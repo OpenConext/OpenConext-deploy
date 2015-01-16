@@ -1,0 +1,16 @@
+---
+- name: set timezone for java apps that may be started on the commandline
+  template: src=jdk-timezone.sh.j2 dest=/etc/profile.d/jdk-timezone.sh owner=root group=root mode=0644
+
+
+- name: Install java 1.7
+  yum: name=java-1.7.0-openjdk-devel state=present
+  tags: java
+
+- name: Link Oracle JDK alternatives
+  file: src=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64/{{ item.path }} dest=/usr/bin/{{ item.name }} state=link force=yes
+  with_items:
+      - { name: 'java', path: 'bin/java' }
+      - { name: 'javaws', path: 'bin/javaws' }
+      - { name: 'keytool', path: 'bin/keytool' }
+  tags: java
