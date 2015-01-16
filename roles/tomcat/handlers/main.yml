@@ -1,0 +1,4 @@
+---
+
+- name: restart tomcat
+  service: name=tomcat6 state=restarted

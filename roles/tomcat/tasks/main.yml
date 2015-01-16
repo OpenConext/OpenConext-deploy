@@ -1,0 +1,63 @@
+---
+- name: Install tomcat
+  yum: name="tomcat6" state="present"
+  tags: tomcat
+
+- name: Set TZ variable in tomcat's init-environment
+  lineinfile:
+    dest: /etc/tomcat6/tomcat6.conf
+    line: "TZ=\"{{ timezone }}\""
+    state: present
+    create: no
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Create directory for application config
+  file: state=directory path=/etc/tomcat6/appconf
+  tags: tomcat
+
+- name: Provide server.xml
+  template: src=server.xml.j2 dest=/etc/tomcat6/server.xml
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Unused webapps dir must still be present
+  file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
+  tags: tomcat
+
+- name: Copy our version of catalina.properties which append /etc/tomcat6/appconf to common.loader
+  copy: src=catalina.properties dest=/etc/tomcat6/catalina.properties
+  notify: restart tomcat
+  tags: tomcat
+
+- name: check if there are any keys to revoke
+  command: keytool -list -alias "{{ item }}" -keystore /etc/pki/java/cacerts -storepass {{ keystore_password | vault }}
+  with_items: keytool.revoked_certificates
+  when: keytool.revoked_certificates is defined
+  register: certificates
+  tags: tomcat
+
+- name: delete revoked certificates
+  command: keytool -delete -alias "{{ item }}" -keystore /etc/pki/java/cacerts -storepass {{ keystore_password | vault }}
+  when: certificates is defined and item.rc == 0
+  with_items: certificates.results
+  notify: restart tomcat
+  tags: tomcat
+
+- name: check if the certificate already exists in the keystore
+  command: keytool -list -alias "{{ keytool.current_certificate.alias }}" -keystore /etc/pki/java/cacerts -storepass {{ keystore_password | vault }}
+  register: check_certificate_exists
+  ignore_errors: yes
+  changed_when: check_certificate_exists.rc != 0
+  tags: tomcat
+
+- name: populate java keystore so that our machine-clients can talk to REST services provided by openconext / selfservice
+  command: keytool -import -noprompt -alias "{{ keytool.current_certificate.alias }}" -file {{ keytool.current_certificate.file }} -trustcacerts -keystore /etc/pki/java/cacerts -storepass {{ keystore_password | vault }}
+  when: check_certificate_exists.rc != 0
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Start and enable tomcat6
+  service: name=tomcat6 state=started enabled=yes
+  notify: restart tomcat
+  tags: tomcat
