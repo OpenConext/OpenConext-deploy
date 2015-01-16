@@ -1,0 +1,5 @@
+[openconext-java]
+192.168.66.78
+
+[openconext-java-vm:children]
+openconext-java

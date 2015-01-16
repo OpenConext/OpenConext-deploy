@@ -1,0 +1,6 @@
+---
+
+- name: set timezone
+  file: state=link src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime force=True
+
+- service: name=ntpd state=started enabled=yes

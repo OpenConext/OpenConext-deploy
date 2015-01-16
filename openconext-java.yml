@@ -1,0 +1,7 @@
+---
+
+- hosts: openconext-java
+  sudo: true
+  roles:
+    - common
+    - httpd

@@ -1,0 +1,56 @@
+---
+- name: Install httpd and required modules
+  yum: name={{ item }} state=present
+  with_items:
+     - httpd
+     - mod_ssl
+  tags: httpd
+
+- name: create dest dir for ssl keys and certs
+  file: name=/etc/httpd/keys state=directory
+  tags: httpd
+
+- name: copy the key files for ssl
+  copy: src=files/{{ env_name }}/{{ item }} dest=/etc/httpd/keys mode=0644
+  with_items:
+    - ca_bundle.pem
+    - identity.pem
+
+- name: copy the private key for ssl
+  copy: content="{{ lookup('file', 'files/' + env_name + '/private.key.encrypted') | vault }}" dest=/etc/httpd/keys/private.key owner=root group=root mode=0600
+
+- name: Copy default config files
+  copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
+  tags: httpd
+  with_items:
+    - 01_default.conf
+    - 10_ajp.conf
+  notify: restart httpd
+
+- name: Copy the config file
+  copy: src={{ item }} dest=/etc/httpd/conf/{{ item }}
+  tags: httpd
+  with_items:
+    - httpd.conf
+  notify: restart httpd
+
+- name: Remove default conf files apache
+  file: path=/etc/httpd/conf.d/{{ item }} state=absent
+  with_items:
+    - cruncher.conf
+    - welcome.conf
+
+- name: Remove default /var/www folders
+  file: path=/var/www/{{ item }} state=absent
+  with_items:
+    - cgi-bin
+    - error
+    - html
+    - icons
+
+- name: enable httpd
+  service: name={{ item }} enabled=yes
+  with_items:
+       - httpd
+  notify:
+    - restart httpd
