@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<Attributes xmlns="urn:mace:shibboleth:2.0:attribute-map" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Attribute name="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" id="persistent-id">
+        <AttributeDecoder xsi:type="NameIDAttributeDecoder" formatter="$Name" defaultQualifiers="true"/>
+    </Attribute>
+    <Attribute name="urn:mace:dir:attribute-def:uid"                          nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-uid"/>
+    <Attribute name="urn:mace:dir:attribute-def:sn"                           nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-surName"/>
+    <Attribute name="urn:mace:dir:attribute-def:givenName"                    nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-givenName"/>
+    <Attribute name="urn:mace:dir:attribute-def:cn"                           nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-commonName"/>
+    <Attribute name="urn:mace:dir:attribute-def:displayName"                  nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-displayName"/>
+    <Attribute name="urn:mace:dir:attribute-def:mail"                         nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-email"/>
+    <Attribute name="urn:mace:dir:attribute-def:eduPersonPrincipalName"       nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-eduPersonPN"/>
+    <Attribute name="urn:mace:terena.org:attribute-def:schacHomeOrganization" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-HomeOrg"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.1076.20.40.40.1"                     nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-user"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1"                 nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-userStatus"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2"                 nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-voName"/>
+    <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.5.1.1"                        nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="Shib-memberOf"/>
+</Attributes>

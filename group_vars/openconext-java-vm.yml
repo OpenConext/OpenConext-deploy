@@ -2,6 +2,9 @@
 env_name: java-vm
 base_domain: openconext.org
 
+# shibboleth
+shibboleth_apps: []
+
 # tomcat
 keystore_password: ACAvoLNaJSARHx9BSmUpockTtDLp_LSmx9DkGnvuk62VtREBsK_IRVr1MM9AAsbb__Xsc4pp5YPa
 

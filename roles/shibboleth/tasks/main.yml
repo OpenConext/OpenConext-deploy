@@ -1,0 +1,37 @@
+---
+- name: Add Shibboleth repo
+  shell: chdir=/etc/yum.repos.d creates=/etc/yum.repos.d/security:shibboleth.repo wget http://download.opensuse.org/repositories/security://shibboleth/CentOS_CentOS-6/security:shibboleth.repo
+
+- name: Install httpd and required modules
+  yum: name={{ item }} state=present
+  with_items:
+    - shibboleth.x86_64
+
+- name: Remove default conf files apache
+  file: path=/etc/httpd/conf.d/{{ item }} state=absent
+  with_items:
+    - shib.conf
+
+- name: Copy default config files
+  copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
+  with_items:
+    - 20_shib.conf
+  notify: restart httpd
+
+- name: Shibboleth config
+  template: src=shibboleth/{{ item }}.j2 dest=/etc/shibboleth/{{ item }}
+  with_items:
+    - attribute-map.xml
+    - localLogout.html
+    - shibboleth2.xml
+  notify:
+    - restart shibd
+    - restart httpd
+
+- name: enable shibd
+  service: name={{ item }} enabled=yes
+  with_items:
+    - shibd
+  notify:
+    - restart shibd
+    - restart httpd

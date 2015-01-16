@@ -8,3 +8,4 @@
     - java
     - tomcat
     - {role: mysql, when: env_name == "java-vm" }
+    - shibboleth
