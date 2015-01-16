@@ -1,0 +1,33 @@
+---
+
+- name: Install mysql
+  yum: name={{ item }} state=present
+  with_items:
+     - mysql.x86_64
+     - mysql-server.x86_64
+     - MySQL-python
+  tags: mysql
+
+- name: Start and enable mysql
+  service: name=mysqld state=started enabled=yes
+  tags: mysql
+
+- name: Set mysql root password for all root accounts
+  mysql_user: name=root password={{ mysql_root_password | vault }} priv=*.*:ALL,GRANT
+  tags: mysql
+
+- name: MySQL my.cnf
+  template: src=my.cnf.j2 dest=/root/.my.cnf mode=0600 owner=root group=root
+  tags: mysql
+
+- name: delete anonymous MySQL server user
+  mysql_user: user="" state="absent" login_user=root login_password={{ mysql_root_password | vault}}
+  tags: mysql
+
+- name: delete anonymous MySQL server user for localhost
+  mysql_user: user="" state="absent" login_user=root login_password={{ mysql_root_password | vault}}
+  tags: mysql
+
+- name: remove the MySQL test database
+  mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password | vault}}
+  tags: mysql

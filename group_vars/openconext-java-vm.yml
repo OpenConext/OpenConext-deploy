@@ -1,5 +1,9 @@
 ---
 env_name: java-vm
 base_domain: openconext.org
+
 # tomcat
 keystore_password: ACAvoLNaJSARHx9BSmUpockTtDLp_LSmx9DkGnvuk62VtREBsK_IRVr1MM9AAsbb__Xsc4pp5YPa
+
+# mysql
+mysql_root_password: ACAvoLMFVoLhAysoj9JUJ0FmyQWRLzUUaDVEuESVwnpA8rtUyZtY3ZMofYPy4DFaZnzXWFjx_1hY
