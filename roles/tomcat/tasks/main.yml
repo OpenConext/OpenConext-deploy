@@ -12,6 +12,12 @@
   notify: restart tomcat
   tags: tomcat
 
+- name: Add AJP to connect to Apache
+  copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
+  with_items:
+    - ajp.conf
+  notify: restart tomcat
+
 - name: Create directory for application config
   file: state=directory path=/etc/tomcat6/appconf
   tags: tomcat
