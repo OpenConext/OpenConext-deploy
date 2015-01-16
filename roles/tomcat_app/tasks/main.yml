@@ -1,0 +1,30 @@
+---
+- name: Deploying {{ app_name }} | create context config dir
+  file: path=/etc/tomcat6/Catalina/{{ app_name }}.{{ base_domain }} state=directory owner=tomcat group=tomcat
+
+- name: Deploying {{ app_name }} | copy tomcat context config
+  template: src=tomcat_app.xml.j2 dest=/etc/tomcat6/Catalina/{{ app_name }}.{{ base_domain }}/{{ deploy_name }}.xml owner=tomcat group=tomcat
+  notify: restart tomcat
+
+- name: Deploying {{ app_name }} | Create appBase for each application's host
+  file: path=/var/lib/tomcat6/appBase-{{ app_name }} state=directory group=tomcat owner=tomcat
+
+- name: Deploying {{ app_name }} | Create directory where we download application packages (e.g. jar/war files)
+  file: path=~/{{ app_name }}-downloads state=directory
+
+- include: download-from-maven.yml
+  when: app_local_war == ''
+
+- include: upload-from-local.yml
+  when: app_local_war != ''
+
+- name: Deploying {{ app_name }} | get the md5 sum of current war
+  stat: path=/etc/tomcat6/wars/{{ deploy_name }}.war
+  register: current_app_stat
+
+- name: Deploying {{ app_name }} | get the md5 sum of the candidate
+  stat: path=~/{{ app_name }}-candidate.war
+  register: candidate_app_stat
+
+- include: deploy.yml
+  when: current_app_stat.stat.exists == false or candidate_app_stat.stat.md5 != current_app_stat.stat.md5

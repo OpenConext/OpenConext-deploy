@@ -19,7 +19,11 @@
   notify: restart tomcat
 
 - name: Create directory for application config
-  file: state=directory path=/etc/tomcat6/appconf
+  file: state=directory path=/etc/tomcat6/appconf owner=tomcat group=tomcat
+  tags: tomcat
+
+- name: Create directory for wars
+  file: state=directory path=/etc/tomcat6/wars owner=tomcat group=tomcat
   tags: tomcat
 
 - name: Provide server.xml

@@ -1,9 +1,19 @@
 ---
 env_name: java-vm
-base_domain: openconext.org
+base_domain: vm.openconext.org
+
+# apache config
+apache:
+  key_name: private.key
+  crt_name: identity.pem
+  bundle_name: ca_bundle.pem
 
 # shibboleth
-shibboleth_apps: []
+shibboleth_apps:
+  - teams
+shib:
+  engine_domain: test.surfconext.nl
+
 
 # tomcat
 keystore_password: ACAvoLNaJSARHx9BSmUpockTtDLp_LSmx9DkGnvuk62VtREBsK_IRVr1MM9AAsbb__Xsc4pp5YPa
@@ -15,3 +25,16 @@ databases:
     - teams
   users:
     - { name: teamsrw, db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }
+
+# versions of installed apps
+teams_version: 4.0.6
+#teams_snapshot_timestamp: 20141112.081923-4
+
+# teams
+teams:
+  team_db_password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
+  team_db_host: localhost
+  eb_db_password: ACAvoLPY26q3FD4KZkXCJtWpQi7GW10qpS8LgW5IEDGherQr8yv5KDlCpdYoyZ8Qts28kfvFdRxm
+  eb_db_host: localhost
+  mail_server: localhost
+  group_name_context: "urn:collab:group:test.surfteams.nl:"

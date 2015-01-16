@@ -5,7 +5,9 @@
   roles:
     - common
     - httpd
-    - java
     - tomcat
+    - java
     - {role: mysql, when: env_name == "java-vm" }
+    - {role: hosts, when: env_name == "java-vm" }
     - shibboleth
+    - teams

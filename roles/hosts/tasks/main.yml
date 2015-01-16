@@ -1,0 +1,8 @@
+---
+- name: Add host names in the hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: ^{{ ansible_eth0["ipv4"]["address"] }} {{ item }}
+    line: "{{ ansible_eth0['ipv4']['address'] }} {{ item }}"
+  with_items:
+    - api.{{ base_domain }}

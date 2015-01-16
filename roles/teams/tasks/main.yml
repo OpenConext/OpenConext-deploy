@@ -1,0 +1,14 @@
+---
+- name: copy teams configuration
+  template: src=coin-teams.properties.j2 dest=/etc/tomcat6/appconf/coin-teams.properties
+  tags: dashboard
+  notify: restart tomcat
+
+- name: copy teams logging configuration
+  copy: src=teams-logback.xml dest=/etc/tomcat6/appconf/teams-logback.xml group=tomcat owner=tomcat
+  notify: restart tomcat
+
+- name: copy virtual host config
+  template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
+  notify: restart httpd
+

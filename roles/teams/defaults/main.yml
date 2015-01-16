@@ -1,0 +1,5 @@
+teams_group_url: org/surfnet/coin
+teams_artifact_id: coin-teams-war
+# needed as default values
+teams_snapshot_timestamp: ''
+teams_local_war: ''

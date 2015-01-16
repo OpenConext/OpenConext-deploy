@@ -1,0 +1,25 @@
+---
+- name: Deploying {{ app_name }} | stop tomcat
+  service: name=tomcat6 state=stopped
+
+- name: Deploying {{ app_name }} | remove current warfile
+  file: path=/var/lib/tomcat6/appBase-{{ app_name }}/{{ item }} state=absent
+  with_items:
+    - ROOT
+    - "{{ deploy_name }}"
+
+- name: Deploying {{ app_name }} | remove current warfile
+  file: path=/etc/tomcat6/wars/{{ item }} state=absent
+  with_items:
+    - ROOT.war
+    - "{{ deploy_name }}.war"
+
+- name: Deploying {{ app_name }} | remove current workdir
+  file: path=/var/cache/tomcat6/work/Catalina/{{ base_domain }} state=absent
+
+- name: Deploying {{ app_name }} | put new warfile into place
+  shell: cp ~/{{ app_name }}-candidate.war /etc/tomcat6/wars/{{ deploy_name }}.war
+  notify: restart tomcat
+
+- name: Deploying {{ app_name }} | set correct permissions
+  file: path=/etc/tomcat6/wars/{{ deploy_name }}.war owner=tomcat group=tomcat
