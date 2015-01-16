@@ -10,3 +10,8 @@ keystore_password: ACAvoLNaJSARHx9BSmUpockTtDLp_LSmx9DkGnvuk62VtREBsK_IRVr1MM9AA
 
 # mysql
 mysql_root_password: ACAvoLMFVoLhAysoj9JUJ0FmyQWRLzUUaDVEuESVwnpA8rtUyZtY3ZMofYPy4DFaZnzXWFjx_1hY
+databases:
+  names:
+    - teams
+  users:
+    - { name: teamsrw, db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }

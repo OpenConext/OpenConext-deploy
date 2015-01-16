@@ -31,3 +31,16 @@
 - name: remove the MySQL test database
   mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password | vault}}
   tags: mysql
+
+- name: Create database
+  mysql_db: name={{ item }} state=present
+  with_items:
+    - "{{ databases.names }}"
+  tags: mysql
+
+- name: Create database user
+  mysql_user: name={{ item.name }} password={{ item.password | vault }} priv={{ item.db_name }}.*:ALL state=present
+  with_items:
+    - "{{ databases.users }}"
+  tags: mysql
+
