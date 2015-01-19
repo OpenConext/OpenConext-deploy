@@ -1,0 +1,10 @@
+---
+- name: copy certificates to correct location
+  copy: src=files/{{ env_name }}/certs/{{ item }} dest={{ tls.cert_path }}/{{ item }}
+  with_items:
+    - "{{ tls.certificates }}"
+
+- name: copy private keys to correct location
+  copy: content="{{ lookup('file', 'files/' + env_name + '/certs/' + item + '.encrypted') | vault }}" dest={{ tls.cert_private_path }}/{{ item }}
+  with_items:
+    - "{{ tls.private_keys }}"

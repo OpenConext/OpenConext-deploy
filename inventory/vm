@@ -1,3 +1,8 @@
+[local-certs]
+localhost ansible_connection=local ansible_python_interpreter=/usr/local/bin/python
+
+[local-certs:children]
+
 [openconext-java]
 192.168.66.78
 

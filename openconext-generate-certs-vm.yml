@@ -1,0 +1,6 @@
+---
+
+- hosts: local-certs
+  connection: local
+  roles:
+    - generate_certs

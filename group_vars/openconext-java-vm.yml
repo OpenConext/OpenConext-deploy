@@ -1,16 +1,21 @@
 ---
-env_name: java-vm
-base_domain: vm.openconext.org
+env: vm
+env_name: java-{{ env }}
+base_domain: "{{ env }}.openconext.org"
 
-certs:
-  subject: /O=OpenConext/commonName=*.{{ base_domain }}
+tls_https:
+  key_name: star.{{ base_domain }}.key
+  crt_name: star.{{ base_domain }}.pem
+  bundle_name: star.{{ base_domain }}_ca_bundle.pem
 
 tls:
   cert_path: /etc/pki/tls/certs
   cert_private_path: /etc/pki/tls/private
-  key_name: star.{{ base_domain }}.key
-  crt_name: star.{{ base_domain }}.pem
-  bundle_name: star.{{ base_domain }}_ca_bundle.pem
+  certificates:
+    - "{{ tls_https.crt_name }}"
+    - "{{ tls_https.bundle_name }}"
+  private_keys:
+    - "{{ tls_https.key_name }}"
 
 
 # shibboleth

@@ -1,82 +1,102 @@
-- name: create work dir
-  file: name=~/certs state=directory
-  tags:
-    - generate_certs
-
 - name: create initial serial file
-  shell: echo -n "00" | tee ~/certs/serial.txt
+  shell: echo "00" | tee files/java-vm/certs/serial.txt
   args:
-    creates: ~/certs/serial.txt
-  tags:
-    - generate_certs
+    creates: files/java-vm/certs/serial.txt
 
 - name: create initial index file
-  command: touch ~/certs/ca_index.txt creates=~/certs/ca_index.txt
-  tags:
-    - generate_certs
+  command: touch files/java-vm/certs/ca_index.txt creates=files/java-vm/certs/ca_index.txt
 
 - name: copy files to remote
-  copy: src={{ item }} dest=~/certs/{{ item }}
+  copy: src={{ item }} dest=files/java-vm/certs/{{ item }}
   with_items:
     - ca_config.cfg
-  tags:
-    - generate_certs
 
-- name: create self-signed SSL cert
+- name: create new CA
   command: |
     openssl req -new \
       -x509 \
       -days 3650 \
       -extensions v3_ca \
-      -config ~/certs/ca_config.cfg \
+      -config files/java-vm/certs/ca_config.cfg \
       -passout pass:secret \
-      -keyout ~/certs/ca.key \
+      -keyout files/java-vm/certs/ca.key \
       -subj "/O=OpenConext CA" \
-      -out ~/certs/ca.crt creates=~/certs/ca.key
-  tags:
-    - generate_certs
+      -out files/java-vm/certs/{{ tls.bundle_name }} creates=files/java-vm/certs/ca.key
 
 - name: generate CSR, generating the private key on the fly
   command: |
     openssl req -new \
       -nodes \
-      -config ~/certs/ca_config.cfg \
-      -out ~/certs/server.csr \
-      -keyout ~/certs/server.key \
+      -config files/java-vm/certs/ca_config.cfg \
+      -out files/java-vm/certs/server.csr \
+      -keyout files/java-vm/certs/{{ tls.key_name }} \
       -batch \
-      -subj "{{ certs.subject }}" creates=~/certs/server.key
-  tags:
-    - generate_certs
+      -subj "{{ certs.subject }}" creates=files/java-vm/certs/{{ tls.key_name }}
 
 - name: sign with the CA
   command: |
     openssl ca \
       -name OpenConext \
       -notext \
-      -config ~/certs/ca_config.cfg \
-      -cert ~/certs/ca.crt \
-      -keyfile ~/certs/ca.key \
+      -config files/java-vm/certs/ca_config.cfg \
+      -cert files/java-vm/certs/{{ tls.bundle_name }} \
+      -keyfile files/java-vm/certs/ca.key \
       -passin pass:secret \
-      -in ~/certs/server.csr \
+      -in files/java-vm/certs/server.csr \
       -days 1825 \
       -batch \
-      -outdir ~/certs \
-      -out ~/certs/server.crt creates=~/certs/server.crt
-  tags:
-    - generate_certs
+      -outdir files/java-vm/certs \
+      -out files/java-vm/certs/{{ tls.crt_name }} creates=files/java-vm/certs/{{ tls.crt_name }}
 
-- name: copy certificate to correct location
-  command: cp ~/certs/server.crt {{ tls.cert_path }}/{{ tls.crt_name }} creates={{ tls.cert_path }}/{{ tls.crt_name }}
-  tags:
-    - generate_certs
+- name: encrypt the private key
+  shell: |
+    scripts/encrypt-file.sh -f files/java-vm/certs/{{ tls.key_name }} creates=files/java-vm/certs/{{ tls.key_name }}.encrypted
+  register: encrypted_key
 
-- name: copy the ca to correct location
-  command: cp ~/certs/ca.crt {{ tls.cert_path }}/{{ tls.bundle_name }} creates={{ tls.cert_path }}/{{ tls.bundle_name }}
-  tags:
-    - generate_certs
+- name: create encrypted key file
+  copy: content={{ encrypted_key.stdout }} dest=files/java-vm/certs/{{ tls.key_name }}.encrypted force=no
 
-- name: copy the key to correct location
-  command: cp ~/certs/server.key {{ tls.cert_private_path }}/{{ tls.key_name }} creates={{ tls.cert_private_path }}/{{ tls.key_name }}
-  tags:
-    - generate_certs
+- name: generate engineblock keypair
+  command: |
+    openssl req \
+      -subj '/CN=Engine/OU=Services/O=OpenConext/C=NL/' \
+      -newkey rsa:2048 \
+      -new \
+      -x509 \
+      -days 3652 \
+      -nodes \
+      -out files/php-vm/certs/engineblock.crt \
+      -keyout files/php-vm/certs/engineblock.pem creates=files/php-vm/certs/engineblock.pem
 
+- name: encrypt the private key for engineblock
+  shell: |
+    scripts/encrypt-file.sh -f files/java-vm/certs/{{ tls.key_name }} creates=files/php-vm/certs/engineblock.pem.encrypted
+  register: encrypted_engineblock_key
+
+- name: generate api keypair
+  command: |
+    openssl req \
+      -subj '/CN=Api/OU=Services/O=OpenConext/C=NL/' \
+      -newkey rsa:2048 \
+      -new \
+      -x509 \
+      -days 3652 \
+      -nodes \
+      -out files/java-vm/certs/api.crt \
+      -keyout files/java-vm/certs/api.pem creates=files/java-vm/certs/api.pem
+
+- name: convert the api key to pkcs8 so it plays well with java
+  command: |
+    openssl pkcs8 \
+      -topk8 \
+      -nocrypt \
+      -in files/java-vm/certs/api.pem \
+      -out files/java-vm/certs/api_pkcs8.pem creates=files/java-vm/certs/api_pkcs8.pem
+
+- name: encrypt the private key for api
+  shell: |
+    scripts/encrypt-file.sh -f files/java-vm/certs/api_pkcs8.pem creates=files/java-vm/certs/api_pkcs8.pem.encrypted
+  register: encrypted_api_key
+
+- name: create encrypted key file for engineblock
+  copy: content={{ encrypted_api_key.stdout }} dest=files/java-vm/certs/api_pkcs8.pem.encrypted force=no
