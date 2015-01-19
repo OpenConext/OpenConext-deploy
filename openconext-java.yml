@@ -4,6 +4,7 @@
   sudo: true
   roles:
     - common
+    - {role: generate_certs, when: env_name == "java-vm" }
     - httpd
     - tomcat
     - java

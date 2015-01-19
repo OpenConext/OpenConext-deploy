@@ -1,0 +1,82 @@
+- name: create work dir
+  file: name=~/certs state=directory
+  tags:
+    - generate_certs
+
+- name: create initial serial file
+  shell: echo -n "00" | tee ~/certs/serial.txt
+  args:
+    creates: ~/certs/serial.txt
+  tags:
+    - generate_certs
+
+- name: create initial index file
+  command: touch ~/certs/ca_index.txt creates=~/certs/ca_index.txt
+  tags:
+    - generate_certs
+
+- name: copy files to remote
+  copy: src={{ item }} dest=~/certs/{{ item }}
+  with_items:
+    - ca_config.cfg
+  tags:
+    - generate_certs
+
+- name: create self-signed SSL cert
+  command: |
+    openssl req -new \
+      -x509 \
+      -days 3650 \
+      -extensions v3_ca \
+      -config ~/certs/ca_config.cfg \
+      -passout pass:secret \
+      -keyout ~/certs/ca.key \
+      -subj "/O=OpenConext CA" \
+      -out ~/certs/ca.crt creates=~/certs/ca.key
+  tags:
+    - generate_certs
+
+- name: generate CSR, generating the private key on the fly
+  command: |
+    openssl req -new \
+      -nodes \
+      -config ~/certs/ca_config.cfg \
+      -out ~/certs/server.csr \
+      -keyout ~/certs/server.key \
+      -batch \
+      -subj "{{ certs.subject }}" creates=~/certs/server.key
+  tags:
+    - generate_certs
+
+- name: sign with the CA
+  command: |
+    openssl ca \
+      -name OpenConext \
+      -notext \
+      -config ~/certs/ca_config.cfg \
+      -cert ~/certs/ca.crt \
+      -keyfile ~/certs/ca.key \
+      -passin pass:secret \
+      -in ~/certs/server.csr \
+      -days 1825 \
+      -batch \
+      -outdir ~/certs \
+      -out ~/certs/server.crt creates=~/certs/server.crt
+  tags:
+    - generate_certs
+
+- name: copy certificate to correct location
+  command: cp ~/certs/server.crt {{ tls.cert_path }}/{{ tls.crt_name }} creates={{ tls.cert_path }}/{{ tls.crt_name }}
+  tags:
+    - generate_certs
+
+- name: copy the ca to correct location
+  command: cp ~/certs/ca.crt {{ tls.cert_path }}/{{ tls.bundle_name }} creates={{ tls.cert_path }}/{{ tls.bundle_name }}
+  tags:
+    - generate_certs
+
+- name: copy the key to correct location
+  command: cp ~/certs/server.key {{ tls.cert_private_path }}/{{ tls.key_name }} creates={{ tls.cert_private_path }}/{{ tls.key_name }}
+  tags:
+    - generate_certs
+

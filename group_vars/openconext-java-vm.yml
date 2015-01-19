@@ -2,11 +2,16 @@
 env_name: java-vm
 base_domain: vm.openconext.org
 
-# apache config
-apache:
-  key_name: private.key
-  crt_name: identity.pem
-  bundle_name: ca_bundle.pem
+certs:
+  subject: /O=OpenConext/commonName=*.{{ base_domain }}
+
+tls:
+  cert_path: /etc/pki/tls/certs
+  cert_private_path: /etc/pki/tls/private
+  key_name: star.{{ base_domain }}.key
+  crt_name: star.{{ base_domain }}.pem
+  bundle_name: star.{{ base_domain }}_ca_bundle.pem
+
 
 # shibboleth
 shibboleth_apps:
