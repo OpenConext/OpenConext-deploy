@@ -1,0 +1,5 @@
+api_group_url: org/surfnet/coin
+api_artifact_id: coin-api-war
+# needed as default values
+api_snapshot_timestamp: ''
+api_local_war: ''

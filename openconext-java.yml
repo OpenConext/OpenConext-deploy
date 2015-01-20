@@ -12,3 +12,4 @@
     - {role: hosts, when: env_name == "java-vm" }
     - shibboleth
     - teams
+    - api

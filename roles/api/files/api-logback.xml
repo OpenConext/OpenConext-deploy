@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2013 SURFnet bv, The Netherlands
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<configuration scan="true">
+  <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${CATALINA_BASE}/logs/api.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${CATALINA_BASE}/logs/api-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+      <maxHistory>60</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
+    </encoder>
+
+
+    <!-- global filter for this appender -->
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>info</level>
+    </filter>
+
+    <!-- specific filters -->
+    <filter class="nl.surfnet.coin.shared.log.diagnostics.LoggerThresholdFilter">
+      <logger>nl.surfnet.coin</logger>
+      <level>debug</level>
+    </filter>
+    <filter class="nl.surfnet.coin.shared.log.diagnostics.LoggerThresholdFilter">
+      <logger>org.springframework</logger>
+      <level>warn</level>
+    </filter>
+    <filter class="nl.surfnet.coin.shared.log.diagnostics.LoggerThresholdFilter">
+      <logger>org.hibernate</logger>
+      <level>warn</level>
+    </filter>
+    <filter class="nl.surfnet.coin.shared.log.diagnostics.LoggerThresholdFilter">
+      <logger>org.opensaml</logger>
+      <level>warn</level>
+    </filter>
+    <filter class="nl.surfnet.coin.shared.log.diagnostics.LoggerThresholdFilter">
+      <logger>org.apache</logger>
+      <level>warn</level>
+    </filter>
+    <filter class="nl.surfnet.coin.shared.log.diagnostics.LoggerThresholdFilter">
+      <logger>hsqldb.db</logger>
+      <level>warn</level>
+    </filter>
+  </appender>
+
+  <appender name="DUMPAPPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${CATALINA_BASE}/logs/api-fc.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${CATALINA_BASE}/logs/api-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+      <maxHistory>60</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="MEMORYAPPENDER" class="nl.surfnet.coin.shared.log.diagnostics.MemoryAppender">
+
+    <!-- Even when dumping the memory events, filter them using these filters -->
+    <filter class="nl.surfnet.coin.shared.log.diagnostics.LoggerThresholdFilter">
+      <logger>org.springframework</logger>
+      <level>info</level>
+    </filter>
+    <filter class="nl.surfnet.coin.shared.log.diagnostics.LoggerThresholdFilter">
+      <logger>org.opensaml</logger>
+      <level>info</level>
+    </filter>
+    <filter class="nl.surfnet.coin.shared.log.diagnostics.LoggerThresholdFilter">
+      <logger>org.apache</logger>
+      <level>info</level>
+    </filter>
+  </appender>
+
+
+  <!-- This serves only as a lookup structure:
+  logger MEMORYLOGGER is by definition present,
+  and has the MEMORYAPPENDER and DUMPAPPENDER attached.
+  -->
+  <logger name="MEMORYLOGGER">
+    <appender-ref ref="MEMORYAPPENDER"/>
+    <appender-ref ref="DUMPAPPENDER"/>
+  </logger>
+
+  <!-- filtering on info/warn level is done by the appenders -->
+  <root level="debug">
+    <appender-ref ref="file"/>
+    <appender-ref ref="MEMORYAPPENDER"/>
+  </root>
+</configuration>

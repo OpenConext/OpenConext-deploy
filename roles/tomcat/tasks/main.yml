@@ -26,6 +26,16 @@
   file: state=directory path=/etc/tomcat6/wars owner=tomcat group=tomcat
   tags: tomcat
 
+- name: "DEPRECATED: Create shared directory for jars"
+  file: state=directory path=/usr/share/tomcat6/shared owner=tomcat group=tomcat
+  notify: restart tomcat
+  tags: tomcat
+
+- name: "DEPRECATED: Create shared lib directory for jars"
+  file: state=directory path=/usr/share/tomcat6/shared/lib owner=tomcat group=tomcat
+  notify: restart tomcat
+  tags: tomcat
+
 - name: Provide server.xml
   template: src=server.xml.j2 dest=/etc/tomcat6/server.xml
   notify: restart tomcat

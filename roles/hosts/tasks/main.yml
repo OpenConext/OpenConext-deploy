@@ -6,3 +6,8 @@
     line: "{{ ansible_eth0['ipv4']['address'] }} {{ item }}"
   with_items:
     - api.{{ base_domain }}
+    - static.{{ base_domain }}
+    - db.{{ base_domain }}
+    - serviceregistry.{{ base_domain }}
+    - ldap.{{ base_domain }}
+    - engine.{{ base_domain }}
