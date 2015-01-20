@@ -24,7 +24,6 @@
 - name: Remove default conf files apache
   file: path=/etc/httpd/conf.d/{{ item }} state=absent
   with_items:
-    - cruncher.conf
     - welcome.conf
 
 - name: Remove default /var/www folders
