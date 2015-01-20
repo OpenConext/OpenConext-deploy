@@ -1,0 +1,7 @@
+# Ignore everything in this directory
+grouper-dist*
+docs*
+ldap*
+tomcat*
+# Except this file
+!.gitignore

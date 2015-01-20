@@ -8,4 +8,5 @@ dependencies:
   , app_group_url: "{{ api_group_url }}"
   , app_artifact_id: "{{ api_artifact_id }}"
   , deploy_name: api
+  , tomcat_context_path: /
   , tags: api }

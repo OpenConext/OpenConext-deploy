@@ -38,9 +38,7 @@
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true" />
             <Host name="teams.{{ base_domain }}" appBase="/var/lib/tomcat6/appBase-teams" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
             <Host name="api.{{ base_domain }}" appBase="/var/lib/tomcat6/appBase-api" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
-            <!--
-            <Host name="dashboard.{{ base_domain }}" appBase="/var/lib/tomcat6/appBase-dashboard" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
-            -->
+            <Host name="grouper.{{ base_domain }}" appBase="/var/lib/tomcat6/appBase-grouper" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
         </Engine>
     </Service>
 </Server>

@@ -87,3 +87,7 @@ api:
   ehcache:
     path: /tmp
 
+grouper:
+  teams_db_user: teamsrw
+  teams_db_host: localhost
+  teams_db_password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb

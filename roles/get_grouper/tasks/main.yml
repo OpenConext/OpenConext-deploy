@@ -1,0 +1,13 @@
+---
+- name: download grouper archive
+  local_action: get_url url=http://build.surfconext.nl/repository/public/releases/org/surfnet/coin/grouper-dist/{{ grouper_dist_version }}/grouper-dist-{{ grouper_dist_version }}-bin.tar.gz dest={{ role_path }}/files
+  sudo: False
+  tags:
+    - grouper
+
+- name: extract grouper archive
+  local_action: unarchive src={{ role_path }}/files/grouper-dist-{{ grouper_dist_version }}-bin.tar.gz dest={{ role_path }}/files
+  sudo: False
+  changed_when: False
+  tags:
+    - grouper

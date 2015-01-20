@@ -13,6 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<Context path="/" docBase="/etc/tomcat6/wars/{{ deploy_name }}.war" useHttpOnly="true">
+<Context path="{{ tomcat_context_path }}" docBase="/etc/tomcat6/wars/{{ deploy_name }}.war" useHttpOnly="true">
     <Parameter name="logbackConfigurationFilePrefix" value="{{ app_name }}" override="false"/>
 </Context>

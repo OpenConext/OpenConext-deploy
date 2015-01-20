@@ -8,4 +8,5 @@ dependencies:
   , app_group_url: "{{ teams_group_url }}"
   , app_artifact_id: "{{ teams_artifact_id }}"
   , deploy_name: teams
+  , tomcat_context_path: /
   , tags: teams }
