@@ -2,13 +2,13 @@
 - name: Deploying {{ app_name }} | Download released war
   get_url:
     url: "{{ maven_repo }}/{{ app_group_url }}/{{ app_artifact_id }}/{{ app_version }}/{{ app_artifact_id }}-{{ app_version }}.war"
-    dest: ~/{{ app_name }}-candidate.war
+    dest: ~/{{ deploy_name }}-candidate.war
   register: downloaded_war
   when: app_snapshot_timestamp == ''
 
 - name: Deploying {{ app_name }} | Download shapshot war
   get_url:
     url: "{{ maven_snapshot_repo }}/{{ app_group_url }}/{{ app_artifact_id }}/{{ app_version }}-SNAPSHOT/{{ app_artifact_id }}-{{ app_version }}-{{ app_snapshot_timestamp }}.war"
-    dest: ~/{{ app_name }}-candidate.war
+    dest: ~/{{ deploy_name }}-candidate.war
   register: downloaded_war
   when: app_snapshot_timestamp != ''
