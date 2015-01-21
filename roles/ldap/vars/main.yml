@@ -1,0 +1,19 @@
+# The suffix (dc=surfconext,dc=nl) of these users must be equal
+ldap:
+  user_cn: ro # needs to correspond with cn of ldap_user
+  password_sha: "{SSHA}pWk1Ibd4w84++95xjuXXbrbzxr4eAPNM" # needs to correspond with ldap_password
+  admin:
+    org: surfconext
+    user: "cn=admin,dc=surfconext,dc=nl"
+    # suffix needs to be the same as in the user
+    suffix: "dc=surfconext,dc=nl"
+    password: ACAvoLODUDZgKT6oPCQzOPR9Rp7Nq4uvvl9J5FBqjcKODnbQmoduSA6RKBub7waTs2MHinRl3jqy3lYiNa5PMLu6w7mo7NzdKA
+    password_sha: "{SSHA}ZTcz1DhpiYwfj4ZMF4+t/MuxZKQno/6V" # this has to match value in password. Use slappasswd -s 'unecrypted password' to generate
+  engine:
+    user: "cn=engine,dc=surfconext,dc=nl"
+    user_cn: engine
+    password: ACAvoLM9A__9zpR5wmn-7zJSji8f7i4Jnl9vxvgc7yY18mZShQ_0_djlglxdGhc6iFctRiQlv5KK
+    password_sha: "{SSHA}XlAxDselBl2tk/Ohm7W+nJaSXoNhdElf"
+  grouper:
+    unit_test_user: gadget
+
