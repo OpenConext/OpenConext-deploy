@@ -91,3 +91,6 @@ grouper:
   teams_db_user: teamsrw
   teams_db_host: localhost
   teams_db_password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
+
+ldap_user: cn=ro,dc=surfconext,dc=nl
+ldap_password: ACAvoLMUTPe1xi6rIcz1QW8DaphUZBK2dLDQ-ixuuZk97skQxPLVio2zbJdLI8vQPMqQYcKj40cS

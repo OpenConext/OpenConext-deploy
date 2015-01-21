@@ -142,12 +142,12 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
 
     <init-param>
       <param-name>SECURITY_PRINCIPAL</param-name>
-      <param-value>cn=ro,dc=surfconext,dc=nl</param-value>
+      <param-value>{{ ldap_user }}</param-value>
     </init-param>
     <init-param>
 
       <param-name>SECURITY_CREDENTIALS</param-name>
-      <param-value>ks97THqW2m3BN</param-value>
+      <param-value>{{ ldap_password | vault }}</param-value>
     </init-param>
     <init-param>
       <param-name>SubjectID_AttributeType</param-name>
@@ -293,12 +293,12 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
     </init-param>
     <init-param>
       <param-name>SECURITY_PRINCIPAL</param-name>
-      <param-value>cn=ro,dc=surfconext,dc=nl</param-value>
+      <param-value>{{ ldap_user }}</param-value>
     </init-param>
 
     <init-param>
       <param-name>SECURITY_CREDENTIALS</param-name>
-      <param-value>ks97THqW2m3BN</param-value>
+      <param-value>{{ ldap_password | vault}}</param-value>
     </init-param>
     <init-param>
       <param-name>SubjectID_AttributeType</param-name>
