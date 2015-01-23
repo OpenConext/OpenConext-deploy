@@ -94,3 +94,6 @@ grouper:
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_password: ACAvoLMUTPe1xi6rIcz1QW8DaphUZBK2dLDQ-ixuuZk97skQxPLVio2zbJdLI8vQPMqQYcKj40cS
+ldap_grouper_unit_test_user: gadget
+ldap_grouper_engine_user: engine
+ldap_grouper_api_user: api

@@ -12,9 +12,6 @@
   tags: ldap
   changed_when: False
 
-- debug: var=config_correct
-  tags: ldap
-
 - name: Copy slapd.conf
   template: src=slapd.conf.j2 dest=/etc/openldap/slapd.conf
   tags: ldap
