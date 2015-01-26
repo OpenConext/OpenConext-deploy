@@ -7,3 +7,8 @@ keytool:
   # You can not reuse alias names.
   # revoked_certificates:
   #   - "alias to revoke"
+
+tomcat_install_dir: "{{ tomcat.install_dir }}"
+tomcat_properties_dir: "{{ tomcat.properties_dir }}"
+tomcat_share_dir: "{{ tomcat.share_dir }}"
+tomcat_service_name: "{{ tomcat.service_name }}"

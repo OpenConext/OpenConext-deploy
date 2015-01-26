@@ -1,6 +1,6 @@
 ---
 - name: copy templates
-  template: src={{ item }}.j2 dest=/etc/tomcat6/appconf/{{ item }}
+  template: src={{ item }}.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/{{ item }}
   with_items:
     - grouper.hibernate.properties
     - sources.xml
@@ -10,7 +10,7 @@
 
 
 - name: copy files
-  copy: src={{ item }} dest=/etc/tomcat6/appconf/{{ item }}
+  copy: src={{ item }} dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/{{ item }}
   with_items:
     - grouper.properties
     - log4j.properties

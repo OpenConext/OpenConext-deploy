@@ -41,7 +41,7 @@
     - api
 
 - name: copy api configuration templates
-  template: src={{ item }}.j2 dest=/etc/tomcat6/appconf/{{ item }}
+  template: src={{ item }}.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/{{ item }}
   with_items:
     - coin-api.properties
     - api-ehcache.xml
@@ -50,7 +50,7 @@
   notify: restart tomcat
 
 - name: copy teams logging configuration
-  copy: src=api-logback.xml dest=/etc/tomcat6/appconf/api-logback.xml group=tomcat owner=tomcat
+  copy: src=api-logback.xml dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/api-logback.xml group=tomcat owner=tomcat
   tags:
     - api
   notify: restart tomcat

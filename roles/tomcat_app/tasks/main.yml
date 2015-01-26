@@ -1,13 +1,13 @@
 ---
 - name: Deploying {{ app_name }} | create context config dir
-  file: path={{ tomcat.install_dir }}/Catalina/{{ app_name }}.{{ base_domain }} state=directory owner=tomcat group=tomcat
+  file: path={{ tomcat_install_dir }}/Catalina/{{ app_name }}.{{ base_domain }} state=directory owner=tomcat group=tomcat
 
 - name: Deploying {{ app_name }} | copy tomcat context config
-  template: src=tomcat_app.xml.j2 dest={{ tomcat.install_dir }}/Catalina/{{ app_name }}.{{ base_domain }}/{{ deploy_name }}.xml owner=tomcat group=tomcat
-  notify: restart tomcat
+  template: src=tomcat_app.xml.j2 dest={{ tomcat_install_dir }}/Catalina/{{ app_name }}.{{ base_domain }}/{{ deploy_name }}.xml owner=tomcat group=tomcat
+  notify: restart {{ tomcat_handler_name }}
 
-- name: Deploying {{ app_name }} | Create {{ tomcat.app_base_dir_name }} for each application's host
-  file: path={{ tomcat.lib_dir }}/{{ tomcat.app_base_dir_name }}-{{ app_name }} state=directory group=tomcat owner=tomcat
+- name: Deploying {{ app_name }} | Create {{ tomcat_app_base_dir_name }} for each application's host
+  file: path={{ tomcat_lib_dir }}/{{ tomcat_app_base_dir_name }}-{{ app_name }} state=directory group=tomcat owner=tomcat
 
 - name: Deploying {{ app_name }} | Create directory where we download application packages (e.g. jar/war files)
   file: path=~/{{ app_name }}-downloads state=directory
@@ -19,7 +19,7 @@
   when: app_local_war != ''
 
 - name: Deploying {{ app_name }} | get the md5 sum of current war
-  stat: path={{ tomcat.install_dir }}/wars/{{ deploy_name }}.war
+  stat: path={{ tomcat_install_dir }}/wars/{{ deploy_name }}.war
   register: current_app_stat
 
 - name: Deploying {{ deploy_name }} | get the md5 sum of the candidate

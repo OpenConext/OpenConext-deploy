@@ -1,6 +1,0 @@
-tomcat:
-  install_dir: /etc/tomcat6
-  share_dir: /usr/share/tomcat6
-  service_name: tomcat6
-  server_port: 8005
-  redirect_port: 8443

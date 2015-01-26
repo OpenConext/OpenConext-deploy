@@ -1,11 +1,11 @@
 ---
 - name: copy teams configuration
-  template: src=coin-teams.properties.j2 dest=/etc/tomcat6/appconf/coin-teams.properties
+  template: src=coin-teams.properties.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/coin-teams.properties
   tags: dashboard
   notify: restart tomcat
 
 - name: copy teams logging configuration
-  copy: src=teams-logback.xml dest=/etc/tomcat6/appconf/teams-logback.xml group=tomcat owner=tomcat
+  copy: src=teams-logback.xml dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/teams-logback.xml group=tomcat owner=tomcat
   notify: restart tomcat
 
 - name: copy virtual host config

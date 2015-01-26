@@ -5,7 +5,7 @@
 
 - name: Set TZ variable in tomcat's init-environment
   lineinfile:
-    dest: "{{ tomcat.install_dir }}/tomcat6.conf"
+    dest: "{{ tomcat_install_dir }}/tomcat6.conf"
     line: "TZ=\"{{ timezone }}\""
     state: present
     create: no
@@ -19,25 +19,25 @@
   notify: restart tomcat
 
 - name: Create directory for application config
-  file: state=directory path={{ tomcat.install_dir }}/appconf owner=tomcat group=tomcat
+  file: state=directory path={{ tomcat_install_dir }}/{{ tomcat_properties_dir }} owner=tomcat group=tomcat
   tags: tomcat
 
 - name: Create directory for wars
-  file: state=directory path={{ tomcat.install_dir }}/wars owner=tomcat group=tomcat
+  file: state=directory path={{ tomcat_install_dir }}/wars owner=tomcat group=tomcat
   tags: tomcat
 
 - name: "DEPRECATED: Create shared directory for jars"
-  file: state=directory path={{ tomcat.share_dir }}/shared owner=tomcat group=tomcat
+  file: state=directory path={{ tomcat_share_dir }}/shared owner=tomcat group=tomcat
   notify: restart tomcat
   tags: tomcat
 
 - name: "DEPRECATED: Create shared lib directory for jars"
-  file: state=directory path={{ tomcat.share_dir }}/shared/lib owner=tomcat group=tomcat
+  file: state=directory path={{ tomcat_share_dir }}/shared/lib owner=tomcat group=tomcat
   notify: restart tomcat
   tags: tomcat
 
 - name: Provide server.xml
-  template: src=server.xml.j2 dest={{ tomcat.install_dir }}/server.xml
+  template: src=server.xml.j2 dest={{ tomcat_install_dir }}/server.xml
   notify: restart tomcat
   tags: tomcat
 
@@ -45,8 +45,8 @@
   file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
   tags: tomcat
 
-- name: Copy our version of catalina.properties which append {{ tomcat.install_dir }}/appconf to common.loader
-  copy: src=catalina.properties dest={{ tomcat.install_dir }}/catalina.properties
+- name: Copy our version of catalina.properties which append {{ tomcat_install_dir }}/{{ tomcat_properties_dir }} to common.loader
+  template: src=catalina.properties.j2 dest={{ tomcat_install_dir }}/catalina.properties
   notify: restart tomcat
   tags: tomcat
 
@@ -78,6 +78,6 @@
   tags: tomcat
 
 - name: Start and enable tomcat6
-  service: name={{ tomcat.service_name }} state=started enabled=yes
+  service: name={{ tomcat_service_name }} state=started enabled=yes
   notify: restart tomcat
   tags: tomcat
