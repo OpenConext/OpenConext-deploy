@@ -54,6 +54,9 @@ teams:
   mail_server: localhost
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
+engineblock:
+  idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
+  idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 #api
 api:
   janus:
@@ -82,8 +85,6 @@ api:
   saml:
     entityId: https://api.{{ base_domain }}/
     assertionConsumerURI: https://api.{{ base_domain }}/v1/assertionConsumer
-    idpUrl: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
-    idpEntityId: https://engine.{{ base_domain }}/authentication/idp/metadata
   ehcache:
     path: /tmp
 
