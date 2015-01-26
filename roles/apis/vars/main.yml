@@ -1,0 +1,8 @@
+tomcat_low:
+  catalina_base: /usr/share/tomcat6-low
+  cache_dir: /var/cache/tomcat6-low
+  install_dir: /etc/tomcat6-low
+  log_dir: /var/log/tomcat6-low
+  lib_dir: /var/lib/tomcat6-low
+  properties_dir: "{{ tomcat.properties_dir }}"
+  app_base_dir_name: "{{ tomcat.app_base_dir_name }}"

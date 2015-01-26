@@ -34,9 +34,11 @@ databases:
   names:
     - teams
     - api
+    - apis
   users:
     - { name: teamsrw, db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }
     - { name: apirw, db_name: api, password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY }
+    - { name: apisrw, db_name: apis, password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh }
 
 # versions of installed apps
 teams_version: 4.0.6
@@ -98,3 +100,16 @@ ldap_password: ACAvoLMUTPe1xi6rIcz1QW8DaphUZBK2dLDQ-ixuuZk97skQxPLVio2zbJdLI8vQP
 ldap_grouper_unit_test_user: gadget
 ldap_grouper_engine_user: engine
 ldap_grouper_api_user: api
+
+apis:
+  user: apisrw
+  url: jdbc:mysql://localhost:3306/apis
+  password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh
+  entity_id: https://apis.{{ base_domain }}
+  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
+  admin_service:
+    resource_server_key: authorization-server-admin
+    resource_server_secret: ACAvoLN9oE35zmjam6Z5athj5Gf_vJV65O1sjNhbcpEsMubNd5CpRxNk7zWSrqLkJtYAgG-4fvCo7vxXug8MSIKOZVrrBZiNks916eh_McBLcXZrpf6vFb8
+  api:
+    consumer_key: https://apis.test.surfconext.nl
+    consumer_secret: ACAvoLMx3F7lC4ypJrDqyls4Iu4XHMtzUNUT7ihcMeCZkJx9q7M2DiLzWiNqM46k5zh-mrg5wrhM2vK4Eq-8o-lamCjBajx8sQ

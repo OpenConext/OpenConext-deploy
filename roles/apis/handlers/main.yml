@@ -1,0 +1,4 @@
+---
+
+- name: restart tomcat-low
+  service: name=tomcat6-low state=restarted

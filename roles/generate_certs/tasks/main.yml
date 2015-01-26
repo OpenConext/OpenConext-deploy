@@ -73,30 +73,44 @@
     scripts/encrypt-file.sh -f files/java-vm/certs/{{ tls.key_name }} creates=files/php-vm/certs/engineblock.pem.encrypted
   register: encrypted_engineblock_key
 
-- name: generate api keypair
+- name: generate keypairs for SP's
   command: |
     openssl req \
-      -subj '/CN=Api/OU=Services/O=OpenConext/C=NL/' \
+      -subj '/CN={{ item.cn }}/OU=Services/O=OpenConext/C=NL/' \
       -newkey rsa:2048 \
       -new \
       -x509 \
       -days 3652 \
       -nodes \
-      -out files/java-vm/certs/api.crt \
-      -keyout files/java-vm/certs/api.pem creates=files/java-vm/certs/api.pem
+      -out files/java-vm/certs/{{ item.cert_name }}.crt \
+      -keyout files/java-vm/certs/{{ item.cert_name }}.pem creates=files/java-vm/certs/{{ item.cert_name }}.pem
+  with_items:
+    - {cn: Api, cert_name: api}
+    - {cn: Apis, cert_name: apis}
 
-- name: convert the api key to pkcs8 so it plays well with java
+- name: convert the sp key to pkcs8 so it plays well with java
   command: |
     openssl pkcs8 \
       -topk8 \
       -nocrypt \
-      -in files/java-vm/certs/api.pem \
-      -out files/java-vm/certs/api_pkcs8.pem creates=files/java-vm/certs/api_pkcs8.pem
+      -in files/java-vm/certs/{{ item }}.pem \
+      -out files/java-vm/certs/{{ item }}_pkcs8.pem creates=files/java-vm/certs/{{ item }}_pkcs8.pem
+  with_items:
+    - api
+    - apis
 
 - name: encrypt the private key for api
   shell: |
     scripts/encrypt-file.sh -f files/java-vm/certs/api_pkcs8.pem creates=files/java-vm/certs/api_pkcs8.pem.encrypted
-  register: encrypted_api_key
+  register: "encrypted_api_key"
 
-- name: create encrypted key file for engineblock
+- name: encrypt the private key for apis
+  shell: |
+    scripts/encrypt-file.sh -f files/java-vm/certs/apis_pkcs8.pem creates=files/java-vm/certs/apis_pkcs8.pem.encrypted
+  register: "encrypted_apis_key"
+
+- name: create encrypted key file for api for engineblock
   copy: content={{ encrypted_api_key.stdout }} dest=files/java-vm/certs/api_pkcs8.pem.encrypted force=no
+
+- name: create encrypted key file for apis for engineblock
+  copy: content={{ encrypted_apis_key.stdout }} dest=files/java-vm/certs/apis_pkcs8.pem.encrypted force=no
