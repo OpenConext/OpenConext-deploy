@@ -16,7 +16,7 @@
   limitations under the License.
 -->
 
-<Server port="8005" shutdown="SHUTDOWN">
+<Server port="{{ tomcat.server_port }}" shutdown="SHUTDOWN">
 
     <!--APR library loader. Documentation at /docs/apr.html -->
     <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
@@ -31,7 +31,7 @@
     <Service name="Catalina">
 
         <!-- Define an AJP 1.3 Connector on port 8009 -->
-        <Connector port="${ajp.port}" protocol="AJP/1.3" redirectPort="8443" tomcatAuthentication="false" maxThreads="500" enableLookups="false" URIEncoding="UTF-8" packetSize="65536"/>
+        <Connector port="${ajp.port}" protocol="AJP/1.3" redirectPort="{{ tomcat.redirect_port }}" tomcatAuthentication="false" maxThreads="500" enableLookups="false" URIEncoding="UTF-8" packetSize="65536"/>
 
         <Engine name="Catalina" defaultHost="localhost">
             <!-- Add a Host for each app because they all must be run as the ROOT context of their Host -->

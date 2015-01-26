@@ -5,7 +5,7 @@
 
 - name: Set TZ variable in tomcat's init-environment
   lineinfile:
-    dest: /etc/tomcat6/tomcat6.conf
+    dest: "{{ tomcat.install_dir }}/tomcat6.conf"
     line: "TZ=\"{{ timezone }}\""
     state: present
     create: no
@@ -19,25 +19,25 @@
   notify: restart tomcat
 
 - name: Create directory for application config
-  file: state=directory path=/etc/tomcat6/appconf owner=tomcat group=tomcat
+  file: state=directory path={{ tomcat.install_dir }}/appconf owner=tomcat group=tomcat
   tags: tomcat
 
 - name: Create directory for wars
-  file: state=directory path=/etc/tomcat6/wars owner=tomcat group=tomcat
+  file: state=directory path={{ tomcat.install_dir }}/wars owner=tomcat group=tomcat
   tags: tomcat
 
 - name: "DEPRECATED: Create shared directory for jars"
-  file: state=directory path=/usr/share/tomcat6/shared owner=tomcat group=tomcat
+  file: state=directory path={{ tomcat.share_dir }}/shared owner=tomcat group=tomcat
   notify: restart tomcat
   tags: tomcat
 
 - name: "DEPRECATED: Create shared lib directory for jars"
-  file: state=directory path=/usr/share/tomcat6/shared/lib owner=tomcat group=tomcat
+  file: state=directory path={{ tomcat.share_dir }}/shared/lib owner=tomcat group=tomcat
   notify: restart tomcat
   tags: tomcat
 
 - name: Provide server.xml
-  template: src=server.xml.j2 dest=/etc/tomcat6/server.xml
+  template: src=server.xml.j2 dest={{ tomcat.install_dir }}/server.xml
   notify: restart tomcat
   tags: tomcat
 
@@ -45,8 +45,8 @@
   file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
   tags: tomcat
 
-- name: Copy our version of catalina.properties which append /etc/tomcat6/appconf to common.loader
-  copy: src=catalina.properties dest=/etc/tomcat6/catalina.properties
+- name: Copy our version of catalina.properties which append {{ tomcat.install_dir }}/appconf to common.loader
+  copy: src=catalina.properties dest={{ tomcat.install_dir }}/catalina.properties
   notify: restart tomcat
   tags: tomcat
 
@@ -78,6 +78,6 @@
   tags: tomcat
 
 - name: Start and enable tomcat6
-  service: name=tomcat6 state=started enabled=yes
+  service: name={{ tomcat.service_name }} state=started enabled=yes
   notify: restart tomcat
   tags: tomcat

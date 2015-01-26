@@ -1,0 +1,5 @@
+tomcat:
+  install_dir: /etc/tomcat6
+  lib_dir: /var/lib/tomcat6
+  app_base_dir_name: appBase
+  cache_dir: /var/cache/tomcat6
