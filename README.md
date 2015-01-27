@@ -1,9 +1,16 @@
 Ansible-driven provisioning the OpenConext platform.
 ==============================
 
-# Getting started - development mode
+# Getting started
 
-## Install Vagrant and VirtualBox (for Mac users)
+These step for setting up are based on Mac OSX. Please feel free to create a PR for other environments.
+
+This playbook uses a custom vault, defined in filter_plugins/custom_plugins.py in order to encrypt data. We think this is a better solution than the ansible-vault because it allows us to do fine grained encryption instead of a big ansible-vault file.
+Also, the creator of ansible-vault admits his solution is not the way to go. See [this blogpost](http://jpmens.net/2014/02/22/my-thoughts-on-ansible-s-vault/).
+
+To encrypt and decrypt values use the scripts in `./scripts/encrypt.sh` and `./scripts/encrypt-file.sh`. Run them without arguments to see the help.
+
+## Install Vagrant and VirtualBox
 
     brew tap caskroom/cask
     brew install brew-cask
@@ -23,28 +30,66 @@ install for development:
     pip install python-keyczar==0.71c
 
 
-This playbook uses a custom vault, defined in filter_plugins/custom_plugins.py in order to encrypt data. We think this is a better solution than the ansible-vault because it allows us to do fine grained encryption instead of a big ansible-vault file.
-Also, the creator of ansible-vault admits his solution is not the way to go. See [this blogpost](http://jpmens.net/2014/02/22/my-thoughts-on-ansible-s-vault/).
+# Getting started - OpenConext VM
 
-Retrieve the openconext-keystore from a colleague and put it on an encrypted disk partition, to keep it safe even in case of laptop-loss. Here's how to [create an encrypted folder](http://apple.stackexchange.com/questions/129720/how-can-i-encrypt-a-folder-in-os-x-mavericks) on your Mac.
+The VM setup is intended for demo purposes only since it is using the `openconext-unsafe-keystore`.
 
-This is how the keystore is created (you don't have to do this because it already exists for this project). See [this blogpost](http://www.saltycrane.com/blog/2011/10/notes-using-keyczar-and-python/) for example.
-
-`keyczart create --location=./openconext-unsafe-keystore --purpose=crypt`
-
-`keyczart addkey --location=./openconext-unsafe-keystore --status=primary`
-
-Create the symlink so that our playbook can find the AES key on your encrypted volume:
+Create the symlink so that our playbook can find the AES key in this project:
 
 `ln -s $CURRENT_DIR/openconext-unsafe-keystore ~/.openconext-keystore`
 
-## Structure ##
-The main playbooks are `openconext-php.yml` and `openconext-java.yml`. Its inventories are kept in `environments`. In that directory, a directory is made for each environment that we provision (e.g. vm, test, prod). In each of those is a group_vars folder that containst variable definitions, and the inventory file.
+The setup of the VM is using the `openconext-unsafe-keystore`, don't use that in production.
 
-## Target-environment setup ##
 
-The war-files for each app are put in their right place, inside tomcat6. That Tomcat only binds to localhost. Apache is used with mod_ssl and mod_proxy to manage virtualhosts, access logging etc.
+## Run playbooks
 
-## Environments ##
+For the VM environment the certificates are generated on the fly. Typically you would only run `openconext-java.yml` for installing the java apps on a target environment.
+The VM will install everything on a single box for demo purposes.
 
- - vm: your local vagrant vm
+To provision the VM please run:
+
+1. vagrant up openconext-vm.yml - This will setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
+2. ./ansible-vm openconext-storage.yml - This will setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
+3. ./ansible-vm openconext-java.yml - This will install all Java apps for the openconext platform.
+
+
+# Getting started - Production versions
+
+## Create your own keystore(s)
+
+Create a keystore on an encrypted disk partition, to keep it extra safe (e.g. in case of laptop-loss).
+Here's how to [create an encrypted folder](http://apple.stackexchange.com/questions/129720/how-can-i-encrypt-a-folder-in-os-x-mavericks) on your Mac.
+
+This is how the keystore is created (you don't have to do this because it already exists for your project).
+See [this blogpost](http://www.saltycrane.com/blog/2011/10/notes-using-keyczar-and-python/) for example.
+
+`keyczart create --location=PATH_TO_FOLDER --purpose=crypt`
+
+`keyczart addkey --location=PATH_TO_FOLDER --status=primary`
+
+Create the symlink so that our playbook can find the AES key in this project:
+
+`ln -s PATH_TO_FOLDER ~/.openconext-keystore`
+
+Once created the keystore needs to be shared with your colleagues who also need to deploy. Whether you choose to check in into a git repo is all up to you.
+As long as a ~/.openconext-keystore exists the provision scripts will work.
+
+## Create group_vars and inventory for you environment.
+
+Currently in `./inventory` only `vm` exists. This describes the vm environment. When creating a production setup create an inventory file called `production`.
+To deploy the openconext-java apps you should:
+
+1. copy the openconext-java setup and adjust accordingly
+
+        [openconext-java]
+        PRODUCTION_IP_HERE
+
+        [openconext-java-production:children]
+        openconext-java
+
+2. Create a groups_vars/openconext-java-production.yml and adjust value accordingly. There is a special property (`env`) that is used to determine where to look for certificates and such.
+    Let's say you use `production` as `env`.
+
+3. Place your certificates in `java-production/certs` and `php-production/certs`. If you are going to checkin the private keys as well please make sure you encrypt them using `scripts/encrypt-file.sh`.
+
+4. Run ansible-playbook -u USERNAME -i inventory/production openconext-java.yml (USERNAME needs sudo rights, use -K when a password is needed to sudo)
