@@ -24,6 +24,6 @@
               "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 
     # Proxy requests through to Tomcat using AJP
-    ProxyPass / ajp://localhost:8109/
+    ProxyPass / ajp://localhost:8109/ retry=0
 
 </VirtualHost>
