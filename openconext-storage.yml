@@ -1,0 +1,7 @@
+---
+
+- hosts: openconext-storage
+  sudo: true
+  roles:
+    - mysql
+    - ldap

@@ -1,0 +1,14 @@
+---
+env: vm
+
+# mysql
+mysql_root_password: ACAvoLMFVoLhAysoj9JUJ0FmyQWRLzUUaDVEuESVwnpA8rtUyZtY3ZMofYPy4DFaZnzXWFjx_1hY
+databases:
+  names:
+    - teams
+    - api
+    - apis
+  users:
+    - { name: teamsrw, db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }
+    - { name: apirw, db_name: api, password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY }
+    - { name: apisrw, db_name: apis, password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh }

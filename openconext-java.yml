@@ -8,9 +8,7 @@
     - httpd
     - tomcat
     - java
-    - {role: mysql, when: env_name == "java-vm" }
     - {role: hosts, when: env_name == "java-vm" }
-    - {role: ldap, when: env_name == "java-vm" }
     - shibboleth
     - teams
     - api
