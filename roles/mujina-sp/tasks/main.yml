@@ -1,0 +1,13 @@
+---
+- name: copy mujina-sp configuration
+  template: src=mujina-sp.properties.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/mujina-sp.properties
+  tags: dashboard
+  notify: restart tomcat
+
+- name: copy mujina-sp logging configuration
+  copy: src=mujina-sp-logback.xml dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/mujina-sp-logback.xml group=tomcat owner=tomcat
+  notify: restart tomcat
+
+- name: copy virtual host config
+  template: src=mujina-sp.conf.j2 dest=/etc/httpd/conf.d/mujina-sp.conf
+  notify: restart httpd

@@ -22,6 +22,7 @@ tomcat_apps:
   - api
   - teams
   - grouper
+  - mujina-sp
 
 # shibboleth
 shibboleth_apps:
@@ -39,6 +40,9 @@ teams_version: 4.0.6
 
 api_version: 4.0.1
 api_snapshot_timestamp: 20150115.230128-349
+
+mujina_version: 4.0.2
+#mujina_snapshot_timestamp
 
 # teams
 teams:

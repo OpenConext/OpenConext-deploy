@@ -12,3 +12,4 @@
     - ldap.{{ base_domain }}
     - engine.{{ base_domain }}
     - apis.{{ base_domain }}
+    - mujina-sp.{{ base_domain }}

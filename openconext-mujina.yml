@@ -1,0 +1,9 @@
+---
+
+- hosts: openconext-java
+  sudo: true
+  roles:
+    - mujina-sp
+  handlers:
+    - include: roles/tomcat/handlers/main.yml
+    - include: roles/httpd/handlers/main.yml

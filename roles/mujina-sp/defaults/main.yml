@@ -1,0 +1,5 @@
+mujina_sp_group_url: org/surfnet/coin
+mujina_sp_artifact_id: mujina-sp
+# needed as default values
+mujina_snapshot_timestamp: ''
+mujina_sp_local_war: ''
