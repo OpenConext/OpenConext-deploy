@@ -18,6 +18,11 @@ tls:
     - "{{ tls_https.key_name }}"
 
 
+tomcat_apps:
+  - api
+  - teams
+  - grouper
+
 # shibboleth
 shibboleth_apps:
   - teams

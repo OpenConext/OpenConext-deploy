@@ -36,9 +36,9 @@
         <Engine name="Catalina" defaultHost="localhost">
             <!-- Add a Host for each app because they all must be run as the ROOT context of their Host -->
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true" />
-            <Host name="teams.{{ base_domain }}" appBase="/var/lib/tomcat6/appBase-teams" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
-            <Host name="api.{{ base_domain }}" appBase="/var/lib/tomcat6/appBase-api" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
-            <Host name="grouper.{{ base_domain }}" appBase="/var/lib/tomcat6/appBase-grouper" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
+            {% for tomcat_app in tomcat_apps %}
+            <Host name="{{ tomcat_app }}.{{ base_domain }}" appBase="/var/lib/tomcat6/{{ tomcat.app_base_dir_name }}-{{ tomcat_app }}" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
+            {% endfor %}
         </Engine>
     </Service>
 </Server>
