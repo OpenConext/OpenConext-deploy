@@ -1,0 +1,29 @@
+<VirtualHost *:443>
+    # General setup for the virtual host, inherited from global configuration
+    ServerName apis.{{ base_domain }}:443
+
+    # Use separate log files for the SSL virtual host; note that LogLevel
+    # is not inherited from httpd.conf.
+    ErrorLog logs/apis_ssl_error_log
+    TransferLog logs/apis_ssl_access_log
+    LogLevel warn
+
+    SSLEngine             on
+    SSLProxyEngine        on
+    SSLProtocol           all -SSLv2 -SSLv3
+    SSLCipherSuite        ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA
+    SSLCertificateFile    {{ tls.cert_path }}/{{ tls_https.crt_name }}
+    SSLCertificateKeyFile {{ tls.cert_private_path }}/{{ tls_https.key_name }}
+    SSLCACertificateFile  {{ tls.cert_path }}/{{ tls_https.bundle_name }}
+
+    SetEnvIf User-Agent ".*MSIE.*" \
+             nokeepalive ssl-unclean-shutdown \
+             downgrade-1.0 force-response-1.0
+
+    CustomLog logs/ssl_request_log \
+              "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+
+    # Proxy requests through to Tomcat using AJP
+    ProxyPass / ajp://localhost:8109/
+
+</VirtualHost>

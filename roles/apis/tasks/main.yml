@@ -85,5 +85,7 @@
     deploy_name: apis
     tomcat_context_path: /
   tags: apis
-#- name:
 
+- name: copy virtual host config
+  template: src=apis.conf.j2 dest=/etc/httpd/conf.d/apis.conf
+  notify: restart httpd
