@@ -13,3 +13,4 @@
     - engine.{{ base_domain }}
     - apis.{{ base_domain }}
     - mujina-sp.{{ base_domain }}
+    - mujina-idp.{{ base_domain }}

@@ -23,6 +23,7 @@ tomcat_apps:
   - teams
   - grouper
   - mujina-sp
+  - mujina-idp
 
 # shibboleth
 shibboleth_apps:

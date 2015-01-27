@@ -4,6 +4,7 @@
   sudo: true
   roles:
     - mujina-sp
+    - mujina-idp
   handlers:
     - include: roles/tomcat/handlers/main.yml
     - include: roles/httpd/handlers/main.yml

@@ -1,0 +1,5 @@
+mujina_idp_group_url: org/surfnet/coin
+mujina_idp_artifact_id: mujina-idp
+# needed as default values
+mujina_snapshot_timestamp: ''
+mujina_idp_local_war: ''
