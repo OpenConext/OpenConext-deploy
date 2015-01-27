@@ -48,9 +48,9 @@ The VM will install everything on a single box for demo purposes.
 
 To provision the VM please run:
 
-1. vagrant up openconext-vm.yml - This will setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
-2. ./ansible-vm openconext-storage.yml - This will setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
-3. ./ansible-vm openconext-java.yml - This will install all Java apps for the openconext platform.
+1. `vagrant up openconext-vm.yml` - This will setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
+2. `./ansible-vm openconext-storage.yml` - This will setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
+3. `./ansible-vm openconext-java.yml` - This will install all Java apps for the openconext platform.
 
 
 # Getting started - Production versions
@@ -60,7 +60,7 @@ To provision the VM please run:
 Create a keystore on an encrypted disk partition, to keep it extra safe (e.g. in case of laptop-loss).
 Here's how to [create an encrypted folder](http://apple.stackexchange.com/questions/129720/how-can-i-encrypt-a-folder-in-os-x-mavericks) on your Mac.
 
-This is how the keystore is created (you don't have to do this because it already exists for your project).
+This is how the keystore is created (you don't have to do this if it already exists for your project).
 See [this blogpost](http://www.saltycrane.com/blog/2011/10/notes-using-keyczar-and-python/) for example.
 
 `keyczart create --location=PATH_TO_FOLDER --purpose=crypt`
@@ -74,21 +74,23 @@ Create the symlink so that our playbook can find the AES key in this project:
 Once created the keystore needs to be shared with your colleagues who also need to deploy. Whether you choose to check in into a git repo is all up to you.
 As long as a ~/.openconext-keystore exists the provision scripts will work.
 
+**Notice: When the crypted store is compromised you should change all encrypted values ASAP. The same goes for when you loose your home key, you should change the locks.**
+
 ## Create group_vars and inventory for you environment.
 
-Currently in `./inventory` only `vm` exists. This describes the vm environment. When creating a production setup create an inventory file called `production`.
-To deploy the openconext-java apps you should:
+Currently in `./inventory` only the `vm` inventory file exists. This describes the vm environment. When for instance creating a production setup create an inventory file called `production`.
+To deploy the openconext-java apps to this new production environment you should:
 
 1. copy the openconext-java setup and adjust accordingly
 
         [openconext-java]
-        PRODUCTION_IP_HERE
+        PRODUCTION_ADDRESS_HERE
 
         [openconext-java-production:children]
         openconext-java
 
-2. Create a groups_vars/openconext-java-production.yml and adjust value accordingly. There is a special property (`env`) that is used to determine where to look for certificates and such.
-    Let's say you use `production` as `env`.
+2. Create a `groups_vars/openconext-java-production.yml` and adjust values accordingly. There is a special property (`env`) that is also used to determine where to look for certificates and such.
+    In this case use `production` as `env`.
 
 3. Place your certificates in `java-production/certs` and `php-production/certs`. If you are going to checkin the private keys as well please make sure you encrypt them using `scripts/encrypt-file.sh`.
 
