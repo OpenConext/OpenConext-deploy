@@ -7,10 +7,10 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--memory", "2048"]
   end
 
-  config.vm.define "openconext-java" do |openconext_java|
-    openconext_java.vm.network :private_network, ip: "192.168.66.78"
-    openconext_java.vm.provision :ansible do |ansible|
-      ansible.playbook = "openconext-java.yml"
+  config.vm.define "openconext-vm" do |openconext_vm|
+    openconext_vm.vm.network :private_network, ip: "192.168.66.78"
+    openconext_vm.vm.provision :ansible do |ansible|
+      ansible.playbook = "openconext-vm.yml"
       ansible.inventory_path = "inventory/vm"
     end
   end

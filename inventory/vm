@@ -3,6 +3,9 @@ localhost ansible_connection=local ansible_python_interpreter=/usr/local/bin/pyt
 
 [local-certs:children]
 
+[openconext-vm]
+192.168.66.78
+
 [openconext-storage]
 192.168.66.78
 
