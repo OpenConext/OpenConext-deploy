@@ -5,3 +5,4 @@ maven_repo: https://build.surfconext.nl/repository/public/releases
 maven_snapshot_repo: https://build.surfconext.nl/repository/public/snapshots
 
 ssl_key_dir: /etc/httpd/keys
+php_display_errors: 1

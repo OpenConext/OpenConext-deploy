@@ -4,3 +4,4 @@
   sudo: true
   roles:
     - hosts
+    - php
