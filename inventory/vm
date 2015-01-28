@@ -18,3 +18,8 @@ openconext-storage
 [openconext-java-vm:children]
 openconext-java
 
+[openconext-php]
+192.168.66.78
+
+[openconext-php-vm:children]
+openconext-php

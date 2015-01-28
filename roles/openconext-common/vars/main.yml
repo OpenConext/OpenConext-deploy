@@ -1,0 +1,7 @@
+---
+# OpenConext global variables.
+openconext_releases_dir:   "/opt/openconext"
+openconext_builds_dir:     "{{ openconext_releases_dir }}/builds"
+openconext_configs_dir:    "/etc/openconext"
+openconext_logging_dir:    "/var/log/openconext"
+

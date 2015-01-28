@@ -1,0 +1,8 @@
+---
+- name: Ensure the directories exist
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ openconext_builds_dir }}"
+  - "{{ openconext_configs_dir }}"
+  - "{{ openconext_logging_dir }}"
+  - "{{ openconext_releases_dir }}"
