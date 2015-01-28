@@ -72,9 +72,9 @@ api:
     userDn: "cn=engine,dc=surfconext,dc=nl"
     password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
   engineblock:
-    user: ebrw
-    url: jdbc:mysql://db.{{ base_domain }}:3306/eb
-    password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
+    user: "{{ engine_database_user }}"
+    url: jdbc:mysql://{{ engine_database_host }}:3306/{{ engine_database_name }}
+    password: "{{ engine_database_password }}"
   teams:
     user: teamsrw
     url: jdbc:mysql://localhost:3306/teams

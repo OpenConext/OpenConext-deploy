@@ -1,0 +1,4 @@
+engine_database_name: eb
+engine_database_host: db.{{ base_domain }}
+engine_database_user: ebrw
+engine_database_password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
