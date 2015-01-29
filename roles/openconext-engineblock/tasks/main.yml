@@ -31,11 +31,11 @@
   args:
     chdir: "{{ engine_release_dir }}"
   changed_when: False # TODO How to check when migrate is up to date?
-#
-#- name: Activate new EngineBlock
-#  file: src={{ engine_release_dir }} dest={{ engine_current_release_symlink }} state=link
-#  notify:
-#    - restart apache
+
+- name: Activate new EngineBlock
+  file: src={{ engine_release_dir }} dest={{ engine_current_release_symlink }} state=link
+  notify:
+    - restart httpd
 #
 #- name: Legacy 4.2.0
 #  include: 4.2.0-post.yml
