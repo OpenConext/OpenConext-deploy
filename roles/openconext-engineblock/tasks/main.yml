@@ -13,7 +13,6 @@
   notify:
     - restart httpd
 
-
 - name: copy over the engineblock keys
   copy: content="{{ lookup('file', 'files/' + env_name + '/certs/' + item.value.privateKey) | vault }}" dest={{ item.value.privateFile }}
   with_dict: engine_keys
@@ -26,11 +25,12 @@
   template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
   with_items:
     - engineblock.ini
-#
-#- name: Run EngineBlock migrations
-#  command: ./bin/migrate
-#  args:
-#    chdir: "{{ engine_release_dir }}"
+
+- name: Run EngineBlock migrations
+  command: ./bin/migrate
+  args:
+    chdir: "{{ engine_release_dir }}"
+  changed_when: False # TODO How to check when migrate is up to date?
 #
 #- name: Activate new EngineBlock
 #  file: src={{ engine_release_dir }} dest={{ engine_current_release_symlink }} state=link

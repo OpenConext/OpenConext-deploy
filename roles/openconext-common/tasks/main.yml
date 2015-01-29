@@ -6,3 +6,6 @@
   - "{{ openconext_configs_dir }}"
   - "{{ openconext_logging_dir }}"
   - "{{ openconext_releases_dir }}"
+
+- name: Symlink /etc/surfconext to /etc/openconext
+  file: src={{ openconext_configs_dir }} path=/etc/surfconext state=link
