@@ -1,3 +1,16 @@
+apache_server_admin: unix@prolocation.net
+
+# when using multiple certificates list them all (and their bundles) under tls.certificates
+tls:
+  cert_path: /etc/pki/tls/certs
+  cert_private_path: /etc/pki/tls/private
+  certificates:
+    - "{{ tls_https.crt_name }}"
+    - "{{ tls_https.bundle_name }}"
+  private_keys:
+    - "{{ tls_https.key_name }}"
+
+
 engine_database_name: eb
 engine_database_host: db.{{ base_domain }}
 engine_database_user: ebrw

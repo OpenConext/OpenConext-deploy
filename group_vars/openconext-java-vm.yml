@@ -9,17 +9,6 @@ tls_https:
   crt_name: star.{{ base_domain }}.pem
   bundle_name: star.{{ base_domain }}_ca_bundle.pem
 
-# when using multiple certificates list them all (and their bundles) under tls.certificates
-tls:
-  cert_path: /etc/pki/tls/certs
-  cert_private_path: /etc/pki/tls/private
-  certificates:
-    - "{{ tls_https.crt_name }}"
-    - "{{ tls_https.bundle_name }}"
-  private_keys:
-    - "{{ tls_https.key_name }}"
-
-
 tomcat_apps:
   - api
   - teams

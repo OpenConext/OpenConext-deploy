@@ -5,15 +5,13 @@
 - name: Install current version
   unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
 
-#- name: Install Apache vhost
-#  template:
-#    src: "{{ item.src }}"
-#    dest: /etc/httpd/conf.d/{{ item.dest }}
-#  with_items:
-#    - { src: 'engine.j2.conf', dest: 'engine.conf' }
-#    - { src: 'profile.j2.conf', dest: 'profile.conf' }
-#  notify:
-#    - restart httpd
+- name: Install Apache vhost
+  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
+  with_items:
+    - engine.conf
+    - profile.conf
+  notify:
+    - restart httpd
 #
 #- name: Configure EngineBlock
 #  template:
