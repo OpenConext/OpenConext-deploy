@@ -29,3 +29,8 @@ engine_database_password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_j
 engine_ldap_host: ldap.{{ base_domain }}
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_ldap_password: ACAvoLM9A__9zpR5wmn-7zJSji8f7i4Jnl9vxvgc7yY18mZShQ_0_djlglxdGhc6iFctRiQlv5KK
+
+janus_database_name: sr
+janus_database_host: db.{{ base_domain }}
+janus_database_user: srrw
+janus_database_password: ACAvoLO-pSK11LiWuOVsTljviCISlTdmJpJMNGb0iIDNwljUrIPcP_3ANoK-59FU86o-g0XsLV2VKcLX2Gjwkh97wF6JW1xvDw

@@ -28,14 +28,14 @@ engine_janus_user: engineblock
 engine_janus_cache_lifetime: 3600 # Cache for an hour
 
 #
-#engine_api_domain: engine-api.{{ base_domain }}
-#engine_api_janus_user: serviceregistry
-##engine_api_janus_password:
+engine_api_domain: engine-api.{{ base_domain }}
+engine_api_janus_user: serviceregistry
+engine_api_janus_password: ACAvoLN-2zyNG3J5Ftj0NsWutriCbKaQagT3S5L214vCgz4SgP5yGuUFbxZRx93OEf2KoZEZloTiLZnc5ITkngpv82clFfw0Zg
 #
 #
 
 ## The Identity Provider that Profile can use (always it's own EngineBlock really)
-engine_profile_idp_certificate: /etc/openconext/engineblock.crt
+engine_profile_idp_certificate: "{{ engine_keys.default.publicFile }}"
 engine_profile_idp_entityid: https://{{ engine_domain }}/authentication/idp/metadata
 engine_profile_idp_sso_location: https://{{ engine_domain }}/authentication/idp/single-sign-on
 engine_profile_idp_baseurlpath: "simplesaml/"

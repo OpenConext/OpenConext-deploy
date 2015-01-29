@@ -1,0 +1,66 @@
+---
+#- stat: path={{ janus_tar_location }}
+#  register: janus_tar_location_stat
+#
+- name: Install JANUS - Download archive
+  get_url: url="{{ janus_download_base_url }}/{{ janus_tar_file }}" dest="{{ janus_tar_location }}"
+
+- name: Install JANUS - Create dir
+  file: path={{ janus_dir }} state=directory
+
+- name: Install JANUS - Unarchive it
+  unarchive: src={{ janus_tar_location }} dest={{ janus_dir }} copy=no creates={{ janus_dir }}/app
+  notify:
+    - restart httpd
+    - restart memcached
+
+- name: Install JANUS - Copy config and metadata
+  template: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: "janus/config/parameters.j2.yml", dest: "{{ janus_dir }}/app/config/parameters.yml" }
+    - { src: "janus/config/config_janus_core.j2.yml", dest: "{{ janus_dir }}/app/config/config_janus_core.yml" }
+    - { src: "janus/dictionaries/metadatafields.definition.j2.json", dest: "{{ janus_dir }}/dictionaries/metadatafields-custom.definition.json" }
+  notify:
+    - restart httpd
+    - restart memcached
+
+- name: Activate installation
+  file: src={{ janus_installation_dir }} dest={{ janus_installation_current_release_symlink }} state=link
+  notify:
+    - restart httpd
+    - restart memcached
+#
+- name: Ensure cache is cleared
+  file: path={{ janus_cache_path }}/janus state=absent
+  changed_when: False # never report change since it is about cache
+
+- name: Ensure cache base and log directories exist and are writable for the webserver
+  file:
+    path={{ item }}
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+  with_items:
+    - "{{ janus_cache_path }}"
+    - "{{ janus_cache_path }}/janus"
+    - "{{ janus_cache_path }}/janus/sessions"
+    - "/var/log/janus-ssp/janus"
+  changed_when: False # never report change because we remove the directories above...
+
+# Note that this migration command probably has created cache directories and files
+# owned by root since it will be run as sudo
+- name: Install Janus - Run database migrations
+  command: ./bin/migrate.sh
+  args:
+    chdir: "{{ janus_dir }}"
+  register: janus_migrate_output
+  changed_when: "'No migrations to execute' not in janus_migrate_output.stdout"
+
+- name: Ensure cache base and log directories exist and are writable for the webserver
+  file:
+    path={{ janus_cache_path }}
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+    recurse=yes
+  changed_when: False # never report change because it is caused by migrate
