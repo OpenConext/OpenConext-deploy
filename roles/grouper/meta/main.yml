@@ -10,6 +10,7 @@ dependencies:
   , app_artifact_id: ""
   , deploy_name: grouper
   , tomcat_context_path: /grouper
+  , tomcat_handler_name: tomcat
   , tags: grouper }
 - { role: tomcat_app
   , app_name: grouper
@@ -20,4 +21,5 @@ dependencies:
   , app_artifact_id: ""
   , deploy_name: grouper-ws
   , tomcat_context_path: /grouper-ws
+  , tomcat_handler_name: tomcat
   , tags: grouper }
