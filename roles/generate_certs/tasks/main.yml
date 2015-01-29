@@ -65,11 +65,12 @@
       -x509 \
       -days 3652 \
       -nodes \
-      -out files/java-vm/certs/{{ item.cert_name }}.crt \
-      -keyout files/java-vm/certs/{{ item.cert_name }}.pem creates=files/java-vm/certs/{{ item.cert_name }}.pem
+      -out files/{{ item.dest }}/certs/{{ item.cert_name }}.crt \
+      -keyout files/{{ item.dest }}/certs/{{ item.cert_name }}.pem creates=files/{{ item.dest }}/certs/{{ item.cert_name }}.pem
   with_items:
-    - {cn: Api, cert_name: api}
-    - {cn: Apis, cert_name: apis}
+    - {cn: Api, cert_name: api, dest: java-vm}
+    - {cn: Apis, cert_name: apis, dest: java-vm}
+    - {cn: Engine, cert_name: engineblock, dest: php-vm}
 
 - name: convert the sp key to pkcs8 so it plays well with java
   command: |
@@ -92,8 +93,16 @@
     scripts/encrypt-file.sh -f files/java-vm/certs/apis_pkcs8.pem creates=files/java-vm/certs/apis_pkcs8.pem.encrypted
   register: "encrypted_apis_key"
 
+- name: encrypt the private key for engineblock
+  shell: |
+    scripts/encrypt-file.sh -f files/php-vm/certs/engineblock.pem creates=files/php-vm/certs/engineblock.pem.encrypted
+  register: "encrypted_engineblock_key"
+
 - name: create encrypted key file for api for engineblock
   copy: content={{ encrypted_api_key.stdout }} dest=files/java-vm/certs/api_pkcs8.pem.encrypted force=no
 
 - name: create encrypted key file for apis for engineblock
   copy: content={{ encrypted_apis_key.stdout }} dest=files/java-vm/certs/apis_pkcs8.pem.encrypted force=no
+
+- name: create encrypted key file for engineblock
+  copy: content={{ encrypted_engineblock_key.stdout }} dest=files/php-vm/certs/engineblock.pem.encrypted force=no
