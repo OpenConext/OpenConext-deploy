@@ -1,0 +1,6 @@
+---
+  - include: 1_install_simplesamlphp.yml
+#  - include: 2_install_janus.yml
+#  - include: 3_install_keys_openconext.yml
+#  - include: 4_install_keys_surfconext.yml
+#  - include: 5_install_vhost.yml

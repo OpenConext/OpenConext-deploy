@@ -7,4 +7,4 @@
   roles:
     - { role: openconext-common, tags: ['eb','sr']}
     - { role: openconext-engineblock, tags: ['eb'] }
-#    - { role: janus, tags: ['sr'] }
+    - { role: janus, tags: ['sr'] }
