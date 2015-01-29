@@ -1,3 +1,4 @@
+---
 tomcat:
   install_dir: /etc/tomcat6
   share_dir: /usr/share/tomcat6

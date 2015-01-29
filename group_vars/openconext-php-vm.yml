@@ -1,5 +1,4 @@
 ---
-env_name: php-{{ env }}
 engine:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"

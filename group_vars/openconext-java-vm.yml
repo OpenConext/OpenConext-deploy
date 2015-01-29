@@ -1,5 +1,4 @@
 ---
-env_name: java-{{ env }}
 base_domain: "{{ env }}.openconext.org"
 
 # on the VM we use the same certificate for all domains under base_domain.

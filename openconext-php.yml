@@ -2,6 +2,8 @@
 - hosts: openconext-php
   sudo: yes
   gather_facts: no
+  vars:
+    env_lang: php
   roles:
     - { role: openconext-common, tags: ['eb','sr']}
     - { role: openconext-engineblock, tags: ['eb'] }

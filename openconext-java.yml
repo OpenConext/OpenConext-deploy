@@ -2,6 +2,8 @@
 
 - hosts: openconext-java
   sudo: true
+  vars:
+    env_lang: java
   roles:
     - common
     - tls
