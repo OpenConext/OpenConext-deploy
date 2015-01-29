@@ -10,10 +10,10 @@ ldap:
     password: ACAvoLODUDZgKT6oPCQzOPR9Rp7Nq4uvvl9J5FBqjcKODnbQmoduSA6RKBub7waTs2MHinRl3jqy3lYiNa5PMLu6w7mo7NzdKA
     password_sha: "{SSHA}ZTcz1DhpiYwfj4ZMF4+t/MuxZKQno/6V" # this has to match value in password. Use slappasswd -s 'unecrypted password' to generate
   engine:
-    user: "cn=engine,dc=surfconext,dc=nl"
+    user: "{{ engine_ldap_bind_dn }}"
     user_cn: engine
-    password: ACAvoLM9A__9zpR5wmn-7zJSji8f7i4Jnl9vxvgc7yY18mZShQ_0_djlglxdGhc6iFctRiQlv5KK
-    password_sha: "{SSHA}XlAxDselBl2tk/Ohm7W+nJaSXoNhdElf"
+    password: "{{ engine_ldap_password }}"
+    password_sha: "{SSHA}XlAxDselBl2tk/Ohm7W+nJaSXoNhdElf" # this has to match value in password. Use slappasswd -s 'unecrypted password' to generate
   grouper:
     unit_test_user: gadget
 

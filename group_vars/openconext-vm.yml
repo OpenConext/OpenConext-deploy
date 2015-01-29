@@ -1,4 +1,8 @@
+---
+env: vm
 apache_server_admin: unix@prolocation.net
+
+engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
 # when using multiple certificates list them all (and their bundles) under tls.certificates
 tls:
@@ -15,3 +19,7 @@ engine_database_name: eb
 engine_database_host: db.{{ base_domain }}
 engine_database_user: ebrw
 engine_database_password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
+
+engine_ldap_host: ldap.{{ base_domain }}
+engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
+engine_ldap_password: ACAvoLM9A__9zpR5wmn-7zJSji8f7i4Jnl9vxvgc7yY18mZShQ_0_djlglxdGhc6iFctRiQlv5KK

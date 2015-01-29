@@ -1,5 +1,4 @@
 ---
-env: vm
 env_name: java-{{ env }}
 base_domain: "{{ env }}.openconext.org"
 

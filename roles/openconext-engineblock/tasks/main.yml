@@ -12,11 +12,21 @@
     - profile.conf
   notify:
     - restart httpd
-#
-#- name: Configure EngineBlock
-#  template:
-#    src: engineblock.ini
-#    dest: /etc/openconext/engineblock.ini
+
+
+- name: copy over the engineblock key
+  copy: content="{{ lookup('file', 'files/' + env_name + '/certs/engineblock.pem.encrypted') | vault }}" dest=/etc/openconext/engineblock.pem
+
+- name: copy engineblock certificate to correct location
+  copy: src=files/{{ env_name }}/certs/engineblock.crt dest=/etc/openconext/engineblock.crt
+
+- name: copy over the engineblock crt
+  copy: src=files/php-{{ env }}/certs/engineblock.crt dest=/etc/openconext
+
+- name: Configure EngineBlock
+  template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
+  with_items:
+    - engineblock.ini
 #
 #- name: Write the public keys
 #  shell: echo "{{ item.value.publicKey | vault }}" > {{ item.value.publicFile }} creates={{ item.value.publicKey }}
