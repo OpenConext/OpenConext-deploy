@@ -2,9 +2,9 @@
 - name: Download current version
   get_url: url="{{ engine_download_url }}" dest="{{ engine_build_path }}"
 
-#- name: Install current version
-#  unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
-#
+- name: Install current version
+  unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
+
 #- name: Install Apache vhost
 #  template:
 #    src: "{{ item.src }}"
