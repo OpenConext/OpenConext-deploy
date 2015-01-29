@@ -65,15 +65,17 @@
   tags: tomcat
 
 - name: check if the certificate already exists in the keystore
-  command: keytool -list -alias "{{ keytool.current_certificate.alias }}" -keystore /etc/pki/java/cacerts -storepass {{ keystore_password | vault }}
+  command: keytool -list -alias "{{ item.alias }}" -keystore /etc/pki/java/cacerts -storepass {{ keystore_password | vault }}
   register: check_certificate_exists
   ignore_errors: yes
-  changed_when: check_certificate_exists.rc != 0
+  changed_when: False
+  with_items: keytool.current_certificates
   tags: tomcat
 
 - name: populate java keystore so that our machine-clients can talk to REST services provided by openconext / selfservice
-  command: keytool -import -noprompt -alias "{{ keytool.current_certificate.alias }}" -file {{ keytool.current_certificate.file }} -trustcacerts -keystore /etc/pki/java/cacerts -storepass {{ keystore_password | vault }}
-  when: check_certificate_exists.rc != 0
+  command: keytool -import -noprompt -alias "{{ item.item.alias }}" -file {{ item.item.file }} -trustcacerts -keystore /etc/pki/java/cacerts -storepass {{ keystore_password | vault }}
+  when: item.rc != 0
+  with_items: check_certificate_exists["results"]
   notify: restart tomcat
   tags: tomcat
 

@@ -3,11 +3,13 @@ env: vm
 env_name: java-{{ env }}
 base_domain: "{{ env }}.openconext.org"
 
+# on the VM we use the same certificate for all domains under base_domain.
 tls_https:
   key_name: star.{{ base_domain }}.key
   crt_name: star.{{ base_domain }}.pem
   bundle_name: star.{{ base_domain }}_ca_bundle.pem
 
+# when using multiple certificates list them all (and their bundles) under tls.certificates
 tls:
   cert_path: /etc/pki/tls/certs
   cert_private_path: /etc/pki/tls/private
@@ -45,8 +47,13 @@ api_snapshot_timestamp: 20150115.230128-349
 mujina_version: 4.0.2
 #mujina_snapshot_timestamp
 
-# teams
+##
+# VM config for the teams app
+##
 teams:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
   team_db_password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
   team_db_host: localhost
   eb_db_password: ACAvoLPY26q3FD4KZkXCJtWpQi7GW10qpS8LgW5IEDGherQr8yv5KDlCpdYoyZ8Qts28kfvFdRxm
@@ -57,8 +64,14 @@ teams:
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
-#api
+
+##
+# VM config for the api app
+##
 api:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
   janus:
     user: engineblock
     secret: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
@@ -88,6 +101,9 @@ api:
   ehcache:
     path: /tmp
 
+##
+# VM config for the grouper app
+##
 grouper:
   teams_db_user: teamsrw
   teams_db_host: localhost
@@ -99,7 +115,13 @@ ldap_grouper_unit_test_user: gadget
 ldap_grouper_engine_user: engine
 ldap_grouper_api_user: api
 
+##
+# VM config for the apis app
+##
 apis:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
   user: apisrw
   url: jdbc:mysql://localhost:3306/apis
   password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh
@@ -111,3 +133,8 @@ apis:
   api:
     consumer_key: https://apis.test.surfconext.nl
     consumer_secret: ACAvoLMx3F7lC4ypJrDqyls4Iu4XHMtzUNUT7ihcMeCZkJx9q7M2DiLzWiNqM46k5zh-mrg5wrhM2vK4Eq-8o-lamCjBajx8sQ
+
+mujina:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
