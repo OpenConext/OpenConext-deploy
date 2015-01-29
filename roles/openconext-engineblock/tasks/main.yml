@@ -1,0 +1,42 @@
+---
+- name: Download current version
+  get_url: url="{{ engine_download_url }}" dest="{{ engine_build_path }}"
+
+#- name: Install current version
+#  unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
+#
+#- name: Install Apache vhost
+#  template:
+#    src: "{{ item.src }}"
+#    dest: /etc/httpd/conf.d/{{ item.dest }}
+#  with_items:
+#    - { src: 'engine.j2.conf', dest: 'engine.conf' }
+#    - { src: 'profile.j2.conf', dest: 'profile.conf' }
+#  notify:
+#    - restart httpd
+#
+#- name: Configure EngineBlock
+#  template:
+#    src: engineblock.ini
+#    dest: /etc/openconext/engineblock.ini
+#
+#- name: Write the public keys
+#  shell: echo "{{ item.value.publicKey | vault }}" > {{ item.value.publicFile }} creates={{ item.value.publicKey }}
+#  with_dict: engine_keys
+#
+#- name: Write the private keys
+#  shell: echo "{{ item.value.privateKey | vault }}" > {{ item.value.privateFile }} creates={{ item.value.privateKey }}
+#  with_dict: engine_keys
+#
+#- name: Run EngineBlock migrations
+#  command: ./bin/migrate
+#  args:
+#    chdir: "{{ engine_release_dir }}"
+#
+#- name: Activate new EngineBlock
+#  file: src={{ engine_release_dir }} dest={{ engine_current_release_symlink }} state=link
+#  notify:
+#    - restart apache
+#
+#- name: Legacy 4.2.0
+#  include: 4.2.0-post.yml

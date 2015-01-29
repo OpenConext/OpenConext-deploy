@@ -4,5 +4,5 @@
   gather_facts: no
   roles:
     - { role: openconext-common, tags: ['eb','sr']}
-#    - { role: openconext-engineblock, tags: ['eb'] }
+    - { role: openconext-engineblock, tags: ['eb'] }
 #    - { role: janus, tags: ['sr'] }
