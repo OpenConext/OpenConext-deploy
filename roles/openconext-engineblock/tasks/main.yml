@@ -30,6 +30,14 @@
   template: src=files/{{ env_name }}/{{ engine_initial_sql }}.j2 dest=/tmp/{{ engine_initial_sql }}
   when: engine_initial_sql != ''
 
+## TODO: Fix broken engineblock migration... Probably fixed in a new release.
+- name: Run EngineBlock migrations
+  command: ./bin/migrate
+  args:
+    chdir: "{{ engine_release_dir }}"
+  register: migrate_output
+  changed_when: "'no update needed' not in migrate_output.stderr"
+
 - name: run load engineblock sql
   shell: mysql -u {{ engine_database_user }} -p{{ engine_database_password | vault }} -h localhost -D {{ engine_database_name }} < /tmp/{{ engine_initial_sql }}
   when: engine_initial_sql != ''
