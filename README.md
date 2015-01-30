@@ -63,7 +63,7 @@ To provision the VM please run:
 
 ## Enjoy your new VM!
 
-Go to (https://vm.openconext.org)[https://vm.openconext.org].
+Go to [https://vm.openconext.org](https://vm.openconext.org).
 
 # Deploy to test / staging / production
 
