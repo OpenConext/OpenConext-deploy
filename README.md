@@ -59,7 +59,6 @@ To provision the VM please run:
 3. `./ansible-vm openconext-java.yml` - This will install all Java apps for the openconext platform.
 4. `./ansible-vm openconext-php.yml` - This will install all PHP apps for the openconext platform.
 5. `./ansible-vm openconext-mujina.yml` - This will install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
-6. 
 
 ## Enjoy your new VM!
 
