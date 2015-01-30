@@ -64,3 +64,8 @@
     group={{ apache_user }}
     recurse=yes
   changed_when: False # never report change because it is caused by migrate
+
+- name: Install Apache vhost
+  template: src=vhost.j2.conf dest=/etc/httpd/conf.d/serviceregistry.conf
+  notify:
+    - restart httpd

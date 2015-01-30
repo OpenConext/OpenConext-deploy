@@ -1,7 +1,4 @@
 ---
-#  - stat: path={{ janus_ssp_tar_location }}
-#    register: janus_ssp_tar_location_stat
-
 - name: Install memcached and required modules
   yum: name=memcached state=present
 
@@ -11,9 +8,9 @@
 - name: Install SSP - Download archive
   get_url: url="{{ janus_ssp_download_base_url }}/{{ janus_ssp_tar_file }}" dest="{{ janus_ssp_tar_location }}"
 
-# added creates so it does not keep unarchiving it after deleting the unused files and modules
+# TODO: Not idempotent. Install SSP - Remove unused config files and modules removes folders...
 - name: Install SSP - Unarchive it
-  unarchive: src="{{ janus_ssp_tar_location }}" dest="{{ janus_installation_dir }}" copy=no creates="{{ janus_installation_dir }}"
+  unarchive: src="{{ janus_ssp_tar_location }}" dest="{{ janus_installation_dir }}" copy=no
 
 - name: Install SSP - Link dir to standard location
   file: path={{ janus_ssp_dir }} src={{ janus_ssp_unarchived_dir }} state=link

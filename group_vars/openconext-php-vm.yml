@@ -9,6 +9,11 @@ profile:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
 
+janus:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
 
 engine_janus_secret: ACAvoLMrTw8Azpw2Ml3c9nbivbvyQchg9zQ2ShwViJOxT9eqeI-e79xLYpKgN4xGsT_GzBGXWlDYDxWw63WvDAZyvamP_46DGg
 engine_janus_cache_lifetime: 0
