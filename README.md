@@ -36,7 +36,7 @@ To install for development with Homebrew:
     pip install python-keyczar==0.71c
 
 
-# Getting started - OpenConext VM
+# Deploy to a (development) VM
 
 The VM setup is intended for demo purposes only since it is using the `openconext-unsafe-keystore`.
 
@@ -61,7 +61,7 @@ To provision the VM please run:
 5. `./ansible-vm openconext-mujina.yml` - This will install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
 
 
-# Getting started - Production versions
+# Deploy to test / staging / production
 
 ## Create your own keystore(s)
 
