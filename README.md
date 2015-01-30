@@ -17,10 +17,10 @@ For installation instructions see [the website](https://docs.vagrantup.com/v2/in
 
 To install both with Homebrew:
 
-    brew tap caskroom/cask
-    brew install brew-cask
-    brew cask install vagrant
-    brew cask install virtualbox
+    sudo brew tap caskroom/cask &&
+    sudo brew install brew-cask &&
+    sudo brew cask install vagrant &&
+    sudo brew cask install virtualbox
 
 ## Install Ansible
 
@@ -28,12 +28,12 @@ Ansible is the configuration tool we use to describe our servers.
 Installation instruction can be found on the [Ansible website](http://docs.ansible.com/intro_installation.html).
 To install for development with Homebrew:
 
-    brew install python
-    pip install --upgrade setuptools
-    pip install --upgrade pip
-    brew linkapps
-    brew install ansible
-    pip install python-keyczar==0.71c
+    sudo brew install python &&
+    sudo pip install --upgrade setuptools &&
+    sudo pip install --upgrade pip &&
+    sudo brew linkapps &&
+    sudo brew install ansible &&
+    sudo pip install python-keyczar==0.71c
 
 
 # Deploy to a (development) VM
@@ -59,7 +59,11 @@ To provision the VM please run:
 3. `./ansible-vm openconext-java.yml` - This will install all Java apps for the openconext platform.
 4. `./ansible-vm openconext-php.yml` - This will install all PHP apps for the openconext platform.
 5. `./ansible-vm openconext-mujina.yml` - This will install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
+6. 
 
+## Enjoy your new VM!
+
+Go to (https://vm.openconext.org)[https://vm.openconext.org].
 
 # Deploy to test / staging / production
 
