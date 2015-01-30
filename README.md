@@ -54,11 +54,18 @@ The VM will install everything on a single box for demo purposes.
 
 To provision the VM please run:
 
-1. `vagrant up openconext-vm` - This will setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
-2. `./ansible-vm openconext-storage.yml` - This will setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
-3. `./ansible-vm openconext-java.yml` - This will install all Java apps for the openconext platform.
-4. `./ansible-vm openconext-php.yml` - This will install all PHP apps for the openconext platform.
-5. `./ansible-vm openconext-mujina.yml` - This will install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
+```bash
+# Setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
+vagrant up &&
+# Setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
+./ansible-vm openconext-storage.yml &&
+# Install all Java apps for the openconext platform.
+./ansible-vm openconext-java.yml
+# Install all PHP apps for the openconext platform.
+./ansible-vm openconext-php.yml
+# install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
+./ansible-vm openconext-mujina.yml
+```
 
 ## Enjoy your new VM!
 
