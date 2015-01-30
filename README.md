@@ -64,6 +64,7 @@ vagrant up &&
 ```
 
 Which will:
+
 1. Setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
 2. Setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
 3. Install all Java apps for the openconext platform.
