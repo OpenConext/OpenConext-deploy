@@ -1,0 +1,3 @@
+---
+- include: simplesamlphp.yml
+- include: janus.yml

@@ -39,7 +39,7 @@
   tags: mysql
 
 - name: Create database user
-  mysql_user: name={{ item.name }} password={{ item.password | vault }} priv={{ item.db_name }}.*:ALL state=present
+  mysql_user: name={{ item.name }} host={{ item.host }} password={{ item.password | vault }} priv={{ item.db_name }}.*:ALL state=present
   with_items:
     - "{{ databases.users }}"
   tags: mysql

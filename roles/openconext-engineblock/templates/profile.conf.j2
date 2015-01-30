@@ -1,0 +1,68 @@
+<Virtualhost {{ profile_ipv4_address }}:443>
+		ServerAdmin {{ apache_server_admin }}
+
+		DocumentRoot {{ engine_current_release_symlink }}/www/profile
+		ServerName   {{ profile_domain }}
+
+		<Directory "{{ engine_current_release_symlink }}/www">
+			AllowOverride None
+		</Directory>
+
+		Alias /simplesaml {{ engine_current_release_symlink }}/vendor/simplesamlphp/simplesamlphp/www
+
+		SSLEngine on
+		SSLHonorCipherOrder On
+		SSLProtocol all -SSLv2 -SSLv3
+		SSLCipherSuite ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH
+    SSLCertificateFile    {{ tls.cert_path }}/{{ profile.crt_name }}
+    SSLCertificateKeyFile {{ tls.cert_private_path }}/{{ profile.key_name }}
+    SSLCACertificateFile  {{ tls.cert_path }}/{{ profile.bundle_name }}
+
+		RewriteEngine On
+		# If the requested url does not map to a file or directory, then forward it to index.php/URL.
+		# Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
+		RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+		RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+		RewriteCond %{REQUEST_URI} !^/(simplesaml.*)$
+		RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
+		# Requests to the domain (no query string)
+		RewriteRule ^$ index.php/ [L]
+
+		ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-PROFILE'"
+		CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PROFILE'" combined
+</VirtualHost>
+{% if profile_ipv6_address is defined %}
+<Virtualhost [{{ profile_ipv6_address }}]:443>
+		ServerAdmin {{ apache_server_admin }}
+
+		DocumentRoot {{ engine_current_release_symlink }}/www/profile
+		ServerName   {{ profile_domain }}
+
+		<Directory "{{ engine_current_release_symlink }}/www">
+			AllowOverride None
+		</Directory>
+
+		Alias /simplesaml {{ engine_current_release_symlink }}/vendor/simplesamlphp/simplesamlphp/www
+
+		SSLEngine on
+		SSLHonorCipherOrder On
+		SSLProtocol all -SSLv2 -SSLv3
+		SSLCipherSuite ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH
+    SSLCertificateFile    {{ tls.cert_path }}/{{ profile.crt_name }}
+    SSLCertificateKeyFile {{ tls.cert_private_path }}/{{ profile.key_name }}
+    SSLCACertificateFile  {{ tls.cert_path }}/{{ profile.bundle_name }}
+
+		RewriteEngine On
+		# If the requested url does not map to a file or directory, then forward it to index.php/URL.
+		# Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
+		RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+		RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+		RewriteCond %{REQUEST_URI} !^/(simplesaml.*)$
+		RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
+		# Requests to the domain (no query string)
+		RewriteRule ^$ index.php/ [L]
+	
+		ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-PROFILE'"
+		CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PROFILE'" combined
+</VirtualHost>
+{% endif %}

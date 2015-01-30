@@ -1,0 +1,50 @@
+#---
+## Version of EngineBlock that is installable by this role
+engine_version: 4.3.5
+
+## Engine installer specific variables.
+engine_version_dir: "{{ engine_version | replace('/', '-') }}"
+engine_release_dir: "{{ openconext_releases_dir }}/OpenConext-engineblock-{{ engine_version_dir }}"
+engine_build_path: "{{ openconext_builds_dir }}/OpenConext-engineblock-{{ engine_version_dir }}.tar.gz"
+engine_download_url: "https://github.com/OpenConext/OpenConext-engineblock/releases/download/{{ engine_version }}/OpenConext-engineblock-{{ engine_version_dir }}.tar.gz"
+engine_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+
+engine_ipv4_address: "*"
+# engine_ipv6_address:
+profile_ipv4_address: "*"
+# profile_ipv6_address
+
+engine_domain: engine.{{ base_domain }}
+profile_domain: profile.{{ base_domain }}
+#
+engine_debug: false
+
+## The endpoint it can use to validate Virtual Organizations
+engine_vovalidate_baseurl : https://api.{{ base_domain }}
+
+## Where EngineBlock can go for its (v1) Service Registry API
+engine_janus_url: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
+engine_janus_user: engineblock
+engine_janus_cache_lifetime: 3600 # Cache for an hour
+
+#
+engine_api_domain: engine-api.{{ base_domain }}
+engine_api_janus_user: serviceregistry
+engine_api_janus_password: ACAvoLN-2zyNG3J5Ftj0NsWutriCbKaQagT3S5L214vCgz4SgP5yGuUFbxZRx93OEf2KoZEZloTiLZnc5ITkngpv82clFfw0Zg
+#
+#
+
+## The Identity Provider that Profile can use (always it's own EngineBlock really)
+engine_profile_idp_certificate: "{{ engine_keys.default.publicFile }}"
+engine_profile_idp_entityid: https://{{ engine_domain }}/authentication/idp/metadata
+engine_profile_idp_sso_location: https://{{ engine_domain }}/authentication/idp/single-sign-on
+engine_profile_idp_baseurlpath: "simplesaml/"
+engine_engine_idp_baseurlpath: "simplesaml/"
+engine_profile_idp_hostmatch: "{{ profile_domain }}"
+
+## The priority of messages that should be logged to syslog
+## 7 = debug
+## 6 = notices
+engine_syslog_priority: 7
+
+#engine_initial_sql: ''

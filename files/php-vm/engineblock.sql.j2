@@ -1,0 +1,22 @@
+INSERT INTO `group_provider`
+  SELECT 1, 'grouper', 'SURFteams grouper','EngineBlock_Group_Provider_Grouper','SURFteams grouper'
+  FROM dual
+  WHERE NOT EXISTS (SELECT * FROM group_provider WHERE id = 1);
+
+INSERT INTO `group_provider_filter`
+  SELECT 1,1,'group','EngineBlock_Group_Provider_Filter_ModelProperty_PregReplace'
+  FROM dual
+  WHERE NOT EXISTS (SELECT * FROM group_provider_filter WHERE id = 1);
+
+INSERT INTO `group_provider_filter_option`
+  SELECT 1,'property','id'
+  FROM dual
+  WHERE NOT EXISTS (SELECT * FROM group_provider_filter_option WHERE group_provider_filter_id = 1 and name = 'property');
+INSERT INTO `group_provider_filter_option`
+  SELECT 1,'replace','urn:collab:group:teams.{{ base_domain }}:$1'
+  FROM dual
+  WHERE NOT EXISTS (SELECT * FROM group_provider_filter_option WHERE group_provider_filter_id = 1 and name = 'replace');
+INSERT INTO `group_provider_filter_option`
+  SELECT 1,'search','|(.+)|'
+  FROM dual
+  WHERE NOT EXISTS (SELECT * FROM group_provider_filter_option WHERE group_provider_filter_id = 1 and name = 'search');

@@ -1,0 +1,27 @@
+---
+- name: Install PHP with extensions
+  yum: name={{ item }} state=present
+  with_items:
+     - php
+     - php-pecl-apc
+     - php-cli
+     - php-curl
+     - php-devel
+     - php-ldap
+     - php-mbstring
+     - php-mcrypt
+     - php-mysql
+     - php-pecl-memcache
+     - php-soap
+     - php-xml
+     - php-mcrypt
+
+- name: Configure PHP
+  template:
+    dest: /etc/php.ini
+    src: php.ini.j2
+
+- name: Configure PHP APC
+  template:
+    dest: /etc/php.d/apc.ini
+    src: apc.ini.j2

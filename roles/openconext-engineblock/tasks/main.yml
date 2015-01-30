@@ -1,0 +1,60 @@
+---
+- name: Download current version
+  get_url: url="{{ engine_download_url }}" dest="{{ engine_build_path }}"
+
+- name: Install current version
+  unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
+
+- name: Install Apache vhost
+  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
+  with_items:
+    - engine.conf
+    - profile.conf
+  notify:
+    - restart httpd
+
+- name: copy over the engineblock keys
+  copy: content="{{ lookup('file', 'files/' + env_name + '/certs/' + item.value.privateKey) | vault }}" dest={{ item.value.privateFile }}
+  with_dict: engine_keys
+
+- name: copy engineblock certificates to correct location
+  copy: src=files/{{ env_name }}/certs/{{ item.value.publicKey }} dest={{ item.value.publicFile }}
+  with_dict: engine_keys
+
+- name: Configure EngineBlock
+  template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
+  with_items:
+    - engineblock.ini
+
+- name: copy load engineblock sql
+  template: src=files/{{ env_name }}/{{ engine_initial_sql }}.j2 dest=/tmp/{{ engine_initial_sql }}
+  when: engine_initial_sql != ''
+
+## TODO: Fix broken engineblock migration... Probably fixed in a new release.
+- name: Run EngineBlock migrations
+  command: ./bin/migrate
+  args:
+    chdir: "{{ engine_release_dir }}"
+  register: migrate_output
+  changed_when: "'no update needed' not in migrate_output.stderr"
+
+- name: run load engineblock sql
+  shell: mysql -u {{ engine_database_user }} -p{{ engine_database_password | vault }} -h localhost -D {{ engine_database_name }} < /tmp/{{ engine_initial_sql }}
+  when: engine_initial_sql != ''
+  register: mysql_output
+  changed_when: False # script should be idempotent
+
+- name: Run EngineBlock migrations
+  command: ./bin/migrate
+  args:
+    chdir: "{{ engine_release_dir }}"
+  register: migrate_output
+  changed_when: "'no update needed' not in migrate_output.stderr"
+
+- name: Activate new EngineBlock
+  file: src={{ engine_release_dir }} dest={{ engine_current_release_symlink }} state=link
+  notify:
+    - restart httpd
+#
+#- name: Legacy 4.2.0
+#  include: 4.2.0-post.yml

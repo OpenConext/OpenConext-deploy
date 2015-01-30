@@ -8,7 +8,16 @@ databases:
     - teams
     - api
     - apis
+    - "{{ engine_database_name }}"
+    - "{{ janus_database_name }}"
   users:
-    - { name: teamsrw, db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }
-    - { name: apirw, db_name: api, password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY }
-    - { name: apisrw, db_name: apis, password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh }
+    - { name: teamsrw, host: localhost, db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }
+    - { name: teamsrw, host: "%", db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }
+    - { name: apirw, host: localhost, db_name: api, password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY }
+    - { name: apirw, host: "%", db_name: api, password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY }
+    - { name: apisrw, host: localhost, db_name: apis, password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh }
+    - { name: apisrw, host: "%", db_name: apis, password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh }
+    - { name: "{{ engine_database_user }}", host: localhost, db_name: "{{ engine_database_name }}", password: "{{ engine_database_password }}" }
+    - { name: "{{ engine_database_user }}", host: "%", db_name: "{{ engine_database_name }}", password: "{{ engine_database_password }}" }
+    - { name: "{{ janus_database_user }}", host: localhost, db_name: "{{ janus_database_name }}", password: "{{ janus_database_password }}" }
+    - { name: "{{ janus_database_user }}", host: "%", db_name: "{{ janus_database_name }}", password: "{{ janus_database_password }}" }

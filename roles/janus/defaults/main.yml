@@ -1,0 +1,92 @@
+---
+janus_installation_version: 5.1.1
+janus_installation_version_dir: "{{ janus_installation_version | replace('/', '-') }}"
+janus_installation_dir: "{{ openconext_releases_dir }}/OpenConext-serviceregistry-{{ janus_installation_version_dir }}"
+janus_installation_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-serviceregistry"
+#
+## SimpleSAMLphp
+janus_ssp_version: 1.13.2
+janus_ssp_unarchived_dir: "{{ janus_installation_dir }}/simplesamlphp-{{ janus_ssp_version}}"
+janus_ssp_dir: "{{ janus_installation_dir }}/simplesamlphp"
+janus_ssp_modules_dir: "{{ janus_ssp_dir }}/modules"
+janus_ssp_download_base_url: https://simplesamlphp.org/res/downloads/
+janus_ssp_tar_file: simplesamlphp-{{ janus_ssp_version }}.tar.gz
+janus_ssp_tar_location: "{{ openconext_builds_dir }}/{{ janus_ssp_tar_file }}"
+#
+## Janus
+janus_version: 1.20.3
+janus_dir: "{{ janus_ssp_modules_dir }}/janus"
+janus_download_base_url: "https://github.com/janus-ssp/janus/releases/download/{{ janus_version }}"
+janus_tar_file: "janus-{{ janus_version }}.tar.gz"
+janus_tar_location: "{{ openconext_builds_dir }}/{{ janus_tar_file }}"
+janus_cache_path: "/var/cache/janus-ssp"
+#
+## This password will give access to the installation page of simpleSAMLphp with
+## metadata listing and diagnostics pages.
+janus_ssp_auth_admin_password: ACAvoLNb0k5KzJPvQSuNzbAKDlWXW_2whsY-ghDMw4_PTxA9zmR3wVREnCw1Z-JuPzNiJ8pEw8X54nc06Ux24SHHhyTACiIvDw
+#
+## This is a secret salt used by simpleSAMLphp when it needs to generate a secure hash
+## of a value. It must be changed from its default value to a secret value. The value of
+## 'secretsalt' can be any valid string of any length.
+##
+## A possible way to generate a random salt is by running the following command from a unix shell:
+## tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo
+janus_ssp_secretsalt: ACAvoLM2dnEYG6hBlalgnkC3LrqoR5fm8kNrcbOVN81Mu8s4nNOyTO8QDL-xCDGZVfBGmmVhkntAq9Nhfjnz6ynTx9aXyBL0xg
+#
+## Some information about the technical persons running this installation.
+## The email address will be used as the recipient address for error reports, and
+## also as the technical contact in generated metadata.
+#
+## Some information about the managing person for this installation
+#
+janus_ssp_base_url_path: simplesaml/
+janus_ssp_cert_dir: /etc/openconext/serviceregistry-certs/
+janus_ssp_data_dir: data/
+#
+## If you enable this option, simpleSAMLphp will log all sent and received messages
+## to the log file.
+##
+## This option also enables logging of the messages that are encrypted and decrypted.
+##
+## Note: The messages are logged with the DEBUG log level, so you also need to set
+## the 'logging.level' option to LOG_DEBUG.
+##
+## Note: this should be disabled on production
+janus_ssp_debug: FALSE
+#
+janus_ssp_showerrors: FALSE
+#
+## Logging.
+## define the minimum log level to log
+##		LOG_ERR				No statistics, only errors
+##		LOG_WARNING			No statistics, only warnings/errors
+##		LOG_NOTICE			Statistics and errors
+##		LOG_INFO			Verbose logs
+##		LOG_DEBUG			Full debug logs - not reccomended for production
+##
+## Choose logging handler.
+##
+## Options: [syslog,file,errorlog]
+janus_ssp_logging_level: LOG_NOTICE
+janus_ssp_logging_handler: syslog
+#
+## Option to override the default settings for the auth token cookie
+janus_ssp_session_authtoken_cookiename: SR_SimpleSAMLAuthToken
+#
+## Cache to memcache, this is used amongst others for caching entity information per revision
+janus_ssp_store_type: phpsession
+#
+## IDP
+janus_ssp_idp_name: "https://engine.{{ base_domain }}/authentication/idp/metadata/vo:managementvo"
+janus_ssp_idp_sso_service: "https://engine.{{ base_domain }}/authentication/idp/single-sign-on/vo:managementvo"
+#
+# A title which is suffixed to the header title
+janus_ssp_title_suffix:
+
+janus_domain: serviceregistry.{{ base_domain }}
+
+# A list of one or more ipv4 or ipv6 addresses
+janus_vhost_ip_list:
+  - "*"
+janus_vhost_error_log: "\"|/usr/bin/logger -p local3.err  -t 'Apache-SR'\""
+janus_vhost_custom_log: "\"|/usr/bin/logger -p local3.info  -t 'Apache-SR'\" combined"
