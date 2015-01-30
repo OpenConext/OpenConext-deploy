@@ -6,9 +6,6 @@ Ansible-driven provisioning the OpenConext platform.
 These step for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
 While it is possible to deploy OpenConext using other environments, currently it is unsupported.
 
-This playbook uses a custom vault, defined in filter_plugins/custom_plugins.py in order to encrypt data. We think this is a better solution than the ansible-vault because it allows us to do fine grained encryption instead of a big ansible-vault file.
-Also, the creator of ansible-vault admits his solution is not the way to go. See [this blogpost](http://jpmens.net/2014/02/22/my-thoughts-on-ansible-s-vault/).
-
 To encrypt and decrypt values use the scripts in `./scripts/encrypt.sh` and `./scripts/encrypt-file.sh`. Run them without arguments to see the help.
 
 ## Install Vagrant and VirtualBox
@@ -106,3 +103,8 @@ To deploy the openconext-java apps to this new production environment you should
 3. Place your certificates in `java-production/certs` and `php-production/certs`. If you are going to checkin the private keys as well please make sure you encrypt them using `scripts/encrypt-file.sh`.
 
 4. Run ansible-playbook -u USERNAME -i inventory/production openconext-java.yml (USERNAME needs sudo rights, use -K when a password is needed to sudo)
+
+# Notes on custom vaults
+
+This playbook uses a custom vault, defined in filter_plugins/custom_plugins.py in order to encrypt data. We think this is a better solution than the ansible-vault because it allows us to do fine grained encryption instead of a big ansible-vault file.
+Also, the creator of ansible-vault admits his solution is not the way to go. See [this blogpost](http://jpmens.net/2014/02/22/my-thoughts-on-ansible-s-vault/).
