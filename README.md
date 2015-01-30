@@ -3,7 +3,8 @@ Ansible-driven provisioning the OpenConext platform.
 
 # Getting started
 
-These step for setting up are based on Mac OSX. Please feel free to create a PR for other environments.
+These step for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
+While it is possible to deploy OpenConext using other environments, currently it is unsupported.
 
 This playbook uses a custom vault, defined in filter_plugins/custom_plugins.py in order to encrypt data. We think this is a better solution than the ansible-vault because it allows us to do fine grained encryption instead of a big ansible-vault file.
 Also, the creator of ansible-vault admits his solution is not the way to go. See [this blogpost](http://jpmens.net/2014/02/22/my-thoughts-on-ansible-s-vault/).
@@ -12,6 +13,13 @@ To encrypt and decrypt values use the scripts in `./scripts/encrypt.sh` and `./s
 
 ## Install Vagrant and VirtualBox
 
+VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product, downloads and user manual can be found on the [VirtualBox website](https://www.virtualbox.org/wiki/Downloads).
+> Vagrant provides easy to configure, reproducible, and portable work environments built on top of industry-standard technology and controlled by a single consistent workflow to help maximize the productivity and flexibility of you and your team.
+
+For installation instructions see [the website](https://docs.vagrantup.com/v2/installation/index.html).
+
+To install both with Homebrew:
+
     brew tap caskroom/cask
     brew install brew-cask
     brew cask install vagrant
@@ -19,8 +27,9 @@ To encrypt and decrypt values use the scripts in `./scripts/encrypt.sh` and `./s
 
 ## Install Ansible
 
-Ansible is the configuration tool we use to describe our servers. To
-install for development:
+Ansible is the configuration tool we use to describe our servers.
+Installation instruction can be found on the [Ansible website](http://docs.ansible.com/intro_installation.html).
+To install for development with Homebrew:
 
     brew install python
     pip install --upgrade setuptools
