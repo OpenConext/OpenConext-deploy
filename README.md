@@ -17,10 +17,10 @@ For installation instructions see [the website](https://docs.vagrantup.com/v2/in
 
 To install both with Homebrew:
 
-    sudo brew tap caskroom/cask &&
-    sudo brew install brew-cask &&
-    sudo brew cask install vagrant &&
-    sudo brew cask install virtualbox
+    brew tap caskroom/cask
+    brew install brew-cask
+    brew cask install vagrant
+    brew cask install virtualbox
 
 ## Install Ansible
 
@@ -28,12 +28,12 @@ Ansible is the configuration tool we use to describe our servers.
 Installation instruction can be found on the [Ansible website](http://docs.ansible.com/intro_installation.html).
 To install for development with Homebrew:
 
-    sudo brew install python &&
-    sudo pip install --upgrade setuptools &&
-    sudo pip install --upgrade pip &&
-    sudo brew linkapps &&
-    sudo brew install ansible &&
-    sudo pip install python-keyczar==0.71c
+    brew install python
+    pip install --upgrade setuptools
+    pip install --upgrade pip
+    brew linkapps
+    brew install ansible
+    pip install python-keyczar==0.71c
 
 
 # Deploy to a (development) VM
@@ -56,10 +56,10 @@ To provision the VM please run:
 
 ```bash
 
-vagrant up &&
-./ansible-vm openconext-storage.yml &&
-./ansible-vm openconext-java.yml &&
-./ansible-vm openconext-php.yml &&
+vagrant up
+./ansible-vm openconext-storage.yml
+./ansible-vm openconext-java.yml
+./ansible-vm openconext-php.yml
 ./ansible-vm openconext-mujina.yml
 ```
 
