@@ -11,7 +11,6 @@
   tags: httpd
   with_items:
     - 01_default.conf
-    - 10_ajp.conf
   notify: restart httpd
 
 - name: Copy the config file
