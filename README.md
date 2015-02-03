@@ -84,6 +84,16 @@ Which will:
 4. Install all PHP apps for the openconext platform.
 5. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
 
+## Add hostname entries to your own /etc/hosts file
+
+We need pseudo-DNS entries so that your browser can reach the VM-platform we just installed. So, add this very long line to your `/etc/hosts` file:
+
+```
+192.168.66.78 api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org serviceregistry.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  apis.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org vm.openconext.org
+```
+
+Here, the ip-address `192.168.66.78` refers to the address that is mentioned in ./Vagrantfile.
+
 ## Enjoy your new VM!
 
 Go to [https://vm.openconext.org](https://vm.openconext.org).
