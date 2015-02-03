@@ -4,5 +4,8 @@
   sudo: true
   roles:
     - hosts
+    - common
+    - tls
+    - httpd
     - php
     - welcome
