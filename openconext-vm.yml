@@ -5,3 +5,4 @@
   roles:
     - hosts
     - php
+    - welcome

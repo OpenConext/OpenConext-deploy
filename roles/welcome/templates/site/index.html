@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OpenConext</title>
+  <link rel="stylesheet" href="css/style.min.css" />
+</head>
+<body>
+<div class="wrapper">
+  <div style="padding: 40px" class="column-center content-holder app-grid-holder">
+    <h1 class="hidden-phone">Welcome to OpenConext</h1>
+    <section>
+      <p>You have completed the OpenConext setup. Import the <a href="openconext_ca.crt">Certificate Authority</a> into your browser for an optimal Conext-perience.</p>
+      <h2>OpenConext Services</h2>
+      <ul class="app-grid filters-available lmng-active"
+          data-search-placeholder="Search in applications">
+          <li class="connected" data-id="1">
+          <h2>
+            <a href="https://profile.{{ base_domain }}/">
+              Profile
+            </a>
+          </h2>
+          <img src="images/profile-logo.png" alt="" />
+          <p class="desc">
+            View and edit your profile
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://profile.{{ base_domain }}/" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://teams.{{ base_domain }}/">
+              Teams
+            </a>
+          </h2>
+          <img src="images/teams-logo.png" alt="" />
+          <p class="desc">
+            Manage team members
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://teams.{{ base_domain }}/" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://mujina-sp.{{ base_domain }}/user.jsp">
+              Mujina SP
+            </a>
+          </h2>
+          <img src="images/mujina-logo.jpg" alt="" />
+          <p class="desc">
+            Mujina Service Provider
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://mujina-sp.{{ base_domain }}/user.jsp" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://mujina-idp.{{ base_domain }}/user.jsp">
+              Mujina IdP
+            </a>
+          </h2>
+          <img src="images/mujina-logo.jpg" alt="" />
+          <p class="desc">
+            Mujina Identity Provider
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://mujina-idp.{{ base_domain }}/user.jsp" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+        
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://dashboard.{{ base_domain }}/">
+              OpenConext Dashboard
+            </a>
+          </h2>
+          <img src="images/dashboard-logo.png" alt="" />
+          <p class="desc">
+              Overview of connected and available service providers
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://dashboard.{{ base_domain }}/" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+      </ul>
+      
+      <h2>OpenConext Administration</h2>
+      <ul class="app-grid filters-available lmng-active"
+          data-search-placeholder="Search in applications">
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://manage.{{ base_domain }}/">
+              Manage
+            </a>
+          </h2>
+          <img src="images/manage-logo.png" alt="" />
+          <p class="desc">
+              Statistics and management of external group providers and virtual identity providers
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://manage.{{ base_domain }}/" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+
+        
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/index.php">
+              Service Registry
+            </a>
+          </h2>
+          <img src="images/sr-logo.png" alt="" />
+          <p class="desc">
+            Manage SPs and IdPs
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/index.php" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://grouper.{{ base_domain }}/grouper">
+              Grouper
+            </a>
+          </h2>
+          <img src="images/grouper-logo.jpg" alt="" />
+          <p class="desc">
+            Backend for teams
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://grouper.{{ base_domain }}/grouper" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+        
+        
+
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://apis.{{ base_domain }}/client/client.html">
+              APIS
+            </a>
+          </h2>
+          <img src="images/apis-logo.png" alt="" />
+          <p class="desc">
+            Authorization server
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://apis.{{ base_domain }}/client/client.html" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://engine.{{ base_domain }}">
+              OpenConext EngineBlock
+            </a>
+          </h2>
+          <img src="images/engine-block-logo.jpg" alt="" />
+          <p class="desc">
+            OpenConext EngineBlock
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://engine.{{ base_domain }}" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+
+      </ul>
+      
+      <h2>OpenConext Utilities</h2>
+      <ul class="app-grid filters-available lmng-active"
+          data-search-placeholder="Search in applications">
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://welcome.{{ base_domain }}/testing/index.html">
+              Integration Testing
+            </a>
+          </h2>
+          <img src="images/selenium-logo.png" alt="" />
+          <p class="desc">
+            Integration Testing
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://welcome.{{ base_domain }}/testing/" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://api.{{ base_domain }}/v1/test">
+              API playground
+            </a>
+          </h2>
+          <img src="images/api-logo.png" alt="" />
+          <p class="desc">
+            Person/group API
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://api.{{ base_domain }}/v1/test" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="content-some-dense">
+    OpenConext | <a href="mailto:openconext-users@list.surfnet.nl">openconext-users@list.surfnet.nl</a>
+  </div>
+</footer>
+<script src="js/tools/sizewatcher.js"></script>
+</body>
+</html>

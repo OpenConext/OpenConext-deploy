@@ -1,0 +1,13 @@
+---
+- name: create site dir
+  file: path=/var/www/welcome state=directory
+
+- name: copy static site files
+  copy: src=site/ dest=/var/www/welcome # src ends with / so *only* the content of that folder is copied.
+
+- name: copy template site files
+  template: src=site/index.html dest=/var/www/welcome/index.html
+
+- name: copy virtual host config
+  template: src=welcome-vm.conf.j2 dest=/etc/httpd/conf.d/welcome-vm.conf
+  notify: restart httpd
