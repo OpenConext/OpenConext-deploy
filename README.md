@@ -3,14 +3,19 @@ Ansible-driven provisioning the OpenConext platform.
 
 # Getting started
 
-These step for setting up are based on Mac OSX. Please feel free to create a PR for other environments.
-
-This playbook uses a custom vault, defined in filter_plugins/custom_plugins.py in order to encrypt data. We think this is a better solution than the ansible-vault because it allows us to do fine grained encryption instead of a big ansible-vault file.
-Also, the creator of ansible-vault admits his solution is not the way to go. See [this blogpost](http://jpmens.net/2014/02/22/my-thoughts-on-ansible-s-vault/).
+These step for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
+While it is possible to deploy OpenConext using other environments, currently it is unsupported.
 
 To encrypt and decrypt values use the scripts in `./scripts/encrypt.sh` and `./scripts/encrypt-file.sh`. Run them without arguments to see the help.
 
 ## Install Vagrant and VirtualBox
+
+VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product, downloads and user manual can be found on the [VirtualBox website](https://www.virtualbox.org/wiki/Downloads).
+> Vagrant provides easy to configure, reproducible, and portable work environments built on top of industry-standard technology and controlled by a single consistent workflow to help maximize the productivity and flexibility of you and your team.
+
+For installation instructions see [the website](https://docs.vagrantup.com/v2/installation/index.html).
+
+To install both with Homebrew:
 
     brew tap caskroom/cask
     brew install brew-cask
@@ -19,8 +24,9 @@ To encrypt and decrypt values use the scripts in `./scripts/encrypt.sh` and `./s
 
 ## Install Ansible
 
-Ansible is the configuration tool we use to describe our servers. To
-install for development:
+Ansible is the configuration tool we use to describe our servers.
+Installation instruction can be found on the [Ansible website](http://docs.ansible.com/intro_installation.html).
+To install for development with Homebrew:
 
     brew install python
     pip install --upgrade setuptools
@@ -30,7 +36,7 @@ install for development:
     pip install python-keyczar==0.71c
 
 
-# Getting started - OpenConext VM
+# Deploy to a (development) VM
 
 The VM setup is intended for demo purposes only since it is using the `openconext-unsafe-keystore`.
 
@@ -48,15 +54,29 @@ The VM will install everything on a single box for demo purposes.
 
 To provision the VM please run:
 
-1. `vagrant up openconext-vm.yml` - This will setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
-2. `./ansible-vm openconext-generate-certs-vm.yml` - This will generate certificates to be used on the VM. In real environments you will have your own.
-3. `./ansible-vm openconext-storage.yml` - This will setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
-4. `./ansible-vm openconext-java.yml` - This will install all Java apps for the openconext platform.
-5. `./ansible-vm openconext-php.yml` - This will install all PHP apps for the openconext platform.
-6. `./ansible-vm openconext-mujina.yml` - This will install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
 
+```bash
 
-# Getting started - Production versions
+vagrant up
+./ansible-vm openconext-storage.yml
+./ansible-vm openconext-java.yml
+./ansible-vm openconext-php.yml
+./ansible-vm openconext-mujina.yml
+```
+
+Which will:
+
+1. Setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
+2. Setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
+3. Install all Java apps for the openconext platform.
+4. Install all PHP apps for the openconext platform.
+5. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
+
+## Enjoy your new VM!
+
+Go to [https://vm.openconext.org](https://vm.openconext.org).
+
+# Deploy to test / staging / production
 
 ## Create your own keystore(s)
 
@@ -98,3 +118,8 @@ To deploy the openconext-java apps to this new production environment you should
 3. Place your certificates in `java-production/certs` and `php-production/certs`. If you are going to checkin the private keys as well please make sure you encrypt them using `scripts/encrypt-file.sh`.
 
 4. Run ansible-playbook -u USERNAME -i inventory/production openconext-java.yml (USERNAME needs sudo rights, use -K when a password is needed to sudo)
+
+# Notes on custom vaults
+
+This playbook uses a custom vault, defined in filter_plugins/custom_plugins.py in order to encrypt data. We think this is a better solution than the ansible-vault because it allows us to do fine grained encryption instead of a big ansible-vault file.
+Also, the creator of ansible-vault admits his solution is not the way to go. See [this blogpost](http://jpmens.net/2014/02/22/my-thoughts-on-ansible-s-vault/).
