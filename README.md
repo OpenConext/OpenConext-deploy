@@ -69,6 +69,7 @@ To provision the VM please run:
 ```bash
 
 vagrant up
+./ansible-vm openconext-generate-certs-vm.yml
 ./ansible-vm openconext-storage.yml
 ./ansible-vm openconext-java.yml
 ./ansible-vm openconext-php.yml
