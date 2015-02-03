@@ -1,0 +1,24 @@
+---
+- name: register api crt content
+  sudo: False
+  local_action: shell sed -e '1d;$d' files/java-{{ env }}/certs/api.crt | tr -d '\n'
+  register: api_crt_content
+  changed_when: False
+
+- name: register apis crt content
+  sudo: False
+  local_action: shell sed -e '1d;$d' files/java-{{ env }}/certs/apis.crt | tr -d '\n'
+  register: apis_crt_content
+  changed_when: False
+
+- name: copy load sql
+  template: src={{ item }}.j2 dest=/tmp/{{ item }}
+  with_items:
+    - engineblock.sql
+    - serviceregistry.sql
+
+- name: run load engineblock sql
+  shell: mysql -u {{ item.db_user }} -p{{ item.db_password | vault }} -h localhost -D {{ item.db_name }} < /tmp/{{ item.sql }}
+  with_items:
+    - { db_user: "{{ engine_database_user }}", db_password: "{{ engine_database_password }}", db_name: "{{ engine_database_name }}", sql: engineblock.sql }
+    - { db_user: "{{ janus_database_user }}", db_password: "{{ janus_database_password }}", db_name: "{{ janus_database_name }}", sql: serviceregistry.sql }

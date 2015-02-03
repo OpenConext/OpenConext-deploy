@@ -31,9 +31,3 @@ engine_keys:
     privateFile: /etc/openconext/engineblock.pem
     publicKey: engineblock.crt
     publicFile: /etc/openconext/engineblock.crt
-
-engine_initial_sql: "engineblock.sql"
-
-#janus_ssp_title_suffix: SURFConext TEST
-#
-#janus_database_password: AFc_w24hvQMxivA6g2Eykp8CKVqwr1HnQJgCiwEiG6crkCp0YyX2qS7hMTAQ3BWqqff9hvAzdT9D
