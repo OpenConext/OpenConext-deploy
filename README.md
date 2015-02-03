@@ -132,3 +132,7 @@ To deploy the openconext-java apps to this new production environment you should
 
 This playbook uses a custom vault, defined in filter_plugins/custom_plugins.py in order to encrypt data. We think this is a better solution than the ansible-vault because it allows us to do fine grained encryption instead of a big ansible-vault file.
 Also, the creator of ansible-vault admits his solution is not the way to go. See [this blogpost](http://jpmens.net/2014/02/22/my-thoughts-on-ansible-s-vault/).
+
+# License
+
+These files are licensed under version 2.0 of the Apache License, as described in the file [LICENSE](LICENSE).
