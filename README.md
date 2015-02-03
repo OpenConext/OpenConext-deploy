@@ -1,9 +1,9 @@
-Ansible-driven provisioning the OpenConext platform.
+Ansible-driven provisioning of the OpenConext platform.
 ==============================
 
 # Getting started
 
-These step for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
+These steps for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
 While it is possible to deploy OpenConext using other environments, currently it is unsupported.
 
 To encrypt and decrypt values use the scripts in `./scripts/encrypt.sh` and `./scripts/encrypt-file.sh`. Run them without arguments to see the help.
@@ -35,6 +35,15 @@ To install for development with Homebrew:
     brew install ansible
     pip install python-keyczar==0.71c
 
+# Installation to a non-Vagrant VM
+
+If you don't want to use Vagrant, but deploy to e.g. a VM you created on
+OpenStack, VMware or any other virtualisation platform, take the following steps.
+
+1. Install RHEL 6 or boot from a RHEL 6 image.
+2. Configure your machine's IP in vm/inventory.
+3. On the machine: run `visudo` and disable requiretty (`Defaults !requiretty`).
+4. Run the ansible commands below, from your workstation.
 
 # Deploy to a (development) VM
 
@@ -42,7 +51,7 @@ The VM setup is intended for demo purposes only since it is using the `openconex
 
 Create the symlink so that our playbook can find the AES key in this project:
 
-`ln -s $CURRENT_DIR/openconext-unsafe-keystore ~/.openconext-keystore`
+`ln -s `pwd`/openconext-unsafe-keystore ~/.openconext-keystore`
 
 The setup of the VM is using the `openconext-unsafe-keystore`, don't use that in production.
 
