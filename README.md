@@ -54,6 +54,7 @@ The VM will install everything on a single box for demo purposes.
 
 To provision the VM please run:
 
+
 ```bash
 
 vagrant up
