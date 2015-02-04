@@ -8,6 +8,7 @@ dependencies:
   , app_group_url: "{{ mujina_sp_group_url }}"
   , app_artifact_id: "{{ mujina_sp_artifact_id }}"
   , deploy_name: mujina-sp
+  , deploy_xml_name: ROOT
   , tomcat_context_path: /
   , tomcat_handler_name: tomcat
   , tags: mujina-sp }

@@ -83,6 +83,7 @@
     app_group_url: "nl/surfnet/apis"
     app_artifact_id: "apis-authorization-server-war"
     deploy_name: apis
+    deploy_xml_name: ROOT
     tomcat_context_path: /
   tags: apis
 
