@@ -1,0 +1,13 @@
+; General PHP settings for all OpenConext hosts
+
+; disable onzinnige 'X-Powered-By' HTTP header
+expose_php = Off
+
+; more secure
+session.cookie_httponly = On
+session.cookie_secure = On
+session.hash_function = 1
+session.hash_bits_per_character = 6
+
+; You are required to use the date.timezone setting
+date.timezone = "{{ timezone }}"

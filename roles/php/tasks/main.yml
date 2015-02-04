@@ -22,6 +22,7 @@
     src: php.ini.j2
 
 - name: Configure PHP APC
-  template:
-    dest: /etc/php.d/apc.ini
-    src: apc.ini.j2
+  template: src={{ item }}.j2 dest=/etc/php.d/{{ item }}
+  with_items:
+    - apc.ini
+    - openconext.ini
