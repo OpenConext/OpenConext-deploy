@@ -24,7 +24,6 @@ engine_vovalidate_baseurl : https://api.{{ base_domain }}
 
 ## Where EngineBlock can go for its (v1) Service Registry API
 engine_janus_url: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
-engine_janus_user: engineblock
 engine_janus_cache_lifetime: 3600 # Cache for an hour
 
 #
