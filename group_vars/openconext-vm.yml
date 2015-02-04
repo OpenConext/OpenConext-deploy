@@ -20,6 +20,8 @@ tls:
   private_keys:
     - "{{ tls_https.key_name }}"
 
+engine_janus_user: engineblock
+engine_janus_secret: ACAvoLMrTw8Azpw2Ml3c9nbivbvyQchg9zQ2ShwViJOxT9eqeI-e79xLYpKgN4xGsT_GzBGXWlDYDxWw63WvDAZyvamP_46DGg
 
 engine_database_name: eb
 engine_database_host: db.{{ base_domain }}
@@ -29,6 +31,9 @@ engine_database_password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_j
 engine_ldap_host: ldap.{{ base_domain }}
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_ldap_password: ACAvoLM9A__9zpR5wmn-7zJSji8f7i4Jnl9vxvgc7yY18mZShQ_0_djlglxdGhc6iFctRiQlv5KK
+
+ldap_password: ACAvoLMUTPe1xi6rIcz1QW8DaphUZBK2dLDQ-ixuuZk97skQxPLVio2zbJdLI8vQPMqQYcKj40cS
+
 
 janus_database_name: sr
 janus_database_host: db.{{ base_domain }}

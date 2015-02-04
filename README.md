@@ -15,6 +15,8 @@ VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product, downloads
 
 For installation instructions see [the website](https://docs.vagrantup.com/v2/installation/index.html).
 
+You will need at least Vagrant 1.7
+
 To install both with Homebrew:
 
     brew tap caskroom/cask
@@ -71,6 +73,7 @@ To provision the VM please run:
 vagrant up
 ./ansible-vm openconext-generate-certs-vm.yml
 ./ansible-vm openconext-storage.yml
+./ansible-vm openconext-vm-initial.yml
 ./ansible-vm openconext-java.yml
 ./ansible-vm openconext-php.yml
 ./ansible-vm openconext-mujina.yml
@@ -80,9 +83,10 @@ Which will:
 
 1. Setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
 2. Setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
-3. Install all Java apps for the openconext platform.
-4. Install all PHP apps for the openconext platform.
-5. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
+3. Inserts entitities and metadata in Janus and initial load of engineblock to bootstrap. **Rerunning this script will delete everything in Janus and Engineblock.**
+4. Install all Java apps for the openconext platform.
+5. Install all PHP apps for the openconext platform.
+6. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
 
 ## Add hostname entries to your own /etc/hosts file
 

@@ -3,7 +3,7 @@
   file: path={{ tomcat_install_dir }}/Catalina/{{ app_name }}.{{ base_domain }} state=directory owner=tomcat group=tomcat
 
 - name: Deploying {{ app_name }} | copy tomcat context config
-  template: src=tomcat_app.xml.j2 dest={{ tomcat_install_dir }}/Catalina/{{ app_name }}.{{ base_domain }}/{{ deploy_name }}.xml owner=tomcat group=tomcat
+  template: src=tomcat_app.xml.j2 dest={{ tomcat_install_dir }}/Catalina/{{ app_name }}.{{ base_domain }}/{{ deploy_xml_name }}.xml owner=tomcat group=tomcat
   notify: restart {{ tomcat_handler_name }}
 
 - name: Deploying {{ app_name }} | Create {{ tomcat_app_base_dir_name }} for each application's host

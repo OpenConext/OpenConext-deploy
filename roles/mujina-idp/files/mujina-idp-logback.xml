@@ -28,13 +28,13 @@
     </encoder>
   </appender>
 
-  <logger name="org.hibernate" level="warn">
+  <logger name="org.hibernate" level="warn" additivity="false">
     <appender-ref ref="file" />
   </logger>
-  <logger name="org.springframework" level="warn">
+  <logger name="org.springframework" level="debug" additivity="false">
     <appender-ref ref="file" />
   </logger>
-  <logger name="nl.surfnet.coin" level="info">
+  <logger name="nl.surfnet.coin" level="info" additivity="false">
     <appender-ref ref="file" />
   </logger>
   <root level="info">

@@ -77,8 +77,8 @@ janus_ssp_session_authtoken_cookiename: SR_SimpleSAMLAuthToken
 janus_ssp_store_type: phpsession
 #
 ## IDP
-janus_ssp_idp_name: "https://engine.{{ base_domain }}/authentication/idp/metadata/vo:managementvo"
-janus_ssp_idp_sso_service: "https://engine.{{ base_domain }}/authentication/idp/single-sign-on/vo:managementvo"
+janus_ssp_idp_name: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+janus_ssp_idp_sso_service: "https://engine.{{ base_domain }}/authentication/idp/single-sign-on"
 #
 # A title which is suffixed to the header title
 janus_ssp_title_suffix:

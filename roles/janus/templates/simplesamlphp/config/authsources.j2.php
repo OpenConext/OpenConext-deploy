@@ -42,6 +42,7 @@ $config = array(
             20 => array(
                    'class' => 'saml:NameIDAttribute',
                    'format' => '%V',
+                    'attribute' => 'NameID',
             ),
         ),
     ),
