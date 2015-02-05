@@ -66,18 +66,18 @@
   notify: restart httpd
   tags: grouper
 
+- name: copy ldap provision script to call grouper
+  template: src={{ item }}.j2 dest=~/{{ item }}
+  with_items:
+    - add-user-in-grouper.gsh
+    - add-api-user-in-grouper.gsh
+  tags: grouper
 
-#TODO: This is probably only in vm?
-#- name: copy ldap provision for mujina
-#  copy: src={{ item }} dest=~/{{ item }}
-#  with_items:
-#    - provision-ldap.gsh
-#  tags: grouper
-
-#TODO: This is probably only in vm?
-#- name: provision ldap for mujina
-#  shell: bin/gsh ~/provision-ldap.gsh
-#  args:
-#    chdir: /opt/www/grouper-shell
-#  tags: grouper
-
+- name: provision ldap with users to call grouper ws
+  shell: bin/gsh ~/{{ item }}
+  args:
+    chdir: /opt/www/grouper-shell
+  with_items:
+    - add-user-in-grouper.gsh
+    - add-api-user-in-grouper.gsh
+  tags: grouper
