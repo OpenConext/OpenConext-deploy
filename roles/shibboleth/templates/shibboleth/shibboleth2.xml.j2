@@ -20,8 +20,7 @@
     -->
 
     <!-- The ApplicationDefaults element is where most of Shibboleth's SAML bits are defined. -->
-    <ApplicationDefaults entityID="https://override-me"
-      REMOTE_USER="eppn persistent-id targeted-id" attributePrefix="AJP_">
+    <ApplicationDefaults entityID="https://override-me" REMOTE_USER="name-id" signing="true" encryption="true">
 
         <!--
         Controls session lifetimes, address checks, cookie handling, and the protocol handlers.
@@ -33,7 +32,7 @@
         impact on the security of the SP. Stealing cookies/sessions is much easier with this disabled.
         -->
         <Sessions
-            lifetime="28800" timeout="3600" checkAddress="false" relayState="ss:mem" handlerSSL="true"
+            lifetime="28800" timeout="3600" checkAddress="true" relayState="ss:mem" handlerSSL="true"
             consistentAddress="true" cookieProps="; path=/; HttpOnly; secure">
 
             <!--
@@ -115,7 +114,23 @@
         <CredentialResolver type="File" key="sp-key.pem" certificate="sp-cert.pem"/>
 
         {% for key, value in shibboleth_apps.items() %}
-        <ApplicationOverride id="{{ key }}" entityID="{{ value }}" />
+        <ApplicationOverride id="{{ key }}" entityID="{{ value }}">
+            <MetadataProvider type="Chaining">
+                <!-- Engineblock IDP metadata -->
+                <MetadataProvider type="XML"
+                                  uri="https://engine.{{ base_domain }}/authentication/idp/metadata?sp-entity-id={{ value }}"
+                                  backingFilePath="/var/cache/engineblock-metadata-saml2-{{ key }}.xml"
+                                  reloadInterval="7200">
+                </MetadataProvider>
+
+                <!-- Metadata of IdP's registered with Engineblock -->
+                <MetadataProvider type="XML"
+                                  uri="https://engine.{{ base_domain }}/authentication/proxy/idps-metadata?sp-entity-id={{ value }}"
+                                  backingFilePath="/var/cache/engineblock-idps-metadata-saml2-{{ key }}.xml"
+                                  reloadInterval="7200">
+                </MetadataProvider>
+            </MetadataProvider>
+        </ApplicationOverride>
         {% endfor %}
 
 
