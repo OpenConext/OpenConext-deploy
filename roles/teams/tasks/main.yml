@@ -12,3 +12,12 @@
   template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
   notify: restart httpd
 
+- name: copy grouper provision script for teams
+  copy: src={{ item }} dest=~/{{ item }}
+  with_items:
+    - create-stems.gsh
+
+- name: provision grouper for teams
+  shell: bin/gsh ~/create-stems.gsh
+  args:
+    chdir: /opt/www/grouper-shell
