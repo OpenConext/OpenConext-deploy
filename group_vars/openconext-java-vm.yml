@@ -95,6 +95,10 @@ grouper:
   db_user: grouperrw
   db_host: localhost
   db_password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_unit_test_user: gadget
@@ -124,3 +128,7 @@ mujina:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
+
+
+tomcat_grouper_user: gadget
+tomcat_grouper_password: ACAvoLM3w46TGosPyYv6AkCgp6WZjg1NX19lspUpWSGHFIo6DovmOt3Z0PUCBVOplcpf2FwBB1jP

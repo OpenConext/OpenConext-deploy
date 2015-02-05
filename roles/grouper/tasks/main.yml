@@ -4,6 +4,7 @@
   with_items:
     - grouper.hibernate.properties
     - sources.xml
+    - grouper.client.properties
   notify: restart tomcat
   tags:
     - grouper
@@ -59,6 +60,12 @@
   args:
     chdir: /opt/www/grouper-shell
   tags: grouper
+
+- name: enable apache conf for grouper
+  template: src=grouper.conf.j2 dest=/etc/httpd/conf.d/grouper.conf
+  notify: restart httpd
+  tags: grouper
+
 
 #TODO: This is probably only in vm?
 #- name: copy ldap provision for mujina

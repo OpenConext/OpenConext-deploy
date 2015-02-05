@@ -36,8 +36,12 @@
   notify: restart tomcat
   tags: tomcat
 
-- name: Provide server.xml
-  template: src=server.xml.j2 dest={{ tomcat_install_dir }}/server.xml
+- name: Copy tomcat config
+  template: src={{ item }}.j2 dest={{ tomcat_install_dir }}/{{ item }}
+  with_items:
+    - server.xml
+    - catalina.properties
+    - tomcat-users.xml
   notify: restart tomcat
   tags: tomcat
 
@@ -45,9 +49,8 @@
   file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
   tags: tomcat
 
-- name: Copy our version of catalina.properties which append {{ tomcat_install_dir }}/{{ tomcat_properties_dir }} to common.loader
-  template: src=catalina.properties.j2 dest={{ tomcat_install_dir }}/catalina.properties
-  notify: restart tomcat
+- name: Unused webapps dir must still be present
+  file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
   tags: tomcat
 
 - name: check if there are any keys to revoke
