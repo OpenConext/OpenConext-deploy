@@ -11,3 +11,14 @@
 - name: copy virtual host config
   template: src=mujina-idp.conf.j2 dest=/etc/httpd/conf.d/mujina-idp.conf
   notify: restart httpd
+
+- name: copy ldap provision for mujina
+  copy: src={{ item }} dest=~/{{ item }}
+  with_items:
+    - add-mujina-user.gsh
+
+- name: provision ldap for mujina
+  shell: bin/gsh ~/add-mujina-user.gsh
+  args:
+    chdir: /opt/www/grouper-shell
+
