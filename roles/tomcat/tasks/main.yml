@@ -45,8 +45,9 @@
   notify: restart tomcat
   tags: tomcat
 
-- name: Unused webapps dir must still be present
-  file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
+- name: Copy sysconfig tomcat
+  template: src=tomcat6.conf.j2 dest={{ tomcat_install_dir }}/tomcat6.conf
+  notify: restart tomcat
   tags: tomcat
 
 - name: Unused webapps dir must still be present
@@ -75,7 +76,7 @@
   with_items: keytool.current_certificates
   tags: tomcat
 
-- name: populate java keystore so that our machine-clients can talk to REST services provided by openconext / selfservice
+- name: populate java keystore so that our machine-clients can talk to REST services provided by openconext
   command: keytool -import -noprompt -alias "{{ item.item.alias }}" -file {{ item.item.file }} -trustcacerts -keystore /etc/pki/java/cacerts -storepass {{ keystore_password | vault }}
   when: item.rc != 0
   with_items: check_certificate_exists["results"]
