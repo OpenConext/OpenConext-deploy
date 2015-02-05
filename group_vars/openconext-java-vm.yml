@@ -25,8 +25,8 @@ shib:
 keystore_password: ACAvoLNaJSARHx9BSmUpockTtDLp_LSmx9DkGnvuk62VtREBsK_IRVr1MM9AAsbb__Xsc4pp5YPa
 
 # versions of installed apps
-teams_version: 4.0.6
-#teams_snapshot_timestamp: 20141112.081923-4
+teams_version: 4.0.7
+teams_snapshot_timestamp: 20150205.105251-3
 
 api_version: 4.0.1
 api_snapshot_timestamp: 20150115.230128-349
@@ -92,9 +92,9 @@ api:
 # VM config for the grouper app
 ##
 grouper:
-  teams_db_user: teamsrw
-  teams_db_host: localhost
-  teams_db_password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
+  db_user: grouperrw
+  db_host: localhost
+  db_password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_unit_test_user: gadget
