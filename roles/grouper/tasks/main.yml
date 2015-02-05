@@ -66,14 +66,17 @@
   notify: restart httpd
   tags: grouper
 
-- name: copy ldap provision script to call grouper
+#TODO: 'already exists' means it's okay. Initially stderr will be empty.
+# changed_when: stderr is empty
+# failed_when: stderr is not empty and not contains already exists
+- name: copy grouper provision script to call grouper
   template: src={{ item }}.j2 dest=~/{{ item }}
   with_items:
     - add-user-in-grouper.gsh
     - add-api-user-in-grouper.gsh
   tags: grouper
 
-- name: provision ldap with users to call grouper ws
+- name: provision grouper with users to call grouper ws
   shell: bin/gsh ~/{{ item }}
   args:
     chdir: /opt/www/grouper-shell
