@@ -21,4 +21,8 @@
   shell: bin/gsh ~/add-mujina-user.gsh
   args:
     chdir: /opt/www/grouper-shell
+  register: gsh_output
+  changed_when: gsh_output.stderr == ''
+  failed_when: gsh_output.stderr != '' and ("already exists" not in gsh_output.stderr)
+
 

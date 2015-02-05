@@ -66,9 +66,6 @@
   notify: restart httpd
   tags: grouper
 
-#TODO: 'already exists' means it's okay. Initially stderr will be empty.
-# changed_when: stderr is empty
-# failed_when: stderr is not empty and not contains already exists
 - name: copy grouper provision script to call grouper
   template: src={{ item }}.j2 dest=~/{{ item }}
   with_items:
@@ -78,6 +75,9 @@
 
 - name: provision grouper with users to call grouper ws
   shell: bin/gsh ~/{{ item }}
+  register: gsh_output
+  changed_when: gsh_output.stderr == ''
+  failed_when: gsh_output.stderr != '' and ("already exists" not in gsh_output.stderr)
   args:
     chdir: /opt/www/grouper-shell
   with_items:

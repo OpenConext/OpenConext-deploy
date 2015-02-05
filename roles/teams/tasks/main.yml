@@ -19,5 +19,7 @@
 
 - name: provision grouper for teams
   shell: bin/gsh ~/create-stems.gsh
+  register: gsh_output
+  changed_when: gsh_output.stderr != ''
   args:
     chdir: /opt/www/grouper-shell
