@@ -69,8 +69,8 @@ api:
     password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
   ldap:
     url: ldap://ldap.{{ base_domain }}:389
-    userDn: "cn=engine,dc=surfconext,dc=nl"
-    password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
+    userDn: "{{ engine_ldap_bind_dn }}"
+    password: "{{ engine_ldap_password }}"
   engineblock:
     user: "{{ engine_database_user }}"
     url: jdbc:mysql://{{ engine_database_host }}:3306/{{ engine_database_name }}
