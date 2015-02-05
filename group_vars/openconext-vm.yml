@@ -46,3 +46,7 @@ welcome:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
+
+
+janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
+janus_teams_oauth_secret: ACAvoLMnlvmGLXK02rbbUrKJSfBo4fFehrSDgvaWf1-QVmOmNuQN270IbUI4Q4RwGH7TJTzXjuvV

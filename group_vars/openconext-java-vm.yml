@@ -60,8 +60,8 @@ api:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
   janus:
-    user: engineblock
-    secret: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
+    user: "{{ engine_janus_user }}"
+    secret: "{{ engine_janus_secret }}"
     uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
   jdbc:
     user: apirw

@@ -38,8 +38,8 @@ grouperPowerUser=GrouperSystem
 api-location=https://api.{{ base_domain }}/v1/
 
 # Oauth properties
-oauth-key=https://teams.{{ base_domain }}/teams/teams.xml
-oauth-secret=mysecret
+oauth-key={{ janus_teams_oauth_key }}
+oauth-secret={{ janus_teams_oauth_secret | vault }}
 
 shindigHost=https://os.{{ base_domain }}
 
