@@ -41,7 +41,6 @@
   tags: grouper
   with_items:
     - { src: grouper-shell.hibernate.properties, dest: grouper.hibernate.properties }
-    - { src: sources.xml, dest: sources.xml }
 
 - name: correct values for grouper.properties
   lineinfile: dest=/opt/www/grouper.apiBinary-2.1.5/conf/grouper.properties regexp=^{{ item.line }} line={{ item.line }}={{ item.value }}
@@ -66,19 +65,4 @@
   notify: restart httpd
   tags: grouper
 
-- name: copy grouper provision script to call grouper
-  template: src={{ item }}.j2 dest=~/{{ item }}
-  with_items:
-    - add-user-in-grouper.gsh
-  tags: grouper
-
-- name: provision grouper with users to call grouper ws
-  shell: bin/gsh ~/{{ item }}
-  register: gsh_output
-  changed_when: "'auto-created' in gsh_output.stderr"
-  failed_when: gsh_output.stderr != '' and ("already exists" not in gsh_output.stderr and "auto-created" not in gsh_output.stderr)
-  args:
-    chdir: /opt/www/grouper-shell
-  with_items:
-    - add-user-in-grouper.gsh
-  tags: grouper
+- include: provision_grouper.yml source_id="applications"

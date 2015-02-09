@@ -14,18 +14,4 @@
   tags: mujina-idp
   notify: restart httpd
 
-- name: copy grouper provision script for mujina
-  copy: src={{ item }} dest=~/{{ item }}
-  with_items:
-    - add-mujina-user.gsh
-  tags: mujina-idp
-
-- name: provision grouper for mujina
-  shell: bin/gsh ~/add-mujina-user.gsh
-  args:
-    chdir: /opt/www/grouper-shell
-  register: gsh_output
-  changed_when: gsh_output.stderr == ''
-  failed_when: gsh_output.stderr != '' and ("already exists" not in gsh_output.stderr)
-  tags: mujina-idp
-
+- include: provision_grouper.yml source_id="openconext-ldap"

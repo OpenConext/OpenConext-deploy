@@ -1,0 +1,22 @@
+- name: copy grouper provision script to call grouper
+  template: src={{ item }}.j2 dest=~/{{ item }}
+  with_items:
+    - add-user-in-grouper.gsh
+  tags: grouper
+
+- name: use correct grouper config
+  template: src={{ item.src }}.j2 dest=/opt/www/grouper.apiBinary-2.1.5/conf/{{ item.dest }}
+  tags: grouper
+  with_items:
+    - { src: sources-grouper-shell.xml, dest: sources.xml }
+
+- name: provision grouper with users to call grouper ws
+  shell: bin/gsh ~/{{ item }}
+  register: gsh_output
+  changed_when: "'auto-created' in gsh_output.stderr"
+  failed_when: gsh_output.stderr != '' and ("already exists" not in gsh_output.stderr and "auto-created" not in gsh_output.stderr)
+  args:
+    chdir: /opt/www/grouper-shell
+  with_items:
+    - add-user-in-grouper.gsh
+  tags: grouper
