@@ -4,10 +4,10 @@ ldap:
   password_sha: "{SSHA}pWk1Ibd4w84++95xjuXXbrbzxr4eAPNM" # needs to correspond with ldap_password
   admin:
     org: surfconext
-    user: "cn=admin,dc=surfconext,dc=nl"
+    user: "{{ ldap_admin_user }}"
     # suffix needs to be the same as in the user
     suffix: "dc=surfconext,dc=nl"
-    password: ACAvoLODUDZgKT6oPCQzOPR9Rp7Nq4uvvl9J5FBqjcKODnbQmoduSA6RKBub7waTs2MHinRl3jqy3lYiNa5PMLu6w7mo7NzdKA
+    password: "{{ ldap_admin_password }}"
     password_sha: "{SSHA}ZTcz1DhpiYwfj4ZMF4+t/MuxZKQno/6V" # this has to match value in password. Use slappasswd -s 'unecrypted password' to generate
   engine:
     user: "{{ engine_ldap_bind_dn }}"
