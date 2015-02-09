@@ -70,17 +70,15 @@
   template: src={{ item }}.j2 dest=~/{{ item }}
   with_items:
     - add-user-in-grouper.gsh
-    - add-api-user-in-grouper.gsh
   tags: grouper
 
 - name: provision grouper with users to call grouper ws
   shell: bin/gsh ~/{{ item }}
   register: gsh_output
-  changed_when: gsh_output.stderr == ''
-  failed_when: gsh_output.stderr != '' and ("already exists" not in gsh_output.stderr)
+  changed_when: "'auto-created' in gsh_output.stderr"
+  failed_when: gsh_output.stderr != '' and ("already exists" not in gsh_output.stderr and "auto-created" not in gsh_output.stderr)
   args:
     chdir: /opt/www/grouper-shell
   with_items:
     - add-user-in-grouper.gsh
-    - add-api-user-in-grouper.gsh
   tags: grouper

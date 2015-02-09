@@ -11,7 +11,7 @@
     - tomcat
     - java
     - shibboleth
+    - grouper
     - teams
     - api
-    - grouper
     - apis

@@ -2,7 +2,6 @@
 <tomcat-users> 
   <role rolename="grouper_user"/>
 
-  <user username="{{ ldap_grouper_api_user }}" password="{{ tomcat_grouper_password | vault }}" roles="grouper_user"/>
   <user username="{{ ldap_grouper_unit_test_user }}" password="{{ tomcat_grouper_password | vault }}" roles="grouper_user"/>
 
 </tomcat-users>

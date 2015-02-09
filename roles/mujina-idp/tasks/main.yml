@@ -1,21 +1,24 @@
 ---
 - name: copy mujina-idp configuration
   template: src=mujina-idp.properties.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/mujina-idp.properties
-  tags: dashboard
+  tags: mujina-idp
   notify: restart tomcat
 
 - name: copy mujina-idp logging configuration
   copy: src=mujina-idp-logback.xml dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/mujina-idp-logback.xml group=tomcat owner=tomcat
+  tags: mujina-idp
   notify: restart tomcat
 
 - name: copy virtual host config
   template: src=mujina-idp.conf.j2 dest=/etc/httpd/conf.d/mujina-idp.conf
+  tags: mujina-idp
   notify: restart httpd
 
 - name: copy grouper provision script for mujina
   copy: src={{ item }} dest=~/{{ item }}
   with_items:
     - add-mujina-user.gsh
+  tags: mujina-idp
 
 - name: provision grouper for mujina
   shell: bin/gsh ~/add-mujina-user.gsh
@@ -24,5 +27,5 @@
   register: gsh_output
   changed_when: gsh_output.stderr == ''
   failed_when: gsh_output.stderr != '' and ("already exists" not in gsh_output.stderr)
-
+  tags: mujina-idp
 
