@@ -17,6 +17,7 @@ tomcat_apps:
 # shibboleth
 shibboleth_apps:
   teams: "https://teams.{{ base_domain }}/shibboleth"
+  grouper: "https://grouper.{{ base_domain }}/grouper/shibboleth"
 shib:
   engine_domain: "{{ base_domain }}"
 
