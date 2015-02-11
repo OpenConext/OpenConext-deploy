@@ -2,7 +2,7 @@
 - name: set timezone for java apps that may be started on the commandline
   template: src=jdk-timezone.sh.j2 dest=/etc/profile.d/jdk-timezone.sh owner=root group=root mode=0644
 
-- name: Install javas
+- name: Install java
   yum: name={{ item }} state=present
   with_items:
     - java-1.8.0-openjdk-devel.x86_64
