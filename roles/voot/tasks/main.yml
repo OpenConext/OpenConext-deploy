@@ -13,7 +13,7 @@
 
 - name: Deploying voot | Download snapshot
   get_url:
-    url: "{{ maven_snapshot_repo }}/org/openconext/voot-service/{{ voot_version }}-SNAPSHOT/voot-service-{{ voot_version }}-{{ voot_version_timestamp }}.jar"
+    url: "{{ maven_snapshot_repo }}/org/openconext/voot-service/{{ voot_version }}-SNAPSHOT/voot-service-{{ voot_version }}-{{ voot_snapshot_timestamp }}.jar"
     dest: "{{ voot_dir }}/{{ voot_service_jar }}"
     force: yes
   when: voot_snapshot_timestamp != '' and voot_local_jar == ''
