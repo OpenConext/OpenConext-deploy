@@ -3,7 +3,7 @@
 # Startup script for a spring-boot powered application
 #
 # chkconfig: - 84 16
-# description: VOOT group information
+# description: {{ java_app.name }}
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -42,7 +42,7 @@ pid_of_app() {
 start() {
 
     cd "$APPLICATION_HOME"
-    $SU - $APP_USER -c "nohup $JAVA -jar $APP_JAR  >> /var/log/voot/init.log 2>&1 &"
+    $SU - $APP_USER -c "nohup $JAVA -jar $APP_JAR -Dserver.port={{ java_app.tcpport }}  >> /var/log/{{ java_app.name }}/init.log 2>&1 &"
 
     pid_of_app > /dev/null
     RETVAL=$?

@@ -132,6 +132,19 @@ mujina:
 tomcat_grouper_password: ACAvoLM3w46TGosPyYv6AkCgp6WZjg1NX19lspUpWSGHFIo6DovmOt3Z0PUCBVOplcpf2FwBB1jP
 tomcat_api_password: ACAvoLOUyEjVfQLusPaON6MAW4UiEjn6UayDf2_BQFLUSnYNI4BmSROfgeJ7b3xBKjthc78dqmnXrP-uuW621S-K1Wllp6IevQ
 
+##
+# VM config for the Authorization Server
+##
+authzserver:
+  db_user: authz-serverrw
+  db_password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0
+  db_host: localhost
+  db_name: authz-server
+
+
+authz_server_version: 1
+authz_server_snapshot_timestamp: 20150211.133225-1
+
 
 ##
 # VM config for the Voot app

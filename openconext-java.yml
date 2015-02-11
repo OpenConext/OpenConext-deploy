@@ -15,4 +15,5 @@
     - teams
     - api
     - apis
+    - authz-server
     - voot
