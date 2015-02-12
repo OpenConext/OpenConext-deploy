@@ -6,6 +6,9 @@
   template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ java_app.name }} mode=0755
   notify: restart voot
 
+- name: enable voot service
+  service: name=voot enabled=yes
+
 - name: Create logging directory
   file: path=/var/log/{{ java_app.name }} state=directory owner=voot group=voot mode=0755
 
@@ -29,3 +32,6 @@
 - name: copy apache config
   template: src=voot.conf.j2 dest=/etc/httpd/conf.d/voot.conf
   notify: restart httpd
+
+- name: ensure the service is started
+  service: name=voot state=started

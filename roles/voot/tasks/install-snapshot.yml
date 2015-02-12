@@ -5,7 +5,6 @@
     owner: "{{ java_app.user }}"
     group: "{{ java_app.user }}"
   register: app_released
-  notify: restart voot
 
 - include: switch-version.yml app_service_name={{ java_app.name }}
   when: app_released.changed

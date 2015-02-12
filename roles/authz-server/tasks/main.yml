@@ -6,6 +6,9 @@
   template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ java_app.name }} mode=0755
   notify: restart authz-server
 
+- name: enable authz-server service
+  service: name=authz-server enabled=yes
+
 - name: Create logging directory
   file: path=/var/log/{{ java_app.name }} state=directory owner=authz-server group=authz-server mode=0755
 
@@ -29,3 +32,6 @@
 - name: copy apache config
   template: src=authz.conf.j2 dest=/etc/httpd/conf.d/authz.conf
   notify: restart httpd
+
+- name: ensure the service is started
+  service: name=authz-server state=started
