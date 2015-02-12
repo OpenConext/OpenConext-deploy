@@ -1,0 +1,11 @@
+- name: Deploy | Download snapshot
+  get_url:
+    url: "{{ maven_snapshot_repo }}/org/openconext/voot-service/{{ voot_version }}-SNAPSHOT/voot-service-{{ voot_version }}-{{ voot_snapshot_timestamp }}.jar"
+    dest: "{{ voot_dir }}/voot-service-{{ voot_version }}-{{ voot_snapshot_timestamp }}.jar"
+    owner: "{{ java_app.user }}"
+    group: "{{ java_app.user }}"
+  register: app_released
+  notify: restart voot
+
+- include: switch-version.yml app_service_name={{ java_app.name }}
+  when: app_released.changed

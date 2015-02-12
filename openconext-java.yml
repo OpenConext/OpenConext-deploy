@@ -16,4 +16,4 @@
     - api
     - apis
     - { role: authz-server, tags: ['authz'] }
-    - voot
+    - { role: voot, tags: ['voot'] }

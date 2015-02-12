@@ -4,13 +4,3 @@ voot_version: ''
 voot_snapshot_timestamp: ''
 voot_local_jar: ''
 voot_service_jar: voot-service.jar
-
-java_app:
-  install_dir: "{{ voot_dir }}"
-  name: voot
-  env: production
-  user: voot
-  jar: "{{ voot_service_jar }}"
-  main_class: VootServiceApplication
-  tcpport: 9191
-
