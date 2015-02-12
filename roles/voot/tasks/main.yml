@@ -7,44 +7,27 @@
   file: path=/var/log/{{ java_app.name }} state=directory owner=voot group=voot mode=0755
   tags: voot
 
-- name: Get the md5 sum of current jar
-  stat: path={{ voot_dir }}/{{ voot_service_jar }}
-  register: current_jar_stat
-  tags: voot
-
-- name: Create directory where we download application packages (e.g. jar/war files)
-  file: path=~/app-downloads state=directory
-  tags: voot
-
 - name: Deploy | Download release
   get_url:
     url: "{{ maven_repo }}/org/openconext/voot-service/{{ voot_version }}/voot-service-{{ voot_version }}.jar"
-    dest: "~/app-downloads/{{ voot_service_jar }}"
+    dest: "{{ voot_dir }}/{{ voot_service_jar }}"
     force: yes
   when: voot_snapshot_timestamp == '' and voot_local_jar == ''
+  notify: restart voot
   tags: voot
 
 - name: Deploy | Download snapshot
   get_url:
     url: "{{ maven_snapshot_repo }}/org/openconext/voot-service/{{ voot_version }}-SNAPSHOT/voot-service-{{ voot_version }}-{{ voot_snapshot_timestamp }}.jar"
-    dest: "~/app-downloads/{{ voot_service_jar }}"
+    dest: "{{ voot_dir }}/{{ voot_service_jar }}"
     force: yes
   when: voot_snapshot_timestamp != '' and voot_local_jar == ''
+  notify: restart voot
   tags: voot
 
 - name: Deploy | Upload from local
-  copy: src={{ voot_local_jar }} dest=~/app-downloads/{{ voot_service_jar }}
+  copy: src={{ voot_local_jar }} dest={{ voot_dir }}/{{ voot_service_jar }}
   when: voot_local_jar != ''
-  tags: voot
-
-- name: Get the md5 sum of the candidate
-  stat: path=~/app-downloads/{{ voot_service_jar }}
-  register: candidate_jar_stat
-  tags: voot
-
-- name: Replace the jar if it has changed
-  shell: cp ~/app-downloads/{{ voot_service_jar }} {{ voot_dir }}/{{ voot_service_jar }}
-  when: current_jar_stat.stat.exists == false or candidate_jar_stat.stat.md5 != current_jar_stat.stat.md5
   notify: restart voot
   tags: voot
 

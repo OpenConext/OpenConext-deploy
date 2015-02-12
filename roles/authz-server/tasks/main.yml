@@ -7,44 +7,27 @@
   file: path=/var/log/{{ java_app.name }} state=directory owner=authz-server group=authz-server mode=0755
   tags: authz-server
 
-- name: Get the md5 sum of current jar
-  stat: path={{ authz_server_dir }}/{{ authz_server_jar }}
-  register: current_jar_stat
-  tags: authz-server
-
-- name: Create directory where we download application packages (e.g. jar/war files)
-  file: path=~/app-downloads state=directory
-  tags: authz-server
-
 - name: Deploy | Download release
   get_url:
     url: "{{ maven_repo }}/org/openconext/authz-server/{{ authz_server_version }}/authz-server-{{ authz_server_version }}.jar"
-    dest: "~/app-downloads/{{ authz_server_jar }}"
+    dest: "{{ authz_server_dir }}/{{ authz_server_jar }}"
     force: yes
   when: authz_server_snapshot_timestamp == '' and authz_server_local_jar == ''
+  notify: restart authz-server
   tags: authz-server
 
 - name: Deploy | Download snapshot
   get_url:
     url: "{{ maven_snapshot_repo }}/org/openconext/authz-server/{{ authz_server_version }}-SNAPSHOT/authz-server-{{ authz_server_version }}-{{ authz_server_snapshot_timestamp }}.jar"
-    dest: "~/app-downloads/{{ authz_server_jar }}"
+    dest: "{{ authz_server_dir }}/{{ authz_server_jar }}"
     force: yes
   when: authz_server_snapshot_timestamp != '' and authz_server_local_jar == ''
+  notify: restart authz-server
   tags: authz-server
 
 - name: Deploy | Upload from local
-  copy: src={{ authz_server_local_jar }} dest=~/app-downloads/{{ authz_server_jar }}
+  copy: src={{ authz_server_local_jar }} dest={{ authz_server_dir }}/{{ authz_server_jar }}
   when: authz_server_local_jar != ''
-  tags: authz-server
-
-- name: Get the md5 sum of the candidate
-  stat: path=~/app-downloads/{{ authz_server_jar }}
-  register: candidate_jar_stat
-  tags: authz-server
-
-- name: Replace the jar if it has changed
-  shell: cp ~/app-downloads/{{ authz_server_jar }} {{ authz_server_dir }}/{{ authz_server_jar }}
-  when: current_jar_stat.stat.exists == false or candidate_jar_stat.stat.md5 != current_jar_stat.stat.md5
   notify: restart authz-server
   tags: authz-server
 
