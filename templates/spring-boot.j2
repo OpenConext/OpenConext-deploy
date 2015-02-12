@@ -40,9 +40,14 @@ pid_of_app() {
 }
 
 start() {
+    pid=`pid_of_app`
+    if [ -n "$pid" ]; then
+        echo "$APP_NAME (pid $pid) is already running..."
+        return 0
+    fi
 
     cd "$APPLICATION_HOME"
-    $SU - $APP_USER -c "nohup $JAVA -jar $APP_JAR -Dserver.port={{ java_app.tcpport }}  >> /var/log/{{ java_app.name }}/init.log 2>&1 &"
+    $SU - $APP_USER -c "nohup $JAVA -jar $APP_JAR >> /var/log/{{ java_app.name }}/init.log 2>&1 &"
 
     pid_of_app > /dev/null
     RETVAL=$?

@@ -1,0 +1,12 @@
+- name: Deploy | Download release
+  get_url:
+    url: "{{ maven_repo }}/org/openconext/authz-server/{{ authz_server_version }}/authz-server-{{ authz_server_version }}.jar"
+    dest: "{{ authz_server_dir }}/"
+    force: yes
+    owner: "{{ java_app.user }}"
+    group: "{{ java_app.user }}"
+  register: app_released
+  notify: restart authz-server
+
+- include: switch-version.yml app_service_name={{ java_app.name }}
+  when: app_released.changed

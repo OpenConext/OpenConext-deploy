@@ -15,5 +15,5 @@
     - teams
     - api
     - apis
-    - authz-server
+    - { role: authz-server, tags: ['authz-server'] }
     - voot

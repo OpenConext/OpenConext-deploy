@@ -1,0 +1,7 @@
+java_app:
+  install_dir: "{{ authz_server_dir }}"
+  name: authz-server
+  user: authz-server
+  jar: "{{ authz_server_jar }}"
+  main_class: AuthzServerApplication
+  tcpport: 9190

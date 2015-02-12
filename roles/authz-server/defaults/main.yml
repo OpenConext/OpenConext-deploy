@@ -1,14 +1,6 @@
 ---
-authz_server_dir: /opt/authz-server/
+authz_server_dir: /opt/authz-server
 authz_server_version: ''
 authz_server_snapshot_timestamp: ''
 authz_server_local_jar: ''
-authz_server_jar: authz-server.jar
-
-java_app:
-  install_dir: "{{ authz_server_dir }}"
-  name: authz-server
-  user: authz-server
-  jar: "{{ authz_server_jar }}"
-  main_class: AuthzServerApplication
-  tcpport: 9190
+authz_server_jar: authz-server-current.jar
