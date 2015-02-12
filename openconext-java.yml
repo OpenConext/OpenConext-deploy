@@ -10,10 +10,10 @@
     - httpd
     - tomcat
     - java
-    - shibboleth
+    - { role: shibboleth, tags: ['shib'] }
     - grouper
     - teams
     - api
     - apis
-    - { role: authz-server, tags: ['authz-server'] }
+    - { role: authz-server, tags: ['authz'] }
     - voot

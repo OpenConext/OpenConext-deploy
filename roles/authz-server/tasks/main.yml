@@ -25,3 +25,7 @@
 - name: Copy start script
   template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ java_app.name }} mode=0755
   notify: restart authz-server
+
+- name: copy apache config
+  template: src=authz.conf.j2 dest=/etc/httpd/conf.d/authz.conf
+  notify: restart httpd

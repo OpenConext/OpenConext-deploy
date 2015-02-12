@@ -18,6 +18,7 @@ tomcat_apps:
 shibboleth_apps:
   teams: "https://teams.{{ base_domain }}/shibboleth"
   grouper: "https://grouper.{{ base_domain }}/grouper/shibboleth"
+  authz: "https://authz.{{ base_domain }}/shibboleth"
 shib:
   engine_domain: "{{ base_domain }}"
 
@@ -140,6 +141,10 @@ authzserver:
   db_password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0
   db_host: localhost
   db_name: authz-server
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
 
 
 authz_server_version: 1
