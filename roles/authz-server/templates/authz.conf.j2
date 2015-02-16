@@ -37,8 +37,14 @@
     ProxyPass /Shibboleth.sso !
     ProxyPass / http://localhost:{{ java_app.tcpport }}/ retry=0
 
-    # Always
-    <Location ~ /oauth/authorize>
+    # Allow non-saml access for machine clients.
+    <Location ~ "/oauth/(check_token|token)">
+      allow from all
+      satisfy any
+    </Location>
+
+    # Enable shibboleth for all other URLs
+    <Location />
       ShibRequestSetting applicationId authz
       AuthType shibboleth
       ShibRequireSession On
