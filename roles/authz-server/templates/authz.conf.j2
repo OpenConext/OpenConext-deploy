@@ -37,12 +37,14 @@
     ProxyPass /Shibboleth.sso !
     ProxyPass / http://localhost:{{ java_app.tcpport }}/ retry=0
 
-    # authz location
-    <Location />
+    # Always
+    <Location ~ /oauth/authorize>
       ShibRequestSetting applicationId authz
       AuthType shibboleth
       ShibRequireSession On
       require valid-user
       ShibUseHeaders On
     </Location>
+
+
 </VirtualHost>
