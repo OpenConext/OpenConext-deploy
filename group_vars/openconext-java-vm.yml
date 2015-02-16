@@ -160,3 +160,4 @@ voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
+  resource_checking_secret: ACAvoLN6ftlLRGHDZfl0aGWvPfzWqjbmS6aAqVsW1KgF1-slzgDF4xPqgMM5x3845uOufUiFymvf
