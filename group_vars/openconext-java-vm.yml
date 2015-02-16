@@ -148,14 +148,14 @@ authzserver:
 
 
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150211.133225-1
+authz_server_snapshot_timestamp: 20150216.131035-6
 
 
 ##
 # VM config for the Voot app
 ##
 voot_version: 1
-voot_snapshot_timestamp: 20150211.124132-1
+voot_snapshot_timestamp: 20150216.131014-4
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
