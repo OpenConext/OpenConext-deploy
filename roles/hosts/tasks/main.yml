@@ -16,4 +16,5 @@
     - mujina-idp.{{ base_domain }}
     - grouper.{{ base_domain }}
     - authz.{{ base_domain }}
+    - authz-admin.{{ base_domain }}
     - voot.{{ base_domain }}
