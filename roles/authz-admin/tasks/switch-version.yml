@@ -1,5 +1,0 @@
-- name: stop app
-  service: name={{ app_service_name }} state=stopped
-
-- name: change symlink to current version
-  file: src={{ app_released.dest }} dest="{{ authz_admin_dir }}/{{ authz_admin_jar }}" state=link owner="{{ java_app.user }}" group="{{ java_app.user }}"

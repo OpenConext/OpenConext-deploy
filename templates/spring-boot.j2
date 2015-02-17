@@ -3,23 +3,21 @@
 # Startup script for a spring-boot powered application
 #
 # chkconfig: - 84 16
-# description: {{ java_app.name }}
+# description: {{ springapp_service_name }}
 
 # Source function library.
 . /etc/rc.d/init.d/functions
-[ -z "$JAVA_HOME" -a -x /etc/profile.d/java.sh ] && . /etc/profile.d/java.sh
 
 #######################################
 # START configurable per environment
 #######################################
-APPLICATION_HOME="{{ java_app.install_dir }}"
-APP_NAME="{{ java_app.name }}"
-APP_JAR="{{ java_app.jar }}"
-APP_USER="{{ java_app.user }}"
+APPLICATION_HOME="{{ springapp_dir }}"
+APP_NAME="{{ springapp_service_name }}"
+APP_JAR="{{ springapp_jar }}"
+APP_USER="{{ springapp_user }}"
 LOG="/var/log/$APP_NAME.log"
 LOCK="/var/lock/subsys/$APP_NAME"
 JAVA="/usr/lib/jvm/java-1.8.0-openjdk/bin/java"
-MAIN_CLASS="{{ java_app.main_class }}"
 #######################################
 # END configurable per environment
 #######################################
@@ -47,7 +45,7 @@ start() {
     fi
 
     cd "$APPLICATION_HOME"
-    $SU - $APP_USER -c "nohup $JAVA -jar $APP_JAR >> /var/log/{{ java_app.name }}/init.log 2>&1 &"
+    $SU - $APP_USER -c "nohup $JAVA -jar $APP_JAR >> /var/log/$APP_NAME/init.log 2>&1 &"
 
     pid_of_app > /dev/null
     RETVAL=$?

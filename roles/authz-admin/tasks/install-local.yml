@@ -1,6 +1,0 @@
-- name: Deploy | Upload from local
-  copy: src={{ authz_admin_local_jar }} dest={{ authz_admin_dir }}/ owner={{ java_app.user }} group={{ java_app.user }}
-  register: app_released
-
-- include: switch-version.yml app_service_name={{ java_app.name }}
-  when: app_released.changed

@@ -3,22 +3,22 @@
   user: name=voot home={{ voot_dir }} shell=/sbin/nologin
 
 - name: Copy start script
-  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ java_app.name }} mode=0755
+  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
   notify: restart voot
 
 - name: enable voot service
   service: name=voot enabled=yes
 
 - name: Create logging directory
-  file: path=/var/log/{{ java_app.name }} state=directory owner=voot group=voot mode=0755
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner=voot group=voot mode=0755
 
-- include: install-release.yml
+- include: ../../../tasks/springbootapp/install-release.yml
   when: voot_snapshot_timestamp == '' and voot_local_jar == ''
 
-- include: install-snapshot.yml
+- include: ../../../tasks/springbootapp/install-snapshot.yml
   when: voot_snapshot_timestamp != '' and voot_local_jar == ''
 
-- include: install-local.yml
+- include: ../../../tasks/springbootapp/install-local.yml
   when: voot_local_jar != ''
 
 - name: Copy logging config

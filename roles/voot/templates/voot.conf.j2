@@ -34,6 +34,6 @@
     RequestHeader set shib_displayname    ""
 
 
-    ProxyPass / http://localhost:{{ java_app.tcpport }}/ retry=0
+    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
 
 </VirtualHost>
