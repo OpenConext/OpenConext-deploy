@@ -148,7 +148,6 @@ authzserver:
 authz_server_version: 1
 authz_server_snapshot_timestamp: 20150218.140058-16
 
-
 ##
 # VM config for the Voot app
 ##
