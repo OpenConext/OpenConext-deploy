@@ -28,10 +28,10 @@
     CustomLog logs/ssl_request_log \
               "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 
-    # initialize the special headers to a blank value to avoid http header forgeries
-    RequestHeader set shib_uid    ""
-    RequestHeader set shib_displayname    ""
-
+    # initialize the shibboleth-provided headers to a blank value to avoid http header forgeries
+    RequestHeader set uid                       ""
+    RequestHeader set schacHomeOrganization     ""
+    RequestHeader set displayName               ""
 
     ProxyPass /Shibboleth.sso !
     ProxyPass / http://localhost:{{ java_app.tcpport }}/ retry=0
