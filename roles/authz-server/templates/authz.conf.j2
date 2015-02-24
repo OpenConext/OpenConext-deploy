@@ -25,7 +25,7 @@
               "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 
     ProxyPass /Shibboleth.sso !
-    ProxyPass / http://localhost:{{ java_app.tcpport }}/ retry=0
+    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
 
     # Allow non-saml access for machine clients.
     <Location ~ "/oauth/(check_token|token)">

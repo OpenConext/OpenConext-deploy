@@ -1,9 +1,9 @@
 ---
-java_app:
-  install_dir: "{{ voot_dir }}"
-  name: voot
-  env: production
-  user: voot
-  jar: "{{ voot_service_jar }}"
-  main_class: VootServiceApplication
-  tcpport: 9191
+springapp_artifact_id: voot-service
+springapp_version: "{{ voot_version }}"
+springapp_snapshot_timestamp: "{{ voot_snapshot_timestamp }}"
+springapp_dir: "{{ voot_dir }}"
+springapp_user: voot
+springapp_service_name: voot
+springapp_jar: "{{ voot_service_jar }}"
+springapp_tcpport: 9191

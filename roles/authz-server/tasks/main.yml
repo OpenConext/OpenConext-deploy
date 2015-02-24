@@ -3,22 +3,22 @@
   user: name=authz-server home={{ authz_server_dir }} shell=/sbin/nologin
 
 - name: Copy start script
-  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ java_app.name }} mode=0755
+  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
   notify: restart authz-server
 
 - name: enable authz-server service
   service: name=authz-server enabled=yes
 
 - name: Create logging directory
-  file: path=/var/log/{{ java_app.name }} state=directory owner=authz-server group=authz-server mode=0755
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner=authz-server group=authz-server mode=0755
 
-- include: install-release.yml
+- include: ../../../tasks/springbootapp/install-release.yml
   when: authz_server_snapshot_timestamp == '' and authz_server_local_jar == ''
 
-- include: install-snapshot.yml
+- include: ../../../tasks/springbootapp/install-snapshot.yml
   when: authz_server_snapshot_timestamp != '' and authz_server_local_jar == ''
 
-- include: install-local.yml
+- include: ../../../tasks/springbootapp/install-local.yml
   when: authz_server_local_jar != ''
 
 - name: Copy logging config
