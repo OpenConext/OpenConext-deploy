@@ -11,6 +11,7 @@
     - serviceregistry.{{ base_domain }}
     - ldap.{{ base_domain }}
     - engine.{{ base_domain }}
+    - profile.{{ base_domain }}
     - apis.{{ base_domain }}
     - mujina-sp.{{ base_domain }}
     - mujina-idp.{{ base_domain }}
