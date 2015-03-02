@@ -10,6 +10,7 @@
   copy: src={{ item }} dest=files/vm/certs/{{ item }}
   with_items:
     - ca_config.cfg
+    - ee_config.cfg
 
 - name: create new CA
   command: |
@@ -27,11 +28,11 @@
   command: |
     openssl req -new \
       -nodes \
-      -config files/vm/certs/ca_config.cfg \
+      -config files/vm/certs/ee_config.cfg \
       -out files/vm/certs/server.csr \
       -keyout files/vm/certs/{{ tls.key_name }} \
       -batch \
-      -subj "{{ certs.subject }}" creates=files/vm/certs/{{ tls.key_name }}
+      creates=files/vm/certs/{{ tls.key_name }}
 
 - name: sign with the CA
   command: |
