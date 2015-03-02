@@ -15,6 +15,6 @@
     - teams
     - api
     - apis
-    - { role: authz-server, tags: ['authz'] }
-    - { role: authz-admin, tags: ['authz-admin'] }
-    - { role: voot, tags: ['voot'] }
+    - { role: authz-server, tags: ['oauth', 'authz'] }
+    - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
+    - { role: voot, tags: ['oauth', 'voot'] }
