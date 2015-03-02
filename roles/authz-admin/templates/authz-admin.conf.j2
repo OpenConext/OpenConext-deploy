@@ -30,6 +30,7 @@
 
     ProxyPass /Shibboleth.sso !
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
 
     # Enable shibboleth for all other URLs
     <Location />
