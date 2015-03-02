@@ -44,8 +44,9 @@ OpenStack, VMware or any other virtualisation platform, take the following steps
 
 1. Install RHEL 6 or boot from a RHEL 6 image.
 2. Configure your machine's IP in vm/inventory.
-3. On the machine: run `visudo` and disable requiretty (`Defaults !requiretty`).
-4. Run the ansible commands below, from your workstation.
+3. Change the script ./ansible-vm to reference the right username and ssh key.
+4. On the machine: run `visudo` and disable requiretty (`Defaults !requiretty`).
+5. From your workstation, run the command `./ansible-vm openconext-vm` followed by the ansible-vm commands listed below under "Run playbooks".
 
 # Deploy to a (development) VM
 
