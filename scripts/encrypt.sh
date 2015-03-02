@@ -9,7 +9,9 @@ parser.add_option("-d", "--decrypt", action="store_true", help="decrypt the inpu
 
 (options, args) = parser.parse_args()
 
-keydir = os.path.expanduser('~/.openconext-keystore')
+keydir = '.vault'
+if not os.path.isdir(keydir):
+  keydir = os.path.expanduser('~/.openconext-keystore')
 crypter = keyczar.Crypter.Read(keydir)
 
 if options.decrypt:

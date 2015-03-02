@@ -6,12 +6,14 @@ def vault(encrypted):
 from keyczar import keyczar
 import os.path
 import sys
-keydir = os.path.expanduser('~/.openconext-keystore')
+keydir = '.vault'
+if not os.path.isdir(keydir):
+  keydir = os.path.expanduser('~/.openconext-keystore')
 crypter = keyczar.Crypter.Read(keydir)
 sys.stdout.write(crypter.Decrypt("%s"))
   """ % encrypted
-  from subprocess import check_output
-  return check_output(["python", "-c", method])
+  import subprocess
+  return subprocess.Popen(['python', '-c', method], stdout=subprocess.PIPE).communicate()[0]
 
 class FilterModule(object):
 
