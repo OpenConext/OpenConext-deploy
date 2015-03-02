@@ -14,7 +14,7 @@ janus_ssp_tar_file: simplesamlphp-{{ janus_ssp_version }}.tar.gz
 janus_ssp_tar_location: "{{ openconext_builds_dir }}/{{ janus_ssp_tar_file }}"
 #
 ## Janus
-janus_version: 1.20.3
+janus_version: 1.20.4
 janus_dir: "{{ janus_ssp_modules_dir }}/janus"
 janus_download_base_url: "https://github.com/janus-ssp/janus/releases/download/{{ janus_version }}"
 janus_tar_file: "janus-{{ janus_version }}.tar.gz"
