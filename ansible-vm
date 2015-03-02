@@ -1,3 +1,11 @@
 #!/bin/bash
 
+ANSVER=`ansible --version|head -1|cut -d " " -f 2`
+ANSVER1=`echo $ANSVER | cut -d '.' -f 1`
+ANSVER2=`echo $ANSVER | cut -d '.' -f 2`
+if [ $ANSVER1 -le 1 -a $ANSVER2 -lt 8 ]; then
+	echo "Requires at least Ansible 1.8"
+	exit 1
+fi
+
 ansible-playbook -i inventory/vm --private-key `pwd`/.vagrant/machines/openconext-vm/virtualbox/private_key  -u vagrant "$@"
