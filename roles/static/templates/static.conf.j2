@@ -1,0 +1,32 @@
+<VirtualHost *:443>
+    # General setup for the virtual host, inherited from global configuration
+    ServerName static.{{ base_domain }}:443
+
+    DocumentRoot /var/www/static
+
+    # Use separate log files for the SSL virtual host; note that LogLevel
+    # is not inherited from httpd.conf.
+    ErrorLog logs/static_ssl_error_log
+    TransferLog logs/static_ssl_access_log
+    LogLevel warn
+
+    SSLEngine             on
+    SSLHonorCipherOrder   on
+    SSLProtocol           all -SSLv2 -SSLv3
+    SSLCipherSuite        ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA
+    SSLCertificateFile    {{ tls.cert_path }}/{{ static.crt_name }}
+    SSLCertificateKeyFile {{ tls.cert_private_path }}/{{ static.key_name }}
+    SSLCACertificateFile  {{ tls.cert_path }}/{{ static.bundle_name }}
+
+    <Files ~ "\.(shtml?)$">
+        SSLOptions +StdEnvVars
+    </Files>
+
+    SetEnvIf User-Agent ".*MSIE.*" \
+             nokeepalive ssl-unclean-shutdown \
+             downgrade-1.0 force-response-1.0
+
+    CustomLog logs/ssl_request_log \
+              "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+
+</VirtualHost>

@@ -42,6 +42,11 @@ janus_database_host: db.{{ base_domain }}
 janus_database_user: srrw
 janus_database_password: ACAvoLO-pSK11LiWuOVsTljviCISlTdmJpJMNGb0iIDNwljUrIPcP_3ANoK-59FU86o-g0XsLV2VKcLX2Gjwkh97wF6JW1xvDw
 
+# host for static files (IdP logos)
+static:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
 
 # the welcome page on: vm.{{ base_domain }}
 welcome:

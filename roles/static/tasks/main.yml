@@ -1,0 +1,10 @@
+---
+- name: create static dir
+  file: path=/var/www/static state=directory
+
+- name: copy media files
+  copy: src=media dest=/var/www/static
+
+- name: copy virtual host config
+  template: src=static.conf.j2 dest=/etc/httpd/conf.d/static.conf
+  notify: restart httpd
