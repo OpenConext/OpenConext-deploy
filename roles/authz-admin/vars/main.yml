@@ -6,3 +6,4 @@ springapp_user: authz-admin
 springapp_service_name: authz-admin
 springapp_jar: "{{ authz_admin_jar }}"
 springapp_tcpport: 9290
+springapp_local_jar: "{{ authz_admin_local_jar }}"
