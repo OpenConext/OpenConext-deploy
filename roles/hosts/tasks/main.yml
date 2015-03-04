@@ -18,3 +18,4 @@
     - authz.{{ base_domain }}
     - authz-admin.{{ base_domain }}
     - voot.{{ base_domain }}
+    - authz-playground.{{ base_domain }}
