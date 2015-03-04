@@ -29,6 +29,10 @@
   template: src=application.properties.j2 dest={{ voot_dir }}/application.properties owner=voot group=voot mode=0740
   notify: restart voot
 
+- name: Copy externalProviders config
+  copy: src=externalProviders/{{ env }}.yml dest={{ voot_dir }}/externalProviders.yml owner=voot group=voot mode=0740
+  notify: restart voot
+
 - name: copy apache config
   template: src=voot.conf.j2 dest=/etc/httpd/conf.d/voot.conf
   notify: restart httpd

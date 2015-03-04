@@ -1,0 +1,11 @@
+externalGroupProviders:
+  - {
+      type: "grouper",
+      url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
+      credentials: {
+        username: "gadget",
+        secret: "gadget"
+      },
+      schacHomeOrganisation: "surfnet.nl",
+      timeoutMillis: 3000
+     }
