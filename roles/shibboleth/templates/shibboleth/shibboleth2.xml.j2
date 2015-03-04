@@ -114,7 +114,17 @@
         <CredentialResolver type="File" key="sp-key.pem" certificate="sp-cert.pem"/>
 
         {% for key, value in shibboleth_apps.items() %}
-        <ApplicationOverride id="{{ key }}" entityID="{{ value }}">
+        <ApplicationOverride id="{{ key }}" entityID="{{ value.entityID }}">
+            <Sessions lifetime="28800"
+              timeout="3600"
+              checkAddress="true"
+              handlerURL="{{ value.baseurl }}/Shibboleth.sso"
+              handlerSSL="true"
+              relayState="ss:mem"
+              exportACL="127.0.0.1"
+              idpHistory="false"
+              idpHistoryDays="7"
+              cookieProps="; path={{ value.baseurl }}/; secure; httpOnly"></Sessions>
             <MetadataProvider type="Chaining">
                 <!-- Engineblock IDP metadata -->
                 <MetadataProvider type="XML"
