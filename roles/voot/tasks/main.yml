@@ -30,7 +30,7 @@
   notify: restart voot
 
 - name: Copy externalProviders config
-  copy: src=externalProviders/{{ env }}.yml dest={{ voot_dir }}/externalProviders.yml owner=voot group=voot mode=0740
+  template: src=externalProviders.yml.j2 dest={{ voot_dir }}/externalProviders.yml owner=voot group=voot mode=0740
   notify: restart voot
 
 - name: copy apache config

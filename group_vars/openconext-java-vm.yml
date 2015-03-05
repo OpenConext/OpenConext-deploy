@@ -156,8 +156,21 @@ voot:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
   resource_checking_secret: ACAvoLN6ftlLRGHDZfl0aGWvPfzWqjbmS6aAqVsW1KgF1-slzgDF4xPqgMM5x3845uOufUiFymvf
+  externalGroupProviders:
+    - {
+        type: "grouper",
+        url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
+        credentials: {
+          username: "gadget",
+          secret: "ACAvoLN6ftlLRGHDZfl0aGWvPfzWqjbmS6aAqVsW1KgF1-slzgDF4xPqgMM5x3845uOufUiFymvf"
+        },
+        schacHomeOrganisation: "surfnet.nl",
+        timeoutMillis: 3000
+      }
 voot_version: 1
 voot_snapshot_timestamp: 20150304.145441-18
+
+
 
 ##
 # VM config for the authz-admin application
