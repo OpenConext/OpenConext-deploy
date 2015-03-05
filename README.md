@@ -69,22 +69,13 @@ The VM will install everything on a single box for demo purposes.
 
 To provision the VM please run:
 
-
 ```bash
-
-vagrant up
-./ansible-vm openconext-generate-certs-vm.yml
-./ansible-vm openconext-vm.yml
-./ansible-vm openconext-storage.yml
-./ansible-vm openconext-vm-initial.yml
-./ansible-vm openconext-java.yml
-./ansible-vm openconext-php.yml
-./ansible-vm openconext-mujina.yml
+./provision-vm
 ```
 
 Which will:
 
-1. Setup a VM and will make sure the HOSTS file is able to handle the defined base_domain
+1. Setup a Vagrant VM and will make sure the HOSTS file is able to handle the defined base_domain
 2. Setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
 3. Inserts entitities and metadata in Janus and initial load of engineblock to bootstrap. **Rerunning this script will delete everything in Janus and Engineblock.**
 4. Install all Java apps for the openconext platform.

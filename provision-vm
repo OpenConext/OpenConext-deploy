@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+vagrant up
+./ansible-vm openconext-generate-certs-vm.yml
+./ansible-vm openconext-vm.yml
+./ansible-vm openconext-storage.yml
+./ansible-vm openconext-vm-initial.yml
+./ansible-vm openconext-java.yml
+./ansible-vm openconext-php.yml
+./ansible-vm openconext-mujina.yml
