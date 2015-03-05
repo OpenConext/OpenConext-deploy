@@ -1,0 +1,6 @@
+---
+authz_server_dir: /opt/authz-server
+authz_server_version: ''
+authz_server_snapshot_timestamp: ''
+authz_server_local_jar: ''
+authz_server_jar: authz-server-current.jar

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!--
+  <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+    <syslogHost>localhost</syslogHost>
+    <facility>DAEMON</facility>
+    <suffixPattern>[%thread] %logger %msg</suffixPattern>
+  </appender>
+  -->
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/var/log/authz-playground/authz-playground.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <!-- keep 30 days' worth of history -->
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="authzplayground" level="DEBUG"/>
+  <logger name="org.springframework.security.oauth" level="DEBUG"/>
+  <root level="WARN">
+    <appender-ref ref="FILE" />
+    <!--
+    <appender-ref ref="SYSLOG" />
+    -->
+  </root>
+</configuration>

@@ -1,0 +1,13 @@
+externalGroupProviders:
+{% for provider in voot.externalGroupProviders %}
+  - {
+      type: "{{ provider.type }}",
+      url: "{{ provider.url }}",
+      credentials: {
+        username: "{{ provider.credentials.username }}",
+        secret: "{{ provider.credentials.secret | vault }}"
+      },
+      schacHomeOrganisation: "{{ provider.schacHomeOrganisation }}",
+      timeoutMillis: {{ provider.timeoutMillis }}
+     }
+{% endfor %}

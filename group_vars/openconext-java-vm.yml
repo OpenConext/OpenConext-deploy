@@ -22,6 +22,12 @@ shibboleth_apps:
   grouper:
     entityID: "https://grouper.{{ base_domain }}/grouper/shibboleth"
     baseurl: "/grouper"
+  authz:
+    entityID: "https://authz.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  "authz-admin":
+    entityID: "https://authz-admin.{{ base_domain }}/shibboleth"
+    baseurl: ""
 shib:
   engine_domain: "{{ base_domain }}"
 
@@ -34,7 +40,7 @@ teams_version: 4.0.7
 teams_snapshot_timestamp: 20150205.105251-3
 
 api_version: 4.0.1
-api_snapshot_timestamp: 20150115.230128-349
+api_snapshot_timestamp: 20150302.230045-395
 
 mujina_version: 4.0.2
 #mujina_snapshot_timestamp
@@ -135,3 +141,68 @@ mujina:
 
 tomcat_grouper_password: ACAvoLM3w46TGosPyYv6AkCgp6WZjg1NX19lspUpWSGHFIo6DovmOt3Z0PUCBVOplcpf2FwBB1jP
 tomcat_api_password: ACAvoLOUyEjVfQLusPaON6MAW4UiEjn6UayDf2_BQFLUSnYNI4BmSROfgeJ7b3xBKjthc78dqmnXrP-uuW621S-K1Wllp6IevQ
+
+##
+# VM config for the Authorization Server
+##
+authzserver:
+  db_user: authz-serverrw
+  db_password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0
+  db_host: localhost
+  db_name: authz-server
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+authz_server_version: 1
+authz_server_snapshot_timestamp: 20150304.145424-28
+
+##
+# VM config for the Voot app
+##
+voot:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  resource_checking_secret: ACAvoLN6ftlLRGHDZfl0aGWvPfzWqjbmS6aAqVsW1KgF1-slzgDF4xPqgMM5x3845uOufUiFymvf
+  externalGroupProviders:
+    - {
+        type: "grouper",
+        url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
+        credentials: {
+          username: "gadget",
+          secret: "ACAvoLN6ftlLRGHDZfl0aGWvPfzWqjbmS6aAqVsW1KgF1-slzgDF4xPqgMM5x3845uOufUiFymvf"
+        },
+        schacHomeOrganisation: "surfnet.nl",
+        timeoutMillis: 3000
+      }
+voot_version: 1
+voot_snapshot_timestamp: 20150304.145441-18
+
+
+
+##
+# VM config for the authz-admin application
+##
+authz_admin_version: 1
+authz_admin_snapshot_timestamp: 20150304.140938-16
+authz_admin_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
+authzadmin:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+##
+# VM config for the authz-admin application
+##
+authz_playground_version: 1
+authz_playground_snapshot_timestamp: 20150304.142715-2
+authzplayground:
+  springapp_oauth_redirect: https://authz-playground.vm.openconext.org/redirect
+  springapp_oauth_token_url: https://authz.vm.openconext.org/oauth/token
+  springapp_client_id: cool_app_id
+  springapp_client_secret: secret
+  springapp_authorize_url: https://authz.vm.openconext.org/oauth/authorize
+  springapp_resource_server_api_url: https://voot.vm.openconext.org/me/groups
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"

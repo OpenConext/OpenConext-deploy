@@ -1,0 +1,9 @@
+springapp_artifact_id: authz-playground
+springapp_version: "{{ authz_playground_version }}"
+springapp_snapshot_timestamp: "{{ authz_playground_snapshot_timestamp }}"
+springapp_dir: "{{ authz_playground_dir }}"
+springapp_user: authz-playground
+springapp_service_name: authz-playground
+springapp_jar: "{{ authz_playground_jar }}"
+springapp_tcpport: 9291
+springapp_local_jar: "{{ authz_playground_local_jar }}"

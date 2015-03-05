@@ -1,0 +1,6 @@
+---
+voot_dir: /opt/voot/
+voot_version: ''
+voot_snapshot_timestamp: ''
+voot_local_jar: ''
+voot_service_jar: voot-service.jar

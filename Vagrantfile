@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "openconext-vm" do |openconext_vm|
     openconext_vm.vm.network :private_network, ip: "192.168.66.78"
     openconext_vm.vm.provision :ansible do |ansible|
-      ansible.playbook = "openconext-vm.yml"
+      ansible.playbook = "openconext-generate-certs-vm.yml"
       ansible.inventory_path = "inventory/vm"
     end
   end

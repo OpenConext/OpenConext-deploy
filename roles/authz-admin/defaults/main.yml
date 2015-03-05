@@ -1,0 +1,6 @@
+---
+authz_admin_dir: /opt/authz-admin
+authz_admin_version: ''
+authz_admin_snapshot_timestamp: ''
+authz_admin_local_jar: ''
+authz_admin_jar: authz-admin-current.jar

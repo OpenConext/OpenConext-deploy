@@ -1,0 +1,6 @@
+---
+authz_playground_dir: /opt/authz-playground
+authz_playground_version: ''
+authz_playground_snapshot_timestamp: ''
+authz_playground_local_jar: ''
+authz_playground_jar: authz-playground-current.jar

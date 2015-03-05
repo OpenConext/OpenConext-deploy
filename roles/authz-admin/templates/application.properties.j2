@@ -1,0 +1,20 @@
+logging.config=file://{{ authz_admin_dir }}/logback.xml
+
+allowed_group=nl:surfnet:diensten:surfadmin
+
+spring.datasource.url=jdbc:mysql://{{ authzserver.db_host }}/{{ authzserver.db_name }}
+spring.datasource.username={{ authzserver.db_user }}
+spring.datasource.password={{ authzserver.db_password | vault }}
+spring.datasource.driverClassName=com.mysql.jdbc.Driver
+spring.datasource.validation-query="SELECT 1"
+spring.datasource.testWhileIdle=true
+
+server.port={{ springapp_tcpport }}
+voot.serviceUrl=https://voot.vm.openconext.org
+
+# oauth config for accessing voot.
+voot.accessTokenUri=https://authz.vm.openconext.org/oauth/token
+voot.userAuthorizationUri=https://authz.vm.openconext.org/oauth/authorize
+voot.clientId=authz-admin-vm
+voot.clientSecret={{ authz_admin_client_secret | vault }}
+voot.redirectUri=https://authz-admin.vm.openconext.org

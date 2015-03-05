@@ -6,6 +6,10 @@
      - openldap-clients
   tags: ldap
 
+- name: start slapd at boot
+  service: name=slapd enabled=yes
+  tags: ldap
+
 - name: correct config present
   shell: (test -d /etc/openldap/slapd.d && find /etc/openldap/slapd.d/ | xargs grep -i SURFnet | wc -l) || echo "0"
   register: config_correct

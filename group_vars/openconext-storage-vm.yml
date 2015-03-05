@@ -11,6 +11,7 @@ databases:
     - "{{ engine_database_name }}"
     - "{{ janus_database_name }}"
     - grouper
+    - authz-server
   users:
     - { name: teamsrw, host: localhost, db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }
     - { name: teamsrw, host: "%", db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }
@@ -24,3 +25,5 @@ databases:
     - { name: "{{ janus_database_user }}", host: "%", db_name: "{{ janus_database_name }}", password: "{{ janus_database_password }}" }
     - { name: grouperrw, host: localhost, db_name: grouper, password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0 }
     - { name: grouperrw, host: "%", db_name: grouper, password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0 }
+    - { name: authz-serverrw, host: localhost, db_name: authz-server, password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0 }
+    - { name: authz-serverrw, host: "%", db_name: authz-server, password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0 }

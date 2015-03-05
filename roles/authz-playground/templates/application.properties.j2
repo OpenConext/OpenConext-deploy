@@ -1,0 +1,12 @@
+logging.config=file://{{ authz_playground_dir }}/logback.xml
+
+security.basic.enabled=false
+
+oauth.redirect_uri={{ authzplayground.springapp_oauth_redirect }}
+oauth.token_uri={{ authzplayground.springapp_oauth_token_url }}
+oauth.client_id={{ authzplayground.springapp_client_id }}
+oauth.client_secret={{ authzplayground.springapp_client_secret }}
+oauth.authorize_url={{ authzplayground.springapp_authorize_url }}
+oauth.resource_server_api_url={{ authzplayground.springapp_resource_server_api_url }}
+
+server.port={{ springapp_tcpport }}
