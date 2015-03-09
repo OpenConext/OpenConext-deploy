@@ -154,7 +154,7 @@ authzserver:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150309.133649-32
+authz_server_snapshot_timestamp: 20150309.153638-34
 
 ##
 # VM config for the Voot app
@@ -184,7 +184,7 @@ voot_snapshot_timestamp: 20150304.145441-18
 # VM config for the authz-admin application
 ##
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150304.140938-16
+authz_admin_snapshot_timestamp: 20150309.153707-29
 authz_admin_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
