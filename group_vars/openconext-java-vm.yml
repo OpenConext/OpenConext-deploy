@@ -154,7 +154,7 @@ authzserver:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150305.104546-30
+authz_server_snapshot_timestamp: 20150309.133649-32
 
 ##
 # VM config for the Voot app
