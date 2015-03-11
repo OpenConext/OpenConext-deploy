@@ -153,8 +153,32 @@ authzserver:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
+  defaultClients:
+    - clientId: cool_app_id
+      secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+      resourceIds:
+        - groups
+      scopes:
+        - read
+      grantTypes:
+        - authorization_code
+        - implicit
+      redirectUri: https://authz-playground.{{ base_domain }}/redirect
+    - clientId: authz-admin-vm
+      secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+      resourceIds:
+        - groups
+      scopes:
+        - groups
+      grantTypes:
+        - authorization_code
+      redirectUri: https://authz-admin.{{ base_domain }}
+  defaultResourceServers:
+    - clientId: vootservice
+      secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150309.153638-34
+authz_server_snapshot_timestamp: 20150311.185314-37
 
 ##
 # VM config for the Voot app
@@ -177,8 +201,6 @@ voot:
       }
 voot_version: 1
 voot_snapshot_timestamp: 20150304.145441-18
-
-
 
 ##
 # VM config for the authz-admin application
