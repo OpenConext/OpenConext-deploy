@@ -154,8 +154,8 @@ authzserver:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
   defaultClients:
-    - clientId: cool_app_id
-      secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+    - clientId: "{{ authzplayground.springapp_client_id}}"
+      secret: "{{ authzplayground.springapp_client_secret }}"
       resourceIds:
         - groups
       scopes:
@@ -163,9 +163,9 @@ authzserver:
       grantTypes:
         - authorization_code
         - implicit
-      redirectUri: https://authz-playground.{{ base_domain }}/redirect
+      redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
     - clientId: authz-admin-vm
-      secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+      secret: "{{ authz_admin_client_secret }}"
       resourceIds:
         - groups
       scopes:
@@ -175,7 +175,7 @@ authzserver:
       redirectUri: https://authz-admin.{{ base_domain }}
   defaultResourceServers:
     - clientId: vootservice
-      secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+      secret: "{{ voot.resource_checking_secret }}"
 
 authz_server_version: 1
 authz_server_snapshot_timestamp: 20150311.185314-37
@@ -219,12 +219,12 @@ authzadmin:
 authz_playground_version: 1
 authz_playground_snapshot_timestamp: 20150305.192714-6
 authzplayground:
-  springapp_oauth_redirect: https://authz-playground.vm.openconext.org/redirect
-  springapp_oauth_token_url: https://authz.vm.openconext.org/oauth/token
+  springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
+  springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
   springapp_client_id: cool_app_id
-  springapp_client_secret: secret
-  springapp_authorize_url: https://authz.vm.openconext.org/oauth/authorize
-  springapp_resource_server_api_url: https://voot.vm.openconext.org/me/groups
+  springapp_client_secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+  springapp_authorize_url: https://authz.{{ base_domain }}/oauth/authorize
+  springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
