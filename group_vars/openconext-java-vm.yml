@@ -194,9 +194,9 @@ voot:
         url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
         credentials: {
           username: "gadget",
-          secret: "ACAvoLN6ftlLRGHDZfl0aGWvPfzWqjbmS6aAqVsW1KgF1-slzgDF4xPqgMM5x3845uOufUiFymvf"
+          secret: "ACAvoLOz-PvJU7EDu6rgvhD-3SEnzTXR5OIY59wrwJy1M8U2bb9eZjpchCtsUqwBgojSISOFik_r"
         },
-        schacHomeOrganisation: "surfnet.nl",
+        schacHomeOrganization: "surfnet.nl",
         timeoutMillis: 3000
       }
 voot_version: 1
