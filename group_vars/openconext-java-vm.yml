@@ -153,32 +153,9 @@ authzserver:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-  defaultClients:
-    - clientId: "{{ authzplayground.springapp_client_id}}"
-      secret: "{{ authzplayground.springapp_client_secret }}"
-      resourceIds:
-        - groups
-      scopes:
-        - read
-      grantTypes:
-        - authorization_code
-        - implicit
-      redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
-    - clientId: authz-admin-vm
-      secret: "{{ authz_admin_client_secret }}"
-      resourceIds:
-        - groups
-      scopes:
-        - groups
-      grantTypes:
-        - authorization_code
-      redirectUri: https://authz-admin.{{ base_domain }}
-  defaultResourceServers:
-    - clientId: vootservice
-      secret: "{{ voot.resource_checking_secret }}"
 
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150311.185314-37
+authz_server_snapshot_timestamp: 20150312.220837-39
 
 ##
 # VM config for the Voot app
@@ -206,13 +183,35 @@ voot_snapshot_timestamp: 20150304.145441-18
 # VM config for the authz-admin application
 ##
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150309.153707-29
+authz_admin_snapshot_timestamp: 20150312.221853-36
 authz_admin_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-
+  defaultClients:
+      - clientId: "{{ authzplayground.springapp_client_id}}"
+        secret: "{{ authzplayground.springapp_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - read
+        grantTypes:
+          - authorization_code
+          - implicit
+        redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
+      - clientId: authz-admin-vm
+        secret: "{{ authz_admin_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+        redirectUri: https://authz-admin.{{ base_domain }}
+  defaultResourceServers:
+    - clientId: vootservice
+      secret: "{{ voot.resource_checking_secret }}"
 ##
 # VM config for the authz-admin application
 ##

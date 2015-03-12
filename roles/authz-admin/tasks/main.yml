@@ -29,6 +29,10 @@
   template: src=application.properties.j2 dest={{ authz_admin_dir }}/application.properties owner=authz-admin group=authz-admin mode=0740
   notify: restart authz-admin
 
+- name: Copy config for default clients and resource servers
+  template: src=clientsAndResources.conf.j2 dest={{ authz_admin_dir }}/clientsAndResources.conf owner=authz-admin group=authz-admin mode=0740
+  notify: restart authz-server
+
 - name: copy apache config
   template: src=authz-admin.conf.j2 dest=/etc/httpd/conf.d/authz-admin.conf
   notify: restart httpd

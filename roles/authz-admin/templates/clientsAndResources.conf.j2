@@ -1,6 +1,6 @@
 # This file is in the 'Hocon' format developed by Typesafe. See https://github.com/typesafehub/config
 clients = [
-  {% for client in authzserver.defaultClients %}
+  {% for client in authzadmin.defaultClients %}
   {
     clientId = "{{ client.clientId }}"
     secret = "{{ client.secret | vault }}"
@@ -25,7 +25,7 @@ clients = [
 ]
 # The entries in the list below will all be granted the authority ROLE_TOKEN_CHECKER so they can invoke the /oauth/check_token endpoint
 resourceServers = [
-{% for client in authzserver.defaultResourceServers %}
+{% for client in authzadmin.defaultResourceServers %}
   {
     clientId = "{{ client.clientId }}"
     secret = {{ client.secret | vault}}
