@@ -259,6 +259,7 @@ INSERT INTO `janus__entity` VALUES (11,'https://teams.{{ base_domain }}/shibbole
 INSERT INTO `janus__entity` VALUES (12,'https://api.{{ base_domain }}/',0,'prodaccepted','saml20-sp',NULL,NULL,NULL,NULL,'yes',NULL,NULL,3,'2012-06-27T13:22:35+02:00','172.18.5.1',NULL,'Entity created.','yes');
 INSERT INTO `janus__entity` VALUES (13,'https://apis.{{ base_domain }}/',0,'prodaccepted','saml20-sp',NULL,NULL,NULL,NULL,'yes',NULL,NULL,3,'2012-06-27T13:22:35+02:00','172.18.5.1',NULL,'Entity created.','yes');
 INSERT INTO `janus__entity` VALUES (14,'https://apis.{{ base_domain }}/client/client.html',0,'prodaccepted','saml20-sp',NULL,NULL,NULL,NULL,'yes',NULL,NULL,3,'2012-06-27T13:22:35+02:00','172.18.5.1',NULL,'Entity created.','yes');
+INSERT INTO `janus__entity` VALUES (15,'https://authz-server.{{ base_domain }}/',0,'prodaccepted','saml20-sp',NULL,NULL,NULL,NULL,'yes',NULL,NULL,3,'2012-06-25T16:34:29+02:00','172.18.5.1',NULL,'Entity created.','yes');
 /*!40000 ALTER TABLE `janus__entity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -710,6 +711,40 @@ INSERT INTO `janus__metadata` VALUES (14,0,'NameIDFormats:0','urn:oasis:names:tc
 INSERT INTO `janus__metadata` VALUES (14,0,'NameIDFormats:1','urn:oasis:names:tc:SAML:2.0:nameid-format:transient','2012-11-28T17:27:02+01:00','192.168.56.1');
 INSERT INTO `janus__metadata` VALUES (14,0,'NameIDFormats:2','urn:oasis:names:tc:SAML:2.0:nameid-format:persistent','2012-11-28T17:27:02+01:00','192.168.56.1');
 
+# 15 = authz-server
+INSERT INTO `janus__metadata` VALUES (15,0,'AssertionConsumerService:0:Binding','urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'AssertionConsumerService:0:Location','https://authz-server.{{ base_domain }}/oauth/authorize','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:0:emailAddress','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:0:givenName','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:0:surName','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:1:emailAddress','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:1:givenName','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:1:surName','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:2:emailAddress','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:2:givenName','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:2:surName','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'description:en','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'description:nl','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'logo:0:height','60','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'logo:0:url','https://.png','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'logo:0:width','120','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'name:en','OpenConext APIS','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'name:nl','OpenConext APIS','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'displayName:nl','OpenConext Authz Server','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'displayName:en','OpenConext Authz Server','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'redirect.sign','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'url:en','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'url:nl','','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:0:contactType','technical','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:1:contactType','technical','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'contacts:2:contactType','technical','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'coin:no_consent_required','1','2012-06-27T13:24:02+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'NameIDFormat','urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified','2012-11-28T17:27:02+01:00','192.168.56.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'NameIDFormats:0','urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified','2012-11-28T17:27:02+01:00','192.168.56.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'NameIDFormats:1','urn:oasis:names:tc:SAML:2.0:nameid-format:transient','2012-11-28T17:27:02+01:00','192.168.56.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'NameIDFormats:2','urn:oasis:names:tc:SAML:2.0:nameid-format:persistent','2012-11-28T17:27:02+01:00','192.168.56.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'coin:gadgetbaseurl','cool_app_id','2012-06-25T16:42:04+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (15,0,'coin:oauth:secret','secret','2012-06-25T16:42:04+02:00','172.18.5.1');
 
 /*!40000 ALTER TABLE `janus__metadata` ENABLE KEYS */;
 UNLOCK TABLES;
