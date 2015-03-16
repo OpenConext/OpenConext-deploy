@@ -1,6 +1,6 @@
 ---
 
-- hosts: openconext-php:openconext-java
+- hosts: php-apps:java-apps
   sudo: true
   roles:
     - common

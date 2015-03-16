@@ -1,10 +1,9 @@
-[openconext-java]
+[java-apps]
 t04.dev.coin.surf.net
 
-[openconext-php]
+[php-apps]
 t03.dev.coin.surf.net
 
 [test:children]
-openconext-java
-openconext-php
-
+java-apps
+php-apps

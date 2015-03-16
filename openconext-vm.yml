@@ -1,6 +1,6 @@
 ---
 
-- hosts: openconext-vm
+- hosts: vm
   sudo: true
   roles:
     - hosts
