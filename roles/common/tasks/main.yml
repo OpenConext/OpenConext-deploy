@@ -3,7 +3,6 @@
 - name: set timezone
   file: state=link src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime force=True
 
-- name: Enable ntpd
 - service: name=ntpd state=started enabled=yes
 
 - name: install telnet
