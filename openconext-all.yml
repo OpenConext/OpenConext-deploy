@@ -1,0 +1,8 @@
+---
+
+- hosts: openconext-php:openconext-java
+  sudo: true
+  roles:
+    - common
+    - tls
+    - httpd
