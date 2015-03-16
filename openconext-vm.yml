@@ -8,6 +8,5 @@
     - tools
     - tls
     - httpd
-    - php
     - static
     - welcome

@@ -8,6 +8,7 @@
     - common
     - tls
     - httpd
+    - php
     - { role: openconext-common, tags: ['eb','sr']}
     - { role: openconext-engineblock, tags: ['eb'] }
     - { role: janus, tags: ['sr'] }
