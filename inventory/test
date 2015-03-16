@@ -1,0 +1,11 @@
+[openconext-java]
+192.168.80.81
+
+[openconext-java-vm:children]
+openconext-java
+
+[openconext-php]
+192.168.80.80
+
+[openconext-php-vm:children]
+openconext-php
