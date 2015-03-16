@@ -1,6 +1,6 @@
 ---
 
-- hosts: openconext-storage
+- hosts: storage
   sudo: true
   roles:
     - mysql

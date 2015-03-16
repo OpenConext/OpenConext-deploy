@@ -1,0 +1,9 @@
+[java-apps]
+t04.dev.coin.surf.net
+
+[php-apps]
+t03.dev.coin.surf.net
+
+[test:children]
+java-apps
+php-apps

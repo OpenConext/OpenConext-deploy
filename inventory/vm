@@ -3,23 +3,23 @@ localhost ansible_connection=local ansible_python_interpreter=python
 
 [local-certs:children]
 
-[openconext-vm]
+[vm]
 192.168.66.78
 
-[openconext-storage]
+[storage]
 192.168.66.78
 
-[openconext-storage-vm:children]
-openconext-storage
+[storage-vm:children]
+storage
 
-[openconext-java]
+[java-apps]
 192.168.66.78
 
-[openconext-java-vm:children]
-openconext-java
+[java-apps-vm:children]
+java-apps
 
-[openconext-php]
+[php-apps]
 192.168.66.78
 
-[openconext-php-vm:children]
-openconext-php
+[php-apps-vm:children]
+php-apps

@@ -1,13 +1,7 @@
 ---
 
-- hosts: openconext-vm
+- hosts: vm
   sudo: true
   roles:
     - hosts
-    - common
-    - tools
-    - tls
-    - httpd
-    - php
-    - static
     - welcome

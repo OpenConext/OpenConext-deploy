@@ -1,5 +1,5 @@
 ---
-- hosts: openconext-php
+- hosts: php-apps
   sudo: yes
   gather_facts: no
   vars:
@@ -8,6 +8,8 @@
     - common
     - tls
     - httpd
+    - php
+    - static
     - { role: openconext-common, tags: ['eb','sr']}
     - { role: openconext-engineblock, tags: ['eb'] }
     - { role: janus, tags: ['sr'] }

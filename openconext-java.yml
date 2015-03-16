@@ -1,6 +1,6 @@
 ---
 
-- hosts: openconext-java
+- hosts: java-apps
   sudo: true
   vars:
     env_lang: java
