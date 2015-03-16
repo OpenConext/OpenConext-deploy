@@ -1,4 +1,5 @@
 ---
+# Settings that are identical in every environment (vm, test etc)
 tomcat:
   install_dir: /etc/tomcat6
   share_dir: /usr/share/tomcat6

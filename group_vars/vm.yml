@@ -57,3 +57,264 @@ welcome:
 
 janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
 janus_teams_oauth_secret: ACAvoLMnlvmGLXK02rbbUrKJSfBo4fFehrSDgvaWf1-QVmOmNuQN270IbUI4Q4RwGH7TJTzXjuvV
+
+engine:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+profile:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+janus:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+
+engine_janus_cache_lifetime: 0
+
+engine_vovalidate_key : oauth_key
+engine_vovalidate_secret : ACAvoLPlQEX-b0RMc52JY5o0qtYuLA8lT2pJ9TaIZQymmRAuXYysq7oxmPDSXN9cGUgKnWXdhA0ZWvQZWtFm2qEFBBeXf_pUxQ
+
+engine_trusted_proxy_ips:
+  - 192.168.1.1
+  - 10.0.0.1
+#
+engine_keys:
+  default:
+    privateKey: engineblock.pem.encrypted
+    privateFile: /etc/openconext/engineblock.pem
+    publicKey: engineblock.crt
+    publicFile: /etc/openconext/engineblock.crt
+
+base_domain: "{{ env }}.openconext.org"
+
+# on the VM we use the same certificate for all domains under base_domain.
+tls_https:
+  key_name: star.{{ base_domain }}.key
+  crt_name: star.{{ base_domain }}.pem
+  bundle_name: star.{{ base_domain }}_ca_bundle.pem
+
+tomcat_apps:
+  - api
+  - teams
+  - grouper
+  - mujina-sp
+  - mujina-idp
+
+# shibboleth
+shibboleth_apps:
+  teams:
+    entityID: "https://teams.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  grouper:
+    entityID: "https://grouper.{{ base_domain }}/grouper/shibboleth"
+    baseurl: "/grouper"
+  authz:
+    entityID: "https://authz.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  "authz-admin":
+    entityID: "https://authz-admin.{{ base_domain }}/shibboleth"
+    baseurl: ""
+shib:
+  engine_domain: "{{ base_domain }}"
+
+
+# tomcat
+keystore_password: ACAvoLNaJSARHx9BSmUpockTtDLp_LSmx9DkGnvuk62VtREBsK_IRVr1MM9AAsbb__Xsc4pp5YPa
+
+# versions of installed apps
+teams_version: 4.0.7
+teams_snapshot_timestamp: 20150205.105251-3
+
+api_version: 4.0.1
+api_snapshot_timestamp: 20150302.230045-395
+
+mujina_version: 4.0.2
+#mujina_snapshot_timestamp
+
+##
+# VM config for the teams app
+##
+teams:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  team_db_password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
+  team_db_host: localhost
+  eb_db_password: ACAvoLPY26q3FD4KZkXCJtWpQi7GW10qpS8LgW5IEDGherQr8yv5KDlCpdYoyZ8Qts28kfvFdRxm
+  eb_db_host: db.{{ base_domain }}
+  mail_server: localhost
+  group_name_context: "urn:collab:group:test.surfteams.nl:"
+
+engineblock:
+  idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
+  idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+
+##
+# VM config for the api app
+##
+api:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  janus:
+    user: "{{ engine_janus_user }}"
+    secret: "{{ engine_janus_secret }}"
+    uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
+  jdbc:
+    user: apirw
+    url: jdbc:mysql://localhost:3306/api
+    password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
+  ldap:
+    url: ldap://ldap.{{ base_domain }}:389
+    userDn: "{{ engine_ldap_bind_dn }}"
+    password: "{{ engine_ldap_password }}"
+  engineblock:
+    user: "{{ engine_database_user }}"
+    url: jdbc:mysql://{{ engine_database_host }}:3306/{{ engine_database_name }}
+    password: "{{ engine_database_password }}"
+  teams:
+    user: teamsrw
+    url: jdbc:mysql://localhost:3306/teams
+    password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
+  oauth:
+    callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
+  staticContentBasePath: https://static.{{ base_domain }}
+  saml:
+    entityId: https://api.{{ base_domain }}/
+    assertionConsumerURI: https://api.{{ base_domain }}/v1/assertionConsumer
+  ehcache:
+    path: /tmp
+
+##
+# VM config for the grouper app
+##
+grouper:
+  db_user: grouperrw
+  db_host: localhost
+  db_password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+
+ldap_user: cn=ro,dc=surfconext,dc=nl
+ldap_grouper_engine_user: engine
+
+##
+# VM config for the apis app
+##
+apis:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  user: apisrw
+  url: jdbc:mysql://localhost:3306/apis
+  password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh
+  entity_id: https://apis.{{ base_domain }}
+  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
+  admin_service:
+    resource_server_key: authorization-server-admin
+    resource_server_secret: ACAvoLN9oE35zmjam6Z5athj5Gf_vJV65O1sjNhbcpEsMubNd5CpRxNk7zWSrqLkJtYAgG-4fvCo7vxXug8MSIKOZVrrBZiNks916eh_McBLcXZrpf6vFb8
+  api:
+    consumer_key: https://apis.test.surfconext.nl
+    consumer_secret: ACAvoLMx3F7lC4ypJrDqyls4Iu4XHMtzUNUT7ihcMeCZkJx9q7M2DiLzWiNqM46k5zh-mrg5wrhM2vK4Eq-8o-lamCjBajx8sQ
+
+mujina:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+
+tomcat_grouper_password: ACAvoLM3w46TGosPyYv6AkCgp6WZjg1NX19lspUpWSGHFIo6DovmOt3Z0PUCBVOplcpf2FwBB1jP
+tomcat_api_password: ACAvoLOUyEjVfQLusPaON6MAW4UiEjn6UayDf2_BQFLUSnYNI4BmSROfgeJ7b3xBKjthc78dqmnXrP-uuW621S-K1Wllp6IevQ
+
+##
+# VM config for the Authorization Server
+##
+authzserver:
+  db_user: authz-serverrw
+  db_password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0
+  db_host: localhost
+  db_name: authz-server
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+authz_server_version: 1
+authz_server_snapshot_timestamp: 20150312.220837-39
+
+##
+# VM config for the Voot app
+##
+voot:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  resource_checking_secret: ACAvoLN6ftlLRGHDZfl0aGWvPfzWqjbmS6aAqVsW1KgF1-slzgDF4xPqgMM5x3845uOufUiFymvf
+  externalGroupProviders:
+    - {
+        type: "grouper",
+        url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
+        credentials: {
+          username: "gadget",
+          secret: "ACAvoLOz-PvJU7EDu6rgvhD-3SEnzTXR5OIY59wrwJy1M8U2bb9eZjpchCtsUqwBgojSISOFik_r"
+        },
+        schacHomeOrganization: "surfnet.nl",
+        timeoutMillis: 3000
+      }
+voot_version: 1
+voot_snapshot_timestamp: 20150304.145441-18
+
+##
+# VM config for the authz-admin application
+##
+authz_admin_version: 1
+authz_admin_snapshot_timestamp: 20150312.221853-36
+authz_admin_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
+authzadmin:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  defaultClients:
+      - clientId: "{{ authzplayground.springapp_client_id}}"
+        secret: "{{ authzplayground.springapp_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - read
+        grantTypes:
+          - authorization_code
+          - implicit
+        redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
+      - clientId: authz-admin-vm
+        secret: "{{ authz_admin_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+        redirectUri: https://authz-admin.{{ base_domain }}
+  defaultResourceServers:
+    - clientId: vootservice
+      secret: "{{ voot.resource_checking_secret }}"
+##
+# VM config for the authz-admin application
+##
+authz_playground_version: 1
+authz_playground_snapshot_timestamp: 20150305.192714-6
+authzplayground:
+  springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
+  springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
+  springapp_client_id: cool_app_id
+  springapp_client_secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+  springapp_authorize_url: https://authz.{{ base_domain }}/oauth/authorize
+  springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
