@@ -5,7 +5,6 @@
   roles:
     - hosts
     - common
-    - tools
     - tls
     - httpd
     - static
