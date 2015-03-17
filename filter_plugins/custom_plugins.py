@@ -8,7 +8,7 @@ import os.path
 import sys
 keydir = '.vault'
 if not os.path.isdir(keydir):
-  keydir = os.path.expanduser('~/.openconext-keystore')
+  keydir = os.path.expanduser('~/.decrypted_openconext_keystore')
 crypter = keyczar.Crypter.Read(keydir)
 sys.stdout.write(crypter.Decrypt("%s"))
   """ % encrypted

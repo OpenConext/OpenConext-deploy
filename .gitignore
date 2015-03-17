@@ -4,3 +4,6 @@
 
 *.pyc
 *.iml
+
+# ignore the directory where our decrypted keystore is kept during execution of playbooks
+.decrypted_keystore

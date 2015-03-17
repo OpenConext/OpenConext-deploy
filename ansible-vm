@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ANSVER=`ansible --version|head -1|cut -d " " -f 2`
 ANSVER1=`echo $ANSVER | cut -d '.' -f 1`
@@ -7,5 +8,12 @@ if [ $ANSVER1 -le 1 -a $ANSVER2 -lt 8 ]; then
 	echo "Requires at least Ansible 1.8"
 	exit 1
 fi
+
+mkdir -p ~/.decrypted_openconext_keystore
+# empty contents if some other contents where already there
+rm -rf ~/.decrypted_openconext_keystore/*
+
+# GPG decrypt the tarred keycar file
+gpg --batch --quiet --passphrase-file gpg/passphrase.txt --decrypt files/tarred_and_crypted_keystores/vm.tar.gpg | tar -x -C ~/.decrypted_openconext_keystore
 
 ansible-playbook -i inventory/vm --private-key `pwd`/.vagrant/machines/openconext-vm/virtualbox/private_key  -u vagrant "$@"

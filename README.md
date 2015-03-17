@@ -56,7 +56,7 @@ The VM setup is intended for demo purposes only since it is using the `openconex
 Create the symlink so that our playbook can find the AES key in this project:
 
 ```
-ln -s `pwd`/openconext-unsafe-keystore ~/.openconext-keystore
+ln -s `pwd`/files/keystores/vm ~/.openconext-keystore-vm
 ```
 
 The setup of the VM is using the `openconext-unsafe-keystore`, don't use that in production.
