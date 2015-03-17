@@ -5,9 +5,6 @@
   vars:
     env_lang: java
   roles:
-    - common
-    - tls
-    - httpd
     - tomcat
     - java
     - { role: shibboleth, tags: ['shib'] }

@@ -5,9 +5,6 @@
   vars:
     env_lang: php
   roles:
-    - common
-    - tls
-    - httpd
     - php
     - static
     - { role: openconext-common, tags: ['eb','sr']}
