@@ -1,0 +1,6 @@
+# Ignore un-encrypted private keys
+api.pem
+api_pkcs8.pem
+
+apis.pem
+apis_pkcs8.pem

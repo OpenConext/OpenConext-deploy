@@ -1,6 +1,6 @@
 ---
 env: test
-base_domain: test2.surfconext.nl.nl
+base_domain: test2.surfconext.nl
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
