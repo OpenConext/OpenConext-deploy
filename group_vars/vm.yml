@@ -269,7 +269,7 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1
-voot_snapshot_timestamp: 20150304.145441-18
+voot_snapshot_timestamp: 20150317.111827-28
 
 ##
 # VM config for the authz-admin application
