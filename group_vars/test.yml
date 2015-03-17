@@ -2,6 +2,12 @@
 env: test
 base_domain: test2.surfconext.nl.nl
 
+# on the VM we use the same certificate for all domains under base_domain.
+tls_https:
+  key_name: star.{{ base_domain }}.key
+  crt_name: star.{{ base_domain }}.pem
+  bundle_name: star.{{ base_domain }}_ca_bundle.pem
+
 apache_server_admin: unix@prolocation.net
 
 janus_ssp_technicalcontact_name: "Surfconext beheer"
@@ -92,12 +98,6 @@ engine_keys:
     publicKey: engineblock.crt
     publicFile: /etc/openconext/engineblock.crt
 
-
-# on the VM we use the same certificate for all domains under base_domain.
-tls_https:
-  key_name: star.{{ base_domain }}.key
-  crt_name: star.{{ base_domain }}.pem
-  bundle_name: star.{{ base_domain }}_ca_bundle.pem
 
 tomcat_apps:
   - api
