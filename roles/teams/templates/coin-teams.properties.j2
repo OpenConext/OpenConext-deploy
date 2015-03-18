@@ -21,11 +21,11 @@
 
 coin-team-db-url=jdbc:mysql://{{ teams.team_db_host }}:3306/teams
 coin-team-db-username=teamsrw
-coin-team-db-password={{ teams.team_db_password | vault }}
+coin-team-db-password={{ teams.team_db_password | vault(env) }}
 
 coin-eb-db-url=jdbc:mysql://{{ teams.eb_db_host }}:3306/eb
 coin-eb-db-username=ebrw
-coin-eb-db-password={{ teams.eb_db_password | vault }}
+coin-eb-db-password={{ teams.eb_db_password | vault(env) }}
 
 teams.db.migrations.folder=
 
@@ -39,7 +39,7 @@ api-location=https://api.{{ base_domain }}/v1/
 
 # Oauth properties
 oauth-key={{ janus_teams_oauth_key }}
-oauth-secret={{ janus_teams_oauth_secret | vault }}
+oauth-secret={{ janus_teams_oauth_secret | vault(env) }}
 
 shindigHost=https://os.{{ base_domain }}
 

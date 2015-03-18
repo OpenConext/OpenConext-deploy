@@ -55,7 +55,7 @@ $config = array(
      * This password will give access to the installation page of simpleSAMLphp with
      * metadata listing and diagnostics pages.
      */
-    'auth.adminpassword'        => '{{ janus_ssp_auth_admin_password | vault }}',
+    'auth.adminpassword'        => '{{ janus_ssp_auth_admin_password | vault(env) }}',
     'admin.protectindexpage'    => TRUE,
     'admin.protectmetadata'     => FALSE,
 
@@ -67,7 +67,7 @@ $config = array(
      * A possible way to generate a random salt is by running the following command from a unix shell:
      * tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo
      */
-    'secretsalt' => '{{ janus_ssp_secretsalt | vault }}',
+    'secretsalt' => '{{ janus_ssp_secretsalt | vault(env) }}',
     
     /*
      * Some information about the technical persons running this installation.

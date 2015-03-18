@@ -13,7 +13,7 @@
   tags: mysql
 
 - name: Set mysql root password for all root accounts
-  mysql_user: name=root password={{ mysql_root_password | vault }} priv=*.*:ALL,GRANT
+  mysql_user: name=root password={{ mysql_root_password | vault(env) }} priv=*.*:ALL,GRANT
   tags: mysql
 
 - name: MySQL my.cnf
@@ -21,15 +21,15 @@
   tags: mysql
 
 - name: delete anonymous MySQL server user
-  mysql_user: user="" state="absent" login_user=root login_password={{ mysql_root_password | vault}}
+  mysql_user: user="" state="absent" login_user=root login_password={{ mysql_root_password | vault(env) }}
   tags: mysql
 
 - name: delete anonymous MySQL server user for localhost
-  mysql_user: user="" state="absent" login_user=root login_password={{ mysql_root_password | vault}}
+  mysql_user: user="" state="absent" login_user=root login_password={{ mysql_root_password | vault(env) }}
   tags: mysql
 
 - name: remove the MySQL test database
-  mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password | vault}}
+  mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password | vault(env) }}
   tags: mysql
 
 - name: Create database
@@ -39,7 +39,7 @@
   tags: mysql
 
 - name: Create database user
-  mysql_user: name={{ item.name }} host={{ item.host }} password={{ item.password | vault }} priv={{ item.db_name }}.*:ALL state=present
+  mysql_user: name={{ item.name }} host={{ item.host }} password={{ item.password | vault(env) }} priv={{ item.db_name }}.*:ALL state=present
   with_items:
     - "{{ databases.users }}"
   tags: mysql

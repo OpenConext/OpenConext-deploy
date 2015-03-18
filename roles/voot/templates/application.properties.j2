@@ -10,4 +10,4 @@ vootservice.oauthResourceId = groups
 # Basic authentication with the oAuth server.
 oauth.checkToken.endpoint.url=https://authz.{{ base_domain }}/oauth/check_token
 oauth.checkToken.clientId=vootservice
-oauth.checkToken.secret={{ voot.resource_checking_secret | vault }}
+oauth.checkToken.secret={{ voot.resource_checking_secret | vault(env) }}

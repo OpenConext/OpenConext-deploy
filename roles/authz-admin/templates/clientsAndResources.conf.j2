@@ -3,7 +3,7 @@ clients = [
   {% for client in authzadmin.defaultClients %}
   {
     clientId = "{{ client.clientId }}"
-    secret = "{{ client.secret | vault }}"
+    secret = "{{ client.secret | vault(env) }}"
     redirectUri= "{{ client.redirectUri}}"
     resourceIds = [
       {% for value in client.resourceIds %}
@@ -28,7 +28,7 @@ resourceServers = [
 {% for client in authzadmin.defaultResourceServers %}
   {
     clientId = "{{ client.clientId }}"
-    secret = {{ client.secret | vault}}
+    secret = {{ client.secret | vault(env) }}
   }
 {% endfor %}
 ]

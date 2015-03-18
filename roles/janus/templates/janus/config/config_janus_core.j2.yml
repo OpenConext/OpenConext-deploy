@@ -15,7 +15,7 @@ janus_service_registry_core:
         remote:
             test:
                 name: "OpenConext EngineBlock"
-                url: "https://{{ engine_api_janus_user }}:{{ engine_api_janus_password | vault }}@{{ engine_api_domain }}/api/connections"
+                url: "https://{{ engine_api_janus_user }}:{{ engine_api_janus_password | vault(env) }}@{{ engine_api_domain }}/api/connections"
     entity:
         prettyname: 'name:en'
         useblacklist: false

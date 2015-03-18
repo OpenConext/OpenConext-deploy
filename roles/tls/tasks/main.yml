@@ -5,6 +5,6 @@
     - "{{ tls.certificates }}"
 
 - name: copy private keys to correct location
-  copy: content="{{ lookup('file', 'files/' + env + '/certs/' + item + '.encrypted') | vault }}" dest={{ tls.cert_private_path }}/{{ item }}
+  copy: content="{{ lookup('file', 'files/' + env + '/certs/' + item + '.encrypted') | vault (env) }}" dest={{ tls.cert_private_path }}/{{ item }}
   with_items:
     - "{{ tls.private_keys }}"
