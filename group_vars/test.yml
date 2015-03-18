@@ -127,8 +127,8 @@ shibboleth_apps:
 shib:
   engine_domain: "{{ base_domain }}"
 
-# tomcat
-keystore_password: AO389jIasT77KXigYsv1RmA_BhnBl1JtgS_LNXx9nX_zidPPx8K9w70OAHNp2joMffSJmedtyE12
+# jvm keystore password
+keystore_password: AO389jJYhqwvRfZ5623zck8jSHLsDPPjSWq3R5neV1qxqvoDaKGm1JLuNAKi9zBxDOihasPMRRrt
 
 # versions of installed apps
 teams_version: 4.0.7
