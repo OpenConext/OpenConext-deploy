@@ -6,12 +6,11 @@ from keyczar import keyczar
 
 parser = OptionParser()
 parser.add_option("-d", "--decrypt", action="store_true", help="decrypt the input", dest="decrypt")
+parser.add_option("-e", "--environment", action="store", type="string", help="target environment", dest="env", default="vm")
 
 (options, args) = parser.parse_args()
 
-keydir = '.vault'
-if not os.path.isdir(keydir):
-  keydir = os.path.expanduser('~/.openconext-keystore')
+keydir = os.path.expanduser('~/.decrypted_openconext_keystore_' + options.env)
 crypter = keyczar.Crypter.Read(keydir)
 
 if options.decrypt:
