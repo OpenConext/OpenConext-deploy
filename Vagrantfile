@@ -11,8 +11,4 @@ Vagrant.configure("2") do |config|
     openconext_vm.vm.network :private_network, ip: "192.168.66.78"
   end
 
-  # Temporary until we get a real t03
-  config.vm.define "test-php" do |test_php|
-    test_php.vm.network :private_network, ip: "192.168.80.80"
-  end
 end

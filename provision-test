@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+./ansible-env test openconext-all.yml "$1"
+./ansible-env test openconext-java.yml "$1"
+./ansible-env test openconext-php.yml "$1"
+./ansible-env test openconext-mujina.yml "$1"

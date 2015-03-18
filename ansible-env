@@ -29,5 +29,5 @@ if [ "$1" == 'vm' ]; then
   ansible-playbook -i "inventory/$1" --private-key `pwd`/.vagrant/machines/openconext-vm/virtualbox/private_key  -u vagrant "$2"
 else
   gpg --batch --quiet --decrypt "gpg/tarred_and_crypted_keystores/$1.tar.gpg" | tar -x -C "$KEYSTORE_DIR"
-  ansible-playbook -i "inventory/$1" -K -u "$3" "$2"
+  ansible-playbook -i "inventory/$1" -u "$3" -K "$2"
 fi

@@ -14,10 +14,11 @@ crypter = keyczar.Crypter.Read(keydir)
 sys.stdout.write(crypter.Decrypt("%s"))
   """.format(env=env) % encrypted
   import subprocess
-  import sys
+  from ansible import errors
+
   (out, err) = subprocess.Popen(['python', '-c', method], stdout=subprocess.PIPE).communicate()
   if (err != None):
-    sys.exit("Unable to decrypt, error: {error}".format(error = err))
+    raise errors.AnsibleFilterError("Unable to decrypt, aborting. Error: {error}".format(error = err))
   else:
     return out
 class FilterModule(object):
