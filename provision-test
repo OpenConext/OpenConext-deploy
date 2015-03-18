@@ -5,7 +5,4 @@ then
   echo "Usage: ./provision-test [YOUR_USERNAME_ON_TARGET_HOSTS]"
   exit 1
 fi
-./ansible-env test openconext-all.yml "$1"
-./ansible-env test openconext-php.yml "$1"
-./ansible-env test openconext-java.yml "$1"
-./ansible-env test openconext-mujina.yml "$1"
+./ansible-env test provision-t-a-p.yml "$1"

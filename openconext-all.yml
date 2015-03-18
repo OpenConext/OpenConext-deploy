@@ -1,8 +1,0 @@
----
-
-- hosts: php-apps:java-apps
-  sudo: true
-  roles:
-    - common
-    - tls
-    - httpd

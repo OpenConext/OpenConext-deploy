@@ -1,7 +1,0 @@
----
-
-- hosts: storage
-  sudo: true
-  roles:
-    - mysql
-    - ldap

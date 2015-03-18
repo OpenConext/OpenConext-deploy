@@ -1,0 +1,70 @@
+---
+
+- hosts: local-certs
+  connection: local
+  gather_facts: no
+  roles:
+    - generate_certs
+
+- hosts: php-apps:java-apps
+  sudo: true
+  roles:
+    - common
+    - tls
+    - httpd
+
+- hosts: vm
+  sudo: true
+  roles:
+    - hosts
+    - welcome
+
+- hosts: storage
+  sudo: true
+  roles:
+    - mysql
+    - ldap
+
+- hosts: storage
+  sudo: true
+  roles:
+    - initial
+
+- hosts: php-apps
+  sudo: yes
+  gather_facts: no
+  vars:
+    env_lang: php
+  roles:
+    - php
+    - static
+    - { role: openconext-common, tags: ['eb','sr']}
+    - { role: openconext-engineblock, tags: ['eb'] }
+    - { role: janus, tags: ['sr'] }
+
+- hosts: java-apps
+  sudo: true
+  vars:
+    env_lang: java
+  roles:
+    - tomcat
+    - java
+    - { role: shibboleth, tags: ['shib'] }
+    - grouper
+    - teams
+    - api
+    - apis
+    - { role: authz-server, tags: ['oauth', 'authz'] }
+    - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
+    - { role: voot, tags: ['oauth', 'voot'] }
+    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
+
+- hosts: java-apps
+  sudo: true
+  roles:
+    - mujina-sp
+    - mujina-idp
+  handlers:
+    - include: roles/tomcat/handlers/main.yml
+    - include: roles/httpd/handlers/main.yml
+

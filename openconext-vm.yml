@@ -1,7 +1,0 @@
----
-
-- hosts: vm
-  sudo: true
-  roles:
-    - hosts
-    - welcome

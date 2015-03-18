@@ -1,6 +1,0 @@
----
-
-- hosts: storage
-  sudo: true
-  roles:
-    - initial
