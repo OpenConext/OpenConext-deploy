@@ -13,14 +13,9 @@ if not os.path.isdir(keydir):
 crypter = keyczar.Crypter.Read(keydir)
 sys.stdout.write(crypter.Decrypt("%s"))
   """.format(env=env) % encrypted
-  import subprocess
-  from ansible import errors
+  from subprocess import check_output
+  return check_output(["python", "-c", method])
 
-  (out, err) = subprocess.Popen(['python', '-c', method], stdout=subprocess.PIPE).communicate()
-  if (err != None):
-    raise errors.AnsibleFilterError("Unable to decrypt, aborting. Error: {error}".format(error = err))
-  else:
-    return out
 class FilterModule(object):
 
   def filters(self):
