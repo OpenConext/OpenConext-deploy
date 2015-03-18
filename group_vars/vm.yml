@@ -285,7 +285,7 @@ authzadmin:
         resourceIds:
           - groups
         scopes:
-          - read
+          - groups
         grantTypes:
           - authorization_code
           - implicit

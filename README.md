@@ -67,6 +67,8 @@ The setup of the VM is using the `openconext-unsafe-keystore`, don't use that in
 For the VM environment the certificates are generated on the fly. Typically you would only run `openconext-java.yml` for installing the java apps on a target environment.
 The VM will install everything on a single box for demo purposes.
 
+Before you can provision the VM you will have to import the ./gpg/vm.key into your GPG Keychain.
+
 To provision the VM please run:
 
 ```bash
