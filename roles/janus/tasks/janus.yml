@@ -1,7 +1,5 @@
 ---
-#- stat: path={{ janus_tar_location }}
-#  register: janus_tar_location_stat
-#
+
 - name: Install JANUS - Download archive
   get_url: url="{{ janus_download_base_url }}/{{ janus_tar_file }}" dest="{{ janus_tar_location }}"
 
