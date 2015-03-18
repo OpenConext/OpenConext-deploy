@@ -42,6 +42,9 @@ engine_ldap_host: ldap.{{ base_domain }}
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_ldap_password: ACAvoLM9A__9zpR5wmn-7zJSji8f7i4Jnl9vxvgc7yY18mZShQ_0_djlglxdGhc6iFctRiQlv5KK
 
+engine_api_janus_password: ACAvoLN-2zyNG3J5Ftj0NsWutriCbKaQagT3S5L214vCgz4SgP5yGuUFbxZRx93OEf2KoZEZloTiLZnc5ITkngpv82clFfw0Zg
+
+
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 ldap_admin_password: ACAvoLODUDZgKT6oPCQzOPR9Rp7Nq4uvvl9J5FBqjcKODnbQmoduSA6RKBub7waTs2MHinRl3jqy3lYiNa5PMLu6w7mo7NzdKA
 ldap_password: ACAvoLMUTPe1xi6rIcz1QW8DaphUZBK2dLDQ-ixuuZk97skQxPLVio2zbJdLI8vQPMqQYcKj40cS
