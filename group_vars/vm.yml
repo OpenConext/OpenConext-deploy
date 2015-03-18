@@ -290,6 +290,7 @@ authzadmin:
         grantTypes:
           - authorization_code
           - implicit
+          - client_credentials
         redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
       - clientId: authz-admin-vm
         secret: "{{ authz_admin_client_secret }}"
