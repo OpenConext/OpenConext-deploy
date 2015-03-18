@@ -13,8 +13,12 @@ if not os.path.isdir(keydir):
 crypter = keyczar.Crypter.Read(keydir)
 sys.stdout.write(crypter.Decrypt("%s"))
   """.format(env=env) % encrypted
-  from subprocess import check_output
-  return check_output(["python", "-c", method])
+  import subprocess
+  child = subprocess.Popen(['python', '-c', method], stdout=subprocess.PIPE)
+  output = child.communicate()[0]
+  if child.returncode != 0:
+    raise ValueError("Exit code non-zero: %d" % child.returncode)
+  return output
 
 class FilterModule(object):
 

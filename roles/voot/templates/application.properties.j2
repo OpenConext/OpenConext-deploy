@@ -11,3 +11,7 @@ vootservice.oauthResourceId = groups
 oauth.checkToken.endpoint.url=https://authz.{{ base_domain }}/oauth/check_token
 oauth.checkToken.clientId=vootservice
 oauth.checkToken.secret={{ voot.resource_checking_secret | vault(env) }}
+
+endpoints.enabled=false
+endpoints.health.enabled=true
+endpoints.info.enabled=true
