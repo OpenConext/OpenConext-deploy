@@ -5,5 +5,8 @@
 
 - service: name=ntpd state=started enabled=yes
 
-- name: install telnet
-  yum: name=telnet state=latest
+- name: Install tools / clients
+  yum: name={{ item }} state=present
+  with_items:
+     - telnet
+     - openldap-clients

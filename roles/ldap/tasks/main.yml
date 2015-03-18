@@ -1,9 +1,8 @@
 ---
-- name: Install openldap
+- name: Install openldap server
   yum: name={{ item }} state=present
   with_items:
      - openldap-servers
-     - openldap-clients
   tags: ldap
 
 - name: start slapd at boot
