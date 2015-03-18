@@ -22,3 +22,7 @@ voot.clientId=authz-admin-vm
 voot.clientSecret={{ authz_admin_client_secret | vault(env) }}
 voot.redirectUri=https://authz-admin.vm.openconext.org
 voot.scopes = groups
+
+endpoints.enabled=false
+endpoints.health.enabled=true
+endpoints.info.enabled=true

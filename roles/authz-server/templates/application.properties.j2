@@ -22,3 +22,7 @@ spring.datasource.username={{ authzserver.db_user }}
 spring.datasource.password={{ authzserver.db_password | vault(env) }}
 
 server.port={{ springapp_tcpport }}
+
+endpoints.enabled=false
+endpoints.health.enabled=true
+endpoints.info.enabled=true
