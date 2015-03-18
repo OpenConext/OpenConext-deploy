@@ -17,6 +17,8 @@ janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
 
+janus_ssp_auth_admin_password: AO389jIzP7vzelkU_EIOSaKzfy6nldVti3WHcfnlLTJ4xjxcOOcclhj5OOMkur0PkCkhl04b5kK4
+janus_ssp_secretsalt: AO389jLCxf-3SVaII3ZhDTpTIfKM4xjfN8WOVBHjsOgnNKyGRz7i0cfNfhf2SC6VWACXm49ul91ychZNV8kjougnPayHMjoNlw
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
@@ -48,7 +50,7 @@ ldap_grouper_unit_test_user: gadget
 janus_database_name: sr
 janus_database_host: "{{ db_host }}"
 janus_database_user: srrw
-janus_database_password: AO389jIAjHZiDMPDPNCv3WlFSNbTnoyE11eST-4nwMPSy1J3vyjUT1wG6pQxoBuL7EN4dXfLePtf
+janus_database_password: AO389jJqUoyI5aGSB600-4b-iJws-pvjzRT_K4CLpZ8WG-BhtdYOHdU8jcJZdfqODccCsrI96kL_
 
 # host for static files (IdP logos)
 static:

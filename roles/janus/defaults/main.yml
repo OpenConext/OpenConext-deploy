@@ -20,18 +20,7 @@ janus_download_base_url: "https://github.com/janus-ssp/janus/releases/download/{
 janus_tar_file: "janus-{{ janus_version }}.tar.gz"
 janus_tar_location: "{{ openconext_builds_dir }}/{{ janus_tar_file }}"
 janus_cache_path: "/var/cache/janus-ssp"
-#
-## This password will give access to the installation page of simpleSAMLphp with
-## metadata listing and diagnostics pages.
-janus_ssp_auth_admin_password: ACAvoLNb0k5KzJPvQSuNzbAKDlWXW_2whsY-ghDMw4_PTxA9zmR3wVREnCw1Z-JuPzNiJ8pEw8X54nc06Ux24SHHhyTACiIvDw
-#
-## This is a secret salt used by simpleSAMLphp when it needs to generate a secure hash
-## of a value. It must be changed from its default value to a secret value. The value of
-## 'secretsalt' can be any valid string of any length.
-##
-## A possible way to generate a random salt is by running the following command from a unix shell:
-## tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo
-janus_ssp_secretsalt: ACAvoLM2dnEYG6hBlalgnkC3LrqoR5fm8kNrcbOVN81Mu8s4nNOyTO8QDL-xCDGZVfBGmmVhkntAq9Nhfjnz6ynTx9aXyBL0xg
+
 #
 ## Some information about the technical persons running this installation.
 ## The email address will be used as the recipient address for error reports, and

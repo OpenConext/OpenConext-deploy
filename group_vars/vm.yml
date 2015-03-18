@@ -15,6 +15,8 @@ janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
 
+janus_ssp_auth_admin_password: ACAvoLNb0k5KzJPvQSuNzbAKDlWXW_2whsY-ghDMw4_PTxA9zmR3wVREnCw1Z-JuPzNiJ8pEw8X54nc06Ux24SHHhyTACiIvDw
+janus_ssp_secretsalt: ACAvoLM2dnEYG6hBlalgnkC3LrqoR5fm8kNrcbOVN81Mu8s4nNOyTO8QDL-xCDGZVfBGmmVhkntAq9Nhfjnz6ynTx9aXyBL0xg
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
