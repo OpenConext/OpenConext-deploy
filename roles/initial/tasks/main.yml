@@ -13,12 +13,14 @@
 
 - name: copy load sql
   template: src={{ item }}.j2 dest=/tmp/{{ item }}
+  when: env == 'vm'
   with_items:
     - engineblock.sql
     - serviceregistry.sql
 
 - name: run load engineblock sql
   shell: mysql -u {{ item.db_user }} -p{{ item.db_password | vault(env) }} -h localhost -D {{ item.db_name }} < /tmp/{{ item.sql }}
+  when: env == 'vm'
   with_items:
     - { db_user: "{{ engine_database_user }}", db_password: "{{ engine_database_password }}", db_name: "{{ engine_database_name }}", sql: engineblock.sql }
     - { db_user: "{{ janus_database_user }}", db_password: "{{ janus_database_password }}", db_name: "{{ janus_database_name }}", sql: serviceregistry.sql }
