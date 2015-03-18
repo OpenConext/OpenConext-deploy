@@ -231,7 +231,6 @@ mujina:
 
 
 tomcat_grouper_password: ACAvoLM3w46TGosPyYv6AkCgp6WZjg1NX19lspUpWSGHFIo6DovmOt3Z0PUCBVOplcpf2FwBB1jP
-tomcat_api_password: ACAvoLOUyEjVfQLusPaON6MAW4UiEjn6UayDf2_BQFLUSnYNI4BmSROfgeJ7b3xBKjthc78dqmnXrP-uuW621S-K1Wllp6IevQ
 
 ##
 # VM config for the Authorization Server
