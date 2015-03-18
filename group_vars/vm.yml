@@ -1,7 +1,7 @@
 ---
 env: vm
 base_domain: "{{ env }}.openconext.org"
-
+ldap_host: localhost:389
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
   key_name: star.{{ base_domain }}.key

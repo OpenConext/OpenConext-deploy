@@ -2,6 +2,7 @@
 env: test
 base_domain: test2.surfconext.nl
 db_host: db.test.surfconext.nl
+ldap_host: ldap.test.surfconext.nl:389
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
@@ -79,7 +80,6 @@ janus:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-
 
 engine_janus_cache_lifetime: 0
 
