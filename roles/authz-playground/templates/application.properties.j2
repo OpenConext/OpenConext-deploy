@@ -4,6 +4,7 @@ oauth.redirect_uri={{ authzplayground.springapp_oauth_redirect }}
 oauth.token_uri={{ authzplayground.springapp_oauth_token_url }}
 oauth.client_id={{ authzplayground.springapp_client_id }}
 oauth.client_secret={{ authzplayground.springapp_client_secret | vault(env) }}
+oauth.scopes={{ authzplayground.springapp_scopes }}
 oauth.authorize_url={{ authzplayground.springapp_authorize_url }}
 oauth.resource_server_api_url={{ authzplayground.springapp_resource_server_api_url }}
 
@@ -12,3 +13,6 @@ server.port={{ springapp_tcpport }}
 endpoints.enabled=false
 endpoints.health.enabled=true
 endpoints.info.enabled=true
+
+# see for all options: http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+spring.thymeleaf.mode=HTML5
