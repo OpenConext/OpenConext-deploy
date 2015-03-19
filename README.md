@@ -78,9 +78,9 @@ Here, the ip-address `192.168.66.78` refers to the address that is mentioned in 
 Go to [https://vm.openconext.org](https://vm.openconext.org).
 
 # Adding a new environment
-Let's create an environment called 'foo'.
+Let's create an environment called 'foo':
 
-## Create symmetric encryption key for your env
+## 1. Create symmetric encryption key for your env
 Generate a keyczart keystore with primary AES key. Example:
 
 ```bash
@@ -89,14 +89,14 @@ Generate a keyczart keystore with primary AES key. Example:
  keyczart addkey --location=./foo --status=primary
 ```
 
-## Tar the files inside the keystore-dir
+## 2. Tar the files inside the keystore-dir
 The files are typically named '1' and 'meta',
 
 ```bash
 tar c ./foo/* > foo.tar
 ```
 
-## GPG-crypt the tarred keystore.
+## 3. GPG-crypt the tarred keystore.
 
 Include yourself as a recipient or you won't be able to decrypt.
 
@@ -106,13 +106,13 @@ gpg --recipient 9561C684 --encrypt-files foo.tar`.
 
 You can supply '--recipient' multiple times.
 
-## Move the crypted file into place
+## 4. Move the crypted file into place
 Put the crypted file in gpg/tarred_and_crypted_keystores. Its name is important, so in this case it should be foo.tar.gpg.
 
-## Create the corresponding file in the Ansible inventory
+## 5. Create the corresponding file in the Ansible inventory
 Easiest way is probably to copy an existing file and modify it: `cp inventory/test inventory/foo'
 
-Finally, commit and push your changes to the git repo's.
+Finally, commit and push your changes to the git repos.
 
 # Note on custom vaults
 
