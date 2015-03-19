@@ -1,13 +1,13 @@
 vm:
+[is public]
 
 test:
 9561C684
 B2A679CA
 5F5947EA
-D6BB9C80
 E1C21845
 48CB12F0
-
+D14BD479
 acc:
 ?
 
