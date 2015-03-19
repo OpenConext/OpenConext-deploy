@@ -78,7 +78,12 @@ Here, the ip-address `192.168.66.78` refers to the address that is mentioned in 
 Go to [https://vm.openconext.org](https://vm.openconext.org).
 
 # Adding a new environment
-Let's create an environment called 'foo':
+Let's create an environment called 'foo'.
+
+Prerequisites:
+
+ * You have GPG installed.
+ * You have a GPG identity.
 
 ## 1. Create symmetric encryption key for your env
 Generate a keyczart keystore with primary AES key. Example:
@@ -101,10 +106,10 @@ tar c ./foo/* > foo.tar
 Include yourself as a recipient or you won't be able to decrypt.
 
 ```bash
-gpg --recipient 9561C684 --encrypt-files foo.tar`.
+gpg --recipient 9561C684 --encrypt-files foo.tar
 ```
 
-You can supply '--recipient' multiple times.
+You can supply `--recipient` multiple times. If you're
 
 ## 4. Move the crypted file into place
 Put the crypted file in gpg/tarred_and_crypted_keystores. Its name is important, so in this case it should be foo.tar.gpg.
