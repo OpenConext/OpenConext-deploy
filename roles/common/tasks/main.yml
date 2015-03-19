@@ -10,3 +10,5 @@
   with_items:
      - telnet
      - openldap-clients
+     - mysql.x86_64
+     - MySQL-python
