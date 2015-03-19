@@ -312,12 +312,13 @@ authzadmin:
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1
-authz_playground_snapshot_timestamp: 20150316.120215-11
+authz_playground_snapshot_timestamp: 20150319.131542-16
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
   springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
   springapp_client_id: cool_app_id
   springapp_client_secret: AO389jJSpbD_GNIAAPRFbDTXJuwN9lInCRbeqwpi_qJhYF0QOTbvrpllfpE9ufi6PIBVe04t02ku
+  springapp_scopes: groups
   springapp_authorize_url: https://authz.{{ base_domain }}/oauth/authorize
   springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
   crt_name: "{{ tls_https.crt_name }}"
