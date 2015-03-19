@@ -6,7 +6,7 @@ saml_base_domain: "test.surfconext.nl"
 db_host: db.test.surfconext.nl
 ldap_host: ldap.test.surfconext.nl:389
 
-# on the VM we use the same certificate for all domains under base_domain.
+# For apache, the same star-certificate is used.
 tls_https:
   key_name: star.{{ base_domain }}.key
   crt_name: star.{{ base_domain }}.pem
