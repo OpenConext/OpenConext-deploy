@@ -318,6 +318,7 @@ authzplayground:
   springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
   springapp_client_id: cool_app_id
   springapp_client_secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+  springapp_scopes: groups
   springapp_authorize_url: https://authz.{{ base_domain }}/oauth/authorize
   springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
   crt_name: "{{ tls_https.crt_name }}"
