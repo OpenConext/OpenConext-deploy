@@ -1,8 +1,29 @@
 ---
 env: test
 base_domain: test2.surfconext.nl
-db_host: db.test.surfconext.nl
+mysql_host: t03.dev.coin.surf.net
 ldap_host: ldap.test.surfconext.nl:389
+
+# mysql
+mysql_root_password: AO389jL8rO8BdClerx7cu1o19cX5QnbGw205p0X0X-X3MqBtTOoC9stRSTKhdbuYRjte36LbJlov
+
+databases:
+  names:
+    - teams
+    - api
+    - apis
+    - "{{ engine_database_name }}"
+    - "{{ janus_database_name }}"
+    - grouper
+    - authz-server
+  users:
+    - { name: teamsrw, host: "{{ mysql_host }}", db_name: teams, password: "{{teams.team_db_password }}" }
+    - { name: apirw, host: "{{ mysql_host }}", db_name: api, password: "{{ api.jdbc.password }}" }
+    - { name: apisrw, host: "{{ mysql_host }}", db_name: apis, password: "{{ apis.password }}" }
+    - { name: "{{ engine_database_user }}", host: "{{ mysql_host }}", db_name: "{{ engine_database_name }}", password: "{{ engine_database_password }}" }
+    - { name: "{{ janus_database_user }}", host: "{{ mysql_host }}", db_name: "{{ janus_database_name }}", password: "{{ janus_database_password }}" }
+    - { name: grouperrw, host: "{{ mysql_host }}", db_name: grouper, password: "{{ grouper.db_password }}" }
+    - { name: authz-serverrw, host: "{{ mysql_host }}", db_name: authz-server, password: "{{ authzserver.db_password }}" }
 
 # For apache, the same star-certificate is used.
 tls_https:
@@ -36,7 +57,7 @@ engine_janus_user: engineblock
 engine_janus_secret: AO389jK0DeSFenU_V0tqOaemIpi9C3hV5i7cpT4l31fT2FlXA_rK9rQZJa7EELhtzB_iycPYsUoV
 
 engine_database_name: eb
-engine_database_host: "{{ db_host }}"
+engine_database_host: "{{ mysql_host }}"
 engine_database_user: ebrw
 engine_database_password: AO389jIHbuH1WELmGAVexwynvtNwSyFI1EABj5YxOpULMvMTc3KnJLnfxXWvzztb2XtVRDUT_9Yp
 
@@ -51,7 +72,7 @@ ldap_password: "{{ engine_ldap_password }}"
 ldap_grouper_unit_test_user: gadget
 
 janus_database_name: sr
-janus_database_host: "{{ db_host }}"
+janus_database_host: "{{ mysql_host }}"
 janus_database_user: srrw
 janus_database_password: AO389jJqUoyI5aGSB600-4b-iJws-pvjzRT_K4CLpZ8WG-BhtdYOHdU8jcJZdfqODccCsrI96kL_
 
@@ -148,9 +169,9 @@ teams:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
   team_db_password: AO389jKA2AnwgW79TARlzVETaDfwjRv5vUf3PjuqnlEq7WRkpZwhmBeUom4hrWCyoylI3rdoMXP9fVnczW_rFyX4tXmwpTqSDg
-  team_db_host: "{{ db_host }}"
+  team_db_host: "{{ mysql_host }}"
   eb_db_password: AO389jLFjCMf3dxInL1kB1P2RZB_-t7q8_qxzP1MbhWicU5L3wlsXPcbB1DL5N9AgD-rX2lRBkle
-  eb_db_host: "{{ db_host }}"
+  eb_db_host: "{{ mysql_host }}"
   mail_server: s01.dev.coin.surf.net
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
@@ -171,7 +192,7 @@ api:
     uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
   jdbc:
     user: apirw
-    url: "jdbc:mysql://{{ db_host }}/api"
+    url: "jdbc:mysql://{{ mysql_host }}/api"
     password: AO389jJKrY50bkZw2-cer1PEcza8evQegVMXZ3LYibPNFnIdAGP3eTflbK9ijICL3Rb1xD1_Xcw9EgwzHDKKbR6BV44O9LT9Ow
   ldap:
     url: ldap://ldap.{{ base_domain }}:389
@@ -183,7 +204,7 @@ api:
     password: "{{ engine_database_password }}"
   teams:
     user: teamsrw
-    url: "jdbc:mysql://{{ db_host }}/teams"
+    url: "jdbc:mysql://{{ mysql_host }}/teams"
     password: "{{ teams.team_db_password }}"
   oauth:
     callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
@@ -199,7 +220,7 @@ api:
 ##
 grouper:
   db_user: grouperrw
-  db_host: "{{ db_host }}"
+  db_host: "{{ mysql_host }}"
   db_password: AO389jJ9IITviA1aIY-FCk-7OaSKYeT0_BEpDt1BucM4JN1H9Q0vFWWneYDpR11JJOuZ9cmzwqLqC6GNRV9_W3TCp8lLUMikqQ
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -217,7 +238,7 @@ apis:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
   user: apisrw
-  url: "jdbc:mysql://{{ db_host }}/apis"
+  url: "jdbc:mysql://{{ mysql_host }}/apis"
   password: AO389jK__uubzomGDJ860wSViZfWGnB4QQgy_bYjHZqAUeF3UzsXSF9WsobT5xj9D7onqcaSJ8m4
   entity_id: https://apis.{{ base_domain }}
   group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
@@ -242,7 +263,7 @@ tomcat_grouper_password: AO389jLvTEwDbIPGyG8wxULmFuEFYlwSqQlRn8Ec3LCHumPMnB3Conq
 authzserver:
   db_user: authz-serverrw
   db_password: AO389jIKSnsfbVwnpm3At8jnZF_LjR3iThzteQAHQTJZsggoMZJyOTpix__B6W8D7DJyriTJLLQg
-  db_host: "{{ db_host }}"
+  db_host: "{{ mysql_host }}"
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"

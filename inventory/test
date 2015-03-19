@@ -1,3 +1,9 @@
+[storage]
+t03.dev.coin.surf.net
+
+[storage-test:children]
+storage
+
 [java-apps]
 t04.dev.coin.surf.net
 
@@ -5,5 +11,6 @@ t04.dev.coin.surf.net
 t03.dev.coin.surf.net
 
 [test:children]
+storage
 java-apps
 php-apps

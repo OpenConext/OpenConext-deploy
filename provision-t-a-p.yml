@@ -7,6 +7,11 @@
     - tls
     - httpd
 
+- hosts: storage
+  sudo: true
+  roles:
+    - mysql
+
 - hosts: php-apps
   sudo: yes
   gather_facts: no
