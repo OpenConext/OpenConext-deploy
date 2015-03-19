@@ -47,10 +47,11 @@
   vars:
     env_lang: java
   roles:
-    - tomcat
     - java
-    - { role: shibboleth, tags: ['shib'] }
+    - tomcat
     - grouper
+    - mujina-idp
+    - { role: shibboleth, tags: ['shib'] }
     - teams
     - api
     - apis
@@ -58,13 +59,7 @@
     - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
     - { role: voot, tags: ['oauth', 'voot'] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
-
-- hosts: java-apps
-  sudo: true
-  roles:
     - mujina-sp
-    - mujina-idp
   handlers:
-    - include: roles/tomcat/handlers/main.yml
     - include: roles/httpd/handlers/main.yml
 
