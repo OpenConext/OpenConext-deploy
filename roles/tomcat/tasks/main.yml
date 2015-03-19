@@ -82,8 +82,3 @@
   with_items: check_certificate_exists["results"]
   notify: restart tomcat
   tags: tomcat
-
-- name: Start and enable tomcat6
-  service: name={{ tomcat_service_name }} state=started enabled=yes
-  notify: restart tomcat
-  tags: tomcat
