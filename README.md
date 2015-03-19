@@ -116,7 +116,7 @@ Add the public keys of the persons that should have access to the openconext-sec
 Put the crypted file in gpg/tarred_and_crypted_keystores. Its name is important, so in this case it should be foo.tar.gpg.
 
 ## 5. Create the corresponding file in the Ansible inventory
-Easiest way is probably to copy an existing file and modify it: `cp inventory/test inventory/foo'
+Easiest way is probably to copy an existing file and modify it: `cp inventory/test inventory/foo`
 
 Finally, commit and push your changes to the git repos.
 
