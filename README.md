@@ -95,7 +95,7 @@ Generate a keyczart keystore with primary AES key. Example:
 ```
 
 ## 2. Tar the files inside the keystore-dir
-The files are typically named '1' and 'meta',
+The files are typically named '1' and 'meta', let's tar them so we can encrypt them in one go:
 
 ```bash
 tar c ./foo/* > foo.tar
