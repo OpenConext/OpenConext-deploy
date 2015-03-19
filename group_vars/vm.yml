@@ -1,8 +1,6 @@
 ---
 env: vm
 base_domain: "{{ env }}.openconext.org"
-saml_base_domain: "{{ base_domain }}"
-
 ldap_host: localhost:389
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
@@ -115,19 +113,19 @@ tomcat_apps:
 # shibboleth
 shibboleth_apps:
   teams:
-    entityID: "https://teams.{{ saml_base_domain }}/shibboleth"
+    entityID: "https://teams.{{ base_domain }}/shibboleth"
     baseurl: ""
   grouper:
-    entityID: "https://grouper.{{ saml_base_domain }}/grouper/shibboleth"
+    entityID: "https://grouper.{{ base_domain }}/grouper/shibboleth"
     baseurl: "/grouper"
   authz:
-    entityID: "https://authz.{{ saml_base_domain }}/shibboleth"
+    entityID: "https://authz.{{ base_domain }}/shibboleth"
     baseurl: ""
   "authz-admin":
-    entityID: "https://authz-admin.{{ saml_base_domain }}/shibboleth"
+    entityID: "https://authz-admin.{{ base_domain }}/shibboleth"
     baseurl: ""
 shib:
-  engine_domain: "{{ saml_base_domain }}"
+  engine_domain: "{{ base_domain }}"
 
 
 # tomcat
@@ -158,8 +156,8 @@ teams:
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 engineblock:
-  idp_url: https://engine.{{ saml_base_domain }}/authentication/idp/single-sign-on
-  idp_entity_id: https://engine.{{ saml_base_domain }}/authentication/idp/metadata
+  idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
+  idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 
 ##
 # VM config for the api app
@@ -192,7 +190,7 @@ api:
     callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
   staticContentBasePath: https://static.{{ base_domain }}
   saml:
-    entityId: https://api.{{ saml_base_domain }}/
+    entityId: https://api.{{ base_domain }}/
     assertionConsumerURI: https://api.{{ base_domain }}/v1/assertionConsumer
   ehcache:
     path: /tmp
@@ -222,7 +220,7 @@ apis:
   user: apisrw
   url: jdbc:mysql://localhost:3306/apis
   password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh
-  entity_id: https://apis.{{ saml_base_domain }}
+  entity_id: https://apis.{{ base_domain }}
   group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
   admin_service:
     resource_server_key: authorization-server-admin
