@@ -3,8 +3,7 @@
 - name: Install mysql server
   yum: name={{ item }} state=present
   with_items:
-     - mysql.x86_64
-     - MySQL-python
+     - mysql-server.x86_64
   tags: mysql
 
 - name: Start and enable mysql
