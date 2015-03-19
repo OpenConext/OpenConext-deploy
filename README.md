@@ -109,7 +109,8 @@ Include yourself as a recipient or you won't be able to decrypt.
 gpg --recipient 9561C684 --encrypt-files foo.tar
 ```
 
-You can supply `--recipient` multiple times. If you're
+You can supply `--recipient` multiple times. The argument to recipient is a GPG public-key-id.
+Add the public keys of the persons that should have access to the openconext-secrets you crypt for this environment.
 
 ## 4. Move the crypted file into place
 Put the crypted file in gpg/tarred_and_crypted_keystores. Its name is important, so in this case it should be foo.tar.gpg.
