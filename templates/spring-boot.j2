@@ -18,6 +18,11 @@ APP_USER="{{ springapp_user }}"
 LOG="/var/log/$APP_NAME.log"
 LOCK="/var/lock/subsys/$APP_NAME"
 JAVA="/usr/lib/jvm/java-1.8.0-openjdk/bin/java"
+{% if springapp_debug == "True" %}
+DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address={{ springapp_debug_port }}"
+{% else %}
+DEBUG_OPTS=""
+{% endif %}
 #######################################
 # END configurable per environment
 #######################################
@@ -45,7 +50,7 @@ start() {
     fi
 
     cd "$APPLICATION_HOME"
-    $SU - $APP_USER -c "nohup $JAVA -jar $APP_JAR >> /var/log/$APP_NAME/init.log 2>&1 &"
+    $SU - $APP_USER -c "nohup $JAVA $DEBUG_OPTS -jar $APP_JAR >> /var/log/$APP_NAME/init.log 2>&1 &"
 
     pid_of_app > /dev/null
     RETVAL=$?

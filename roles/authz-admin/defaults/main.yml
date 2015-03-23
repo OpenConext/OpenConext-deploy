@@ -4,3 +4,4 @@ authz_admin_version: ''
 authz_admin_snapshot_timestamp: ''
 authz_admin_local_jar: ''
 authz_admin_jar: authz-admin-current.jar
+authz_admin_debug: false

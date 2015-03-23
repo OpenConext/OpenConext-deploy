@@ -274,6 +274,7 @@ authzserver:
 
 authz_server_version: 1
 authz_server_snapshot_timestamp: 20150312.220837-39
+authz_server_debug: true
 
 ##
 # VM config for the Voot app
@@ -296,6 +297,7 @@ voot:
       }
 voot_version: 1
 voot_snapshot_timestamp: 20150323.083523-31
+voot_debug: true
 
 ##
 # VM config for the authz-admin application
@@ -303,6 +305,7 @@ voot_snapshot_timestamp: 20150323.083523-31
 authz_admin_version: 1
 authz_admin_snapshot_timestamp: 20150317.102154-42
 authz_admin_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
+authz_admin_debug: true
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -336,6 +339,7 @@ authzadmin:
 ##
 authz_playground_version: 1
 authz_playground_snapshot_timestamp: 20150319.131542-16
+authz_playground_debug: true
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
   springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token

@@ -8,3 +8,5 @@ springapp_service_name: voot
 springapp_jar: "{{ voot_service_jar }}"
 springapp_tcpport: 9191
 springapp_local_jar: "{{ voot_local_jar }}"
+springapp_debug: "{{ voot_debug }}"
+springapp_debug_port: 1191
