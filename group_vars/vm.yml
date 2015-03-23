@@ -57,7 +57,7 @@ engine_janus_user: engineblock
 engine_janus_secret: ACAvoLMrTw8Azpw2Ml3c9nbivbvyQchg9zQ2ShwViJOxT9eqeI-e79xLYpKgN4xGsT_GzBGXWlDYDxWw63WvDAZyvamP_46DGg
 
 engine_database_name: eb
-engine_database_host: db.{{ base_domain }}
+engine_database_host: localhost
 engine_database_user: ebrw
 engine_database_password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
 
@@ -74,7 +74,7 @@ ldap_password: ACAvoLMUTPe1xi6rIcz1QW8DaphUZBK2dLDQ-ixuuZk97skQxPLVio2zbJdLI8vQP
 ldap_grouper_unit_test_user: gadget
 
 janus_database_name: sr
-janus_database_host: db.{{ base_domain }}
+janus_database_host: localhost
 janus_database_user: srrw
 janus_database_password: ACAvoLO-pSK11LiWuOVsTljviCISlTdmJpJMNGb0iIDNwljUrIPcP_3ANoK-59FU86o-g0XsLV2VKcLX2Gjwkh97wF6JW1xvDw
 
@@ -195,7 +195,7 @@ api:
     uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
   jdbc:
     user: apirw
-    url: jdbc:mysql://"{{ mysql_host }}":3306/api
+    url: jdbc:mysql://{{ mysql_host }}:3306/api
     password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
   ldap:
     url: ldap://ldap.{{ base_domain }}:389
@@ -207,7 +207,7 @@ api:
     password: "{{ engine_database_password }}"
   teams:
     user: teamsrw
-    url: jdbc:mysql://"{{ mysql_host }}":3306/teams
+    url: jdbc:mysql://{{ mysql_host }}:3306/teams
     password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
   oauth:
     callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
@@ -241,7 +241,7 @@ apis:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
   user: apisrw
-  url: jdbc:mysql://"{{ mysql_host }}":3306/apis
+  url: jdbc:mysql://{{ mysql_host }}:3306/apis
   password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh
   entity_id: https://apis.{{ base_domain }}
   group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
@@ -273,7 +273,7 @@ authzserver:
   bundle_name: "{{ tls_https.bundle_name }}"
 
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150312.220837-39
+authz_server_snapshot_timestamp: 20150323.150911-45
 authz_server_debug: true
 
 ##
@@ -296,14 +296,14 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1
-voot_snapshot_timestamp: 20150323.083523-31
+voot_snapshot_timestamp: 20150323.150631-32
 voot_debug: true
 
 ##
 # VM config for the authz-admin application
 ##
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150317.102154-42
+authz_admin_snapshot_timestamp: 20150323.151239-49
 authz_admin_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
 authz_admin_debug: true
 authzadmin:
@@ -338,7 +338,7 @@ authzadmin:
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1
-authz_playground_snapshot_timestamp: 20150319.131542-16
+authz_playground_snapshot_timestamp: 20150323.150936-17
 authz_playground_debug: true
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
