@@ -64,13 +64,15 @@ engine_database_password: AO389jIHbuH1WELmGAVexwynvtNwSyFI1EABj5YxOpULMvMTc3KnJL
 engine_ldap_host: ldap.{{ base_domain }}
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_ldap_password: AO389jIRf1SzuFY6TuyVNO2bZyRSNCT6K9r54IEDRLSENhWz1fa_jRqMQ1qNhYC9ARRs3pyiSRs1
-
+engine_ldap_password_sha: "{SSHA}VmzC+QobeJfDoOI2Z6yZdOLpvvqNG3l1"
 engine_api_janus_password: AO389jIDumapQeFtN7yFSUd2imW4bbXWp2-njpLQy4-d7Y0YuoJCw7a7GvbaZ0AP_25uEZkEsBGn
-
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 ldap_admin_password: AO389jKR4FM3vW5WjW42cITaK3LfdJaTagJogSmu4bmoAYAPYW9OmF61Ktxt2Ko_911IQJcp7wIf
+ldap_admin_password_sha: "{SSHA}cG2E9LFZgQr7grKgEdgx3PBGSEsGGjk2"
+
 ldap_password: "{{ engine_ldap_password }}"
+ldap_password_sha: "{{ engine_ldap_password_sha }}"
 ldap_grouper_unit_test_user: gadget
 
 janus_database_name: sr
