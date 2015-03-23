@@ -165,9 +165,7 @@ api_snapshot_timestamp: 20150302.230045-395
 mujina_version: 4.0.2
 #mujina_snapshot_timestamp
 
-##
-# VM config for the teams app
-##
+
 teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -183,9 +181,6 @@ engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 
-##
-# VM config for the api app
-##
 api:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -219,9 +214,6 @@ api:
   ehcache:
     path: /tmp
 
-##
-# VM config for the grouper app
-##
 grouper:
   db_user: grouperrw
   db_host: "{{ mysql_host }}"
@@ -234,9 +226,6 @@ grouper:
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
 
-##
-# VM config for the apis app
-##
 apis:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -261,9 +250,7 @@ mujina:
 
 tomcat_grouper_password: AO389jLvTEwDbIPGyG8wxULmFuEFYlwSqQlRn8Ec3LCHumPMnB3Conq8gNKgPaddDCedI7Z9j7ya
 
-##
-# VM config for the Authorization Server
-##
+
 authzserver:
   db_user: authz-serverrw
   db_password: AO389jIKSnsfbVwnpm3At8jnZF_LjR3iThzteQAHQTJZsggoMZJyOTpix__B6W8D7DJyriTJLLQg
@@ -276,9 +263,7 @@ authzserver:
 authz_server_version: 1
 authz_server_snapshot_timestamp: 20150316.120118-42
 
-##
-# VM config for the Voot app
-##
+
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -298,9 +283,7 @@ voot:
 voot_version: 1
 voot_snapshot_timestamp: 20150316.152804-27
 
-##
-# VM config for the authz-admin application
-##
+
 authz_admin_version: 1
 authz_admin_snapshot_timestamp: 20150316.153010-41
 authz_admin_client_secret: AO389jJRzD0PhvfTkJQAeAXxzpCLhPhegalI2g8srABF2YyB2977dZ2R3PmbJnP8kv1QkmzCYXjo
@@ -331,9 +314,7 @@ authzadmin:
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.resource_checking_secret }}"
-##
-# VM config for the authz-admin application
-##
+
 authz_playground_version: 1
 authz_playground_snapshot_timestamp: 20150319.131542-16
 authzplayground:
