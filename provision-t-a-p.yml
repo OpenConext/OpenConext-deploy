@@ -11,6 +11,7 @@
   sudo: true
   roles:
     - mysql
+    - ldap
 
 - hosts: php-apps
   sudo: yes
