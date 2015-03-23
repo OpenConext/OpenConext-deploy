@@ -82,3 +82,6 @@
   with_items: check_certificate_exists["results"]
   notify: restart tomcat
   tags: tomcat
+
+- name: Make sure Tomcat starts when the system is booted.
+  service: name=tomcat6 enabled=yes

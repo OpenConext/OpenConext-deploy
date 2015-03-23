@@ -34,4 +34,4 @@
   notify: restart httpd
 
 - name: ensure the service is started
-  service: name=authz-server state=started
+  service: name=authz-server enabled=yes state=started

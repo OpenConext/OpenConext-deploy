@@ -90,3 +90,6 @@
 - name: copy virtual host config
   template: src=apis.conf.j2 dest=/etc/httpd/conf.d/apis.conf
   notify: restart httpd
+
+- name: Make sure Tomcat-low starts when the system is booted.
+  service: name=tomcat6-low enabled=yes
