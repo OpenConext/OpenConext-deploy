@@ -1,4 +1,16 @@
 ---
+- name: register api crt content
+  sudo: False
+  local_action: shell sed -e '1d;$d' files/java-{{ env }}/certs/api.crt | tr -d '\n'
+  register: api_crt_content
+  changed_when: False
+
+- name: register apis crt content
+  sudo: False
+  local_action: shell sed -e '1d;$d' files/java-{{ env }}/certs/apis.crt | tr -d '\n'
+  register: apis_crt_content
+  changed_when: False
+
 - name: copy load sql
   template: src={{ item }}.j2 dest=/tmp/{{ item }}
   when: env == 'vm'
