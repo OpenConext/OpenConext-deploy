@@ -176,7 +176,7 @@ teams:
   team_db_password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
   team_db_host: "{{ mysql_host }}"
   eb_db_password: ACAvoLPY26q3FD4KZkXCJtWpQi7GW10qpS8LgW5IEDGherQr8yv5KDlCpdYoyZ8Qts28kfvFdRxm
-  eb_db_host: db.{{ base_domain }}
+  eb_db_host: "{{ mysql_host }}"
   mail_server: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
