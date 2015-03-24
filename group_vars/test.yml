@@ -281,7 +281,7 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1
-voot_snapshot_timestamp: 20150316.152804-27
+voot_snapshot_timestamp: 20150324.120930-34
 
 
 authz_admin_version: 1
