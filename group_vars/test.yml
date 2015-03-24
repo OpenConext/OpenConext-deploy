@@ -157,7 +157,7 @@ keystore_password: AO389jJYhqwvRfZ5623zck8jSHLsDPPjSWq3R5neV1qxqvoDaKGm1JLuNAKi9
 
 # versions of installed apps
 teams_version: 4.0.7
-teams_snapshot_timestamp: 20150205.105251-3
+teams_snapshot_timestamp: 20150310.142133-11
 
 api_version: 4.0.1
 api_snapshot_timestamp: 20150302.230045-395
