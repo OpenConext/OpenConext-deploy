@@ -18,7 +18,7 @@ voot.serviceUrl=https://voot.{{ base_domain }}
 # oauth config for accessing voot.
 voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
 voot.userAuthorizationUri=https://authz.{{ base_domain }}/oauth/authorize
-voot.clientId=authz-admin-vm
+voot.clientId=authz-admin
 voot.clientSecret={{ authz_admin_client_secret | vault(env) }}
 voot.redirectUri=https://authz-admin.{{ base_domain }}
 voot.scopes = groups

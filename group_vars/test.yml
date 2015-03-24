@@ -297,12 +297,13 @@ authzadmin:
         resourceIds:
           - groups
         scopes:
-          - read
+          - groups
         grantTypes:
           - authorization_code
           - implicit
+          - client_credentials
         redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
-      - clientId: authz-admin-vm
+      - clientId: authz-admin
         secret: "{{ authz_admin_client_secret }}"
         resourceIds:
           - groups
