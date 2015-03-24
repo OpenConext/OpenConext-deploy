@@ -316,7 +316,7 @@ authzadmin:
       secret: "{{ voot.resource_checking_secret }}"
 
 authz_playground_version: 1
-authz_playground_snapshot_timestamp: 20150319.131542-16
+authz_playground_snapshot_timestamp: 20150324.132119-18
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
   springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
