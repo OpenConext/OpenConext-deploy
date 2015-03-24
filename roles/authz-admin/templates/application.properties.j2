@@ -13,14 +13,14 @@ spring.datasource.validation-query="SELECT 1"
 spring.datasource.testWhileIdle=true
 
 server.port={{ springapp_tcpport }}
-voot.serviceUrl=https://voot.vm.openconext.org
+voot.serviceUrl=https://voot.{{ base_domain }}
 
 # oauth config for accessing voot.
-voot.accessTokenUri=https://authz.vm.openconext.org/oauth/token
-voot.userAuthorizationUri=https://authz.vm.openconext.org/oauth/authorize
+voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
+voot.userAuthorizationUri=https://authz.{{ base_domain }}/oauth/authorize
 voot.clientId=authz-admin-vm
 voot.clientSecret={{ authz_admin_client_secret | vault(env) }}
-voot.redirectUri=https://authz-admin.vm.openconext.org
+voot.redirectUri=https://authz-admin.{{ base_domain }}
 voot.scopes = groups
 
 endpoints.enabled=false
