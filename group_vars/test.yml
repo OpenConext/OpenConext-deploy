@@ -285,7 +285,7 @@ voot_snapshot_timestamp: 20150316.152804-27
 
 
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150316.153010-41
+authz_admin_snapshot_timestamp: 20150323.151239-49
 authz_admin_client_secret: AO389jJRzD0PhvfTkJQAeAXxzpCLhPhegalI2g8srABF2YyB2977dZ2R3PmbJnP8kv1QkmzCYXjo
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
