@@ -2,7 +2,7 @@
 env: test
 base_domain: test2.surfconext.nl
 mysql_host: t03.dev.coin.surf.net
-ldap_host: ldap.test.surfconext.nl:389
+ldap_host: t03.dev.coin.surf.net:389
 
 # mysql
 mysql_root_password: AO389jL8rO8BdClerx7cu1o19cX5QnbGw205p0X0X-X3MqBtTOoC9stRSTKhdbuYRjte36LbJlov
