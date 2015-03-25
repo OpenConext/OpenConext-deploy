@@ -2,17 +2,19 @@
 
 - name: Install JANUS - Download archive
   get_url: url="{{ janus_download_base_url }}/{{ janus_tar_file }}" dest="{{ janus_tar_location }}"
+  register: janus_download
 
 - name: Install JANUS - Create dir
   file: path={{ janus_dir }} state=directory
 
 - name: Install JANUS - Unarchive it
   unarchive: src={{ janus_tar_location }} dest={{ janus_dir }} copy=no creates={{ janus_dir }}/app
+  when: janus_download.changed
   notify:
     - restart httpd
     - restart memcached
 
-- name: Install JANUS - Copy config and metadata
+- name: Configure Janus - Copy config and metadata
   template: src={{ item.src }} dest={{ item.dest }}
   with_items:
     - { src: "janus/config/parameters.j2.yml", dest: "{{ janus_dir }}/app/config/parameters.yml" }
@@ -32,7 +34,7 @@
   file: path={{ janus_cache_path }}/janus state=absent
   changed_when: False # never report change since it is about cache
 
-- name: Ensure cache base and log directories exist and are writable for the webserver
+- name: Ensure cache base dir exists and is writable for the webserver
   file:
     path={{ item }}
     state=directory
@@ -42,8 +44,17 @@
     - "{{ janus_cache_path }}"
     - "{{ janus_cache_path }}/janus"
     - "{{ janus_cache_path }}/janus/sessions"
-    - "/var/log/janus-ssp/janus"
   changed_when: False # never report change because we remove the directories above...
+
+- name: Ensure log directory exists and is writable for the webserver
+  file:
+    path=/var/log/janus-ssp/janus
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+  notify:
+      - restart httpd
+      - restart memcached
 
 # Note that this migration command probably has created cache directories and files
 # owned by root since it will be run as sudo
