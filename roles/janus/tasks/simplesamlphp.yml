@@ -7,18 +7,22 @@
 
 - name: Install SSP - Download archive
   get_url: url="{{ janus_ssp_download_base_url }}/{{ janus_ssp_tar_file }}" dest="{{ janus_ssp_tar_location }}"
+  register: janusSSP
 
 # TODO: Not idempotent. Install SSP - Remove unused config files and modules removes folders...
 - name: Install SSP - Unarchive it
   unarchive: src="{{ janus_ssp_tar_location }}" dest="{{ janus_installation_dir }}" copy=no
-
+  when: janusSSP.changed
+  
 - name: Install SSP - Link dir to standard location
   file: path={{ janus_ssp_dir }} src={{ janus_ssp_unarchived_dir }} state=link
+  when: janusSSP.changed
 
 # Note that there is a lineinfile module which can do this, however it did not seem possible to specify the line nr
 - name: Install SSP - Suffix title to differentiate between various environments
   when: janus_ssp_title_suffix is defined
   command: sed -i "2i $this->data['header'] .= ' - {{ janus_ssp_title_suffix }}';" '{{ janus_ssp_dir }}/templates/includes/header.php'
+  when: janusSSP.changed
 
 - name: Install SSP - Remove unused config files and modules
   file: path="{{ item }}" state=absent
@@ -90,6 +94,9 @@
     - "{{ janus_ssp_modules_dir }}/sqlauth"
     - "{{ janus_ssp_modules_dir }}/statistics"
     - "{{ janus_ssp_modules_dir }}/themefeidernd"
+  notify:
+    - restart httpd
+    - restart memcached
 
 - name: Install SSP - Copy config and metadata
   template: src={{ item.src }} dest={{ item.dest }}
