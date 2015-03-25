@@ -24,11 +24,7 @@
   roles:
     - mysql
     - ldap
-
-- hosts: storage
-  sudo: true
-  roles:
-    - initial
+    - vm_only_provision_eb_sr
 
 - hosts: php-apps
   sudo: yes
