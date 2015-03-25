@@ -288,6 +288,7 @@ voot_snapshot_timestamp: 20150324.120930-34
 authz_admin_version: 1
 authz_admin_snapshot_timestamp: 20150323.151239-49
 authz_admin_client_secret: AO389jJRzD0PhvfTkJQAeAXxzpCLhPhegalI2g8srABF2YyB2977dZ2R3PmbJnP8kv1QkmzCYXjo
+authz_admin_group: urn:collab:group:surfnet.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"

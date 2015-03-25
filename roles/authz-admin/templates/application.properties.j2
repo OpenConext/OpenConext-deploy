@@ -3,7 +3,7 @@ defaultClientsAndResourceServers.config.path = file://{{ authz_admin_dir }}/clie
 
 logging.config=file://{{ authz_admin_dir }}/logback.xml
 
-allowed_group=urn:collab:group:surfnet.nl:etc:sysadmingroup
+allowed_group={{ authz_admin_group }}
 
 spring.datasource.url=jdbc:mysql://{{ authzserver.db_host }}/{{ authzserver.db_name }}
 spring.datasource.username={{ authzserver.db_user }}
