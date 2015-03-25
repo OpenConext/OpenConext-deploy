@@ -44,7 +44,7 @@
     env_lang: java
   roles:
     - java
-    - tomcat
+    - { role: tomcat, tags: ['legacy'] }
     - grouper
     - mujina-idp
     - { role: shibboleth, tags: ['shib'] }

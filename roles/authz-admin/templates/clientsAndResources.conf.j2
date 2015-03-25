@@ -4,7 +4,9 @@ clients = [
   {
     clientId = "{{ client.clientId }}"
     secret = "{{ client.secret | vault(env) }}"
-    redirectUri= "{{ client.redirectUri}}"
+    {% if client.redirectUri is defined %}
+      redirectUri= "{{ client.redirectUri}}"
+    {% endif %}
     resourceIds = [
       {% for value in client.resourceIds %}
       "{{ value }}"

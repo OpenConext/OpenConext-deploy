@@ -179,10 +179,12 @@ teams:
   eb_db_host: "{{ mysql_host }}"
   mail_server: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
+  authz_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+  authz_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
 
 ##
 # VM config for the api app
@@ -335,6 +337,22 @@ authzadmin:
         grantTypes:
           - authorization_code
         redirectUri: https://authz-admin.{{ base_domain }}
+      - clientId: surf-teams
+        secret: "{{ teams.authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
+      - clientId: engineblock
+        secret: "{{ engineblock.authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.resource_checking_secret }}"

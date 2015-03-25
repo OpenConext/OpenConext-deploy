@@ -81,6 +81,14 @@ displayExternalTeamMembers=true
 # Shows/hides the button to add an external group to a SURFteam. If true, the button is visible
 displayAddExternalGroupToTeam=true
 
+# actual end-point for accessing VOOT
+voot.serviceUrl=https://voot.{{ base_domain }}
+# oauth config for accessing voot.
+voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
+voot.clientId=surf-teams
+voot.clientSecret={{ teams.authz_client_secret | vault(env) }}
+voot.scopes = groups
+
 ##########################################################################
 # The following properties are the responsibility of development. The    #
 # values do NOT depend on the environment                                #

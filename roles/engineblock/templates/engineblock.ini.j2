@@ -2,6 +2,15 @@ api.vovalidate.baseUrl = {{ engine_vovalidate_baseurl }}
 api.vovalidate.key = {{ engine_vovalidate_key }}
 api.vovalidate.secret = {{ engine_vovalidate_secret | vault(env) }}
 
+# actual end-point for accessing VOOT
+voot.serviceUrl=https://voot.{{ base_domain }}
+# oauth config for accessing voot.
+voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
+voot.clientId=engineblock
+voot.clientSecret={{ engineblock.authz_client_secret | vault(env) }}
+voot.scopes = groups
+
+
 auth.simplesamlphp.idp.entityId = {{ engine_profile_idp_entityid }}
 auth.simplesamlphp.idp.location = {{ engine_profile_idp_sso_location }}
 auth.simplesamlphp.idp.certificate= "{{ engine_profile_idp_certificate }}"

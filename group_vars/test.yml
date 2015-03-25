@@ -176,10 +176,12 @@ teams:
   eb_db_host: "{{ mysql_host }}"
   mail_server: s01.dev.coin.surf.net
   group_name_context: "urn:collab:group:test.surfteams.nl:"
+  authz_client_secret: AO389jJRzD0PhvfTkJQAeAXxzpCLhPhegalI2g8srABF2YyB2977dZ2R3PmbJnP8kv1QkmzCYXjo
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+  authz_client_secret: AO389jJRzD0PhvfTkJQAeAXxzpCLhPhegalI2g8srABF2YyB2977dZ2R3PmbJnP8kv1QkmzCYXjo
 
 api:
   crt_name: "{{ tls_https.crt_name }}"
@@ -314,6 +316,22 @@ authzadmin:
         grantTypes:
           - authorization_code
         redirectUri: https://authz-admin.{{ base_domain }}
+      - clientId: surf-teams
+        secret: "{{ teams.authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
+      - clientId: engineblock
+        secret: "{{ engineblock.authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.resource_checking_secret }}"
