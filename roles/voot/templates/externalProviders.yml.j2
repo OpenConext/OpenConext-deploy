@@ -8,6 +8,7 @@ externalGroupProviders:
         secret: "{{ provider.credentials.secret | vault(env) }}"
       },
       schacHomeOrganization: "{{ provider.schacHomeOrganization }}",
+      name: "{{ provider.name }}",
       timeoutMillis: {{ provider.timeoutMillis }}
      }
 {% endfor %}

@@ -278,6 +278,7 @@ voot:
           secret: "{{ tomcat_grouper_password }}"
         },
         schacHomeOrganization: "surfnet.nl",
+        name: "SURFteams",
         timeoutMillis: 3000
       }
 voot_version: 1

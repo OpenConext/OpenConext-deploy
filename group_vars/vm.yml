@@ -295,6 +295,7 @@ voot:
           secret: "ACAvoLOz-PvJU7EDu6rgvhD-3SEnzTXR5OIY59wrwJy1M8U2bb9eZjpchCtsUqwBgojSISOFik_r"
         },
         schacHomeOrganization: "surfnet.nl",
+        name: "SURFteams",
         timeoutMillis: 3000
       }
 voot_version: 1
