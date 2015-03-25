@@ -19,7 +19,7 @@
     - serviceregistry.sql
 
 - name: run load engineblock sql
-  shell: mysql -u {{ item.db_user }} -p{{ item.db_password | vault(env) }} -h localhost -D {{ item.db_name }} < /tmp/{{ item.sql }}
+  shell: mysql -u {{ item.db_user }} -p{{ item.db_password | vault(env) }} -h {{ mysql_host }} -D {{ item.db_name }} < /tmp/{{ item.sql }}
   when: env == 'vm'
   with_items:
     - { db_user: "{{ engine_database_user }}", db_password: "{{ engine_database_password }}", db_name: "{{ engine_database_name }}", sql: engineblock.sql }
