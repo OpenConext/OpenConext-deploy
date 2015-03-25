@@ -66,4 +66,3 @@
   tags: grouper
 
 - include: provision_grouper.yml source_id="applications"
-  when: env == 'vm'
