@@ -79,7 +79,7 @@
         <MetadataProvider type="XML"
                           uri="https://engine.{{ shib.engine_domain }}/authentication/idp/metadata"
                           backingFilePath="metadata-surfconext.xml"
-                          reloadInterval="7200">
+                          reloadInterval="60">
             <MetadataFilter type="RequireValidUntil" maxValidityInterval="172800"/>
         </MetadataProvider>
 
@@ -112,14 +112,14 @@
                 <MetadataProvider type="XML"
                                   uri="https://engine.{{ base_domain }}/authentication/idp/metadata?sp-entity-id={{ value.entityID }}"
                                   backingFilePath="/var/cache/shibboleth/engineblock-metadata-saml2-{{ key }}.xml"
-                                  reloadInterval="7200">
+                                  reloadInterval="60">
                 </MetadataProvider>
 
                 <!-- Metadata of IdP's registered with Engineblock -->
                 <MetadataProvider type="XML"
                                   uri="https://engine.{{ base_domain }}/authentication/proxy/idps-metadata?sp-entity-id={{ value.entityID }}"
                                   backingFilePath="/var/cache/shibboleth/engineblock-idps-metadata-saml2-{{ key }}.xml"
-                                  reloadInterval="7200">
+                                  reloadInterval="60">
                 </MetadataProvider>
             </MetadataProvider>
         </ApplicationOverride>
