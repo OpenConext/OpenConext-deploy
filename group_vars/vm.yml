@@ -1,6 +1,5 @@
 ---
 env: vm
-secrets_file: secrets/vm.yml
 base_domain: "{{ env }}.openconext.org"
 ldap_host: localhost:389
 

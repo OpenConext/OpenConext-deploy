@@ -1,4 +1,7 @@
 ---
+- hosts: test
+  roles:
+    - include_secret_vars
 
 - hosts: php-apps:java-apps
   sudo: true

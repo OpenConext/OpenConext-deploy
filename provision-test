@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
-if [ "$#" -ne 1 ]
+if [ "$#" -ne 2 ]
 then
-  echo "Usage: ./provision-test [YOUR_USERNAME_ON_TARGET_HOSTS]"
+  echo "Usage: ./provision-test [YOUR_USERNAME_ON_TARGET_HOSTS] [ABSOLUTE_PATH_TO_SECRETS_FILE]"
   exit 1
 fi
-./ansible-env test provision-t-a-p.yml "$1"
+./ansible-env test provision-test.yml "$1" "$2"
