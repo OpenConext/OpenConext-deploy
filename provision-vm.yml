@@ -44,18 +44,18 @@
     env_lang: java
   roles:
     - java
-    - { role: tomcat, tags: ['legacy'] }
+    - tomcat
     - grouper
-    - mujina-idp
+    - { role: mujina-idp, tags: ['legacy'] }
     - { role: shibboleth, tags: ['shib'] }
-    - teams
-    - api
-    - apis
+    - { role: teams, tags: ['legacy'] }
+    - { role: api, tags: ['legacy'] }
+    - { role: apis, tags: ['legacy'] }
+    - { role: mujina-sp, tags: ['legacy'] }
     - { role: authz-server, tags: ['oauth', 'authz'] }
     - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
     - { role: voot, tags: ['oauth', 'voot'] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
-    - mujina-sp
   handlers:
     - include: roles/httpd/handlers/main.yml
 
