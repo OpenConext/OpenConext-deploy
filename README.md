@@ -79,54 +79,6 @@ Here, the ip-address `192.168.66.78` refers to the address that is mentioned in 
 
 Go to [https://vm.openconext.org](https://vm.openconext.org).
 
-# Adding a new environment
-Let's create an environment called 'foo'.
-
-Prerequisites:
-
- * You have GPG installed.
- * You have a GPG identity.
-
-## 1. Create symmetric encryption key for your env
-Generate a keyczart keystore with primary AES key. Example:
-
-```bash
- mkdir -p foo
- keyczart create --location=./foo --purpose=crypt
- keyczart addkey --location=./foo --status=primary
-```
-
-## 2. Tar the files inside the keystore-dir
-The files are typically named '1' and 'meta', let's tar them so we can encrypt them in one go:
-
-```bash
-tar c ./foo/* > foo.tar
-```
-
-## 3. GPG-crypt the tarred keystore.
-
-Include yourself as a recipient or you won't be able to decrypt.
-
-```bash
-gpg --recipient 9561C684 --encrypt-files foo.tar
-```
-
-You can supply `--recipient` multiple times. The argument to recipient is a GPG public-key-id.
-Add the public keys of the persons that should have access to the openconext-secrets you crypt for this environment.
-
-## 4. Move the crypted file into place
-Put the crypted file in gpg/tarred_and_crypted_keystores. Its name is important, so in this case it should be foo.tar.gpg.
-
-## 5. Create the corresponding file in the Ansible inventory
-Easiest way is probably to copy an existing file and modify it: `cp inventory/test inventory/foo`
-
-Finally, commit and push your changes to the git repos.
-
-# Note on custom vaults
-
-This playbook uses a custom vault, defined in filter_plugins/custom_plugins.py in order to encrypt data. We think this is a better solution than the ansible-vault because it allows us to do fine grained encryption instead of a big ansible-vault file.
-Also, the creator of ansible-vault admits his solution is not the way to go. See [this blogpost](http://jpmens.net/2014/02/22/my-thoughts-on-ansible-s-vault/).
-
 # License
 
 These files are licensed under version 2.0 of the Apache License, as described in the file [LICENSE](LICENSE).
