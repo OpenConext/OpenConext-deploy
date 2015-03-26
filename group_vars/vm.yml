@@ -193,7 +193,7 @@ api:
   teams:
     user: teamsrw
     url: jdbc:mysql://{{ mysql_host }}:3306/teams
-    password: "{{ mysql_passwords.teams }} "
+    password: "{{ mysql_passwords.teams }}"
   oauth:
     callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
   staticContentBasePath: https://static.{{ base_domain }}
