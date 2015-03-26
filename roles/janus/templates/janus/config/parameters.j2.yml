@@ -13,5 +13,5 @@ parameters:
     database_port: 3306
     database_name: {{ janus_database_name }}
     database_user: {{ janus_database_user }}
-    database_password: {{ janus_database_password | vault(env) }}
+    database_password: {{ janus_database_password }}
     database_prefix: janus__

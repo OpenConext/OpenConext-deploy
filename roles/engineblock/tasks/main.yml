@@ -16,7 +16,7 @@
     - restart httpd
 
 - name: copy over the engineblock keys
-  copy: content="{{ lookup('file', 'files/' + env_name + '/certs/' + item.value.privateKey) | vault(env) }}" dest={{ item.value.privateFile }}
+  copy: content="{{ engineblock_private_key }}" dest={{ item.value.privateFile }}
   with_dict: engine_keys
 
 - name: copy engineblock certificates to correct location
@@ -41,14 +41,14 @@
     - restart httpd
 
 - name: import entries
-  shell: ldapmodify -x -D cn=admin,cn=config -h {{ ldap_host }} -w {{ ldap_password | vault(env) }} -f {{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addDeprovisionWarningSentAttributes.ldif
+  shell: ldapmodify -x -D cn=admin,cn=config -h {{ ldap_host }} -w {{ ldap_password }} -f {{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addDeprovisionWarningSentAttributes.ldif
   register: add_deprevision_output
   changed_when: "add_deprevision_output.rc != 20"
   failed_when: "add_deprevision_output.rc not in [20,0]"
   tags: ldap
 
 - name: import entries
-  shell: ldapmodify -x -D cn=admin,cn=config -h {{ ldap_host }} -w {{ ldap_password | vault(env) }} -f {{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addCollabPersonUUID.ldif
+  shell: ldapmodify -x -D cn=admin,cn=config -h {{ ldap_host }} -w {{ ldap_password }} -f {{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addCollabPersonUUID.ldif
   register: add_collab_output
   changed_when: "add_collab_output.rc != 20"
   failed_when: "add_collab_output.rc not in [20,0]"

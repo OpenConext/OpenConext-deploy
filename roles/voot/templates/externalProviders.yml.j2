@@ -5,7 +5,7 @@ externalGroupProviders:
       url: "{{ provider.url }}",
       credentials: {
         username: "{{ provider.credentials.username }}",
-        secret: "{{ provider.credentials.secret | vault(env) }}"
+        secret: "{{ provider.credentials.secret }}"
       },
       schacHomeOrganization: "{{ provider.schacHomeOrganization }}",
       name: "{{ provider.name }}",

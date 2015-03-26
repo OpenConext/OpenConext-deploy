@@ -6,27 +6,27 @@
 ####################################################################
 
 janus.user={{ api.janus.user }}
-janus.secret={{ api.janus.secret | vault(env) }}
+janus.secret={{ api.janus.secret }}
 janus.uri={{ api.janus.uri }}
 
 coin-api.jdbc.driver=com.mysql.jdbc.Driver
 coin-api.jdbc.user={{ api.jdbc.user }}
 coin-api.jdbc.url={{ api.jdbc.url }}
-coin-api.jdbc.password={{ api.jdbc.password | vault(env) }}
+coin-api.jdbc.password={{ api.jdbc.password }}
 
 coin-api.ldap.url={{ api.ldap.url }}
 coin-api.ldap.userDn={{ api.ldap.userDn }}
-coin-api.ldap.password={{ api.ldap.password | vault(env) }}
+coin-api.ldap.password={{ api.ldap.password }}
 
 coin-api.engineblock.jdbc.driver=com.mysql.jdbc.Driver
 coin-api.engineblock.jdbc.user={{ api.engineblock.user }}
 coin-api.engineblock.jdbc.url={{ api.engineblock.url }}
-coin-api.engineblock.jdbc.password={{ api.engineblock.password | vault(env) }}
+coin-api.engineblock.jdbc.password={{ api.engineblock.password }}
 
 coin-api.teams.jdbc.driver=com.mysql.jdbc.Driver
 coin-api.teams.jdbc.user={{ api.teams.user }}
 coin-api.teams.jdbc.url={{ api.teams.url }}
-coin-api.teams.jdbc.password={{ api.teams.password | vault(env) }}
+coin-api.teams.jdbc.password={{ api.teams.password }}
 
 # Email address that recieves error notifications
 coin-errormail-to=coin-logs@surfnet.nl

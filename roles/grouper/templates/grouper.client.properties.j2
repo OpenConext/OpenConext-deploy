@@ -12,7 +12,7 @@ grouperClient.webService.login = {{ ldap_grouper_unit_test_user }}
 
 # password for shared secret authentication to web service
 # or you can put a filename with an encrypted password
-grouperClient.webService.password = {{ tomcat_grouper_password | vault(env) }}
+grouperClient.webService.password = {{ tomcat_grouper_password }}
 
 ########################################
 ## Web service settings

@@ -1,10 +1,13 @@
 ---
-
-- hosts: local-certs
-  connection: local
-  gather_facts: no
+- hosts: vm
   roles:
-    - generate_certs
+    - include_secret_vars
+
+#- hosts: local-certs
+#  connection: local
+#  gather_facts: no
+#  roles:
+#    - generate_certs
 
 - hosts: php-apps:java-apps
   sudo: true

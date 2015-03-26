@@ -147,7 +147,7 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
     <init-param>
 
       <param-name>SECURITY_CREDENTIALS</param-name>
-      <param-value>{{ ldap_password | vault(env) }}</param-value>
+      <param-value>{{ ldap_password }}</param-value>
     </init-param>
     <init-param>
       <param-name>SubjectID_AttributeType</param-name>
@@ -298,7 +298,7 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
 
     <init-param>
       <param-name>SECURITY_CREDENTIALS</param-name>
-      <param-value>{{ ldap_password | vault(env) }}</param-value>
+      <param-value>{{ ldap_password }}</param-value>
     </init-param>
     <init-param>
       <param-name>SubjectID_AttributeType</param-name>

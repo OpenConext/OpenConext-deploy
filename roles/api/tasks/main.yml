@@ -5,7 +5,7 @@
   notify: restart tomcat
 
 - name: copy over the api key
-  copy: content="{{ lookup('file', 'files/' + env_name + '/certs/api_pkcs8.pem.encrypted') | vault(env) }}" dest={{ tls.cert_private_path }}/api_pkcs8.pem
+  copy: content="{{ api_private_key_pkcs8 }}" dest={{ tls.cert_private_path }}/api_pkcs8.pem
   tags:
     - api
 

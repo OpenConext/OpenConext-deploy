@@ -1,10 +1,9 @@
 ---
 env: vm
+secrets_file: secrets/vm.yml
 base_domain: "{{ env }}.openconext.org"
 ldap_host: localhost:389
 
-# mysql
-mysql_root_password: ACAvoLMFVoLhAysoj9JUJ0FmyQWRLzUUaDVEuESVwnpA8rtUyZtY3ZMofYPy4DFaZnzXWFjx_1hY
 mysql_host: localhost
 
 databases:
@@ -17,13 +16,13 @@ databases:
     - grouper
     - authz-server
   users:
-    - { name: teamsrw, host: "{{ mysql_host }}", db_name: teams, password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb }
-    - { name: apirw, host: "{{ mysql_host }}", db_name: api, password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY }
-    - { name: apisrw, host: "{{ mysql_host }}", db_name: apis, password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh }
-    - { name: "{{ engine_database_user }}", host: "{{ mysql_host }}", db_name: "{{ engine_database_name }}", password: "{{ engine_database_password }}" }
-    - { name: "{{ janus_database_user }}", host: "{{ mysql_host }}", db_name: "{{ janus_database_name }}", password: "{{ janus_database_password }}" }
-    - { name: grouperrw, host: "{{ mysql_host }}", db_name: grouper, password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0 }
-    - { name: authz-serverrw, host: "{{ mysql_host }}", db_name: authz-server, password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0 }
+    - { name: teamsrw, host: "{{ mysql_host }}", db_name: teams, password: "{{ mysql_passwords.teams }}" }
+    - { name: apirw, host: "{{ mysql_host }}", db_name: api, password: "{{ mysql_passwords.api }}" }
+    - { name: apisrw, host: "{{ mysql_host }}", db_name: apis, password: "{{ mysql_passwords.apis }}" }
+    - { name: "{{ engine_database_user }}", host: "{{ mysql_host }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
+    - { name: "{{ janus_database_user }}", host: "{{ mysql_host }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
+    - { name: grouperrw, host: "{{ mysql_host }}", db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
+    - { name: authz-serverrw, host: "{{ mysql_host }}", db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
@@ -38,8 +37,6 @@ janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
 
-janus_ssp_auth_admin_password: ACAvoLNb0k5KzJPvQSuNzbAKDlWXW_2whsY-ghDMw4_PTxA9zmR3wVREnCw1Z-JuPzNiJ8pEw8X54nc06Ux24SHHhyTACiIvDw
-janus_ssp_secretsalt: ACAvoLM2dnEYG6hBlalgnkC3LrqoR5fm8kNrcbOVN81Mu8s4nNOyTO8QDL-xCDGZVfBGmmVhkntAq9Nhfjnz6ynTx9aXyBL0xg
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
@@ -54,31 +51,23 @@ tls:
     - "{{ tls_https.key_name }}"
 
 engine_janus_user: engineblock
-engine_janus_secret: ACAvoLMrTw8Azpw2Ml3c9nbivbvyQchg9zQ2ShwViJOxT9eqeI-e79xLYpKgN4xGsT_GzBGXWlDYDxWw63WvDAZyvamP_46DGg
 
 engine_database_name: eb
 engine_database_host: localhost
 engine_database_user: ebrw
-engine_database_password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
+engine_database_password: "{{ mysql_passwords.eb }}"
 
 engine_ldap_host: ldap.{{ base_domain }}
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
-engine_ldap_password: ACAvoLM9A__9zpR5wmn-7zJSji8f7i4Jnl9vxvgc7yY18mZShQ_0_djlglxdGhc6iFctRiQlv5KK
-engine_ldap_password_sha: "{SSHA}j/h6VnoH0CzujTgQ1dGgSLT6BTUMlGlb"
-engine_api_janus_password: ACAvoLN-2zyNG3J5Ftj0NsWutriCbKaQagT3S5L214vCgz4SgP5yGuUFbxZRx93OEf2KoZEZloTiLZnc5ITkngpv82clFfw0Zg
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
-ldap_admin_password: ACAvoLODUDZgKT6oPCQzOPR9Rp7Nq4uvvl9J5FBqjcKODnbQmoduSA6RKBub7waTs2MHinRl3jqy3lYiNa5PMLu6w7mo7NzdKA
-ldap_admin_password_sha: "{SSHA}8HdwSFLm/UANCUpHJ2lb9wNjruqpKrBw"
 
-ldap_password: ACAvoLMUTPe1xi6rIcz1QW8DaphUZBK2dLDQ-ixuuZk97skQxPLVio2zbJdLI8vQPMqQYcKj40cS
-ldap_password_sha: "{SSHA}S7+zQcuRCOnrpdJmrMXCeFjzFRr3ekEV"
 ldap_grouper_unit_test_user: gadget
 
 janus_database_name: sr
 janus_database_host: localhost
 janus_database_user: srrw
-janus_database_password: ACAvoLO-pSK11LiWuOVsTljviCISlTdmJpJMNGb0iIDNwljUrIPcP_3ANoK-59FU86o-g0XsLV2VKcLX2Gjwkh97wF6JW1xvDw
+janus_database_password: "{{ mysql_passwords.sr }}"
 
 # host for static files (IdP logos)
 static:
@@ -94,7 +83,6 @@ welcome:
 
 
 janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
-janus_teams_oauth_secret: ACAvoLMnlvmGLXK02rbbUrKJSfBo4fFehrSDgvaWf1-QVmOmNuQN270IbUI4Q4RwGH7TJTzXjuvV
 
 engine:
   crt_name: "{{ tls_https.crt_name }}"
@@ -115,7 +103,6 @@ janus:
 engine_janus_cache_lifetime: 0
 
 engine_vovalidate_key : oauth_key
-engine_vovalidate_secret : ACAvoLPlQEX-b0RMc52JY5o0qtYuLA8lT2pJ9TaIZQymmRAuXYysq7oxmPDSXN9cGUgKnWXdhA0ZWvQZWtFm2qEFBBeXf_pUxQ
 
 engine_trusted_proxy_ips:
   - 192.168.1.1
@@ -123,7 +110,6 @@ engine_trusted_proxy_ips:
 #
 engine_keys:
   default:
-    privateKey: engineblock.pem.encrypted
     privateFile: /etc/openconext/engineblock.pem
     publicKey: engineblock.crt
     publicFile: /etc/openconext/engineblock.crt
@@ -152,10 +138,6 @@ shibboleth_apps:
 shib:
   engine_domain: "{{ base_domain }}"
 
-
-# tomcat
-keystore_password: ACAvoLNaJSARHx9BSmUpockTtDLp_LSmx9DkGnvuk62VtREBsK_IRVr1MM9AAsbb__Xsc4pp5YPa
-
 # versions of installed apps
 teams_version: 4.0.7
 teams_snapshot_timestamp: 20150310.142133-11
@@ -173,18 +155,17 @@ teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-  team_db_password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
+  team_db_password: "{{ mysql_passwords.teams }}"
   team_db_host: "{{ mysql_host }}"
-  eb_db_password: ACAvoLPY26q3FD4KZkXCJtWpQi7GW10qpS8LgW5IEDGherQr8yv5KDlCpdYoyZ8Qts28kfvFdRxm
+  eb_db_password: "{{ mysql_passwords.eb }}"
   eb_db_host: "{{ mysql_host }}"
   mail_server: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
-  authz_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
+
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
-  authz_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
 
 ##
 # VM config for the api app
@@ -200,7 +181,7 @@ api:
   jdbc:
     user: apirw
     url: jdbc:mysql://{{ mysql_host }}:3306/api
-    password: ACAvoLNeelXDm7dPwY5Lw-N_GUFAQWDIqiBQs-XeG2-Gbu54UNiW_jUrK_uBVzCU8yyyieAJbRJY
+    password: "{{ mysql_passwords.api }} "
   ldap:
     url: ldap://ldap.{{ base_domain }}:389
     userDn: "{{ engine_ldap_bind_dn }}"
@@ -212,7 +193,7 @@ api:
   teams:
     user: teamsrw
     url: jdbc:mysql://{{ mysql_host }}:3306/teams
-    password: ACAvoLNsq2VCDZAEwUldTSn2waM9mIazqxmykoTbpZQaPuIV0ye_7YswiMFrTD1pbXE_UGBW2OTb
+    password: "{{ mysql_passwords.teams }} "
   oauth:
     callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
   staticContentBasePath: https://static.{{ base_domain }}
@@ -228,7 +209,7 @@ api:
 grouper:
   db_user: grouperrw
   db_host: "{{ mysql_host }}"
-  db_password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0
+  db_password: "{{ mysql_passwords.grouper }} "
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
@@ -246,30 +227,27 @@ apis:
   bundle_name: "{{ tls_https.bundle_name }}"
   user: apisrw
   url: jdbc:mysql://{{ mysql_host }}:3306/apis
-  password: ACAvoLN6NUIXOTcZw5OanCDn6Wty1faR_yBbD-0-8geX_quSqEp6Gk8RFIpVmDBymndqn7iCoOzh
+  password: "{{ mysql_passwords.apis }} "
   entity_id: https://apis.{{ base_domain }}
   group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
   admin_service:
     resource_server_key: authorization-server-admin
-    resource_server_secret: ACAvoLN9oE35zmjam6Z5athj5Gf_vJV65O1sjNhbcpEsMubNd5CpRxNk7zWSrqLkJtYAgG-4fvCo7vxXug8MSIKOZVrrBZiNks916eh_McBLcXZrpf6vFb8
+    resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
   api:
     consumer_key: https://apis.test.surfconext.nl
-    consumer_secret: ACAvoLMx3F7lC4ypJrDqyls4Iu4XHMtzUNUT7ihcMeCZkJx9q7M2DiLzWiNqM46k5zh-mrg5wrhM2vK4Eq-8o-lamCjBajx8sQ
+    consumer_secret: "{{ apis_api_consumer_secret }}"
 
 mujina:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
 
-
-tomcat_grouper_password: ACAvoLM3w46TGosPyYv6AkCgp6WZjg1NX19lspUpWSGHFIo6DovmOt3Z0PUCBVOplcpf2FwBB1jP
-
 ##
 # VM config for the Authorization Server
 ##
 authzserver:
   db_user: authz-serverrw
-  db_password: ACAvoLMtDLViHb2HwCk0v_Qn1sQAQLm4QGxkJ2_gdjaGu_m8CtXwn3l-47loIn4cdd_UIKOaLwk0
+  db_password: "{{ mysql_passwords.authz_server }}"
   db_host: "{{ mysql_host }}"
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
@@ -287,29 +265,28 @@ voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-  resource_checking_secret: ACAvoLN6ftlLRGHDZfl0aGWvPfzWqjbmS6aAqVsW1KgF1-slzgDF4xPqgMM5x3845uOufUiFymvf
+  resource_checking_secret: "{{ voot_resource_checking_secret }}"
   externalGroupProviders:
     - {
         type: "grouper",
         url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
         credentials: {
           username: "gadget",
-          secret: "ACAvoLOz-PvJU7EDu6rgvhD-3SEnzTXR5OIY59wrwJy1M8U2bb9eZjpchCtsUqwBgojSISOFik_r"
+          secret: "{{ external_group_provider_secrets.grouper }}"
         },
         schacHomeOrganization: "surfnet.nl",
         name: "SURFteams",
         timeoutMillis: 3000
       }
 voot_version: 1
-voot_snapshot_timestamp: 20150323.150631-32
+voot_snapshot_timestamp: 20150326.074233-36
 voot_debug: true
 
 ##
 # VM config for the authz-admin application
 ##
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150323.151239-49
-authz_admin_client_secret: ACAvoLNyx7OptF7jJsvHanFBcm3VCBP3k8gg8cZTDV23BuV-1vk3r5Ggfw6q42HdK0MGMoao4lfs
+authz_admin_snapshot_timestamp: 20150326.120101-50
 authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
 authz_admin_debug: true
 authzadmin:
@@ -338,7 +315,7 @@ authzadmin:
           - authorization_code
         redirectUri: https://authz-admin.{{ base_domain }}
       - clientId: surf-teams
-        secret: "{{ teams.authz_client_secret }}"
+        secret: "{{ teams_authz_client_secret }}"
         resourceIds:
           - groups
         scopes:
@@ -346,7 +323,7 @@ authzadmin:
         grantTypes:
           - client_credentials
       - clientId: engineblock
-        secret: "{{ engineblock.authz_client_secret }}"
+        secret: "{{ engineblock_authz_client_secret }}"
         resourceIds:
           - groups
         scopes:
@@ -366,7 +343,7 @@ authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
   springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
   springapp_client_id: cool_app_id
-  springapp_client_secret: ACAvoLPIGrGr624xtdK2Gl6cZHYU1Km0O9PvnQHILdQcAHbREtrscAHX4-XYMEB0u-xCigaM85ck
+  springapp_client_secret: "{{ authzplayground_springapp_client_secret }}"
   springapp_scopes: groups
   springapp_authorize_url: https://authz.{{ base_domain }}/oauth/authorize
   springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups

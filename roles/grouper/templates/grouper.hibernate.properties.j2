@@ -25,7 +25,7 @@ hibernate.connection.username         = {{ grouper.db_user }}
 # If you are using an empty password, depending upon your version of
 # Java and Ant you may need to specify a password of "".
 # Note: you can keep passwords external and encrypted: https://bugs.internet2.edu/jira/browse/GRP-122
-hibernate.connection.password         = {{ grouper.db_password | vault(env) }}
+hibernate.connection.password         = {{ grouper.db_password }}
 
 ################  BELOW HERE YOU GENERALLY DO NOT NEED TO CHANGE ####################
 

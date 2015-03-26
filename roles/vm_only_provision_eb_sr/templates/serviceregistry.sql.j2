@@ -551,7 +551,7 @@ INSERT INTO `janus__metadata` VALUES (10,0,'NameIDFormats:2','urn:oasis:names:tc
 INSERT INTO `janus__metadata` VALUES (11,0,'AssertionConsumerService:0:Binding','urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST','2012-06-25T16:42:04+02:00','172.18.5.1');
 INSERT INTO `janus__metadata` VALUES (11,0,'AssertionConsumerService:0:Location','https://teams.{{ base_domain }}/Shibboleth.sso/SAML2/POST','2012-06-25T16:42:04+02:00','172.18.5.1');
 INSERT INTO `janus__metadata` VALUES (11,0,'coin:gadgetbaseurl','{{ janus_teams_oauth_key }}','2012-06-25T16:42:04+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` VALUES (11,0,'coin:oauth:secret','{{ janus_teams_oauth_secret | vault(env) }}','2012-06-25T16:42:04+02:00','172.18.5.1');
+INSERT INTO `janus__metadata` VALUES (11,0,'coin:oauth:secret','{{ janus_teams_oauth_secret }}','2012-06-25T16:42:04+02:00','172.18.5.1');
 INSERT INTO `janus__metadata` VALUES (11,0,'coin:oauth:two_legged_allowed','1','2012-06-25T16:42:04+02:00','172.18.5.1');
 INSERT INTO `janus__metadata` VALUES (11,0,'contacts:0:contactType','technical','2012-06-25T16:42:04+02:00','172.18.5.1');
 INSERT INTO `janus__metadata` VALUES (11,0,'contacts:0:emailAddress','','2012-06-25T16:42:04+02:00','172.18.5.1');
@@ -877,7 +877,7 @@ CREATE TABLE `janus__user` (
 LOCK TABLES `janus__user` WRITE;
 /*!40000 ALTER TABLE `janus__user` DISABLE KEYS */;
 INSERT INTO `janus__user` VALUES (1,'admin','a:2:{i:0;s:9:\"technical\";i:1;s:5:\"admin\";}',NULL,'yes','2011-04-12T01:02:43-07:00','2011-04-12T01:02:43-07:00','192.168.212.1',NULL,NULL);
-INSERT INTO `janus__user` VALUES (2,'{{ engine_janus_user }}','a:2:{i:0;s:9:\"technical\";i:1;s:5:\"admin\";}',NULL,'yes','2011-04-12T02:42:25-07:00','2011-04-12T02:42:25-07:00','192.168.212.1',NULL,'{{ engine_janus_secret | vault(env) }}');
+INSERT INTO `janus__user` VALUES (2,'{{ engine_janus_user }}','a:2:{i:0;s:9:\"technical\";i:1;s:5:\"admin\";}',NULL,'yes','2011-04-12T02:42:25-07:00','2011-04-12T02:42:25-07:00','192.168.212.1',NULL,'{{ engine_janus_secret }}');
 INSERT INTO `janus__user` VALUES (3,'urn:collab:person:example.com:john.doe','a:2:{i:0;s:9:\"technical\";i:1;s:5:\"admin\";}',NULL,'yes','2012-06-13T10:57:08+02:00','2012-06-13T10:57:08+02:00','172.18.5.1',NULL,NULL);
 INSERT INTO `janus__user` VALUES (4,'urn:collab:person:example.com:admin','a:2:{i:0;s:9:\"technical\";i:1;s:5:\"admin\";}',NULL,'yes','2012-06-13T10:57:08+02:00','2012-06-13T10:57:08+02:00','172.18.5.1',NULL,NULL);
 INSERT INTO `janus__user` VALUES (5,'urn:collab:person:example.com:regression','a:2:{i:0;s:9:\"technical\";i:1;s:5:\"admin\";}',NULL,'yes','2013-01-01T10:57:08+02:00','2013-07-01T10:57:08+02:00','172.18.5.1',NULL,NULL);

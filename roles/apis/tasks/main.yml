@@ -10,7 +10,7 @@
   tags: apis
 
 - name: copy over the api key
-  copy: content="{{ lookup('file', 'files/' + env_name + '/certs/apis_pkcs8.pem.encrypted') | vault(env) }}" dest={{ tls.cert_private_path }}/apis_pkcs8.pem
+  copy: content="{{ apis_private_key_pkcs8 }}" dest={{ tls.cert_private_path }}/apis_pkcs8.pem
   tags: apis
 
 - name: copy api certificate to correct location

@@ -18,7 +18,7 @@
 jdbc.driverClassName=com.mysql.jdbc.Driver
 jdbc.url={{ apis.url }}
 jdbc.username={{ apis.user }}
-jdbc.password={{ apis.password | vault(env) }}
+jdbc.password={{ apis.password }}
 
 # Either db/migration/mysql or db/migration/hsqldb or your custom implementation (e.g. postgres)
 flyway.migrations.location=db/migration/mysql, db/migration/mysql_content
@@ -32,5 +32,5 @@ userConsentHandlerClass=org.surfnet.oaaas.consent.FormUserConsentHandler
 # The url and key/secret that is used by the Client/Resource Server endpoints to validate the oauth access tokens
 adminService.tokenVerificationUrl=https://apis.{{ base_domain }}/v1/tokeninfo
 adminService.resourceServerKey={{ apis.admin_service.resource_server_key }}
-adminService.resourceServerSecret={{ apis.admin_service.resource_server_secret }}
+adminService.resourceServerSecret={{ apis_admin_service_resource_server_secret }}
 adminService.jsonTypeInfoIncluded=false

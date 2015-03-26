@@ -317,7 +317,7 @@ authzadmin:
           - authorization_code
         redirectUri: https://authz-admin.{{ base_domain }}
       - clientId: surf-teams
-        secret: "{{ teams.authz_client_secret }}"
+        secret: "{{ teams_authz_client_secret }}"
         resourceIds:
           - groups
         scopes:
@@ -325,7 +325,7 @@ authzadmin:
         grantTypes:
           - client_credentials
       - clientId: engineblock
-        secret: "{{ engineblock.authz_client_secret }}"
+        secret: "{{ engineblock_authz_client_secret }}"
         resourceIds:
           - groups
         scopes:

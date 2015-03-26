@@ -19,7 +19,7 @@ logging.config=file://{{ authz_server_dir }}/logback.xml
 
 spring.datasource.url=jdbc:mysql://{{ authzserver.db_host }}/{{ authzserver.db_name }}
 spring.datasource.username={{ authzserver.db_user }}
-spring.datasource.password={{ authzserver.db_password | vault(env) }}
+spring.datasource.password={{ authzserver.db_password }}
 
 server.port={{ springapp_tcpport }}
 

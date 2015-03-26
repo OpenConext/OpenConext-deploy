@@ -1,7 +1,6 @@
 ---
 - name: copy teams configuration
   template: src=coin-teams.properties.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/coin-teams.properties
-  tags: dashboard
   notify: restart tomcat
 
 - name: copy teams logging configuration
