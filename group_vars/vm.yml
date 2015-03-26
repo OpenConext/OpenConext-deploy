@@ -209,7 +209,7 @@ api:
 grouper:
   db_user: grouperrw
   db_host: "{{ mysql_host }}"
-  db_password: "{{ mysql_passwords.grouper }} "
+  db_password: "{{ mysql_passwords.grouper }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
@@ -227,7 +227,7 @@ apis:
   bundle_name: "{{ tls_https.bundle_name }}"
   user: apisrw
   url: jdbc:mysql://{{ mysql_host }}:3306/apis
-  password: "{{ mysql_passwords.apis }} "
+  password: "{{ mysql_passwords.apis }}"
   entity_id: https://apis.{{ base_domain }}
   group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
   admin_service:
@@ -337,7 +337,7 @@ authzadmin:
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1
-authz_playground_snapshot_timestamp: 20150323.150936-17
+authz_playground_snapshot_timestamp: 20150324.132119-18
 authz_playground_debug: true
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
