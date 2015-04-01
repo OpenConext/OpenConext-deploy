@@ -246,7 +246,7 @@ mujina:
 # VM config for Teams
 ##
 teams:
-  db_user: teams
+  db_user: teamsrw
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   db_name: teams

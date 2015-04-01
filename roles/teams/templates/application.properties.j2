@@ -1,24 +1,19 @@
 
 logging.config=file://{{ teams_dir }}/logback.xml
 
-spring.datasource.url=jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
-spring.datasource.username={{ teams.db_user }}
-spring.datasource.password={{ teams.db_password }}
-
 server.port={{ springapp_tcpport }}
 
 endpoints.enabled=false
 endpoints.health.enabled=true
 endpoints.info.enabled=true
 
-
 spring.mvc.favicon.enabled=false
 app.version=TODO_REPLACE_WITH_SPRINGBOOT_WAY_OF_DOING_THIS
 
 datasource.teams.driver-class-name=com.mysql.jdbc.Driver
-datasource.teams.url=jdbc:mysql://localhost/teams
-datasource.teams.username=teams
-datasource.teams.password=teams
+datasource.teams.url=jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
+datasource.teams.username={{ teams.db_user }}
+datasource.teams.password={{ teams.db_password }}
 datasource.teams.validation-query="SELECT 1"
 datasource.teams.testWhileIdle=true
 
