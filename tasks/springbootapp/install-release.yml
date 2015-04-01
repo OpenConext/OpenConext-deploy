@@ -1,6 +1,6 @@
 - name: Deploy | Download release
   get_url:
-    url: "{{ maven_repo }}/org/openconext/{{ springapp_artifact_id }}/{{ springapp_version }}/authz-server-{{ springapp_version }}.jar"
+    url: "{{ maven_repo }}/org/openconext/{{ springapp_artifact_id }}/{{ springapp_version }}/{{ springapp_artifact_id }}-{{ springapp_version }}.jar"
     dest: "{{ springapp_dir }}/{{ springapp_artifact_id }}-{{ springapp_version }}.jar"
     owner: "{{ springapp_user }}"
     group: "{{ springapp_user }}"
