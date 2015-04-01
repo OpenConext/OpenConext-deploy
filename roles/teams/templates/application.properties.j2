@@ -29,22 +29,6 @@ datasource.groupzy.testWhileIdle=true
 
 logging.level.nl.surfnet.coin.teams=DEBUG
 
-#Use the ASyncProvisioningManager when the iwelcome implementation is ready
-provisioningManagerClass=nl.surfnet.coin.teams.service.NoOpProvisioningManager
-#provisioningManagerClass=nl.surfnet.coin.teams.service.ASyncProvisioningManager
-
-#something like example.iwelcome.com
-provisioner.baseurl=localhost
-
-#basic authentication
-provisioner.user=test
-provisioner.password=test
-
-api-location=https://mock
-
-
-
-
 #the stem name to find all groups
 defaultStemName=nl:surfnet:diensten
 
@@ -54,12 +38,12 @@ grouperPowerUser=GrouperSystem
 appId=SURFteams
 
 # The URL where the teams application is run so we can send out emails
-teamsURL = http://localhost:8080/
+teamsURL=https://teams.{{ base_domain }}
 
-shindigHost=http://localhost:80680
+shindigHost=https://os.{{ base_domain }}
 
 # SMTP server settings for notifications
-spring.mail.host=localhost
+spring.mail.host={{ teams.mail_server }}
 spring.mail.port=2525
 
 # Email address that is the sender of invitations/requests
@@ -72,7 +56,7 @@ coin-errormail-to=Okke Harsta <oharsta@zilverline.com>
 maxInvitations=5
 
 #Group name context
-group-name-context=urn:collab:group:dev.surfteams.nl:
+group-name-context={{ teams.group_name_context }}
 
 ####################################################################
 ##
@@ -93,36 +77,15 @@ displayAddExternalGroupToTeam=true
 ##
 ####################################################################
 
-
-
-# Use the MockLoginInterceptor when you want to mock Shibboleth:
-loginInterceptor=nl.surfnet.coin.teams.interceptor.MockLoginInterceptor
-#loginInterceptor=nl.surfnet.coin.teams.interceptor.LoginInterceptor
-
-# Use the InMemoryMockTeamService when you want to mock the grouperTeamService
-grouperTeamService=nl.surfnet.coin.teams.service.impl.InMemoryMockTeamService
-#grouperTeamService=nl.surfnet.coin.teams.service.impl.GrouperTeamServiceWsImpl
-
-# Mock user status
-#mock-user-status=guest
-mock-user-status=member
-
 # Maximum upload size in forms (in bytes), ~2MB
 multipart.maxFileSize=2048000
 
-# groupzy properties
-teams.groupzy.group_provider_acl_db.migrations.folder=groupzydb/migration
-
-# path to stoker file. e.g. file:///var/stoker/metadata.json
-teams.groupzy.stoker.file=classpath:/stoker/metadata.index.json
-teams.groupzy.stoker.folder=classpath:/stoker/
-
 # actual end-point for accessing VOOT
-voot.serviceUrl=https://voot.vm.openconext.org
+voot.serviceUrl=https://voot.{{ base_domain }}
 # oauth config for accessing voot.
-voot.accessTokenUri=https://authz.vm.openconext.org/oauth/token
+voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
 voot.clientId=surf-teams
-voot.clientSecret=secret
+voot.clientSecret={{ teams_authz_client_secret }}
 voot.scopes = groups
 
 server.session-timeout=3600

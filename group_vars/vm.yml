@@ -154,13 +154,16 @@ teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-  team_db_password: "{{ mysql_passwords.teams }}"
-  team_db_host: "{{ mysql_host }}"
-  eb_db_password: "{{ mysql_passwords.eb }}"
-  eb_db_host: "{{ mysql_host }}"
-  mail_server: "{{ mysql_host }}"
+  db_name: "teams"
+  db_user: "teamsrw"
+  db_password: "{{ mysql_passwords.teams }}"
+  db_host: "{{ mysql_host }}"
+  mail_server: "localhost"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
+teams_version: 4.0.9
+teams_snapshot_timestamp: 20150401.133148-5
+teams_debug: true
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -240,23 +243,6 @@ mujina:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-
-
-##
-# VM config for Teams
-##
-teams:
-  db_user: teamsrw
-  db_password: "{{ mysql_passwords.teams }}"
-  db_host: "{{ mysql_host }}"
-  db_name: teams
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
-
-teams_version: 4.0.9
-teams_snapshot_timestamp: 20150401.133148-5
-teams_debug: true
 
 ##
 # VM config for the Authorization Server
