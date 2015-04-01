@@ -1,15 +1,16 @@
 ---
-- name: copy teams configuration
-  template: src=coin-teams.properties.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/coin-teams.properties
-  notify: restart tomcat
+- name: Create user
+  user: name=teams home={{ teams_dir }} shell=/sbin/nologin
 
-- name: copy teams logging configuration
-  copy: src=teams-logback.xml dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/teams-logback.xml group=tomcat owner=tomcat
-  notify: restart tomcat
+- name: Copy start script
+  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
+  notify: restart teams
 
-- name: copy virtual host config
-  template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
-  notify: restart httpd
+- name: enable service
+  service: name=teams enabled=yes
+
+- name: Create logging directory
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner=teams group=teams mode=0755
 
 - name: copy grouper provision script for teams
   copy: src={{ item }} dest=~/{{ item }}
@@ -22,3 +23,27 @@
   changed_when: gsh_output.stderr != ''
   args:
     chdir: /opt/www/grouper-shell
+
+- include: ../../../tasks/springbootapp/install-release.yml
+  when: teams_snapshot_timestamp == '' and teams_local_jar == ''
+
+- include: ../../../tasks/springbootapp/install-snapshot.yml
+  when: teams_snapshot_timestamp != '' and teams_local_jar == ''
+
+- include: ../../../tasks/springbootapp/install-local.yml
+  when: teams_local_jar != ''
+
+- name: Copy logging config
+  template: src=logback.xml.j2 dest={{ teams_dir }}/logback.xml owner=teams group=teams mode=0740
+  notify: restart teams
+
+- name: Copy application config
+  template: src=application.properties.j2 dest={{ teams_dir }}/application.properties owner=teams group=teams mode=0740
+  notify: restart teams
+
+- name: copy apache config
+  template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
+  notify: restart httpd
+
+- name: ensure the service is started
+  service: name=teams enabled=yes state=started

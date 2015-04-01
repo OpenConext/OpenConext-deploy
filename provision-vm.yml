@@ -1,7 +1,7 @@
 ---
 - hosts: vm
   roles:
-    - include_secret_vars
+    - { role: include_secret_vars, tags: ['secrets'] }
 
 #- hosts: local-certs
 #  connection: local
@@ -51,7 +51,7 @@
     - grouper
     - { role: mujina-idp, tags: ['legacy'] }
     - { role: shibboleth, tags: ['shib'] }
-    - { role: teams, tags: ['legacy'] }
+    - { role: teams, tags: ['teams'] }
     - { role: api, tags: ['legacy'] }
     - { role: apis, tags: ['legacy'] }
     - { role: mujina-sp, tags: ['legacy'] }

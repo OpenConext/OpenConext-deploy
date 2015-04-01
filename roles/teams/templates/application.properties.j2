@@ -1,0 +1,133 @@
+
+logging.config=file://{{ teams_dir }}/logback.xml
+
+spring.datasource.url=jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
+spring.datasource.username={{ teams.db_user }}
+spring.datasource.password={{ teams.db_password }}
+
+server.port={{ springapp_tcpport }}
+
+endpoints.enabled=false
+endpoints.health.enabled=true
+endpoints.info.enabled=true
+
+
+spring.mvc.favicon.enabled=false
+app.version=TODO_REPLACE_WITH_SPRINGBOOT_WAY_OF_DOING_THIS
+
+datasource.teams.driver-class-name=com.mysql.jdbc.Driver
+datasource.teams.url=jdbc:mysql://localhost/teams
+datasource.teams.username=teams
+datasource.teams.password=teams
+datasource.teams.validation-query="SELECT 1"
+datasource.teams.testWhileIdle=true
+
+spring.jpa.properties.hibernate.naming-strategy=org.hibernate.cfg.ImprovedNamingStrategy
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect
+
+datasource.groupzy.driver-class-name=com.mysql.jdbc.Driver
+datasource.groupzy.url=jdbc:mysql://localhost/groupzy
+datasource.groupzy.username=groupzy
+datasource.groupzy.password=groupzy
+datasource.groupzy.validation-query="SELECT 1"
+datasource.groupzy.testWhileIdle=true
+
+logging.level.nl.surfnet.coin.teams=DEBUG
+
+#Use the ASyncProvisioningManager when the iwelcome implementation is ready
+provisioningManagerClass=nl.surfnet.coin.teams.service.NoOpProvisioningManager
+#provisioningManagerClass=nl.surfnet.coin.teams.service.ASyncProvisioningManager
+
+#something like example.iwelcome.com
+provisioner.baseurl=localhost
+
+#basic authentication
+provisioner.user=test
+provisioner.password=test
+
+api-location=https://mock
+
+
+
+
+#the stem name to find all groups
+defaultStemName=nl:surfnet:diensten
+
+grouperPowerUser=GrouperSystem
+
+# App id displayed in the updates / invites section of the portal
+appId=SURFteams
+
+# The URL where the teams application is run so we can send out emails
+teamsURL = http://localhost:8080/
+
+shindigHost=http://localhost:80680
+
+# SMTP server settings for notifications
+spring.mail.host=localhost
+spring.mail.port=2525
+
+# Email address that is the sender of invitations/requests
+systemEmail=SURFteams <no-reply@surfteams.nl>
+
+# Email address that recieves error notifications
+coin-errormail-to=Okke Harsta <oharsta@zilverline.com>
+
+# Maximum amount an invitation can be sent
+maxInvitations=5
+
+#Group name context
+group-name-context=urn:collab:group:dev.surfteams.nl:
+
+####################################################################
+##
+## The following properties are used to enable/disable features
+##
+####################################################################
+
+# If set to false, the link to external group providers will not be shown (only SURFconext Teams and Public Teams are visible)
+displayExternalTeams=true
+# If set to false, the link from the list of external groups to the detail view with their members is hidden
+displayExternalTeamMembers=true
+# Shows/hides the button to add an external group to a SURFteam. If true, the button is visible
+displayAddExternalGroupToTeam=true
+
+####################################################################
+##
+## The following properties are the responsibility of the developers
+##
+####################################################################
+
+
+
+# Use the MockLoginInterceptor when you want to mock Shibboleth:
+loginInterceptor=nl.surfnet.coin.teams.interceptor.MockLoginInterceptor
+#loginInterceptor=nl.surfnet.coin.teams.interceptor.LoginInterceptor
+
+# Use the InMemoryMockTeamService when you want to mock the grouperTeamService
+grouperTeamService=nl.surfnet.coin.teams.service.impl.InMemoryMockTeamService
+#grouperTeamService=nl.surfnet.coin.teams.service.impl.GrouperTeamServiceWsImpl
+
+# Mock user status
+#mock-user-status=guest
+mock-user-status=member
+
+# Maximum upload size in forms (in bytes), ~2MB
+multipart.maxFileSize=2048000
+
+# groupzy properties
+teams.groupzy.group_provider_acl_db.migrations.folder=groupzydb/migration
+
+# path to stoker file. e.g. file:///var/stoker/metadata.json
+teams.groupzy.stoker.file=classpath:/stoker/metadata.index.json
+teams.groupzy.stoker.folder=classpath:/stoker/
+
+# actual end-point for accessing VOOT
+voot.serviceUrl=https://voot.vm.openconext.org
+# oauth config for accessing voot.
+voot.accessTokenUri=https://authz.vm.openconext.org/oauth/token
+voot.clientId=surf-teams
+voot.clientSecret=secret
+voot.scopes = groups
+
+server.session-timeout=3600

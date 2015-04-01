@@ -241,6 +241,23 @@ mujina:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
 
+
+##
+# VM config for Teams
+##
+teams:
+  db_user: teams
+  db_password: "{{ mysql_passwords.teams }}"
+  db_host: "{{ mysql_host }}"
+  db_name: teams
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+teams_version: 4.0.9
+teams_snapshot_timestamp: 20150401.133148-5
+teams_debug: true
+
 ##
 # VM config for the Authorization Server
 ##
