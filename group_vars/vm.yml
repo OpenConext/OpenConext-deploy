@@ -162,7 +162,7 @@ teams:
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 teams_version: 4.0.9
-teams_snapshot_timestamp: 20150401.133148-5
+teams_snapshot_timestamp: 20150402.081220-6
 teams_debug: true
 
 engineblock:
