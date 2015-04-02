@@ -3,6 +3,7 @@ env: test
 secrets_file: /root/secrets_test.yml
 base_domain: test2.surfconext.nl
 mysql_host: t03.dev.coin.surf.net
+rsyslog_host: t03.dev.coin.surf.net
 ldap_host: t03.dev.coin.surf.net:389
 
 databases:

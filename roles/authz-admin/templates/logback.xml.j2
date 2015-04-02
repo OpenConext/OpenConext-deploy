@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <!--
+
   <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
-    <syslogHost>localhost</syslogHost>
+    <syslogHost>{{ rsyslog_host }}</syslogHost>
     <facility>DAEMON</facility>
     <suffixPattern>[%thread] %logger %msg</suffixPattern>
   </appender>
-  -->
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>/var/log/authz-admin/authz-admin.log</file>
@@ -26,8 +25,6 @@
   <logger name="org.springframework.security.oauth" level="DEBUG"/>
   <root level="WARN">
     <appender-ref ref="FILE" />
-    <!--
     <appender-ref ref="SYSLOG" />
-    -->
   </root>
 </configuration>

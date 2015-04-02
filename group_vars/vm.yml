@@ -4,6 +4,7 @@ base_domain: "{{ env }}.openconext.org"
 ldap_host: localhost:389
 
 mysql_host: localhost
+rsyslog_host: localhost
 
 databases:
   names:
