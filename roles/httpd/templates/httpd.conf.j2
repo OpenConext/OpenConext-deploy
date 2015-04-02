@@ -275,6 +275,11 @@ ServerAdmin root@localhost
 #
 #ServerName www.example.com:80
 
+{% if env == "vm" %}
+
+ServerName monkey.{{ base_domain }}
+
+{% endif %}
 #
 # UseCanonicalName: Determines how Apache constructs self-referencing 
 # URLs and the SERVER_NAME and SERVER_PORT variables.

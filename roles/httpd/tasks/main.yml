@@ -14,10 +14,8 @@
   notify: restart httpd
 
 - name: Copy the config file
-  copy: src={{ item }} dest=/etc/httpd/conf/{{ item }}
+  template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
   tags: httpd
-  with_items:
-    - httpd.conf
   notify: restart httpd
 
 - name: Remove default conf files apache
