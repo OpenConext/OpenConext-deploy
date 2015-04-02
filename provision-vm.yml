@@ -3,11 +3,11 @@
   roles:
     - { role: include_secret_vars, tags: ['secrets'] }
 
-#- hosts: local-certs
-#  connection: local
-#  gather_facts: no
-#  roles:
-#    - generate_certs
+- hosts: local-certs
+  connection: local
+  gather_facts: no
+  roles:
+    - generate_certs
 
 - hosts: php-apps:java-apps
   sudo: true
