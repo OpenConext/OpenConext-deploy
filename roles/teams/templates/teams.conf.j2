@@ -17,7 +17,6 @@
     SSLCACertificateFile  {{ tls.cert_path }}/{{ teams.bundle_name }}
 
     RewriteEngine On
-    RewriteRule ^/$ /teams/$1 [L,R=permanent]
 
     <Files ~ "\.(shtml?)$">
         SSLOptions +StdEnvVars
@@ -31,10 +30,10 @@
               "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 
 
-    # Proxy requests through to Tomcat using AJP
     # However, do not proxy shibboleth requests through to Tomcat
     ProxyPass /Shibboleth.sso !
-    ProxyPass / ajp://localhost:8009/ retry=0
+    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
 
     # Teams location
     <Location />

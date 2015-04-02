@@ -1,0 +1,15 @@
+springapp_artifact_id: coin-teams-war
+springapp_artifact_type: war
+springapp_artifact_group_dir: /org/surfnet/coin
+springapp_version: "{{ teams_version }}"
+springapp_snapshot_timestamp: "{{ teams_snapshot_timestamp }}"
+springapp_dir: "{{ teams_dir }}"
+springapp_user: teams
+springapp_service_name: teams
+springapp_jar: "{{ teams_jar }}"
+springapp_tcpport: 9197
+springapp_local_jar: "{{ teams_local_jar }}"
+springapp_debug: "{{ teams_debug }}"
+springapp_debug_port: 1197
+springapp_heapsize: "384m"
+springapp_auxiliary_classpath_dir: "{{ teams_dir }}/grouperClientConfig"

@@ -1,5 +1,7 @@
-teams_group_url: org/surfnet/coin
-teams_artifact_id: coin-teams-war
-# needed as default values
+---
+teams_dir: /opt/teams
+teams_version: ''
 teams_snapshot_timestamp: ''
-teams_local_war: ''
+teams_local_jar: ''
+teams_jar: teams-current.war
+teams_server_debug: false

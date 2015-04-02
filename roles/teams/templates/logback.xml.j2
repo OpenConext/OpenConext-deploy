@@ -16,7 +16,7 @@
   -->
 <configuration scan="true">
   <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>logs/teams.log</file>
+    <file>/var/log/teams/teams.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- daily rollover -->
       <fileNamePattern>logs/teams-%d{yyyy-MM-dd}.log.gz</fileNamePattern>

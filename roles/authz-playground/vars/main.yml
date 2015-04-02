@@ -1,4 +1,6 @@
 springapp_artifact_id: authz-playground
+springapp_artifact_type: jar
+springapp_artifact_group_dir: /org/openconext
 springapp_version: "{{ authz_playground_version }}"
 springapp_snapshot_timestamp: "{{ authz_playground_snapshot_timestamp }}"
 springapp_dir: "{{ authz_playground_dir }}"

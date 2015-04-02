@@ -138,10 +138,6 @@ shibboleth_apps:
 shib:
   engine_domain: "{{ base_domain }}"
 
-# versions of installed apps
-teams_version: 4.0.7
-teams_snapshot_timestamp: 20150310.142133-11
-
 api_version: 4.0.1
 api_snapshot_timestamp: 20150302.230045-395
 
@@ -155,13 +151,16 @@ teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-  team_db_password: "{{ mysql_passwords.teams }}"
-  team_db_host: "{{ mysql_host }}"
-  eb_db_password: "{{ mysql_passwords.eb }}"
-  eb_db_host: "{{ mysql_host }}"
-  mail_server: "{{ mysql_host }}"
+  db_name: "teams"
+  db_user: "teamsrw"
+  db_password: "{{ mysql_passwords.teams }}"
+  db_host: "{{ mysql_host }}"
+  mail_server: "localhost"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
+teams_version: 4.0.9
+teams_snapshot_timestamp: 20150402.125600-8
+teams_debug: true
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
