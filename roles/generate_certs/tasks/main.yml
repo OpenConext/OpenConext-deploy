@@ -49,15 +49,7 @@
       -outdir files/vm/certs \
       -out files/vm/certs/{{ tls.crt_name }} creates=files/vm/certs/{{ tls.crt_name }}
 
-- name: encrypt the private key
-  shell: |
-    scripts/encrypt-file.sh -f files/vm/certs/{{ tls.key_name }} creates=files/vm/certs/{{ tls.key_name }}.encrypted
-  register: encrypted_key
-
-- name: create encrypted key file
-  copy: content={{ encrypted_key.stdout }} dest=files/vm/certs/{{ tls.key_name }}.encrypted force=no
-
-- name: generate keypairs for SP's
+- name: generate keypairs for SPs
   command: |
     openssl req \
       -subj '/CN={{ item.cn }}/OU=Services/O=OpenConext/C=NL/' \
@@ -83,27 +75,3 @@
   with_items:
     - api
     - apis
-
-- name: encrypt the private key for api
-  shell: |
-    scripts/encrypt-file.sh -f files/java-vm/certs/api_pkcs8.pem creates=files/java-vm/certs/api_pkcs8.pem.encrypted
-  register: "encrypted_api_key"
-
-- name: encrypt the private key for apis
-  shell: |
-    scripts/encrypt-file.sh -f files/java-vm/certs/apis_pkcs8.pem creates=files/java-vm/certs/apis_pkcs8.pem.encrypted
-  register: "encrypted_apis_key"
-
-- name: encrypt the private key for engineblock
-  shell: |
-    scripts/encrypt-file.sh -f files/php-vm/certs/engineblock.pem creates=files/php-vm/certs/engineblock.pem.encrypted
-  register: "encrypted_engineblock_key"
-
-- name: create encrypted key file for api for engineblock
-  copy: content={{ encrypted_api_key.stdout }} dest=files/java-vm/certs/api_pkcs8.pem.encrypted force=no
-
-- name: create encrypted key file for apis for engineblock
-  copy: content={{ encrypted_apis_key.stdout }} dest=files/java-vm/certs/apis_pkcs8.pem.encrypted force=no
-
-- name: create encrypted key file for engineblock
-  copy: content={{ encrypted_engineblock_key.stdout }} dest=files/php-vm/certs/engineblock.pem.encrypted force=no
