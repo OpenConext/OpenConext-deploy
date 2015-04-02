@@ -137,10 +137,6 @@ shibboleth_apps:
 shib:
   engine_domain: "{{ base_domain }}"
 
-# versions of installed apps
-teams_version: 4.0.7
-teams_snapshot_timestamp: 20150310.142133-11
-
 api_version: 4.0.1
 api_snapshot_timestamp: 20150302.230045-395
 
@@ -162,7 +158,7 @@ teams:
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 teams_version: 4.0.9
-teams_snapshot_timestamp: 20150402.081220-6
+teams_snapshot_timestamp: 20150402.102541-7
 teams_debug: true
 
 engineblock:
