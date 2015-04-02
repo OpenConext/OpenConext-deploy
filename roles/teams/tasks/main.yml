@@ -12,8 +12,6 @@
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=teams group=teams mode=0755
 
-
-
 - include: ../../../tasks/springbootapp/install-release.yml
   when: teams_snapshot_timestamp == '' and teams_local_jar == ''
 
@@ -27,10 +25,15 @@
   template: src=logback.xml.j2 dest={{ teams_dir }}/logback.xml owner=teams group=teams mode=0740
   notify: restart teams
 
-- debug: var=teams
-
 - name: Copy application config
   template: src=application.properties.j2 dest={{ teams_dir }}/application.properties owner=teams group=teams mode=0740
+  notify: restart teams
+
+- name: Create auxiliary classpath directory for grouper client config
+  file: path={{ springapp_auxiliary_classpath_dir }} state=directory owner=teams group=teams mode=0755
+
+- name: Copy grouper client config
+  template: src=grouper.client.properties.j2 dest={{ springapp_auxiliary_classpath_dir }}/grouper.client.properties owner=teams group=teams mode=0740
   notify: restart teams
 
 - name: copy grouper provision script for teams
