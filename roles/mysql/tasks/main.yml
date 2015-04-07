@@ -19,8 +19,19 @@
   tags: mysql
 
 - name: delete anonymous MySQL server user
-  mysql_user: user="" state="absent" login_user=root login_password={{ mysql_root_password }}
+  mysql_user: user="" state="absent" login_user=root host={{ mysql_host }}  login_password={{ mysql_root_password }}
   tags: mysql
+
+- name: delete anonymous MySQL server user for localhost
+  mysql_user: user="" state="absent" login_user=root host={{ mysql_host }} login_password={{ mysql_root_password }}
+  tags: mysql
+
+- name: delete test MySQL server user
+  mysql_user: user="{{ item }} " state="absent" login_user=root login_password={{ mysql_root_password }}
+  tags: mysql
+  with_items:
+    - test
+    - test_%
 
 - name: delete anonymous MySQL server user for localhost
   mysql_user: user="" state="absent" login_user=root login_password={{ mysql_root_password }}
