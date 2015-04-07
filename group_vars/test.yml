@@ -67,6 +67,7 @@ ldap_grouper_unit_test_user: gadget
 janus_database_name: sr
 janus_database_host: "{{ mysql_host }}"
 janus_database_user: srrw
+janus_database_password: "{{ mysql_passwords.sr }}"
 
 # host for static files (IdP logos)
 static:
