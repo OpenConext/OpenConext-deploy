@@ -1,3 +1,0 @@
----
-- name: Read secret vars from {{ secrets_file }}.
-  include_vars: "{{ secrets_file }}"

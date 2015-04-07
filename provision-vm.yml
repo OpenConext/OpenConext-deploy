@@ -1,7 +1,9 @@
 ---
-- hosts: vm
-  roles:
-    - { role: include_secret_vars, tags: ['secrets'] }
+
+- hosts: all
+  tasks:
+  - name: Read vars from secrets file
+    include_vars: "{{ secrets_file }}"
 
 - hosts: local-certs
   connection: local

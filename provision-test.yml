@@ -1,7 +1,8 @@
 ---
-- hosts: test
-  roles:
-    - include_secret_vars
+- hosts: all
+  tasks:
+  - name: Read vars from secrets file
+    include_vars: "{{ secrets_file }}"
 
 - hosts: php-apps:java-apps
   sudo: true
