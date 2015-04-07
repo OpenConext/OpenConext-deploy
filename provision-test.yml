@@ -25,7 +25,7 @@
   roles:
     - php
     - static
-    - { role: openconext-common, tags: ['eb','sr']}
+    - { role: openconext-common, tags: ['eb', 'sr'] }
     - { role: engineblock, tags: ['eb'] }
     - { role: janus, tags: ['sr'] }
 
@@ -38,7 +38,7 @@
     - java
     - { role: shibboleth, tags: ['shib'] }
     - grouper
-    - - { role: teams, tags: ['teams'] }
+    - { role: teams, tags: ['teams'] }
     - api
     - apis
     - { role: authz-server, tags: ['oauth', 'authz'] }
