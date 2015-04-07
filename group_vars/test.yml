@@ -155,10 +155,10 @@ teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-  team_db_password: "{{ mysql_passwords.teams }}"
-  team_db_host: "{{ mysql_host }}"
-  eb_db_password: "{{ mysql_passwords.eb }}"
-  eb_db_host: "{{ mysql_host }}"
+  db_name: "teams"
+  db_user: "teamsrw"
+  db_password: "{{ mysql_passwords.teams }}"
+  db_host: "{{ mysql_host }}"
   mail_server: s01.dev.coin.surf.net
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
@@ -188,8 +188,8 @@ api:
     password: "{{ engine_database_password }}"
   teams:
     user: teamsrw
-    url: "jdbc:mysql://{{ mysql_host }}/teams"
-    password: "{{ teams.team_db_password }}"
+    url: "jdbc:mysql://{{ mysql_host }}/{{ teams.db_name }}"
+    password: "{{ teams.db_password }}"
   oauth:
     callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
   staticContentBasePath: https://static.{{ base_domain }}
