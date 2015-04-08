@@ -11,5 +11,5 @@ springapp_tcpport: 9197
 springapp_local_jar: "{{ teams_local_jar }}"
 springapp_debug: "{{ teams_debug | default(false) }}"
 springapp_debug_port: 1197
-springapp_heapsize: "384m"
+springapp_heapsize: "640m"
 springapp_auxiliary_classpath_dir: "{{ teams_dir }}/grouperClientConfig"
