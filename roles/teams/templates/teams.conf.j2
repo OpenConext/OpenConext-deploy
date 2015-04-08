@@ -30,8 +30,10 @@
               "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 
 
-    # However, do not proxy shibboleth requests through to Tomcat
+
     ProxyPreserveHost on
+
+    # However, do not proxy shibboleth requests through to the app
     ProxyPass /Shibboleth.sso !
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
