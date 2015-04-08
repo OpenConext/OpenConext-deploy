@@ -51,7 +51,7 @@ The VM will install everything on a single box for demo purposes.
 To provision the VM please run:
 
 ```bash
-./provision-vm
+./provision-vagrant
 ```
 
 When the script is done, wait a little while to let all services come up and initialize themselves. Then point your browser to [https://vm.openconext.org](https://vm.openconext.org)
