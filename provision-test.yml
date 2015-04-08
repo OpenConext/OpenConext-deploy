@@ -3,6 +3,8 @@
   tasks:
   - name: Read vars from secrets file
     include_vars: "{{ secrets_file }}"
+    tags:
+      - always
 
 - hosts: php-apps:java-apps
   sudo: true

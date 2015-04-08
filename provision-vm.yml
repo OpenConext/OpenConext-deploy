@@ -4,6 +4,8 @@
   tasks:
   - name: Read vars from secrets file
     include_vars: "{{ secrets_file }}"
+    tags:
+      - always
 
 - hosts: local-certs
   connection: local
