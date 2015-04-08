@@ -11,4 +11,4 @@ springapp_tcpport: 9290
 springapp_local_jar: "{{ authz_admin_local_jar }}"
 springapp_debug: "{{ authz_admin_debug }}"
 springapp_debug_port: 1290
-springapp_heapsize: "256m"
+springapp_heapsize: "128m"

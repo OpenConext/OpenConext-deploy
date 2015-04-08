@@ -34,7 +34,7 @@ TOMCAT_USER="tomcat"
 #LANG="en_US"
 
 # You can pass extra JVM startup parameters to java here if you wish.
-JAVA_OPTS="-Djvm=$JVM_ID -Xms384M -Xmx1024M -XX:MaxPermSize=512m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=false $JMX_OPTS"
+JAVA_OPTS="-Djvm=$JVM_ID -Xms512m -Xmx512m -XX:MaxPermSize=256m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=false $JMX_OPTS"
 
 # Network opts added to start && shutdown process
 NETWORK_OPTS="-Djava.net.preferIPv4Stack=false -Djava.net.preferIPv6Addresses=true"
