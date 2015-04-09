@@ -118,7 +118,6 @@ engine_keys:
 
 tomcat_apps:
   - api
-  - teams
   - grouper
   - mujina-sp
   - mujina-idp
