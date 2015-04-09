@@ -14,7 +14,7 @@ datasource.teams.driver-class-name=com.mysql.jdbc.Driver
 datasource.teams.url=jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
 datasource.teams.username={{ teams.db_user }}
 datasource.teams.password={{ teams.db_password }}
-datasource.teams.validation-query="SELECT 1"
+datasource.teams.validation-query=SELECT 1
 datasource.teams.testWhileIdle=true
 
 spring.jpa.properties.hibernate.naming-strategy=org.hibernate.cfg.ImprovedNamingStrategy
@@ -24,7 +24,7 @@ datasource.groupzy.driver-class-name=com.mysql.jdbc.Driver
 datasource.groupzy.url=jdbc:mysql://localhost/groupzy
 datasource.groupzy.username=groupzy
 datasource.groupzy.password=groupzy
-datasource.groupzy.validation-query="SELECT 1"
+datasource.groupzy.validation-query=SELECT 1
 datasource.groupzy.testWhileIdle=true
 
 logging.level.nl.surfnet.coin.teams=DEBUG

@@ -9,7 +9,7 @@ spring.datasource.url=jdbc:mysql://{{ authzserver.db_host }}/{{ authzserver.db_n
 spring.datasource.username={{ authzserver.db_user }}
 spring.datasource.password={{ authzserver.db_password }}
 spring.datasource.driverClassName=com.mysql.jdbc.Driver
-spring.datasource.validation-query="SELECT 1"
+spring.datasource.validation-query=SELECT 1
 spring.datasource.testWhileIdle=true
 
 server.port={{ springapp_tcpport }}
