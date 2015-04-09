@@ -3,6 +3,9 @@ externalProviders.config.path = file://{{ voot_dir }}/externalProviders.yml
 logging.config=file://{{ voot_dir }}/logback.xml
 server.port={{ springapp_tcpport }}
 
+# Space-delimited list of scope-names for which the user must have approved access.
+vootservice.requiredScopes = groups
+
 # The name under which this Oauth2 resource is registered with the Oauth2 Authorization server.
 vootservice.oauthResourceId = groups
 
