@@ -142,7 +142,7 @@ shib:
 
 # versions of installed apps
 teams_version: 4.0.9
-teams_snapshot_timestamp: 20150408.095715-13
+teams_snapshot_timestamp: 20150409.134836-16
 
 api_version: 4.0.1
 api_snapshot_timestamp: 20150302.230045-395
