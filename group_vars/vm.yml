@@ -277,7 +277,7 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1
-voot_snapshot_timestamp: 20150326.074233-36
+voot_snapshot_timestamp: 20150409.145129-41
 voot_debug: true
 
 ##
