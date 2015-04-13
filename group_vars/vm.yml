@@ -159,7 +159,7 @@ teams:
 
 teams_version: 4.0.9
 teams_snapshot_timestamp: 20150409.134836-16
-teams_debug: true
+teams_debug: false
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
