@@ -21,5 +21,6 @@ if [ "$1" == 'vm' ]; then
   # no need to provide the username when targeting vagrant: it's always the same.
   ansible-playbook -i "inventory/$1" --private-key `pwd`/.vagrant/machines/openconext-vm/virtualbox/private_key  -u vagrant "$2" "${@:3}" --extra-vars="secrets_file=secrets/vm.yml"
 else
-  ansible-playbook -i "inventory/$1" -u "$3" -K "$2" --extra-vars="secrets_file=$4"
+  echo "executing ansible-playbook -i inventory/$1 -u $3 -K $2 ${@:5} --extra-vars=secrets_file=$4"
+  ansible-playbook -i "inventory/$1" -u "$3" -K "$2" "${@:5}" --extra-vars="secrets_file=$4"
 fi

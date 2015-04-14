@@ -243,7 +243,6 @@ authzserver:
 authz_server_version: 1
 authz_server_snapshot_timestamp: 20150323.150911-45
 
-
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -261,12 +260,22 @@ voot:
         name: "SURFteams",
         timeoutMillis: 3000
       }
+    - {
+        type: "surfnet",
+        url: "https://idp-acc.surfnet.nl/voot",
+        credentials: {
+          username: "conext",
+          secret: "{{ external_group_provider_secrets.surfnet }}"
+        },
+        schacHomeOrganization: "surfnet.nl",
+        name: "SURFnet",
+        timeoutMillis: 3000
+      }
 voot_version: 1
-voot_snapshot_timestamp: 20150409.145129-41
-
+voot_snapshot_timestamp: 20150413.072742-42
 
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150326.120101-50
+authz_admin_snapshot_timestamp: 20150413.133043-57
 authz_admin_group: urn:collab:group:surfnet.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
