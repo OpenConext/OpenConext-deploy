@@ -158,8 +158,7 @@ teams:
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 teams_version: 4.0.9
-teams_snapshot_timestamp: 20150409.134836-16
-teams_debug: false
+teams_snapshot_timestamp: 20150414.095531-21
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
