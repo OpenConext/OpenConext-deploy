@@ -76,10 +76,11 @@ Go to [https://vm.openconext.org](https://vm.openconext.org).
 
 # Releases to vm, test, acc, prod
 
-SURFnet has decided to deploy single applications instead of using the Ansible capabilities to detect changes. To provision - e.g. release
-a new version - an application use:
+To update single applications - e.g. release - use:
 
+```
 ./provision-single-component ${vm|test|acc|prod} ${remote-user} ${absolute location of secrets file} ${component}
+```
 
 # License
 
