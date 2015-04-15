@@ -55,7 +55,7 @@ These are the steps the above script performs:
 
 1. Setup a Vagrant VM and will make sure the HOSTS file is able to handle the defined base_domain
 2. Setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
-3. Inserts entitities and metadata in Janus and initial load of engineblock to bootstrap.
+3. Inserts entities and metadata in Janus and initial load of engineblock to bootstrap.
 4. Install all Java apps for the openconext platform.
 5. Install all PHP apps for the openconext platform.
 6. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.

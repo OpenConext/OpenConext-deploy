@@ -15,7 +15,7 @@ do
     break
   fi
 done
-if [ $VALID_COMPONENT = 0 ]; then
+if [ $VALID_COMPONENT == 0 ]; then
   echo "The component $4 is not a valid component";
   exit 1
 fi
