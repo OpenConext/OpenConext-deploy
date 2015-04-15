@@ -16,7 +16,7 @@
 - hosts: storage
   sudo: true
   roles:
-    - mysql
+    - { role: mysql, tags: [mysql] }
     - ldap
 
 - hosts: php-apps

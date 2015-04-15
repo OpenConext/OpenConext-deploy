@@ -273,7 +273,7 @@ voot:
         timeoutMillis: 3000
       }
     - {
-        type: "voot2",
+        type: "open_social",
         url: "https://idp-acc.surfnet.nl/voot",
         credentials: {
           username: "conext",
