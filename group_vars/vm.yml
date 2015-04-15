@@ -114,6 +114,19 @@ engine_keys:
     publicKey: engineblock.crt
     publicFile: /etc/openconext/engineblock.crt
 
+engine_block:
+  metadataRepositories:
+    - {
+        index: 0,
+        type: "database",
+        value: "Doctrine"
+      }
+    - {
+        index: 1,
+        type: "janus",
+        value: "JanusRestV1"
+      }
+
 tomcat_apps:
   - api
   - grouper

@@ -10,7 +10,6 @@ voot.clientId=engineblock
 voot.clientSecret={{ engineblock_authz_client_secret }}
 voot.scopes = groups
 
-
 auth.simplesamlphp.idp.entityId = {{ engine_profile_idp_entityid }}
 auth.simplesamlphp.idp.location = {{ engine_profile_idp_sso_location }}
 auth.simplesamlphp.idp.certificate= "{{ engine_profile_idp_certificate }}"
@@ -43,6 +42,11 @@ ldap.password = "{{ engine_ldap_password }}"
 ldap.userName = "{{ engine_ldap_bind_dn }}"
 
 logs.syslog-queue.filterParams.priority = {{ engine_syslog_priority }}
+
+{% for repository in engine_block.metadataRepositories %}
+metadataRepository.{{ repository.type }}.type = {{ repository.value }}
+metadataRepositories[{{ repository.index }}] = {{ repository.type }}
+{% endfor %}
 
 phpSettings.display_errors = {{ php_display_errors }}
 

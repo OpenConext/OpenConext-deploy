@@ -24,11 +24,6 @@ To install both with Homebrew:
     brew cask install vagrant
     brew cask install virtualbox
 
-## Install GPG
-Install GPG for your platform. For Mac, this is [GPG Tools] (https://gpgtools.org/).
-
-Using your toolset, import the [gpg/vm.key](gpg/vm.key) and [gpg/vm.pub](gpg/vm.pub) into your GPG Keychain.
-
 ## Install Ansible
 
 Ansible is the configuration tool we use to describe our servers.
@@ -60,7 +55,7 @@ These are the steps the above script performs:
 
 1. Setup a Vagrant VM and will make sure the HOSTS file is able to handle the defined base_domain
 2. Setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
-3. Inserts entitities and metadata in Janus and initial load of engineblock to bootstrap.
+3. Inserts entities and metadata in Janus and initial load of engineblock to bootstrap.
 4. Install all Java apps for the openconext platform.
 5. Install all PHP apps for the openconext platform.
 6. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
@@ -78,6 +73,14 @@ Here, the ip-address `192.168.66.78` refers to the address that is mentioned in 
 ## Enjoy your new VM!
 
 Go to [https://vm.openconext.org](https://vm.openconext.org).
+
+# Releases to vm, test, acc, prod
+
+To update single applications - e.g. release - use:
+
+```
+./provision-single-component ${vm|test|acc|prod} ${remote-user} ${absolute location of secrets file} ${component}
+```
 
 # License
 

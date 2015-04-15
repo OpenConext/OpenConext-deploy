@@ -115,6 +115,18 @@ engine_keys:
     publicKey: engineblock.crt
     publicFile: /etc/openconext/engineblock.crt
 
+engine_block:
+  metadataRepositories:
+    - {
+        index: 0,
+        type: "database",
+        value: "Doctrine"
+      }
+    - {
+        index: 1,
+        type: "janus",
+        value: "JanusRestV1"
+      }
 
 tomcat_apps:
   - api
@@ -261,7 +273,7 @@ voot:
         timeoutMillis: 3000
       }
     - {
-        type: "surfnet",
+        type: "open_social",
         url: "https://idp-acc.surfnet.nl/voot",
         credentials: {
           username: "conext",
