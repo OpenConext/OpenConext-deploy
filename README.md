@@ -24,11 +24,6 @@ To install both with Homebrew:
     brew cask install vagrant
     brew cask install virtualbox
 
-## Install GPG
-Install GPG for your platform. For Mac, this is [GPG Tools] (https://gpgtools.org/).
-
-Using your toolset, import the [gpg/vm.key](gpg/vm.key) and [gpg/vm.pub](gpg/vm.pub) into your GPG Keychain.
-
 ## Install Ansible
 
 Ansible is the configuration tool we use to describe our servers.
@@ -78,6 +73,13 @@ Here, the ip-address `192.168.66.78` refers to the address that is mentioned in 
 ## Enjoy your new VM!
 
 Go to [https://vm.openconext.org](https://vm.openconext.org).
+
+# Releases to vm, test, acc, prod
+
+SURFnet has decided to deploy single applications instead of using the Ansible capabilities to detect changes. To provision - e.g. release
+a new version - an application use:
+
+./provision-single-component ${vm|test|acc|prod} ${remote-user} ${absolute location of secrets file} ${component}
 
 # License
 
