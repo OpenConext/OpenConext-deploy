@@ -36,7 +36,6 @@ To install for development with Homebrew:
     pip install --upgrade pip
     brew linkapps
     brew install ansible
-    pip install python-keyczar==0.71c
 
 ## Run playbooks
 
