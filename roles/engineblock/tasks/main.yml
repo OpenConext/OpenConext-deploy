@@ -41,6 +41,15 @@
     - restart httpd
 
 - name: import entries
+  shell: ldapmodify -x -D cn=admin,cn=config -h {{ ldap_host }} -w {{ ldap_password }} -f {{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addDeprovisionWarningSentAttributes.ldif
+  register: add_deprevision_output
+  changed_when: "add_deprevision_output.rc != 20"
+  failed_when: "add_deprevision_output.rc not in [20,0]"
+  tags: ldap
+  with_items:
+
+
+- name: import entries
   shell: ldapmodify -x -D cn=admin,cn=config -h {{ ldap_host }} -w {{ ldap_password }} -f {{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addCollabPersonUUID.ldif
   register: add_collab_output
   changed_when: "add_collab_output.rc != 20"
