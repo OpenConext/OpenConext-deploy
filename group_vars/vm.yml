@@ -347,7 +347,7 @@ authzadmin:
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1
-authz_playground_snapshot_timestamp: 20150324.132119-18
+authz_playground_snapshot_timestamp: 20150415.135608-23
 authz_playground_debug: true
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
