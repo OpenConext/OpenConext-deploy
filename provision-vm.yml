@@ -13,6 +13,13 @@
   roles:
     - generate_certs
 
+- hosts: loadbalancer
+  sudo: true
+  roles:
+    - { role: tls, tags: ['lb'] }
+    - { role: haproxy, tags: ['lb'] }
+    - { role: nginx, tags: ['lb'] }
+
 - hosts: php-apps:java-apps
   sudo: true
   roles:
