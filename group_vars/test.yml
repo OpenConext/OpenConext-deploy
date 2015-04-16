@@ -287,7 +287,7 @@ voot_version: 1
 voot_snapshot_timestamp: 20150413.072742-42
 
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150413.133043-57
+authz_admin_snapshot_timestamp: 20150416.064350-59
 authz_admin_group: urn:collab:group:surfnet.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
