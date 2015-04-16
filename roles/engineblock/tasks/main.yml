@@ -46,7 +46,6 @@
   changed_when: "add_deprevision_output.rc != 20"
   failed_when: "add_deprevision_output.rc not in [20,0]"
   tags: ldap
-  with_items:
 
 
 - name: import entries
