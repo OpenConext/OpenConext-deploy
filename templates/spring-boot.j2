@@ -17,14 +17,6 @@ APP_NAME="{{ springapp_service_name }}"
 APP_JAR="{{ springapp_jar }}"
 APP_USER="{{ springapp_user }}"
 HEAPSIZE="{{ springapp_heapsize }}"
-AUX_CLASSPATH_DIR="{{ springapp_auxiliary_classpath_dir }}"
-ARTIFACT_TYPE="{{ springapp_artifact_type }}"
-
-if [ "$ARTIFACT_TYPE" = 'war' ]; then
-  SPRINGBOOT_LAUNCHER="org.springframework.boot.loader.WarLauncher"
-else
-  SPRINGBOOT_LAUNCHER="org.springframework.boot.loader.JarLauncher"
-fi
 
 LOG="/var/log/$APP_NAME.log"
 LOCK="/var/lock/subsys/$APP_NAME"
@@ -61,7 +53,7 @@ start() {
     fi
 
     cd "$APPLICATION_HOME"
-    $SU - $APP_USER -c "nohup $JAVA $DEBUG_OPTS -Xms$HEAPSIZE  -Xmx$HEAPSIZE -cp $APP_JAR:$AUX_CLASSPATH_DIR $SPRINGBOOT_LAUNCHER >> /var/log/$APP_NAME/init.log 2>&1 &"
+    $SU - $APP_USER -c "nohup $JAVA $DEBUG_OPTS -Xms$HEAPSIZE  -Xmx$HEAPSIZE -jar $APP_JAR >> /var/log/$APP_NAME/init.log 2>&1 &"
 
     pid_of_app > /dev/null
     RETVAL=$?

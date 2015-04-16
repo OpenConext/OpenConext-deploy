@@ -1,4 +1,8 @@
 ---
+
+- name: rezip war
+  service: name=teams state=restarted
+
 - name: restart teams
   service: name=teams state=restarted
 

@@ -1,4 +1,3 @@
----
 springapp_artifact_id: voot-service
 springapp_artifact_type: jar
 springapp_artifact_group_dir: /org/openconext
@@ -13,4 +12,3 @@ springapp_local_jar: "{{ voot_local_jar }}"
 springapp_debug: "{{ voot_debug }}"
 springapp_debug_port: 1191
 springapp_heapsize: "128m"
-springapp_auxiliary_classpath_dir: ""
