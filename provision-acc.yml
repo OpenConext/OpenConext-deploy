@@ -1,0 +1,59 @@
+---
+- hosts: all
+  tasks:
+  - name: Read vars from secrets file
+    include_vars: "{{ secrets_file }}"
+    tags:
+      - always
+
+- hosts: eb-app:sr-app:voot-app:authz-server-app:authz-admin-app:authz-playground-app
+  sudo: true
+  roles:
+    - common
+    - tls
+    - httpd
+
+- hosts: storage
+  sudo: true
+  roles:
+    - { role: mysql, tags: [mysql] }
+    - ldap
+
+- hosts: eb-app
+  sudo: yes
+  gather_facts: no
+  vars:
+    env_lang: php
+  roles:
+    - php
+    - static
+    - { role: openconext-common, tags: ['eb', 'sr'] }
+    - { role: engineblock, tags: ['eb'] }
+
+- hosts: sr-app
+  sudo: yes
+  gather_facts: no
+  vars:
+    env_lang: php
+  roles:
+    - php
+    - static
+    - { role: openconext-common, tags: ['eb', 'sr'] }
+    - { role: janus, tags: ['sr'] }
+
+- hosts: java-apps
+  sudo: true
+  vars:
+    env_lang: java
+  roles:
+    - tomcat
+    - java
+    - { role: shibboleth, tags: ['shib'] }
+    - grouper
+    - { role: teams, tags: ['teams'] }
+    - api
+    - apis
+    - { role: authz-server, tags: ['oauth', 'authz-server'] }
+    - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
+    - { role: voot, tags: ['oauth', 'voot'] }
+    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
