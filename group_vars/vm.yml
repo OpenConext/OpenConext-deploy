@@ -265,7 +265,7 @@ authzserver:
   bundle_name: "{{ tls_https.bundle_name }}"
 
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150415.135942-49
+authz_server_snapshot_timestamp: 20150417.044805-52
 authz_server_debug: true
 
 ##
