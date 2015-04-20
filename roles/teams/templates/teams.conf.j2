@@ -17,8 +17,6 @@
     SSLCACertificateFile  {{ tls.cert_path }}/{{ teams.bundle_name }}
 
     RewriteEngine On
-    # Rewrite old URLS
-    RewriteRule /teams/$ ^/$1  [L,R=permanent]
 
     <Files ~ "\.(shtml?)$">
         SSLOptions +StdEnvVars
