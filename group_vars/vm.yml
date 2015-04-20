@@ -171,7 +171,7 @@ teams:
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 teams_version: 4.0.9
-teams_snapshot_timestamp: 20150420.140458-26
+teams_snapshot_timestamp: 20150420.143855-27
 teams_debug: true
 
 engineblock:
