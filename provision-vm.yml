@@ -58,7 +58,7 @@
     - { role: teams, tags: ['teams'] }
     - { role: api, tags: ['legacy'] }
     - { role: mujina-sp, tags: ['legacy'] }
-    - { role: authz-server, tags: ['oauth', 'authz'] }
+    - { role: authz-server, tags: ['oauth', 'authz-server'] }
     - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
     - { role: voot, tags: ['oauth', 'voot'] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-if [ "$#" -ne 4 ]
+if [ "$#" -lt 4 ]
 then
   echo "Usage: ./provision-single-component [ENVIRONMENT] [YOUR_USERNAME_ON_TARGET_HOSTS] [ABSOLUTE_PATH_TO_SECRETS_FILE] [COMPONENT_NAME]"
   exit 1

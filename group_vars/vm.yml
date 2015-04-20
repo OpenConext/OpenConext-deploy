@@ -151,7 +151,7 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 api_version: 4.0.1
-api_snapshot_timestamp: 20150302.230045-395
+api_snapshot_timestamp: 20150419.220130-443
 
 mujina_version: 4.0.2
 #mujina_snapshot_timestamp
