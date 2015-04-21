@@ -253,7 +253,7 @@ authzserver:
   bundle_name: "{{ tls_https.bundle_name }}"
 
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150415.135942-49
+authz_server_snapshot_timestamp: 20150421.084104-54
 
 voot:
   crt_name: "{{ tls_https.crt_name }}"
