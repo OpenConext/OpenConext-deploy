@@ -330,9 +330,32 @@ authzadmin:
           - groups
         grantTypes:
           - client_credentials
+      - clientId: csa
+        secret: "{{ csa_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
+      - clientId: dashboard
+        secret: "{{ dashboards_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+          - actions
+          - cross-idp-services
+          - stats
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.resource_checking_secret }}"
+    - clientId: csa
+      secret: "{{ csa_resource_checking_secret }}"
 
 authz_playground_version: 1
 authz_playground_snapshot_timestamp: 20150415.135608-23
