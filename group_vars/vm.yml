@@ -62,7 +62,7 @@ engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
-ldap_grouper_unit_test_user: gadget
+ldap_grouper_user: gadget
 
 janus_database_name: sr
 janus_database_host: localhost
@@ -282,7 +282,7 @@ voot:
         type: "grouper",
         url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
         credentials: {
-          username: "gadget",
+          username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
         },
         schacHomeOrganization: "surfnet.nl",
