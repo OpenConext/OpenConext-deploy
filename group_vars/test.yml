@@ -330,7 +330,7 @@ authzadmin:
           - groups
         grantTypes:
           - client_credentials
-      - clientId: csa
+      - clientId: csa_client
         secret: "{{ csa_authz_client_secret }}"
         resourceIds:
           - groups
