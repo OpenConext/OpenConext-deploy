@@ -1,7 +1,7 @@
 [storage]
 acc21.coin.surf.net
 
-[storage-test:children]
+[storage-acc:children]
 storage
 
 [lb-app]
@@ -15,7 +15,7 @@ acc62.coin.surf.net
 acc41.coin.surf.net
 acc42.coin.surf.net
 
-[test:children]
+[acc:children]
 storage
 java-apps
 php-apps
