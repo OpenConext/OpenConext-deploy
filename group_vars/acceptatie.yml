@@ -47,9 +47,9 @@ tls:
 
 engine_janus_user: engineblock
 
-engine_database_name: "{{ engine_database_name }}"
+engine_database_name: eb
 engine_database_host: "{{ mysql_host }}"
-engine_database_user: "{{ engine_database_user }}"
+engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
 engine_ldap_host: "{{ ldap_host }}"
@@ -59,9 +59,9 @@ ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
 ldap_grouper_unit_test_user: gadget
 
-janus_database_name: "{{ janus_database_name }}"
+janus_database_name: sr
 janus_database_host: "{{ mysql_host }}"
-janus_database_user: "{{ janus_database_name }}"
+janus_database_user: srrw
 janus_database_password: "{{ mysql_passwords.sr }}"
 
 # host for static files (IdP logos)
