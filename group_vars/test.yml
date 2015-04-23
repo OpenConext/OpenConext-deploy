@@ -160,7 +160,6 @@ api_snapshot_timestamp: 20150419.220130-443
 mujina_version: 4.0.2
 #mujina_snapshot_timestamp
 
-
 teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -252,7 +251,7 @@ authzserver:
   bundle_name: "{{ tls_https.bundle_name }}"
 
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150421.084104-54
+authz_server_snapshot_timestamp: 20150422.112530-56
 
 voot:
   crt_name: "{{ tls_https.crt_name }}"
@@ -283,10 +282,10 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1
-voot_snapshot_timestamp: 20150413.072742-42
+voot_snapshot_timestamp: 20150420.135435-44
 
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150416.064350-59
+authz_admin_snapshot_timestamp: 20150422.113215-61
 authz_admin_group: urn:collab:group:surfnet.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -357,7 +356,7 @@ authzadmin:
       secret: "{{ csa_resource_checking_secret }}"
 
 authz_playground_version: 1
-authz_playground_snapshot_timestamp: 20150415.135608-23
+authz_playground_snapshot_timestamp: 20150423.100812-25
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
   springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
