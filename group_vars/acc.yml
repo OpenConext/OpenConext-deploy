@@ -1,0 +1,342 @@
+---
+env: acceptance
+
+databases:
+  names:
+    - teams
+    - api
+    - apis
+    - "{{ engine_database_name }}"
+    - "{{ janus_database_name }}"
+    - grouper
+    - authz-server
+  users:
+    - { name: teamsrw, host: "{{ mysql_subdomain }}", db_name: teams, password: "{{ mysql_passwords.teams }}" }
+    - { name: apirw, host: "{{ mysql_subdomain }}", db_name: api, password: "{{ mysql_passwords.api }}" }
+    - { name: apisrw, host: "{{ mysql_subdomain }}", db_name: apis, password: "{{ mysql_passwords.apis }}" }
+    - { name: "{{ engine_database_user }}", host: "{{ mysql_subdomain }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
+    - { name: "{{ janus_database_user }}", host: "{{ mysql_subdomain }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
+    - { name: grouperrw, host: "{{ mysql_subdomain }}", db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
+    - { name: authz-serverrw, host: "{{ mysql_subdomain }}", db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
+
+# For apache, the same star-certificate is used.
+tls_https:
+  key_name: star.{{ base_domain }}.key
+  crt_name: star.{{ base_domain }}.pem
+  bundle_name: star.{{ base_domain }}_cabundle.pem
+
+apache_server_admin: unix@prolocation.net
+
+janus_ssp_technicalcontact_name: "Surfconext beheer"
+janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
+janus_ssp_managingcontact_name: "Surfconext beheer"
+janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
+
+
+engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
+
+# when using multiple certificates list them all (and their bundles) under tls.certificates
+tls:
+  cert_path: /etc/httpd/keys/
+  cert_private_path: /etc/httpd/keys/
+  certificates:
+    - "{{ tls_https.crt_name }}"
+    - "{{ tls_https.bundle_name }}"
+  private_keys:
+    - "{{ tls_https.key_name }}"
+
+engine_janus_user: engineblock
+
+engine_database_name: eb
+engine_database_host: "{{ mysql_host }}"
+engine_database_user: ebrw
+engine_database_password: "{{ mysql_passwords.eb }}"
+
+engine_ldap_host: "{{ ldap_host }}"
+engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
+
+ldap_admin_user: cn=admin,dc=surfconext,dc=nl
+
+ldap_grouper_user: gadget
+
+janus_database_name: sr
+janus_database_host: "{{ mysql_host }}"
+janus_database_user: srrw
+janus_database_password: "{{ mysql_passwords.sr }}"
+
+# host for static files (IdP logos)
+static:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+# the welcome page on: vm.{{ base_domain }}
+welcome:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+
+janus_teams_oauth_key: https://teams.acc.surfconext.nl/teams/teams.xml
+
+engine:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+profile:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+janus:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+engine_janus_cache_lifetime: 0
+
+engine_vovalidate_key : oauth_key
+
+engine_trusted_proxy_ips:
+  - 192.168.1.1
+  - 10.0.0.1
+#
+engine_keys:
+  default:
+    privateFile: /etc/openconext/engineblock.pem
+    publicKey: engineblock.crt
+    publicFile: /etc/openconext/engineblock.crt
+
+engine_block:
+  metadataRepositories:
+    - {
+        index: 0,
+        type: "database",
+        value: "Doctrine"
+      }
+    - {
+        index: 1,
+        type: "janus",
+        value: "JanusRestV1"
+      }
+
+tomcat_apps:
+  - api
+  - grouper
+  - mujina-sp
+  - mujina-idp
+
+# shibboleth
+shibboleth_apps:
+  teams:
+    entityID: "https://teams.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  grouper:
+    entityID: "https://grouper.{{ base_domain }}/grouper/shibboleth"
+    baseurl: "/grouper"
+  authz:
+    entityID: "https://authz.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  "authz-admin":
+    entityID: "https://authz-admin.{{ base_domain }}/shibboleth"
+    baseurl: ""
+shib:
+  engine_domain: "{{ base_domain }}"
+
+# versions of installed apps
+teams_version: 4.0.9
+teams_snapshot_timestamp: 20150420.152536-28
+
+api_version: 4.0.1
+api_snapshot_timestamp: 20150419.220130-443
+
+mujina_version: 4.0.2
+#mujina_snapshot_timestamp
+
+
+teams:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  db_name: "teams"
+  db_user: "teamsrw"
+  db_password: "{{ mysql_passwords.teams }}"
+  db_host: "{{ mysql_host }}"
+  mail_server: s01.dev.coin.surf.net
+  group_name_context: "urn:collab:group:test.surfteams.nl:"
+
+engineblock:
+  idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
+  idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+
+api:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  janus:
+    user: "{{ engine_janus_user }}"
+    secret: "{{ engine_janus_secret }}"
+    uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
+  jdbc:
+    user: apirw
+    url: "jdbc:mysql://{{ mysql_host }}/api"
+    password: "{{ mysql_passwords.api }} "
+  ldap:
+    url: ldap://ldap.{{ base_domain }}:389
+    userDn: "{{ engine_ldap_bind_dn }}"
+    password: "{{ engine_ldap_password }}"
+  engineblock:
+    user: "{{ engine_database_user }}"
+    url: jdbc:mysql://{{ engine_database_host }}:3306/{{ engine_database_name }}
+    password: "{{ engine_database_password }}"
+  teams:
+    user: teamsrw
+    url: "jdbc:mysql://{{ mysql_host }}/{{ teams.db_name }}"
+    password: "{{ teams.db_password }}"
+  oauth:
+    callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
+  staticContentBasePath: https://static.{{ base_domain }}
+  saml:
+    entityId: https://api.{{ base_domain }}/
+    assertionConsumerURI: https://api.{{ base_domain }}/v1/assertionConsumer
+  ehcache:
+    path: /tmp
+
+grouper:
+  db_user: grouperrw
+  db_host: "{{ mysql_host }}"
+  db_password: "{{ mysql_passwords.grouper }}"
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+
+ldap_user: cn=ro,dc=surfconext,dc=nl
+ldap_grouper_engine_user: engine
+
+apis:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  user: apisrw
+  url: "jdbc:mysql://{{ mysql_host }}/apis"
+  password: "{{ mysql_passwords.apis }}"
+  entity_id: https://apis.{{ base_domain }}
+  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
+  admin_service:
+    resource_server_key: authorization-server-admin
+    resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
+  api:
+    consumer_key: https://apis.test.surfconext.nl
+    consumer_secret: "{{ apis_api_consumer_secret }}"
+
+mujina:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+authzserver:
+  db_user: authz-serverrw
+  db_password: "{{ mysql_passwords.authz_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: authz-server
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+authz_server_version: 1
+authz_server_snapshot_timestamp: 20150422.112530-56
+
+voot:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  resource_checking_secret: "{{ voot_resource_checking_secret }}"
+  externalGroupProviders:
+    - {
+        type: "grouper",
+        url: "https://grouper.{{ base_domain }}/grouper-ws/services/GrouperService_v2_0",
+        credentials: {
+          username: "{{ ldap_grouper_user }}",
+          secret: "{{ external_group_provider_secrets.grouper }}"
+        },
+        schacHomeOrganization: "surfnet.nl",
+        name: "SURFteams",
+        timeoutMillis: 3000
+      }
+    - {
+        type: "open_social",
+        url: "https://idp-acc.surfnet.nl/voot",
+        credentials: {
+          username: "conext",
+          secret: "{{ external_group_provider_secrets.surfnet }}"
+        },
+        schacHomeOrganization: "surfnet.nl",
+        name: "SURFnet",
+        timeoutMillis: 3000
+      }
+voot_version: 1
+voot_snapshot_timestamp: 20150420.135435-44
+
+authz_admin_version: 1
+authz_admin_snapshot_timestamp: 20150422.113215-61
+authz_admin_group: urn:collab:group:surfnet.nl:nl:surfnet:diensten:authz-admins
+authzadmin:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+  defaultClients:
+      - clientId: "{{ authzplayground.springapp_client_id}}"
+        secret: "{{ authzplayground.springapp_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
+        redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
+      - clientId: authz-admin
+        secret: "{{ authz_admin_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+        redirectUri: https://authz-admin.{{ base_domain }}
+      - clientId: surf-teams
+        secret: "{{ teams_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
+      - clientId: engineblock
+        secret: "{{ engineblock_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
+  defaultResourceServers:
+    - clientId: vootservice
+      secret: "{{ voot.resource_checking_secret }}"
+
+authz_playground_version: 1
+authz_playground_snapshot_timestamp: 20150423.100812-25
+authzplayground:
+  springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
+  springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
+  springapp_client_id: cool_app_id
+  springapp_client_secret: "{{ authzplayground_springapp_client_secret }}"
+  springapp_scopes: groups
+  springapp_authorize_url: https://authz.{{ base_domain }}/oauth/authorize
+  springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
