@@ -1,10 +1,5 @@
 ---
 env: vm
-base_domain: "{{ env }}.openconext.org"
-ldap_host: localhost:389
-
-mysql_host: localhost
-rsyslog_host: localhost
 
 databases:
   names:
@@ -16,13 +11,13 @@ databases:
     - grouper
     - authz-server
   users:
-    - { name: teamsrw, host: "{{ mysql_host }}", db_name: teams, password: "{{ mysql_passwords.teams }}" }
-    - { name: apirw, host: "{{ mysql_host }}", db_name: api, password: "{{ mysql_passwords.api }}" }
-    - { name: apisrw, host: "{{ mysql_host }}", db_name: apis, password: "{{ mysql_passwords.apis }}" }
-    - { name: "{{ engine_database_user }}", host: "{{ mysql_host }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
-    - { name: "{{ janus_database_user }}", host: "{{ mysql_host }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
-    - { name: grouperrw, host: "{{ mysql_host }}", db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
-    - { name: authz-serverrw, host: "{{ mysql_host }}", db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
+    - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
+    - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
+    - { name: apisrw, db_name: apis, password: "{{ mysql_passwords.apis }}" }
+    - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
+    - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
+    - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
+    - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
