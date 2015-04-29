@@ -5,6 +5,3 @@
 
 - name: restart teams
   service: name=teams state=restarted
-
-- name: restart httpd
-  service: name=httpd state=restarted
