@@ -19,12 +19,16 @@
     - common
     - tls
     - httpd
+  handlers:
+      - include: roles/httpd/handlers/main.yml
 
 - hosts: vm
   sudo: true
   roles:
     - hosts
     - welcome
+  handlers:
+      - include: roles/httpd/handlers/main.yml
 
 - hosts: storage
   sudo: true
@@ -44,7 +48,8 @@
     - { role: openconext-common, tags: ['eb','sr']}
     - { role: engineblock, tags: ['eb'] }
     - { role: janus, tags: ['sr'] }
-
+  handlers:
+      - include: roles/httpd/handlers/main.yml
 - hosts: java-apps
   sudo: true
   vars:
