@@ -31,7 +31,7 @@
 
 - name: copy apache config
   template: src=authz.conf.j2 dest=/etc/httpd/conf.d/authz.conf
-  notify: restart httpd
+  notify: reload httpd
 
 - name: ensure the service is started
   service: name=authz-server enabled=yes state=started

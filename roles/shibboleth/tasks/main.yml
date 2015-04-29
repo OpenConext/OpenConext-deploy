@@ -16,7 +16,7 @@
   copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
   with_items:
     - 20_shib.conf
-  notify: restart httpd
+  notify: reload httpd
 
 - name: Shibboleth config
   template: src=shibboleth/{{ item }}.j2 dest=/etc/shibboleth/{{ item }}
@@ -26,7 +26,7 @@
     - shibboleth2.xml
   notify:
     - restart shibd
-    - restart httpd
+    - reload httpd
 
 - name: enable shibd
   service: name={{ item }} enabled=yes
@@ -34,4 +34,4 @@
     - shibd
   notify:
     - restart shibd
-    - restart httpd
+    - reload httpd
