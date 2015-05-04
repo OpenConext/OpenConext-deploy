@@ -1,4 +1,5 @@
-<VirtualHost *:443>
+Listen {{ apache_app_listen_address.grouper }}:{{ loadbalancing.grouper.port }}
+<VirtualHost {{ apache_app_listen_address.grouper }}:{{ loadbalancing.grouper.port }}>
     ServerName grouper.{{ base_domain }}:443
 
     # Use separate log files for the SSL virtual host; note that LogLevel
@@ -6,29 +7,6 @@
     ErrorLog logs/grouper_ssl_error_log
     TransferLog logs/grouper_ssl_access_log
     LogLevel warn
-
-    SSLEngine             on
-    SSLHonorCipherOrder   on
-    SSLProtocol           -ALL +SSLv3 +TLSv1
-    SSLCipherSuite        ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH
-    SSLCertificateFile    {{ tls.cert_path }}/{{ grouper.crt_name }}
-    SSLCertificateKeyFile {{ tls.cert_private_path }}/{{ grouper.key_name }}
-    SSLCACertificateFile  {{ tls.cert_path }}/{{ grouper.bundle_name }}
-
-    <Files ~ "\.(cgi|shtml|phtml|php3?)$">
-        SSLOptions +StdEnvVars
-    </Files>
-    <Directory "/var/www/cgi-bin">
-        SSLOptions +StdEnvVars
-    </Directory>
-
-    SetEnvIf User-Agent ".*MSIE.*" \
-             nokeepalive ssl-unclean-shutdown \
-             downgrade-1.0 force-response-1.0
-
-    CustomLog logs/ssl_request_log \
-              "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-
 
     ProxyPass /grouper-ws/ ajp://localhost:8009/grouper-ws/
     ProxyPass /grouper/ ajp://localhost:8009/grouper/

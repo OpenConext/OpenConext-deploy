@@ -437,6 +437,27 @@ loadbalancing:
       { label: "voot_backend", ip: "127.0.0.1" },
     ]
   }
+  grouper: {
+    port: 606,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "grouper_backend", ip: "127.0.0.1" },
+    ]
+  }
+  mujina_sp: {
+    port: 607,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "mujina_sp_backend", ip: "127.0.0.1" },
+    ]
+  }
+  mujina_idp: {
+      port: 608,
+      heartbeat: { url: "/", method: "HEAD" },
+      servers: [
+        { label: "mujina_idp_backend", ip: "127.0.0.1" },
+    ]
+  }
 
   statistics_ip_port: "127.0.0.1:8888"
 
@@ -450,4 +471,6 @@ nginx_ipv4_addresses:
   authz_admin: 192.168.66.78
   authz_playground: 192.168.66.78
   voot: 192.168.66.78
-
+  grouper: 192.168.66.78
+  mujina_sp: 192.168.66.78
+  mujina_idp: 192.168.66.78
