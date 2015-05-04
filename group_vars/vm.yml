@@ -379,3 +379,81 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
+
+haproxy:
+  - {
+     app: engine
+     listen_port: 401
+     servers:
+      - {
+        label: engine_server
+        ip_port: 127.0.0.1:80
+      }
+  }
+  - {
+  {}
+
+loadbalancing:
+  - engine: {
+      port: 401
+      heartbeat: { url : "/", method: "HEAD" }
+      servers:
+        - { label: "engine_backend", ip: "127.0.0.1" }
+  }
+  - profile: {
+      port: 402
+      heartbeat: { url : "/", method: "HEAD" }
+      servers:
+        - { label: "profile_backend", ip: "127.0.0.1" }
+  }
+  - static: {
+      port: 403
+      heartbeat: { url : "/notice.txt", method: "HEAD" }
+      servers:
+        - { label: "static_backend", ip: "127.0.0.1" }
+  }
+  - teams: {
+      port: 601
+      heartbeat: { url : "/", method: "HEAD" }
+      servers:
+        - { label: "teams_backend", ip: "127.0.0.1" }
+  }
+  - authz: {
+      port: 602
+      heartbeat: { url : "/health", method: "GET" }
+      servers:
+        - { label: "authz_backend", ip: "127.0.0.1" }
+  }
+  - authz_admin: {
+      port: 603
+      heartbeat: { url : "/health", method: "GET" }
+      servers:
+        - { label: "authz_admin_backend", ip: "127.0.0.1" }
+  }
+  - authz_playground: {
+      port: 604
+      heartbeat: { url : "/health", method: "GET" }
+      servers:
+        - { label: "authz_playground_backend", ip: "127.0.0.1" }
+  }
+
+  - voot: {
+      port: 605
+      heartbeat: { url : "/health", method: "GET" }
+      servers:
+        - { label: "voot_backend", ip: "127.0.0.1" }
+  }
+
+  statistics_ip_port: "127.0.0.1:8888"
+
+# values below seem silly but on acc+prod these differ.
+nginx_ipv4_addresses:
+  engine: 192.168.66.78
+  profile: 192.168.66.78
+  static: 192.168.66.78
+  teams: 192.168.66.78
+  authz: 192.168.66.78
+  authz_admin: 192.168.66.78
+  authz_playground: 192.168.66.78
+  voot: 192.168.66.78
+

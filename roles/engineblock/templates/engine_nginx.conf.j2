@@ -3,23 +3,22 @@
 #
 
 # Port mappings
-# 
-# engine.acc.surfconext.nl:443	-> localhost:401 (haproxy)
+#
 
 server {
-    listen       145.100.191.139:80;
-    server_name  engine.acc.surfconext.nl;
+    listen       {{ nginx_ipv4_addresses.engine }}:80;
+    server_name  engine.{{ base_domain }};
 
-    return       301 https://engine.acc.surfconext.nl$request_uri;
+    return       301 https://engine.{{ base_domain }}$request_uri;
 }
 
 server {
-    listen       145.100.191.139:443 ssl spdy;
-    server_name  engine.acc.surfconext.nl;
+    listen       {{ nginx_ipv4_addresses.engine }}:443 ssl spdy;
+    server_name  engine.{{ base_domain }};
 
     ssl                  on;
-    ssl_certificate      /etc/nginx/keys/star.acc.surfconext.nl.crt;
-    ssl_certificate_key  /etc/nginx/keys/star.acc.surfconext.nl.key;
+    ssl_certificate      {{ tls.cert_path }}/{{ engine.crt_name }};
+    ssl_certificate_key  {{ tls.cert_path }}/{{ engine.key_name }};
 
     ssl_session_timeout  60m;
 
@@ -32,7 +31,7 @@ server {
     ssl_stapling on;
 
     location / {
-        proxy_pass http://127.0.0.1:401/;
+        proxy_pass http://127.0.0.1:{{ loadbalancing.engine.port }}/;
         proxy_http_version 1.1;
         proxy_redirect off;
         proxy_set_header Host $http_host;
@@ -42,23 +41,23 @@ server {
 }
 
 # Port mappings (IPv6)
-# 
-# engine.acc.surfconext.nl:443	-> localhost:401 (haproxy)
+#
 
 server {
     listen       [::]:80;
-    server_name  engine.acc.surfconext.nl;
+    server_name  engine.{{ base_domain }};
 
-    return       301 https://engine.acc.surfconext.nl$request_uri;
+    return       301 https://engine.{{ base_domain }}$request_uri;
 }
 
 server {
     listen       [::]:443 ssl spdy;
-    server_name  engine.acc.surfconext.nl;
+    server_name  engine.{{ base_domain }};
 
     ssl                  on;
-    ssl_certificate      /etc/nginx/keys/star.acc.surfconext.nl.crt;
-    ssl_certificate_key  /etc/nginx/keys/star.acc.surfconext.nl.key;
+    ssl_certificate      {{ tls.cert_path }}/{{ engine.crt_name }};
+    ssl_certificate_key  {{ tls.cert_path }}/{{ engine.key_name }};
+
 
     ssl_session_timeout  60m;
 
@@ -71,7 +70,7 @@ server {
     ssl_stapling on;
 
     location / {
-        proxy_pass http://127.0.0.1:401/;
+        proxy_pass http://127.0.0.1:{{ loadbalancing.engine.port }}/;
         proxy_http_version 1.1;
         proxy_redirect off;
         proxy_set_header Host $http_host;
@@ -79,3 +78,6 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 }
+
+
+

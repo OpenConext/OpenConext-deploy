@@ -27,5 +27,5 @@ php-apps
 [loadbalancer]
 192.168.66.78
 
-[loadbalancer:children]
+[loadbalancer-vm:children]
 loadbalancer

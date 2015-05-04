@@ -13,10 +13,14 @@
   roles:
     - generate_certs
 
-- hosts: loadbalancer
+- hosts: loadbalancer:java-apps
   sudo: true
   roles:
     - { role: tls, tags: ['lb'] }
+
+- hosts: loadbalancer
+  sudo: true
+  roles:
     - { role: haproxy, tags: ['lb'] }
     - { role: nginx, tags: ['lb'] }
 
@@ -24,7 +28,6 @@
   sudo: true
   roles:
     - common
-    - tls
     - httpd
   handlers:
       - include: roles/httpd/handlers/main.yml

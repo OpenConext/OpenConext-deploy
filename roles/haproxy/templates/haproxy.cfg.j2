@@ -63,7 +63,7 @@ defaults
 #---------------------------------------------------------------------
 # ENGINE frontend
 #---------------------------------------------------------------------
-frontend engine 127.0.0.1:401
+frontend engine 127.0.0.1:{{ loadbalancing.engine.port }}
 
     capture cookie JSESSIONID len 52
 
@@ -74,7 +74,7 @@ frontend engine 127.0.0.1:401
 #---------------------------------------------------------------------
 # PROFILE frontend
 #---------------------------------------------------------------------
-frontend profile 127.0.0.1:402
+frontend profile 127.0.0.1:{{ loadbalancing.profile.port }}
 
     capture cookie JSESSIONID len 52
 
@@ -85,7 +85,7 @@ frontend profile 127.0.0.1:402
 #---------------------------------------------------------------------
 # STATIC frontend
 #---------------------------------------------------------------------
-frontend static 127.0.0.1:403
+frontend static 127.0.0.1:{{ loadbalancing.static.port }}
 
     capture cookie JSESSIONID len 52
 
@@ -96,13 +96,57 @@ frontend static 127.0.0.1:403
 #---------------------------------------------------------------------
 # TEAMS frontend
 #---------------------------------------------------------------------
-frontend teams 127.0.0.1:601
+frontend teams 127.0.0.1:{{ loadbalancing.teams.port }}
 
     capture cookie JSESSIONID len 52
 
     acl url_all         path_beg        -i /
     use_backend         teams_be        if url_all
     default_backend     teams_be
+
+#---------------------------------------------------------------------
+# AUTHZ frontend
+#---------------------------------------------------------------------
+frontend authz 127.0.0.1:{{ loadbalancing.authz.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         authz_be        if url_all
+    default_backend     authz_be
+
+#---------------------------------------------------------------------
+# AUTHZ-ADMIN frontend
+#---------------------------------------------------------------------
+frontend authz_admin 127.0.0.1:{{ loadbalancing.authz_admin.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         authz_admin_be        if url_all
+    default_backend     authz_admin_be
+
+#---------------------------------------------------------------------
+# AUTHZ-PLAYGROUND frontend
+#---------------------------------------------------------------------
+frontend authz_playground 127.0.0.1:{{ loadbalancing.authz_playground.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         authz_playground_be        if url_all
+    default_backend     authz_playground_be
+
+#---------------------------------------------------------------------
+# VOOT frontend
+#---------------------------------------------------------------------
+frontend voot 127.0.0.1:{{ loadbalancing.voot.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         voot_be        if url_all
+    default_backend     voot_be
 
 
 #---------------------------------------------------------------------
@@ -111,8 +155,7 @@ frontend teams 127.0.0.1:601
 backend engine_be
 
     # Healthcheck ombouwen naar controle op valide antwoord
-    #option httpchk HEAD /heartbeat.html HTTP/1.0
-    option httpchk HEAD / HTTP/1.0
+    option httpchk {{ loadbalancing.engine.heartbeat.method }} {{ loadbalancing.engine.heartbeat.url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
 
     mode http
@@ -122,17 +165,16 @@ backend engine_be
 
     cookie HTTPSERVERID insert nocache indirect
 
-    server acc41 145.100.191.133:401 cookie acc41 check inter 20000 fall 2 rise 2 maxconn 1024
-    server acc42 145.100.191.134:401 cookie acc42 check inter 20000 fall 2 rise 2 maxconn 1024
-
+    {% for server in loadbalancing.engine.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.engine.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor $}
 #---------------------------------------------------------------------
 # profile.acc.surfconext.nl
 #---------------------------------------------------------------------
 backend profile_be
 
     # Healthcheck ombouwen naar controle op valide antwoord
-    #option httpchk HEAD /heartbeat.html HTTP/1.0
-    option httpchk HEAD / HTTP/1.0
+    option httpchk {{ loadbalancing.profile.heartbeat.method }} {{ loadbalancing.profile.heartbeat.url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
 
     mode http
@@ -142,8 +184,9 @@ backend profile_be
 
     cookie HTTPSERVERID insert nocache indirect
 
-    server acc41 145.100.191.133:402 cookie acc41 check inter 20000 fall 2 rise 2 maxconn 1024
-    server acc42 145.100.191.134:402 cookie acc42 check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for server in loadbalancing.profile.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.profile.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor $}
 
 
 #---------------------------------------------------------------------
@@ -152,8 +195,7 @@ backend profile_be
 backend static_be
 
     # Healthcheck ombouwen naar controle op valide antwoord
-    #option httpchk HEAD /heartbeat.html HTTP/1.0
-    option httpchk HEAD /NOTICE.txt HTTP/1.0
+    option httpchk {{ loadbalancing.static.heartbeat.method }} {{ loadbalancing.static.heartbeat.url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
 
     mode http
@@ -163,18 +205,15 @@ backend static_be
 
     cookie HTTPSERVERID insert nocache indirect
 
-    server acc41 145.100.191.133:403 cookie acc41 check inter 20000 fall 2 rise 2 maxconn 1024
-    server acc42 145.100.191.134:403 cookie acc42 check inter 20000 fall 2 rise 2 maxconn 1024
-
-
+    {% for server in loadbalancing.static.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.static.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor $}
 #---------------------------------------------------------------------
 # teams.acc.surfconext.nl
 #---------------------------------------------------------------------
 backend teams_be
 
-    # Healthcheck ombouwen naar controle op valide antwoord
-    #option httpchk HEAD /heartbeat.html HTTP/1.0
-    option httpchk HEAD / HTTP/1.0
+    option httpchk {{ loadbalancing.teams.heartbeat.method }} {{ loadbalancing.teams.heartbeat.url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
 
     mode http
@@ -184,12 +223,88 @@ backend teams_be
 
     cookie HTTPSERVERID insert nocache indirect
 
-    server acc61 145.100.191.135:601 cookie acc61 check inter 20000 fall 2 rise 2 maxconn 1024
-    server acc62 145.100.191.136:601 cookie acc62 check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for server in loadbalancing.teams.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.teams.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor $}
+
+#---------------------------------------------------------------------
+# authz.acc.surfconext.nl
+#---------------------------------------------------------------------
+backend authz_be
+
+    option httpchk {{ loadbalancing.authz.heartbeat.method }} {{ loadbalancing.authz.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.authz.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor $}
+
+#---------------------------------------------------------------------
+# authz-admin.acc.surfconext.nl
+#---------------------------------------------------------------------
+backend authz_admin_be
+
+    option httpchk {{ loadbalancing.authz_admin.heartbeat.method }} {{ loadbalancing.authz_admin.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.authz_admin.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_admin.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor $}
+
+#---------------------------------------------------------------------
+# authz-playground.acc.surfconext.nl
+#---------------------------------------------------------------------
+backend authz_playground_be
+
+    option httpchk {{ loadbalancing.authz_playground.heartbeat.method }} {{ loadbalancing.authz_playground.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.authz_playground.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_playground.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor $}
+
+#---------------------------------------------------------------------
+# voot.acc.surfconext.nl
+#---------------------------------------------------------------------
+backend voot_be
+
+    option httpchk {{ loadbalancing.voot.heartbeat.method }} {{ loadbalancing.voot.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in voot.authz.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ voot.authz.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor $}
 
 # Statistics
-listen statisticts 145.100.191.130:80
-
+listen statistics {{ loadbalancing.statistics_ip_port }}
      stats enable
      stats uri /stats
 

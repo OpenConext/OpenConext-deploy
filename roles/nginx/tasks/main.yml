@@ -1,13 +1,9 @@
 ---
 - name: Install
-  yum: name=haproxy.x86_64 state=present
-  with_items:
+  yum: name=nginx state=present
 
-- name: enable haproxy
-  service: name=haproxy state=enabled
+- name: enable service
+  service: name=nginx state=enabled
   notify:
-    - restart haproxy
+    - restart nginx
 
-- name: Copy config
-  template: src=httpd.conf.j2 dest=/etc/haproxy.cfg
-  notify: reload haproxy

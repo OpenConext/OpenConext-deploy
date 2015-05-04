@@ -1,7 +1,6 @@
 ---
 - name: Install
   yum: name=haproxy.x86_64 state=present
-  with_items:
 
 - name: enable service
   service: name=haproxy state=enabled
