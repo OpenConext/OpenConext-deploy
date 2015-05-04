@@ -95,7 +95,6 @@ janus:
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
 
-
 engine_janus_cache_lifetime: 0
 
 engine_vovalidate_key : oauth_key

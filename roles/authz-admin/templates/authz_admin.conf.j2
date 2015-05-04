@@ -1,0 +1,33 @@
+Listen {{ apache_app_listen_address }}:{{ loadbalancing.authz_admin.port }}
+<VirtualHost {{ apache_app_listen_address }}:{{ loadbalancing.authz_admin.port }}>
+    # General setup for the virtual host, inherited from global configuration
+    ServerName authz-admin.{{ base_domain }}:443
+
+    UseCanonicalName On
+    SetEnv HTTPS on
+
+    # Use separate log files for the SSL virtual host; note that LogLevel
+    # is not inherited from httpd.conf.
+    ErrorLog logs/authzadmin_ssl_error_log
+    TransferLog logs/authzadmin_ssl_access_log
+    LogLevel warn
+
+    ProxyPass /Shibboleth.sso !
+    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
+
+    # Enable shibboleth for all other URLs, but the health check
+    <Location ~ "/health">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location />
+      ShibRequestSetting applicationId authz-admin
+      AuthType shibboleth
+      ShibRequireSession On
+      require valid-user
+      ShibUseHeaders On
+    </Location>
+
+</VirtualHost>

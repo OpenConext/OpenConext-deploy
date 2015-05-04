@@ -33,8 +33,12 @@
   template: src=clientsAndResources.conf.j2 dest={{ authz_admin_dir }}/clientsAndResources.conf owner=authz-admin group=authz-admin mode=0740
   notify: restart authz-admin
 
+- name: copy nginx config
+  template: src=authz_admin_nginx.conf.j2 dest=/etc/nginx/conf.d/authz_admin.conf
+  notify: reload nginx
+
 - name: copy apache config
-  template: src=authz-admin.conf.j2 dest=/etc/httpd/conf.d/authz-admin.conf
+  template: src=authz_admin.conf.j2 dest=/etc/httpd/conf.d/authz_admin.conf
   notify: reload httpd
 
 - name: ensure the service is started
