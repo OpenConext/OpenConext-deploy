@@ -77,4 +77,4 @@
 - name: Install Apache vhost
   template: src=vhost.j2.conf dest=/etc/httpd/conf.d/serviceregistry.conf
   notify:
-    - restart httpd
+    - reload httpd
