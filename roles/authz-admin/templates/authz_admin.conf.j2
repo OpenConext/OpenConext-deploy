@@ -1,5 +1,5 @@
-Listen {{ apache_app_listen_address }}:{{ loadbalancing.authz_admin.port }}
-<VirtualHost {{ apache_app_listen_address }}:{{ loadbalancing.authz_admin.port }}>
+Listen {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.port }}
+<VirtualHost {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.port }}>
     # General setup for the virtual host, inherited from global configuration
     ServerName authz-admin.{{ base_domain }}:443
 
