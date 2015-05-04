@@ -2,11 +2,11 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
 <Virtualhost {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}>
     ServerAdmin {{ apache_server_admin}}
 
-    DocumentRoot /opt/www/engineblock/www/authentication
-    ServerName   engine.{{ base_domain }}
+    DocumentRoot {{ engine_current_release_symlink }}/www/authentication
+    ServerName   {{ engine_domain }}
 
-    <Directory "/opt/www/engineblock/www">
-        AllowOverride All
+    <Directory "{{ engine_current_release_symlink }}/www">
+      AllowOverride All
     </Directory>
 
     SetEnv ENGINEBLOCK_ENV {{ engine_apache_environment }}

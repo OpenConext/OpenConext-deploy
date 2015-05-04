@@ -75,7 +75,6 @@
     - { role: mujina-idp, tags: ['legacy'] }
     - { role: shibboleth, tags: ['shib'] }
     - { role: teams, tags: ['teams'] }
-    - { role: api, tags: ['legacy'] }
     - { role: mujina-sp, tags: ['legacy'] }
     - { role: authz-server, tags: ['oauth', 'authz-server'] }
     - { role: authz-admin, tags: ['oauth', 'authz-admin'] }

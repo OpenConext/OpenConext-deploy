@@ -1,22 +1,3 @@
 ---
-- name: Add host names in the hosts file
-  lineinfile:
-    dest: /etc/hosts
-    regexp: ^{{ ansible_eth0["ipv4"]["address"] }} {{ item }}
-    line: "{{ ansible_eth0['ipv4']['address'] }} {{ item }}"
-  with_items:
-    - api.{{ base_domain }}
-    - static.{{ base_domain }}
-    - db.{{ base_domain }}
-    - serviceregistry.{{ base_domain }}
-    - ldap.{{ base_domain }}
-    - engine.{{ base_domain }}
-    - profile.{{ base_domain }}
-    - apis.{{ base_domain }}
-    - mujina-sp.{{ base_domain }}
-    - mujina-idp.{{ base_domain }}
-    - grouper.{{ base_domain }}
-    - authz.{{ base_domain }}
-    - authz-admin.{{ base_domain }}
-    - voot.{{ base_domain }}
-    - authz-playground.{{ base_domain }}
+- name: Set hosts
+  copy: src=hosts dest=/etc/hosts
