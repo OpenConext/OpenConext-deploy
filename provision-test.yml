@@ -14,6 +14,7 @@
     - httpd
   handlers:
     - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
 
 - hosts: storage
   sudo: true
@@ -34,6 +35,7 @@
     - { role: janus, tags: ['sr'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
 
 - hosts: java-apps
   sudo: true
@@ -53,3 +55,4 @@
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml

@@ -30,7 +30,8 @@
     - common
     - httpd
   handlers:
-      - include: roles/httpd/handlers/main.yml
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
 
 - hosts: vm
   sudo: true
@@ -38,7 +39,8 @@
     - hosts
     - welcome
   handlers:
-      - include: roles/httpd/handlers/main.yml
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
 
 - hosts: storage
   sudo: true
@@ -59,7 +61,9 @@
     - { role: engineblock, tags: ['eb'] }
     - { role: janus, tags: ['sr'] }
   handlers:
-      - include: roles/httpd/handlers/main.yml
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
+
 - hosts: java-apps
   sudo: true
   vars:
@@ -79,4 +83,5 @@
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
 

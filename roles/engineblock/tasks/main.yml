@@ -16,7 +16,7 @@
     - restart httpd
 
 - name: nginx config
-  template: src={{ item }}.j2 dest=/etc/nginx/conf.d/{{ item }}
+  template: src={{ item }} dest=/etc/nginx/conf.d/{{ item }}
   with_items:
     - engine_nginx.conf.j2
     - profile_nginx.conf.j2

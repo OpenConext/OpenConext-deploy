@@ -1,74 +1,29 @@
-<Virtualhost {{ engine_ipv4_address }}:443>
-		ServerAdmin {{ apache_server_admin }}
+Listen 145.100.191.133:{{ loadbalancing.engine.port }}
+<Virtualhost 145.100.191.133:{{ loadbalancing.engine.port }}>
+        ServerAdmin unix@prolocation.net
 
-		DocumentRoot {{ engine_current_release_symlink }}/www/authentication
-		ServerName   {{ engine_domain }}
+        DocumentRoot /opt/www/engineblock/www/authentication
+        ServerName   engine.acc.surfconext.nl
 
-		<Directory "{{ engine_current_release_symlink }}/www">
-			AllowOverride None
-		</Directory>
+        <Directory "/opt/www/engineblock/www">
+            AllowOverride All
+        </Directory>
 
-		SSLEngine on
-		SSLHonorCipherOrder On
-		SSLProtocol all -SSLv2 -SSLv3
-		SSLCipherSuite ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH
-    SSLCertificateFile    {{ tls.cert_path }}/{{ engine.crt_name }}
-    SSLCertificateKeyFile {{ tls.cert_private_path }}/{{ engine.key_name }}
-    SSLCACertificateFile  {{ tls.cert_path }}/{{ engine.bundle_name }}
+        SetEnv ENGINEBLOCK_ENV acceptance
+		SetEnv HTTPS on
 
-		RewriteEngine On
-		# We support only GET/POST/HEAD
-		RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
-		RewriteRule .* - [R=405,L]
+        RewriteEngine On
+        # We support only GET/POST/HEAD
+        RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
+        RewriteRule .* - [R=405,L]
+        # If the requested url does not map to a file or directory, then forward it to index.php/URL.
+        # Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+        RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
+        # Requests to the domain (no query string)
+        RewriteRule ^$ index.php/ [L]
 
-		# If the requested url does not map to a file or directory, then forward it to index.php/URL.
-		# Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
-		RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
-		RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-		RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
-
-		# Requests to the domain (no query string)
-		RewriteRule ^$ index.php/ [L]
-
-		ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EB'"
-		CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB'" combined
-		CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB-SSL'" "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+        ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EB'"
+        CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB'" combined
 </VirtualHost>
-{% if engine_ipv6_address is defined %}
-<Virtualhost [{{ engine_ipv6_address }}]:443>
-		ServerAdmin {{ apache_server_admin }}
-
-		DocumentRoot {{ engine_current_release_symlink }}/www/authentication
-		ServerName   {{ engine_domain }}
-
-		<Directory "{{ engine_current_release_symlink }}/www">
-			AllowOverride None
-		</Directory>
-
-		SSLEngine on
-		SSLHonorCipherOrder On
-		SSLProtocol all -SSLv2 -SSLv3
-		SSLCipherSuite ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH
-    SSLCertificateFile    {{ tls.cert_path }}/{{ engine.crt_name }}
-    SSLCertificateKeyFile {{ tls.cert_private_path }}/{{ engine.key_name }}
-    SSLCACertificateFile  {{ tls.cert_path }}/{{ engine.bundle_name }}
-
-		RewriteEngine On
-		# We support only GET/POST/HEAD
-		RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
-		RewriteRule .* - [R=405,L]
-
-		# If the requested url does not map to a file or directory, then forward it to index.php/URL.
-		# Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
-		RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
-		RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-		RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
-
-		# Requests to the domain (no query string)
-		RewriteRule ^$ index.php/ [L]
-
-		ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EB'"
-		CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB'" combined
-		CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB-SSL'" "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-</VirtualHost>
-{% endif %}
