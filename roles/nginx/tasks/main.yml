@@ -2,8 +2,14 @@
 - name: Install
   yum: name=nginx state=present
 
+- name: Delete default default.conf
+  file: path=/etc/nginx/conf.d/default.conf state=absent
+
+- name: Copy empty default.conf
+  copy: src=default.conf dest=/etc/nginx/conf.d
+
 - name: enable service
-  service: name=nginx state=enabled
+  service: name=nginx enabled=yes
   notify:
     - restart nginx
 

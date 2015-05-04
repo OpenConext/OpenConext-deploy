@@ -3,10 +3,10 @@
   yum: name=haproxy.x86_64 state=present
 
 - name: enable service
-  service: name=haproxy state=enabled
+  service: name=haproxy enabled=yes
   notify:
     - restart haproxy
 
 - name: Copy config
-  template: src=httpd.conf.j2 dest=/etc/haproxy.cfg
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
   notify: reload haproxy

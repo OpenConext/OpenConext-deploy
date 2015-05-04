@@ -167,7 +167,7 @@ backend engine_be
 
     {% for server in loadbalancing.engine.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.engine.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor $}
+    {% endfor %}
 #---------------------------------------------------------------------
 # profile.acc.surfconext.nl
 #---------------------------------------------------------------------
@@ -186,7 +186,7 @@ backend profile_be
 
     {% for server in loadbalancing.profile.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.profile.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor $}
+    {% endfor %}
 
 
 #---------------------------------------------------------------------
@@ -207,7 +207,7 @@ backend static_be
 
     {% for server in loadbalancing.static.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.static.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor $}
+    {% endfor %}
 #---------------------------------------------------------------------
 # teams.acc.surfconext.nl
 #---------------------------------------------------------------------
@@ -225,7 +225,7 @@ backend teams_be
 
     {% for server in loadbalancing.teams.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.teams.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor $}
+    {% endfor %}
 
 #---------------------------------------------------------------------
 # authz.acc.surfconext.nl
@@ -244,7 +244,7 @@ backend authz_be
 
     {% for server in loadbalancing.authz.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor $}
+    {% endfor %}
 
 #---------------------------------------------------------------------
 # authz-admin.acc.surfconext.nl
@@ -263,7 +263,7 @@ backend authz_admin_be
 
     {% for server in loadbalancing.authz_admin.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_admin.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor $}
+    {% endfor %}
 
 #---------------------------------------------------------------------
 # authz-playground.acc.surfconext.nl
@@ -282,7 +282,7 @@ backend authz_playground_be
 
     {% for server in loadbalancing.authz_playground.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_playground.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor $}
+    {% endfor %}
 
 #---------------------------------------------------------------------
 # voot.acc.surfconext.nl
@@ -299,9 +299,9 @@ backend voot_be
 
     cookie HTTPSERVERID insert nocache indirect
 
-    {% for server in voot.authz.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ voot.authz.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor $}
+    {% for server in loadbalancing.voot.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.voot.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
 
 # Statistics
 listen statistics {{ loadbalancing.statistics_ip_port }}
