@@ -18,7 +18,7 @@ server {
 
     ssl                  on;
     ssl_certificate      {{ tls.cert_path }}/{{ profile.crt_name }};
-    ssl_certificate_key  {{ tls.cert_path }}/{{ profile.key_name }};
+    ssl_certificate_key  {{ tls.cert_private_path }}/{{ engine.key_name }};
 
     ssl_session_timeout  60m;
 
@@ -56,7 +56,7 @@ server {
 
     ssl                  on;
     ssl_certificate      {{ tls.cert_path }}/{{ profile.crt_name }};
-    ssl_certificate_key  {{ tls.cert_path }}/{{ profile.key_name }};
+    ssl_certificate_key  {{ tls.cert_private_path }}/{{ engine.key_name }};
 
 
     ssl_session_timeout  60m;

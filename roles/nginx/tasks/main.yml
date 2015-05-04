@@ -1,6 +1,10 @@
 ---
+
+- name: Add nginx repo
+  copy: src=nginx.repo dest=/etc/yum.repos.d/nginx.repo
+
 - name: Install
-  yum: name=nginx state=present
+  yum: name=nginx-1.6.2-1.el6.ngx state=present
 
 - name: Copy empty default.conf
   copy: src=default.conf dest=/etc/nginx/conf.d

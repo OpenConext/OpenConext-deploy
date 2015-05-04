@@ -1,29 +1,29 @@
-Listen 145.100.191.133:{{ loadbalancing.engine.port }}
-<Virtualhost 145.100.191.133:{{ loadbalancing.engine.port }}>
-        ServerAdmin unix@prolocation.net
+Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
+<Virtualhost {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}>
+    ServerAdmin {{ apache_server_admin}}
 
-        DocumentRoot /opt/www/engineblock/www/authentication
-        ServerName   engine.acc.surfconext.nl
+    DocumentRoot /opt/www/engineblock/www/authentication
+    ServerName   engine.{{ base_domain }}
 
-        <Directory "/opt/www/engineblock/www">
-            AllowOverride All
-        </Directory>
+    <Directory "/opt/www/engineblock/www">
+        AllowOverride All
+    </Directory>
 
-        SetEnv ENGINEBLOCK_ENV acceptance
+    SetEnv ENGINEBLOCK_ENV {{ engine_apache_environment }}
 		SetEnv HTTPS on
 
-        RewriteEngine On
-        # We support only GET/POST/HEAD
-        RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
-        RewriteRule .* - [R=405,L]
-        # If the requested url does not map to a file or directory, then forward it to index.php/URL.
-        # Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
-        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
-        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-        RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
-        # Requests to the domain (no query string)
-        RewriteRule ^$ index.php/ [L]
+    RewriteEngine On
+    # We support only GET/POST/HEAD
+    RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
+    RewriteRule .* - [R=405,L]
+    # If the requested url does not map to a file or directory, then forward it to index.php/URL.
+    # Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
+    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
+    # Requests to the domain (no query string)
+    RewriteRule ^$ index.php/ [L]
 
-        ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EB'"
-        CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB'" combined
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EB'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB'" combined
 </VirtualHost>
