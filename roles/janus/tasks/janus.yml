@@ -74,7 +74,12 @@
     recurse=yes
   changed_when: False # never report change because it is caused by migrate
 
-- name: Install Apache vhost
+- name: Apache config
   template: src=vhost.j2.conf dest=/etc/httpd/conf.d/serviceregistry.conf
   notify:
     - reload httpd
+
+- name: Nginx config
+  template: src=nginx.j2.conf dest=/etc/nginx/conf.d/serviceregistry.conf
+  notify:
+    - reload nginx

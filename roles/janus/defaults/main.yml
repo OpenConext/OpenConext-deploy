@@ -73,9 +73,3 @@ janus_ssp_idp_sso_service: "https://engine.{{ base_domain }}/authentication/idp/
 janus_ssp_title_suffix:
 
 janus_domain: serviceregistry.{{ base_domain }}
-
-# A list of one or more ipv4 or ipv6 addresses
-janus_vhost_ip_list:
-  - "*"
-janus_vhost_error_log: "\"|/usr/bin/logger -p local3.err  -t 'Apache-SR'\""
-janus_vhost_custom_log: "\"|/usr/bin/logger -p local3.info  -t 'Apache-SR'\" combined"
