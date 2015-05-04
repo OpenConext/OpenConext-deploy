@@ -4,6 +4,7 @@
   yum: name={{ item }} state=present
   with_items:
      - mysql-server.x86_64
+     - MySQL-python
   tags: mysql
 
 - name: Start and enable mysql
@@ -48,8 +49,9 @@
   tags: mysql
 
 - name: Create database user
-  mysql_user: name={{ item.name }} host={{ item.host }} password={{ item.password }} priv={{ item.db_name }}.*:ALL state=present
-  with_items:
-    - "{{ databases.users }}"
+  mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:ALL state=present
+  with_nested:
+    - databases.users
+    - database_clients
   tags: mysql
 

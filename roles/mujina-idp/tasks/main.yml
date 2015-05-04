@@ -12,6 +12,6 @@
 - name: copy virtual host config
   template: src=mujina-idp.conf.j2 dest=/etc/httpd/conf.d/mujina-idp.conf
   tags: mujina-idp
-  notify: restart httpd
+  notify: reload httpd
 
 - include: provision_grouper.yml source_id="openconext-ldap"

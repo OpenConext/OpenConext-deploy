@@ -13,4 +13,4 @@
 
 - name: copy virtual host config
   template: src=welcome-vm.conf.j2 dest=/etc/httpd/conf.d/welcome-vm.conf
-  notify: restart httpd
+  notify: reload httpd

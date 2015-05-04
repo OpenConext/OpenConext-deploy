@@ -26,12 +26,16 @@
     - common
     - tls
     - httpd
+  handlers:
+      - include: roles/httpd/handlers/main.yml
 
 - hosts: vm
   sudo: true
   roles:
     - hosts
     - welcome
+  handlers:
+      - include: roles/httpd/handlers/main.yml
 
 - hosts: storage
   sudo: true
@@ -51,7 +55,8 @@
     - { role: openconext-common, tags: ['eb','sr']}
     - { role: engineblock, tags: ['eb'] }
     - { role: janus, tags: ['sr'] }
-
+  handlers:
+      - include: roles/httpd/handlers/main.yml
 - hosts: java-apps
   sudo: true
   vars:
@@ -65,7 +70,7 @@
     - { role: teams, tags: ['teams'] }
     - { role: api, tags: ['legacy'] }
     - { role: mujina-sp, tags: ['legacy'] }
-    - { role: authz-server, tags: ['oauth', 'authz'] }
+    - { role: authz-server, tags: ['oauth', 'authz-server'] }
     - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
     - { role: voot, tags: ['oauth', 'voot'] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }

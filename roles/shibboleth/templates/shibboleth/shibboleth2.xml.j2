@@ -86,6 +86,8 @@
         <!-- Map to extract attributes from SAML assertions. -->
         <AttributeExtractor type="XML" validate="true" path="attribute-map.xml"/>
 
+        <AttributeExtractor type="Assertion" AuthenticatingAuthority="Shib-Authenticating-Authority"/>
+
         <!-- Use a SAML query if no attributes are supplied during SSO. -->
         <AttributeResolver type="Query" subjectMatch="true"/>
 
@@ -95,7 +97,7 @@
         <!-- Simple file-based resolver for using a single keypair. -->
         <CredentialResolver type="File" key="sp-key.pem" certificate="sp-cert.pem"/>
 
-        {% for key, value in shibboleth_apps.items() %}
+          {% for key, value in shibboleth_apps.items() %}
         <ApplicationOverride id="{{ key }}" entityID="{{ value.entityID }}">
             <Sessions lifetime="28800"
               timeout="3600"

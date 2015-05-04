@@ -12,6 +12,9 @@
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=teams group=teams mode=0755
 
+- stat: path={{ teams_dir }}/teams-current.war follow=True
+  register: preDeployStat
+
 - include: ../../../tasks/springbootapp/install-release.yml
   when: teams_snapshot_timestamp == '' and teams_local_jar == ''
 
@@ -20,6 +23,9 @@
 
 - include: ../../../tasks/springbootapp/install-local.yml
   when: teams_local_jar != ''
+
+- stat: path={{ teams_dir }}/teams-current.war follow=True
+  register: postDeployStat
 
 - name: Copy logging config
   template: src=logback.xml.j2 dest={{ teams_dir }}/logback.xml owner=teams group=teams mode=0740
@@ -36,7 +42,7 @@
 
 # grouperClient.jar insists that a file called grouper.client.properties is on the classpath, so we'll put it inside the war.
 - include: insert_grouper_client_props.yml
-  when: grouper_client_config_result.changed == True or appSymlink.changed == True
+  when: grouper_client_config_result.changed or preDeployStat.stat.md5 != postDeployStat.stat.md5
   notify: restart teams
 
 - name: copy grouper provision script for teams
@@ -53,7 +59,7 @@
 
 - name: copy apache config
   template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
-  notify: restart httpd
+  notify: reload httpd
 
 - name: ensure the service is started
   service: name=teams enabled=yes state=started

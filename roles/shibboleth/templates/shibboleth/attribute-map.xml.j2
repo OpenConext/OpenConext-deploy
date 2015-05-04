@@ -5,10 +5,6 @@
     <Attribute name="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" id="name-id">
       <AttributeDecoder xsi:type="NameIDAttributeDecoder" formatter="$Name" defaultQualifiers="true"/>
     </Attribute>
-    <!-- Fall back to also support deprecated wrong nameid format still in use in SURFconext -->
-    <Attribute name="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified" id="name-id">
-      <AttributeDecoder xsi:type="NameIDAttributeDecoder" formatter="$Name" defaultQualifiers="true"/>
-    </Attribute>
 
     <!-- UID attribute map -->
     <Attribute name="urn:mace:dir:attribute-def:uid" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" id="uid" />

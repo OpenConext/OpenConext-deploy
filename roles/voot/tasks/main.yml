@@ -35,7 +35,7 @@
 
 - name: copy apache config
   template: src=voot.conf.j2 dest=/etc/httpd/conf.d/voot.conf
-  notify: restart httpd
+  notify: reload httpd
 
 - name: ensure the service is started
   service: name=voot enabled=yes state=started

@@ -10,4 +10,4 @@
 
 - name: copy virtual host config
   template: src=mujina-sp.conf.j2 dest=/etc/httpd/conf.d/mujina-sp.conf
-  notify: restart httpd
+  notify: reload httpd

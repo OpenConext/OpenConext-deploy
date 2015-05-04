@@ -60,7 +60,7 @@
 
 - name: enable apache conf
   template: src=grouper.conf.j2 dest=/etc/httpd/conf.d/grouper.conf
-  notify: restart httpd
+  notify: reload httpd
   tags: grouper
 
 - include: provision_grouper.yml source_id="applications"

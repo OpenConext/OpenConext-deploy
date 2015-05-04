@@ -32,7 +32,12 @@
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
 
-    # Enable shibboleth for all other URLs
+    # Enable shibboleth for all other URLs, but the health check
+    <Location ~ "/health">
+      allow from all
+      satisfy any
+    </Location>
+
     <Location />
       ShibRequestSetting applicationId authz-admin
       AuthType shibboleth

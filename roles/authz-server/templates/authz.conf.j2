@@ -33,6 +33,13 @@
       satisfy any
     </Location>
 
+    # Enable shibboleth for all other URLs, but the health check
+    <Location ~ "/health">
+      allow from all
+      satisfy any
+    </Location>
+
+
     # Enable shibboleth for all other URLs
     <Location />
       ShibRequestSetting applicationId authz

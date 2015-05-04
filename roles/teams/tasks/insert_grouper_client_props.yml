@@ -2,7 +2,6 @@
 - stat: path={{ teams_dir }}/teams-current.war
   register: symlink
 
-
 - name: Make sure the 'unzipped' directory is empty
   file: path={{ springapp_dir }}/unzipped state=absent owner="{{ springapp_user }}" group="{{ springapp_user }}"
 

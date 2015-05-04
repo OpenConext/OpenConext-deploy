@@ -31,7 +31,7 @@
 
 - name: copy apache config
   template: src=authz-playground.conf.j2 dest=/etc/httpd/conf.d/authz-playground.conf
-  notify: restart httpd
+  notify: reload httpd
 
 - name: ensure the service is started
   service: name=authz-playground enabled=yes state=started

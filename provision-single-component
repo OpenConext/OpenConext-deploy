@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
-if [ "$#" -ne 4 ]
+if [ "$#" -lt 4 ]
 then
   echo "Usage: ./provision-single-component [ENVIRONMENT] [YOUR_USERNAME_ON_TARGET_HOSTS] [ABSOLUTE_PATH_TO_SECRETS_FILE] [COMPONENT_NAME]"
   exit 1
 fi
 
-COMPONENTS=("authz-admin" "authz-playground" "authz-server" "eb" "shib" "sr" "teams" "voot" "mysql")
+COMPONENTS=("authz-admin" "authz-playground" "authz-server" "eb" "shib" "sr" "teams" "voot" "mysql" "java")
 VALID_COMPONENT=0
 for component in "${COMPONENTS[@]}"
 do

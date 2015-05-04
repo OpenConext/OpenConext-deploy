@@ -1,12 +1,5 @@
 ---
 env: test
-secrets_file: /root/secrets_test.yml
-base_domain: test2.surfconext.nl
-mysql_host: t03.dev.coin.surf.net
-rsyslog_host: t03.dev.coin.surf.net
-ldap_host: t03.dev.coin.surf.net:389
-
-mysql_subdomain: "%.dev.coin.surf.net" # the dns domain from which mysql-clients connect to the mysql server.
 
 databases:
   names:
@@ -18,13 +11,13 @@ databases:
     - grouper
     - authz-server
   users:
-    - { name: teamsrw, host: "{{ mysql_subdomain }}", db_name: teams, password: "{{ mysql_passwords.teams }}" }
-    - { name: apirw, host: "{{ mysql_subdomain }}", db_name: api, password: "{{ mysql_passwords.api }}" }
-    - { name: apisrw, host: "{{ mysql_subdomain }}", db_name: apis, password: "{{ mysql_passwords.apis }}" }
-    - { name: "{{ engine_database_user }}", host: "{{ mysql_subdomain }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
-    - { name: "{{ janus_database_user }}", host: "{{ mysql_subdomain }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
-    - { name: grouperrw, host: "{{ mysql_subdomain }}", db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
-    - { name: authz-serverrw, host: "{{ mysql_subdomain }}", db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
+    - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
+    - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
+    - { name: apisrw, db_name: apis, password: "{{ mysql_passwords.apis }}" }
+    - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
+    - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
+    - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
+    - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
 
 # For apache, the same star-certificate is used.
 tls_https:
@@ -64,7 +57,7 @@ engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
-ldap_grouper_unit_test_user: gadget
+ldap_grouper_user: gadget
 
 janus_database_name: sr
 janus_database_host: "{{ mysql_host }}"
@@ -153,14 +146,13 @@ shib:
 
 # versions of installed apps
 teams_version: 4.0.9
-teams_snapshot_timestamp: 20150415.195445-23
+teams_snapshot_timestamp: 20150420.152536-28
 
 api_version: 4.0.1
-api_snapshot_timestamp: 20150302.230045-395
+api_snapshot_timestamp: 20150419.220130-443
 
 mujina_version: 4.0.2
 #mujina_snapshot_timestamp
-
 
 teams:
   crt_name: "{{ tls_https.crt_name }}"
@@ -253,7 +245,7 @@ authzserver:
   bundle_name: "{{ tls_https.bundle_name }}"
 
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150323.150911-45
+authz_server_snapshot_timestamp: 20150422.112530-56
 
 voot:
   crt_name: "{{ tls_https.crt_name }}"
@@ -265,7 +257,7 @@ voot:
         type: "grouper",
         url: "https://grouper.{{ base_domain }}/grouper-ws/services/GrouperService_v2_0",
         credentials: {
-          username: "gadget",
+          username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
         },
         schacHomeOrganization: "surfnet.nl",
@@ -284,10 +276,10 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1
-voot_snapshot_timestamp: 20150413.072742-42
+voot_snapshot_timestamp: 20150420.135435-44
 
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150416.064350-59
+authz_admin_snapshot_timestamp: 20150424.112235-64
 authz_admin_group: urn:collab:group:surfnet.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -330,12 +322,35 @@ authzadmin:
           - groups
         grantTypes:
           - client_credentials
+      - clientId: csa_client
+        secret: "{{ csa_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
+      - clientId: dashboard
+        secret: "{{ dashboards_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+          - actions
+          - cross-idp-services
+          - stats
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.resource_checking_secret }}"
+    - clientId: csa
+      secret: "{{ csa_resource_checking_secret }}"
 
 authz_playground_version: 1
-authz_playground_snapshot_timestamp: 20150324.132119-18
+authz_playground_snapshot_timestamp: 20150423.100812-25
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
   springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
