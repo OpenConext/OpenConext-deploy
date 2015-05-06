@@ -8,17 +8,17 @@ if [ "$1" != 'vm' ] && [ "$1" != 'test' ] && [ "$1" != 'acc' ]; then
   exit 1
 fi
 
-ANSVER=`ansible --version|head -1|cut -d " " -f 2`
-ANSVER1=`echo $ANSVER | cut -d '.' -f 1`
-ANSVER2=`echo $ANSVER | cut -d '.' -f 2`
-if [ $ANSVER1 -le 1 -a $ANSVER2 -lt 8 ]; then
-	echo "Requires at least Ansible 1.8"
+ANSVER=$(ansible --version|head -1|cut -d " " -f 2)
+ANSVER1=$(echo "$ANSVER" | cut -d '.' -f 1)
+ANSVER2=$(echo "$ANSVER" | cut -d '.' -f 2)
+if [ "$ANSVER1" -le 1 -a "$ANSVER2" -lt 9 ]; then
+	echo "Requires at least Ansible 1.9"
 	exit 1
 fi
 
 if [ "$1" == 'vm' ]; then
   # no need to provide the username when targeting vagrant: it's always the same.
-  ansible-playbook -i "inventory/$1" --private-key `pwd`/.vagrant/machines/openconext-vm/virtualbox/private_key  -u vagrant "$2" "${@:5}" --extra-vars="secrets_file=secrets/vm.yml"
+  ansible-playbook -i "inventory/$1" --private-key "$(pwd)/.vagrant/machines/openconext-vm/virtualbox/private_key"  -u vagrant "$2" "${@:5}" --extra-vars="secrets_file=secrets/vm.yml"
 else
   echo "executing ansible-playbook -i inventory/$1 -u $3 -K $2 ${@:5} --extra-vars=secrets_file=$4"
   ansible-playbook -i "inventory/$1" -u "$3" -K "$2" "${@:5}" --extra-vars="secrets_file=$4"
