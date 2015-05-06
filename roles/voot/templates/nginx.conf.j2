@@ -3,19 +3,19 @@
 #
 
 server {
-    listen       {{ nginx_ipv4_addresses.serviceregistry }}:80;
-    server_name  serviceregistry.{{ base_domain }};
+    listen       {{ nginx_ipv4_addresses.voot }}:80;
+    server_name  voot.{{ base_domain }};
 
-    return       301 https://serviceregistry.{{ base_domain }}$request_uri;
+    return       301 https://voot.{{ base_domain }}$request_uri;
 }
 
 server {
-    listen       {{ nginx_ipv4_addresses.serviceregistry }}:443 ssl spdy;
-    server_name  serviceregistry.{{ base_domain }};
+    listen       {{ nginx_ipv4_addresses.voot }}:443 ssl spdy;
+    server_name  voot.{{ base_domain }};
 
     ssl                  on;
-    ssl_certificate      {{ tls.cert_path }}/{{ janus.crt_name }};
-    ssl_certificate_key  {{ tls.cert_private_path }}/{{ janus.key_name }};
+    ssl_certificate      {{ tls.cert_path }}/{{ voot.crt_name }};
+    ssl_certificate_key  {{ tls.cert_private_path }}/{{ voot.key_name }};
 
     ssl_session_timeout  60m;
 
@@ -28,7 +28,7 @@ server {
     ssl_stapling on;
 
     location / {
-        proxy_pass http://127.0.0.1:{{ loadbalancing.serviceregistry.port }}/;
+        proxy_pass http://127.0.0.1:{{ loadbalancing.voot.port }}/;
         proxy_http_version 1.1;
         proxy_redirect off;
         proxy_set_header Host $http_host;
@@ -42,23 +42,23 @@ server {
 
 server {
     listen       [::]:80;
-    server_name  serviceregistry.{{ base_domain }};
+    server_name  voot.{{ base_domain }};
 
-    return       301 https://serviceregistry.{{ base_domain }}$request_uri;
+    return       301 https://voot.{{ base_domain }}$request_uri;
 }
 
 server {
     listen       [::]:443 ssl spdy;
-    server_name  serviceregistry.{{ base_domain }};
+    server_name  voot.{{ base_domain }};
 
     ssl                  on;
-    ssl_certificate      {{ tls.cert_path }}/{{ janus.crt_name }};
-    ssl_certificate_key  {{ tls.cert_private_path }}/{{ janus.key_name }};
+    ssl_certificate      {{ tls.cert_path }}/{{ voot.crt_name }};
+    ssl_certificate_key  {{ tls.cert_private_path }}/{{ voot.key_name }};
 
 
     ssl_session_timeout  60m;
 
-	ssl_ciphers ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH;
+	  ssl_ciphers ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH;
     ssl_prefer_server_ciphers on;
 
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -67,7 +67,7 @@ server {
     ssl_stapling on;
 
     location / {
-        proxy_pass http://127.0.0.1:{{ loadbalancing.serviceregistry.port }}/;
+        proxy_pass http://127.0.0.1:{{ loadbalancing.voot.port }}/;
         proxy_http_version 1.1;
         proxy_redirect off;
         proxy_set_header Host $http_host;

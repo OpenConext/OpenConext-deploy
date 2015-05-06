@@ -72,8 +72,8 @@
     - java
     - tomcat
     - grouper
-    - { role: mujina-idp, tags: ['legacy'] }
     - { role: shibboleth, tags: ['shib'] }
+    - { role: mujina-idp, tags: ['legacy'] }
     - { role: teams, tags: ['teams'] }
     - { role: mujina-sp, tags: ['legacy'] }
     - { role: authz-server, tags: ['oauth', 'authz-server'] }

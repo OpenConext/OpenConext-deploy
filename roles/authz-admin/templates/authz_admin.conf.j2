@@ -1,13 +1,9 @@
 Listen {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.port }}
 <VirtualHost {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.port }}>
-    # General setup for the virtual host, inherited from global configuration
     ServerName authz-admin.{{ base_domain }}:443
 
     UseCanonicalName On
-    SetEnv HTTPS on
 
-    # Use separate log files for the SSL virtual host; note that LogLevel
-    # is not inherited from httpd.conf.
     ErrorLog logs/authzadmin_ssl_error_log
     TransferLog logs/authzadmin_ssl_access_log
     LogLevel warn

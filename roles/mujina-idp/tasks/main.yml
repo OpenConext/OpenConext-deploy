@@ -14,4 +14,9 @@
   tags: mujina-idp
   notify: reload httpd
 
+- name: copy nginx config
+  template: src=nginx.conf.j2 dest=/etc/nginx/conf.d/mujina-idp.conf
+  tags: mujina-idp
+  notify: reload nginx
+
 - include: provision_grouper.yml source_id="openconext-ldap"

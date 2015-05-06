@@ -65,6 +65,8 @@ janus_database_host: localhost
 janus_database_user: srrw
 janus_database_password: "{{ mysql_passwords.sr }}"
 
+janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
+
 # host for static files (IdP logos)
 static:
   crt_name: "{{ tls_https.crt_name }}"
@@ -76,9 +78,6 @@ welcome:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
-
-
-janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
 
 engine:
   crt_name: "{{ tls_https.crt_name }}"
@@ -94,6 +93,17 @@ janus:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
+
+mujina_sp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
+mujina_idp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
 
 engine_janus_cache_lifetime: 0
 
@@ -243,10 +253,16 @@ apis:
     consumer_key: https://apis.test.surfconext.nl
     consumer_secret: "{{ apis_api_consumer_secret }}"
 
-mujina:
+mujina_idp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
+
+mujina_sp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  bundle_name: "{{ tls_https.bundle_name }}"
+
 
 ##
 # VM config for the Authorization Server
@@ -402,6 +418,13 @@ loadbalancing:
       { label: "static_backend", ip: "127.0.0.1" },
     ]
   }
+  serviceregistry: {
+      port: 404,
+      heartbeat: { url: "/", method: "HEAD" },
+      servers: [
+        { label: "serviceregistry_backend", ip: "127.0.0.1" },
+    ]
+  }
   teams: {
     port: 601,
     heartbeat: { url: "/", method: "HEAD" },
@@ -409,7 +432,7 @@ loadbalancing:
       { label: "teams_backend", ip: "127.0.0.1" },
     ]
   }
-  authz: {
+  authzserver: {
     port: 602,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
@@ -458,6 +481,14 @@ loadbalancing:
         { label: "mujina_idp_backend", ip: "127.0.0.1" },
     ]
   }
+  welcome: {
+      port: 609,
+      heartbeat: { url: "/", method: "HEAD" },
+      servers: [
+        { label: "welcome_idp_backend", ip: "127.0.0.1" },
+    ]
+  }
+
 
   statistics_ip_port: "127.0.0.1:8888"
 
@@ -465,12 +496,14 @@ loadbalancing:
 nginx_ipv4_addresses:
   engine: 192.168.66.78
   profile: 192.168.66.78
+  serviceregistry: 192.168.66.78
   static: 192.168.66.78
   teams: 192.168.66.78
-  authz: 192.168.66.78
+  authzserver: 192.168.66.78
   authz_admin: 192.168.66.78
   authz_playground: 192.168.66.78
   voot: 192.168.66.78
   grouper: 192.168.66.78
   mujina_sp: 192.168.66.78
   mujina_idp: 192.168.66.78
+  welcome: 192.168.66.78

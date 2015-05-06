@@ -107,7 +107,7 @@ frontend teams 127.0.0.1:{{ loadbalancing.teams.port }}
 #---------------------------------------------------------------------
 # AUTHZ frontend
 #---------------------------------------------------------------------
-frontend authz 127.0.0.1:{{ loadbalancing.authz.port }}
+frontend authz 127.0.0.1:{{ loadbalancing.authzserver.port }}
 
     capture cookie JSESSIONID len 52
 
@@ -232,7 +232,7 @@ backend teams_be
 #---------------------------------------------------------------------
 backend authz_be
 
-    option httpchk {{ loadbalancing.authz.heartbeat.method }} {{ loadbalancing.authz.heartbeat.url }} HTTP/1.0
+    option httpchk {{ loadbalancing.authzserver.heartbeat.method }} {{ loadbalancing.authzserver.heartbeat.url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
 
     mode http
@@ -242,8 +242,8 @@ backend authz_be
 
     cookie HTTPSERVERID insert nocache indirect
 
-    {% for server in loadbalancing.authz.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for server in loadbalancing.authzserver.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authzserver.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------

@@ -2,12 +2,12 @@
 apache_app_listen_address:
   engine: 192.168.66.78
   profile: 192.168.66.78
-  authz: 192.168.66.78
-  authz-admin: 192.168.66.78
-  authz-playground: 192.168.66.78
+  authzserver: 192.168.66.78
+  authz_admin: 192.168.66.78
+  authz_playground: 192.168.66.78
   grouper: 192.168.66.78
-  mujina-idp: 192.168.66.78
-  mujina-sp: 192.168.66.78
+  mujina_idp: 192.168.66.78
+  mujina_sp: 192.168.66.78
   serviceregistry: 192.168.66.78
   static: 192.168.66.78
   teams: 192.168.66.78

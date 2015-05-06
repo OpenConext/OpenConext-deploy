@@ -1,14 +1,10 @@
-Listen {{ apache_app_listen_address.authz }}:{{ loadbalancing.authz.port }}
-<VirtualHost {{ apache_app_listen_address.authz }}:{{ loadbalancing.authz.port }}>
-    # General setup for the virtual host, inherited from global configuration
+Listen {{ apache_app_listen_address.authzserver }}:{{ loadbalancing.authzserver.port }}
+<VirtualHost {{ apache_app_listen_address.authzserver }}:{{ loadbalancing.authzserver.port }}>
     ServerName authz.{{ base_domain }}:443
 
-    # Use separate log files for the SSL virtual host; note that LogLevel
-    # is not inherited from httpd.conf.
     ErrorLog logs/authz_ssl_error_log
     TransferLog logs/authz_ssl_access_log
     LogLevel warn
-
 
     ProxyPass /Shibboleth.sso !
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0

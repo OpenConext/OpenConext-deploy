@@ -3,7 +3,6 @@
   yum: name={{ item }} state=present
   with_items:
      - httpd
-     - mod_ssl
   tags: httpd
 
 - name: Copy default config files
@@ -11,12 +10,12 @@
   tags: httpd
   with_items:
     - 01_default.conf
-  notify: restart httpd
+  notify: reload httpd
 
 - name: Copy the config file
   template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
   tags: httpd
-  notify: restart httpd
+  notify: reload httpd
 
 - name: Remove default conf files apache
   file: path=/etc/httpd/conf.d/{{ item }} state=absent
@@ -35,5 +34,3 @@
   service: name={{ item }} enabled=yes
   with_items:
        - httpd
-  notify:
-    - restart httpd

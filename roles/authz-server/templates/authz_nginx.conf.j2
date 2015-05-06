@@ -1,18 +1,18 @@
 
 server {
-    listen       {{ nginx_ipv4_addresses.authz }}:80;
+    listen       {{ nginx_ipv4_addresses.authzserver }}:80;
     server_name  authz.{{ base_domain }};
 
     return       301 https://authz.{{ base_domain }}$request_uri;
 }
 
 server {
-  listen       {{ nginx_ipv4_addresses.authz }}:443 ssl spdy;
+  listen       {{ nginx_ipv4_addresses.authzserver }}:443 ssl spdy;
   server_name  authz.{{ base_domain }};
 
   ssl                  on;
-  ssl_certificate      {{ tls.cert_path }}/{{ authz.crt_name }};
-  ssl_certificate_key  {{ tls.cert_private_path }}/{{ authz.key_name }};
+  ssl_certificate      {{ tls.cert_path }}/{{ authzserver.crt_name }};
+  ssl_certificate_key  {{ tls.cert_private_path }}/{{ authzserver.key_name }};
 
   ssl_session_timeout  60m;
 
@@ -25,7 +25,7 @@ server {
   ssl_stapling on;
 
   location / {
-      proxy_pass http://127.0.0.1:{{ loadbalancing.authz.port }}/;
+      proxy_pass http://127.0.0.1:{{ loadbalancing.authzserver.port }}/;
       proxy_http_version 1.1;
       proxy_redirect off;
       proxy_set_header Host $http_host;
@@ -48,8 +48,8 @@ server {
     server_name  authz.{{ base_domain }};
 
     ssl                  on;
-    ssl_certificate      {{ tls.cert_path }}/{{ authz.crt_name }};
-    ssl_certificate_key  {{ tls.cert_private_path }}/{{ authz.key_name }};
+    ssl_certificate      {{ tls.cert_path }}/{{ authzserver.crt_name }};
+    ssl_certificate_key  {{ tls.cert_private_path }}/{{ authzserver.key_name }};
 
     ssl_session_timeout  60m;
 
@@ -62,7 +62,7 @@ server {
     ssl_stapling on;
 
     location / {
-        proxy_pass http://127.0.0.1:{{ loadbalancing.authz.port }}/;
+        proxy_pass http://127.0.0.1:{{ loadbalancing.authzserver.port }}/;
         proxy_http_version 1.1;
         proxy_redirect off;
         proxy_set_header Host $http_host;
