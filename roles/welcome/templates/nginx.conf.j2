@@ -4,8 +4,8 @@
 
 server {
     listen       {{ nginx_ipv4_addresses.welcome }}:80;
-    server_name  welcome.{{ base_domain }};
-    return       301 https://welcome.{{ base_domain }}$request_uri;
+    server_name  {{ base_domain }};
+    return       301 https://{{ base_domain }}$request_uri;
 }
 
 server {
@@ -41,14 +41,14 @@ server {
 
 server {
     listen       [::]:80;
-    server_name  welcome.{{ base_domain }};
+    server_name  {{ base_domain }};
 
-    return       301 https://welcome.{{ base_domain }}$request_uri;
+    return       301 https://{{ base_domain }}$request_uri;
 }
 
 server {
     listen       [::]:443 ssl spdy;
-    server_name  welcome.{{ base_domain }};
+    server_name  {{ base_domain }};
 
     ssl                  on;
     ssl_certificate      {{ tls.cert_path }}/{{ welcome.crt_name }};

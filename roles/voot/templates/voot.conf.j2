@@ -1,4 +1,5 @@
-<VirtualHost *:443>
+Listen {{ apache_app_listen_address.voot }}:{{ loadbalancing.voot.port }}
+<Virtualhost {{ apache_app_listen_address.voot }}:{{ loadbalancing.voot.port }}>
     # General setup for the virtual host, inherited from global configuration
     ServerName voot.{{ base_domain }}:443
 
