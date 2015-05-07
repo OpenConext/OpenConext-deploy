@@ -16,7 +16,7 @@ do
   fi
 done
 if [ $VALID_COMPONENT == 0 ]; then
-  echo "The component $4 is not a valid component, chose one of: ${COMPONENTS[*]}";
+  echo "The component $4 is not a valid component, choose one of: ${COMPONENTS[*]}";
   exit 1
 fi
 # echo "./ansible-env $1 provision-$1.yml $2 $3 --tags $4 ${@:5}"
