@@ -26,3 +26,7 @@
   with_items:
     - apc.ini
     - openconext.ini
+
+- name: Enable php in apache
+  copy: src=httpd.php.conf dest=/etc/httpd/conf.d/php.conf
+  notify: reload httpd
