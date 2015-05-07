@@ -18,3 +18,7 @@
   notify:
     - restart nginx
 
+- name: start
+  service: name=nginx state=started
+
+
