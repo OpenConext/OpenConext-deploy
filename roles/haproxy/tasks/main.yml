@@ -2,6 +2,9 @@
 - name: Install
   yum: name=haproxy.x86_64 state=present
 
+- name: Install socat
+  yum: name=socat state=present
+
 - name: enable service
   service: name=haproxy enabled=yes
   notify:
