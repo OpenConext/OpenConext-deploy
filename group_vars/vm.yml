@@ -277,7 +277,7 @@ authzserver:
   bundle_name: "{{ tls_https.bundle_name }}"
 
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150422.112530-56
+authz_server_snapshot_timestamp: 20150429.085158-60
 authz_server_debug: true
 
 ##
@@ -399,7 +399,7 @@ authzplayground:
 loadbalancing:
   engine: {
     port: 401,
-    heartbeat: { url: "/", method: "HEAD" },
+    heartbeat: { url: "/", method: "GET" },
     servers: [
       { label: "engine_backend", ip: "127.0.0.1" },
     ]
@@ -427,7 +427,7 @@ loadbalancing:
   }
   teams: {
     port: 601,
-    heartbeat: { url: "/", method: "HEAD" },
+    heartbeat: { url: "/health", method: "GET" },
     servers: [
       { label: "teams_backend", ip: "127.0.0.1" },
     ]
@@ -483,14 +483,12 @@ loadbalancing:
   }
   welcome: {
       port: 609,
-      heartbeat: { url: "/", method: "HEAD" },
+      heartbeat: { url: "/", method: "GET" },
       servers: [
-        { label: "welcome_idp_backend", ip: "127.0.0.1" },
+        { label: "welcome_backend", ip: "127.0.0.1" },
     ]
   }
 
-
-  statistics_ip_port: "127.0.0.1:8888"
 
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
