@@ -304,7 +304,43 @@ backend voot_be
     {% endfor %}
 
 # Statistics
-listen statistics {{ loadbalancing.statistics_ip_port }}
-     stats enable
-     stats uri /stats
+listen stats 0.0.0.0:9000       #Listen on all IP's on port 9000
+    mode http
+    balance
+    timeout client 5000
+    timeout connect 4000
+    timeout server 30000
 
+    #This is the virtual URL to access the stats page
+    stats uri /stats
+
+
+{% if env == 'vm' %}
+#---------------------------------------------------------------------
+# WELCOME frontend
+#---------------------------------------------------------------------
+frontend welcome 127.0.0.1:{{ loadbalancing.welcome.port }}
+
+    acl url_all         path_beg        -i /
+    use_backend         static_be       if url_all
+    default_backend     static_be
+
+#---------------------------------------------------------------------
+# static.acc.surfconext.nl
+#---------------------------------------------------------------------
+backend welcome_be
+
+    # Healthcheck ombouwen naar controle op valide antwoord
+    option httpchk {{ loadbalancing.welcome.heartbeat.method }} {{ loadbalancing.welcome.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.welcome.servers %}
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.welcome.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+{% endif %}
