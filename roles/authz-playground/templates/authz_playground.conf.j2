@@ -1,5 +1,5 @@
-Listen {{ apache_app_listen_address.authz_playground }}:{{ loadbalancing.authz_playground.port }}
-<VirtualHost {{ apache_app_listen_address.authz_playground }}:{{ loadbalancing.authz_playground.port }}>
+Listen {{ apache_app_listen_address.authz_playground }}:10{{ loadbalancing.authz_playground.port }}
+<VirtualHost {{ apache_app_listen_address.authz_playground }}:10{{ loadbalancing.authz_playground.port }}>
     ServerName authz-playground.{{ base_domain }}:443
 
     ErrorLog logs/authzplayground_ssl_error_log

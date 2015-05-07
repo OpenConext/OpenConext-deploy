@@ -1,5 +1,5 @@
-Listen {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}
-<Virtualhost {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}>
+Listen {{ apache_app_listen_address.static }}:10{{ loadbalancing.static.port }}
+<Virtualhost {{ apache_app_listen_address.static }}:10{{ loadbalancing.static.port }}>
     ServerName static.{{ base_domain }}:443
 
     DocumentRoot /var/www/static

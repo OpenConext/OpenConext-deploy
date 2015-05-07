@@ -1,5 +1,5 @@
-Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
-<Virtualhost {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}>
+Listen {{ apache_app_listen_address.teams }}:10{{ loadbalancing.teams.port }}
+<Virtualhost {{ apache_app_listen_address.teams }}:10{{ loadbalancing.teams.port }}>
     # General setup for the virtual host, inherited from global configuration
     ServerName teams.{{ base_domain }}:443
 

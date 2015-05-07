@@ -1,5 +1,5 @@
-Listen {{ apache_app_listen_address.authzserver }}:{{ loadbalancing.authzserver.port }}
-<VirtualHost {{ apache_app_listen_address.authzserver }}:{{ loadbalancing.authzserver.port }}>
+Listen {{ apache_app_listen_address.authzserver }}:10{{ loadbalancing.authzserver.port }}
+<VirtualHost {{ apache_app_listen_address.authzserver }}:10{{ loadbalancing.authzserver.port }}>
     ServerName authz.{{ base_domain }}:443
 
     ErrorLog logs/authz_ssl_error_log

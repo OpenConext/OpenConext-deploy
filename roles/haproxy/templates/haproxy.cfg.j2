@@ -166,7 +166,7 @@ backend engine_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.engine.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.engine.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.engine.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 #---------------------------------------------------------------------
 # profile.acc.surfconext.nl
@@ -185,7 +185,7 @@ backend profile_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.profile.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.profile.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.profile.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 
@@ -206,7 +206,7 @@ backend static_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.static.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.static.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.static.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 #---------------------------------------------------------------------
 # teams.acc.surfconext.nl
@@ -224,7 +224,7 @@ backend teams_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.teams.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.teams.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.teams.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -243,7 +243,7 @@ backend authz_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.authzserver.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authzserver.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.authzserver.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -262,7 +262,7 @@ backend authz_admin_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.authz_admin.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_admin.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.authz_admin.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -281,7 +281,7 @@ backend authz_playground_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.authz_playground.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_playground.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.authz_playground.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -300,7 +300,7 @@ backend voot_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.voot.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.voot.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.voot.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 # Statistics
