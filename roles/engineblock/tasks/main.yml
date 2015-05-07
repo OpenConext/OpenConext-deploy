@@ -15,14 +15,6 @@
   notify:
     - restart httpd
 
-- name: nginx config
-  template: src={{ item }}.j2 dest=/etc/nginx/conf.d/{{ item }}
-  with_items:
-    - engine_nginx.conf
-    - profile_nginx.conf
-  notify:
-    - reload nginx
-
 - name: copy over the engineblock keys
   copy: content="{{ engineblock_private_key }}" dest={{ item.value.privateFile }}
   with_dict: engine_keys
@@ -35,6 +27,8 @@
   template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
   with_items:
     - engineblock.ini
+  notify:
+    - restart httpd
 
 - name: Run EngineBlock migrations
   command: ./bin/migrate

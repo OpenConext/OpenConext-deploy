@@ -58,11 +58,6 @@
     chdir: /opt/www/grouper-shell
   tags: grouper
 
-- name: copy nginx conf
-  template: src=grouper_nginx.conf.j2 dest=/etc/nginx/conf.d/grouper.conf
-  notify: reload nginx
-  tags: grouper
-
 - name: copy apache conf
   template: src=grouper.conf.j2 dest=/etc/httpd/conf.d/grouper.conf
   notify: reload httpd

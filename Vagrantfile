@@ -7,8 +7,14 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--memory", "2048"]
   end
 
-  config.vm.define "openconext-vm" do |openconext_vm|
-    openconext_vm.vm.network :private_network, ip: "192.168.66.78"
+  config.vm.define "lb" do |lb|
+    lb.vm.network :private_network, ip: "192.168.66.78"
+    lb.vm.hostname = "lb.vm.openconext.org"
+  end
+
+  config.vm.define "apps" do |apps|
+    apps.vm.network :private_network, ip: "192.168.66.79"
+    apps.vm.hostname = "apps.vm.openconext.org"
   end
 
 end

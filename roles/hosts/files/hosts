@@ -1,9 +1,9 @@
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 192.168.66.78 static.vm.openconext.org
-192.168.66.78 db.vm.openconext.org
-192.168.66.78 serviceregistry.vm.openconext.org
-192.168.66.78 ldap.vm.openconext.org
+192.168.66.79 db.vm.openconext.org
+192.168.66.79 serviceregistry.vm.openconext.org
+192.168.66.79 ldap.vm.openconext.org
 192.168.66.78 engine.vm.openconext.org
 192.168.66.78 profile.vm.openconext.org
 192.168.66.78 mujina-sp.vm.openconext.org
@@ -13,3 +13,6 @@
 192.168.66.78 authz-admin.vm.openconext.org
 192.168.66.78 voot.vm.openconext.org
 192.168.66.78 authz-playground.vm.openconext.org
+
+192.168.66.78 lb.vm.openconext.org
+192.168.66.79 apps.vm.openconext.org

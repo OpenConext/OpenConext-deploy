@@ -1,7 +1,7 @@
 Listen {{ apache_app_listen_address.mujina_idp }}:10{{ loadbalancing.mujina_idp.port }}
 <Virtualhost {{ apache_app_listen_address.mujina_idp }}:10{{ loadbalancing.mujina_idp.port }}>
     ServerName mujina-idp.{{ base_domain }}:443
-
+    SetEnv HTTPS on
     ErrorLog logs/mujina-idp_ssl_error_log
     TransferLog logs/mujina-idp_ssl_access_log
     LogLevel warn

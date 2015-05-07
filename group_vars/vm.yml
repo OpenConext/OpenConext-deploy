@@ -401,91 +401,91 @@ loadbalancing:
     port: 401,
     heartbeat: { url: "/", method: "GET" },
     servers: [
-      { label: "engine_backend", ip: "127.0.0.1" },
+      { label: "engine_backend", ip: "192.168.66.79" },
     ]
   }
   profile: {
     port: 402,
     heartbeat: { url: "/media/surfconext.png", method: "HEAD" },
     servers: [
-      { label: "profile_backend", ip: "127.0.0.1" }
+      { label: "profile_backend", ip: "192.168.66.79" }
     ]
   }
   static: {
     port: 403,
     heartbeat: { url: "/media/alive.txt", method: "HEAD" },
     servers: [
-      { label: "static_backend", ip: "127.0.0.1" },
+      { label: "static_backend", ip: "192.168.66.79" },
     ]
   }
   serviceregistry: {
       port: 404,
       heartbeat: { url: "/", method: "HEAD" },
       servers: [
-        { label: "serviceregistry_backend", ip: "127.0.0.1" },
+        { label: "serviceregistry_backend", ip: "192.168.66.79" },
     ]
   }
   teams: {
     port: 601,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "teams_backend", ip: "127.0.0.1" },
+      { label: "teams_backend", ip: "192.168.66.79" },
     ]
   }
   authzserver: {
     port: 602,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_backend", ip: "127.0.0.1" },
+      { label: "authz_backend", ip: "192.168.66.79" },
     ]
   }
   authz_admin: {
     port: 603,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_admin_backend", ip: "127.0.0.1" }
+      { label: "authz_admin_backend", ip: "192.168.66.79" }
     ]
   }
   authz_playground: {
     port: 604,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_playground_backend", ip: "127.0.0.1" },
+      { label: "authz_playground_backend", ip: "192.168.66.79" },
     ]
   }
   voot: {
     port: 605,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "voot_backend", ip: "127.0.0.1" },
+      { label: "voot_backend", ip: "192.168.66.79" },
     ]
   }
   grouper: {
     port: 606,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
-      { label: "grouper_backend", ip: "127.0.0.1" },
+      { label: "grouper_backend", ip: "192.168.66.79" },
     ]
   }
   mujina_sp: {
     port: 607,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
-      { label: "mujina_sp_backend", ip: "127.0.0.1" },
+      { label: "mujina_sp_backend", ip: "192.168.66.79" },
     ]
   }
   mujina_idp: {
       port: 608,
       heartbeat: { url: "/", method: "HEAD" },
       servers: [
-        { label: "mujina_idp_backend", ip: "127.0.0.1" },
+        { label: "mujina_idp_backend", ip: "192.168.66.79" },
     ]
   }
   welcome: {
       port: 609,
       heartbeat: { url: "/", method: "GET" },
       servers: [
-        { label: "welcome_backend", ip: "127.0.0.1" },
+        { label: "welcome_backend", ip: "192.168.66.79" },
     ]
   }
 
@@ -505,3 +505,17 @@ nginx_ipv4_addresses:
   mujina_sp: 192.168.66.78
   mujina_idp: 192.168.66.78
   welcome: 192.168.66.78
+
+nginx_config_templates:
+  - welcome
+  - mujina_sp
+  - mujina_idp
+  - engine
+  - teams
+  - grouper
+  - voot
+  - authz
+  - authz_admin
+  - authz_playground
+  - static
+  - profile

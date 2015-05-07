@@ -81,7 +81,6 @@ frontend profile 127.0.0.1:{{ loadbalancing.profile.port }}
     acl url_all         path_beg        -i /
     use_backend         profile_be       if url_all
     default_backend     profile_be
-
 #---------------------------------------------------------------------
 # STATIC frontend
 #---------------------------------------------------------------------
@@ -150,7 +149,7 @@ frontend voot 127.0.0.1:{{ loadbalancing.voot.port }}
 
 
 #---------------------------------------------------------------------
-# engine.acc.surfconext.nl
+# engine backend
 #---------------------------------------------------------------------
 backend engine_be
 
@@ -168,8 +167,9 @@ backend engine_be
     {% for server in loadbalancing.engine.servers %}
     server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.engine.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
+
 #---------------------------------------------------------------------
-# profile.acc.surfconext.nl
+# profile backend
 #---------------------------------------------------------------------
 backend profile_be
 
@@ -188,9 +188,8 @@ backend profile_be
     server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.profile.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
-
 #---------------------------------------------------------------------
-# static.acc.surfconext.nl
+# static backend
 #---------------------------------------------------------------------
 backend static_be
 
@@ -208,8 +207,9 @@ backend static_be
     {% for server in loadbalancing.static.servers %}
     server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.static.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
+
 #---------------------------------------------------------------------
-# teams.acc.surfconext.nl
+# teams backend
 #---------------------------------------------------------------------
 backend teams_be
 
@@ -228,8 +228,9 @@ backend teams_be
     {% endfor %}
 
 #---------------------------------------------------------------------
-# authz.acc.surfconext.nl
+# authz backend
 #---------------------------------------------------------------------
+
 backend authz_be
 
     option httpchk {{ loadbalancing.authzserver.heartbeat.method }} {{ loadbalancing.authzserver.heartbeat.url }} HTTP/1.0
@@ -247,8 +248,9 @@ backend authz_be
     {% endfor %}
 
 #---------------------------------------------------------------------
-# authz-admin.acc.surfconext.nl
+# authz-admin backend
 #---------------------------------------------------------------------
+
 backend authz_admin_be
 
     option httpchk {{ loadbalancing.authz_admin.heartbeat.method }} {{ loadbalancing.authz_admin.heartbeat.url }} HTTP/1.0
@@ -266,7 +268,7 @@ backend authz_admin_be
     {% endfor %}
 
 #---------------------------------------------------------------------
-# authz-playground.acc.surfconext.nl
+# authz-playground backend
 #---------------------------------------------------------------------
 backend authz_playground_be
 
@@ -285,7 +287,7 @@ backend authz_playground_be
     {% endfor %}
 
 #---------------------------------------------------------------------
-# voot.acc.surfconext.nl
+# voot backend
 #---------------------------------------------------------------------
 backend voot_be
 
@@ -317,16 +319,71 @@ listen stats 0.0.0.0:9000       #Listen on all IP's on port 9000
 
 {% if env == 'vm' %}
 #---------------------------------------------------------------------
+# mujina idp frontend
+#---------------------------------------------------------------------
+frontend mujina_idp 127.0.0.1:{{ loadbalancing.mujina_idp.port }}
+
+    acl url_all         path_beg        -i /
+    use_backend         mujina_idp_be       if url_all
+    default_backend     mujina_idp_be
+
+#---------------------------------------------------------------------
+# mujina idp backend
+#---------------------------------------------------------------------
+backend mujina_idp_be
+
+    # Healthcheck ombouwen naar controle op valide antwoord
+    option httpchk {{ loadbalancing.mujina_idp.heartbeat.method }} {{ loadbalancing.mujina_idp.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    option httpclose
+    cookie JSESSIONID preserve indirect
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.mujina_idp.servers %}
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.mujina_idp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+
+#---------------------------------------------------------------------
+# mujina sp frontend
+#---------------------------------------------------------------------
+frontend mujina_sp 127.0.0.1:{{ loadbalancing.mujina_sp.port }}
+
+    acl url_all         path_beg        -i /
+    use_backend         mujina_sp_be       if url_all
+    default_backend     mujina_sp_be
+
+#---------------------------------------------------------------------
+# mujina idp backend
+#---------------------------------------------------------------------
+backend mujina_sp_be
+
+    option httpchk {{ loadbalancing.mujina_sp.heartbeat.method }} {{ loadbalancing.mujina_sp.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    option httpclose
+    cookie JSESSIONID preserve indirect
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.mujina_sp.servers %}
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.mujina_sp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+
+#---------------------------------------------------------------------
 # WELCOME frontend
 #---------------------------------------------------------------------
 frontend welcome 127.0.0.1:{{ loadbalancing.welcome.port }}
 
     acl url_all         path_beg        -i /
-    use_backend         static_be       if url_all
-    default_backend     static_be
+    use_backend         welcome_be       if url_all
+    default_backend     welcome_be
 
 #---------------------------------------------------------------------
-# static.acc.surfconext.nl
+# WELCOME backend
 #---------------------------------------------------------------------
 backend welcome_be
 

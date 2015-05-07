@@ -3,6 +3,7 @@
   yum: name={{ item }} state=present
   with_items:
      - httpd
+     - mod_ssl
   tags: httpd
 
 - name: Copy default config files
