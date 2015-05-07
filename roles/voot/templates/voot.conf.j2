@@ -1,7 +1,7 @@
 Listen {{ apache_app_listen_address.voot }}:10{{ loadbalancing.voot.port }}
 <Virtualhost {{ apache_app_listen_address.voot }}:10{{ loadbalancing.voot.port }}>
     # General setup for the virtual host, inherited from global configuration
-    ServerName voot.{{ base_domain }}:443
+    ServerName https://voot.{{ base_domain }}
 
     # Use separate log files for the SSL virtual host; note that LogLevel
     # is not inherited from httpd.conf.

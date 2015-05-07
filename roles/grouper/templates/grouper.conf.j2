@@ -1,6 +1,6 @@
 Listen {{ apache_app_listen_address.grouper }}:10{{ loadbalancing.grouper.port }}
 <VirtualHost {{ apache_app_listen_address.grouper }}:10{{ loadbalancing.grouper.port }}>
-    ServerName grouper.{{ base_domain }}:443
+    ServerName https://grouper.{{ base_domain }}
 
     # Use separate log files for the SSL virtual host; note that LogLevel
     # is not inherited from httpd.conf.

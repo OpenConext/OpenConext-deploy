@@ -1,6 +1,6 @@
 Listen {{ apache_app_listen_address.authzserver }}:10{{ loadbalancing.authzserver.port }}
 <VirtualHost {{ apache_app_listen_address.authzserver }}:10{{ loadbalancing.authzserver.port }}>
-    ServerName authz.{{ base_domain }}:443
+    ServerName https://authz.{{ base_domain }}
 
     ErrorLog logs/authz_ssl_error_log
     TransferLog logs/authz_ssl_access_log

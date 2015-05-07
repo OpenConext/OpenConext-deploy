@@ -1,6 +1,6 @@
 Listen {{ apache_app_listen_address.authz_admin }}:10{{ loadbalancing.authz_admin.port }}
 <VirtualHost {{ apache_app_listen_address.authz_admin }}:10{{ loadbalancing.authz_admin.port }}>
-    ServerName authz-admin.{{ base_domain }}:443
+    ServerName https://authz-admin.{{ base_domain }}
 
     UseCanonicalName On
 

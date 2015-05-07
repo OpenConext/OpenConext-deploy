@@ -1,7 +1,7 @@
 Listen {{ apache_app_listen_address.teams }}:10{{ loadbalancing.teams.port }}
 <Virtualhost {{ apache_app_listen_address.teams }}:10{{ loadbalancing.teams.port }}>
     # General setup for the virtual host, inherited from global configuration
-    ServerName teams.{{ base_domain }}:443
+    ServerName https://teams.{{ base_domain }}
 
     # Use separate log files for the SSL virtual host; note that LogLevel
     # is not inherited from httpd.conf.
