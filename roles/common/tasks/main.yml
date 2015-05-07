@@ -12,6 +12,8 @@
   yum: name={{ item }} state=present
   with_items:
      - telnet
+     - lynx
      - openldap-clients
      - mysql.x86_64
      - MySQL-python
+
