@@ -406,7 +406,7 @@ loadbalancing:
   }
   profile: {
     port: 402,
-    heartbeat: { url: "/", method: "HEAD" },
+    heartbeat: { url: "/media/surfconext.png", method: "HEAD" },
     servers: [
       { label: "profile_backend", ip: "127.0.0.1" }
     ]
