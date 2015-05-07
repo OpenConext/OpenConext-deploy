@@ -32,7 +32,7 @@
         impact on the security of the SP. Stealing cookies/sessions is much easier with this disabled.
         -->
         <Sessions
-            lifetime="28800" timeout="3600" checkAddress="true" relayState="ss:mem" handlerSSL="true"
+            lifetime="28800" timeout="3600" checkAddress="true" relayState="ss:mem" handlerSSL="false"
             consistentAddress="true" cookieProps="; path=/; HttpOnly; secure">
 
             <!--
@@ -103,7 +103,7 @@
               timeout="3600"
               checkAddress="true"
               handlerURL="{{ value.baseurl }}/Shibboleth.sso"
-              handlerSSL="true"
+              handlerSSL="false"
               relayState="ss:mem"
               exportACL="127.0.0.1"
               idpHistory="false"
