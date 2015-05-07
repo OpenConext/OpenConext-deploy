@@ -10,7 +10,7 @@ server {
 
 server {
     listen       {{ nginx_ipv4_addresses.welcome }}:443 ssl spdy;
-    server_name  welcome.{{ base_domain }};
+    server_name  {{ base_domain }};
 
     ssl                  on;
     ssl_certificate      {{ tls.cert_path }}/{{ welcome.crt_name }};
