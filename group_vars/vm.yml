@@ -413,7 +413,7 @@ loadbalancing:
   }
   static: {
     port: 403,
-    heartbeat: { url: "/notice.txt", method: "HEAD" },
+    heartbeat: { url: "/media/alive.txt", method: "HEAD" },
     servers: [
       { label: "static_backend", ip: "127.0.0.1" },
     ]
