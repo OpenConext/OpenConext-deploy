@@ -8,6 +8,8 @@
   unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
   when: engine_branch == '' and eb_download.changed
 
+USE http://stackoverflow.com/questions/23014713/run-a-build-task-only-when-changes-have-been-pulled-from-a-git-repository
+
 - name: Remove engine-block current release
   git: repo=https://github.com/OpenConext/OpenConext-engineblock.git dest="{{ openconext_releases_dir }}" version={{ engine_branch }}
   when: engine_branch != ''
