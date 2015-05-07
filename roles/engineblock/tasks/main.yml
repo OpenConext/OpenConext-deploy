@@ -1,11 +1,20 @@
 ---
 - name: Download current version
   get_url: url="{{ engine_download_url }}" dest="{{ engine_build_path }}"
+  when: engine_branch == ''
   register: eb_download
 
 - name: Unpack current version
   unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
-  when: eb_download.changed
+  when: engine_branch == '' and eb_download.changed
+
+- name: Remove engine-block current release
+  git: repo=https://github.com/OpenConext/OpenConext-engineblock.git dest="{{ openconext_releases_dir }}" version={{ engine_branch }}
+  when: engine_branch != ''
+
+- name: Checkout engine-block branch
+  git: repo=https://github.com/OpenConext/OpenConext-engineblock.git dest="{{ openconext_releases_dir }}" version={{ engine_branch }}
+  when: engine_branch != ''
 
 - name: Install Apache vhost
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
