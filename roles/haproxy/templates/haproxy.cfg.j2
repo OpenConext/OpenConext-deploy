@@ -93,6 +93,18 @@ frontend static 127.0.0.1:{{ loadbalancing.static.port }}
     default_backend     static_be
 
 #---------------------------------------------------------------------
+# GROUPER frontend
+#---------------------------------------------------------------------
+frontend grouper 127.0.0.1:{{ loadbalancing.grouper.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         grouper_be        if url_all
+    default_backend     grouper_be
+
+
+#---------------------------------------------------------------------
 # TEAMS frontend
 #---------------------------------------------------------------------
 frontend teams 127.0.0.1:{{ loadbalancing.teams.port }}
@@ -207,6 +219,27 @@ backend static_be
     {% for server in loadbalancing.static.servers %}
     server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.static.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
+
+#---------------------------------------------------------------------
+# grouper backend
+#---------------------------------------------------------------------
+backend grouper_be
+
+    # Healthcheck ombouwen naar controle op valide antwoord
+    option httpchk {{ loadbalancing.grouper.heartbeat.method }} {{ loadbalancing.grouper.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.grouper.servers %}
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.grouper.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+
 
 #---------------------------------------------------------------------
 # teams backend

@@ -462,7 +462,7 @@ loadbalancing:
   }
   grouper: {
     port: 606,
-    heartbeat: { url: "/", method: "HEAD" },
+    heartbeat: { url: "/grouper/", method: "HEAD" },
     servers: [
       { label: "grouper_backend", ip: "192.168.66.79" },
     ]
