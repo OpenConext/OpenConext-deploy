@@ -1,0 +1,16 @@
+---
+- name: Download current version
+  get_url: url="{{ engine_download_url }}" dest="{{ engine_build_path }}"
+  register: eb_download
+
+- name: Unpack current version
+  unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
+  when: eb_download.changed
+
+- name: Activate new EngineBlock release
+  file: src={{ engine_release_dir }} dest={{ engine_current_release_symlink }} state=link
+  notify:
+    - restart httpd
+  when: eb_download.changed
+
+

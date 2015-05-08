@@ -1,9 +1,12 @@
 #---
 ## Version of EngineBlock that is installable by this role
 engine_version: 4.3.7
+## Branch of EngineBlock that will be updated by this role - this takes precendence over the version
+engine_branch: voot-migration
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"
+engine_branch_dir: "{{ openconext_builds_dir }}/OpenConext-engineblock-{{ engine_branch | replace('/', '-') }}"
 engine_release_dir: "{{ openconext_releases_dir }}/OpenConext-engineblock-{{ engine_version_dir }}"
 engine_build_path: "{{ openconext_builds_dir }}/OpenConext-engineblock-{{ engine_version_dir }}.tar.gz"
 engine_download_url: "https://github.com/OpenConext/OpenConext-engineblock/releases/download/{{ engine_version }}/OpenConext-engineblock-{{ engine_version_dir }}.tar.gz"

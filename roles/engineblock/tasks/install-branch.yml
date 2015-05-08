@@ -1,0 +1,21 @@
+---
+- name: Checkout engine-block branch
+  git: repo=https://github.com/OpenConext/OpenConext-engineblock.git dest="{{ engine_branch_dir }}" version={{ engine_branch }} force=yes
+  when: engine_branch != ''
+  register: eb_gitclone
+
+- name: Make release
+  command: "./bin/makeRelease.sh {{ engine_branch }}"
+  args:
+    chdir: "{{ engine_branch_dir }}"
+  when: eb_gitclone.changed
+
+- name: Unpack current version
+  unarchive: src="~/Releases/OpenConext-engineblock-{{ engine_branch }}.tar.gz" dest="{{ openconext_releases_dir }}" copy=no
+  when: eb_gitclone.changed
+
+- name: Activate new EngineBlock branch
+  file: src="{{ openconext_releases_dir }}/OpenConext-engineblock-{{ engine_branch }}" dest={{ engine_current_release_symlink }} state=link
+  notify:
+    - restart httpd
+  when: eb_gitclone.changed

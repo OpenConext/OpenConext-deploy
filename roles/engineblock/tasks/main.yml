@@ -1,11 +1,9 @@
 ---
-- name: Download current version
-  get_url: url="{{ engine_download_url }}" dest="{{ engine_build_path }}"
-  register: eb_download
+- include: install-release.yml
+  when: engine_branch == ''
 
-- name: Unpack current version
-  unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
-  when: eb_download.changed
+- include: install-branch.yml
+  when: engine_branch != ''
 
 - name: Install Apache vhost
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
@@ -37,16 +35,15 @@
   register: migrate_output
   changed_when: "'no update needed' not in migrate_output.stderr"
 
-- name: Activate new EngineBlock
-  file: src={{ engine_release_dir }} dest={{ engine_current_release_symlink }} state=link
-  notify:
-    - restart httpd
+- stat: path={{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addDeprovisionWarningSentAttributes.ldif
+  register: addDeprovisionWarningSentAttributes
 
 - name: import entries
   shell: ldapmodify -x -D cn=admin,cn=config -h {{ ldap_host }} -w {{ ldap_password }} -f {{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addDeprovisionWarningSentAttributes.ldif
   register: add_deprevision_output
   changed_when: "add_deprevision_output.rc != 20"
   failed_when: "add_deprevision_output.rc not in [20,0]"
+  when: addDeprovisionWarningSentAttributes.stat.exists == True
   tags: ldap
 
 
