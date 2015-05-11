@@ -1,28 +1,47 @@
 ---
 - hosts: all
+  gather_facts: no
   tasks:
   - name: Read vars from secrets file
     include_vars: "{{ secrets_file }}"
     tags:
       - always
 
-- hosts: php-apps:java-apps
+- hosts: loadbalancer:php-apps:java-apps:storage
+  gather_facts: no
   sudo: true
   roles:
     - common
     - tls
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
+
+- hosts: loadbalancer
+  gather_facts: no
+  sudo: true
+  roles:
+    - { role: haproxy, tags: ['lb'] }
+    - { role: nginx, tags: ['lb'] }
+
+- hosts: php-apps:java-apps
+  gather_facts: no
+  sudo: true
+  roles:
     - httpd
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
 
 - hosts: storage
+  gather_facts: no
   sudo: true
   roles:
     - { role: mysql, tags: [mysql] }
     - ldap
 
 - hosts: php-apps
+  gather_facts: no
   sudo: yes
   gather_facts: no
   vars:
@@ -38,6 +57,7 @@
     - include: roles/nginx/handlers/main.yml
 
 - hosts: java-apps
+  gather_facts: no
   sudo: true
   vars:
     env_lang: java

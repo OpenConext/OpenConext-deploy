@@ -1,0 +1,10 @@
+---
+apache_app_listen_address:
+  authzserver: 145.100.191.117
+  authz_admin: 145.100.191.117
+  authz_playground: 145.100.191.117
+  grouper: 145.100.191.117
+  mujina_idp: 145.100.191.117
+  mujina_sp: 145.100.191.117
+  teams: 145.100.191.117
+  voot: 145.100.191.117

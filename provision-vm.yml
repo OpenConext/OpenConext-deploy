@@ -14,17 +14,18 @@
   roles:
     - generate_certs
 
-- hosts: loadbalancer:php-apps:java-apps
+- hosts: loadbalancer:php-apps:java-apps:storage
   gather_facts: no
   sudo: true
   roles:
-    - { role: tls, tags: ['lb'] }
+    - tls
+    - hosts
+    - common
 
 - hosts: loadbalancer
   gather_facts: no
   sudo: true
   roles:
-    - common
     - { role: haproxy, tags: ['lb'] }
     - { role: nginx, tags: ['lb'] }
 
@@ -32,8 +33,6 @@
   gather_facts: no
   sudo: true
   roles:
-    - hosts
-    - common
     - httpd
   handlers:
     - include: roles/httpd/handlers/main.yml

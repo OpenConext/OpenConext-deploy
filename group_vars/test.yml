@@ -362,3 +362,103 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   bundle_name: "{{ tls_https.bundle_name }}"
+
+loadbalancing:
+  engine: {
+    port: 401,
+    heartbeat: { url: "/", method: "GET" },
+    servers: [
+      { label: "engine_backend", ip: "145.100.191.116" },
+    ]
+  }
+  profile: {
+    port: 402,
+    heartbeat: { url: "/media/surfconext.png", method: "HEAD" },
+    servers: [
+      { label: "profile_backend", ip: "145.100.191.116" }
+    ]
+  }
+  static: {
+    port: 403,
+    heartbeat: { url: "/media/alive.txt", method: "HEAD" },
+    servers: [
+      { label: "static_backend", ip: "145.100.191.116" },
+    ]
+  }
+  serviceregistry: {
+      port: 404,
+      heartbeat: { url: "/", method: "HEAD" },
+      servers: [
+        { label: "serviceregistry_backend", ip: "145.100.191.116" },
+    ]
+  }
+  teams: {
+    port: 601,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "teams_backend", ip: "145.100.191.117" },
+    ]
+  }
+  authzserver: {
+    port: 602,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "authz_backend", ip: "145.100.191.117" },
+    ]
+  }
+  authz_admin: {
+    port: 603,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "authz_admin_backend", ip: "145.100.191.117" }
+    ]
+  }
+  authz_playground: {
+    port: 604,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "authz_playground_backend", ip: "145.100.191.117" },
+    ]
+  }
+  voot: {
+    port: 605,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "voot_backend", ip: "145.100.191.117" },
+    ]
+  }
+  grouper: {
+    port: 606,
+    heartbeat: { url: "/grouper/", method: "HEAD" },
+    servers: [
+      { label: "grouper_backend", ip: "145.100.191.117" },
+    ]
+  }
+
+# values below seem silly but on acc+prod these differ.
+nginx_ipv4_addresses:
+  engine: 145.100.191.127
+  profile: 145.100.191.127
+  serviceregistry: 145.100.191.127
+  static: 145.100.191.127
+  teams: 145.100.191.127
+  authzserver: 145.100.191.127
+  authz_admin: 145.100.191.127
+  authz_playground: 145.100.191.127
+  voot: 145.100.191.127
+  grouper: 145.100.191.127
+  mujina_sp: 145.100.191.127
+  mujina_idp: 145.100.191.127
+  welcome: 145.100.191.127
+
+nginx_config_templates:
+  - engine
+  - teams
+  - grouper
+  - voot
+  - authz
+  - authz_admin
+  - authz_playground
+  - static
+  - profile
+  - serviceregistry
