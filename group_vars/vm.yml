@@ -175,7 +175,7 @@ teams:
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 teams_version: 4.0.9
-teams_snapshot_timestamp: 20150420.152536-28
+#teams_snapshot_timestamp: 20150420.152536-28
 teams_debug: true
 
 engineblock:
@@ -276,7 +276,7 @@ authzserver:
   bundle_name: "{{ tls_https.bundle_name }}"
 
 authz_server_version: 1
-authz_server_snapshot_timestamp: 20150429.085158-60
+#authz_server_snapshot_timestamp: 20150429.085158-60
 authz_server_debug: true
 
 ##
@@ -300,14 +300,14 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1
-voot_snapshot_timestamp: 20150420.135435-44
+#voot_snapshot_timestamp: ""
 voot_debug: true
 
 ##
 # VM config for the authz-admin application
 ##
 authz_admin_version: 1
-authz_admin_snapshot_timestamp: 20150422.113215-61
+#authz_admin_snapshot_timestamp: 20150422.113215-61
 authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
 authz_admin_debug: true
 authzadmin:
@@ -381,7 +381,7 @@ authzadmin:
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1
-authz_playground_snapshot_timestamp: 20150423.100812-25
+#authz_playground_snapshot_timestamp: 20150423.100812-25
 authz_playground_debug: true
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
