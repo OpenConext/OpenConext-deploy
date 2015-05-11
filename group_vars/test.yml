@@ -437,19 +437,19 @@ loadbalancing:
 
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
-  engine: 145.100.191.127
-  profile: 145.100.191.127
-  serviceregistry: 145.100.191.127
-  static: 145.100.191.127
-  teams: 145.100.191.127
-  authzserver: 145.100.191.127
-  authz_admin: 145.100.191.127
-  authz_playground: 145.100.191.127
-  voot: 145.100.191.127
-  grouper: 145.100.191.127
-  mujina_sp: 145.100.191.127
-  mujina_idp: 145.100.191.127
-  welcome: 145.100.191.127
+  engine: 145.100.191.122
+  profile: 145.100.191.122
+  serviceregistry: 145.100.191.122
+  static: 145.100.191.122
+  teams: 145.100.191.122
+  authzserver: 145.100.191.122
+  authz_admin: 145.100.191.122
+  authz_playground: 145.100.191.122
+  voot: 145.100.191.122
+  grouper: 145.100.191.122
+  mujina_sp: 145.100.191.122
+  mujina_idp: 145.100.191.122
+  welcome: 145.100.191.122
 
 nginx_config_templates:
   - engine
