@@ -28,7 +28,7 @@ janus_cache_path: "/var/cache/janus-ssp"
 #
 ## Some information about the managing person for this installation
 #
-janus_ssp_base_url_path: simplesaml/
+janus_ssp_base_url_path: "https://{{ janus_domain }}/simplesaml/"
 janus_ssp_cert_dir: /etc/openconext/serviceregistry-certs/
 janus_ssp_data_dir: data/
 #

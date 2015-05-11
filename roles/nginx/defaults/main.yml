@@ -1,0 +1,14 @@
+nginx_config_templates:
+  - welcome
+  - mujina_sp
+  - mujina_idp
+  - engine
+  - teams
+  - grouper
+  - voot
+  - authz
+  - authz_admin
+  - authz_playground
+  - static
+  - profile
+  - serviceregistry

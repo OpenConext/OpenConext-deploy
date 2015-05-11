@@ -33,6 +33,7 @@
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: migrate_output
+  changed_when: "'no update needed' not in migrate_output.stderr"
 
 - stat: path={{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addDeprovisionWarningSentAttributes.ldif
   register: addDeprovisionWarningSentAttributes
@@ -45,11 +46,9 @@
   when: addDeprovisionWarningSentAttributes.stat.exists == True
   tags: ldap
 
-
 - name: import entries
   shell: ldapmodify -x -D cn=admin,cn=config -h {{ ldap_host }} -w {{ ldap_password }} -f {{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addCollabPersonUUID.ldif
   register: add_collab_output
   changed_when: "add_collab_output.rc != 20"
-  failed_when: "add_collab_output.rc not in [20,0]"
   tags: ldap
-
+  ignore_errors: yes

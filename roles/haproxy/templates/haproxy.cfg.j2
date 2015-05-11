@@ -81,6 +81,18 @@ frontend profile 127.0.0.1:{{ loadbalancing.profile.port }}
     acl url_all         path_beg        -i /
     use_backend         profile_be       if url_all
     default_backend     profile_be
+
+#---------------------------------------------------------------------
+# SERVICE REGISTRY frontend
+#---------------------------------------------------------------------
+frontend serviceregistry 127.0.0.1:{{ loadbalancing.serviceregistry.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         serviceregistry_be       if url_all
+    default_backend     serviceregistry_be
+
 #---------------------------------------------------------------------
 # STATIC frontend
 #---------------------------------------------------------------------
@@ -199,6 +211,26 @@ backend profile_be
     {% for server in loadbalancing.profile.servers %}
     server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.profile.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
+
+#---------------------------------------------------------------------
+# serviceregistry backend
+#---------------------------------------------------------------------
+backend serviceregistry_be
+
+    option httpchk {{ loadbalancing.serviceregistry.heartbeat.method }} {{ loadbalancing.serviceregistry.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.serviceregistry.servers %}
+    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.serviceregistry.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+
 
 #---------------------------------------------------------------------
 # static backend
