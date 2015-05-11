@@ -31,9 +31,8 @@
 - name: Run EngineBlock migrations
   command: ./bin/migrate
   args:
-    chdir: "{{ engine_release_dir }}"
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: migrate_output
-  changed_when: "'no update needed' not in migrate_output.stderr"
 
 - stat: path={{ openconext_releases_dir }}/OpenConext-engineblock/ldap/changes/addDeprovisionWarningSentAttributes.ldif
   register: addDeprovisionWarningSentAttributes

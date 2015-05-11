@@ -133,7 +133,6 @@ engine_block:
       }
 
 tomcat_apps:
-  - api
   - grouper
   - mujina-sp
   - mujina-idp
