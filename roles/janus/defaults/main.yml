@@ -1,5 +1,5 @@
 ---
-janus_installation_version: 5.1.1
+janus_installation_version: 5.1.2
 janus_installation_version_dir: "{{ janus_installation_version | replace('/', '-') }}"
 janus_installation_dir: "{{ openconext_releases_dir }}/OpenConext-serviceregistry-{{ janus_installation_version_dir }}"
 janus_installation_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-serviceregistry"

@@ -36,8 +36,8 @@ engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
 # when using multiple certificates list them all (and their bundles) under tls.certificates
 tls:
-  cert_path: /etc/httpd/keys/
-  cert_private_path: /etc/httpd/keys/
+  cert_path: /etc/nginx/keys/
+  cert_private_path: /etc/nginx/keys/
   certificates:
     - "{{ tls_https.crt_name }}"
   private_keys:
@@ -408,19 +408,16 @@ loadbalancing:
 
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
-  engine: 145.100.191.130
-  profile: 145.100.191.130
-  serviceregistry: 145.100.191.130
-  static: 145.100.191.130
-  teams: 145.100.191.130
-  authzserver: 145.100.191.130
-  authz_admin: 145.100.191.130
-  authz_playground: 145.100.191.130
-  voot: 145.100.191.130
-  grouper: 145.100.191.130
-  mujina_sp: 145.100.191.130
-  mujina_idp: 145.100.191.130
-  welcome: 145.100.191.130
+  engine: 145.100.191.139
+  profile: 145.100.191.146
+  serviceregistry: 145.100.191.141
+  static: 145.100.191.148
+  teams: 145.100.191.142
+  authzserver: 145.100.191.149
+  authz_admin: 145.100.191.150
+  authz_playground: 145.100.191.151
+  voot: 145.100.191.145
+  grouper: 145.100.191.144
 
 nginx_config_templates:
   - engine
