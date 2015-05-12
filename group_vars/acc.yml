@@ -231,7 +231,7 @@ authzserver:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-authz_server_version: 1
+authz_server_version: 1.1
 #authz_server_snapshot_timestamp: 20150422.112530-56
 
 voot:
