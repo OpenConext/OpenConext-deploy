@@ -9,7 +9,7 @@
 - name: Copy empty default.conf
   copy: src=default.conf dest=/etc/nginx/conf.d
 
-- name: Copy mandatory nginx config-files
+- name: Copy nginx config-files
   template: src={{ item }}.j2 dest=/etc/nginx/conf.d/{{ item }}.conf
   with_items: nginx_config_templates
 
