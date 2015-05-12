@@ -16,7 +16,7 @@
           data-search-placeholder="Search in applications">
           <li class="connected" data-id="1">
           <h2>
-            <a href="https://profile.{{ base_domain }}/">
+            <a href="https://profile.{{ base_domain }}/" target="_blank" >
               Profile
             </a>
           </h2>
@@ -32,7 +32,7 @@
         </li>
         <li class="connected" data-id="1">
           <h2>
-            <a href="https://teams.{{ base_domain }}/">
+            <a href="https://teams.{{ base_domain }}/" target="_blank" >
               Teams
             </a>
           </h2>
@@ -46,56 +46,6 @@
             </a>
           </div>
         </li>
-        <li class="connected" data-id="1">
-          <h2>
-            <a href="https://mujina-sp.{{ base_domain }}/user.jsp">
-              Mujina SP
-            </a>
-          </h2>
-          <img src="images/mujina-logo.jpg" alt="" />
-          <p class="desc">
-            Mujina Service Provider
-          </p>
-          <div class="app-meta-cta">
-            <a href="https://mujina-sp.{{ base_domain }}/user.jsp" target="_blank" rel="tooltip" title="Go to app">
-              <i class="icon-external-link"></i>
-            </a>
-          </div>
-        </li>
-
-        <li class="connected" data-id="1">
-          <h2>
-            <a href="https://mujina-idp.{{ base_domain }}/user.jsp">
-              Mujina IdP
-            </a>
-          </h2>
-          <img src="images/mujina-logo.jpg" alt="" />
-          <p class="desc">
-            Mujina Identity Provider
-          </p>
-          <div class="app-meta-cta">
-            <a href="https://mujina-idp.{{ base_domain }}/user.jsp" target="_blank" rel="tooltip" title="Go to app">
-              <i class="icon-external-link"></i>
-            </a>
-          </div>
-        </li>
-        
-        <li class="connected" data-id="1">
-          <h2>
-            <a href="https://dashboard.{{ base_domain }}/">
-              OpenConext Dashboard
-            </a>
-          </h2>
-          <img src="images/dashboard-logo.png" alt="" />
-          <p class="desc">
-              Overview of connected and available service providers
-          </p>
-          <div class="app-meta-cta">
-            <a href="https://dashboard.{{ base_domain }}/" target="_blank" rel="tooltip" title="Go to app">
-              <i class="icon-external-link"></i>
-            </a>
-          </div>
-        </li>
       </ul>
       
       <h2>OpenConext Administration</h2>
@@ -103,25 +53,7 @@
           data-search-placeholder="Search in applications">
         <li class="connected" data-id="1">
           <h2>
-            <a href="https://manage.{{ base_domain }}/">
-              Manage
-            </a>
-          </h2>
-          <img src="images/manage-logo.png" alt="" />
-          <p class="desc">
-              Statistics and management of external group providers and virtual identity providers
-          </p>
-          <div class="app-meta-cta">
-            <a href="https://manage.{{ base_domain }}/" target="_blank" rel="tooltip" title="Go to app">
-              <i class="icon-external-link"></i>
-            </a>
-          </div>
-        </li>
-
-        
-        <li class="connected" data-id="1">
-          <h2>
-            <a href="https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/index.php">
+            <a href="https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/index.php" target="_blank" >
               Service Registry
             </a>
           </h2>
@@ -138,35 +70,16 @@
 
         <li class="connected" data-id="1">
           <h2>
-            <a href="https://grouper.{{ base_domain }}/grouper">
-              Grouper
+            <a href="https://authz-admin.{{ base_domain }}" target="_blank" >
+              Authorization server Admin
             </a>
           </h2>
-          <img src="images/grouper-logo.jpg" alt="" />
-          <p class="desc">
-            Backend for teams
-          </p>
-          <div class="app-meta-cta">
-            <a href="https://grouper.{{ base_domain }}/grouper" target="_blank" rel="tooltip" title="Go to app">
-              <i class="icon-external-link"></i>
-            </a>
-          </div>
-        </li>
-        
-        
-
-        <li class="connected" data-id="1">
-          <h2>
-            <a href="https://apis.{{ base_domain }}/client/client.html">
-              APIS
-            </a>
-          </h2>
-          <img src="images/apis-logo.png" alt="" />
+          <img src="images/oauth-2-sm.png" alt="" />
           <p class="desc">
             Authorization server
           </p>
           <div class="app-meta-cta">
-            <a href="https://apis.{{ base_domain }}/client/client.html" target="_blank" rel="tooltip" title="Go to app">
+            <a href="https://authz-admin.{{ base_domain }}" target="_blank" rel="tooltip" title="Go to app">
               <i class="icon-external-link"></i>
             </a>
           </div>
@@ -174,7 +87,7 @@
 
         <li class="connected" data-id="1">
           <h2>
-            <a href="https://engine.{{ base_domain }}">
+            <a href="https://engine.{{ base_domain }}" target="_blank" >
               OpenConext EngineBlock
             </a>
           </h2>
@@ -196,29 +109,47 @@
           data-search-placeholder="Search in applications">
         <li class="connected" data-id="1">
           <h2>
-            <a href="https://welcome.{{ base_domain }}/testing/index.html">
-              Integration Testing
+            <a href="https://mujina-sp.{{ base_domain }}/user.jsp" target="_blank" >
+              Mujina SP
             </a>
           </h2>
-          <img src="images/selenium-logo.png" alt="" />
+          <img src="images/mujina-logo.jpg" alt="" />
           <p class="desc">
-            Integration Testing
+            Mujina Service Provider
           </p>
           <div class="app-meta-cta">
-            <a href="https://welcome.{{ base_domain }}/testing/" target="_blank" rel="tooltip" title="Go to app">
+            <a href="https://mujina-sp.{{ base_domain }}/user.jsp" target="_blank" rel="tooltip" title="Go to app">
               <i class="icon-external-link"></i>
             </a>
           </div>
         </li>
+
         <li class="connected" data-id="1">
           <h2>
-            <a href="https://api.{{ base_domain }}/v1/test">
-              API playground
+            <a href="https://mujina-idp.{{ base_domain }}/user.jsp" target="_blank" >
+              Mujina IdP
+            </a>
+          </h2>
+          <img src="images/mujina-logo.jpg" alt="" />
+          <p class="desc">
+            Mujina Identity Provider
+          </p>
+          <div class="app-meta-cta">
+            <a href="https://mujina-idp.{{ base_domain }}/user.jsp" target="_blank" rel="tooltip" title="Go to app">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+        </li>
+
+        <li class="connected" data-id="1">
+          <h2>
+            <a href="https://authz-playground.{{ base_domain }}" target="_blank" >
+              OAuth2 playground
             </a>
           </h2>
           <img src="images/api-logo.png" alt="" />
           <p class="desc">
-            Person/group API
+            Test the VOOT group API
           </p>
           <div class="app-meta-cta">
             <a href="https://api.{{ base_domain }}/v1/test" target="_blank" rel="tooltip" title="Go to app">

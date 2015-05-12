@@ -42,7 +42,7 @@
   gather_facts: no
   sudo: true
   roles:
-    - welcome
+    - { role: welcome, tags: ['welcome']}
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

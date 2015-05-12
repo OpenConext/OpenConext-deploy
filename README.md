@@ -6,8 +6,6 @@ Ansible-driven provisioning of the OpenConext platform.
 These steps for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
 While it is possible to deploy OpenConext using other environments, currently it is unsupported.
 
-To encrypt and decrypt values use the scripts in `./scripts/encrypt.sh` and `./scripts/encrypt-file.sh`. Run them without arguments to see the help.
-
 ## Install Vagrant and VirtualBox
 
 VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product, downloads and user manual can be found on the [VirtualBox website](https://www.virtualbox.org/wiki/Downloads).
@@ -39,8 +37,7 @@ To install for development with Homebrew:
 
 ## Run playbooks
 
-For the VM environment the certificates are generated on the fly.
-The VM will install everything on a single box for demo purposes.
+The VM will install everything on a two boxes for demo purposes.
 
 To provision the VM please run:
 
@@ -53,18 +50,19 @@ When the script is done, wait a little while to let all services come up and ini
 These are the steps the above script performs:
 
 1. Setup a Vagrant VM and will make sure the HOSTS file is able to handle the defined base_domain
-2. Setup a MySQL server and LDAP for storage. In real environments it is advisable to install these on a separate box.
+2. Setup a MySQL server and LDAP for storage.
 3. Inserts entities and metadata in Janus and initial load of engineblock to bootstrap.
 4. Install all Java apps for the openconext platform.
 5. Install all PHP apps for the openconext platform.
-6. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
+6. Install Haproxy and Nginx for loadbalacing and SSL termination
+7. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
 
 ## Add hostname entries to your own /etc/hosts file
 
 We need pseudo-DNS entries so that your browser can reach the VM-platform we just installed. So, add this very long line to your `/etc/hosts` file:
 
 ```
-192.168.66.78  serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org apis.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org
+192.168.66.78  vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org apis.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org
 ```
 
 Here, the ip-address `192.168.66.78` refers to the address that is mentioned in ./Vagrantfile.
@@ -80,6 +78,8 @@ To update single applications - e.g. release - use:
 ```
 ./provision-single-component ${vm|test|acc|prod} ${remote-user} ${absolute location of secrets file} ${component}
 ```
+
+The secrets used by Ansible are externalized. For the VM the secrets are in this github repp, for test in an internal SURF repo on the build server and for acc and prod the secrets are managed by Prolocation.
 
 # License
 
