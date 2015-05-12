@@ -23,7 +23,6 @@ databases:
 tls_https:
   key_name: star.{{ base_domain }}.key
   crt_name: star.{{ base_domain }}.pem
-  bundle_name: star.{{ base_domain }}_ca_bundle.pem
 
 apache_server_admin: unix@prolocation.net
 
@@ -41,7 +40,6 @@ tls:
   cert_private_path: /etc/pki/tls/private
   certificates:
     - "{{ tls_https.crt_name }}"
-    - "{{ tls_https.bundle_name }}"
   private_keys:
     - "{{ tls_https.key_name }}"
 
@@ -69,13 +67,11 @@ janus_database_password: "{{ mysql_passwords.sr }}"
 static:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 # the welcome page on: vm.{{ base_domain }}
 welcome:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 
 janus_teams_oauth_key: https://teams.test.surfconext.nl/teams/teams.xml
@@ -83,17 +79,14 @@ janus_teams_oauth_key: https://teams.test.surfconext.nl/teams/teams.xml
 engine:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 profile:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 janus:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 engine_janus_cache_lifetime: 0
 
@@ -157,7 +150,6 @@ mujina_version: 4.0.2
 teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   db_name: "teams"
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
@@ -172,7 +164,6 @@ engineblock:
 api:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   janus:
     user: "{{ engine_janus_user }}"
     secret: "{{ engine_janus_secret }}"
@@ -208,7 +199,6 @@ grouper:
   db_password: "{{ mysql_passwords.grouper }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
@@ -217,7 +207,6 @@ ldap_grouper_engine_user: engine
 apis:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   user: apisrw
   url: "jdbc:mysql://{{ mysql_host }}/apis"
   password: "{{ mysql_passwords.apis }}"
@@ -233,7 +222,6 @@ apis:
 mujina:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 authzserver:
   db_user: authz-serverrw
@@ -242,7 +230,6 @@ authzserver:
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 authz_server_version: 1
 #authz_server_snapshot_timestamp: ""
@@ -250,7 +237,6 @@ authz_server_version: 1
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   resource_checking_secret: "{{ voot_resource_checking_secret }}"
   externalGroupProviders:
     - {
@@ -284,7 +270,6 @@ authz_admin_group: urn:collab:group:surfnet.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   defaultClients:
       - clientId: "{{ authzplayground.springapp_client_id}}"
         secret: "{{ authzplayground.springapp_client_secret }}"
@@ -361,7 +346,6 @@ authzplayground:
   springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 loadbalancing:
   engine: {
