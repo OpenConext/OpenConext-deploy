@@ -69,7 +69,14 @@ Here, the ip-address `192.168.66.78` refers to the address that is mentioned in 
 
 ## Enjoy your new VM!
 
-Go to [https://vm.openconext.org](https://vm.openconext.org).
+Go to [https://vm.openconext.org](https://vm.openconext.org). To ssh to the machines use the following:
+
+```
+vagrant ssh lb
+vagrant ssh apps
+```
+
+The lb vm contains haproxy and nginx. The apps vm contains all the applications, apache, database and ldap.
 
 # Releases to vm, test, acc, prod
 
