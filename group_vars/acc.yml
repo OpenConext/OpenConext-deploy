@@ -330,13 +330,15 @@ loadbalancing:
     heartbeat: { url: "/", method: "GET" },
     servers: [
       { label: "engine_backend", ip: "145.100.191.133" },
+      { label: "engine_backend", ip: "145.100.191.134" },
     ]
   }
   profile: {
     port: 402,
     heartbeat: { url: "/media/surfconext.png", method: "HEAD" },
     servers: [
-      { label: "profile_backend", ip: "145.100.191.133" }
+      { label: "profile_backend", ip: "145.100.191.133" },
+      { label: "profile_backend", ip: "145.100.191.134" },
     ]
   }
   static: {
@@ -344,6 +346,7 @@ loadbalancing:
     heartbeat: { url: "/media/alive.txt", method: "HEAD" },
     servers: [
       { label: "static_backend", ip: "145.100.191.133" },
+      { label: "static_backend", ip: "145.100.191.134" },
     ]
   }
   serviceregistry: {
@@ -351,6 +354,7 @@ loadbalancing:
       heartbeat: { url: "/", method: "HEAD" },
       servers: [
         { label: "serviceregistry_backend", ip: "145.100.191.133" },
+        { label: "serviceregistry_backend", ip: "145.100.191.134" },
     ]
   }
   teams: {
@@ -358,6 +362,7 @@ loadbalancing:
     heartbeat: { url: "/health", method: "GET" },
     servers: [
       { label: "teams_backend", ip: "145.100.191.135" },
+      { label: "teams_backend", ip: "145.100.191.136" },
     ]
   }
   authzserver: {
@@ -365,13 +370,15 @@ loadbalancing:
     heartbeat: { url: "/health", method: "GET" },
     servers: [
       { label: "authz_backend", ip: "145.100.191.135" },
+      { label: "authz_backend", ip: "145.100.191.136" },
     ]
   }
   authz_admin: {
     port: 603,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_admin_backend", ip: "145.100.191.135" }
+      { label: "authz_admin_backend", ip: "145.100.191.135" },
+      { label: "authz_admin_backend", ip: "145.100.191.136" },
     ]
   }
   authz_playground: {
@@ -379,6 +386,7 @@ loadbalancing:
     heartbeat: { url: "/health", method: "GET" },
     servers: [
       { label: "authz_playground_backend", ip: "145.100.191.135" },
+      { label: "authz_playground_backend", ip: "145.100.191.136" },
     ]
   }
   voot: {
@@ -386,6 +394,7 @@ loadbalancing:
     heartbeat: { url: "/health", method: "GET" },
     servers: [
       { label: "voot_backend", ip: "145.100.191.135" },
+      { label: "voot_backend", ip: "145.100.191.136" },
     ]
   }
   grouper: {
@@ -393,6 +402,7 @@ loadbalancing:
     heartbeat: { url: "/grouper/", method: "HEAD" },
     servers: [
       { label: "grouper_backend", ip: "145.100.191.135" },
+      { label: "grouper_backend", ip: "145.100.191.136" },
     ]
   }
 
