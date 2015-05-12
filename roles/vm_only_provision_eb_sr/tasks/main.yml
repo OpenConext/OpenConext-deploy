@@ -23,3 +23,4 @@
   with_items:
     - { db_user: "{{ engine_database_user }}", db_password: "{{ engine_database_password }}", db_name: "{{ engine_database_name }}", sql: engineblock.sql }
     - { db_user: "{{ janus_database_user }}", db_password: "{{ janus_database_password }}", db_name: "{{ janus_database_name }}", sql: serviceregistry.sql }
+    - { db_user: "{{ engine_database_user }}", db_password: "{{ engine_database_password }}", db_name: "{{ engine_database_name }}", sql: virtual_organization.sql }
