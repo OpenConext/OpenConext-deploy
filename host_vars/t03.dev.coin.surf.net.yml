@@ -2,7 +2,6 @@
 apache_app_listen_address:
   engine: 145.100.191.116
   profile: 145.100.191.116
-  authzserver: 145.100.191.116
   mujina_idp: 145.100.191.116
   mujina_sp: 145.100.191.116
   serviceregistry: 145.100.191.116
