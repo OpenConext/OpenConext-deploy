@@ -13,9 +13,6 @@ t03.dev.coin.surf.net
 [loadbalancer]
 t05.dev.coin.surf.net
 
-[loadbalancer-vm:children]
-loadbalancer
-
 [test:children]
 storage
 java-apps
