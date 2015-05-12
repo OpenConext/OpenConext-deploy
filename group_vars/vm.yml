@@ -41,7 +41,6 @@ tls:
   cert_private_path: /etc/pki/tls/private
   certificates:
     - "{{ tls_https.crt_name }}"
-    - "{{ tls_https.bundle_name }}"
   private_keys:
     - "{{ tls_https.key_name }}"
 
@@ -71,38 +70,31 @@ janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
 static:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 # the welcome page on: vm.{{ base_domain }}
 welcome:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 engine:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 profile:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 janus:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 mujina_sp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 mujina_idp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 
 engine_janus_cache_lifetime: 0
@@ -166,7 +158,6 @@ mujina_version: 4.0.2
 teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   db_name: "teams"
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
@@ -227,7 +218,6 @@ grouper:
   db_password: "{{ mysql_passwords.grouper }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
@@ -239,7 +229,6 @@ ldap_grouper_engine_user: engine
 apis:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   user: apisrw
   url: jdbc:mysql://{{ mysql_host }}:3306/apis
   password: "{{ mysql_passwords.apis }}"
@@ -255,13 +244,10 @@ apis:
 mujina_idp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 mujina_sp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
-
 
 ##
 # VM config for the Authorization Server
@@ -273,7 +259,6 @@ authzserver:
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 authz_server_version: 1
 #authz_server_snapshot_timestamp: 20150429.085158-60
@@ -285,7 +270,6 @@ authz_server_debug: true
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   resource_checking_secret: "{{ voot_resource_checking_secret }}"
   externalGroupProviders:
     - {
@@ -313,7 +297,6 @@ authz_admin_debug: true
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   defaultClients:
       - clientId: "{{ authzplayground.springapp_client_id}}"
         secret: "{{ authzplayground.springapp_client_secret }}"
@@ -393,7 +376,6 @@ authzplayground:
   springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
 
 loadbalancing:
   engine: {

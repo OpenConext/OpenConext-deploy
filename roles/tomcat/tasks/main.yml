@@ -54,34 +54,8 @@
   file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
   tags: tomcat
 
-- name: check if there are any keys to revoke
-  command: keytool -list -alias "{{ item }}" -keystore /etc/pki/java/cacerts -storepass {{ keystore_password }}
-  with_items: keytool.revoked_certificates
-  when: keytool.revoked_certificates is defined
-  register: certificates
-  tags: tomcat
-
-- name: delete revoked certificates
-  command: keytool -delete -alias "{{ item }}" -keystore /etc/pki/java/cacerts -storepass {{ keystore_password }}
-  when: certificates is defined and item.rc == 0
-  with_items: certificates.results
-  notify: restart tomcat
-  tags: tomcat
-
-- name: check if the certificate already exists in the keystore
-  command: keytool -list -alias "{{ item.alias }}" -keystore /etc/pki/java/cacerts -storepass {{ keystore_password }}
-  register: check_certificate_exists
-  ignore_errors: yes
-  changed_when: False
-  with_items: keytool.current_certificates
-  tags: tomcat
-
-- name: populate java keystore so that our machine-clients can talk to REST services provided by openconext
-  command: keytool -import -noprompt -alias "{{ item.item.alias }}" -file {{ item.item.file }} -trustcacerts -keystore /etc/pki/java/cacerts -storepass {{ keystore_password }}
-  when: item.rc != 0
-  with_items: check_certificate_exists["results"]
-  notify: restart tomcat
-  tags: tomcat
+- include: java_keystore.yml
+  when: env == 'vm'
 
 - name: Make sure Tomcat starts when the system is booted.
   service: name=tomcat6 enabled=yes

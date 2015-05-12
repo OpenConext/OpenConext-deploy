@@ -5,9 +5,6 @@
 - name: copy static site files
   copy: src=site/ dest=/var/www/welcome # src ends with / so *only* the content of that folder is copied.
 
-- name: create symlink to OpenConext CA
-  file: src={{ tls.cert_path }}/{{ welcome.bundle_name }} dest=/var/www/welcome/openconext_ca.crt state=link force=yes
-
 - name: copy template site files
   template: src=site/index.html dest=/var/www/welcome/index.html
 
