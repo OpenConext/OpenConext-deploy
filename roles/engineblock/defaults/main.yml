@@ -2,7 +2,7 @@
 ## Version of EngineBlock that is installable by this role
 engine_version: 4.3.8
 ## Branch of EngineBlock that will be updated by this role - this takes precendence over the version
-#engine_branch: voot-migration
+engine_branch: voot-migration
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"

@@ -28,7 +28,6 @@ server {
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_session_cache shared:SSL:10m;
     ssl_ecdh_curve secp384r1;
-    ssl_stapling on;
 
     location / {
         proxy_pass http://127.0.0.1:{{ loadbalancing.profile.port }}/;
@@ -67,7 +66,6 @@ server {
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_session_cache shared:SSL:10m;
     ssl_ecdh_curve secp384r1;
-    ssl_stapling on;
 
     location / {
         proxy_pass http://127.0.0.1:{{ loadbalancing.profile.port }}/;
