@@ -22,7 +22,7 @@ databases:
 # For apache, the same star-certificate is used.
 tls_https:
   key_name: star.{{ base_domain }}.key
-  crt_name: star.{{ base_domain }}.pem
+  crt_name: star.{{ base_domain }}.crt
 
 apache_server_admin: unix@prolocation.net
 
@@ -329,80 +329,80 @@ loadbalancing:
     port: 401,
     heartbeat: { url: "/", method: "GET" },
     servers: [
-      { label: "engine_backend", ip: "145.100.191.133" },
-      { label: "engine_backend", ip: "145.100.191.134" },
+      { label: "acc41", ip: "145.100.191.133" },
+      { label: "acc42", ip: "145.100.191.134" },
     ]
   }
   profile: {
     port: 402,
     heartbeat: { url: "/media/surfconext.png", method: "HEAD" },
     servers: [
-      { label: "profile_backend", ip: "145.100.191.133" },
-      { label: "profile_backend", ip: "145.100.191.134" },
+      { label: "acc41", ip: "145.100.191.133" },
+      { label: "acc42", ip: "145.100.191.134" },
     ]
   }
   static: {
     port: 403,
     heartbeat: { url: "/media/alive.txt", method: "HEAD" },
     servers: [
-      { label: "static_backend", ip: "145.100.191.133" },
-      { label: "static_backend", ip: "145.100.191.134" },
+      { label: "acc41", ip: "145.100.191.133" },
+      { label: "acc42", ip: "145.100.191.134" },
     ]
   }
   serviceregistry: {
       port: 404,
       heartbeat: { url: "/", method: "HEAD" },
       servers: [
-        { label: "serviceregistry_backend", ip: "145.100.191.133" },
-        { label: "serviceregistry_backend", ip: "145.100.191.134" },
+        { label: "acc41", ip: "145.100.191.133" },
+        { label: "acc42", ip: "145.100.191.134" },
     ]
   }
   teams: {
     port: 601,
-    heartbeat: { url: "/health", method: "GET" },
+    heartbeat: { url: "/", method: "HEAD" },
     servers: [
-      { label: "teams_backend", ip: "145.100.191.135" },
-      { label: "teams_backend", ip: "145.100.191.136" },
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
     ]
   }
   authzserver: {
     port: 602,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_backend", ip: "145.100.191.135" },
-      { label: "authz_backend", ip: "145.100.191.136" },
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
     ]
   }
   authz_admin: {
     port: 603,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_admin_backend", ip: "145.100.191.135" },
-      { label: "authz_admin_backend", ip: "145.100.191.136" },
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
     ]
   }
   authz_playground: {
     port: 604,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_playground_backend", ip: "145.100.191.135" },
-      { label: "authz_playground_backend", ip: "145.100.191.136" },
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
     ]
   }
   voot: {
     port: 605,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "voot_backend", ip: "145.100.191.135" },
-      { label: "voot_backend", ip: "145.100.191.136" },
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
     ]
   }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper/", method: "HEAD" },
     servers: [
-      { label: "grouper_backend", ip: "145.100.191.135" },
-      { label: "grouper_backend", ip: "145.100.191.136" },
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
     ]
   }
 
