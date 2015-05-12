@@ -4,9 +4,6 @@ acc21.coin.surf.net
 [storage-acc:children]
 storage
 
-[lb-app]
-acc11.coin.surf.net
-
 [java-apps]
 acc61.coin.surf.net
 acc62.coin.surf.net
@@ -15,7 +12,11 @@ acc62.coin.surf.net
 acc41.coin.surf.net
 acc42.coin.surf.net
 
+[loadbalancer]
+acc11.coin.surf.net
+
 [acc:children]
 storage
 java-apps
 php-apps
+loadbalancer
