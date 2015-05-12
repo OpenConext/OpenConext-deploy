@@ -371,7 +371,7 @@ backend voot_be
     {% endfor %}
 
 # Statistics
-listen stats 0.0.0.0:9000       #Listen on all IP's on port 9000
+listen stats 127.0.0.1:9000       #Listen on all IP's on port 9000
     mode http
     balance
     timeout client 5000
