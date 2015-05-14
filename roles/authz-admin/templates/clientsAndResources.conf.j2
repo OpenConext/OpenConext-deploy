@@ -22,6 +22,9 @@ clients = [
        "{{ value }}"
       {% endfor %}
     ]
+    {% if client.autoApprove is defined %}
+          autoApprove= "{{ client.autoApprove}}"
+    {% endif %}
   }
   {% endfor %}
 ]

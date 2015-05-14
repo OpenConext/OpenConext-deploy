@@ -231,7 +231,7 @@ authzserver:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-authz_server_version: 1.1
+authz_server_version: 1.2
 #authz_server_snapshot_timestamp: 20150422.112530-56
 
 voot:
@@ -264,7 +264,7 @@ voot:
 voot_version: 1.2
 #voot_snapshot_timestamp: 20150420.135435-44
 
-authz_admin_version: 1
+authz_admin_version: 1.2
 #authz_admin_snapshot_timestamp: 20150422.113215-61
 authz_admin_group: urn:collab:group:surfnet.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
@@ -291,6 +291,7 @@ authzadmin:
         grantTypes:
           - authorization_code
         redirectUri: https://authz-admin.{{ base_domain }}
+        autoApprove: true
       - clientId: surf-teams
         secret: "{{ teams_authz_client_secret }}"
         resourceIds:
