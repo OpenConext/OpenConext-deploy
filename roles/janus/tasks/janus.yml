@@ -1,15 +1,6 @@
 ---
-
-- name: Install JANUS - Download archive
-  get_url: url="{{ janus_download_base_url }}/{{ janus_tar_file }}" dest="{{ janus_tar_location }}"
-  register: janus_download
-
-- name: Install JANUS - Create dir
-  file: path={{ janus_dir }} state=directory
-
 - name: Install JANUS - Unarchive it
   unarchive: src={{ janus_tar_location }} dest={{ janus_dir }} copy=no creates={{ janus_dir }}/app
-  when: janus_download.changed
   notify:
     - restart httpd
     - restart memcached
