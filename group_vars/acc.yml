@@ -56,7 +56,7 @@ engine_apache_environment: acceptance
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
-ldap_grouper_user: gadget
+ldap_grouper_user: GrouperSystem
 
 janus_database_name: sr
 janus_database_host: "{{ mysql_host }}"
