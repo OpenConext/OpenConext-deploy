@@ -189,7 +189,7 @@ backend engine_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.engine.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.engine.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.engine.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -209,7 +209,7 @@ backend profile_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.profile.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.profile.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.profile.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -228,7 +228,7 @@ backend serviceregistry_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.serviceregistry.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.serviceregistry.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.serviceregistry.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 
@@ -249,7 +249,7 @@ backend static_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.static.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.static.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.static.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -269,7 +269,7 @@ backend grouper_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.grouper.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.grouper.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.grouper.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 
@@ -289,7 +289,7 @@ backend teams_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.teams.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.teams.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.teams.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -309,7 +309,7 @@ backend authz_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.authzserver.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.authzserver.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authzserver.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -329,7 +329,7 @@ backend authz_admin_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.authz_admin.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.authz_admin.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_admin.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -348,7 +348,7 @@ backend authz_playground_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.authz_playground.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.authz_playground.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_playground.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -367,7 +367,7 @@ backend voot_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.voot.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.voot.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.voot.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 # Statistics
@@ -408,7 +408,7 @@ backend mujina_idp_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.mujina_idp.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.mujina_idp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.mujina_idp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -435,7 +435,7 @@ backend mujina_sp_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.mujina_sp.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.mujina_sp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.mujina_sp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------
@@ -463,6 +463,6 @@ backend welcome_be
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in loadbalancing.welcome.servers %}
-    server {{ server.label }} {{ server.ip }}:10{{ loadbalancing.welcome.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.welcome.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 {% endif %}

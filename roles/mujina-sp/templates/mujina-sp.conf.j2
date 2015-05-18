@@ -1,5 +1,5 @@
-Listen {{ apache_app_listen_address.mujina_sp }}:10{{ loadbalancing.mujina_sp.port }}
-<Virtualhost {{ apache_app_listen_address.mujina_sp }}:10{{ loadbalancing.mujina_sp.port }}>
+Listen {{ apache_app_listen_address.mujina_sp }}:{{ loadbalancing.mujina_sp.port }}
+<Virtualhost {{ apache_app_listen_address.mujina_sp }}:{{ loadbalancing.mujina_sp.port }}>
     # General setup for the virtual host, inherited from global configuration
     ServerName mujina-sp.{{ base_domain }}:443
 

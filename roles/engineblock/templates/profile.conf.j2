@@ -1,5 +1,5 @@
-Listen {{ apache_app_listen_address.profile }}:10{{ loadbalancing.profile.port }}
-<Virtualhost {{ apache_app_listen_address.profile }}:10{{ loadbalancing.profile.port }}>
+Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
+<Virtualhost {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}>
 		ServerAdmin {{ apache_server_admin }}
 
 		DocumentRoot {{ engine_current_release_symlink }}/www/profile
