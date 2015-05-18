@@ -56,6 +56,7 @@
   changed_when: gsh_output.stderr != ''
   args:
     chdir: /opt/www/grouper-shell
+  when: env == 'vm'
   ignore_errors: yes
 
 - name: copy apache config
