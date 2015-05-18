@@ -56,6 +56,7 @@
   changed_when: gsh_output.stderr != ''
   args:
     chdir: /opt/www/grouper-shell
+  ignore_errors: yes
 
 - name: copy apache config
   template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
