@@ -2,9 +2,8 @@ Listen {{ apache_app_listen_address.authzserver }}:{{ loadbalancing.authzserver.
 <VirtualHost {{ apache_app_listen_address.authzserver }}:{{ loadbalancing.authzserver.port }}>
     ServerName https://authz.{{ base_domain }}
 
-    ErrorLog logs/authz_ssl_error_log
-    TransferLog logs/authz_ssl_access_log
-    LogLevel warn
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Authz-Server'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Authz-Server'" combined
 
     ProxyPass /Shibboleth.sso !
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0

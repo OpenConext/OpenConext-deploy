@@ -3,11 +3,8 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     # General setup for the virtual host, inherited from global configuration
     ServerName https://teams.{{ base_domain }}
 
-    # Use separate log files for the SSL virtual host; note that LogLevel
-    # is not inherited from httpd.conf.
-    ErrorLog logs/teams_ssl_error_log
-    TransferLog logs/teams_ssl_access_log
-    LogLevel warn
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-TEAMS'"
+	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-TEAMS'" combined
 
     RewriteEngine On
     # Rewrite old URLS

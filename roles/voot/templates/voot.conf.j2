@@ -3,11 +3,8 @@ Listen {{ apache_app_listen_address.voot }}:{{ loadbalancing.voot.port }}
     # General setup for the virtual host, inherited from global configuration
     ServerName https://voot.{{ base_domain }}
 
-    # Use separate log files for the SSL virtual host; note that LogLevel
-    # is not inherited from httpd.conf.
-    ErrorLog logs/voot_ssl_error_log
-    TransferLog logs/voot_ssl_access_log
-    LogLevel warn
+  ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-VOOT'"
+	CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-VOOT'" combined
 
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
 

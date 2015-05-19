@@ -4,10 +4,7 @@ Listen {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}
 
     DocumentRoot /var/www/static
 
-    # Use separate log files for the SSL virtual host; note that LogLevel
-    # is not inherited from httpd.conf.
-    ErrorLog logs/static_ssl_error_log
-    TransferLog logs/static_ssl_access_log
-    LogLevel warn
+	  ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-STATIC'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-STATIC'" combined
 
 </VirtualHost>

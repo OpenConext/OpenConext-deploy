@@ -5,10 +5,7 @@ Listen {{ apache_app_listen_address.welcome }}:10{{ loadbalancing.welcome.port }
 
     DocumentRoot /var/www/welcome
 
-    # Use separate log files for the SSL virtual host; note that LogLevel
-    # is not inherited from httpd.conf.
-    ErrorLog logs/welcome_ssl_error_log
-    TransferLog logs/welcome_ssl_access_log
-    LogLevel warn
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Welcome'"
+	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Welcome'" combined
 
 </VirtualHost>

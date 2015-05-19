@@ -4,9 +4,8 @@ Listen {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.
 
     UseCanonicalName On
 
-    ErrorLog logs/authzadmin_ssl_error_log
-    TransferLog logs/authzadmin_ssl_access_log
-    LogLevel warn
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Authz-Admin'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Authz-Admin'" combined
 
     ProxyPass /Shibboleth.sso !
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0

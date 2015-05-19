@@ -2,9 +2,8 @@ Listen {{ apache_app_listen_address.authz_playground }}:{{ loadbalancing.authz_p
 <VirtualHost {{ apache_app_listen_address.authz_playground }}:{{ loadbalancing.authz_playground.port }}>
     ServerName https://authz-playground.{{ base_domain }}
 
-    ErrorLog logs/authzplayground_ssl_error_log
-    TransferLog logs/authzplayground_ssl_access_log
-    LogLevel warn
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Playground'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Playground'" combined
 
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
