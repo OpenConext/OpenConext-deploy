@@ -139,7 +139,7 @@ shib:
 
 # versions of installed apps
 teams_version: 4.0.10
-#teams_snapshot_timestamp: ""
+teams_snapshot_timestamp: 20150519.072106-2
 
 api_version: 4.0.1
 #api_snapshot_timestamp: 20150419.220130-443
@@ -379,7 +379,7 @@ loadbalancing:
   }
   teams: {
     port: 601,
-    heartbeat: { url: "/health", method: "GET" },
+    heartbeat: { url: "/media/trans-white.png", method: "GET" },
     servers: [
       { label: "teams_backend", ip: "145.100.191.117" },
     ]

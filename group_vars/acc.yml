@@ -368,7 +368,7 @@ loadbalancing:
   }
   authzserver: {
     port: 602,
-    heartbeat: { url: "/health", method: "GET" },
+    heartbeat: { url: "/media/trans-white.png", method: "GET" },
     servers: [
       { label: "acc61", ip: "145.100.191.135" },
       { label: "acc62", ip: "145.100.191.136" },

@@ -166,7 +166,7 @@ teams:
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 teams_version: 4.0.10
-#teams_snapshot_timestamp: 20150420.152536-28
+teams_snapshot_timestamp: 20150519.072106-2
 teams_debug: true
 
 engineblock:
@@ -409,7 +409,7 @@ loadbalancing:
   }
   teams: {
     port: 601,
-    heartbeat: { url: "/health", method: "GET" },
+    heartbeat: { url: "/media/trans-white.png", method: "GET" },
     servers: [
       { label: "teams_backend", ip: "192.168.66.79" },
     ]
