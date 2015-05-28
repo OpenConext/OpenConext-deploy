@@ -91,3 +91,11 @@ The secrets used by Ansible are externalized. For the VM the secrets are in this
 # License
 
 These files are licensed under version 2.0 of the Apache License, as described in the file [LICENSE](LICENSE).
+
+# VM
+
+To provision the VM use the following (password is vagrant and sudo password is <enter>
+
+```
+ansible-playbook -u vagrant -i inventory/vm -K selfservice.yml -k
+```

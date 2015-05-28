@@ -21,6 +21,18 @@
     </encoder>
   </appender>
 
+  <appender name="email" class="ch.qos.logback.classic.net.SMTPAppender">
+    <smtpHost>{{ smtp_server }}</smtpHost>
+    <from>no-reply@surfconext.nl</From>
+    <to>{{ error_mail_to }}</To>
+    <subject>Unepxected error authz server</Subject>
+    <layout class="ch.qos.logback.classic.html.HTMLLayout"/>
+
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+  </appender>
+
   <logger name="authzserver" level="DEBUG"/>
   <logger name="org.springframework.security.oauth" level="DEBUG"/>
   <root level="WARN">

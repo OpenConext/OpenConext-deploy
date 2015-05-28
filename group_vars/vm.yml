@@ -1,6 +1,9 @@
 ---
 env: vm
 
+smtp_server: localhost
+error_mail_to: no-mail-on-vm@surfconext.nl
+
 databases:
   names:
     - teams

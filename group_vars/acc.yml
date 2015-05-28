@@ -1,6 +1,9 @@
 ---
 env: acc
 
+smtp_server: s01.dev.coin.surf.net
+error_mail_to: no-mail-on-acc@surfconext.nl
+
 databases:
   names:
     - teams
