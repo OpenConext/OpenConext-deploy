@@ -265,7 +265,7 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1.2
-#voot_snapshot_timestamp: ""
+voot_snapshot_timestamp: "20150609.143138-1"
 
 authz_admin_version: 1.2
 #authz_admin_snapshot_timestamp: ""
