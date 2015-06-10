@@ -11,7 +11,7 @@
     <file>/var/log/voot/voot.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- daily rollover -->
-      <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>/var/log/voot/%d{yyyy-MM-dd}.log</fileNamePattern>
       <!-- keep 30 days' worth of history -->
       <maxHistory>30</maxHistory>
     </rollingPolicy>
@@ -23,9 +23,9 @@
 
   <appender name="email" class="ch.qos.logback.classic.net.SMTPAppender">
     <smtpHost>{{ smtp_server }}</smtpHost>
-    <from>no-reply@surfconext.nl</From>
-    <to>{{ error_mail_to }}</To>
-    <subject>Unexpected error voot</Subject>
+    <from>no-reply@surfconext.nl</from>
+    <to>{{ error_mail_to }}</to>
+    <subject>Unexpected error voot</subject>
     <layout class="ch.qos.logback.classic.html.HTMLLayout"/>
 
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
