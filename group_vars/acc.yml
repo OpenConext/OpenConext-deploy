@@ -249,7 +249,7 @@ voot:
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
         },
-        schacHomeOrganization: "surfnet.nl",
+        schacHomeOrganization: "acc.surfteams.nl",
         name: "SURFteams",
         timeoutMillis: 3000
       }
@@ -269,7 +269,7 @@ voot_version: 1.2
 
 authz_admin_version: 1.2
 #authz_admin_snapshot_timestamp: 20150422.113215-61
-authz_admin_group: urn:collab:group:surfnet.nl:nl:surfnet:diensten:authz-admins
+authz_admin_group: urn:collab:group:acc.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
