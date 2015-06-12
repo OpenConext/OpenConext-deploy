@@ -251,7 +251,7 @@ voot:
         },
         schacHomeOrganization: "test.surfteams.nl",
         name: "SURFteams",
-        timeoutMillis: 3000
+        timeoutMillis: 15000
       }
     - {
         type: "open_social",
