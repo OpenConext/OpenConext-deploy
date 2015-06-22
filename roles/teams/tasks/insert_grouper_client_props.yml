@@ -8,8 +8,8 @@
 - name: Create the 'unzipped' directory
   file: path={{ springapp_dir }}/unzipped state=directory owner="{{ springapp_user }}" group="{{ springapp_user }}"
 
-- name: Unzip current war.
-  command: sudo -u "{{ springapp_user }}" unzip -q "{{ symlink.stat.lnk_source }}" -d ./unzipped
+- name: Unzip current war
+  command: sudo -u "{{ springapp_user }}" unzip "{{ symlink.stat.lnk_source }}" -d ./unzipped
   args:
     chdir: "{{ teams_dir }}"
 
@@ -17,6 +17,9 @@
   command: sudo -u "{{ springapp_user }}" cp ./grouper.client.properties ./unzipped/
   args:
     chdir: "{{ teams_dir }}"
+
+- name: Make sure the target archive file is deleted or zip will merge it (and keep old files)
+  file: path={{ springapp_dir }}/with-grouper-config-teams-current.war state=absent
 
 - name: Rezip the war. Don't use compression or java will barf.
   command: sudo -u "{{ springapp_user }}" /usr/bin/zip -0 -r ../with-grouper-config-teams-current.war .
