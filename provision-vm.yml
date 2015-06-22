@@ -8,12 +8,6 @@
     tags:
       - always
 
-- hosts: local-certs
-  connection: local
-  gather_facts: no
-  roles:
-    - generate_certs
-
 - hosts: loadbalancer:php-apps:java-apps:storage
   gather_facts: no
   sudo: true
