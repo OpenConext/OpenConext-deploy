@@ -2,7 +2,7 @@
 env: test
 
 smtp_server: s01.dev.coin.surf.net
-error_mail_to: no-mail-on-test@surfconext.nl
+error_mail_to: coin-logs-dev@list.surfnet.nl
 
 databases:
   names:
@@ -142,7 +142,7 @@ shib:
 
 # versions of installed apps
 teams_version: 4.0.12
-teams_snapshot_timestamp: 20150623.084257-7
+teams_snapshot_timestamp: 20150623.115506-8
 
 api_version: 4.0.1
 #api_snapshot_timestamp: 20150419.220130-443

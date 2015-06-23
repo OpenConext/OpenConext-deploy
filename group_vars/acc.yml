@@ -2,7 +2,7 @@
 env: acc
 
 smtp_server: localhost
-error_mail_to: no-mail-on-acc@surfconext.nl
+error_mail_to: coin-logs-dev@list.surfnet.nl
 
 databases:
   names:
