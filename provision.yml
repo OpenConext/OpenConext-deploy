@@ -65,7 +65,7 @@
     - tomcat
     - java
     - { role: shibboleth, tags: ['shib'] }
-    - grouper
+    - { role: grouper, tags: ['grouper'] }
     - { role: teams, tags: ['teams'] }
     - { role: authz-server, tags: ['oauth', 'authz-server'] }
     - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
