@@ -37,8 +37,8 @@
   gather_facts: no
   sudo: true
   roles:
-    - { role: mysql, tags: [mysql] }
-    - ldap
+    - { role: mysql, tags: ['mysql'] }
+    - { role: ldap, tags: ['ldap'] }
 
 - hosts: php-apps
   gather_facts: no
