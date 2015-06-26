@@ -10,7 +10,7 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
     </Directory>
 
     SetEnv ENGINEBLOCK_ENV {{ engine_apache_environment }}
-		SetEnv HTTPS on
+    SetEnv HTTPS on
 
     RewriteEngine On
     # We support only GET/POST/HEAD
