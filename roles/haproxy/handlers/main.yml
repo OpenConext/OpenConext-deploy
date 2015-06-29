@@ -4,3 +4,6 @@
 
 - name: reload haproxy
   service: name=haproxy state=reloaded
+
+- name: reload rsyslog
+  service: name=rsyslog state=reloaded
