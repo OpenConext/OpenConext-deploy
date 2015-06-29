@@ -417,7 +417,7 @@ loadbalancing:
   }
   grouper: {
     port: 606,
-    heartbeat: { url: "/grouper/", method: "HEAD" },
+    heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
     servers: [
       { label: "grouper_backend", ip: "145.100.191.117" },
     ]

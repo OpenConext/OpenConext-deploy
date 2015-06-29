@@ -403,7 +403,7 @@ loadbalancing:
   }
   grouper: {
     port: 606,
-    heartbeat: { url: "/grouper/", method: "HEAD" },
+    heartbeat: url: "/grouper-ws/status?diagnosticType=db", method: "GET",
     servers: [
       { label: "acc61", ip: "145.100.191.135" },
       { label: "acc62", ip: "145.100.191.136" },
