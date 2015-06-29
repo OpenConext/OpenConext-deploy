@@ -13,7 +13,6 @@
   with_items:
     - grouper.properties
     - log4j.properties
-    - ldap.properties
   notify: restart tomcat
   tags:
     - grouper
