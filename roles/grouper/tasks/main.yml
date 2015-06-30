@@ -13,7 +13,12 @@
   with_items:
     - grouper.properties
     - log4j.properties
-    - ldap.properties
+  notify: restart tomcat
+  tags:
+    - grouper
+
+- name: copy ldap config
+  template: src=ldap.properties.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/ldap.properties
   notify: restart tomcat
   tags:
     - grouper

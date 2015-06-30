@@ -1,0 +1,15 @@
+edu.vt.middleware.ldap.ldapUrl=ldap://ldap.{{ base_domain }}:389
+edu.vt.middleware.ldap.base=dc=surfconext,dc=nl
+
+# or: SUBTREE_SCOPE
+edu.vt.middleware.ldap.searchScope=SUBTREE
+
+# authn if simple
+edu.vt.middleware.ldap.bindDn={{ ldap_user }}
+edu.vt.middleware.ldap.bindCredential={{ ldap_password }}
+
+# Settings below seem to be ignored
+edu.vt.middleware.ldap.pool.minPoolSize=5
+edu.vt.middleware.ldap.pool.maxPoolSize=20
+edu.vt.middleware.ldap.pool.validateOnCheckOut=true
+

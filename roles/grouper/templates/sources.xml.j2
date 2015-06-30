@@ -126,28 +126,8 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
     <name>OpenConext LDAP</name>
     <type>person</type>
     <init-param>
-      <param-name>INITIAL_CONTEXT_FACTORY</param-name>
-      <param-value>com.sun.jndi.ldap.LdapCtxFactory</param-value>
-    </init-param>
-
-    <init-param>
-      <param-name>PROVIDER_URL</param-name>
-      <param-value>ldap://ldap.{{ base_domain }}:389</param-value>
-    </init-param>
-
-    <init-param>
-      <param-name>SECURITY_AUTHENTICATION</param-name>
-      <param-value>simple</param-value>
-    </init-param>
-
-    <init-param>
-      <param-name>SECURITY_PRINCIPAL</param-name>
-      <param-value>{{ ldap_user }}</param-value>
-    </init-param>
-    <init-param>
-
-      <param-name>SECURITY_CREDENTIALS</param-name>
-      <param-value>{{ ldap_password }}</param-value>
+      <param-name>ldapProperties_file</param-name>
+      <param-value>ldap.properties</param-value>
     </init-param>
     <init-param>
       <param-name>SubjectID_AttributeType</param-name>
@@ -279,26 +259,8 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
     <name>OpenConext Applications</name>
     <type>person</type>
     <init-param>
-      <param-name>INITIAL_CONTEXT_FACTORY</param-name>
-      <param-value>com.sun.jndi.ldap.LdapCtxFactory</param-value>
-    </init-param>
-    <init-param>
-      <param-name>PROVIDER_URL</param-name>
-      <param-value>ldap://ldap.{{ base_domain }}:389</param-value>
-    </init-param>
-    <init-param>
-
-      <param-name>SECURITY_AUTHENTICATION</param-name>
-      <param-value>simple</param-value>
-    </init-param>
-    <init-param>
-      <param-name>SECURITY_PRINCIPAL</param-name>
-      <param-value>{{ ldap_user }}</param-value>
-    </init-param>
-
-    <init-param>
-      <param-name>SECURITY_CREDENTIALS</param-name>
-      <param-value>{{ ldap_password }}</param-value>
+      <param-name>ldapProperties_file</param-name>
+      <param-value>ldap.properties</param-value>
     </init-param>
     <init-param>
       <param-name>SubjectID_AttributeType</param-name>
