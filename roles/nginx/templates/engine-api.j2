@@ -6,19 +6,19 @@
 #
 
 server {
-    listen       {{ nginx_ipv4_addresses.profile }}:80;
-    server_name  profile.{{ base_domain }};
+    listen       {{ nginx_ipv4_addresses.engine_api }}:80;
+    server_name  engine-api.{{ base_domain }};
 
-    return       301 https://profile.{{ base_domain }}$request_uri;
+    return       301 https://engine-api.{{ base_domain }}$request_uri;
 }
 
 server {
-    listen       {{ nginx_ipv4_addresses.profile }}:443 ssl spdy;
-    server_name  profile.{{ base_domain }};
+    listen       {{ nginx_ipv4_addresses.engine_api }}:443 ssl spdy;
+    server_name  engine-api.{{ base_domain }};
 
     ssl                  on;
-    ssl_certificate      {{ tls.cert_path }}/{{ profile.crt_name }};
-    ssl_certificate_key  {{ tls.cert_private_path }}/{{ profile.key_name }};
+    ssl_certificate      {{ tls.cert_path }}/{{ engine_api.crt_name }};
+    ssl_certificate_key  {{ tls.cert_private_path }}/{{ engine_api.key_name }};
 
     ssl_session_timeout  60m;
 
@@ -30,7 +30,7 @@ server {
     ssl_ecdh_curve secp384r1;
 
     location / {
-        proxy_pass http://127.0.0.1:{{ loadbalancing.profile.port }}/;
+        proxy_pass http://127.0.0.1:{{ loadbalancing.engine_api.port }}/;
         proxy_http_version 1.1;
         proxy_redirect off;
         proxy_set_header Host $http_host;
@@ -44,18 +44,18 @@ server {
 
 server {
     listen       [::]:80;
-    server_name  profile.{{ base_domain }};
+    server_name  engine-api.{{ base_domain }};
 
-    return       301 https://profile.{{ base_domain }}$request_uri;
+    return       301 https://engine-api.{{ base_domain }}$request_uri;
 }
 
 server {
     listen       [::]:443 ssl spdy;
-    server_name  profile.{{ base_domain }};
+    server_name  engine-api.{{ base_domain }};
 
     ssl                  on;
-    ssl_certificate      {{ tls.cert_path }}/{{ profile.crt_name }};
-    ssl_certificate_key  {{ tls.cert_private_path }}/{{ profile.key_name }};
+    ssl_certificate      {{ tls.cert_path }}/{{ engine_api.crt_name }};
+    ssl_certificate_key  {{ tls.cert_private_path }}/{{ engine_api.key_name }};
 
 
     ssl_session_timeout  60m;
@@ -69,7 +69,7 @@ server {
     ssl_stapling on;
 
     location / {
-        proxy_pass http://127.0.0.1:{{ loadbalancing.profile.port }}/;
+        proxy_pass http://127.0.0.1:{{ loadbalancing.engine_api.port }}/;
         proxy_http_version 1.1;
         proxy_redirect off;
         proxy_set_header Host $http_host;

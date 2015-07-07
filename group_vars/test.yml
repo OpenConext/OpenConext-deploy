@@ -380,6 +380,13 @@ loadbalancing:
         { label: "serviceregistry_backend", ip: "145.100.191.116" },
     ]
   }
+  engine_api: {
+      port: 405,
+      heartbeat: { url: "/", method: "GET" },
+      servers: [
+        { label: "engine_api_backend", ip: "145.100.191.116" },
+      ]
+    }
   teams: {
     port: 601,
     heartbeat: { url: "/media/trans-white.png", method: "GET" },
@@ -426,6 +433,7 @@ loadbalancing:
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
   engine: 145.100.191.122
+  engine_api: 145.100.191.122
   profile: 145.100.191.122
   serviceregistry: 145.100.191.122
   static: 145.100.191.122

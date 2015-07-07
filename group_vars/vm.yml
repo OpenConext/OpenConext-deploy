@@ -477,6 +477,7 @@ loadbalancing:
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
   engine: 192.168.66.78
+  engine_api: 192.168.66.78
   profile: 192.168.66.78
   serviceregistry: 192.168.66.78
   static: 192.168.66.78
