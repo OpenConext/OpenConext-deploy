@@ -1,6 +1,6 @@
 #---
 ## Version of EngineBlock that is installable by this role
-engine_version: 4.4.3
+engine_version: 4.4.4
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"
@@ -12,12 +12,15 @@ engine_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-engine
 
 engine_ipv4_address: "*"
 # engine_ipv6_address:
+engine_api_ipv4_address: "*"
+# engine_api_ipv6_address:
 profile_ipv4_address: "*"
 # profile_ipv6_address
 
 engine_domain: engine.{{ base_domain }}
+engine_api_domain: engine-api.{{ base_domain }}
 profile_domain: profile.{{ base_domain }}
-#
+
 engine_debug: false
 
 ## The endpoint it can use to validate Virtual Organizations
@@ -27,11 +30,8 @@ engine_vovalidate_baseurl : https://api.{{ base_domain }}
 engine_janus_url: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
 engine_janus_cache_lifetime: 3600 # Cache for an hour
 
-#
-engine_api_domain: engine-api.{{ base_domain }}
 engine_api_janus_user: serviceregistry
-#
-#
+#engine_api_janus_password:
 
 ## The Identity Provider that Profile can use (always it's own EngineBlock really)
 engine_profile_idp_certificate: "{{ engine_keys.default.publicFile }}"

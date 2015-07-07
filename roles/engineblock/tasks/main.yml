@@ -9,6 +9,7 @@
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
   with_items:
     - engine.conf
+    - engine-api.conf
     - profile.conf
   notify:
     - restart httpd
