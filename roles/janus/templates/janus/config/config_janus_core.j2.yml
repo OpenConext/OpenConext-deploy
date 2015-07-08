@@ -490,6 +490,12 @@ janus_service_registry_core:
                 default: ''
                 default_allow: false
                 required: false
+            'coin:institution_guid':
+#               validate: isguid
+                type: text
+                default: ''
+                default_allow: false
+                required: false
             'SingleSignOnService:0:Binding':
                 type: select
                 select_values:
