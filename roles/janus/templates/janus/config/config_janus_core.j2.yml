@@ -773,6 +773,12 @@ janus_service_registry_core:
                 default: ''
                 default_allow: false
                 required: false
+            'coin:institution_guid':
+#               validate: isguid
+                type: text
+                default: ''
+                default_allow: false
+                required: false
             'coin:trusted_proxy':
                 type: boolean
                 default: false
