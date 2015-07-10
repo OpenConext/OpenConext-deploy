@@ -414,9 +414,9 @@ loadbalancing:
         { label: "serviceregistry_backend", ip: "192.168.66.79" },
     ]
   }
-  engine: {
+  engine_api: {
       port: 405,
-      heartbeat: { url: "/", method: "GET" },
+      #heartbeat: { url: "/", method: "GET" },
       servers: [
         { label: "engine_backend", ip: "192.168.66.79" },
       ]
