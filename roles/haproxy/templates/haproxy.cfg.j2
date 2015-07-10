@@ -46,8 +46,8 @@ defaults
     log                     global
     option                  httplog
     option                  dontlognull
-    option		    http-server-close
-    option 		    forwardfor       except 127.0.0.0/8
+    option                  http-server-close
+    option                  forwardfor       except 127.0.0.0/8
     option                  redispatch
     retries                 3
     timeout http-request    10s
@@ -70,6 +70,17 @@ frontend engine 127.0.0.1:{{ loadbalancing.engine.port }}
     acl url_all         path_beg        -i /
     use_backend         engine_be       if url_all
     default_backend     engine_be
+
+#---------------------------------------------------------------------
+# ENGINE frontend
+#---------------------------------------------------------------------
+frontend engine 127.0.0.1:{{ loadbalancing.engine_api.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         engine_api_be       if url_all
+    default_backend     engine_api_be
 
 #---------------------------------------------------------------------
 # PROFILE frontend
@@ -190,6 +201,26 @@ backend engine_be
 
     {% for server in loadbalancing.engine.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.engine.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+
+#---------------------------------------------------------------------
+# engine-api backend
+#---------------------------------------------------------------------
+backend engine_api_be
+
+    # Healthcheck ombouwen naar controle op valide antwoord
+    option httpchk {{ loadbalancing.engine_api.heartbeat.method }} {{ loadbalancing.engine_api.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.engine_api.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.engine_api.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 #---------------------------------------------------------------------

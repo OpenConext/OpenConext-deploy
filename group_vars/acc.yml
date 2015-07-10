@@ -365,6 +365,14 @@ loadbalancing:
         { label: "acc42", ip: "145.100.191.134" },
     ]
   }
+  engine_api: {
+      port: 405,
+      heartbeat: { url: "/", method: "GET" },
+      servers: [
+        { label: "acc41", ip: "145.100.191.133" },
+        { label: "acc42", ip: "145.100.191.134" },
+      ]
+  }
   teams: {
     port: 601,
     heartbeat: { url: "/", method: "HEAD" },
@@ -429,6 +437,7 @@ nginx_ipv4_addresses:
 
 nginx_config_templates:
   - engine
+  - engine_api
   - teams
   - grouper
   - voot

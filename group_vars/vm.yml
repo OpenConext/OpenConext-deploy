@@ -83,6 +83,10 @@ engine:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
+engine_api:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+
 profile:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -410,6 +414,13 @@ loadbalancing:
         { label: "serviceregistry_backend", ip: "192.168.66.79" },
     ]
   }
+  engine: {
+      port: 405,
+      heartbeat: { url: "/", method: "GET" },
+      servers: [
+        { label: "engine_backend", ip: "192.168.66.79" },
+      ]
+    }
   teams: {
     port: 601,
     heartbeat: { url: "/media/trans-white.png", method: "GET" },
@@ -496,6 +507,7 @@ nginx_config_templates:
   - mujina_sp
   - mujina_idp
   - engine
+  - engine_api
   - teams
   - grouper
   - voot

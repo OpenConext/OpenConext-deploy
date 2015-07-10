@@ -83,6 +83,10 @@ engine:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
+engine_api:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+
 profile:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -449,6 +453,7 @@ nginx_ipv4_addresses:
 
 nginx_config_templates:
   - engine
+  - engine_api
   - teams
   - grouper
   - voot

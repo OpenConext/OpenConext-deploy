@@ -1,6 +1,7 @@
 ---
 apache_app_listen_address:
   engine: 192.168.66.79
+  engine_api: 192.168.66.79
   profile: 192.168.66.79
   authzserver: 192.168.66.79
   authz_admin: 192.168.66.79
