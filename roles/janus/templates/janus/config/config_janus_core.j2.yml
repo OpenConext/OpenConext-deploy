@@ -514,7 +514,7 @@ janus_service_registry_core:
                 type: text
                 default: ''
                 default_allow: false
-            'SingleSignOnService:1:Binding':
+            'SingleSignOnService:#:Binding':
                 type: select
                 select_values:
                     - 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
@@ -526,12 +526,32 @@ janus_service_registry_core:
                 default: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
                 required: false
                 default_allow: true
-            'SingleSignOnService:1:Location':
+                supported:
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                    - 6
+                    - 7
+                    - 8
+                    - 9
+            'SingleSignOnService:#:Location':
                 required: false
                 validate: isurl
                 type: text
                 default: ''
                 default_allow: false
+                supported:
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                    - 6
+                    - 7
+                    - 8
+                    - 9
             'coin:guest_qualifier':
                 type: select
                 required: true
