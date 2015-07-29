@@ -1,6 +1,9 @@
 ---
 - name: Add Shibboleth repo
-  shell: chdir=/etc/yum.repos.d creates=/etc/yum.repos.d/security:shibboleth.repo wget http://download.opensuse.org/repositories/security://shibboleth/CentOS_CentOS-6/security:shibboleth.repo
+  copy: src={{ item }} dest=/etc/yum.repos.d/{{ item }}
+  with_items:
+    - shibboleth.repo
+    - shibboleth.repo.gpgkey
 
 - name: Install
   yum: name={{ item }} state=present
