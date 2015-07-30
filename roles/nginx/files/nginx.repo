@@ -1,5 +1,6 @@
 [nginx]
 name=nginx repo
 baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
-gpgcheck=0
+gpgcheck=1
+gpgkey=file:///etc/yum.repos.d/nginx.repo.gpgkey
 enabled=1
