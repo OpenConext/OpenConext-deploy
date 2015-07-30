@@ -25,7 +25,7 @@
 
 - name: configure the file in which haproxy-logging ends up
   copy: src=syslog_haproxy.conf dest=/etc/rsyslog.d/haproxy.conf mode=0644
-  notify: restart rsyslog
+  notify: reload rsyslog
 
 - name: Copy config
   template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
