@@ -30,4 +30,4 @@
 - debug: var=janusDir
 
 - include: janus.yml
-  when: janusDownload.changed or janusDir.changed
+  when: janusDownload.changed or janusDir.changed or eb_sr_sql.changed
