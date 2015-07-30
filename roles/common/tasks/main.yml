@@ -3,8 +3,6 @@
 - name: set timezone
   file: state=link src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime force=True
 
-- service: name=ntpd state=started enabled=yes
-
 - name: Add Epel repo
   yum: name=http://ftp.nluug.nl/pub/os/Linux/distr/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
 
@@ -16,4 +14,9 @@
      - openldap-clients
      - mysql.x86_64
      - MySQL-python
+     - ntp
+     - unzip
+
+- name: Start ntpd
+  service: name=ntpd state=started enabled=yes
 
