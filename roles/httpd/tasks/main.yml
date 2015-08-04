@@ -34,6 +34,9 @@
   with_items:
     - welcome.conf
 
+- name: Stop listening on port 443
+  lineinfile: dest=/etc/httpd/conf.d/ssl.conf state=absent line="Listen 443"
+
 - name: Remove default /var/www folders
   file: path=/var/www/{{ item }} state=absent
   with_items:
