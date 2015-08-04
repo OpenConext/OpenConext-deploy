@@ -1,3 +1,19 @@
 ---
 - name: Set hosts
-  copy: src=hosts dest=/etc/hosts
+  lineinfile: dest=/etc/hosts line="192.168.66.78 {{ item }}"
+  with_items:
+    - "static.vm.openconext.org"
+    - "serviceregistry.vm.openconext.org"
+    - "engine.vm.openconext.org"
+    - "profile.vm.openconext.org"
+    - "mujina-sp.vm.openconext.org"
+    - "mujina-idp.vm.openconext.org"
+    - "grouper.vm.openconext.org"
+    - "authz.vm.openconext.org"
+    - "authz-admin.vm.openconext.org"
+    - "voot.vm.openconext.org"
+    - "authz-playground.vm.openconext.org"
+    - "lb.vm.openconext.org"
+    - "apps.vm.openconext.org"
+    - "ldap.vm.openconext.org"
+    - "db.vm.openconext.org"
