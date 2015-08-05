@@ -33,13 +33,18 @@
   stat: path=/usr/sbin/setenforce
   register: selinux_binaries
 
+- name: check for SELinux status
+  command: /usr/sbin/sestatus
+  when: selinux_binaries.stat.exists == True
+  register: selinux_status
+
 - name: disable SELinux
   lineinfile: dest=/etc/sysconfig/selinux state=present regexp='^SELINUX=' line='SELINUX=permissive'
   when: selinux_config.stat.exists == True
 
 - name: disable SELinux NOW
   command: /usr/sbin/setenforce 0
-  when: selinux_binaries.stat.exists == True
+  when: "selinux_binaries.stat.exists == True and selinux_status.stdout|search('status: *enabled')"
 
 - name: check SELinux status
   shell: "
