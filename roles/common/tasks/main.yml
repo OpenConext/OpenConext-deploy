@@ -20,3 +20,31 @@
 - name: Start ntpd
   service: name=ntpd state=started enabled=yes
 
+# TODO: proper SElinux support.  Would require at least to explicitly open up
+# all non-standard apache ports (9876, loadbalancing.engine.port, etc)
+# we don't use the standard ansible selinux module, because it is way to
+# limited in how it handles systems without SELinux binaries or SELinux
+# support (like test)
+- name: check for presence of SELinux config file
+  stat: path=/etc/sysconfig/selinux
+  register: selinux_config
+
+- name: check for presence of SELinux binaries
+  stat: path=/usr/sbin/setenforce
+  register: selinux_binaries
+
+- name: disable SELinux
+  lineinfile: dest=/etc/sysconfig/selinux state=present regexp='^SELINUX=' line='SELINUX=permissive'
+  when: selinux_config.stat.exists == True
+
+- name: disable SELinux NOW
+  command: /usr/sbin/setenforce 0
+  when: selinux_binaries.stat.exists == True
+
+- name: check SELinux status
+  shell: "
+         /usr/sbin/sestatus | egrep '^SELinux status: *disabled' 
+      || /usr/sbin/sestatus | egrep '^Current mode: *permissive'
+    "
+  when: selinux_binaries.stat.exists == True
+
