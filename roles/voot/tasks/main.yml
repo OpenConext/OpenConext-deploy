@@ -13,13 +13,13 @@
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=voot group=voot mode=0755
 
 - include: ../../../tasks/springbootapp/install-release.yml
-  when: voot_snapshot_timestamp == '' and voot_local_jar == ''
+  when: "voot_snapshot_timestamp == '' and voot_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-snapshot.yml
-  when: voot_snapshot_timestamp != '' and voot_local_jar == ''
+  when: "voot_snapshot_timestamp != '' and voot_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-local.yml
-  when: voot_local_jar != ''
+  when: "voot_local_jar != ''"
 
 - name: Copy logging config
   template: src=logback.xml.j2 dest={{ voot_dir }}/logback.xml owner=voot group=voot mode=0740
