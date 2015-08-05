@@ -13,7 +13,7 @@
 - name: enable rsyslog
   service: name=rsyslog enabled=yes
   notify:
-    - reload rsyslog
+    - restart rsyslog
 
 - name: enable syslog for haproxy
   lineinfile: dest=/etc/rsyslog.conf line="{{ item }}" insertafter="^# Provides UDP syslog reception"
@@ -21,15 +21,15 @@
     - "$ModLoad imudp"
     - "$UDPServerRun 514"
     - "$UDPServerAddress 127.0.0.1"
-  notify: reload rsyslog
+  notify: restart rsyslog
 
 - name: configure the file in which haproxy-logging ends up
   copy: src=syslog_haproxy.conf dest=/etc/rsyslog.d/haproxy.conf mode=0644
-  notify: reload rsyslog
+  notify: restart rsyslog
 
 - name: Copy config
   template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
-  notify: reload haproxy
+  notify: restart haproxy
 
 
 - name: start rsyslog
