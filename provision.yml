@@ -42,7 +42,7 @@
 
 - hosts: php-apps
   gather_facts: no
-  sudo: yes
+  sudo: true
   gather_facts: no
   vars:
     env_lang: php

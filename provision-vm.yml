@@ -12,9 +12,12 @@
   gather_facts: no
   sudo: true
   roles:
-    - tls
-    - hosts
     - common
+    - hosts
+    - tls
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
 
 - hosts: loadbalancer
   gather_facts: no
@@ -32,33 +35,25 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
 
-- hosts: php-apps
-  gather_facts: no
-  sudo: true
-  roles:
-    - { role: welcome, tags: ['welcome']}
-  handlers:
-    - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
-
 - hosts: storage
   gather_facts: no
   sudo: true
   roles:
-    - mysql
-    - ldap
+    - { role: mysql, tags: ['mysql'] }
+    - { role: ldap, tags: ['ldap'] }
     - vm_only_provision_eb_sr
 
 - hosts: php-apps
   gather_facts: no
-  sudo: yes
+  sudo: true
   gather_facts: no
   vars:
     env_lang: php
   roles:
     - php
     - static
-    - { role: openconext-common, tags: ['eb','sr']}
+    - { role: welcome, tags: ['welcome']}
+    - { role: openconext-common, tags: ['eb', 'sr'] }
     - { role: engineblock, tags: ['eb'] }
     - vm_only_bootstrap_ldap_attributes
     - { role: janus, tags: ['sr'] }
@@ -73,12 +68,12 @@
   vars:
     env_lang: java
   roles:
-    - java
     - tomcat
-    - grouper
+    - java
     - { role: shibboleth, tags: ['shib'] }
-    - { role: mujina-idp, tags: ['legacy'] }
+    - { role: grouper, tags: ['grouper'] }
     - { role: teams, tags: ['teams'] }
+    - { role: mujina-idp, tags: ['legacy'] }
     - { role: mujina-sp, tags: ['legacy'] }
     - { role: authz-server, tags: ['oauth', 'authz-server'] }
     - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
