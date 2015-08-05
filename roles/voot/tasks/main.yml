@@ -13,13 +13,13 @@
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=voot group=voot mode=0755
 
 - include: ../../../tasks/springbootapp/install-release.yml
-  when: voot_snapshot_timestamp == '' and voot_local_jar == ''
+  when: "voot_snapshot_timestamp == '' and voot_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-snapshot.yml
-  when: voot_snapshot_timestamp != '' and voot_local_jar == ''
+  when: "voot_snapshot_timestamp != '' and voot_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-local.yml
-  when: voot_local_jar != ''
+  when: "voot_local_jar != ''"
 
 - name: Copy logging config
   template: src=logback.xml.j2 dest={{ voot_dir }}/logback.xml owner=voot group=voot mode=0740
@@ -37,5 +37,16 @@
   template: src=voot.conf.j2 dest=/etc/httpd/conf.d/voot.conf
   notify: reload httpd
 
+# no idea why this is necessary, as the init script returns an ok status also
+# if voot is still initializing.  Waiting for the port to open works well
+# though, and seems like to correct way to handle this.
+- name: start the voot service
+  service: name=voot state=started enabled=yes
+  ignore_errors: true
+
+- name: wait for voot to start
+  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
+
 - name: ensure the service is started
   service: name=voot enabled=yes state=started
+

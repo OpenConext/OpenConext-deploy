@@ -1,15 +1,4 @@
 ---
-- name: Check httpd access to port
-  shell: |
-    if ! ( semanage port -l > /tmp/semanage.list;
-           egrep -q '^http_port_t .*\b{{ item }}\b' /tmp/semanage.list )
-    then
-      semanage port -a -t http_port_t -p tcp {{item}}
-    fi
-  with_items:
-     - 9876
-  tags: httpd
-
 - name: Install httpd and required modules
   yum: name={{ item }} state=present
   with_items:
@@ -33,6 +22,9 @@
   file: path=/etc/httpd/conf.d/{{ item }} state=absent
   with_items:
     - welcome.conf
+
+- name: Stop listening on port 443
+  lineinfile: dest=/etc/httpd/conf.d/ssl.conf state=absent line="Listen 443"
 
 - name: Remove default /var/www folders
   file: path=/var/www/{{ item }} state=absent

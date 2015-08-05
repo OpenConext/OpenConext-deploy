@@ -74,7 +74,7 @@ frontend engine 127.0.0.1:{{ loadbalancing.engine.port }}
 #---------------------------------------------------------------------
 # ENGINE frontend
 #---------------------------------------------------------------------
-frontend engine 127.0.0.1:{{ loadbalancing.engine_api.port }}
+frontend engine_api 127.0.0.1:{{ loadbalancing.engine_api.port }}
 
     capture cookie JSESSIONID len 52
 

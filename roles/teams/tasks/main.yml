@@ -53,7 +53,7 @@
 - name: provision grouper for teams
   shell: bin/gsh ~/create-stems.gsh
   register: gsh_output
-  changed_when: gsh_output.stderr != ''
+  changed_when: "gsh_output.stderr != ''"
   args:
     chdir: /opt/www/grouper-shell
   when: env == 'vm'
@@ -62,6 +62,16 @@
 - name: copy apache config
   template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
   notify: reload httpd
+
+# no idea why this is necessary, as the init script returns an ok status also
+# if teams is still initializing.  Waiting for the port to open works well
+# though, and seems like to correct way to handle this.
+- name: start the teams service
+  service: name=teams state=started enabled=yes
+  ignore_errors: true
+
+- name: wait for teams to start
+  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
 
 - name: ensure the service is started
   service: name=teams enabled=yes state=started

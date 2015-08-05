@@ -13,13 +13,13 @@
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=authz-playground group=authz-playground mode=0755
 
 - include: ../../../tasks/springbootapp/install-release.yml
-  when: authz_playground_snapshot_timestamp == '' and authz_playground_local_jar == ''
+  when: "authz_playground_snapshot_timestamp == '' and authz_playground_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-snapshot.yml
-  when: authz_playground_snapshot_timestamp != '' and authz_playground_local_jar == ''
+  when: "authz_playground_snapshot_timestamp != '' and authz_playground_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-local.yml
-  when: authz_playground_local_jar != ''
+  when: "authz_playground_local_jar != ''"
 
 - name: Copy logging config
   template: src=logback.xml.j2 dest={{ authz_playground_dir }}/logback.xml owner=authz-playground group=authz-playground mode=0740
