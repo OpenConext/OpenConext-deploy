@@ -57,7 +57,7 @@ start() {
 
     pid_of_app > /dev/null
     RETVAL=$?
-    [ $RETVAL = 0 ] && success $"$STRING" || failure $"$STRING"
+    [ $RETVAL = 0 ] && success $"$APP_NAME" || failure $"$APP_NAME"
     echo
 
     [ $RETVAL = 0 ] && touch "$LOCK"
@@ -75,7 +75,7 @@ stop() {
     done
 
     [ $RETVAL = 0 ] && rm -f "$LOCK"
-    [ $RETVAL = 0 ] && success $"$STRING" || failure $"$STRING"
+    [ $RETVAL = 0 ] && success $"$APP_NAME" || failure $"$APP_NAME"
     echo
 }
 
