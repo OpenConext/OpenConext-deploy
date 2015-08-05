@@ -248,7 +248,7 @@ voot:
   externalGroupProviders:
     - {
         type: "grouper",
-        url: "https://grouper.{{ base_domain }}/grouper-ws/services/GrouperService_v2_0",
+        url: "https://grouper.surfconext.nl/v1_6_000/grouper-ws/servicesRest",
         credentials: {
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
@@ -259,7 +259,7 @@ voot:
       }
     - {
         type: "open_social",
-        url: "https://idp-acc.surfnet.nl/voot",
+        url: "https://groupprovider.surfnet.nl",
         credentials: {
           username: "conext",
           secret: "{{ external_group_provider_secrets.surfnet }}"
