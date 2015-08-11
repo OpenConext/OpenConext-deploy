@@ -1,10 +1,10 @@
 ---
 
 - name: Add nginx repo
-  copy: src={{ item }} dest=/etc/yum.repos.d/{{ item }}
+  template: src={{ item }}.j2 dest=/etc/yum.repos.d/{{ item }}
   with_items:
-    - nginx.repo
     - nginx.repo.gpgkey
+    - nginx.repo
 
 - name: Install
   yum: name=nginx-1.8.0-1.el6.ngx state=present
