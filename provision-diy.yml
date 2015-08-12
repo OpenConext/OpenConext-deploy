@@ -1,0 +1,84 @@
+---
+
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: Read vars from secrets file
+    include_vars: "{{ secrets_file }}"
+    tags:
+      - always
+
+- hosts: loadbalancer:php-apps:java-apps:storage
+  gather_facts: no
+  sudo: true
+  roles:
+    - common
+    - hosts
+    - tls
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
+
+- hosts: loadbalancer
+  gather_facts: true
+  sudo: true
+  roles:
+  # - { role: haproxy, tags: ['lb'] }
+    - { role: nginx, tags: ['nginx'] }
+
+- hosts: php-apps:java-apps
+  gather_facts: no
+  sudo: true
+  roles:
+    - httpd
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
+
+- hosts: storage
+  gather_facts: no
+  sudo: true
+  roles:
+    - { role: mysql, tags: ['mysql'] }
+    - { role: ldap, tags: ['ldap'] }
+  # - vm_only_provision_eb_sr
+
+- hosts: php-apps
+  gather_facts: no
+  sudo: true
+  gather_facts: no
+  vars:
+    env_lang: php
+  roles:
+    - php
+    - static
+    - { role: welcome, tags: ['welcome']}
+    - { role: openconext-common, tags: ['eb', 'sr'] }
+    - { role: engineblock, tags: ['eb'] }
+  # - vm_only_bootstrap_ldap_attributes
+    - { role: janus, tags: ['sr'] }
+  # - vm_only_bootstrap_ldap_attributes
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
+
+- hosts: java-apps
+  gather_facts: no
+  sudo: true
+  vars:
+    env_lang: java
+  roles:
+    - tomcat
+    - java
+    - { role: shibboleth, tags: ['shib'] }
+    - { role: grouper, tags: ['grouper'] }
+    - { role: teams, tags: ['teams'] }
+    - { role: mujina-idp, tags: ['legacy'] }
+    - { role: mujina-sp, tags: ['legacy'] }
+    - { role: authz-server, tags: ['oauth', 'authz-server'] }
+    - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
+    - { role: voot, tags: ['oauth', 'voot'] }
+    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
