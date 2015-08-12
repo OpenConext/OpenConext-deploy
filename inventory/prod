@@ -1,0 +1,17 @@
+[storage]
+
+[storage-acc:children]
+storage
+
+[java-apps]
+prd64.coin.surf.net
+
+[php-apps]
+
+[loadbalancer]
+
+[prod:children]
+storage
+java-apps
+php-apps
+loadbalancer
