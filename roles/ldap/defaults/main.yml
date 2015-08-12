@@ -18,5 +18,5 @@ ldap:
     unit_test_user: gadget
 
 
-ldap_bind_urls: "ldap:///" # change this is you want ldap to listen on localhost only, for example
+  ldap_bind_urls: "ldap:/// ldapi:///" # change this is you want ldap to listen on localhost only, for example
 
