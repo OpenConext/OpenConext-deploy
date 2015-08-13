@@ -1,6 +1,5 @@
 ---
 env: diy
-base_domain: "connect.surfconext.nl"
 
 smtp_server: localhost
 error_mail_to: coin-logs-dev@list.surfnet.nl
