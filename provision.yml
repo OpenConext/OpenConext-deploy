@@ -57,7 +57,7 @@
     - include: roles/nginx/handlers/main.yml
 
 - hosts: java-apps
-  gather_facts: no
+  gather_facts: true
   sudo: true
   vars:
     env_lang: java
