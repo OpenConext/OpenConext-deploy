@@ -45,7 +45,7 @@ authz_playground_version: 1
 
 # TODO: get rid of this variable altogether.  It is used only to name the
 # unpack directory
-janus_installation_version: {{ janus_version }}
+janus_installation_version: "{{ janus_version }}"
 
 
 # For apache, the same star-certificate is used.
