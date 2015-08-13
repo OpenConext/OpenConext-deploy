@@ -22,7 +22,7 @@
   sudo: true
   roles:
     - { role: haproxy, tags: ['lb'] }
-    - { role: nginx, tags: ['lb'] }
+    - { role: nginx,   tags: ['lb'] }
 
 - hosts: php-apps:java-apps
   gather_facts: no
@@ -38,7 +38,7 @@
   sudo: true
   roles:
     - { role: mysql, tags: ['mysql'] }
-    - { role: ldap, tags: ['ldap'] }
+    - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: php-apps
   gather_facts: no
@@ -49,9 +49,9 @@
   roles:
     - php
     - static
-    - { role: openconext-common, tags: ['eb', 'sr'] }
-    - { role: engineblock, tags: ['eb'] }
-    - { role: janus, tags: ['sr'] }
+    - { role: openconext-common, tags: ['eb','sr'] }
+    - { role: engineblock,       tags: ['eb'     ] }
+    - { role: janus,             tags: ['sr'     ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
@@ -64,12 +64,12 @@
   roles:
     - tomcat
     - java
-    - { role: shibboleth, tags: ['shib'] }
-    - { role: grouper, tags: ['grouper'] }
-    - { role: teams, tags: ['teams'] }
-    - { role: authz-server, tags: ['oauth', 'authz-server'] }
-    - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
-    - { role: voot, tags: ['oauth', 'voot'] }
+    - { role: shibboleth,       tags: ['shib'   ] }
+    - { role: grouper,          tags: ['grouper'] }
+    - { role: teams,            tags: ['teams'  ] }
+    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,             tags: ['oauth', 'voot'            ] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
   handlers:
     - include: roles/httpd/handlers/main.yml

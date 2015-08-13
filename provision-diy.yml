@@ -1,5 +1,4 @@
 ---
-
 - hosts: all
   gather_facts: no
   tasks:
@@ -22,8 +21,7 @@
   gather_facts: true
   sudo: true
   roles:
-  # - { role: haproxy, tags: ['lb'] }
-    - { role: nginx, tags: ['nginx'] }
+    - { role: nginx,   tags: ['lb'] }
 
 - hosts: php-apps:java-apps
   gather_facts: no
@@ -39,8 +37,8 @@
   sudo: true
   roles:
     - { role: mysql, tags: ['mysql'] }
-    - { role: ldap, tags: ['ldap'] }
-  # - vm_only_provision_eb_sr
+    - { role: ldap,  tags: ['ldap' ] }
+    - vm_only_provision_eb_sr
 
 - hosts: php-apps
   gather_facts: no
@@ -51,12 +49,12 @@
   roles:
     - php
     - static
-    - { role: welcome, tags: ['welcome']}
-    - { role: openconext-common, tags: ['eb', 'sr'] }
-    - { role: engineblock, tags: ['eb'] }
-  # - vm_only_bootstrap_ldap_attributes
-    - { role: janus, tags: ['sr'] }
-  # - vm_only_bootstrap_ldap_attributes
+    - { role: welcome,           tags: ['welcome'] }
+    - { role: openconext-common, tags: ['eb','sr'] }
+    - { role: engineblock,       tags: ['eb'     ] }
+    - vm_only_bootstrap_ldap_attributes
+    - { role: janus,             tags: ['sr'     ] }
+    - vm_only_bootstrap_ldap_attributes
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
@@ -69,14 +67,14 @@
   roles:
     - tomcat
     - java
-    - { role: shibboleth, tags: ['shib'] }
-    - { role: grouper, tags: ['grouper'] }
-    - { role: teams, tags: ['teams'] }
-    - { role: mujina-idp, tags: ['legacy'] }
-    - { role: mujina-sp, tags: ['legacy'] }
-    - { role: authz-server, tags: ['oauth', 'authz-server'] }
-    - { role: authz-admin, tags: ['oauth', 'authz-admin'] }
-    - { role: voot, tags: ['oauth', 'voot'] }
+    - { role: shibboleth,       tags: ['shib'   ] }
+    - { role: grouper,          tags: ['grouper'] }
+    - { role: teams,            tags: ['teams'  ] }
+    - { role: mujina-idp,       tags: ['legacy' ] }
+    - { role: mujina-sp,        tags: ['legacy' ] }
+    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,             tags: ['oauth', 'voot'            ] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
