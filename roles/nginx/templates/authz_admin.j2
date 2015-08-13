@@ -22,6 +22,7 @@ server {
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   ssl_session_cache shared:SSL:10m;
   ssl_ecdh_curve secp384r1;
+  ssl_dhparam {{ tls_dh_param_file }};
 
   location / {
       proxy_pass http://{{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.port }}/;
@@ -58,6 +59,7 @@ server {
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_session_cache shared:SSL:10m;
     ssl_ecdh_curve secp384r1;
+    ssl_dhparam {{ tls_dh_param_file }};
     ssl_stapling on;
 
     location / {
