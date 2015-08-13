@@ -5,6 +5,14 @@
     - shibboleth.repo
     - shibboleth.repo.gpgkey
 
+- name: Install custom libcurl
+  yum: name={{ item }} state=present
+  with_items:
+    - libcurl-openssl.x86_64
+  when: >
+      ( ansible_distribution == 'RedHat' and ansible_distribution_major_version == '6' ) or
+      ( ansible_distribution == 'Centos' and ansible_distribution_major_version == '6' )
+
 - name: Install
   yum: name={{ item }} state=present
   with_items:

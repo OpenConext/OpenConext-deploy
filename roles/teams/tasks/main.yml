@@ -16,13 +16,13 @@
   register: preDeployStat
 
 - include: ../../../tasks/springbootapp/install-release.yml
-  when: teams_snapshot_timestamp == '' and teams_local_jar == ''
+  when: "teams_snapshot_timestamp == '' and teams_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-snapshot.yml
-  when: teams_snapshot_timestamp != '' and teams_local_jar == ''
+  when: "teams_snapshot_timestamp != '' and teams_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-local.yml
-  when: teams_local_jar != ''
+  when: "teams_local_jar != ''"
 
 - stat: path={{ teams_dir }}/teams-current.war follow=True
   register: postDeployStat
@@ -51,13 +51,11 @@
     - create-stems.gsh
 
 - name: provision grouper for teams
-  shell: bin/gsh ~/create-stems.gsh
+  shell: "bin/gsh ~/create-stems.gsh"
   register: gsh_output
   changed_when: "gsh_output.stderr != ''"
   args:
     chdir: /opt/www/grouper-shell
-  when: env == 'vm'
-  ignore_errors: yes
 
 - name: copy apache config
   template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
