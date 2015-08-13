@@ -13,7 +13,6 @@
   sudo: true
   roles:
     - common
-    - hosts
     - tls
   handlers:
     - include: roles/httpd/handlers/main.yml
