@@ -13,7 +13,7 @@
   roles:
     - common
     - hosts
-    - tls
+    - { role: tls, tags: ['tls'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
