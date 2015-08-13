@@ -16,7 +16,7 @@ diy01
 [loadbalancer]
 diy01
 
-[diy-test:children]
+[diy:children]
 storage
 java-apps
 php-apps
