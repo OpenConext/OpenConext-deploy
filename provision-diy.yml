@@ -70,8 +70,8 @@
     - { role: shibboleth,       tags: ['shib'   ] }
     - { role: grouper,          tags: ['grouper'] }
     - { role: teams,            tags: ['teams'  ] }
-    - { role: mujina-idp,       tags: ['legacy' ] }
-    - { role: mujina-sp,        tags: ['legacy' ] }
+    - { role: mujina-idp,       tags: ['legacy','mujina' ] }
+    - { role: mujina-sp,        tags: ['legacy','mujina' ] }
     - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,             tags: ['oauth', 'voot'            ] }
