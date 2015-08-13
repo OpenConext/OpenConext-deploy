@@ -476,7 +476,7 @@ nginx_ipv4_addresses:
   voot: 145.101.112.67
   grouper: 145.101.112.66
   mujina_sp: 145.101.112.67
-  mujina_idp: 145.101.112.67
+  mujina_idp: 145.101.112.66
   welcome: 145.101.112.67
 
 nginx_config_templates:
