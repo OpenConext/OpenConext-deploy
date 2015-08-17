@@ -3,7 +3,7 @@
 set -e
 
 listcontains() {
-	match = shift
+	match=shift
 	for word in $@
 	do
 		[[ $word = $match ]] && return 0
