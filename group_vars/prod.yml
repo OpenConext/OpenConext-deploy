@@ -248,7 +248,7 @@ voot:
   externalGroupProviders:
     - {
         type: "grouper",
-        url: "https://grouper.surfconext.nl/v1_6_000/grouper-ws/servicesRest",
+        url: "https://grouper.surfconext.nl/grouper-ws/services/GrouperService_v2_0",
         credentials: {
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
