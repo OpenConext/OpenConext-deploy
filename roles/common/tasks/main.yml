@@ -1,5 +1,4 @@
 ---
-
 - name: set timezone
   file: state=link src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime force=True
 
@@ -52,4 +51,3 @@
       || /usr/sbin/sestatus | egrep '^Current mode: *permissive'
     "
   when: selinux_binaries.stat.exists == True
-
