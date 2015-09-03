@@ -54,7 +54,7 @@ engine_database_host: localhost
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
-engine_ldap_host: ldap.{{ base_domain }}
+engine_ldap_host: localhost
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: vm
 
