@@ -61,6 +61,7 @@ engine_apache_environment: vm
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
 ldap_grouper_user: gadget
+grouper_ldap_host: localhost
 
 janus_database_name: sr
 janus_database_host: localhost
