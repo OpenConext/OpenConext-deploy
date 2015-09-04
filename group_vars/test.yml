@@ -145,8 +145,8 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.0.12
-teams_snapshot_timestamp: 20150827.064739-10
+teams_version: 4.0.16
+#teams_snapshot_timestamp: 20150827.064739-10
 
 api_version: 4.0.1
 #api_snapshot_timestamp: 20150419.220130-443
@@ -239,7 +239,7 @@ authzserver:
   key_name: "{{ tls_https.key_name }}"
 
 authz_server_version: 1.3
-authz_server_snapshot_timestamp: "20150903.120645-1"
+authz_server_snapshot_timestamp: "20150904.114133-3"
 
 voot:
   crt_name: "{{ tls_https.crt_name }}"
