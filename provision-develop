@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+if [ "$1" == "--reload" ]; then
+    echo "Reloading vagrant without provisioning"
+    ENV='develop' vagrant reload
+    exit 0
+fi
+
+ENV='develop' vagrant up
+./ansible-env develop provision-vm.yml

@@ -20,6 +20,10 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--memory", "2048"]
       vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
+
+    if ENV['ENV'] == 'develop'
+        apps.vm.synced_folder "../OpenConext-engineblock", "/opt/openconext/OpenConext-engineblock"
+    end
   end
 
 end
