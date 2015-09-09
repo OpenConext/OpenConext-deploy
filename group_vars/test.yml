@@ -355,6 +355,15 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
+pdp_version: "0.1"
+pdp_snapshot_timestamp: "20150909.122119-4"
+pdp_debug: true
+pdp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  username: "pdp_admin"
+  password: "{{ pdp_password }}"
+
 loadbalancing:
   engine: {
     port: 401,
@@ -426,6 +435,13 @@ loadbalancing:
       { label: "voot_backend", ip: "145.100.191.117" },
     ]
   }
+  pdp: {
+    port: 607,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "pdp_backend", ip: "145.100.191.117" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
@@ -450,6 +466,7 @@ nginx_ipv4_addresses:
   mujina_sp: 145.100.191.122
   mujina_idp: 145.100.191.122
   welcome: 145.100.191.122
+  pdp: 145.100.191.122
 
 nginx_config_templates:
   - engine
@@ -463,3 +480,4 @@ nginx_config_templates:
   - static
   - profile
   - serviceregistry
+  - pdp

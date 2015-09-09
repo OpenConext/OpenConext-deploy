@@ -386,6 +386,15 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
+pdp_version: "0.1-SNAPSHOT"
+pdp_snapshot_timestamp: "20150909.122119-4"
+pdp_debug: true
+pdp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  username: "pdp_admin"
+  password: "{{ pdp_password }}"
+
 loadbalancing:
   engine: {
     port: 401,
@@ -485,6 +494,13 @@ loadbalancing:
         { label: "welcome_backend", ip: "192.168.66.79" },
     ]
   }
+  pdp: {
+      port: 607,
+      heartbeat: { url: "/health", method: "GET" },
+      servers: [
+        { label: "pdp_backend", ip: "192.168.66.79" },
+      ]
+    }
 
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
@@ -502,6 +518,7 @@ nginx_ipv4_addresses:
   mujina_sp: 192.168.66.78
   mujina_idp: 192.168.66.78
   welcome: 192.168.66.78
+  pdp: 192.168.66.78
 
 nginx_config_templates:
   - welcome
@@ -517,4 +534,5 @@ nginx_config_templates:
   - authz_playground
   - static
   - profile
+  - pdp
   - serviceregistry

@@ -1,0 +1,11 @@
+Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
+<Virtualhost {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}>
+    # General setup for the virtual host, inherited from global configuration
+    ServerName https://pdp.{{ base_domain }}
+
+  ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-PDP'"
+	CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PDP'" combined
+
+    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
+
+</VirtualHost>

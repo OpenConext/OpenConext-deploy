@@ -318,6 +318,8 @@ authzadmin:
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.resource_checking_secret }}"
+    - clientId: csa
+      secret: "{{ csa_resource_checking_secret }}"
 
 authz_playground_version: 1
 #authz_playground_snapshot_timestamp: 20150423.100812-25

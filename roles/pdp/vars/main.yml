@@ -1,0 +1,14 @@
+springapp_artifact_id: pdp
+springapp_artifact_type: jar
+springapp_artifact_group_dir: /org/openconext
+springapp_version: "{{ pdp_version }}"
+springapp_snapshot_timestamp: "{{ pdp_snapshot_timestamp }}"
+springapp_dir: "{{ pdp_dir }}"
+springapp_user: pdp
+springapp_service_name: pdp
+springapp_jar: "{{ pdp_jar }}"
+springapp_tcpport: 9196
+springapp_local_jar: "{{ pdp_local_jar }}"
+springapp_debug: "{{ pdp_debug }}"
+springapp_debug_port: 1196
+springapp_heapsize: "128m"

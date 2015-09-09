@@ -1,0 +1,7 @@
+---
+pdp_dir: /opt/pdp/
+pdp_version: ''
+pdp_snapshot_timestamp: ''
+pdp_local_jar: ''
+pdp_jar: pdp.jar
+pdp_debug: false
