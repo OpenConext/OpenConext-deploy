@@ -54,13 +54,14 @@ engine_database_host: localhost
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
-engine_ldap_host: ldap.{{ base_domain }}
+engine_ldap_host: localhost
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: vm
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
 ldap_grouper_user: gadget
+grouper_ldap_host: localhost
 
 janus_database_name: sr
 janus_database_host: localhost
