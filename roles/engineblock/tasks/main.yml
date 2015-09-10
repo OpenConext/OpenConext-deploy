@@ -1,13 +1,11 @@
 ---
 - include: install-release.yml
   when: engine_branch is not defined or engine_branch == ''
-  tags:
-    - skip_develop
+  when: not develop
 
 - include: install-branch.yml
   when: engine_branch is defined and engine_branch != ''
-  tags:
-    - skip_develop
+  when: not develop
 
 - name: Install Apache vhost
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
@@ -39,3 +37,5 @@
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: migrate_output
   changed_when: "'no update needed' not in migrate_output.stderr"
+  tags:
+    - eb-migrate
