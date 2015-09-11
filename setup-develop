@@ -2,29 +2,29 @@
 set -e
 
 case "$1" in
-    "reload")
-        echo "Reloading vagrant without provisioning"
-        ENV='develop' vagrant reload
+    "install")
+        echo "Running vagrant up with provisioning"
+        ENV='develop' vagrant up
+        ansible-playbook -i inventory/vm -u vagrant provision-vm.yml --extra-vars="secrets_file=secrets/vm.yml develop=true"
         ;;
     "up")
         echo "Running vagrant up without provisioning"
         ENV='develop' vagrant up
         ;;
+    "provision")
+        echo "Provisioning"
+        ansible-playbook -i inventory/vm -u vagrant provision-vm.yml --extra-vars="secrets_file=secrets/vm.yml develop=true" --tags="xdebug"
+        ;;
+    "reload")
+        echo "Reloading vagrant without provisioning"
+        ENV='develop' vagrant reload
+        ;;
     "migrate")
         echo "Running migrations"
         vagrant ssh apps -c /opt/openconext/OpenConext-engineblock/bin/migrate
         ;;
-    "logparse")
-        vagrant ssh apps -c "sudo tail -f /var/log/messages | /opt/openconext/OpenConext-engineblock/bin/logparse.sh"
-        ;;
-    "provision")
-        echo "Provisioning"
-        ansible-playbook -i inventory/vm -u vagrant provision-vm.yml --extra-vars="secrets_file=secrets/vm.yml develop=true"
-        ;;
     *)
-        echo "Running vagrant up with provisioning"
-        ENV='develop' vagrant up
-        ansible-playbook -i inventory/vm -u vagrant provision-vm.yml --extra-vars="secrets_file=secrets/vm.yml develop=true"
+        echo "Usage: $0 {install|up|provision|reload|migrate}"
         ;;
 esac
 
