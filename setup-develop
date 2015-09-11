@@ -13,7 +13,7 @@ case "$1" in
         ;;
     "provision")
         echo "Provisioning"
-        ansible-playbook -i inventory/vm -u vagrant provision-vm.yml --extra-vars="secrets_file=secrets/vm.yml develop=true" --tags="xdebug"
+        ansible-playbook -i inventory/vm -u vagrant provision-vm.yml --extra-vars="secrets_file=secrets/vm.yml develop=true"
         ;;
     "reload")
         echo "Reloading vagrant without provisioning"
