@@ -15,6 +15,7 @@
      - php-soap
      - php-xml
      - php-mcrypt
+     - php-pecl-xdebug
 
 - name: Configure PHP
   template:
@@ -26,6 +27,9 @@
   with_items:
     - apc.ini
     - openconext.ini
+
+- name: Configure PHP Xdebug
+  template: src=xdebug.ini.j2 dest=/etc/php.d/xdebug.ini
 
 - name: Enable php in apache
   copy: src=httpd.php.conf dest=/etc/httpd/conf.d/php.conf

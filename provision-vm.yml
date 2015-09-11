@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  gather_facts: no
+  gather_facts: yes
   tasks:
   - name: Read vars from secrets file
     include_vars: "{{ secrets_file }}"
