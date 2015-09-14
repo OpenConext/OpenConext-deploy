@@ -23,5 +23,11 @@ xacml.openaz.policyFinderFactory=pdp.xacml.ClassPathPolicyFinderFactory
 
 # Policies to load
 #
-xacml.rootPolicies=conext
-conext.file=file://{{ pdp_dir }}/SURFconext.SURFspotAccess.xml
+xacml.rootPolicies=surfspot,teams
+surfspot.file=file://{{ pdp_dir }}/SURFconext.SURFspotAccess.xml
+teams.file=file://{{ pdp_dir }}/SURFconext.TeamAccess.xml
+
+# PIP Engine Definition
+#
+xacml.pip.engines=teams
+teams.classname=pdp.xacml.teams.TeamsPIP

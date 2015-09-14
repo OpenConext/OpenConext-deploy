@@ -37,6 +37,10 @@
   template: src=SURFconext.SURFspotAccess.xml.j2 dest={{ pdp_dir }}/SURFconext.SURFspotAccess.xml owner=pdp group=pdp mode=0740
   notify: restart pdp
 
+- name: Copy policy config
+  template: src=SURFconext.TeamAccess.xml.j2 dest={{ pdp_dir }}/SURFconext.TeamAccess.xml owner=pdp group=pdp mode=0740
+  notify: restart pdp
+
 - name: copy apache config
   template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
   notify: reload httpd
