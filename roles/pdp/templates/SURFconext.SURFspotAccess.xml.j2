@@ -87,5 +87,14 @@
             RuleId="http://axiomatics.com/alfa/identifier/SURFconext.SURFspotAccess.denyAccess">
         <xacml3:Description />
         <xacml3:Target />
+        <xacml3:AdviceExpressions>
+            <xacml3:AdviceExpression AdviceId="http://example.com/advice/reasonForDeny"
+                                     AppliesTo="Deny">
+                <xacml3:AttributeAssignmentExpression AttributeId="DenyMessage" Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource">
+                    <xacml3:AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">You are not a member of the SURF organization</xacml3:AttributeValue>
+                </xacml3:AttributeAssignmentExpression>
+            </xacml3:AdviceExpression>
+        </xacml3:AdviceExpressions>
     </xacml3:Rule>
 </xacml3:Policy>

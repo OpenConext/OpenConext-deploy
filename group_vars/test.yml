@@ -358,7 +358,7 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20150914.114600-5"
+pdp_snapshot_timestamp: "20150915.100911-6"
 pdp_debug: true
 pdp:
   crt_name: "{{ tls_https.crt_name }}"
