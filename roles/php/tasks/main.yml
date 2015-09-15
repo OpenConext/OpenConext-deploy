@@ -30,11 +30,8 @@
 
 - name: Configure PHP Xdebug
   template: src=xdebug.ini.j2 dest=/etc/php.d/xdebug.ini
-  tags:
-    - xdebug
+  when: develop is true
 
 - name: Enable php in apache
   copy: src=httpd.php.conf dest=/etc/httpd/conf.d/php.conf
-  notify: reload httpd
-  tags:
-    - xdebug
+  when: develop is true
