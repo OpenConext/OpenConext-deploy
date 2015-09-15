@@ -15,7 +15,9 @@ No cookie is required for it to work.
 
 # Setup
 When setting up a development environment, run `./provision-develop` to bring up the Vagrant boxes and to provision them through Ansible.
+
 Be sure to checkout an OpenConext-engineblock branch in the `../OpenConext-engineblock/` directory relative to the `OpenConext-deploy` project directory.
+
 Project dependencies can be installed using `composer install` in the `OpenConext-engineblock` directory on the VM or on the host machine.
 
 # Special commands
