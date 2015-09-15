@@ -37,5 +37,3 @@
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: migrate_output
   changed_when: "'no update needed' not in migrate_output.stderr"
-  tags:
-    - eb-migrate
