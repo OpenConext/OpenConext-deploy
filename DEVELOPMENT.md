@@ -2,7 +2,7 @@ Development Environment
 ==============================
 
 # Introduction
-The `./provision-develop` script is a utility, analogous to existing `provision`-* bash scripts, for setting up and managing development VM's for EngineBlock.
+The `./provision-develop` script is a utility, analogous to existing `provision-*` bash scripts, for setting up and managing development VM's for EngineBlock.
 
 ## Mounting EngineBlock
 Unlike other provisioning scripts, it will not download and symlink EngineBlock in a folder on the VM as it will mount a (shared) directory, expected to be present at `../OpenConext-engineblock/` and accessible on the VM at `/opt/openconext/OpenConext-engineblock`.
