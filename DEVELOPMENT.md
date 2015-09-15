@@ -5,11 +5,11 @@ Development Environment
 The `./provision-develop` script is a utility, analogous to existing `provision-*` bash scripts, for setting up and managing development VM's for EngineBlock.
 
 ## Mounting EngineBlock
-Unlike other provisioning scripts, it will not download and symlink EngineBlock in a folder on the VM as it will mount a (shared) directory, expected to be present at `../OpenConext-engineblock/` and accessible on the VM at `/opt/openconext/OpenConext-engineblock`.
-This way, one can easily checkout OpenConext-engineblock branches from outside the VM.Also included is an xdebug configuration.
+Unlike other provisioning scripts, it will not download and symlink EngineBlock in a folder on the VM as it will mount a (shared) directory, expected to be present at `../OpenConext-engineblock/` and accessible on the `apps` VM at `/opt/openconext/OpenConext-engineblock`.
+This way, one can easily checkout OpenConext-engineblock branches from outside the VM.
 
 ## Xdebug
-For development purposes, provisioning the apps VM includes Xdebug. To circumvent the loadbalancer VM, it is configured with `192.168.66.1` as IP of the host machine. 
+For development purposes, provisioning the `apps` VM includes Xdebug. To circumvent the `loadbalancer` VM, it is configured with `192.168.66.1` as IP of the host machine. 
 Should there be any issues, make sure this IP address is correct for your setup.
 No cookie is required for it to work.
 
