@@ -99,3 +99,6 @@ To provision the VM use the following (password is vagrant and sudo password is 
 ```
 ansible-playbook -u vagrant -i inventory/vm -K selfservice.yml -k
 ```
+
+# Development
+Setting up a development environment is described in the file [DEVELOPMENT](DEVELOPMENT.md).

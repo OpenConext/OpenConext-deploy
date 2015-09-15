@@ -1,0 +1,64 @@
+#!/bin/bash
+set -e
+
+function showHelp {
+    echo "Usage: $0 [optional: command]
+
+If no command is given:
+    Runs vagrant up with provisioning.
+
+The following commands are available:
+    - halt: halts vagrant box.
+    - help: shows this help page.
+    - logs {lb|apps}: shows all non-encrypted, non-zipped logs of specified vm.
+    - provision: provisions vagrant box.
+    - reload: reloads vagrant box.
+    - up: runs vagrant up without provisioning.
+    "
+}
+
+case "$1" in
+    "help")
+        showHelp
+        ;;
+    "up")
+        echo "Running vagrant up without provisioning"
+        ENV='develop' vagrant up
+        ;;
+    "provision")
+        echo "Provisioning"
+        ansible-playbook -i inventory/vm -u vagrant provision-vm.yml --extra-vars="secrets_file=secrets/vm.yml develop=true" --tags="xdebug"
+        ;;
+    "reload")
+        echo "Reloading vagrant without provisioning"
+        ENV='develop' vagrant reload
+        ;;
+    "logs")
+        if [ "$2" == "lb" ] ; then
+            vagrant ssh lb -c "sudo find /var/log/* -type f -a ! -path '*/sa/*' -a ! -name 'wtmp' -a ! -name '*.gz' | sudo xargs tail -f";
+        elif [ "$2" == "apps" ] ; then
+            vagrant ssh apps -c "sudo find /var/log/* -type f -a ! -path '*/sa/*' -a ! -name 'wtmp' -a ! -name '*.gz' | sudo xargs tail -f";
+        else
+            showHelp
+        fi
+        ;;
+    "halt")
+        echo "Halting vagrant"
+        vagrant halt
+        ;;
+    *)
+        read -r -p "This will run vagrant up with provisioning. Are you sure you want to do that? [y/N] " response
+        if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
+        then
+            echo "Running vagrant up with provisioning"
+            ENV='develop' vagrant up
+            ansible-playbook -i inventory/vm -u vagrant provision-vm.yml --extra-vars="secrets_file=secrets/vm.yml develop=true"
+        else
+            showHelp
+            exit 1;
+        fi
+
+        ;;
+esac
+
+
