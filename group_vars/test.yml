@@ -395,7 +395,7 @@ loadbalancing:
   }
   engine_api: {
       port: 405,
-      #heartbeat: { url: "/", method: "GET" },
+      heartbeat: { url: "/", method: "GET" },
       servers: [
         { label: "engine_api_backend", ip: "145.100.191.116" },
       ]

@@ -218,7 +218,7 @@ backend engine_be
 #---------------------------------------------------------------------
 backend engine_api_be
 
-    # Healthcheck ombouwen naar controle op valide antwoord
+    option httpchk {{ loadbalancing.engine_api.heartbeat.method }} {{ loadbalancing.profile.heartbeat.url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
 
     mode http
