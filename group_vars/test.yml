@@ -4,6 +4,8 @@ env: test
 smtp_server: s01.dev.coin.surf.net
 error_mail_to: coin-logs-dev@list.surfnet.nl
 
+php_display_errors: 1
+
 databases:
   names:
     - teams

@@ -4,6 +4,8 @@ env: prd
 smtp_server: localhost
 error_mail_to: coin-logs@list.surfnet.nl
 
+php_display_errors: 0
+
 databases:
   names:
     - teams

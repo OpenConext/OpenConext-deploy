@@ -4,6 +4,8 @@ env: vm
 smtp_server: localhost
 error_mail_to: no-mail-on-vm@surfconext.nl
 
+php_display_errors: 1
+
 databases:
   names:
     - teams
