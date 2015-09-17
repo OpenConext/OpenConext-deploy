@@ -118,7 +118,7 @@ engine_version: 4.4.8
 
 engine_janus_cache_lifetime: 0
 
-engine_vovalidate_key : oauth_key
+engine_vovalidate_key: oauth_key
 
 engine_trusted_proxy_ips:
   - 127.0.0.1

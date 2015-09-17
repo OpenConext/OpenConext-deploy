@@ -98,7 +98,7 @@ janus:
 
 engine_janus_cache_lifetime: 0
 
-engine_vovalidate_key : engine_api_oauth_key
+engine_vovalidate_key: engine_api_oauth_key
 
 engine_trusted_proxy_ips:
   - 145.100.191.194
