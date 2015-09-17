@@ -36,6 +36,10 @@ encryption.keys.{{ key }}.publicFile = {{ value.publicFile }}
 {% endfor %}
 
 {% endif %}
+
+engineApi.user = {{ engine_api_janus_user }}
+engineApi.password = {{ engine_api_janus_password }}
+
 ldap.host = {{ engine_ldap_host }}
 ldap.password = "{{ engine_ldap_password }}"
 ldap.userName = "{{ engine_ldap_bind_dn }}"
