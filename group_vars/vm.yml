@@ -123,13 +123,13 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
+#    - {
+#        index: 0,
+#        type: "database",
+#        value: "Doctrine"
+#      }
     - {
         index: 0,
-        type: "database",
-        value: "Doctrine"
-      }
-    - {
-        index: 1,
         type: "janus",
         value: "JanusRestV1"
       }

@@ -118,7 +118,7 @@ engine_block:
 #        value: "Doctrine"
 #      }
     - {
-        index: 1,
+        index: 0,
         type: "janus",
         value: "JanusRestV1"
       }
