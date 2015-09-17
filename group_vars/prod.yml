@@ -109,6 +109,10 @@ engine_keys:
     privateFile: /etc/openconext/engineblock.pem
     publicKey: engineblock.crt
     publicFile: /etc/openconext/engineblock.20140505.crt
+  20140505:
+    privateFile: /etc/openconext/engineblock.pem
+    publicKey: engineblock.crt
+    publicFile: /etc/openconext/engineblock.20140505.crt
 
 engine_block:
   metadataRepositories:
