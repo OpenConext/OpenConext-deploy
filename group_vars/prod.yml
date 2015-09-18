@@ -37,7 +37,8 @@ janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
 
 
-engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
+engine_idp_debugging_email_address: "conext-beheer@surfnet.nl"
+engine_syslog_priority: 3
 
 # when using multiple certificates list them all (and their bundles) under tls.certificates
 tls:
@@ -96,7 +97,7 @@ janus:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-engine_janus_cache_lifetime: 0
+engine_janus_cache_lifetime: 86400
 
 engine_vovalidate_key: engine_api_oauth_key
 
@@ -106,11 +107,11 @@ engine_trusted_proxy_ips:
 #
 engine_keys:
   default:
-    privateFile: /etc/openconext/engineblock.pem
+    privateFile: /etc/openconext/engineblock.20140505.key
     publicKey: engineblock.crt
     publicFile: /etc/openconext/engineblock.20140505.crt
   20140505:
-    privateFile: /etc/openconext/engineblock.pem
+    privateFile: /etc/openconext/engineblock.20140505.key
     publicKey: engineblock.crt
     publicFile: /etc/openconext/engineblock.20140505.crt
 
