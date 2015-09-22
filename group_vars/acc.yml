@@ -96,7 +96,7 @@ janus:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-engine_janus_cache_lifetime: 0
+engine_janus_cache_lifetime: 86400
 
 engine_vovalidate_key: engine_api_oauth_key
 
