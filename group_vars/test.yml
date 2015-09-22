@@ -147,7 +147,7 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.0.17
+teams_version: 4.1.0
 #teams_snapshot_timestamp: 20150915.083452-1
 
 api_version: 4.0.1

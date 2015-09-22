@@ -175,7 +175,7 @@ teams:
   mail_server: "localhost"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
-teams_version: 4.0.11
+teams_version: 4.1.0
 # teams_snapshot_timestamp: 20150519.080724-3
 teams_debug: true
 
