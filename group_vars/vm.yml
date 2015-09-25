@@ -21,6 +21,8 @@ databases:
     - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
+  development_user:
+    - { name: development, password: development }
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
