@@ -69,3 +69,10 @@
   template: src=vhost.j2.conf dest=/etc/httpd/conf.d/serviceregistry.conf
   notify:
     - reload httpd
+
+- name: Warm the cache of the Symfony components
+  command: "app/console cache:clear"
+  args:
+    chdir: "{{ janus_dir }}"
+  sudo: yes
+  sudo_user: "{{ apache_user }}"

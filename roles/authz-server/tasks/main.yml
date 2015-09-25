@@ -33,5 +33,13 @@
   template: src=authz.conf.j2 dest=/etc/httpd/conf.d/authz.conf
   notify: reload httpd
 
+# see the same task the teams role to see why this is done.
 - name: ensure the service is started
   service: name=authz-server enabled=yes state=started
+  ignore_errors: true
+
+- name: wait for authz-server to start
+  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
+
+- name: ensure the service is started
+  service: name=teams enabled=yes state=started

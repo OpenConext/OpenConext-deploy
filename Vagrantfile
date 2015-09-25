@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "apps" do |apps|
+  config.vm.define "apps", primary: true do |apps|
     apps.vm.network :private_network, ip: "192.168.66.79"
     apps.vm.hostname = "apps.vm.openconext.org"
     config.vm.provider :virtualbox do |vb|

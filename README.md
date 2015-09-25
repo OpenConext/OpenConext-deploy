@@ -3,7 +3,7 @@ Ansible-driven provisioning of the OpenConext platform.
 
 # Getting started
 
-These steps for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
+These steps for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager.
 While it is possible to deploy OpenConext using other environments, currently it is unsupported.
 
 ## Install Vagrant and VirtualBox
@@ -101,4 +101,5 @@ ansible-playbook -u vagrant -i inventory/vm -K selfservice.yml -k
 ```
 
 # Development
+
 Setting up a development environment is described in the file [DEVELOPMENT](DEVELOPMENT.md).
