@@ -11,6 +11,25 @@
   copy: src=app_dev.php dest=/opt/openconext/OpenConext-engineblock/web/app_dev.php owner={{ apache_user }} group={{ apache_user }} mode=0644
   when: develop
 
+- name: Create the cache dir for Symfony
+  file:
+    path={{ engineblock_symfony_cache_path }}
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+    recurse=yes
+
+- name: Create the log dir for Symfony
+  file:
+    path={{ engineblock_symfony_log_path }}
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+    recurse=yes
+
+- include: develop.yml
+  when: develop
+
 - name: Install Apache vhost
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
   with_items:
