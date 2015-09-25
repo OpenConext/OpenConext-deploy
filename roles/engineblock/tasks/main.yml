@@ -7,6 +7,10 @@
   when: engine_branch is defined and engine_branch != ''
   when: not develop
 
+- name: Copy app_dev.php to OpenConext web folder
+  copy: src=app_dev.php dest=/opt/openconext/OpenConext-engineblock/web/app_dev.php owner={{ apache_user }} group={{ apache_user }} mode=0644
+  when: develop
+
 - name: Install Apache vhost
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
   with_items:
