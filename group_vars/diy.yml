@@ -467,7 +467,7 @@ nginx_ipv4_addresses:
   engine: 145.101.112.67
   engine_api: 145.101.112.66
   profile: 145.101.112.67
-  serviceregistry: 145.101.112.66
+  serviceregistry: 145.101.112.67
   static: 145.101.112.67
   teams: 145.101.112.67
   authzserver: 145.101.112.67
