@@ -54,9 +54,9 @@
     - { role: welcome,           tags: ['welcome'] }
     - { role: openconext-common, tags: ['eb','sr'] }
     - { role: engineblock,       tags: ['eb'     ] }
-    - vm_only_bootstrap_ldap_attributes
+    - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
     - { role: janus,             tags: ['sr'     ] }
-    - vm_only_bootstrap_ldap_attributes
+    - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

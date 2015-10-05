@@ -4,6 +4,8 @@ env: diy-test
 smtp_server: localhost
 error_mail_to: coin-logs-dev@list.surfnet.nl
 
+php_display_errors: 1
+
 databases:
   names:
     - teams
@@ -116,7 +118,7 @@ engine_version: 4.4.8
 
 engine_janus_cache_lifetime: 0
 
-engine_vovalidate_key : oauth_key
+engine_vovalidate_key: oauth_key
 
 engine_trusted_proxy_ips:
   - 127.0.0.1
@@ -275,7 +277,7 @@ voot:
 voot_version: 1.2.1
 #voot_snapshot_timestamp: "20150701.122507-7"
 
-authz_admin_version: 1.2
+authz_admin_version: 1.3.1
 #authz_admin_snapshot_timestamp: "20150611.111906-1"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
@@ -369,7 +371,7 @@ loadbalancing:
   }
   profile: {
     port: 402,
-    heartbeat: { url: "/media/surfconext.png", method: "HEAD" },
+    heartbeat: { url: "/favicon.ico", method: "HEAD" },
     servers: [
       { label: "profile_backend", ip: "{{ apache_app_listen_address.profile }}" }
     ]
@@ -390,7 +392,7 @@ loadbalancing:
   }
   engine_api: {
       port: 405,
-      #heartbeat: { url: "/", method: "GET" },
+      heartbeat: { url: "/", method: "GET" },
       servers: [
         { label: "engine_api_backend", ip: "{{ apache_app_listen_address.engine_api }}" },
       ]

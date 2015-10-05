@@ -1,0 +1,2 @@
+---
+grouper_ldap_host: ldap.{{ base_domain }}

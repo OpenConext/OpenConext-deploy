@@ -1,0 +1,14 @@
+logging.config=file://{{ pdp_dir }}/logback.xml
+server.port={{ springapp_tcpport }}
+
+xacml.properties.path=file://{{ pdp_dir }}/xacml.conext.properties
+
+security.basic.enabled=true
+security.user.name={{ pdp.username }}
+security.user.password={{ pdp.password }}
+
+endpoints.enabled=false
+endpoints.health.enabled=true
+endpoints.info.enabled=true
+
+logging.level.pdp: DEBUG

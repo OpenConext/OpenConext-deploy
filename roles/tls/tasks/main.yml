@@ -15,6 +15,10 @@
 - name: create directory
   file: state=directory dest={{ tls_dh_param_path }} mode=0755 owner=root
 
+- name: install libselinux-python
+  yum: name=libselinux-python state=present
+  when: env == 'vm'
+
 - name: copy default Dillie-Hellman parameters
   copy: src=dh_params_default.pem dest={{ tls_dh_param_file }}
   when: env == 'vm'
