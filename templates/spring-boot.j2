@@ -20,7 +20,7 @@ HEAPSIZE="{{ springapp_heapsize }}"
 
 LOG="/var/log/$APP_NAME.log"
 LOCK="/var/lock/subsys/$APP_NAME"
-JAVA="/usr/lib/jvm/java-1.8.0-openjdk/bin/java"
+JAVA="/usr/lib/jvm/java-1.8.0/bin/java"
 {% if springapp_debug == "True" %}
 DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address={{ springapp_debug_port }}"
 {% else %}
