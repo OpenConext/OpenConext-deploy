@@ -1,0 +1,33 @@
+#
+# Properties that the embedded PDP engine uses to configure and load
+#
+# Standard API Factories
+#
+xacml.dataTypeFactory=org.apache.openaz.xacml.std.StdDataTypeFactory
+xacml.pdpEngineFactory=org.apache.openaz.xacml.pdp.OpenAZPDPEngineFactory
+xacml.pepEngineFactory=org.apache.openaz.xacml.std.pep.StdEngineFactory
+xacml.pipFinderFactory=org.apache.openaz.xacml.std.pip.StdPIPFinderFactory
+#
+# OpenAZ PDP Implementation Factories
+#
+xacml.openaz.evaluationContextFactory=org.apache.openaz.xacml.pdp.std.StdEvaluationContextFactory
+xacml.openaz.combiningAlgorithmFactory=org.apache.openaz.xacml.pdp.std.StdCombiningAlgorithmFactory
+xacml.openaz.functionDefinitionFactory=org.apache.openaz.xacml.pdp.std.StdFunctionDefinitionFactory
+xacml.openaz.policyFinderFactory=pdp.xacml.ClassPathPolicyFinderFactory
+
+#
+# NOTE: If you are testing against a RESTful PDP, then the PDP must be configured with the
+# policies and PIP configuration as defined below. Otherwise, this is the configuration that
+# the embedded PDP uses.
+#
+
+# Policies to load
+#
+xacml.rootPolicies=surfspot,teams
+surfspot.file=file://{{ pdp_dir }}/SURFconext.SURFspotAccess.xml
+teams.file=file://{{ pdp_dir }}/SURFconext.TeamAccess.xml
+
+# PIP Engine Definition
+#
+xacml.pip.engines=teams
+teams.classname=pdp.xacml.teams.TeamsPIP

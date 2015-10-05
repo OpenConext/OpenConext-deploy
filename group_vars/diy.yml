@@ -4,6 +4,8 @@ env: diy
 smtp_server: localhost
 error_mail_to: coin-logs-dev@list.surfnet.nl
 
+php_display_errors: 0
+
 databases:
   names:
     - teams
@@ -30,7 +32,7 @@ api_version: 4.0.1
 mujina_version: 4.0.2
 voot_version: 1.2.1
 authz_server_version: 1.2
-authz_admin_version: 1.2
+authz_admin_version: 1.3.1
 authz_playground_version: 1
 
 # alternatively, use a snapshot
@@ -138,7 +140,7 @@ mujina_idp:
 
 engine_janus_cache_lifetime: 0
 
-engine_vovalidate_key : oauth_key
+engine_vovalidate_key: oauth_key
 
 engine_trusted_proxy_ips:
   - 127.0.0.1

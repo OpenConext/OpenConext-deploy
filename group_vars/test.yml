@@ -4,6 +4,8 @@ env: test
 smtp_server: s01.dev.coin.surf.net
 error_mail_to: coin-logs-dev@list.surfnet.nl
 
+php_display_errors: 1
+
 databases:
   names:
     - teams
@@ -97,7 +99,7 @@ janus:
 
 engine_janus_cache_lifetime: 0
 
-engine_vovalidate_key : oauth_key
+engine_vovalidate_key: oauth_key
 
 engine_trusted_proxy_ips:
   - 192.168.1.1
@@ -111,13 +113,13 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
+#    - {
+#        index: 0,
+#        type: "database",
+#        value: "Doctrine"
+#      }
     - {
         index: 0,
-        type: "database",
-        value: "Doctrine"
-      }
-    - {
-        index: 1,
         type: "janus",
         value: "JanusRestV1"
       }
@@ -145,8 +147,8 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.0.16
-#teams_snapshot_timestamp: 20150827.064739-10
+teams_version: 4.1.0
+#teams_snapshot_timestamp: 20150915.083452-1
 
 api_version: 4.0.1
 #api_snapshot_timestamp: 20150419.220130-443
@@ -238,8 +240,8 @@ authzserver:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-authz_server_version: 1.3
-authz_server_snapshot_timestamp: "20150904.114133-3"
+authz_server_version: 1.3.1
+#authz_server_snapshot_timestamp: "20150904.114133-3"
 
 voot:
   crt_name: "{{ tls_https.crt_name }}"
@@ -271,8 +273,8 @@ voot:
 voot_version: 1.3
 voot_snapshot_timestamp: "20150701.122507-7"
 
-authz_admin_version: 1.2
-authz_admin_snapshot_timestamp: "20150611.111906-1"
+authz_admin_version: 1.3.1
+#authz_admin_snapshot_timestamp: "20150611.111906-1"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -355,6 +357,15 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
+pdp_version: "0.1"
+pdp_snapshot_timestamp: "20150915.100911-6"
+pdp_debug: true
+pdp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  username: "pdp_admin"
+  password: "{{ pdp_password }}"
+
 loadbalancing:
   engine: {
     port: 401,
@@ -426,6 +437,13 @@ loadbalancing:
       { label: "voot_backend", ip: "145.100.191.117" },
     ]
   }
+  pdp: {
+    port: 607,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "pdp_backend", ip: "145.100.191.117" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
@@ -450,6 +468,7 @@ nginx_ipv4_addresses:
   mujina_sp: 145.100.191.122
   mujina_idp: 145.100.191.122
   welcome: 145.100.191.122
+  pdp: 145.100.191.122
 
 nginx_config_templates:
   - engine
@@ -463,3 +482,4 @@ nginx_config_templates:
   - static
   - profile
   - serviceregistry
+  - pdp

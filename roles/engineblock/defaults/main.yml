@@ -1,6 +1,6 @@
 #---
 ## Version of EngineBlock that is installable by this role
-engine_version: 4.5.2
+engine_version: 4.6.0
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"

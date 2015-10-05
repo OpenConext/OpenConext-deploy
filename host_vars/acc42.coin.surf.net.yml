@@ -1,6 +1,7 @@
 ---
 apache_app_listen_address:
   engine: 145.100.191.134
+  engine_api: 145.100.191.134
   profile: 145.100.191.134
   serviceregistry: 145.100.191.134
   static: 145.100.191.134

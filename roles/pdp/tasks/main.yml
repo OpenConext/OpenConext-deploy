@@ -1,0 +1,60 @@
+---
+- name: Create user
+  user: name=pdp home={{ pdp_dir }} shell=/sbin/nologin
+
+- name: Copy start script
+  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
+  notify: restart pdp
+
+- name: enable pdp service
+  service: name=pdp enabled=yes
+
+- name: Create logging directory
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner=pdp group=pdp mode=0755
+
+- include: ../../../tasks/springbootapp/install-release.yml
+  when: "pdp_snapshot_timestamp == '' and pdp_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-snapshot.yml
+  when: "pdp_snapshot_timestamp != '' and pdp_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-local.yml
+  when: "pdp_local_jar != ''"
+
+- name: Copy logging config
+  template: src=logback.xml.j2 dest={{ pdp_dir }}/logback.xml owner=pdp group=pdp mode=0740
+  notify: restart pdp
+
+- name: Copy application config
+  template: src=application.properties.j2 dest={{ pdp_dir }}/application.properties owner=pdp group=pdp mode=0740
+  notify: restart pdp
+
+- name: Copy xacml config
+  template: src=xacml.conext.properties.j2 dest={{ pdp_dir }}/xacml.conext.properties owner=pdp group=pdp mode=0740
+  notify: restart pdp
+
+- name: Copy policy config
+  template: src=SURFconext.SURFspotAccess.xml.j2 dest={{ pdp_dir }}/SURFconext.SURFspotAccess.xml owner=pdp group=pdp mode=0740
+  notify: restart pdp
+
+- name: Copy policy config
+  template: src=SURFconext.TeamAccess.xml.j2 dest={{ pdp_dir }}/SURFconext.TeamAccess.xml owner=pdp group=pdp mode=0740
+  notify: restart pdp
+
+- name: copy apache config
+  template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
+  notify: reload httpd
+
+# no idea why this is necessary, as the init script returns an ok status also
+# if pdp is still initializing.  Waiting for the port to open works well
+# though, and seems like to correct way to handle this.
+- name: start the pdp service
+  service: name=pdp state=started enabled=yes
+  ignore_errors: true
+
+- name: wait for pdp to start
+  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
+
+- name: ensure the service is started
+  service: name=pdp enabled=yes state=started
+
