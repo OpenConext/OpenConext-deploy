@@ -25,7 +25,7 @@ databases:
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
 
 # versions of the components
-engine_version: 4.4.8
+engine_version: 4.6.0
 janus_version: 1.20.5
 teams_version: 4.0.11
 api_version: 4.0.1
