@@ -168,7 +168,6 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  mail_server: s01.dev.coin.surf.net
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 engineblock:
