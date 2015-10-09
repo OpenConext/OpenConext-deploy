@@ -47,6 +47,3 @@ engine_profile_idp_hostmatch: "{{ profile_domain }}"
 engine_syslog_priority: 7
 
 #engine_initial_sql: ''
-
-engineblock_symfony_cache_path: "/var/cache/engineblock"
-engineblock_symfony_log_path: "/var/log/engineblock"
