@@ -21,7 +21,7 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
     # Note that the requested URL MUST be appended because Corto uses the PATH_INFO server variable
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ /app{% if develop %}_dev{% endif %}.php/$1 [L] # Send the query string to app(_dev).php
+    RewriteRule ^(.*)$ /app{% if develop %}_dev{% endif %}.php/$1 [L] # Send the query string to index.php
     # Requests to the domain (no query string)
     RewriteRule ^$ /app{% if develop %}_dev{% endif %}.php/ [L]
 
