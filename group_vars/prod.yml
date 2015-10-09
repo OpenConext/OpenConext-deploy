@@ -56,7 +56,6 @@ engine_database_password: "{{ mysql_passwords.eb }}"
 engine_ldap_host: "{{ ldap_host }}"
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: production
-engine_apache_symfony_environment: prod
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
@@ -414,7 +413,7 @@ loadbalancing:
   teams: {
     port: 601,
     heartbeat: { url: "/", method: "HEAD" },
-    servers: [
+    servers: [ 
       { label: "prd61", ip: "145.100.191.201" },
       { label: "prd62", ip: "145.100.191.202" },
       { label: "prd63", ip: "145.100.191.203" },

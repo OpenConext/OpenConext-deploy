@@ -2,15 +2,14 @@ Listen {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.po
 <Virtualhost {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.port }}>
     ServerAdmin {{ apache_server_admin}}
 
-    DocumentRoot {{ engine_current_release_symlink }}/web
+    DocumentRoot {{ engine_current_release_symlink }}/www/api
     ServerName   {{ engine_api_domain }}
 
-    <Directory "{{ engine_current_release_symlink }}/web">
+    <Directory "{{ engine_current_release_symlink }}/www">
       AllowOverride All
     </Directory>
 
     SetEnv ENGINEBLOCK_ENV {{ engine_apache_environment }}
-    SetEnv SYMFONY_ENV {{ engine_apache_symfony_environment }}
     SetEnv HTTPS on
 
     RewriteEngine On
@@ -18,9 +17,9 @@ Listen {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.po
     # Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ /app{% if develop %}_dev{% endif %}.php/$1 [L] # Send the query string to index.php
+    RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
     # Requests to the domain (no query string)
-    RewriteRule ^$ /app{% if develop %}_dev{% endif %}.php/ [L]
+    RewriteRule ^$ index.php/ [L]
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EBABI'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EBABI'" combined
