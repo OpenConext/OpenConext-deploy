@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Policy xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+        PolicyId="http://axiomatics.com/alfa/identifier/OpenConext.pdp.MultipleSameAttributesLogicalOr"
+        Version="1"
+        RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable">
+    <Description>Docenten en assistenten hebben toegang tot Mentorix.</Description>
+    <PolicyDefaults>
+        <XPathVersion>http://www.w3.org/TR/1999/REC-xpath-19991116</XPathVersion>
+    </PolicyDefaults>
+    <Target>
+        <AnyOf>
+            <AllOf>
+                <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">http://sts.acc.edugroepen.netricity.nl/adfs/services/trust</AttributeValue>
+                    <AttributeDesignator
+                            AttributeId="SPentityID"
+                            DataType="http://www.w3.org/2001/XMLSchema#string"
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                            MustBePresent="false"
+                            />
+                </Match>
+            </AllOf>
+        </AnyOf>
+        <AnyOf>
+            <AllOf>
+                <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">http://fides-test.rivm.nl/adfs/services/trust</AttributeValue>
+                    <AttributeDesignator
+                            AttributeId="IDPentityID"
+                            DataType="http://www.w3.org/2001/XMLSchema#string"
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                            MustBePresent="false"
+                            />
+                </Match>
+            </AllOf>
+        </AnyOf>
+    </Target>
+    <Rule
+            Effect="Permit"
+            RuleId="http://axiomatics.com/alfa/identifier/OpenConext.pdp.MultipleSameAttributesLogicalOr.permitAccess1">
+        <Description/>
+        <Target>
+            <AnyOf>
+                <AllOf>
+                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue
+                                DataType="http://www.w3.org/2001/XMLSchema#string">teacher</AttributeValue>
+                        <AttributeDesignator
+                                AttributeId="urn:mace:dir:attribute-def:eduPersonEntitlement"
+                                DataType="http://www.w3.org/2001/XMLSchema#string"
+                                Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+                                MustBePresent="false"
+                                />
+                    </Match>
+                </AllOf>
+                <AllOf>
+                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue
+                                DataType="http://www.w3.org/2001/XMLSchema#string">assistant</AttributeValue>
+                        <AttributeDesignator
+                                AttributeId="urn:mace:dir:attribute-def:eduPersonEntitlement"
+                                DataType="http://www.w3.org/2001/XMLSchema#string"
+                                Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+                                MustBePresent="false"
+                                />
+                    </Match>
+                </AllOf>
+            </AnyOf>
+        </Target>
+    </Rule>
+    <Rule
+            Effect="Deny"
+            RuleId="http://axiomatics.com/alfa/identifier/OpenConext.pdp.MultipleSameAttributesLogicalOr.denyAccess">
+        <Description/>
+        <Target/>
+        <AdviceExpressions>
+            <AdviceExpression AdviceId="http://example.com/advice/reasonForDeny"
+                              AppliesTo="Deny">
+                <AttributeAssignmentExpression AttributeId="DenyMessage"
+                                               Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">You are not authorized to access Mentorix from Hogeschool Utrecht. Please <a href="mailto:mentorix@hu.nl">contact us</a> for details </AttributeValue>
+                </AttributeAssignmentExpression>
+            </AdviceExpression>
+        </AdviceExpressions>
+    </Rule>
+</Policy>

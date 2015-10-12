@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Policy xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+        PolicyId="http://axiomatics.com/alfa/identifier/OpenConext.pdp.MultipleIdentityProversPolicy"
+        Version="1"
+        RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable">
+    <Description>Policy met multiple IDP's in target
+        Toegang tot wiki is voor gebruikers van SURFnet.nl en OneGini.nl IDP's die lid zijn van SURFnetWikiAccess
+        group
+        NB: dit is niet een heel goed voorbeeld maar is slechts ter illustratie van het gebruik van multiple IDP's
+        in een target
+    </Description>
+    <PolicyDefaults>
+        <XPathVersion>http://www.w3.org/TR/1999/REC-xpath-19991116</XPathVersion>
+    </PolicyDefaults>
+    <Target>
+        <AnyOf>
+            <AllOf>
+                <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">https://uba-primostg.hosted.exlibrisgroup.com/shib</AttributeValue>
+                    <AttributeDesignator
+                            AttributeId="SPentityID"
+                            DataType="http://www.w3.org/2001/XMLSchema#string"
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                            MustBePresent="false"
+                            />
+                </Match>
+            </AllOf>
+        </AnyOf>
+        <AnyOf>
+            <AllOf>
+                <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">http://stsfed.test.vu.nl/adfs/services/trust</AttributeValue>
+                    <AttributeDesignator
+                            AttributeId="IDPentityID"
+                            DataType="http://www.w3.org/2001/XMLSchema#string"
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                            MustBePresent="false"
+                            />
+                </Match>
+            </AllOf>
+            <AllOf>
+                <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">https://ssoacc.test.saxion.nl/opensso</AttributeValue>
+                    <AttributeDesignator
+                            AttributeId="IDPentityID"
+                            DataType="http://www.w3.org/2001/XMLSchema#string"
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                            MustBePresent="false"
+                            />
+                </Match>
+            </AllOf>
+        </AnyOf>
+    </Target>
+    <Rule
+            Effect="Permit"
+            RuleId="http://axiomatics.com/alfa/identifier/OpenConext.pdp.MultipleIdentityProversPolicy.permitAccess">
+        <Description/>
+        <Target>
+            <AnyOf>
+                <AllOf>
+                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue
+                                DataType="http://www.w3.org/2001/XMLSchema#string">urn:collab:group:surfteams.nl:nl:surfnet:diensten:SURFnetWikiAccess</AttributeValue>
+                        <AttributeDesignator
+                                AttributeId="urn:collab:group:surfteams.nl"
+                                DataType="http://www.w3.org/2001/XMLSchema#string"
+                                Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+                                MustBePresent="false"
+                                />
+                    </Match>
+                </AllOf>
+            </AnyOf>
+        </Target>
+    </Rule>
+    <Rule
+            Effect="Deny"
+            RuleId="http://axiomatics.com/alfa/identifier/OpenConext.pdp.MultipleIdentityProversPolicy.denyAccess">
+        <Description/>
+        <Target/>
+        <AdviceExpressions>
+            <AdviceExpression AdviceId="http://example.com/advice/reasonForDeny"
+                              AppliesTo="Deny">
+                <AttributeAssignmentExpression AttributeId="DenyMessage"
+                                               Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">You are not authorized to access the SURFnet wiki. Please contact <a href="mailto:info@surfnet.nl">SURFnet</a> for details</AttributeValue>
+                </AttributeAssignmentExpression>
+            </AdviceExpression>
+        </AdviceExpressions>
+    </Rule>
+</Policy>

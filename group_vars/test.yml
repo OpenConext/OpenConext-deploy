@@ -373,13 +373,20 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20150915.100911-6"
+pdp_snapshot_timestamp: "20151012.124105-6"
+pdp_html_snapshot_timestamp: "20151012.124200-5"
+
 pdp_debug: true
 pdp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   username: "pdp_admin"
   password: "{{ pdp_password }}"
+  db_user: pdp-serverrw
+  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: pdp-server
+  spring_profiles_active: test
 
 loadbalancing:
   engine: {

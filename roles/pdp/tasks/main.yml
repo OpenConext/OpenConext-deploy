@@ -2,6 +2,73 @@
 - name: Create user
   user: name=pdp home={{ pdp_dir }} shell=/sbin/nologin
 
+- name: create apache folder
+  file: path=/var/www/pdp owner=apache group=apache mode=2755 state=directory
+
+- name: upload and extract local html archive
+  unarchive: src=./../OpenConext-pdp/pdp-gui/target/pdp-gui-{{ pdp_local_html_version }}.tar.gz dest=/var/www/pdp/
+  register: local_pdp_archive
+  tags: pdp
+  notify: restart httpd
+  when: pdp_local_html_version != ''
+
+- name: create symlink to uploaded version
+  file: src=/var/www/pdp/pdp-gui-{{ pdp_local_html_version }} dest=/var/www/pdp/current state=link force=yes
+  tags: pdp
+  when: pdp_local_html_version != ''
+
+- name: download html archive
+  get_url:
+    url: "{{ maven_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}/pdp-gui-{{ pdp_version }}.tar.gz"
+    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz
+  tags: pdp
+  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+
+- name: extract archive
+  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz dest=/var/www/pdp/ copy=no
+  tags: pdp
+  notify: restart httpd
+  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+
+- name: create symlink to downloaded version
+  file: src=/var/www/pdp/pdp-gui-{{ pdp_version }} dest=/var/www/pdp/current state=link force=yes
+  tags: pdp
+  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+  notify: restart httpd
+
+- name: remove downloaded version
+  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz state=absent
+  tags: pdp
+  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+
+- name: download snapshot of html archive
+  get_url:
+    url: "{{ maven_snapshot_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}-SNAPSHOT/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz"
+    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz
+  tags: pdp
+  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+
+- name: extract snapshot archive
+  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz dest=/var/www/pdp/ copy=no
+  tags: pdp
+  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+
+- name: create symlink to downloaded snapshot version
+  file: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-SNAPSHOT dest=/var/www/pdp/current state=link force=yes
+  tags: pdp
+  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+  notify: restart httpd
+
+- name: remove downloaded snapshot version
+  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz state=absent
+  tags: pdp
+  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+
+- name: copy virtual host config
+  template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
+  tags: pdp
+  notify: restart httpd
+
 - name: Copy start script
   template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
   notify: restart pdp
@@ -33,12 +100,8 @@
   template: src=xacml.conext.properties.j2 dest={{ pdp_dir }}/xacml.conext.properties owner=pdp group=pdp mode=0740
   notify: restart pdp
 
-- name: Copy policy config
-  template: src=SURFconext.SURFspotAccess.xml.j2 dest={{ pdp_dir }}/SURFconext.SURFspotAccess.xml owner=pdp group=pdp mode=0740
-  notify: restart pdp
-
-- name: Copy policy config
-  template: src=SURFconext.TeamAccess.xml.j2 dest={{ pdp_dir }}/SURFconext.TeamAccess.xml owner=pdp group=pdp mode=0740
+- name: Copy policies
+  copy: src={{ env_name }}/xacml-policies dest={{ pdp_dir }} owner=pdp group=pdp mode=0640
   notify: restart pdp
 
 - name: copy apache config
