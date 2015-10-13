@@ -17,6 +17,9 @@ engine_api_ipv4_address: "*"
 profile_ipv4_address: "*"
 # profile_ipv6_address
 
+# Required for the Symfony routing.
+engine_base_domain: "{{ base_domain }}"
+
 engine_domain: engine.{{ base_domain }}
 engine_api_domain: engine-api.{{ base_domain }}
 profile_domain: profile.{{ base_domain }}
