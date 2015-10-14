@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Policy xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+        PolicyId="http://axiomatics.com/alfa/identifier/OpenConext.pdp.IDPandGroupClause"
+        Version="1"
+        RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides"
+        PolicyCombiningAlgId="urn:oasis:names:tc:xacml:1.0:policy-combining-algorithm:first-applicable"
+        >
+
+    <Description>Personen van Avans in de groep HRM hebben toegang tot Youforce</Description>
+    <PolicyDefaults>
+        <XPathVersion>http://www.w3.org/TR/1999/REC-xpath-19991116</XPathVersion>
+    </PolicyDefaults>
+    <Target>
+        <AnyOf>
+            <AllOf>
+                <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">https://avans-uat.mediasalsa.eu/simplesamlphp/module.php/saml/sp/metadata.php/mediasalsa-avans</AttributeValue>
+
+                    <AttributeDesignator
+                            AttributeId="SPentityID"
+                            DataType="http://www.w3.org/2001/XMLSchema#string"
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                            MustBePresent="false"
+                            />
+                </Match>
+            </AllOf>
+        </AnyOf>
+        <AnyOf>
+            <AllOf>
+                <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">https://namidp-hslfh02.avans.nl/nidp/saml2/metadata</AttributeValue>
+                    <AttributeDesignator
+                            AttributeId="IDPentityID"
+                            DataType="http://www.w3.org/2001/XMLSchema#string"
+                            Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                            MustBePresent="false"
+                            />
+                </Match>
+            </AllOf>
+        </AnyOf>
+    </Target>
+    <Rule
+            Effect="Permit"
+            RuleId="http://axiomatics.com/alfa/identifier/OpenConext.pdp.IDPandGroupClause.permitAccess">
+        <Description/>
+        <Target>
+            <AnyOf>
+                <AllOf>
+                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue
+                                DataType="http://www.w3.org/2001/XMLSchema#string">surfnet.nl</AttributeValue>
+                        <AttributeDesignator
+                                AttributeId="urn:mace:terena.org:attribute-def:schacHomeOrganization"
+                                DataType="http://www.w3.org/2001/XMLSchema#string"
+                                Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+                                MustBePresent="false"
+                                />
+                    </Match>
+                </AllOf>
+            </AnyOf>
+            <AnyOf>
+                <AllOf>
+                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <!-- See pdp.teams.VootClientConfig#mockVootClient -->
+                        <AttributeValue
+                                DataType="http://www.w3.org/2001/XMLSchema#string">urn:collab:group:avans.nl:HRemployees</AttributeValue>
+                        <AttributeDesignator
+                                AttributeId="urn:collab:group:surfteams.nl"
+                                DataType="http://www.w3.org/2001/XMLSchema#string"
+                                Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+                                MustBePresent="false"
+                                />
+                    </Match>
+                </AllOf>
+            </AnyOf>
+            <AnyOf>
+                <AllOf>
+                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue
+                                DataType="http://www.w3.org/2001/XMLSchema#string">employee</AttributeValue>
+                        <AttributeDesignator
+                                AttributeId="urn:mace:terena.org:attribute-def:eduPersonAffiliation"
+                                DataType="http://www.w3.org/2001/XMLSchema#string"
+                                Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+                                MustBePresent="false"
+                                />
+                    </Match>
+                </AllOf>
+            </AnyOf>
+        </Target>
+    </Rule>
+    <Rule
+            Effect="Deny"
+            RuleId="http://axiomatics.com/alfa/identifier/OpenConext.pdp.IDPandGroupClause.denyAccess">
+        <Description/>
+        <Target/>
+        <AdviceExpressions>
+            <AdviceExpression AdviceId="http://example.com/advice/reasonForDeny"
+                              AppliesTo="Deny">
+                <AttributeAssignmentExpression AttributeId="DenyMessage"
+                                               Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource">
+                    <AttributeValue
+                            DataType="http://www.w3.org/2001/XMLSchema#string">You are not authorized to access Avans Youforce. Please contact <a href="mailto:hrm@avans.nl">Avans HRM</a> for details</AttributeValue>
+                </AttributeAssignmentExpression>
+            </AdviceExpression>
+        </AdviceExpressions>
+    </Rule>
+</Policy>

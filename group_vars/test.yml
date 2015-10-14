@@ -461,7 +461,7 @@ loadbalancing:
   }
   pdp: {
     port: 607,
-    heartbeat: { url: "/health", method: "GET" },
+    heartbeat: { url: "/pdp/api/health", method: "GET" },
     servers: [
       { label: "pdp_backend", ip: "145.100.191.117" },
     ]
