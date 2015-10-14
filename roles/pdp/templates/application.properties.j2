@@ -15,17 +15,22 @@ spring.datasource.driverClassName=com.mysql.jdbc.Driver
 spring.datasource.validation-query=SELECT 1
 spring.datasource.testWhileIdle=true
 
+logging.level.org.hibernate.SQL=INFO
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=INFO
+
 policy.enforcement.point.user.name={{ pdp.username }}
 policy.enforcement.point.user.password={{ pdp.password }}
 
 xacml.properties.path=file://{{ pdp_dir }}/xacml.conext.properties
 policy.base.dir=file://{{ pdp_dir }}/xacml-policies
 
-initial.delay.policies.refresh.minutes=10
-period.policies.refresh.minutes=10
+initial.delay.policies.refresh.minutes=15
+period.policies.refresh.minutes=15
 
-initial.delay.metadata.refresh.minutes=160
-period.metadata.refresh.minutes=160
+initial.delay.metadata.refresh.minutes=180
+period.metadata.refresh.minutes=180
+
+policy.violation.retention.period.days=30
 
 #Voot client configuration for the teams PIP
 voot.serviceUrl=https://voot.{{ base_domain }}
