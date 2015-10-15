@@ -275,7 +275,7 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1.3
-voot_snapshot_timestamp: "20150701.122507-7"
+voot_snapshot_timestamp: "20150907.093535-3"
 voot_debug: true
 
 authz_admin_version: 1.3.1
@@ -373,8 +373,8 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151014.122459-10"
-pdp_html_snapshot_timestamp: "20151014.122556-9"
+pdp_snapshot_timestamp: "20151015.074008-11"
+pdp_html_snapshot_timestamp: "20151015.074128-10"
 
 pdp_debug: true
 pdp:

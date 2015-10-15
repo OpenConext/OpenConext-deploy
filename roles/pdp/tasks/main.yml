@@ -100,10 +100,6 @@
   template: src=xacml.conext.properties.j2 dest={{ pdp_dir }}/xacml.conext.properties owner=pdp group=pdp mode=0740
   notify: restart pdp
 
-- name: Copy policies
-  copy: src={{ env_name }}/xacml-policies dest={{ pdp_dir }} owner=pdp group=pdp mode=0640
-  notify: restart pdp
-
 - name: copy apache config
   template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
   notify: reload httpd
