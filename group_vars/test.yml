@@ -473,6 +473,20 @@ loadbalancing:
       { label: "grouper_backend", ip: "145.100.191.117" },
     ]
   }
+  mujina_sp: {
+    port: 607,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "mujina_sp_backend", ip: "145.100.191.117" },
+    ]
+  }
+  mujina_idp: {
+      port: 608,
+      heartbeat: { url: "/", method: "HEAD" },
+      servers: [
+        { label: "mujina_idp_backend", ip: "145.100.191.117" },
+    ]
+  }
 
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
