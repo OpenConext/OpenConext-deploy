@@ -402,7 +402,7 @@ loadbalancing:
     ]
   }
   serviceregistry: {
-    port: 404,
+    port: 405,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
       { label: "prd41", ip: "145.100.191.198" },
@@ -411,7 +411,7 @@ loadbalancing:
     ]
   }
   engine_api: {
-    port: 405,
+    port: 404,
     heartbeat: { url: "/", method: "GET" },
     servers: [
       { label: "prd41", ip: "145.100.191.198" },
