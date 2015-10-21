@@ -71,6 +71,7 @@
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,             tags: ['oauth', 'voot'            ] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
+    - { role: pdp,              tags: ['pdp'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

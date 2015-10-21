@@ -1,6 +1,8 @@
 logging.config=file://{{ teams_dir }}/logback.xml
 server.port={{ springapp_tcpport }}
 
+application.version= {{ teams_version }}
+
 datasource.teams.driver-class-name=com.mysql.jdbc.Driver
 datasource.teams.url=jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
 datasource.teams.username={{ teams.db_user }}
@@ -24,17 +26,17 @@ defaultStemName=nl:surfnet:diensten
 grouperPowerUser=GrouperSystem
 
 # App id displayed in the updates / invites section of the portal
-appId=SURFteams
+appId=SURFconext Teams
 
 # The URL where the teams application is run so we can send out emails
 teamsURL=https://teams.{{ base_domain }}
 
 # SMTP server settings for notifications
-spring.mail.host={{ teams.mail_server }}
+spring.mail.host={{ smtp_server }}
 spring.mail.port=25
 
 # Email address that is the sender of invitations/requests
-systemEmail=SURFteams <no-reply@surfteams.nl>
+systemEmail=SURFconext Teams <no-reply@surfconext.nl>
 
 # Maximum amount an invitation can be sent
 maxInvitations=5

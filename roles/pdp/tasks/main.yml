@@ -1,0 +1,119 @@
+---
+- name: Create user
+  user: name=pdp home={{ pdp_dir }} shell=/sbin/nologin
+
+- name: create apache folder
+  file: path=/var/www/pdp owner=apache group=apache mode=2755 state=directory
+
+- name: upload and extract local html archive
+  unarchive: src=./../OpenConext-pdp/pdp-gui/target/pdp-gui-{{ pdp_local_html_version }}.tar.gz dest=/var/www/pdp/
+  register: local_pdp_archive
+  tags: pdp
+  notify: restart httpd
+  when: pdp_local_html_version != ''
+
+- name: create symlink to uploaded version
+  file: src=/var/www/pdp/pdp-gui-{{ pdp_local_html_version }} dest=/var/www/pdp/current state=link force=yes
+  tags: pdp
+  when: pdp_local_html_version != ''
+
+- name: download html archive
+  get_url:
+    url: "{{ maven_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}/pdp-gui-{{ pdp_version }}.tar.gz"
+    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz
+  tags: pdp
+  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+
+- name: extract archive
+  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz dest=/var/www/pdp/ copy=no
+  tags: pdp
+  notify: restart httpd
+  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+
+- name: create symlink to downloaded version
+  file: src=/var/www/pdp/pdp-gui-{{ pdp_version }} dest=/var/www/pdp/current state=link force=yes
+  tags: pdp
+  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+  notify: restart httpd
+
+- name: remove downloaded version
+  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz state=absent
+  tags: pdp
+  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+
+- name: download snapshot of html archive
+  get_url:
+    url: "{{ maven_snapshot_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}-SNAPSHOT/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz"
+    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz
+  tags: pdp
+  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+
+- name: extract snapshot archive
+  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz dest=/var/www/pdp/ copy=no
+  tags: pdp
+  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+
+- name: create symlink to downloaded snapshot version
+  file: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-SNAPSHOT dest=/var/www/pdp/current state=link force=yes
+  tags: pdp
+  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+  notify: restart httpd
+
+- name: remove downloaded snapshot version
+  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz state=absent
+  tags: pdp
+  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+
+- name: copy virtual host config
+  template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
+  tags: pdp
+  notify: restart httpd
+
+- name: Copy start script
+  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
+  notify: restart pdp
+
+- name: enable pdp service
+  service: name=pdp enabled=yes
+
+- name: Create logging directory
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner=pdp group=pdp mode=0755
+
+- include: ../../../tasks/springbootapp/install-release.yml
+  when: "pdp_snapshot_timestamp == '' and pdp_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-snapshot.yml
+  when: "pdp_snapshot_timestamp != '' and pdp_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-local.yml
+  when: "pdp_local_jar != ''"
+
+- name: Copy logging config
+  template: src=logback.xml.j2 dest={{ pdp_dir }}/logback.xml owner=pdp group=pdp mode=0740
+  notify: restart pdp
+
+- name: Copy application config
+  template: src=application.properties.j2 dest={{ pdp_dir }}/application.properties owner=pdp group=pdp mode=0740
+  notify: restart pdp
+
+- name: Copy xacml config
+  template: src=xacml.conext.properties.j2 dest={{ pdp_dir }}/xacml.conext.properties owner=pdp group=pdp mode=0740
+  notify: restart pdp
+
+- name: copy apache config
+  template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
+  notify: reload httpd
+
+# no idea why this is necessary, as the init script returns an ok status also
+# if pdp is still initializing.  Waiting for the port to open works well
+# though, and seems like to correct way to handle this.
+- name: start the pdp service
+  service: name=pdp state=started enabled=yes
+  ignore_errors: true
+
+- name: wait for pdp to start
+  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
+
+- name: ensure the service is started
+  service: name=pdp enabled=yes state=started
+

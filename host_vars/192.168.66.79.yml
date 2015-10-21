@@ -13,4 +13,5 @@ apache_app_listen_address:
   static: 192.168.66.79
   teams: 192.168.66.79
   voot: 192.168.66.79
+  pdp: 192.168.66.79
   welcome: 192.168.66.79

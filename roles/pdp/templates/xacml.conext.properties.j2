@@ -1,0 +1,26 @@
+#
+# Properties that the embedded PDP engine uses to configure and load
+#
+# Standard API Factories
+#
+xacml.dataTypeFactory=org.apache.openaz.xacml.std.StdDataTypeFactory
+xacml.pdpEngineFactory=pdp.xacml.OpenConextPDPEngineFactory
+xacml.pepEngineFactory=org.apache.openaz.xacml.std.pep.StdEngineFactory
+xacml.pipFinderFactory=org.apache.openaz.xacml.std.pip.StdPIPFinderFactory
+
+#
+# OpenAZ PDP Implementation Factories
+#
+xacml.openaz.evaluationContextFactory=pdp.xacml.OpenConextEvaluationContextFactory
+openconext.pdp.cachePolicies=true
+
+xacml.openaz.combiningAlgorithmFactory=org.apache.openaz.xacml.pdp.std.StdCombiningAlgorithmFactory
+xacml.openaz.functionDefinitionFactory=org.apache.openaz.xacml.pdp.std.StdFunctionDefinitionFactory
+
+xacml.openaz.policyFinderFactory.combineRootPolicies=urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:deny-overrides
+
+#
+# PIP Engine Definition
+#
+xacml.pip.engines=teams
+teams.classname=pdp.teams.TeamsPIP

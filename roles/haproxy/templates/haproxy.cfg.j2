@@ -186,6 +186,16 @@ frontend voot 127.0.0.1:{{ loadbalancing.voot.port }}
     use_backend         voot_be        if url_all
     default_backend     voot_be
 
+#---------------------------------------------------------------------
+# PDP frontend
+#---------------------------------------------------------------------
+frontend pdp 127.0.0.1:{{ loadbalancing.pdp.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         pdp_be        if url_all
+    default_backend     pdp_be
 
 #---------------------------------------------------------------------
 # engine backend
@@ -403,6 +413,25 @@ backend voot_be
 
     {% for server in loadbalancing.voot.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.voot.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+
+#---------------------------------------------------------------------
+# pdp backend
+#---------------------------------------------------------------------
+backend pdp_be
+
+    option httpchk {{ loadbalancing.pdp.heartbeat.method }} {{ loadbalancing.pdp.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.pdp.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.pdp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 # Statistics
