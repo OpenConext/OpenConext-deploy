@@ -27,6 +27,10 @@
     group={{ apache_user }}
     recurse=yes
 
+- name: Create the symfony cache
+  command: app/console cache:clear --env=prod --no-debug
+  when: not develop
+
 - include: develop.yml
   when: develop
 

@@ -1,4 +1,3 @@
-[base]
 ;; EngineBlock version
 version = {{ engine_version }}
 
@@ -13,6 +12,10 @@ engineApi.users.janus.password = {{ engine_api_janus_password }}
 
 ;; EngineBlock API feature toggles
 engineApi.features.metadataPush = 1
+
+;; Symfony specific variables
+symfony.cachePath = "{{ engineblock_symfony_cache_path }}"
+symfony.logPath = "{{ engineblock_symfony_log_path }}"
 
 ;; Virtual Organisation Validation api credentials
 api.vovalidate.baseUrl = {{ engine_vovalidate_baseurl }}
