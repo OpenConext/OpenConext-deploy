@@ -15,7 +15,6 @@
      - php-soap
      - php-xml
      - php-mcrypt
-     - php-pecl-xdebug
 
 - name: Configure PHP
   template:
@@ -28,10 +27,16 @@
     - apc.ini
     - openconext.ini
 
+- name: Install PHP with extensions
+  yum: name={{ item }} state=present
+  with_items:
+    - php-pecl-xdebug
+  when: develop
+
 - name: Configure PHP Xdebug
   template: src=xdebug.ini.j2 dest=/etc/php.d/xdebug.ini
   when: develop
 
 - name: Enable php in apache
   copy: src=httpd.php.conf dest=/etc/httpd/conf.d/php.conf
-  when: develop
+  notify: reload httpd
