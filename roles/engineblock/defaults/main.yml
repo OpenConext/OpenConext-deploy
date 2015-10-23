@@ -34,7 +34,7 @@ engine_janus_url: https://serviceregistry.{{ base_domain }}/simplesaml/module.ph
 engine_janus_cache_lifetime: 3600 # Cache for an hour
 
 engine_api_janus_user: serviceregistry
-#engine_api_janus_password:
+engine_api_janus_password: secret
 
 ## The Identity Provider that Profile can use (always it's own EngineBlock really)
 engine_profile_idp_certificate: "{{ engine_keys.default.publicFile }}"
