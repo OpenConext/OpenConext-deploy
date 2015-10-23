@@ -25,14 +25,7 @@ voot.clientId=engineblock
 voot.clientSecret={{ engineblock_authz_client_secret }}
 voot.scopes = groups
 
-auth.simplesamlphp.idp.entityId = {{ engine_profile_idp_entityid }}
-auth.simplesamlphp.idp.location = {{ engine_profile_idp_sso_location }}
-auth.simplesamlphp.idp.certificate= "{{ engine_profile_idp_certificate }}"
-
-profile.simplesamlphp.hostMatch = "{{ engine_profile_idp_hostmatch }}"
-profile.simplesamlphp.baseurlpath = "{{ engine_profile_idp_baseurlpath }}"
 engine.simplesamlphp.baseurlpath = "{{ engine_engine_idp_baseurlpath }}"
-
 
 cookie.lang.domain = .{{ base_domain }}
 

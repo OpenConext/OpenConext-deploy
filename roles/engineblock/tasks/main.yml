@@ -35,6 +35,12 @@
   with_items:
     - engine.conf
     - engine-api.conf
+  notify:
+    - restart httpd
+
+- name: Remove deprecated virtual hosts
+  file: dest=/etc/httpd/conf.d/{{item}} state=absent
+  with_items:
     - profile.conf
   notify:
     - restart httpd
