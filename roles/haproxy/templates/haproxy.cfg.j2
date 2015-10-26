@@ -442,7 +442,7 @@ listen stats 127.0.0.1:9000       #Listen on all IP's on port 9000
     stats uri /stats
 
 
-{% if env == 'vm' %}
+{% if env == 'vm' or env == 'test' %}
 #---------------------------------------------------------------------
 # mujina idp frontend
 #---------------------------------------------------------------------
@@ -497,7 +497,8 @@ backend mujina_sp_be
     {% for server in loadbalancing.mujina_sp.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.mujina_sp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
-
+{% endif %}
+{% if env == 'vm' %}
 #---------------------------------------------------------------------
 # WELCOME frontend
 #---------------------------------------------------------------------
