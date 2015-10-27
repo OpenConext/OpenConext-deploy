@@ -1,7 +1,7 @@
 #---
 ## Version of EngineBlock that is installable by this role
 engine_version: 4.6.1
-engine_branch: "feature-pdp-0.1"
+engine_branch: "feature-pdp-0.1.1"
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"
