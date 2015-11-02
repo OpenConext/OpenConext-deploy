@@ -417,6 +417,7 @@ pdp:
   db_host: "{{ mysql_host }}"
   db_name: pdp-server
   spring_profiles_active: test
+  cache_policies: false
 
 loadbalancing:
   engine: {
