@@ -35,6 +35,12 @@ gives issues with the requests made by haproxy as well as being unable to map al
 EngineBlock. Simplest is to use a browser addon to enable xdebug for that request, such as [this Chrome addon][1] or
 [this Firefox addon][2].
 
+## Database Access
+
+In the development environment an additional database user is created that has full access to all databases that are
+present in the VM. The credentials are username: `development` and password `development`. This used can connect from
+outside the VM, allowing you to set up your favorite Database Administration Tool for usage with this VM.
+
 # How to set up the development environment
 
 ## Create the required Directory Structure
