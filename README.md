@@ -3,7 +3,7 @@ Ansible-driven provisioning of the OpenConext platform.
 
 # Getting started
 
-These steps for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
+These steps for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager.
 While it is possible to deploy OpenConext using other environments, currently it is unsupported.
 
 ## Install Vagrant and VirtualBox
@@ -67,7 +67,7 @@ These are the steps the above script performs:
 We need pseudo-DNS entries so that your browser can reach the VM-platform we just installed. So, add this very long line to your `/etc/hosts` file:
 
 ```
-192.168.66.78  vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org apis.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org
+192.168.66.78  vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org profile.vm.openconext.org apis.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org
 ```
 
 Here, the ip-address `192.168.66.78` refers to the address that is mentioned in ./Vagrantfile.
@@ -80,6 +80,8 @@ Go to [https://vm.openconext.org](https://vm.openconext.org). To ssh to the mach
 vagrant ssh lb
 vagrant ssh apps
 ```
+
+(using `vagrant ssh` without a VM specified leads to the Apps VM)
 
 The lb vm contains haproxy and nginx. The apps vm contains all the applications, apache, database and ldap.
 
@@ -104,3 +106,7 @@ To provision the VM use the following (password is vagrant and sudo password is 
 ```
 ansible-playbook -u vagrant -i inventory/vm -K selfservice.yml -k
 ```
+
+# Development
+
+Setting up a development environment is described in the file [DEVELOPMENT](DEVELOPMENT.md).

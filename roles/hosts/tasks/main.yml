@@ -18,3 +18,9 @@
     - "ldap.vm.openconext.org"
     - "db.vm.openconext.org"
     - "engine-api.vm.openconext.org"
+
+- name: Use IPv4 rather than IPv6 for http://dowloads.opensuse.org
+  lineinfile: dest=/etc/hosts line="{{ item }}"
+  with_items:
+    - "#Reroute downloads.opensuse.org from IPv6 to IPv4"
+    - "2001:638:60f:110::1:1: 195.135.221.134"

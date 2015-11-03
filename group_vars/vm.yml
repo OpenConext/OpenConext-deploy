@@ -25,6 +25,8 @@ databases:
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
+  development_user:
+    - { name: development, password: development }
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
@@ -61,6 +63,7 @@ engine_database_password: "{{ mysql_passwords.eb }}"
 engine_ldap_host: localhost
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: vm
+engine_apache_symfony_environment: dev
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
