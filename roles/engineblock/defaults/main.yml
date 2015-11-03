@@ -32,6 +32,8 @@ engine_janus_cache_lifetime: 3600 # Cache for an hour
 
 engine_api_janus_user: serviceregistry
 engine_api_janus_password: secret
+engine_api_profile_user: profile
+engine_api_profile_password: secret
 
 engine_engine_idp_baseurlpath: "https://{{ engine_domain }}/simplesaml/"
 

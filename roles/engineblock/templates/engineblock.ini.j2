@@ -9,9 +9,12 @@ engineApi.password = {{ engine_api_janus_password }}
 ;; New version that allows for multiple different API users
 engineApi.users.janus.username = {{ engine_api_janus_user }}
 engineApi.users.janus.password = {{ engine_api_janus_password }}
+engineApi.users.profile.username = {{ engine_api_profile_user }}
+engineApi.users.profile.password = {{ engine_api_profile_password }}
 
 ;; EngineBlock API feature toggles
 engineApi.features.metadataPush = 1
+engineApi.features.consentListing = 1
 
 ;; Symfony specific variables
 symfony.cachePath = "{{ engineblock_symfony_cache_path }}"
