@@ -60,15 +60,6 @@ and running `composer install`.
 After this has been done you can navigate to the OpenConext-deploy project and run `./provision-develop` (confirm the
 action when prompted) to start the VMs and start the provisioning.
 
-## Update hosts
-
-For development on the EngineBlock API it can be convenient to be able to access it from outside the VM. This can be
-achieved by adding the following line to your hosts file:
-
-```
-192.168.66.78 engine-api.vm.openconext.org
-```
-
 [1]: https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc
 [2]: https://addons.mozilla.org/en-us/firefox/addon/the-easiest-xdebug/
 [3]: https://getcomposer.org/
