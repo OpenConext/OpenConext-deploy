@@ -1,5 +1,3 @@
-# Currently not used, see the Vagrant file for the rationale.
-# When used, move all dev specific actions to this file.
 ---
 - name: Add "engineblock" user
   user: name=engineblock groups={{ apache_user}} append=yes state=present createhome=no
