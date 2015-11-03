@@ -233,7 +233,11 @@ apis:
     consumer_key: https://apis.test.surfconext.nl
     consumer_secret: "{{ apis_api_consumer_secret }}"
 
-mujina:
+mujina_sp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+
+mujina_idp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
@@ -374,8 +378,8 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151016.070857-15"
-pdp_html_snapshot_timestamp: "20151016.071009-13"
+pdp_snapshot_timestamp: "20151026.081334-16"
+pdp_html_snapshot_timestamp: "20151026.081442-14"
 
 pdp_debug: true
 pdp:
@@ -520,3 +524,5 @@ nginx_config_templates:
   - profile
   - serviceregistry
   - pdp
+  - mujina_sp
+  - mujina_idp

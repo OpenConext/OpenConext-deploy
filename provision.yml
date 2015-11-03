@@ -65,6 +65,8 @@
     - tomcat
     - java
     - { role: shibboleth,       tags: ['shib'   ] }
+    - { role: mujina-idp,       tags: ['mujina' ] }
+    - { role: mujina-sp,        tags: ['mujina' ] }
     - { role: grouper,          tags: ['grouper'] }
     - { role: teams,            tags: ['teams'  ] }
     - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
