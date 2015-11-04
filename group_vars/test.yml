@@ -270,7 +270,7 @@ voot:
       }
     - {
         type: "open_social",
-        url: "https://idp-acc.surfnet.nl/voot",
+        url: "https://groupprovider-acc.surfnet.nl",
         credentials: {
           username: "conext",
           secret: "{{ external_group_provider_secrets.surfnet }}"
