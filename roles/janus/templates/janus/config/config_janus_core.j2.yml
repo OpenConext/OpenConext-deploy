@@ -483,7 +483,6 @@ janus_service_registry_core:
             'coin:entity_categories:#':
                 type: select
                 select_values:
-                    - 'http://www.geant.net/uri/dataprotection-code-of-conduct/v1'
                     - 'http://refeds.org/category/research-and-scholarship'
                     - 'http://refeds.org/category/hide-from-discovery'
                 default: ''
@@ -492,7 +491,6 @@ janus_service_registry_core:
                 supported:
                     - 1
                     - 2
-                    - 3
             'coin:additional_logging':
                 type: boolean
                 default: ''
@@ -801,14 +799,12 @@ janus_service_registry_core:
                 select_values:
                     - 'http://www.geant.net/uri/dataprotection-code-of-conduct/v1'
                     - 'http://refeds.org/category/research-and-scholarship'
-                    - 'http://refeds.org/category/hide-from-discovery'
                 default: ''
                 default_allow: false
                 required: false
                 supported:
                     - 1
                     - 2
-                    - 3
             'coin:additional_logging':
                 type: boolean
                 default: ''
