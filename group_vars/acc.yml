@@ -441,6 +441,7 @@ nginx_ipv4_addresses:
   authz_playground: 145.100.191.151
   voot: 145.100.191.145
   grouper: 145.100.191.144
+  pdp: 145.100.191.143
 
 nginx_config_templates:
   - engine
