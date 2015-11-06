@@ -16,6 +16,7 @@ databases:
     - grouper
     - authz-server
     - pdp-server
+    - oidc-server
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
@@ -25,6 +26,7 @@ databases:
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
+    - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
 
 # For apache, the same star-certificate is used.
 tls_https:
@@ -130,6 +132,7 @@ tomcat_apps:
   - grouper
   - mujina-sp
   - mujina-idp
+  - oidc
 
 # shibboleth
 shibboleth_apps:
@@ -147,6 +150,9 @@ shibboleth_apps:
     baseurl: ""
   pdp:
     entityID: "https://pdp.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  oidc:
+    entityID: "https://oidc.{{ base_domain }}/shibboleth"
     baseurl: ""
 shib:
   engine_domain: "{{ base_domain }}"
@@ -393,6 +399,18 @@ pdp:
   db_name: pdp-server
   spring_profiles_active: test
 
+oidc_version: "0.1"
+oidc_snapshot_timestamp: "20151106.123251-1"
+oidc:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  environment: test
+  issuer: https://oidc.{{ base_domain }}/
+  db_user: oidc-serverrw
+  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: oidc-server
+
 loadbalancing:
   engine: {
     port: 401,
@@ -471,6 +489,13 @@ loadbalancing:
       { label: "pdp_backend", ip: "145.100.191.117" },
     ]
   }
+  oidc: {
+    port: 614,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "oidc_backend", ip: "145.100.191.117" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
@@ -510,6 +535,7 @@ nginx_ipv4_addresses:
   mujina_idp: 145.100.191.122
   welcome: 145.100.191.122
   pdp: 145.100.191.122
+  oidc: 145.100.191.122
 
 nginx_config_templates:
   - engine
@@ -526,3 +552,4 @@ nginx_config_templates:
   - pdp
   - mujina_sp
   - mujina_idp
+  - oidc

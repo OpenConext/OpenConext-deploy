@@ -74,6 +74,7 @@
     - { role: voot,             tags: ['oauth', 'voot'            ] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
     - { role: pdp,              tags: ['pdp'] }
+    - { role: oidc,             tags: ['oidc'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
