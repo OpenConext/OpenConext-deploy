@@ -400,7 +400,7 @@ pdp:
   spring_profiles_active: test
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151106.123251-1"
+oidc_snapshot_timestamp: "20151106.153935-3"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -490,7 +490,7 @@ loadbalancing:
     ]
   }
   oidc: {
-    port: 614,
+    port: 10614,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
       { label: "oidc_backend", ip: "145.100.191.117" },
