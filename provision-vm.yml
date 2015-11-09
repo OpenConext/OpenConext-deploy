@@ -53,7 +53,6 @@
     - { role: welcome,           tags: ['welcome'] }
     - { role: openconext-common, tags: ['eb','sr'] }
     - { role: engineblock,       tags: ['eb'     ] }
-#    - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
     - { role: janus,             tags: ['sr'     ] }
     - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
   handlers:
