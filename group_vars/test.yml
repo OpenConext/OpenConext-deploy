@@ -400,7 +400,7 @@ pdp:
   spring_profiles_active: test
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151106.153935-3"
+oidc_snapshot_timestamp: "20151109.101001-4"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
