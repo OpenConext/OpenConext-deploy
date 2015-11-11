@@ -518,6 +518,13 @@ loadbalancing:
         { label: "welcome_backend", ip: "192.168.66.79" },
     ]
   }
+  oidc: {
+    port: 10614,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "oidc_backend", ip: "192.168.66.79" },
+    ]
+  }
   pdp: {
       port: 613,
       heartbeat: { url: "/pdp/api/health", method: "GET" },
