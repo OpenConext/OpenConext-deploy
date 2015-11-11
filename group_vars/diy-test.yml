@@ -83,7 +83,7 @@ welcome:
   key_name: "{{ tls_https.key_name }}"
 
 
-janus_teams_oauth_key: https://teams.test.surfconext.nl/teams/teams.xml
+janus_teams_oauth_key: https://teams.{{ base_domain }}/teams/teams.xml
 
 engine:
   crt_name: "{{ tls_https.crt_name }}"
@@ -235,12 +235,12 @@ apis:
   url: "jdbc:mysql://{{ mysql_host }}/apis"
   password: "{{ mysql_passwords.apis }}"
   entity_id: https://apis.{{ base_domain }}
-  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
+  group_name: {{ teams.group_name_context }}nl:surfnet:diensten:managementvo
   admin_service:
     resource_server_key: authorization-server-admin
     resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
   api:
-    consumer_key: https://apis.test.surfconext.nl
+    consumer_key: https://apis.{{ base_domain }}
     consumer_secret: "{{ apis_api_consumer_secret }}"
 
 mujina:
@@ -270,7 +270,7 @@ voot:
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
         },
-        schacHomeOrganization: "test.surfteams.nl",
+        schacHomeOrganization: "{{ base_domain }}",
         name: "SURFteams",
         timeoutMillis: 15000
       }
@@ -279,7 +279,7 @@ voot_version: 1.2.1
 
 authz_admin_version: 1.3.1
 #authz_admin_snapshot_timestamp: "20150611.111906-1"
-authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
+authz_admin_group: {{ teams.group_name_context }}nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
