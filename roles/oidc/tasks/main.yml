@@ -1,0 +1,18 @@
+---
+- name: copy oidc configuration
+  template: src=application.oidc.properties.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/application.oidc.properties
+  tags: oidc
+  notify: restart tomcat
+
+- name: copy oidc jwks keystore configuration
+  template: src=oidc.keystore.jwks.json.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc.keystore.jwks.json
+  tags: oidc
+  notify: restart tomcat
+
+- name: copy oidc logging configuration
+  copy: src=oidc-logback.xml dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc-logback.xml group=tomcat owner=tomcat
+  notify: restart tomcat
+
+- name: copy virtual host config
+  template: src=oidc.conf.j2 dest=/etc/httpd/conf.d/oidc.conf
+  notify: reload httpd

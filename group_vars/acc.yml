@@ -167,7 +167,6 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  mail_server: s01.dev.coin.surf.net
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 engineblock:
@@ -264,7 +263,7 @@ voot:
       }
     - {
         type: "open_social",
-        url: "https://idp-acc.surfnet.nl/voot",
+        url: "https://groupprovider-acc.surfnet.nl",
         credentials: {
           username: "conext",
           secret: "{{ external_group_provider_secrets.surfnet }}"
@@ -273,7 +272,7 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.2
+voot_version: 1.4
 #voot_snapshot_timestamp: 20150420.135435-44
 
 authz_admin_version: 1.3.1
@@ -365,7 +364,7 @@ loadbalancing:
     ]
   }
   serviceregistry: {
-      port: 404,
+      port: 405,
       heartbeat: { url: "/", method: "HEAD" },
       servers: [
         { label: "acc41", ip: "145.100.191.133" },
@@ -373,7 +372,7 @@ loadbalancing:
     ]
   }
   engine_api: {
-      port: 405,
+      port: 404,
       heartbeat: { url: "/", method: "GET" },
       servers: [
         { label: "acc41", ip: "145.100.191.133" },
@@ -435,6 +434,7 @@ nginx_backend_ip: 127.0.0.1
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
   engine: 145.100.191.139
+  engine_api: 145.100.191.140
   profile: 145.100.191.146
   serviceregistry: 145.100.191.141
   static: 145.100.191.148
@@ -444,6 +444,7 @@ nginx_ipv4_addresses:
   authz_playground: 145.100.191.151
   voot: 145.100.191.145
   grouper: 145.100.191.144
+  pdp: 145.100.191.143
 
 nginx_config_templates:
   - engine

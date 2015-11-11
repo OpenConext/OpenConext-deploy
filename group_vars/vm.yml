@@ -15,6 +15,7 @@ databases:
     - "{{ janus_database_name }}"
     - grouper
     - authz-server
+    - pdp-server
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
@@ -23,6 +24,7 @@ databases:
     - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
+    - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
@@ -153,6 +155,9 @@ shibboleth_apps:
   "authz-admin":
     entityID: "https://authz-admin.{{ base_domain }}/shibboleth"
     baseurl: ""
+  pdp:
+    entityID: "https://pdp.{{ base_domain }}/shibboleth"
+    baseurl: ""
 shib:
   engine_domain: "{{ base_domain }}"
 
@@ -172,7 +177,6 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  mail_server: "localhost"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
 
 teams_version: 4.1.0
@@ -293,7 +297,7 @@ voot:
         name: "SURFteams",
         timeoutMillis: 3000
       }
-voot_version: 1
+voot_version: 1.4
 #voot_snapshot_timestamp: ""
 voot_debug: true
 
@@ -366,6 +370,16 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
+      - clientId: pdp
+        secret: "{{ pdp_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot_resource_checking_secret }}"
@@ -388,14 +402,22 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: "0.1-SNAPSHOT"
-pdp_snapshot_timestamp: "20150909.122119-4"
+pdp_version: "0.1"
+pdp_snapshot_timestamp: "20151026.081334-16"
+pdp_html_snapshot_timestamp: "20151026.081442-14"
+
 pdp_debug: true
 pdp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   username: "pdp_admin"
   password: "{{ pdp_password }}"
+  db_user: pdp-serverrw
+  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: pdp-server
+  spring_profiles_active: test
+  cache_policies: false
 
 loadbalancing:
   engine: {
@@ -497,8 +519,8 @@ loadbalancing:
     ]
   }
   pdp: {
-      port: 607,
-      heartbeat: { url: "/health", method: "GET" },
+      port: 613,
+      heartbeat: { url: "/pdp/api/health", method: "GET" },
       servers: [
         { label: "pdp_backend", ip: "192.168.66.79" },
       ]

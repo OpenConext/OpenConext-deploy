@@ -1,11 +1,44 @@
 logging.config=file://{{ pdp_dir }}/logback.xml
 server.port={{ springapp_tcpport }}
 
-xacml.properties.path=file://{{ pdp_dir }}/xacml.conext.properties
+server.contextPath=
 
-security.basic.enabled=true
-security.user.name={{ pdp.username }}
-security.user.password={{ pdp.password }}
+spring.profiles.active={{ pdp.spring_profiles_active }}
+
+# 8 hours
+server.session-timeout=28800
+
+spring.datasource.url=jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}
+spring.datasource.username={{ pdp.db_user }}
+spring.datasource.password={{ pdp.db_password }}
+spring.datasource.driverClassName=com.mysql.jdbc.Driver
+spring.datasource.validation-query=SELECT 1
+spring.datasource.testWhileIdle=true
+
+logging.level.org.hibernate.SQL=INFO
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=INFO
+
+policy.enforcement.point.user.name={{ pdp.username }}
+policy.enforcement.point.user.password={{ pdp.password }}
+
+xacml.properties.path=file://{{ pdp_dir }}/xacml.conext.properties
+policy.base.dir=file://{{ pdp_dir }}/xacml-policies
+
+initial.delay.policies.refresh.minutes=15
+period.policies.refresh.minutes=15
+
+initial.delay.metadata.refresh.minutes=180
+period.metadata.refresh.minutes=180
+
+policy.violation.retention.period.days=30
+
+#Voot client configuration for the teams PIP
+voot.serviceUrl=https://voot.{{ base_domain }}
+voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
+voot.userAuthorizationUri=https://authz.{{ base_domain }}/oauth/authorize
+voot.clientId=pdp
+voot.clientSecret={{ pdp_client_secret }}
+voot.scopes = groups
 
 endpoints.enabled=false
 endpoints.health.enabled=true

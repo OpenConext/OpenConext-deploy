@@ -3,9 +3,46 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     # General setup for the virtual host, inherited from global configuration
     ServerName https://pdp.{{ base_domain }}
 
-  ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-PDP'"
-	CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PDP'" combined
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-PDP'"
+	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PDP'" combined
 
-    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
+    RewriteEngine on
+
+    RewriteCond %{REQUEST_URI} !\.html$
+    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.svg$
+    RewriteCond %{REQUEST_URI} !\.css$
+    RewriteCond %{REQUEST_URI} !\.png$
+    RewriteCond %{REQUEST_URI} !\.ico$
+    RewriteCond %{REQUEST_URI} !pdp
+    RewriteCond %{REQUEST_URI} !fonts
+    RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
+
+    ProxyPass /Shibboleth.sso !
+    ProxyPass /pdp/api http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse /pdp/api http://localhost:{{ springapp_tcpport }}/
+
+    DocumentRoot /var/www/pdp/current
+
+    <Directory /var/www/pdp/current>
+      Order       allow,deny
+      Allow       from all
+      Options     -Indexes
+    </Directory>
+
+
+    # Enable shibboleth for all other URLs, but the health check and EB endpoint
+    <Location ~ "/pdp/api/(decide/policy|health|home)">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location />
+      AuthType shibboleth
+      ShibUseHeaders On
+      ShibRequestSetting applicationId pdp
+      ShibRequireSession On
+      require valid-user
+    </Location>
 
 </VirtualHost>

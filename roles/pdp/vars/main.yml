@@ -1,4 +1,4 @@
-springapp_artifact_id: pdp
+springapp_artifact_id: pdp-server
 springapp_artifact_type: jar
 springapp_artifact_group_dir: /org/openconext
 springapp_version: "{{ pdp_version }}"
@@ -11,4 +11,4 @@ springapp_tcpport: 9196
 springapp_local_jar: "{{ pdp_local_jar }}"
 springapp_debug: "{{ pdp_debug }}"
 springapp_debug_port: 1196
-springapp_heapsize: "128m"
+springapp_heapsize: "512m"

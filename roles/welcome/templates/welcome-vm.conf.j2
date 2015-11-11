@@ -1,5 +1,5 @@
-Listen {{ apache_app_listen_address.welcome }}:10{{ loadbalancing.welcome.port }}
-<Virtualhost {{ apache_app_listen_address.welcome }}:10{{ loadbalancing.welcome.port }}>
+Listen {{ apache_app_listen_address.welcome }}:{{ loadbalancing.welcome.port }}
+<Virtualhost {{ apache_app_listen_address.welcome }}:{{ loadbalancing.welcome.port }}>
     # General setup for the virtual host, inherited from global configuration
     ServerName {{ base_domain }}:443
 
