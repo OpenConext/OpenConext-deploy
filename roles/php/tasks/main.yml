@@ -15,7 +15,6 @@
      - php-soap
      - php-xml
      - php-mcrypt
-     - php-gd
 
 - name: Configure PHP
   template:
