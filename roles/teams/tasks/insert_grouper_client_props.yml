@@ -21,7 +21,7 @@
 - name: Make sure the target archive file is deleted or zip will merge it (and keep old files)
   file: path={{ springapp_dir }}/with-grouper-config-teams-current.war state=absent
 
-- name: Rezip the war. Don't use compression or java will barf.
+- name: "Rezip the war. Don't use compression or java will barf."
   command: sudo -u "{{ springapp_user }}" /usr/bin/zip -0 -r ../with-grouper-config-teams-current.war .
   args:
     chdir: "{{ teams_dir }}/unzipped"
