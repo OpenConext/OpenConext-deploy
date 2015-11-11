@@ -9,6 +9,8 @@ env_name: "{{ env_lang }}-{{ env }}"
 
 apache_user: apache
 
+error_subject_prefix: "[{{ ansible_hostname }}] "
+
 # DH-params
 tls_dh_param_path: /etc/pki/tls
 tls_dh_param_file: "{{ tls_dh_param_path }}/dh_params.pem"
