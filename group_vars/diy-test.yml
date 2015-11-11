@@ -464,7 +464,7 @@ loadbalancing:
     ]
   }
 
-nginx_backend_ip: 127.0.0.1
+nginx_backend_ip: 127.0.0.2
 
 nginx_ipv4_addresses:
   engine: 145.101.112.69
