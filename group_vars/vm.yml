@@ -2,7 +2,7 @@
 env: vm
 
 smtp_server: localhost
-error_mail_to: no-mail-on-vm@surfconext.nl
+error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
