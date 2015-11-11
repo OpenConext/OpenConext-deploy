@@ -1,6 +1,6 @@
 [nginx]
 name=nginx repo
-baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+baseurl=http://nginx.org/packages/centos/{{ ansible_distribution_major_version }}/{{ ansible_machine }}/
 gpgcheck=1
 gpgkey=file:///etc/yum.repos.d/nginx.repo.gpgkey
 enabled=1
