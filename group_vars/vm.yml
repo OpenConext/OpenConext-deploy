@@ -2,7 +2,7 @@
 env: vm
 
 smtp_server: localhost
-error_mail_to: no-mail-on-vm@surfconext.nl
+error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
@@ -177,7 +177,7 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:test.surfteams.nl:"
+  group_name_context: "urn:collab:group:demo.openconext.org:"
 
 teams_version: 4.1.0
 # teams_snapshot_timestamp: 20150519.080724-3
@@ -247,7 +247,7 @@ apis:
   url: jdbc:mysql://{{ mysql_host }}:3306/apis
   password: "{{ mysql_passwords.apis }}"
   entity_id: https://apis.{{ base_domain }}
-  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
+  group_name: "{{ teams.group_name_context }}org:openconext:teams:managementvo"
   admin_service:
     resource_server_key: authorization-server-admin
     resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
@@ -306,7 +306,7 @@ voot_debug: true
 ##
 authz_admin_version: 1.3.1
 #authz_admin_snapshot_timestamp: 20150422.113215-61
-authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
+authz_admin_group: "{{ teams.group_name_context }}org:openconext:teams:managementvo"
 authz_admin_debug: true
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -518,6 +518,13 @@ loadbalancing:
         { label: "welcome_backend", ip: "192.168.66.79" },
     ]
   }
+  oidc: {
+    port: 10614,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "oidc_backend", ip: "192.168.66.79" },
+    ]
+  }
   pdp: {
       port: 613,
       heartbeat: { url: "/pdp/api/health", method: "GET" },
@@ -525,6 +532,8 @@ loadbalancing:
         { label: "pdp_backend", ip: "192.168.66.79" },
       ]
     }
+
+nginx_backend_ip: 127.0.0.1
 
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:

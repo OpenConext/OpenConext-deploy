@@ -3,7 +3,7 @@
   yum: name="tomcat6" state="present"
   tags: tomcat
 
-- name: Set TZ variable in tomcat's init-environment
+- name: "Set TZ variable in tomcat's init-environment"
   lineinfile:
     dest: "{{ tomcat_install_dir }}/tomcat6.conf"
     line: "TZ=\"{{ timezone }}\""

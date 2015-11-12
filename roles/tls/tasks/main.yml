@@ -19,7 +19,7 @@
   yum: name=libselinux-python state=present
   when: env == 'vm'
 
-- name: copy default Dillie-Hellman parameters
+- name: copy default Diffie-Hellman parameters
   copy: src=dh_params_default.pem dest={{ tls_dh_param_file }}
   when: env == 'vm'
 

@@ -474,6 +474,8 @@ loadbalancing:
     ]
   }
 
+nginx_backend_ip: 127.0.0.1
+
 # values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
   engine: 145.100.191.206

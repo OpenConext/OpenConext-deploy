@@ -1,9 +1,9 @@
 ---
 - include: install-release.yml
-  when: engine_branch is not defined or engine_branch == ''
+  when: "engine_branch is not defined or engine_branch == ''"
 
 - include: install-branch.yml
-  when: engine_branch is defined and engine_branch != ''
+  when: "engine_branch is defined and engine_branch != ''"
 
 - name: Install Apache vhost
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
