@@ -194,6 +194,17 @@ frontend pdp 127.0.0.1:{{ loadbalancing.pdp.port }}
     default_backend     pdp_be
 
 #---------------------------------------------------------------------
+# OIDC frontend
+#---------------------------------------------------------------------
+frontend oidc 127.0.0.1:{{ loadbalancing.oidc.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         oidc_be        if url_all
+    default_backend     oidc_be
+
+#---------------------------------------------------------------------
 # engine backend
 #---------------------------------------------------------------------
 backend engine_be
@@ -428,6 +439,25 @@ backend pdp_be
 
     {% for server in loadbalancing.pdp.servers %}
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.pdp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+
+#---------------------------------------------------------------------
+# oidc backend
+#---------------------------------------------------------------------
+backend oidc_be
+
+    option httpchk {{ loadbalancing.oidc.heartbeat.method }} {{ loadbalancing.oidc.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.oidc.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.oidc.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
 # Statistics

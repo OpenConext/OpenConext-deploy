@@ -94,5 +94,8 @@
     },
     "coin_trusted_proxy": {
         "en": "Enable to allow this SP to act as a trusted proxy. A trusted proxy is allowed to handle authentication on behalf of other SPs."
+    },
+    "coin_entity_categories": {
+        "en": "Entity Category supported by this entity, to be advertised in metadata."
     }
 }

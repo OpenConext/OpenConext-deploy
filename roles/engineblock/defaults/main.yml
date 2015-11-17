@@ -1,7 +1,7 @@
 #---
 ## Version of EngineBlock that is installable by this role
-engine_version: 4.6.1
-engine_branch: "feature-pep"
+engine_version: 4.6.3
+engine_branch: "develop"
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"
