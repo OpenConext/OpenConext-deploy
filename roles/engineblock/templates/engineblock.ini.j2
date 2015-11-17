@@ -1,21 +1,14 @@
-api.vovalidate.baseUrl = {{ engine_vovalidate_baseurl }}
-api.vovalidate.key = {{ engine_vovalidate_key }}
-api.vovalidate.secret = {{ engine_vovalidate_secret }}
-
-voot.serviceUrl=https://voot.{{ base_domain }}
-voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
-voot.clientId=engineblock
-voot.clientSecret={{ engineblock_authz_client_secret }}
-voot.scopes = groups
-
 auth.simplesamlphp.idp.entityId = {{ engine_profile_idp_entityid }}
 auth.simplesamlphp.idp.location = {{ engine_profile_idp_sso_location }}
 auth.simplesamlphp.idp.certificate= "{{ engine_profile_idp_certificate }}"
 
+pdp.baseUrl = {{ engine_pdp_baseurl }}
+pdp.username = {{engine_pdp_username }}
+pdp.password = {{ engine_pdp_password }}
+
 profile.simplesamlphp.hostMatch = "{{ engine_profile_idp_hostmatch }}"
 profile.simplesamlphp.baseurlpath = "{{ engine_profile_idp_baseurlpath }}"
 engine.simplesamlphp.baseurlpath = "{{ engine_engine_idp_baseurlpath }}"
-
 
 cookie.lang.domain = .{{ base_domain }}
 

@@ -381,8 +381,8 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151026.081334-16"
-pdp_html_snapshot_timestamp: "20151026.081442-14"
+pdp_snapshot_timestamp: "20151029.080326-17"
+pdp_html_snapshot_timestamp: "20151029.080638-15"
 
 pdp_debug: true
 pdp:
@@ -395,6 +395,7 @@ pdp:
   db_host: "{{ mysql_host }}"
   db_name: pdp-server
   spring_profiles_active: test
+  cache_policies: false
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151116.152818-6"

@@ -1,6 +1,7 @@
 #---
 ## Version of EngineBlock that is installable by this role
 engine_version: 4.6.3
+engine_branch: "develop"
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"
@@ -25,6 +26,11 @@ engine_debug: false
 
 ## The endpoint it can use to validate Virtual Organizations
 engine_vovalidate_baseurl : https://api.{{ base_domain }}
+
+## PDP endpoint
+engine_pdp_baseurl: https://pdp.{{ base_domain }}/pdp/api/decide/policy
+engine_pdp_username: pdp_admin
+engine_pdp_password: secret
 
 ## Where EngineBlock can go for its (v1) Service Registry API
 engine_janus_url: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/

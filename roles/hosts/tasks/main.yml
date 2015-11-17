@@ -17,4 +17,5 @@
     - "apps.vm.openconext.org"
     - "ldap.vm.openconext.org"
     - "db.vm.openconext.org"
+    - "pdp.vm.openconext.org"
     - "engine-api.vm.openconext.org"

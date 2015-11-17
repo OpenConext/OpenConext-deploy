@@ -1043,6 +1043,11 @@ janus_service_registry_core:
                 default: false
                 default_allow: true
                 required: false
+            'coin:policy_enforcement_decision_required':
+                type: boolean
+                default: false
+                default_allow: true
+                required: false
     workflow:
         testaccepted:
             prodaccepted:
