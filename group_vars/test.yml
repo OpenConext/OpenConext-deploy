@@ -398,7 +398,7 @@ pdp:
   cache_policies: false
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151116.152818-6"
+oidc_snapshot_timestamp: "20151118.072025-7"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
