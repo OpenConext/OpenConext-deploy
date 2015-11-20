@@ -67,7 +67,7 @@ These are the steps the above script performs:
 We need pseudo-DNS entries so that your browser can reach the VM-platform we just installed. So, add this very long line to your `/etc/hosts` file:
 
 ```
-192.168.66.78  vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org apis.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org
+192.168.66.78  vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org apis.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org oidc.vm.openconext.org
 ```
 
 Here, the ip-address `192.168.66.78` refers to the address that is mentioned in ./Vagrantfile.

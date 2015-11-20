@@ -6,7 +6,7 @@ then
   exit 1
 fi
 
-COMPONENTS=("authz-admin" "authz-playground" "mujina" "tomcat" "oauth" "oidc" "authz-server" "eb" "shib" "sr" "teams" "voot" "mysql" "java" "legacy" "lb" "welcome" "grouper" "ldap" "pdp" )
+COMPONENTS=("authz-admin" "authz-playground" "mujina" "tomcat" "oauth" "oidc" "authz-server" "eb" "shib" "sr" "teams" "voot" "mysql" "java" "legacy" "lb" "welcome" "grouper" "ldap" "pdp" "oidc" )
 VALID_COMPONENT=0
 for component in "${COMPONENTS[@]}"
 do

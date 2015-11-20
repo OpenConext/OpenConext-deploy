@@ -16,6 +16,7 @@ databases:
     - grouper
     - authz-server
     - pdp-server
+    - oidc-server
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
@@ -25,11 +26,13 @@ databases:
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
+    - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
   key_name: star.{{ base_domain }}.key
   crt_name: star.{{ base_domain }}.pem
+  ca_name: star.{{ base_domain }}_ca.pem
   bundle_name: star.{{ base_domain }}_ca_bundle.pem
 
 apache_server_admin: unix@prolocation.net
@@ -50,7 +53,8 @@ tls:
     - "{{ tls_https.crt_name }}"
   private_keys:
     - "{{ tls_https.key_name }}"
-
+  ca_certificates:
+    - "{{ tls_https.ca_name }}"
 engine_janus_user: engineblock
 
 engine_database_name: eb
@@ -140,6 +144,7 @@ tomcat_apps:
   - grouper
   - mujina-sp
   - mujina-idp
+  - oidc
 
 # shibboleth
 shibboleth_apps:
@@ -419,6 +424,22 @@ pdp:
   spring_profiles_active: test
   cache_policies: false
 
+oidc_version: "0.1"
+oidc_snapshot_timestamp: "20151118.072025-7"
+oidc:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  environment: vm
+  issuer: https://oidc.{{ base_domain }}/
+  db_user: oidc-serverrw
+  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: oidc-server
+  idp_public_certificate: MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMTBkVuZ2luZTERMA8GA1UECxMIU2VydmljZXMxEzARBgNVBAoTCk9wZW5Db25leHQxCzAJBgNVBAYTAk5MMB4XDTE1MDQwMjE0MDE1NFoXDTI1MDQwMTE0MDE1NFowRjEPMA0GA1UEAxMGRW5naW5lMREwDwYDVQQLEwhTZXJ2aWNlczETMBEGA1UEChMKT3BlbkNvbmV4dDELMAkGA1UEBhMCTkwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCeVodghQwFR0pItxGaJ3LXHA+ZLy1w/TMaGDcJaszAZRWRkL/6djwbabR7TB45QN6dfKOFGzobQxG1Oksky3gz4Pki1BSzi/DwsjWCw+Yi40cYpYeg/XM0tvHKVorlsx/7Thm5WuC7rwytujr/lV7f6lavf/ApnLHnOORU2h0ZWctJiestapMaC5mc40msruWWp04axmrYICmTmGhEy7w0qO4/HLKjXtWbJh71GWtJeLzG5Hj04X44wI+D9PUJs9U3SYh9SCFZwq0v+oYeqajiX0JPzB+8aVOPmOOM5WqoT8OCddOM/TlsL/0PcxByGHsgJuWbWMI1PKlK3omR764PAgMBAAGjgagwgaUwHQYDVR0OBBYEFLowmsUCD2CrHU0lich1DMkNppmLMHYGA1UdIwRvMG2AFLowmsUCD2CrHU0lich1DMkNppmLoUqkSDBGMQ8wDQYDVQQDEwZFbmdpbmUxETAPBgNVBAsTCFNlcnZpY2VzMRMwEQYDVQQKEwpPcGVuQ29uZXh0MQswCQYDVQQGEwJOTIIJAPdqJ9JQKN6vMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAIF9tGG1C9HOSTQJA5qL13y5Ad8G57bJjBfTjp/dw308zwagsdTeFQIgsP4tdQqPMwYmBImcTx6vUNdiwlIol7TBCPGuqQAHD0lgTkChCzWezobIPxjitlkTUZGHqn4Kpq+mFelX9x4BElmxdLj0RQV3c3BhoW0VvJvBkqVKWkZ0HcUTQMlMrQEOq6D32jGh0LPCQN7Ke6ir0Ix5knb7oegND49fbLSxpdo5vSuxQd+Zn6nI1/VLWtWpdeHMKhiw2+/ArR9YM3cY8UwFQOj9Y6wI6gPCGh/q1qv2HnngmnPrNzZik8XucGcf1Wm2zE4UIVYKW31T52mqRVDKRk8F3Eo= 
+  sp_entity_id: https://oidc.{{ base_domain }}
+  sp_public_certificate: MIIDEzCCAfugAwIBAgIJAIXwoDmV8lb3MA0GCSqGSIb3DQEBCwUAMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzAeFw0xNTExMTgxNDUyMTVaFw0yNTExMTcxNDUyMTVaMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM4DDoIHcwygrhv4f4BCWxdCaGc951sSlZcjMINE3aJ8aXAntHmSjRDws+53A1GK5lJHPPmnFXZFy3p4H8BVMv1p4N0m6sjrj4Ok/gVgZXMoIt9a0MZC8SFLiR25/b3YEeOI5riyAVcgTevt+NWXdnNtyd4QscKG70UYc+rUBcBy2uWxmqLsqcsAdfgkxajOZPj9eNA4Y2ls/bB9UBmO+cVPEpLZKlh3OSJVZAWa3NX1XyBGgEKMYXoOKDcau1ynMCeSTd6hQwxnY5FN+n0yMH/rtYu7Z9etdMSmTcDkQpWHicOxBaQ7onYQ5faoy5zp1w6pV1uCglxiwoD7LOpFlQcCAwEAAaNQME4wHQYDVR0OBBYEFKwusxoVUAzJ9cJX946xs1IRvZXuMB8GA1UdIwQYMBaAFKwusxoVUAzJ9cJX946xs1IRvZXuMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAEsu7vbvITCiLvJI/KgZKh67gOBMoxaepfgcN0xQEma0IqOlafhumcw+4HTi7+r+WN8bheCFgKDqFXnr+U/gwTULDzQNpDChMeP+y9miO4Ry3dlANZXyeavmQ9DdSuwebKMJxKaENx5GW+6b17+viMrWPytLmkc+tutoAKaf5DEyR0moj8gpsAkBT13BwIhWCOIhRl1+ZhGa04YpEb5oBepTfrXMhhlwCMuEV9GV/wmNsmpjooCC4Ihc4W0xgyCdb7jwiXkABSQAEqsF+ysqDSyfWMCzx8RrghVDpViG2yZV8HhU0t1/1VxLRs0uaIaSmcC3CnRonJQy7AOwc1Mc/dM= 
+
+
 loadbalancing:
   engine: {
     port: 401,
@@ -552,6 +573,7 @@ nginx_ipv4_addresses:
   mujina_idp: 192.168.66.78
   welcome: 192.168.66.78
   pdp: 192.168.66.78
+  oidc: 192.168.66.78
 
 nginx_config_templates:
   - welcome
@@ -569,3 +591,4 @@ nginx_config_templates:
   - profile
   - pdp
   - serviceregistry
+  - oidc
