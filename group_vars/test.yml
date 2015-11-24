@@ -367,16 +367,16 @@ authzadmin:
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
 
-authz_playground_version: 1
-#authz_playground_snapshot_timestamp: ""
+authz_playground_version: 1.1
+authz_playground_snapshot_timestamp: 20151124.120116-1
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
-  springapp_oauth_token_url: https://authz.{{ base_domain }}/token
+  springapp_oauth_token_url: https://oidc.{{ base_domain }}/token
   springapp_client_id: https@//oidc.test.surfconext.nl
   springapp_client_secret: "{{ authzplayground_springapp_client_secret }}"
   springapp_scopes: groups
   springapp_oidc_scopes: openid groups profile email organization userids entitlement
-  springapp_authorize_url: https://authz.{{ base_domain }}/authorize
+  springapp_authorize_url: https://oidc.{{ base_domain }}/authorize
   springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -399,7 +399,7 @@ pdp:
   cache_policies: false
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151118.072025-7"
+oidc_snapshot_timestamp: "20151124.124915-9"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
