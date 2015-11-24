@@ -8,6 +8,18 @@ oauth.scopes={{ authzplayground.springapp_scopes }}
 oauth.authorize_url={{ authzplayground.springapp_authorize_url }}
 oauth.resource_server_api_url={{ authzplayground.springapp_resource_server_api_url }}
 
+oidc.redirect_uri={{ authzplayground.springapp_oauth_redirect }}
+oidc.token_uri={{ authzplayground.springapp_oauth_token_url }}
+oidc.client_id={{ authzplayground.springapp_client_id }}
+oidc.client_secret={{ authzplayground.springapp_client_secret }}
+oidc.scopes={{ authzplayground.springapp_oidc_scopes }}
+oidc.authorize_url={{ authzplayground.springapp_authorize_url }}
+oidc.resource_server_api_url={{ authzplayground.springapp_resource_server_api_url }}
+oidc.introspect_url=https://oidc.{{ base_domain }}/introspect
+oidc.user_info_url=https://oidc.{{ base_domain }}/userinfo
+oidc.jwk_url=https://oidc.{{ base_domain }}/jwk
+oidc.well_known_configuration_url=https://oidc.{{ base_domain }}/.well-known/openid-configuration
+
 server.port={{ springapp_tcpport }}
 
 endpoints.enabled=false
