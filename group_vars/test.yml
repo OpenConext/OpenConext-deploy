@@ -259,6 +259,10 @@ voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   resource_checking_secret: "{{ voot_resource_checking_secret }}"
+#  oauth_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
+#  oauth_checkToken_clientId: "https@//oidc.test.surfconext.nl"
+  oauth_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
+  oauth_checkToken_clientId: "vootservice"
   externalGroupProviders:
     - {
         type: "grouper",
@@ -283,7 +287,9 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1.4
-#voot_snapshot_timestamp: "20150907.093535-3"
+#branch oidc-integration
+#voot_snapshot_timestamp: 20151125.084209-1
+voot_snapshot_timestamp: 20151125.093027-2
 voot_debug: true
 
 authz_admin_version: 1.3.1

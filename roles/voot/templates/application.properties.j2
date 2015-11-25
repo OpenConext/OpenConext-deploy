@@ -11,8 +11,8 @@ vootservice.oauthResourceId = groups
 
 # Details needed so that we may check tokens presented to us by clients. This application uses them to authenticate via
 # Basic authentication with the oAuth server.
-oauth.checkToken.endpoint.url=https://authz.{{ base_domain }}/oauth/check_token
-oauth.checkToken.clientId=vootservice
+oauth.checkToken.endpoint.url= {{ voot.oauth_checkToken_endpoint_url }}
+oauth.checkToken.clientId={{ voot.oauth_checkToken_clientId }}
 oauth.checkToken.secret={{ voot.resource_checking_secret }}
 
 endpoints.enabled=false

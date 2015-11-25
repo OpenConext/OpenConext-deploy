@@ -270,6 +270,8 @@ voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   resource_checking_secret: "{{ voot_resource_checking_secret }}"
+  oauth_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
+  oauth_checkToken_clientId: "vootservice"
   externalGroupProviders:
     - {
         type: "grouper",
