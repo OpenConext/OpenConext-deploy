@@ -396,7 +396,7 @@ authzadmin:
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1.1
-authz_playground_snapshot_timestamp: 20151124.120116-1
+authz_playground_snapshot_timestamp: 20151124.142135-2
 authz_playground_debug: true
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
@@ -411,8 +411,8 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151026.081334-16"
-pdp_html_snapshot_timestamp: "20151026.081442-14"
+pdp_snapshot_timestamp: "20151120.123017-19"
+pdp_html_snapshot_timestamp: "20151120.140020-18"
 
 pdp_debug: true
 pdp:
@@ -428,7 +428,7 @@ pdp:
   cache_policies: false
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151124.124915-9"
+oidc_snapshot_timestamp: "20151126.151623-11"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"

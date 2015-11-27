@@ -375,6 +375,7 @@ authzadmin:
 
 authz_playground_version: 1.1
 authz_playground_snapshot_timestamp: 20151124.142135-2
+authz_playground_debug: true
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
   springapp_oauth_token_url: https://oidc.{{ base_domain }}/token
