@@ -1,4 +1,6 @@
 ---
+develop: false
+
 timezone: Europe/Amsterdam
 
 maven_repo: https://build.surfconext.nl/repository/public/releases
