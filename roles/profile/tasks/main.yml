@@ -8,7 +8,7 @@
   when: not develop
 
 - name: Copy app_dev.php to OpenConext Profile web folder
-  copy: src=app_dev.php dest=/opt/openconext/OpenConext-profile/web/app_dev.php owner={{ apache_user }} group={{ apache_user }} mode=0644
+  copy: src=app_dev.php dest={{ profile_current_release_symlink }}/web/app_dev.php owner={{ apache_user }} group={{ apache_user }} mode=0644
   when: develop
 
 - name: Create the cache dir for Symfony
@@ -49,4 +49,8 @@
   notify:
     - restart httpd
 
+- name: Place parameters.yml
+  template: src={{ item }}.j2 dest={{ profile_current_release_symlink }}/app/config/{{ item }} owner={{ apache_user }} group={{ apache_user }} mode=0644
+  with_items:
+  - parameters.yml
 
