@@ -13,6 +13,9 @@ diy11
 [php-apps]
 diy11
 
+[php56-apps]
+diy11
+
 [loadbalancer]
 diy11
 
@@ -20,4 +23,5 @@ diy11
 storage
 java-apps
 php-apps
+php56-apps
 loadbalancer

@@ -11,10 +11,13 @@ prd64.coin.surf.net
 
 [php-apps]
 
+[php56-apps]
+
 [loadbalancer]
 
 [prod:children]
 storage
 java-apps
 php-apps
+php56-apps
 loadbalancer

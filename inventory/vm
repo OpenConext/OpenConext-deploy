@@ -21,6 +21,9 @@ java-apps
 [php-apps]
 192.168.66.79 ansible_ssh_private_key_file=./.vagrant/machines/apps/virtualbox/private_key
 
+[php56-apps]
+192.168.66.79 ansible_ssh_private_key_file=./.vagrant/machines/apps/virtualbox/private_key
+
 [php-apps-vm:children]
 php-apps
 
@@ -34,5 +37,6 @@ loadbalancer
 storage
 java-apps
 php-apps
+php56-apps
 loadbalancer
 local-certs

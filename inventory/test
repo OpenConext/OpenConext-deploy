@@ -10,6 +10,9 @@ t04.dev.coin.surf.net
 [php-apps]
 t03.dev.coin.surf.net
 
+[php56-apps]
+t03.dev.coin.surf.net
+
 [loadbalancer]
 t05.dev.coin.surf.net
 
@@ -17,4 +20,5 @@ t05.dev.coin.surf.net
 storage
 java-apps
 php-apps
+php56-apps
 loadbalancer
