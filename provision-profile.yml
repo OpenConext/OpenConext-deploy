@@ -1,0 +1,37 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: Read vars from secrets file
+    include_vars: "{{ secrets_file }}"
+    tags:
+      - always
+
+- hosts: loadbalancer:php-apps
+  gather_facts: no
+  sudo: true
+  roles:
+    - common
+    - tls
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
+
+- hosts: loadbalancer
+  gather_facts: true
+  sudo: true
+  roles:
+    - { role: haproxy, tags: ['lb'] }
+    - { role: nginx,   tags: ['lb'] }
+
+- hosts: php56-apps
+  gather_facts: no
+  sudo: true
+  roles:
+    - httpd
+    - openconext-common
+    - php56
+    - profile
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
