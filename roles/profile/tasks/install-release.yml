@@ -1,0 +1,14 @@
+---
+- name: Download current version
+  get_url: url="{{ profile_download_url }}" dest="{{ profile_build_path }}"
+  register: profile_download
+
+- name: Unpack current version
+  unarchive: src={{ profile_build_path }} dest={{ openconext_releases_dir }} copy=no
+  when: profile_download.changed
+
+- name: Activate new Profile release
+  file: src={{ profile_release_dir }} dest={{ profile_current_release_symlink }} state=link
+  notify:
+    - restart httpd
+  when: profile_download.changed

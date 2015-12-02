@@ -1,0 +1,22 @@
+#---
+## Version of Profile that is installable by this role
+profile_version: 0.0.0
+
+#
+### Profile installer specific variables.
+profile_version_dir: "{{ profile_version | replace('/', '-') }}"
+profile_branch_dir: "{{ openconext_builds_dir }}/OpenConext-profile-{{ profile_branch | replace('/', '-') }}"
+profile_release_dir: "{{ openconext_releases_dir }}/OpenConext-profile-{{ profile_version_dir }}"
+profile_build_path: "{{ openconext_builds_dir }}/OpenConext-profile-{{ profile_version_dir }}.tar.gz"
+profile_download_url: "https://github.com/OpenConext/OpenConext-profile/releases/download/{{ profile_version }}/OpenConext-profile-{{ profile_version_dir }}.tar.gz"
+profile_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-profile"
+
+profile_ipv4_address: "*"
+# profile_ipv6_address:
+profile_api_ipv4_address: "*"
+# profile_api_ipv6_address:
+
+profile_domain: profile.{{ base_domain }}
+
+profile_symfony_cache_path: "/tmp/profile/symfony-cache/{{ profile_version }}"
+profile_symfony_log_path: "/var/log/profile"
