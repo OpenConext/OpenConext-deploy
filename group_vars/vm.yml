@@ -65,6 +65,8 @@ engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: vm
 engine_apache_symfony_environment: dev
 
+profile_apache_symfony_environment: dev
+
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
 ldap_grouper_user: gadget
@@ -406,8 +408,8 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151014.122459-10"
-pdp_html_snapshot_timestamp: "20151014.122556-9"
+pdp_snapshot_timestamp: "20151120.135949-20"
+pdp_html_snapshot_timestamp: "20151120.140020-18"
 
 pdp_debug: true
 pdp:

@@ -61,6 +61,8 @@ engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: production
 engine_apache_symfony_environment: prod
 
+profile_apache_symfony_environment: prod
+
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
 ldap_grouper_user: GrouperSystem
