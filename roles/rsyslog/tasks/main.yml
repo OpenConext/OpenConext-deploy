@@ -1,0 +1,6 @@
+---
+- name: Install rsyslog
+  yum: pkg=rsyslog state=latest
+
+- name: Configure rsyslog to allow linelength of 10K
+  lineinfile: dest=/etc/rsyslog.conf insertbefore="BOF" line="$MaxMessageSize 10k"

@@ -28,6 +28,7 @@
   gather_facts: no
   sudo: true
   roles:
+    - rsyslog
     - httpd
     - openconext-common
     - php56
