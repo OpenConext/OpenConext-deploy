@@ -12,7 +12,7 @@ SECRET_VARS_FILE=../secrets/secret-vars.yml
 
 SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$SCRIPT")
-BASENAME=$(basename "$SCRIPT)
+BASENAME=$(basename "$SCRIPT")
 
 # ----- Input handling
 if [ $# -lt 2 ]
