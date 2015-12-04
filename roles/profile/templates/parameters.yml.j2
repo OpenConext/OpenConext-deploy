@@ -1,10 +1,10 @@
 parameters:
-    secret: ThisTokenIsNotSoSecretChangeIt
-    default_locale: en
-    saml_sp_publickey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer
-    saml_sp_privatekey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem
-    saml_metadata_publickey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer
-    saml_metadata_privatekey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem
+    secret: {{ profile_secret }}
+    default_locale: {{ profile_default_locale }}
+    saml_sp_publickey: {{ profile_saml_sp_publickey }}
+    saml_sp_privatekey: {{ profile_saml_sp_privatekey }}
+    saml_metadata_publickey: {{ profile_saml_metadata_publickey }}
+    saml_metadata_privatekey: {{ profile_saml_metadata_privatekey }}
     saml_remote_idp_entity_id: {{ engine_profile_idp_entityid }}
     saml_remote_idp_sso_url: {{ engine_profile_idp_sso_location }}
     saml_remote_idp_host: {{ engine_domain }}
@@ -12,4 +12,4 @@ parameters:
     engineblock_api_base_url: 'https://{{ engine_api_domain }}'
     engineblock_api_username: {{ engine_api_profile_user }}
     engineblock_api_password: {{ engine_api_profile_password }}
-    engineblock_api_verify_ssl: false
+    engineblock_api_verify_ssl: {{ engineblock_api_verify_ssl }}

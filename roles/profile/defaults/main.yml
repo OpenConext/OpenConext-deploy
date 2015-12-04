@@ -13,11 +13,17 @@ profile_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-profi
 
 profile_domain: profile.{{ base_domain }}
 
+profile_default_locale: en
 profile_symfony_cache_path: "/tmp/profile/symfony-cache/{{ profile_version }}"
 profile_symfony_log_path: "/var/log/profile"
+profile_secret: secret
+profile_saml_sp_publickey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer
+profile_saml_sp_privatekey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem
+profile_saml_metadata_publickey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer
+profile_saml_metadata_privatekey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem
 
 engine_domain: engine.{{ base_domain }}
-engine_api_address: {{ nginx_ipv4_addresses.engine_api }}
+engine_api_address: "{{ nginx_ipv4_addresses.engine_api }}"
 engine_api_domain: engine-api.{{ base_domain }}
 engine_profile_idp_entityid: https://{{ engine_domain }}/authentication/idp/metadata
 engine_profile_idp_sso_location: https://{{ engine_domain }}/authentication/idp/single-sign-on
