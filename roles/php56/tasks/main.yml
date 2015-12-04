@@ -30,16 +30,6 @@
     - apc.ini
     - openconext.ini
 
-- name: Install xdebug
-  yum: name={{ item }} state=present enablerepo=remi
-  with_items:
-    - php-pecl-xdebug
-  when: develop
-
-- name: Configure PHP Xdebug
-  template: src=xdebug.ini.j2 dest=/etc/php.d/xdebug.ini
-  when: develop
-
 - name: Enable php in apache
   copy: src=httpd.php.conf dest=/etc/httpd/conf.d/php.conf
   notify: reload httpd

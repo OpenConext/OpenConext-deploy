@@ -7,10 +7,6 @@
   when: profile_branch is defined and profile_branch != ''
   when: not develop
 
-- name: Copy app_dev.php to OpenConext Profile web folder
-  copy: src=app_dev.php dest={{ profile_current_release_symlink }}/web/app_dev.php owner={{ apache_user }} group={{ apache_user }} mode=0644
-  when: develop
-
 - name: Create the cache dir for Symfony
   file:
     path={{ profile_symfony_cache_path }}
@@ -30,9 +26,6 @@
 - name: Create the symfony cache
   command: app/console cache:clear --env=prod --no-debug
   when: not develop
-
-- include: develop.yml
-  when: develop
 
 - name: Install Apache vhost
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}

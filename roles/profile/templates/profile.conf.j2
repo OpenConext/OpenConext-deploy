@@ -20,9 +20,9 @@ Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
     # Note that the requested URL MUST be appended because Corto uses the PATH_INFO server variable
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ /app{% if develop %}_dev{% endif %}.php/$1 [L] # Send the query string to app(_dev).php
+    RewriteRule ^(.*)$ /app.php/$1 [L] # Send the query string to app.php
     # Requests to the domain (no query string)
-    RewriteRule ^$ /app{% if develop %}_dev{% endif %}.php/ [L]
+    RewriteRule ^$ /app.php/ [L]
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Profile'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Profile'" combined
