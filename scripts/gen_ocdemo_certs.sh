@@ -59,6 +59,12 @@ mkdir -p $BASEDIR/oc_cert/signing
 ### Create directory for ansible to pick up certificates
 
 mkdir -p ../files/$oc_env/certs
+if [ ! -f ../files/$oc_env/certs/star.$oc_env.$oc_basedomain_ca.pem ]; then
+  cp $BASEDIR/oc_cert/ca/ca-cert.pem ../files/$oc_env/certs/star.$oc_env.$oc_basedomain_ca.pem
+else
+  echo "Skipping star.$oc_env.$oc_basedomain_ca.pem, already exist"
+fi
+
 if [ ! -f ../files/$oc_env/certs/engineblock.crt ]; then
   cp $BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/engineblock.crt
 else
