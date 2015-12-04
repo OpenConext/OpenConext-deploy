@@ -78,6 +78,10 @@ else
 fi
 
 pushd ../files/
-ln -s $oc_env java-$oc_env
-ln -s $oc_env php-$oc_env
+if [ -f java-$oc_env ]; then
+  ln -s $oc_env java-$oc_env
+fi
+if [ -f php-$oc_env ]; then
+  ln -s $oc_env php-$oc_env
+fi
 popd
