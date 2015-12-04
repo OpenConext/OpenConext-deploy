@@ -54,3 +54,5 @@
   with_items:
   - parameters.yml
 
+- name: Add engineblock api to hosts
+  lineinfile: dest=/etc/hosts state=present line="{{ engine_api_address }}  {{ engine_api_domain }}"
