@@ -45,13 +45,13 @@ oc_env=$1
 oc_basedomain=$2
 
 # create some directories for housekeeping
-mkdir -p $BASEDIR/oc_certs/ssl
+mkdir -p $BASEDIR/oc_cert/ssl
 mkdir -p $BASEDIR/oc_cert/signing
 #mkdir -p $BASEDIR/oc_cert/api
 
 #HTTPS certs voor Web omgeving
 ./lib/create_ca.sh $BASEDIR/oc_cert/ca "/CN=OpenConext Demo CA/O=OpenConext/C=NL"
-./lib/gen_ssl_server_cert.sh  $BASEDIR/oc_cert/ca $BASEDIR/oc_cert/ssl/star.$oc_basedomain /CN=*.$oc_basedomain/O=OpenConext/C=NL
+./lib/gen_ssl_server_cert.sh  $BASEDIR/oc_cert/ca $BASEDIR/oc_cert/ssl/star.$oc_env.$oc_basedomain /CN=*.$oc_env.$oc_basedomain/O=OpenConext/C=NL
 
 #SAML Signing CERT
 ./lib/gen_selfsigned_cert.sh $BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning "/CN=OpenConext Demo Saml Signing Certificate/O=OpenConext/C=NL"
@@ -66,7 +66,7 @@ else
 fi
 
 if [ ! -f ../files/$oc_env/certs/star.$oc_basedomain.pem ]; then
-  cp $BASEDIR/oc_cert/ssl/star.$oc_basedomain.crt ../files/$oc_env/certs/star.$oc_basedomain.pem
+  cp $BASEDIR/oc_cert/ssl/star.$oc_env.$oc_basedomain.crt ../files/$oc_env/certs/star.$oc_env.$oc_basedomain.pem
 else
   echo "Skipping star.$oc_basedomain.pem, already exist"
 fi
@@ -86,10 +86,10 @@ else
 fi
 
 pushd ../files/
-if [ -f java-$oc_env ]; then
+if [ ! -f java-$oc_env ]; then
   ln -s $oc_env java-$oc_env
 fi
-if [ -f php-$oc_env ]; then
+if [ ! -f php-$oc_env ]; then
   ln -s $oc_env php-$oc_env
 fi
 popd
