@@ -59,8 +59,8 @@ mkdir -p $BASEDIR/oc_cert/signing
 ### Create directory for ansible to pick up certificates
 
 mkdir -p ../files/$oc_env/certs
-if [ ! -f ../files/$oc_env/certs/star.$oc_env.$oc_basedomain_ca.pem ]; then
-  cp $BASEDIR/oc_cert/ca/ca-cert.pem ../files/$oc_env/certs/star.$oc_env.$oc_basedomain_ca.pem
+if [ ! -f ../files/$oc_env/certs/star.$oc_env.${oc_basedomain}_ca.pem ]; then
+  cp $BASEDIR/oc_cert/ca/ca-cert.pem ../files/$oc_env/certs/star.$oc_env.${oc_basedomain}_ca.pem
 else
   echo "Skipping star.$oc_env.$oc_basedomain_ca.pem, already exist"
 fi
@@ -71,7 +71,7 @@ else
   echo "Skipping engineblock.crt, already exist"
 fi
 
-if [ ! -f ../files/$oc_env/certs/star.$oc_basedomain.pem ]; then
+if [ ! -f ../files/$oc_env/certs/star.$oc_env.$oc_basedomain.pem ]; then
   cp $BASEDIR/oc_cert/ssl/star.$oc_env.$oc_basedomain.crt ../files/$oc_env/certs/star.$oc_env.$oc_basedomain.pem
 else
   echo "Skipping star.$oc_basedomain.pem, already exist"
@@ -92,10 +92,10 @@ else
 fi
 
 pushd ../files/
-if [ ! -f java-$oc_env ]; then
+if [ ! -L java-$oc_env ]; then
   ln -s $oc_env java-$oc_env
 fi
-if [ ! -f php-$oc_env ]; then
+if [ ! -L php-$oc_env ]; then
   ln -s $oc_env php-$oc_env
 fi
 popd
