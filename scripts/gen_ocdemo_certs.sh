@@ -11,7 +11,8 @@ SECRET_VARS_FILE=../secrets/secret-vars.yml
 # ----- End configuration
 
 BASEDIR=$(dirname $0)
-BASENAME=$(basename $0)
+SCRIPT=$(readlink -f "$0")
+BASENAME=$(dirname "$SCRIPT")
 
 # ----- Input handling
 if [ $# -lt 2 ]
