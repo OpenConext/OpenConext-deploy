@@ -29,55 +29,50 @@ if [ $# -eq 1 ]
     echo "INFO: Using file " $SECRET_VARS_FILE " for containing the secrets."
 fi
 
-set -x
+#set -x
 
 oc_env=`grep "^env: " $SECRET_VARS_FILE | cut -f2 -d: | xargs`
 oc_basedomain=`grep "^base_domain: " $SECRET_VARS_FILE | cut -f2 -d: | xargs  | sed "s/{{ env }}/$oc_env/g"`
 
-echo $oc_basedomain
+BASEDIR=$(dirname $0)
 
 # create some directories for housekeeping
-mkdir -p ./oc_certs/ssl
-mkdir -p ./oc_certs/signing
-#mkdir -p ./oc_certs/api
+mkdir -p $BASEDIR/oc_certs/ssl
+mkdir -p $BASEDIR/oc_cert/signing
+#mkdir -p $BASEDIR/oc_cert/api
 
 #HTTPS certs voor Web omgeving
-./create_ca.sh ./oc_certs/ca "/CN=OpenConext Demo CA/O=OpenConext/C=NL"
-./gen_ssl_server_cert.sh  ./oc_certs/ca ./oc_certs/ssl/star.$oc_basedomain /CN=*.$oc_basedomain/O=OpenConext/C=NL
+./lib/create_ca.sh $BASEDIR/oc_cert/ca "/CN=OpenConext Demo CA/O=OpenConext/C=NL"
+./lib/gen_ssl_server_cert.sh  $BASEDIR/oc_cert/ca $BASEDIR/oc_cert/ssl/star.$oc_basedomain /CN=*.$oc_basedomain/O=OpenConext/C=NL
 
 #SAML Signing CERT
-./gen_selfsigned_cert.sh ./oc_certs/signing/OpenConextDemoSAMLSigning "/CN=OpenConext Demo Saml Signing Certificate/O=OpenConext/C=NL"
-
-#API needs certs in a special form (pkcs8)
-# openssl pkcs8 -topk8 -inform PEM -outform PKCS8 -in api.pem -out api_pkcs8.pem -nocrypt
-#/usr/bin/openssl pkcs8 -topk8 -inform PEM -outform PKCS8 -in ./oc_certs/ssl/star.$oc_basedomain.crt -out ./oc_certs/api/star.$oc_basedomain.pem_pkcs8.pem -nocrypt
-
+./lib/gen_selfsigned_cert.sh $BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning "/CN=OpenConext Demo Saml Signing Certificate/O=OpenConext/C=NL"
 
 ### Create directory for ansible to pick up certificates
 
 mkdir -p ../files/$oc_env/certs
 if [ ! -f ../files/$oc_env/certs/engineblock.crt ]; then
-  cp ./oc_certs/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/engineblock.crt
+  cp $BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/engineblock.crt
 else
   echo "Skipping engineblock.crt, already exist"
 fi
 
 if [ ! -f ../files/$oc_env/certs/star.$oc_basedomain.pem ]; then
-  cp ./oc_certs/ssl/star.$oc_basedomain.crt ../files/$oc_env/certs/star.$oc_basedomain.pem
+  cp $BASEDIR/oc_cert/ssl/star.$oc_basedomain.crt ../files/$oc_env/certs/star.$oc_basedomain.pem
 else
   echo "Skipping star.$oc_basedomain.pem, already exist"
 fi
 
 #### API and APIS cert are not used anymore, but copied for backward compatibility (ansible role vm_onlyprovision_eb_sr may still contain references to these files
 if [ ! -f ../files/$oc_env/certs/api.crt ]; then
-  cp ./oc_certs/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/api.crt
+  cp $BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/api.crt
 else
   echo "Skipping api.crt, already exist"
 fi
 
 
 if [ ! -f ../files/$oc_env/certs/apis.crt ]; then
-  cp ./oc_certs/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/apis.crt
+  cp $BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/apis.crt
 else
   echo "Skipping apis.crt, already exist"
 fi
