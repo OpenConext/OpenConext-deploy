@@ -284,8 +284,8 @@ authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   defaultClients:
-      - clientId: "{{ authzplayground.springapp_client_id}}"
-        secret: "{{ authzplayground.springapp_client_secret }}"
+      - clientId: "{{ authzplayground.springapp_authz_client_id }}"
+        secret: "{{ authzplayground.springapp_authz_client_secret }}"
         resourceIds:
           - groups
         scopes:
@@ -294,7 +294,7 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
-        redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
+        redirectUri: https://authz-playground.{{ base_domain }}/redirect
       - clientId: authz-admin
         secret: "{{ authz_admin_client_secret }}"
         resourceIds:
@@ -330,13 +330,10 @@ authzadmin:
 authz_playground_version: 1
 #authz_playground_snapshot_timestamp: 20150423.100812-25
 authzplayground:
-  springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
-  springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
-  springapp_client_id: cool_app_id
-  springapp_client_secret: "{{ authzplayground_springapp_client_secret }}"
-  springapp_scopes: groups
-  springapp_authorize_url: https://authz.{{ base_domain }}/oauth/authorize
-  springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
+  springapp_authz_client_id: cool_app_id
+  springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
+  springapp_oidc_client_id: https@//oidc.test.surfconext.nl
+  springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
