@@ -1,28 +1,25 @@
 Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
 <Virtualhost {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}>
-    ServerAdmin {{ apache_server_admin}}
+    ServerName   {{ profile_domain }}
+    ServerAdmin {{ apache_server_admin }}
 
     DocumentRoot {{ profile_current_release_symlink }}/web
-    ServerName   {{ profile_domain }}
-
-    <Directory "{{ profile_current_release_symlink }}/web">
-      AllowOverride All
-    </Directory>
 
     SetEnv SYMFONY_ENV {{ profile_apache_symfony_environment }}
     SetEnv HTTPS on
 
-    RewriteEngine On
-    # We support only GET/POST/HEAD
-    RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
-    RewriteRule .* - [R=405,L]
-    # If the requested url does not map to a file or directory, then forward it to index.php/URL.
-    # Note that the requested URL MUST be appended because Corto uses the PATH_INFO server variable
-    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
-    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ /app.php/$1 [L] # Send the query string to app.php
-    # Requests to the domain (no query string)
-    RewriteRule ^$ /app.php/ [L]
+    <Directory "{{ profile_current_release_symlink }}/web">
+        AllowOverride All
+        Order Allow,Deny
+        Allow from All
+
+            <IfModule mod_rewrite.c>
+                Options -MultiViews
+                RewriteEngine On
+                RewriteCond %{REQUEST_FILENAME} !-f
+                RewriteRule ^(.*)$ app.php [QSA,L]
+            </IfModule>
+    </Directory>
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Profile'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Profile'" combined
