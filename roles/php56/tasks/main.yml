@@ -11,12 +11,8 @@
   yum: name={{ item }} state=present enablerepo=remi
   with_items:
         - php-cli
-        - php-bcmath
         - php-mbstring
         - php-mcrypt
-        - php-pdo
-        - php-mysql
-        - php-gmp
         - php-xml
 
 - name: Configure PHP
