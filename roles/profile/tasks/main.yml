@@ -38,7 +38,7 @@
 - name: Configure Profile
   template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
   with_items:
-    - profile_deploy.yml
+    - profile.yml
   notify:
     - restart httpd
 
@@ -48,4 +48,4 @@
   - parameters.yml
 
 - name: Add engineblock api to hosts
-  lineinfile: dest=/etc/hosts state=present line="{{ engine_api_address }}  {{ engine_api_domain }}"
+  lineinfile: dest=/etc/hosts state=present line="{{ engine_api_ip_address }} {{ engine_api_domain }}"

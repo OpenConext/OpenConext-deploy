@@ -7,23 +7,6 @@
     tags:
       - always
 
-- hosts: loadbalancer:php-apps
-  gather_facts: no
-  sudo: true
-  roles:
-    - common
-    - tls
-  handlers:
-    - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
-
-- hosts: loadbalancer
-  gather_facts: true
-  sudo: true
-  roles:
-    - { role: haproxy, tags: ['lb'] }
-    - { role: nginx,   tags: ['lb'] }
-
 - hosts: php56-apps
   gather_facts: no
   sudo: true
@@ -35,4 +18,3 @@
     - profile
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
