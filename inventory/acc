@@ -13,8 +13,7 @@ acc41.coin.surf.net
 acc42.coin.surf.net
 
 [php56-apps]
-acc41.coin.surf.net
-acc42.coin.surf.net
+
 
 [loadbalancer]
 acc11.coin.surf.net
