@@ -15,6 +15,8 @@ databases:
     - "{{ janus_database_name }}"
     - grouper
     - authz-server
+    - pdp-server
+    - oidc-server
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
@@ -23,6 +25,8 @@ databases:
     - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
+    - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
+    - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
 
 # For apache, the same star-certificate is used.
 tls_https:
@@ -146,6 +150,10 @@ shibboleth_apps:
   "authz-admin":
     entityID: "https://authz-admin.{{ base_domain }}/shibboleth"
     baseurl: ""
+  pdp:
+    entityID: "https://pdp.{{ base_domain }}/shibboleth"
+    baseurl: ""
+
 shib:
   engine_domain: "{{ base_domain }}"
 
@@ -321,11 +329,23 @@ authzadmin:
           - groups
         grantTypes:
           - client_credentials
+      - clientId: pdp_client
+        secret: "{{ pdp_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.resource_checking_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
+    - clientId: pdp
+      secret: "{{ pdp_resource_checking_secret }}"
 
 authz_playground_version: 1
 #authz_playground_snapshot_timestamp: 20150423.100812-25
@@ -336,6 +356,39 @@ authzplayground:
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+
+pdp_version: "0.1"
+pdp_snapshot_timestamp: "20151209.153205-23"
+pdp_html_snapshot_timestamp: "20151209.153243-21"
+
+pdp_debug: true
+pdp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  username: "pdp_admin"
+  password: "{{ pdp_password }}"
+  db_user: pdp-serverrw
+  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: pdp-server
+  spring_profiles_active: test
+  cache_policies: false
+  sab_username: coin-test
+  sab_password: "{{ pdp_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+
+oidc_version: "0.1"
+oidc_snapshot_timestamp: "20151126.151623-11"
+oidc:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  environment: test
+  issuer: https://oidc.{{ base_domain }}/
+  db_user: oidc-serverrw
+  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: oidc-server
+  sp_entity_id: https://oidc.acc.surfconext.nl
 
 loadbalancing:
   engine: {

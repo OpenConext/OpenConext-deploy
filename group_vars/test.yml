@@ -352,11 +352,12 @@ authzadmin:
           - actions
           - cross-idp-services
           - stats
+          - pdp
         grantTypes:
           - authorization_code
           - implicit
           - client_credentials
-      - clientId: pdp
+      - clientId: pdp_client
         secret: "{{ pdp_client_secret }}"
         resourceIds:
           - groups
@@ -368,9 +369,11 @@ authzadmin:
           - client_credentials
   defaultResourceServers:
     - clientId: vootservice
-      secret: "{{ voot.resource_checking_secret }}"
+      secret: "{{ voot.authz_checkToken_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
+    - clientId: pdp
+      secret: "{{ pdp_resource_checking_secret }}"
 
 authz_playground_version: 1.1
 authz_playground_snapshot_timestamp: 20151205.202004-3
@@ -384,8 +387,8 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151204.165213-22"
-pdp_html_snapshot_timestamp: "20151204.170403-20"
+pdp_snapshot_timestamp: "20151209.153205-23"
+pdp_html_snapshot_timestamp: "20151209.153243-21"
 
 pdp_debug: true
 pdp:
@@ -399,6 +402,9 @@ pdp:
   db_name: pdp-server
   spring_profiles_active: test
   cache_policies: false
+  sab_username: coin-test
+  sab_password: "{{ pdp_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151126.151623-11"
