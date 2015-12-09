@@ -184,7 +184,7 @@ teams:
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:demo.openconext.org:"
 
-teams_version: 4.1.0
+teams_version: 4.2.1
 # teams_snapshot_timestamp: 20150519.080724-3
 teams_debug: true
 
