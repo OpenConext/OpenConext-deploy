@@ -5,6 +5,7 @@
 #
 # It is to be used before any Ansible command.
 #
+# Not yet implemented: OIDC certificates (needs adjustment of vm_only_provision_eb_sr/templates/servicregistry.sql.j2
 
 SECRET_VARS_FILE=../secrets/secret-vars.yml
 
