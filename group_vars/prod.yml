@@ -298,6 +298,18 @@ voot:
         name: "UvA",
         timeoutMillis: 3000
       }
+    - {
+        type: "open_social",
+        url: "https://voot.surfsara.nl/php-voot-provider",
+        credentials: {
+          username: "vootprxy",
+          secret: "{{ external_group_provider_secrets.surfsara.nl }}"
+        },
+        schacHomeOrganization: "surfsara.nl",
+        name: "SURFsara",
+        timeoutMillis: 3000
+      }
+
 voot_version: 1.4
 #voot_snapshot_timestamp: 20151125.084209-1
 
