@@ -10,6 +10,10 @@ prd63.coin.surf.net
 prd64.coin.surf.net
 
 [php-apps]
+prd41.coin.surf.net
+prd42.coin.surf.net
+prd43.coin.surf.net
+prd44.coin.surf.net
 
 [loadbalancer]
 
