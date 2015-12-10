@@ -298,17 +298,6 @@ voot:
         name: "UvA",
         timeoutMillis: 3000
       }
-    - {
-        type: "open_social",
-        url: "https://voot.test.vu.nl/social",
-        credentials: {
-          username: "surfconext_usr_01",
-          secret: "{{ external_group_provider_secrets.vu }}"
-        },
-        schacHomeOrganization: "vu.nl",
-        name: "VU",
-        timeoutMillis: 3000
-      }
 voot_version: 1.4
 #voot_snapshot_timestamp: 20151125.084209-1
 
