@@ -407,7 +407,7 @@ pdp:
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151126.151623-11"
+oidc_snapshot_timestamp: "20151214.112910-12"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
