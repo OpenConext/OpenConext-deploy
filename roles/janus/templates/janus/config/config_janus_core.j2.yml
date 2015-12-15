@@ -502,7 +502,7 @@ janus_service_registry_core:
                 default_allow: false
                 required: false
             'coin:institution_guid':
-#               validate: isguid
+                validate: isguid
                 type: text
                 default: ''
                 default_allow: false
