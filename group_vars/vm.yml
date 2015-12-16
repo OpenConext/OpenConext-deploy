@@ -422,6 +422,7 @@ pdp:
   db_name: pdp-server
   spring_profiles_active: test
   cache_policies: false
+  include_inactive_policies: true
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151126.151623-11"

@@ -373,6 +373,7 @@ pdp:
   db_name: pdp-server
   spring_profiles_active: test
   cache_policies: false
+  include_inactive_policies: true
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
