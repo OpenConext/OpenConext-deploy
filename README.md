@@ -91,7 +91,7 @@ To update single applications - e.g. release - use:
 ./provision-single-component ${vm|test|acc|prod} ${remote-user} ${absolute location of secrets file} ${component}
 ```
 
-The secrets used by Ansible are externalized. For the VM the secrets are in this github repp, for test in an internal SURF repo on the build server and for acc and prod the secrets are managed by Prolocation.
+The secrets used by Ansible are externalized. For the VM the secrets are in this GitHub repo, for test in an internal SURF repo on the build server and for acc and prod the secrets are managed by Prolocation.
 
 # License
 
