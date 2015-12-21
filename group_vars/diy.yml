@@ -157,8 +157,8 @@ engine_block:
   metadataRepositories:
     - {
         index: 0,
-        type: "janus",
-        value: "JanusRestV1"
+        type: "database",
+        value: "Doctrine"
       }
 
 tomcat_apps:
