@@ -291,7 +291,7 @@ voot_version: 1.5
 #voot_snapshot_timestamp: 20151207.100901-4
 voot_debug: true
 
-authz_admin_version: 1.3.2
+authz_admin_version: 1.3.3
 #authz_admin_snapshot_timestamp: "20150611.111906-1"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
