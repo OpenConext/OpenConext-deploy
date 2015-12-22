@@ -386,9 +386,10 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151219.003206-27"
-pdp_html_snapshot_timestamp: "20151219.003321-25"
+pdp_version: "0.1.1"
+pdp_snapshot_timestamp: "20151222.103421-1"
+pdp_html_snapshot_timestamp: "20151222.103519-1"
+pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
 pdp:
@@ -406,6 +407,8 @@ pdp:
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  springapp_rollbar_apikey: "{{ pdp_springapp_rollbar_apikey }}"
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151214.112910-12"
