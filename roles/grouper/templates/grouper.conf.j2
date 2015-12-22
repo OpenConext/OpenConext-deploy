@@ -5,8 +5,13 @@ Listen {{ apache_app_listen_address.grouper }}:{{ loadbalancing.grouper.port }}
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Grouper'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Grouper'" combined
 
+    ProxyPass /grouper/Shibboleth.sso !
     ProxyPass /grouper-ws/ ajp://localhost:8009/grouper-ws/
     ProxyPass /grouper/ ajp://localhost:8009/grouper/
+
+    Redirect /         /grouper/populateManageGroups.do
+    Redirect /grouper  /grouper/populateManageGroups.do
+    Redirect /grouper/ /grouper/populateManageGroups.do
 
     <Location /grouper>
       ShibRequestSetting applicationId grouper

@@ -24,15 +24,38 @@ databases:
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
 
+# versions of the components
+engine_version: 4.6.0
+janus_version: 1.20.5
+teams_version: 4.0.11
+api_version: 4.0.1
+mujina_version: 4.0.2
+voot_version: 1.2.1
+authz_server_version: 1.2
+authz_admin_version: 1.3.1
+authz_playground_version: 1
+
+# alternatively, use a snapshot
+#teams_snapshot_timestamp: 20150623.115506-8
+#api_snapshot_timestamp: 20150419.220130-443
+#mujina_snapshot_timestamp
+#voot_snapshot_timestamp: "20150701.122507-7"
+#authz_server_snapshot_timestamp: ""
+#authz_admin_snapshot_timestamp: "20150611.111906-1"
+#authz_playground_snapshot_timestamp: ""
+
+
+# TODO: get rid of this variable altogether.  It is used only to name the
+# unpack directory
+janus_installation_version: "{{ janus_version }}"
+
+
 # For apache, the same star-certificate is used.
 tls_https:
   key_name: star.{{ base_domain }}.key
   crt_name: star.{{ base_domain }}.pem
 
 apache_server_admin: unix@prolocation.net
-
-janus_installation_version: 5.1.5
-janus_version: 1.20.5
 
 janus_ssp_technicalcontact_name: "SURFconext operations"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
@@ -84,7 +107,7 @@ welcome:
   key_name: "{{ tls_https.key_name }}"
 
 
-janus_teams_oauth_key: https://teams.test.surfconext.nl/teams/teams.xml
+janus_teams_oauth_key: https://teams.{{ base_domain }}/teams/teams.xml
 
 engine:
   crt_name: "{{ tls_https.crt_name }}"
@@ -115,7 +138,6 @@ mujina_idp:
   key_name: "{{ tls_https.key_name }}"
 
 
-engine_version: 4.4.8
 
 engine_janus_cache_lifetime: 0
 
@@ -162,16 +184,6 @@ shibboleth_apps:
 shib:
   engine_domain: "{{ base_domain }}"
 
-# versions of installed apps
-teams_version: 4.0.10
-#teams_snapshot_timestamp: 20150623.115506-8
-
-api_version: 4.0.1
-#api_snapshot_timestamp: 20150419.220130-443
-
-mujina_version: 4.0.2
-#mujina_snapshot_timestamp
-
 teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -179,7 +191,7 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:test.surfteams.nl:"
+  group_name_context: "urn:collab:group:connect-test.surfteams.nl:"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -235,12 +247,12 @@ apis:
   url: "jdbc:mysql://{{ mysql_host }}/apis"
   password: "{{ mysql_passwords.apis }}"
   entity_id: https://apis.{{ base_domain }}
-  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
+  group_name: "{{ teams.group_name_context }}nl:surfnet:diensten:managementvo"
   admin_service:
     resource_server_key: authorization-server-admin
     resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
   api:
-    consumer_key: https://apis.test.surfconext.nl
+    consumer_key: https://apis.{{ base_domain }}
     consumer_secret: "{{ apis_api_consumer_secret }}"
 
 mujina:
@@ -255,13 +267,12 @@ authzserver:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-authz_server_version: 1.2
-#authz_server_snapshot_timestamp: ""
-
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   resource_checking_secret: "{{ voot_resource_checking_secret }}"
+  oauth_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
+  oauth_checkToken_clientId: "vootservice"
   externalGroupProviders:
     - {
         type: "grouper",
@@ -270,16 +281,12 @@ voot:
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
         },
-        schacHomeOrganization: "test.surfteams.nl",
+        schacHomeOrganization: "{{ base_domain }}",
         name: "SURFteams",
         timeoutMillis: 15000
       }
-voot_version: 1.2.1
-#voot_snapshot_timestamp: "20150701.122507-7"
 
-authz_admin_version: 1.3.1
-#authz_admin_snapshot_timestamp: "20150611.111906-1"
-authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
+authz_admin_group: "{{ teams.group_name_context }}nl:surfnet:diensten:authz-admins"
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -348,8 +355,6 @@ authzadmin:
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
 
-authz_playground_version: 1
-#authz_playground_snapshot_timestamp: ""
 authzplayground:
   springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
   springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
@@ -461,11 +466,13 @@ loadbalancing:
     ]
   }
 
+nginx_backend_ip: 127.0.0.2
+
 nginx_ipv4_addresses:
   engine: 145.101.112.69
   engine_api: 145.101.112.68
   profile: 145.101.112.69
-  serviceregistry: 145.101.112.68
+  serviceregistry: 145.101.112.69
   static: 145.101.112.69
   teams: 145.101.112.69
   authzserver: 145.101.112.69

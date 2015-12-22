@@ -1,12 +1,26 @@
 logging.config=file://{{ authz_playground_dir }}/logback.xml
 
-oauth.redirect_uri={{ authzplayground.springapp_oauth_redirect }}
-oauth.token_uri={{ authzplayground.springapp_oauth_token_url }}
-oauth.client_id={{ authzplayground.springapp_client_id }}
-oauth.client_secret={{ authzplayground.springapp_client_secret }}
-oauth.scopes={{ authzplayground.springapp_scopes }}
-oauth.authorize_url={{ authzplayground.springapp_authorize_url }}
-oauth.resource_server_api_url={{ authzplayground.springapp_resource_server_api_url }}
+oauth.client_id={{ authzplayground.springapp_authz_client_id }}
+oauth.client_secret={{ authzplayground.springapp_authz_client_secret }}
+
+oauth.redirect_uri=https://authz-playground.{{ base_domain }}/redirect
+oauth.token_uri=https://authz.{{ base_domain }}/oauth/token
+oauth.scopes=groups
+oauth.authorize_url=https://authz.{{ base_domain }}/oauth/authorize
+oauth.resource_server_api_url=https://voot.{{ base_domain }}/me/groups
+
+oidc.client_id={{ authzplayground.springapp_oidc_client_id }}
+oidc.client_secret={{ authzplayground.springapp_oidc_client_secret }}
+
+oidc.redirect_uri=https://authz-playground.{{ base_domain }}/redirect
+oidc.token_uri=https://oidc.{{ base_domain }}/token
+oidc.scopes=openid groups profile email organization userids entitlement
+oidc.authorize_url=https://oidc.{{ base_domain }}/authorize
+oidc.resource_server_api_url=https://voot.{{ base_domain }}/me/groups
+oidc.introspect_url=https://oidc.{{ base_domain }}/introspect
+oidc.user_info_url=https://oidc.{{ base_domain }}/userinfo
+oidc.jwk_url=https://oidc.{{ base_domain }}/jwk
+oidc.well_known_configuration_url=https://oidc.{{ base_domain }}/.well-known/openid-configuration
 
 server.port={{ springapp_tcpport }}
 

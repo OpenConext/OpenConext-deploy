@@ -6,7 +6,7 @@ then
   exit 1
 fi
 
-COMPONENTS=("authz-admin" "authz-playground" "mujina" "tomcat" "oauth" "authz-server" "eb" "shib" "sr" "teams" "voot" "mysql" "java" "legacy" "lb" "welcome" "grouper" "ldap" "pdp" )
+COMPONENTS=("authz-admin" "authz-playground" "mujina" "tomcat" "oauth" "oidc" "authz-server" "eb" "shib" "sr" "teams" "voot" "mysql" "java" "legacy" "lb" "welcome" "grouper" "ldap" "pdp" "oidc" )
 VALID_COMPONENT=0
 for component in "${COMPONENTS[@]}"
 do
@@ -22,6 +22,8 @@ fi
 # echo "./ansible-env $1 provision-$1.yml $2 $3 --tags $4 ${@:5}"
 if [ "$1" == "vm" ]; then
 	./ansible-env "$1" "provision-vm.yml" "$2" "$3" --tags "$4" "${@:5}"
+elif [ "$1" == "diy"  -o  "$1" == "diy-test" ]; then
+	./ansible-env "$1" "provision-diy.yml" "$2" "$3" --tags "$4" "${@:5}"
 else
 	./ansible-env "$1" "provision.yml" "$2" "$3" --tags "$4" "${@:5}"
 fi

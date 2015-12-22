@@ -480,6 +480,17 @@ janus_service_registry_core:
                 default: ''
                 default_allow: false
                 required: false
+            'coin:entity_categories:#':
+                type: select
+                select_values:
+                    - 'http://refeds.org/category/research-and-scholarship'
+                    - 'http://refeds.org/category/hide-from-discovery'
+                default: ''
+                default_allow: false
+                required: false
+                supported:
+                    - 1
+                    - 2
             'coin:additional_logging':
                 type: boolean
                 default: ''
@@ -491,7 +502,7 @@ janus_service_registry_core:
                 default_allow: false
                 required: false
             'coin:institution_guid':
-#               validate: isguid
+                validate: isguid
                 type: text
                 default: ''
                 default_allow: false
@@ -783,6 +794,17 @@ janus_service_registry_core:
                 default: ''
                 default_allow: false
                 required: false
+            'coin:entity_categories:#':
+                type: select
+                select_values:
+                    - 'http://www.geant.net/uri/dataprotection-code-of-conduct/v1'
+                    - 'http://refeds.org/category/research-and-scholarship'
+                default: ''
+                default_allow: false
+                required: false
+                supported:
+                    - 1
+                    - 2
             'coin:additional_logging':
                 type: boolean
                 default: ''
@@ -1017,6 +1039,11 @@ janus_service_registry_core:
                 default_allow: true
                 required: false
             'coin:display_unconnected_idps_wayf':
+                type: boolean
+                default: false
+                default_allow: true
+                required: false
+            'coin:policy_enforcement_decision_required':
                 type: boolean
                 default: false
                 default_allow: true

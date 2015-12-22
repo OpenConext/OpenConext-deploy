@@ -1,0 +1,12 @@
+Listen {{ apache_app_listen_address.oidc }}:{{ loadbalancing.oidc.port }}
+<Virtualhost {{ apache_app_listen_address.oidc }}:{{ loadbalancing.oidc.port }}>
+    # General setup for the virtual host, inherited from global configuration
+    ServerName https://oidc.{{ base_domain }}
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-oicd'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-oidc'" combined
+
+    # Proxy requests through to Tomcat using AJP
+    ProxyPass / ajp://localhost:8009/ retry=0
+
+</VirtualHost>

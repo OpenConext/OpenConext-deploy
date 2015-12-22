@@ -1,0 +1,16 @@
+issuer={{ oidc.issuer }}
+
+# Dadabase connection settings:
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://{{ oidc.db_host }}/{{ oidc.db_name }}
+jdbc.username={{ oidc.db_user }}
+jdbc.password={{ oidc.db_password }}
+
+idp.metadata.url=https://engine.{{ base_domain }}/authentication/idp/metadata
+idp.entity.id=https://engine.{{ base_domain }}/authentication/idp/metadata
+idp.public.certificate={{ oidc_idp_public_certificate }}
+sp.entity.id={{ oidc.sp_entity_id }}
+sp.private.key={{ oidc_sp_private_key }}
+sp.public.certificate={{ oidc_sp_public_certificate }}
+sp.passphrase={{ oidc_passphrase }}
+sp.entity.base.url=https://oidc.{{ base_domain }}

@@ -38,7 +38,7 @@
   roles:
     - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
-    - vm_only_provision_eb_sr
+#    - vm_only_provision_eb_sr
 
 - hosts: php-apps
   gather_facts: no
@@ -52,9 +52,9 @@
     - { role: welcome,           tags: ['welcome'] }
     - { role: openconext-common, tags: ['eb','sr'] }
     - { role: engineblock,       tags: ['eb'     ] }
-    - vm_only_bootstrap_ldap_attributes
+#    - vm_only_bootstrap_ldap_attributes
     - { role: janus,             tags: ['sr'     ] }
-    - vm_only_bootstrap_ldap_attributes
+#    - vm_only_bootstrap_ldap_attributes
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

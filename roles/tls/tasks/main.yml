@@ -3,6 +3,7 @@
   copy: src=files/{{ env }}/certs/{{ item }} dest={{ tls.cert_path }}/{{ item }}
   with_items:
     - "{{ tls.certificates }}"
+    - "{{ tls.ca_certificates }}"
 
 - name: copy private keys to correct location
   copy: content="{{ https_star_private_key }}" dest={{ tls.cert_private_path }}/{{ item }}
@@ -19,7 +20,7 @@
   yum: name=libselinux-python state=present
   when: env == 'vm'
 
-- name: copy default Dillie-Hellman parameters
+- name: copy default Diffie-Hellman parameters
   copy: src=dh_params_default.pem dest={{ tls_dh_param_file }}
   when: env == 'vm'
 

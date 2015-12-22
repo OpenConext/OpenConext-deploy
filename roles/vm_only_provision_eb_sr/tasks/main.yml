@@ -1,4 +1,11 @@
 ---
+- name: Create directory for database backups
+  file: state=directory path=/opt/OCbackups owner=root group=root
+
+- name: Backup current database
+  shell: "mysqldump -u root -p{{ mysql_root_password }} --force --comment --set-charset --default-character-set=utf8 --databases {{ janus_database_name }} {{ engine_database_name }} > /opt/OCbackups/sr+eb.$(date +%Y%m%d_%H%M%S).sql"
+
+
 - name: register api crt content
   sudo: False
   local_action: "shell awk ' /^-----BEGIN CERT/,/^-----END CERT/ { if ($0 !~ /^-/) printf $0 }; ' files/java-{{ env }}/certs/api.crt"

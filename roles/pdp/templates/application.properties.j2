@@ -24,21 +24,28 @@ policy.enforcement.point.user.password={{ pdp.password }}
 xacml.properties.path=file://{{ pdp_dir }}/xacml.conext.properties
 policy.base.dir=file://{{ pdp_dir }}/xacml-policies
 
-initial.delay.policies.refresh.minutes=15
-period.policies.refresh.minutes=15
+period.policies.refresh.minutes=10
+period.metadata.refresh.minutes=10
 
-initial.delay.metadata.refresh.minutes=180
-period.metadata.refresh.minutes=180
+metadata.idpRemotePath=http://mgnt03.coin.surf.net/export/saml20-idp-remote.json
+metadata.spRemotePath=http://mgnt03.coin.surf.net/export/saml20-sp-remote.json
 
 policy.violation.retention.period.days=30
+
+policy.idp.access.enforcement=false
+policy.include.aggregated.attributes=true
 
 #Voot client configuration for the teams PIP
 voot.serviceUrl=https://voot.{{ base_domain }}
 voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
 voot.userAuthorizationUri=https://authz.{{ base_domain }}/oauth/authorize
-voot.clientId=pdp
+voot.clientId=pdp_client
 voot.clientSecret={{ pdp_client_secret }}
 voot.scopes = groups
+
+sab.userName={{ pdp.sab_username }}
+sab.password={{ pdp.sab_password }}
+sab.endpoint={{ pdp.sab_endpoint }}
 
 endpoints.enabled=false
 endpoints.health.enabled=true
