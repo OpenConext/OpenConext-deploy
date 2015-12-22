@@ -1,3 +1,4 @@
+#jinja2:lstrip_blocks: True
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
 
@@ -19,6 +20,17 @@
    <suffixPattern>[%thread] %logger %msg</suffixPattern>
  </appender>
 
+ {% if teams_rollbar_apiKey is defined %}
+ <appender name="ROLLBAR" class="com.tapstream.rollbar.RollbarAppender">
+   <apiKey>{{ teams_rollbar_apiKey }}</apiKey>
+   <environment>{{ env }}</environment>
+
+   <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+     <level>WARN</level>
+   </filter>
+ </appender>
+ {% endif %}
+
  <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
    <smtpHost>{{ smtp_server }}</smtpHost>
    <from>no-reply@surfconext.nl</from>
@@ -33,6 +45,9 @@
 
  <logger name="teams" level="DEBUG" />
  <root level="WARN">
+   {% if teams_rollbar_apiKey is defined %}
+   <appender-ref ref="ROLLBAR" />
+   {% endif %}
    <appender-ref ref="FILE" />
    <appender-ref ref="EMAIL" />
    <appender-ref ref="SYSLOG" />
