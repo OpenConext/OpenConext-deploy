@@ -1,6 +1,6 @@
 ---
 - name: Create user
-  user: name=pdp home={{ pdp_dir }} shell=/sbin/nologin
+  user: name=pdp system=yes home={{ pdp_dir }} shell=/sbin/nologin
 
 - name: create apache folder
   file: path=/var/www/pdp owner=apache group=apache mode=2755 state=directory

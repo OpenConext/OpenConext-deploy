@@ -1,7 +1,8 @@
 ---
 keytool:
   current_certificates:
-   - { alias: "openconext cacert", file: "{{ tls.cert_path }}/{{ tls_https.crt_name }}" }
+   - { alias: "openconext cacert CA", file: "{{ tls.cert_path }}/{{ tls_https.ca_name }}" }
+   - { alias: "openconext cacert crt", file: "{{ tls.cert_path }}/{{ tls_https.crt_name }}" } 
   # revoked_certificates contains a list of aliases of certificates that must be revoked.
   # You can not reuse alias names.
   # revoked_certificates:

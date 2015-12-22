@@ -1,10 +1,10 @@
 ---
 - include: install-release.yml
-  when: engine_branch is not defined or engine_branch == ''
+  when: "engine_branch is not defined or engine_branch == ''"
   when: not develop
 
 - include: install-branch.yml
-  when: engine_branch is defined and engine_branch != ''
+  when: "engine_branch is defined and engine_branch != ''"
   when: not develop
 
 - name: Copy app_dev.php to OpenConext web folder

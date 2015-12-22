@@ -1,6 +1,6 @@
 ---
 - name: Create user
-  user: name=authz-playground home={{ authz_playground_dir }} shell=/sbin/nologin
+  user: name=authz-playground system=yes home={{ authz_playground_dir }} shell=/sbin/nologin
 
 - name: Copy start script
   template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
