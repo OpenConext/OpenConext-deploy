@@ -20,7 +20,7 @@
    </encoder>
   </appender>
 
-  <appender name="rollbar" class="com.tapstream.rollbar.RollbarAppender">
+  <appender name="ROLLBAR" class="com.tapstream.rollbar.RollbarAppender">
     <apiKey>{{ pdp.springapp_rollbar_apikey }}</apiKey>
     <environment>{{ pdp.rollbar_environment }}</environment>
 
@@ -44,6 +44,7 @@
   <logger name="pdp" level="DEBUG"/>
 
   <root level="WARN">
+    <appender-ref ref="ROLLBAR">
     <appender-ref ref="FILE" />
     <appender-ref ref="SYSLOG" />
   </root>
