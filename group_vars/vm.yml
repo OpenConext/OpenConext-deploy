@@ -292,13 +292,16 @@ authz_server_debug: true
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  resource_checking_secret: "{{ voot_resource_checking_secret }}"
-  oauth_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
-  oauth_checkToken_clientId: "vootservice"
+  authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
+  authz_checkToken_clientId: "vootservice"
+  authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
+  oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
+  oidc_checkToken_clientId: "https@//oidc.{{ base_domain }}"
+  oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
   externalGroupProviders:
     - {
         type: "grouper",
-        url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
+        url: "https://grouper.{{ base_domain }}/grouper-ws/services/GrouperService_v2_0",
         credentials: {
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
@@ -307,9 +310,10 @@ voot:
         name: "SURFteams",
         timeoutMillis: 3000
       }
-voot_version: 1.4
-#voot_snapshot_timestamp: ""
+voot_version: 1.5
+#voot_snapshot_timestamp: 20151207.100901-4
 voot_debug: true
+voot_resource_checking_secret: secret
 
 ##
 # VM config for the authz-admin application
@@ -426,6 +430,12 @@ pdp:
   spring_profiles_active: test
   cache_policies: false
   include_inactive_policies: true
+# these shouldn't be relevant on a dev env.
+  sab_username: coin-test
+  sab_password: "{{ pdp_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: dev
+  springapp_rollbar_apikey: "should not matter for a dev env"
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151126.151623-11"
