@@ -1,8 +1,8 @@
 ---
-- name: Create user
+- name: create user
   user: name=teams system=yes home={{ teams_dir }} shell=/sbin/nologin
 
-- name: Copy start script
+- name: copy start script
   template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
   notify: restart teams
 
@@ -24,19 +24,25 @@
 - include: ../../../tasks/springbootapp/install-local.yml
   when: "teams_local_jar != ''"
 
-- stat: path={{ teams_dir }}/teams-current.war follow=True
+- name: get facts for teams-current.war
+  stat: path={{ teams_dir }}/teams-current.war follow=True
   register: postDeployStat
 
-- name: Copy logging config
+- name: copy logging config
   template: src=logback.xml.j2 dest={{ teams_dir }}/logback.xml owner=teams group=teams mode=0740
   notify: restart teams
 
-- name: Copy application config
+- name: copy application config
   template: src=application.properties.j2 dest={{ teams_dir }}/application.properties owner=teams group=teams mode=0740
   notify: restart teams
 
-- name: Copy grouper client config
-  template: src=grouper.client.properties.j2 dest={{ teams_dir }}/grouper.client.properties owner=teams group=teams mode=0740
+- name: copy grouper client config
+  template: >
+    src=grouper.client.properties.j2
+    dest={{ teams_dir }}/grouper.client.properties
+    owner=teams
+    group=teams
+    mode=0740
   register: grouper_client_config_result
   notify: restart teams
 

@@ -1,24 +1,25 @@
 ---
-- stat: path={{ teams_dir }}/teams-current.war
+- name: get facts for teams-current.war
+  stat: path={{ teams_dir }}/teams-current.war
   register: symlink
 
-- name: Make sure the 'unzipped' directory is empty
+- name: make sure the 'unzipped' directory is empty
   file: path={{ springapp_dir }}/unzipped state=absent owner="{{ springapp_user }}" group="{{ springapp_user }}"
 
-- name: Create the 'unzipped' directory
+- name: create the 'unzipped' directory
   file: path={{ springapp_dir }}/unzipped state=directory owner="{{ springapp_user }}" group="{{ springapp_user }}"
 
-- name: Unzip current war
+- name: unzip current war
   command: sudo -u "{{ springapp_user }}" unzip "{{ symlink.stat.lnk_source }}" -d ./unzipped
   args:
     chdir: "{{ teams_dir }}"
 
-- name: Copy grouper properties
+- name: copy grouper properties
   command: sudo -u "{{ springapp_user }}" cp ./grouper.client.properties ./unzipped/
   args:
     chdir: "{{ teams_dir }}"
 
-- name: Make sure the target archive file is deleted or zip will merge it (and keep old files)
+- name: make sure the target archive file is deleted or zip will merge it (and keep old files)
   file: path={{ springapp_dir }}/with-grouper-config-teams-current.war state=absent
 
 - name: "Rezip the war. Don't use compression or java will barf."
@@ -26,7 +27,7 @@
   args:
     chdir: "{{ teams_dir }}/unzipped"
 
-- name: Remove unzipped dir
+- name: remove unzipped dir
   file: path={{ springapp_dir }}/unzipped state=absent owner="{{ springapp_user }}" group="{{ springapp_user }}"
 
 - name: modify the symlink of teams-current.war to the newly created file
