@@ -20,14 +20,16 @@
    </encoder>
   </appender>
 
+  {% if pdp.rollbar_apiKey is defined %}
   <appender name="ROLLBAR" class="com.tapstream.rollbar.RollbarAppender">
-    <apiKey>{{ pdp.springapp_rollbar_apikey }}</apiKey>
-    <environment>{{ pdp.rollbar_environment }}</environment>
+    <apiKey>{{ pdp.rollbar_apikey }}</apiKey>
+    <environment>{{ env }}</environment>
 
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
       <level>WARN</level>
     </filter>
   </appender>
+  {% endif %}
 
   <appender name="email" class="ch.qos.logback.classic.net.SMTPAppender">
     <smtpHost>{{ smtp_server }}</smtpHost>
@@ -44,7 +46,9 @@
   <logger name="pdp" level="DEBUG"/>
 
   <root level="WARN">
+    {% if pdp.rollbar_apiKey is defined %}
     <appender-ref ref="ROLLBAR">
+    {% endif %}
     <appender-ref ref="FILE" />
     <appender-ref ref="SYSLOG" />
   </root>

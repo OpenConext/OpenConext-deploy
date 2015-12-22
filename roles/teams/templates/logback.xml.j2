@@ -20,9 +20,9 @@
    <suffixPattern>[%thread] %logger %msg</suffixPattern>
  </appender>
 
- {% if teams_rollbar_apiKey is defined %}
+ {% if teams.rollbar_apiKey is defined %}
  <appender name="ROLLBAR" class="com.tapstream.rollbar.RollbarAppender">
-   <apiKey>{{ teams_rollbar_apiKey }}</apiKey>
+   <apiKey>{{ teams.rollbar_apiKey }}</apiKey>
    <environment>{{ env }}</environment>
 
    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -45,7 +45,7 @@
 
  <logger name="teams" level="DEBUG" />
  <root level="WARN">
-   {% if teams_rollbar_apiKey is defined %}
+   {% if teams.rollbar_apiKey is defined %}
    <appender-ref ref="ROLLBAR" />
    {% endif %}
    <appender-ref ref="FILE" />
