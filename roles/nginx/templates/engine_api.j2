@@ -15,7 +15,8 @@ server {
 server {
     listen       {{ nginx_ipv4_addresses.engine_api }}:443 ssl spdy;
     server_name  engine-api.{{ base_domain }};
-
+    client_max_body_size 10M;
+	
     ssl                  on;
     ssl_certificate      {{ tls.cert_path }}/{{ engine_api.crt_name }};
     ssl_certificate_key  {{ tls.cert_private_path }}/{{ engine_api.key_name }};
@@ -53,6 +54,7 @@ server {
 server {
     listen       [::]:443 ssl spdy;
     server_name  engine-api.{{ base_domain }};
+    client_max_body_size 10M;
 
     ssl                  on;
     ssl_certificate      {{ tls.cert_path }}/{{ engine_api.crt_name }};
