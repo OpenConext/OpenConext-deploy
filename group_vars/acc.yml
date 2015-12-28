@@ -343,7 +343,7 @@ authzadmin:
           - client_credentials
   defaultResourceServers:
     - clientId: vootservice
-      secret: "{{ voot.resource_checking_secret }}"
+      secret: "{{ voot.authz_checkToken_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
     - clientId: pdp
