@@ -419,7 +419,7 @@ oidc:
   environment: test
   issuer: https://oidc.{{ base_domain }}/
   db_user: oidc-serverrw
-  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_password: "{{ mysql_passwords.oidc_server }}"
   db_host: "{{ mysql_host }}"
   db_name: oidc-server
   sp_entity_id: https://oidc.test.surfconext.nl
