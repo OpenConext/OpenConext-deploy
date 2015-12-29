@@ -35,3 +35,4 @@
 
 - name: ensure the service is started
   service: name=authz-playground enabled=yes state=started
+  ignore_errors: true
