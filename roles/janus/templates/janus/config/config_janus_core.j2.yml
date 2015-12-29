@@ -584,7 +584,7 @@ janus_service_registry_core:
                     - 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified'
                     - 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
                     - 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
-                default: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+                default: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
                 default_allow: true
             'keywords:#':
                 required: true
@@ -909,7 +909,7 @@ janus_service_registry_core:
                     - 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified'
                     - 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
                     - 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
-                default: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+                default: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
                 default_allow: true
             'NameIDFormats:#':
                 supported:
