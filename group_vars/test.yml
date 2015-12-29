@@ -412,7 +412,7 @@ pdp:
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151214.112910-12"
+oidc_snapshot_timestamp: "20151229.105743-13"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
