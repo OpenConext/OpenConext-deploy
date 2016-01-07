@@ -1,6 +1,6 @@
 #---
 ## Version of EngineBlock that is installable by this role
-engine_version: 4.7.4
+engine_version: 4.7.5
 #engine_branch: "develop"
 
 ## Engine installer specific variables.
