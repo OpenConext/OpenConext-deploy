@@ -306,7 +306,7 @@ voot:
         url: "https://voot.surfsara.nl/php-voot-provider",
         credentials: {
           username: "vootprxy",
-          secret: "{{ external_group_provider_secrets.surfsara.nl }}"
+          secret: "{{ external_group_provider_secrets.surfsara }}"
         },
         schacHomeOrganization: "surfsara.nl",
         name: "SURFsara",
