@@ -308,7 +308,7 @@ voot:
           username: "vootprxy",
           secret: "{{ external_group_provider_secrets.surfsara }}"
         },
-        schacHomeOrganization: "surfsara.nl",
+        schacHomeOrganization: "sara.nl",
         name: "SURFsara",
         timeoutMillis: 3000
       }
