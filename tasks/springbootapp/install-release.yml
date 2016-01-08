@@ -1,10 +1,19 @@
-- name: Deploy | Download release
+- name: download release
   get_url:
     url: "{{ maven_repo }}/{{ springapp_artifact_group_dir }}/{{ springapp_artifact_id }}/{{ springapp_version }}/{{ springapp_artifact_id }}-{{ springapp_version }}.{{ springapp_artifact_type }}"
     dest: "{{ springapp_dir }}/{{ springapp_artifact_id }}-{{ springapp_version }}.{{ springapp_artifact_type }}"
     owner: "{{ springapp_user }}"
     group: "{{ springapp_user }}"
-  register: springapp_released
+  register: springapp_release_released
 
-- include: switch-version.yml
-  when: springapp_released.changed
+- include: switch-version.yml springapp_released={{ springapp_release_released }}
+  when: springapp_release_released.changed
+
+- name: notify Rollbar of deploy
+  rollbar_deployment:
+    token: "{{ springapp_rollbar_apiKey }}"
+    environment: "{{ env }}"
+    user: "{{ ansible_ssh_user }}"
+    revision: "{{ springapp_version }}"
+  tags: deploy
+  when: springapp_release_released.changed and (springapp_rollbar_apiKey|default(None) != None)

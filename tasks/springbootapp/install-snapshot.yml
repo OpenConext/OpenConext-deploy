@@ -1,10 +1,19 @@
-- name: Deploy | Download snapshot
+- name: download snapshot
   get_url:
     url: "{{ maven_snapshot_repo }}{{ springapp_artifact_group_dir }}/{{ springapp_artifact_id }}/{{ springapp_version }}-SNAPSHOT/{{ springapp_artifact_id }}-{{ springapp_version }}-{{ springapp_snapshot_timestamp }}.{{ springapp_artifact_type }}"
     dest: "{{ springapp_dir }}/{{ springapp_artifact_id }}-{{ springapp_version }}-{{ springapp_snapshot_timestamp }}.{{ springapp_artifact_type }}"
     owner: "{{ springapp_user }}"
     group: "{{ springapp_user }}"
-  register: springapp_released
+  register: springapp_snapshot_released
 
-- include: switch-version.yml
-  when: springapp_released.changed
+- include: switch-version.yml springapp_released={{ springapp_snapshot_released }}
+  when: springapp_snapshot_released.changed
+
+- name: notify Rollbar of deploy
+  rollbar_deployment:
+    token: "{{ springapp_rollbar_apiKey }}"
+    environment: "{{ env }}"
+    user: "{{ ansible_ssh_user }}"
+    revision: "{{ springapp_version }}-{{ springapp_snapshot_timestamp }}"
+  tags: deploy
+  when: springapp_snapshot_released.changed and springapp_rollbar_apiKey is defined

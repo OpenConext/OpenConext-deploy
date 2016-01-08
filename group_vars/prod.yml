@@ -307,16 +307,16 @@ voot:
         url: "https://voot.surfsara.nl/php-voot-provider",
         credentials: {
           username: "vootprxy",
-          secret: "{{ external_group_provider_secrets.surfsara.nl }}"
+          secret: "{{ external_group_provider_secrets.surfsara }}"
         },
-        schacHomeOrganization: "surfsara.nl",
+        schacHomeOrganization: "sara.nl",
         name: "SURFsara",
         timeoutMillis: 3000
       }
 
 voot_version: 1.5
 
-authz_admin_version: 1.3.3
+authz_admin_version: 1.3.4
 authz_admin_group: urn:collab:group:surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -361,7 +361,7 @@ authzadmin:
           - client_credentials
   defaultResourceServers:
     - clientId: vootservice
-      secret: "{{ voot.resource_checking_secret }}"
+      secret: "{{ voot.authz_checkToken_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
 

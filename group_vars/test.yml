@@ -156,7 +156,7 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.2.3
+teams_version: 4.2.5
 #teams_snapshot_timestamp: 20150915.083452-1
 
 api_version: 4.0.1
@@ -173,6 +173,7 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
+  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -251,9 +252,10 @@ authzserver:
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
-authz_server_version: 1.3.2
-#authz_server_snapshot_timestamp: "20151103.150836-3"
+authz_server_version: 1.3.3
+authz_server_snapshot_timestamp: "20151229.134236-3"
 authz_server_debug: true
 
 voot:
@@ -292,8 +294,8 @@ voot_version: 1.5
 #voot_snapshot_timestamp: 20151207.100901-4
 voot_debug: true
 
-authz_admin_version: 1.3.3
-#authz_admin_snapshot_timestamp: "20150611.111906-1"
+authz_admin_version: 1.3.4
+authz_admin_snapshot_timestamp: "20151223.124726-3"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -374,10 +376,10 @@ authzadmin:
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
     - clientId: pdp
-      secret: "{{ pdp_resource_checking_secret }}"
+      secret: "{{ voot.oidc_checkToken_secret }}"
 
-authz_playground_version: 1.1
-#authz_playground_snapshot_timestamp: 20151205.202004-3
+authz_playground_version: 1.2
+authz_playground_snapshot_timestamp: "20151229.135228-2"
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
@@ -386,10 +388,12 @@ authzplayground:
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151219.003206-27"
-pdp_html_snapshot_timestamp: "20151219.003321-25"
+pdp_version: "0.1.1"
+pdp_snapshot_timestamp: "20151222.103421-1"
+pdp_html_snapshot_timestamp: "20151222.103519-1"
+pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
 pdp:
@@ -407,16 +411,18 @@ pdp:
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151214.112910-12"
+oidc_snapshot_timestamp: "20151229.105743-13"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   environment: test
   issuer: https://oidc.{{ base_domain }}/
   db_user: oidc-serverrw
-  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_password: "{{ mysql_passwords.oidc_server }}"
   db_host: "{{ mysql_host }}"
   db_name: oidc-server
   sp_entity_id: https://oidc.test.surfconext.nl

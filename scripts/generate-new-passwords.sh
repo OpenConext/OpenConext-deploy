@@ -9,9 +9,40 @@
 #
 
 SECRET_VARS_FILE=../secrets/secret-vars.yml
-SECRET_VARS_TEMPLATE_FILE=../secrets/secret-vars-template.yml
-
+SECRET_VARS_TEMPLATE_FILE=../templates/secret-vars-template.yml
 # ----- End configuration
+
+SCRIPT=$(readlink -f "$0")
+BASEDIR=$(dirname "$SCRIPT")
+BASENAME=$(basename "$SCRIPT")
+
+# ----- Input handling
+if [ $# -lt 2 ]
+  then
+    echo "INFO: No arguments supplied, syntax: $BASENAME environment domain [secret-vars-file]"
+    exit 1
+fi
+
+if [ $# -eq 2 ]
+  then
+    echo "INFO: No secret file supplied, using default secrets file" $SECRET_VARS_FILE
+fi
+
+if [ $# -gt 3 ]
+  then
+    echo "ERROR: Only 2 or 3 arguments expected, syntax: $BASENAME environment domain [secret-vars-file]"
+    exit 1
+fi
+# ----- End Input handing
+
+if [ $# -eq 3 ]
+  then
+    SECRET_VARS_FILE=$3
+    echo "INFO: Using file " $SECRET_VARS_FILE " for containing the secrets."
+fi
+
+oc_env=$1
+oc_basedomain=$2
 
 set -e
 #set -x
@@ -24,6 +55,8 @@ tempfile() {
 
 SV_FILE=$(tempfile)
 trap 'rm -f $SV_FILE; echo "Error: Operation not completed, please restart command"' EXIT INT TERM 
+
+BASEDIR=$(dirname $0)
 
 while IFS= read -r line
 do
@@ -38,7 +71,19 @@ do
 
   key=$(printf "%s" "$line" | cut -f1 -d:)  
   value=$(echo $line | cut -f2 -d: | xargs)
-  
+
+  if [ "$key" == 'env' ]; then
+    line="env: $oc_env"
+    echo "$line" >> $SV_FILE
+    continue
+  fi
+
+  if [ "$key" == 'base_domain' ]; then
+    line="base_domain: \"{{ env }}.$oc_basedomain\""
+    echo "$line" >> $SV_FILE
+    continue
+  fi
+
   if [ "$value" == 'sha' ]; then
     # sha-key must be later in template file
     # lookup password for the non-sha variant (engine_ldap_password for engine_ldap_password_sha)
@@ -47,8 +92,9 @@ do
     passwordkey=`echo $key | sed 's/_sha$//g'`
     passwordline=`cat $SV_FILE | grep $passwordkey`
     password=$(echo $passwordline | cut -f2 -d:)
-    sha=`echo -n $password | sha1sum | cut -f1 -d ' '`
-    line="$key: {sha}$sha"
+    salt=`tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=4 count=1 2>/dev/null;echo`
+    ssha=`( echo -n ${password}${salt} | openssl dgst -sha1 -binary; echo -n ${salt} )  | openssl enc -base64`
+    line="$key: \"{SSHA}$ssha\""
     echo "$line" >> $SV_FILE
     continue
   fi
@@ -65,6 +111,20 @@ do
     password=`(tr -cd '[:alnum:]' < /dev/urandom | fold -w20 | head -n1)`
     line="$key: $password "
     echo "$line" >> $SV_FILE
+    continue
+  fi
+
+  if [ "$value" == 'engineblock_private_key' ]; then
+    line="$key: |"
+    echo "$line" >> $SV_FILE
+    cat "$BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning.key" | sed "s/^/  /g" >> "$SV_FILE"
+    continue
+  fi
+
+  if [ "$value" == 'https_star_private_key' ]; then
+    line="$key: |"
+    echo "$line" >> $SV_FILE
+    cat "$BASEDIR/oc_cert/ssl/star.openconext-qa.openconext.org.key" | sed "s/^/  /g" >> "$SV_FILE"
     continue
   fi
 
