@@ -22,7 +22,7 @@
 
   {% if pdp.rollbar_apiKey is defined %}
   <appender name="ROLLBAR" class="com.tapstream.rollbar.RollbarAppender">
-    <apiKey>{{ pdp.rollbar_apikey }}</apiKey>
+    <apiKey>{{ pdp.rollbar_apiKey }}</apiKey>
     <environment>{{ env }}</environment>
 
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
