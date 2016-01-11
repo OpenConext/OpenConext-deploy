@@ -47,7 +47,7 @@
 
   <root level="WARN">
     {% if pdp.rollbar_apiKey is defined %}
-    <appender-ref ref="ROLLBAR">
+    <appender-ref ref="ROLLBAR"/>
     {% endif %}
     <appender-ref ref="FILE" />
     <appender-ref ref="SYSLOG" />
