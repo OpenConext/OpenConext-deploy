@@ -10,7 +10,6 @@ databases:
   names:
     - teams
     - api
-    - apis
     - "{{ engine_database_name }}"
     - "{{ janus_database_name }}"
     - grouper
@@ -20,7 +19,6 @@ databases:
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
-    - { name: apisrw, db_name: apis, password: "{{ mysql_passwords.apis }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
     - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
@@ -223,21 +221,6 @@ grouper:
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
-
-apis:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-  user: apisrw
-  url: "jdbc:mysql://{{ mysql_host }}/apis"
-  password: "{{ mysql_passwords.apis }}"
-  entity_id: https://apis.{{ base_domain }}
-  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
-  admin_service:
-    resource_server_key: authorization-server-admin
-    resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
-  api:
-    consumer_key: https://apis.test.surfconext.nl
-    consumer_secret: "{{ apis_api_consumer_secret }}"
 
 mujina:
   crt_name: "{{ tls_https.crt_name }}"

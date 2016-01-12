@@ -84,13 +84,6 @@ else
   echo "Skipping api.crt, already exist"
 fi
 
-
-if [ ! -f ../files/$oc_env/certs/apis.crt ]; then
-  cp $BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/apis.crt
-else
-  echo "Skipping apis.crt, already exist"
-fi
-
 pushd ../files/
 if [ ! -L java-$oc_env ]; then
   ln -s $oc_env java-$oc_env
