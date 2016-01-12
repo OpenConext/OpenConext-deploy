@@ -100,6 +100,13 @@ To update single applications - e.g. release - use:
 
 The secrets used by Ansible are externalized. For the VM the secrets are in this GitHub repo, for test in an internal SURF repo on the build server and for acc and prod the secrets are managed by Prolocation.
 
+# Making changes
+
+When making changes, please consider that people are continuously deploying
+vm's from master. Therefore, please do your best to keep HEAD in a working
+state, and make any invasive changes like adding new components or refactoring
+on a separate branch.
+
 # License
 
 These files are licensed under version 2.0 of the Apache License, as described in the file [LICENSE](LICENSE).
