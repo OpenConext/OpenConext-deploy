@@ -79,7 +79,7 @@ if [ $# -lt 3 ]; then
 fi
 
 if [ -e ${CERT_BASENAME}.key -o -e ${CERT_BASENAME}.crt ]; then
-    echo "'${CERT_BASENAME}.key' or '${CERT_BASENAME}.crt' already exist. Leaving"
+    echo "'${CERT_BASENAME}.key' or '${CERT_BASENAME}.crt' already exists. Leaving"
     exit 1;
 fi
 

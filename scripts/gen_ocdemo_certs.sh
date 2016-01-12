@@ -62,26 +62,26 @@ mkdir -p ../files/$oc_env/certs
 if [ ! -f ../files/$oc_env/certs/star.$oc_env.${oc_basedomain}_ca.pem ]; then
   cp $BASEDIR/oc_cert/ca/ca-cert.pem ../files/$oc_env/certs/star.$oc_env.${oc_basedomain}_ca.pem
 else
-  echo "Skipping star.$oc_env.$oc_basedomain_ca.pem, already exist"
+  echo "Skipping star.$oc_env.$oc_basedomain_ca.pem, already exists"
 fi
 
 if [ ! -f ../files/$oc_env/certs/engineblock.crt ]; then
   cp $BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/engineblock.crt
 else
-  echo "Skipping engineblock.crt, already exist"
+  echo "Skipping engineblock.crt, already exists"
 fi
 
 if [ ! -f ../files/$oc_env/certs/star.$oc_env.$oc_basedomain.pem ]; then
   cp $BASEDIR/oc_cert/ssl/star.$oc_env.$oc_basedomain.crt ../files/$oc_env/certs/star.$oc_env.$oc_basedomain.pem
 else
-  echo "Skipping star.$oc_basedomain.pem, already exist"
+  echo "Skipping star.$oc_basedomain.pem, already exists"
 fi
 
 #### API and APIS cert are not used anymore, but copied for backward compatibility (ansible role vm_onlyprovision_eb_sr may still contain references to these files
 if [ ! -f ../files/$oc_env/certs/api.crt ]; then
   cp $BASEDIR/oc_cert/signing/OpenConextDemoSAMLSigning.crt ../files/$oc_env/certs/api.crt
 else
-  echo "Skipping api.crt, already exist"
+  echo "Skipping api.crt, already exists"
 fi
 
 pushd ../files/
