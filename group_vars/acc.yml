@@ -341,9 +341,9 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151209.153205-23"
-pdp_html_snapshot_timestamp: "20151209.153243-21"
+pdp_version: "1.0.0"
+#pdp_snapshot_timestamp: "20151209.153205-23"
+#pdp_html_snapshot_timestamp: "20151209.153243-21"
 
 pdp_debug: true
 pdp:
@@ -361,6 +361,8 @@ pdp:
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151126.151623-11"
@@ -456,6 +458,14 @@ loadbalancing:
       { label: "acc62", ip: "145.100.191.136" },
     ]
   }
+  pdp: {
+    port: 613,
+    heartbeat: { url: "/pdp/api/health", method: "GET" },
+    servers: [
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET"},
@@ -495,3 +505,4 @@ nginx_config_templates:
   - static
   - profile
   - serviceregistry
+  - pdp

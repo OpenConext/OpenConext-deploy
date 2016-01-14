@@ -372,10 +372,10 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
   rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: "0.1.1"
-pdp_snapshot_timestamp: "20151222.103421-1"
-pdp_html_snapshot_timestamp: "20151222.103519-1"
-pdp_local_html_version: "0.1.4-SNAPSHOT"
+pdp_version: "1.0.0"
+#pdp_snapshot_timestamp: "20151222.103421-1"
+#pdp_html_snapshot_timestamp: "20151222.103519-1"
+#pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
 pdp:
