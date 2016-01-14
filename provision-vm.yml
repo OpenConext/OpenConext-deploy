@@ -8,7 +8,7 @@
       - always
 
 - hosts: loadbalancer:php-apps:java-apps:storage
-  gather_facts: no
+  gather_facts: yes
   sudo: true
   roles:
     - common
