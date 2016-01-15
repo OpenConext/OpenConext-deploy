@@ -26,7 +26,7 @@
     - { role: nginx,   tags: ['lb'] }
 
 - hosts: php-apps:java-apps
-  gather_facts: no
+  gather_facts: yes
   sudo: true
   roles:
     - httpd
