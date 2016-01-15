@@ -175,6 +175,7 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:acc.surfteams.nl:"
+  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
