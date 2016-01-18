@@ -16,6 +16,7 @@ databases:
     - authz-server
     - pdp-server
     - oidc-server
+    - aaserver
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
@@ -25,6 +26,7 @@ databases:
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
+    - { name: pdp-serverrw, db_name: aaserver, password: "{{ mysql_passwords.ss_server }}" }
 
 # For apache, the same star-certificate is used.
 tls_https:
@@ -37,7 +39,6 @@ janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
-
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
@@ -148,6 +149,9 @@ shibboleth_apps:
     baseurl: ""
   pdp:
     entityID: "https://pdp.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  aa:
+    entityID: "https://aa.{{ base_domain }}/shibboleth"
     baseurl: ""
 shib:
   engine_domain: "{{ base_domain }}"
@@ -352,6 +356,16 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
+      - clientId: aa.authz_client_id
+        secret: "{{ aa_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.authz_checkToken_secret }}"
@@ -395,6 +409,32 @@ pdp:
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
   rollbar_environment: test
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
+
+aa_version: "0.1"
+aa_snapshot_timestamp: "20160118.144358-1"
+aa_html_snapshot_timestamp: "20160118.144445-1."
+#aa_local_html_version: "0.1.4-SNAPSHOT"
+
+aa_debug: true
+aa:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  eb_username: "eb"
+  eb_password: "{{ aa_eb_password }}"
+  db_user: aa-serverrw
+  db_password: "{{ mysql_passwords.aa_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: aaserver
+  authz_client_id: "https@//aa.surfconext.test.nl"
+  authz_secret: "{{ aa_authz_client_secret }}"
+  oidc_client_id: "https@//aa.surfconext.test.nl"
+  oidc_secret: "{{ aa_oidc_client_secret }}"
+  spring_profiles_active: test
+  sab_username: coin-test
+  sab_password: "{{ aa_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151229.105743-13"
@@ -494,6 +534,13 @@ loadbalancing:
       { label: "oidc_backend", ip: "145.100.191.117" },
     ]
   }
+  aa: {
+    port: 10615,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "aa_backend", ip: "145.100.191.117" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
@@ -536,6 +583,7 @@ nginx_ipv4_addresses:
   welcome: 145.100.191.122
   pdp: 145.100.191.122
   oidc: 145.100.191.122
+  aa: 145.100.191.122
 
 nginx_config_templates:
   - engine
@@ -553,3 +601,4 @@ nginx_config_templates:
   - mujina_sp
   - mujina_idp
   - oidc
+  - aa
