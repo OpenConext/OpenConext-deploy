@@ -32,18 +32,18 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     </Directory>
 
 
-    # Enable shibboleth for all internal URLs (not EB and SCIM as these are protected with other means)
-    <LocationMatch "/aa/api/internal/(.*)">
+    # Enable shibboleth for all other URLs, but the SCIM endpoints, EB endpoint and health check
+    <Location ~ "/aa/api/(attribute/aggregate|health|v2/ServiceProviderConfig|v2/ResourceType|v2/Schema|v2/Me)">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location />
       AuthType shibboleth
       ShibUseHeaders On
       ShibRequestSetting applicationId aa
       ShibRequireSession On
       require valid-user
-    </LocationMatch>
-
-    <Location />
-      allow from all
-      satisfy any
     </Location>
 
 </VirtualHost>
