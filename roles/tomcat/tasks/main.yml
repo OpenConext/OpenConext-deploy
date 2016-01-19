@@ -54,8 +54,14 @@
   file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
   tags: tomcat
 
-- include: java_keystore.yml
-  when: env == 'vm'
+- name: Unused webapps dir must still be present
+  file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
+  tags: tomcat
+
+- name: Check if certificate is available for keystore actions
+  stat: path={{ keytool.current_certificates[0].file }}
+  register: certificate_available_for_keystore
+  tags: tomcat
 
 - name: Make sure Tomcat starts when the system is booted.
   service: name=tomcat6 enabled=yes

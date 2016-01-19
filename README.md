@@ -6,6 +6,16 @@ Ansible-driven provisioning of the OpenConext platform.
 These steps for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager.
 While it is possible to deploy OpenConext using other environments, currently it is unsupported.
 
+# Deploy to a remote machine
+
+A manual to run the deploy to a single target machine (e.g. a hosted VM) is in the wiki:
+[Installation steps to deploy OpenConext on a single system](https://github.com/OpenConext/OpenConext-deploy/wiki/Installation-steps-to-deploy-OpenConext-on-a-single-system-other-than-the-Vagrant-VM).
+
+# Deploy with Vagrant
+
+To run a development instance on your local machine with Vagrant and VirtualBox, follow these steps.
+They are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
+
 ## Install Vagrant and VirtualBox
 
 VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product, downloads and user manual can be found on the [VirtualBox website](https://www.virtualbox.org/wiki/Downloads).

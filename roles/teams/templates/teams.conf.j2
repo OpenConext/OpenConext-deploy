@@ -4,7 +4,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     ServerName https://teams.{{ base_domain }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-TEAMS'"
-	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-TEAMS'" combined
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-TEAMS'" combined
 
     RewriteEngine On
     # Rewrite old URLS

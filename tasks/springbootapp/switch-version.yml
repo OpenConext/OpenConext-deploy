@@ -2,4 +2,9 @@
   service: name={{ springapp_service_name }} state=stopped
 
 - name: change symlink to current version
-  file: src={{ springapp_released.dest }} dest="{{ springapp_dir }}/{{ springapp_jar }}" state=link owner="{{ springapp_user }}" group="{{ springapp_user }}"
+  file: >
+    src={{ springapp_released.dest }}
+    dest={{ springapp_dir }}/{{ springapp_jar }}
+    state=link
+    owner={{ springapp_user }}
+    group={{ springapp_user }}
