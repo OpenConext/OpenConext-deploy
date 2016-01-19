@@ -502,7 +502,7 @@ janus_service_registry_core:
                 default_allow: false
                 required: false
             'coin:institution_guid':
-#               validate: isguid
+                validate: isguid
                 type: text
                 default: ''
                 default_allow: false
@@ -584,7 +584,7 @@ janus_service_registry_core:
                     - 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified'
                     - 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
                     - 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
-                default: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+                default: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
                 default_allow: true
             'keywords:#':
                 required: true
@@ -909,7 +909,7 @@ janus_service_registry_core:
                     - 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified'
                     - 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
                     - 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
-                default: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+                default: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
                 default_allow: true
             'NameIDFormats:#':
                 supported:
@@ -1039,6 +1039,11 @@ janus_service_registry_core:
                 default_allow: true
                 required: false
             'coin:display_unconnected_idps_wayf':
+                type: boolean
+                default: false
+                default_allow: true
+                required: false
+            'coin:policy_enforcement_decision_required':
                 type: boolean
                 default: false
                 default_allow: true

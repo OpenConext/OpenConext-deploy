@@ -7,15 +7,6 @@ Listen {{ apache_app_listen_address.oidc }}:{{ loadbalancing.oidc.port }}
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-oidc'" combined
 
     # Proxy requests through to Tomcat using AJP
-    ProxyPass /Shibboleth.sso !
     ProxyPass / ajp://localhost:8009/ retry=0
-
-    <Location />
-      AuthType shibboleth
-      ShibUseHeaders On
-      ShibRequestSetting applicationId oidc
-      ShibRequireSession On
-      require valid-user
-    </Location>
 
 </VirtualHost>

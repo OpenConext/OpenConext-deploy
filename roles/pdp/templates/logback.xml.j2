@@ -4,7 +4,7 @@
   <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
     <syslogHost>{{ rsyslog_host }}</syslogHost>
     <facility>DAEMON</facility>
-    <suffixPattern>[%thread] %logger %msg</suffixPattern>
+    <suffixPattern>PDPMAIN: [%thread] %logger %msg</suffixPattern>
   </appender>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -19,6 +19,17 @@
      <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
    </encoder>
   </appender>
+
+  {% if pdp.rollbar_apiKey is defined %}
+  <appender name="ROLLBAR" class="com.tapstream.rollbar.RollbarAppender">
+    <apiKey>{{ pdp.rollbar_apiKey }}</apiKey>
+    <environment>{{ env }}</environment>
+
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>WARN</level>
+    </filter>
+  </appender>
+  {% endif %}
 
   <appender name="email" class="ch.qos.logback.classic.net.SMTPAppender">
     <smtpHost>{{ smtp_server }}</smtpHost>
@@ -35,6 +46,9 @@
   <logger name="pdp" level="DEBUG"/>
 
   <root level="WARN">
+    {% if pdp.rollbar_apiKey is defined %}
+    <appender-ref ref="ROLLBAR"/>
+    {% endif %}
     <appender-ref ref="FILE" />
     <appender-ref ref="SYSLOG" />
   </root>

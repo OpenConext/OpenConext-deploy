@@ -1,0 +1,79 @@
+authorities:
+  - {
+      id: "orcid",
+      description: "ORCID provides a persistent digital identifier that distinguishes you from every other researcher and, through integration in key research workflows such as manuscript and grant submission, supports automated linkages between you and your professional activities ensuring that your work is recognized",
+      endpoint: "https://orcidaa.{{ base_domain }}/idp/profile/admin/resolvertest",
+      user: "",
+      password: "",
+      timeOut: 1000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:eduPersonOrcid",
+          caseExact: True,
+          description: "The ORCID is a persistent digital identifier that distinguishes the account holder from every other researcher.",
+          multiValued: False,
+          mutability: "readOnly",
+          required: False,
+          returned: "default",
+          type: "string",
+          uniqueness: "none"
+        }
+      ],
+      requiredInputAttributes: [
+        {
+        name: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
+        }
+      ]
+    }
+  - {
+      id: "sab",
+      description: "SURFnet Autorisatie Beheer",
+      endpoint: "{{ aa.sab_endpoint }}",
+      user: "{{ aa.sab_username }}",
+      password: "{{ aa.sab_password }}",
+      timeOut: 1000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:eduPersonEntitlement",
+          caseExact: True,
+          description: "URI (either URN or URL) that indicates a set of rights to specific resources.",
+          multiValued: True,
+          mutability: "readOnly",
+          required: False,
+          returned: "default",
+          type: "string",
+          uniqueness: "none",
+        }
+      ],
+      requiredInputAttributes: [
+        {
+        name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        }
+      ]
+    }
+  - {
+      id: "voot",
+      description: "An extensible protocol for dynamic exchange of group and authorization data",
+      endpoint: "https://voot.{{ base_domain }}",
+      user: "{{ aa.authz_client_id }}",
+      password: "{{ aa.authz_secret }}",
+      timeOut: 1000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:isMemberOf",
+          caseExact: True,
+          description: "Lists the collaborative organisations / groups the user is a member of",
+          multiValued: True,
+          mutability: "readOnly",
+          required: False,
+          returned: "default",
+          type: "string",
+          uniqueness: "none",
+        }
+      ],
+      requiredInputAttributes: [
+        {
+        name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        }
+      ]
+    }

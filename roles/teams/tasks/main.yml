@@ -1,8 +1,8 @@
 ---
-- name: Create user
-  user: name=teams home={{ teams_dir }} shell=/sbin/nologin
+- name: create user
+  user: name=teams system=yes home={{ teams_dir }} shell=/sbin/nologin
 
-- name: Copy start script
+- name: copy start script
   template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
   notify: restart teams
 
@@ -11,9 +11,6 @@
 
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=teams group=teams mode=0755
-
-- stat: path={{ teams_dir }}/teams-current.war follow=True
-  register: preDeployStat
 
 - include: ../../../tasks/springbootapp/install-release.yml
   when: "teams_snapshot_timestamp == '' and teams_local_jar == ''"
@@ -24,31 +21,35 @@
 - include: ../../../tasks/springbootapp/install-local.yml
   when: "teams_local_jar != ''"
 
-- stat: path={{ teams_dir }}/teams-current.war follow=True
-  register: postDeployStat
-
-- name: Copy logging config
+- name: copy logging config
   template: src=logback.xml.j2 dest={{ teams_dir }}/logback.xml owner=teams group=teams mode=0740
   notify: restart teams
 
-- name: Copy application config
+- name: copy application config
   template: src=application.properties.j2 dest={{ teams_dir }}/application.properties owner=teams group=teams mode=0740
   notify: restart teams
 
-- name: Copy grouper client config
-  template: src=grouper.client.properties.j2 dest={{ teams_dir }}/grouper.client.properties owner=teams group=teams mode=0740
+- name: copy grouper client config
+  template: >
+    src=grouper.client.properties.j2
+    dest={{ teams_dir }}/grouper.client.properties
+    owner=teams
+    group=teams
+    mode=0740
   register: grouper_client_config_result
   notify: restart teams
 
 # grouperClient.jar insists that a file called grouper.client.properties is on the classpath, so we'll put it inside the war.
-- include: insert_grouper_client_props.yml
-  when: grouper_client_config_result.changed or preDeployStat.stat.md5 != postDeployStat.stat.md5
-  notify: restart teams
+- name: add grouper client config to war
+  shell: jar -uf $(readlink teams-current.war) grouper.client.properties chdir={{ teams_dir }}
+  sudo_user: "{{ springapp_user }}"
+  when: grouper_client_config_result.changed or springapp_release_released.changed or springapp_snapshot_released.changed
 
 - name: copy grouper provision script for teams
   copy: src={{ item }} dest=~/{{ item }}
   with_items:
     - create-stems.gsh
+  when: env == 'vm'
 
 - name: provision grouper for teams
   shell: "bin/gsh ~/create-stems.gsh"
@@ -56,6 +57,7 @@
   changed_when: "gsh_output.stderr != ''"
   args:
     chdir: /opt/www/grouper-shell
+  when: env == 'vm'
 
 - name: copy apache config
   template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
@@ -73,3 +75,8 @@
 
 - name: ensure the service is started
   service: name=teams enabled=yes state=started
+
+- name: cleanup old wars
+  shell: find . ! -name $(basename $(readlink teams-current.war)) -name '*.war' -type f -exec rm {} \; chdir={{ teams_dir }}
+  sudo_user: "{{ springapp_user }}"
+  when: springapp_release_released.changed or springapp_snapshot_released.changed

@@ -1,6 +1,6 @@
 ---
 - name: Create user
-  user: name=pdp home={{ pdp_dir }} shell=/sbin/nologin
+  user: name=pdp system=yes home={{ pdp_dir }} shell=/sbin/nologin
 
 - name: create apache folder
   file: path=/var/www/pdp owner=apache group=apache mode=2755 state=directory
@@ -9,13 +9,16 @@
   unarchive: src=./../OpenConext-pdp/pdp-gui/target/pdp-gui-{{ pdp_local_html_version }}.tar.gz dest=/var/www/pdp/
   register: local_pdp_archive
   tags: pdp
-  notify: restart httpd
   when: pdp_local_html_version != ''
+  notify:
+    - replace rollbar-enabled
+    - replace rollbar-environment
 
 - name: create symlink to uploaded version
   file: src=/var/www/pdp/pdp-gui-{{ pdp_local_html_version }} dest=/var/www/pdp/current state=link force=yes
   tags: pdp
   when: pdp_local_html_version != ''
+  notify: restart httpd
 
 - name: download html archive
   get_url:
@@ -23,12 +26,15 @@
     dest: /var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz
   tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+  notify:
+    - replace rollbar-enabled
+    - replace rollbar-environment
 
 - name: extract archive
   unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz dest=/var/www/pdp/ copy=no
   tags: pdp
-  notify: restart httpd
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+  notify: restart httpd
 
 - name: create symlink to downloaded version
   file: src=/var/www/pdp/pdp-gui-{{ pdp_version }} dest=/var/www/pdp/current state=link force=yes
@@ -47,6 +53,9 @@
     dest: /var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz
   tags: pdp
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+  notify:
+    - replace rollbar-enabled
+    - replace rollbar-environment
 
 - name: extract snapshot archive
   unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz dest=/var/www/pdp/ copy=no

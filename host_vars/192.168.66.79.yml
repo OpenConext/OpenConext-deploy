@@ -14,4 +14,6 @@ apache_app_listen_address:
   teams: 192.168.66.79
   voot: 192.168.66.79
   pdp: 192.168.66.79
+  aa: 192.168.66.79
   welcome: 192.168.66.79
+  oidc: 192.168.66.79

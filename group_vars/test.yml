@@ -10,23 +10,23 @@ databases:
   names:
     - teams
     - api
-    - apis
     - "{{ engine_database_name }}"
     - "{{ janus_database_name }}"
     - grouper
     - authz-server
     - pdp-server
     - oidc-server
+    - aaserver
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
-    - { name: apisrw, db_name: apis, password: "{{ mysql_passwords.apis }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
     - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
+    - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
 
 # For apache, the same star-certificate is used.
 tls_https:
@@ -39,7 +39,6 @@ janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
-
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
@@ -117,16 +116,16 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
-#    - {
-#        index: 0,
-#        type: "database",
-#        value: "Doctrine"
-#      }
     - {
         index: 0,
-        type: "janus",
-        value: "JanusRestV1"
+        type: "database",
+        value: "Doctrine"
       }
+#    - {
+#        index: 0,
+#        type: "janus",
+#        value: "JanusRestV1"
+#      }
 
 tomcat_apps:
   - grouper
@@ -151,14 +150,14 @@ shibboleth_apps:
   pdp:
     entityID: "https://pdp.{{ base_domain }}/shibboleth"
     baseurl: ""
-  oidc:
-    entityID: "https://oidc.{{ base_domain }}/shibboleth"
+  aa:
+    entityID: "https://aa.{{ base_domain }}/shibboleth"
     baseurl: ""
 shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.1.0
+teams_version: 4.2.6
 #teams_snapshot_timestamp: 20150915.083452-1
 
 api_version: 4.0.1
@@ -175,6 +174,7 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
+  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -223,21 +223,6 @@ grouper:
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
 
-apis:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-  user: apisrw
-  url: "jdbc:mysql://{{ mysql_host }}/apis"
-  password: "{{ mysql_passwords.apis }}"
-  entity_id: https://apis.{{ base_domain }}
-  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
-  admin_service:
-    resource_server_key: authorization-server-admin
-    resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
-  api:
-    consumer_key: https://apis.test.surfconext.nl
-    consumer_secret: "{{ apis_api_consumer_secret }}"
-
 mujina_sp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -253,15 +238,21 @@ authzserver:
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
-authz_server_version: 1.3.2
-authz_server_snapshot_timestamp: "20151103.150836-3"
+authz_server_version: 1.3.3
+authz_server_snapshot_timestamp: "20151229.134236-3"
 authz_server_debug: true
 
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  resource_checking_secret: "{{ voot_resource_checking_secret }}"
+  authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
+  authz_checkToken_clientId: "vootservice"
+  authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
+  oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
+  oidc_checkToken_clientId: "https@//oidc.test.surfconext.nl"
+  oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
   externalGroupProviders:
     - {
         type: "grouper",
@@ -285,19 +276,19 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.4
-#voot_snapshot_timestamp: "20150907.093535-3"
+voot_version: 1.5
+#voot_snapshot_timestamp: 20151207.100901-4
 voot_debug: true
 
-authz_admin_version: 1.3.1
-#authz_admin_snapshot_timestamp: "20150611.111906-1"
+authz_admin_version: 1.3.4
+authz_admin_snapshot_timestamp: "20151223.124726-3"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   defaultClients:
-      - clientId: "{{ authzplayground.springapp_client_id}}"
-        secret: "{{ authzplayground.springapp_client_secret }}"
+      - clientId: "{{ authzplayground.springapp_authz_client_id }}"
+        secret: "{{ authzplayground.springapp_authz_client_secret }}"
         resourceIds:
           - groups
         scopes:
@@ -306,7 +297,7 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
-        redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
+        redirectUri: https://authz-playground.{{ base_domain }}/redirect
       - clientId: authz-admin
         secret: "{{ authz_admin_client_secret }}"
         resourceIds:
@@ -350,12 +341,23 @@ authzadmin:
           - actions
           - cross-idp-services
           - stats
+          - pdp
         grantTypes:
           - authorization_code
           - implicit
           - client_credentials
-      - clientId: pdp
+      - clientId: pdp_client
         secret: "{{ pdp_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
+      - clientId: "{{ aa.authz_client_id }}"
+        secret: "{{ aa_authz_client_secret }}"
         resourceIds:
           - groups
         scopes:
@@ -366,26 +368,28 @@ authzadmin:
           - client_credentials
   defaultResourceServers:
     - clientId: vootservice
-      secret: "{{ voot.resource_checking_secret }}"
+      secret: "{{ voot.authz_checkToken_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
+    - clientId: pdp
+      secret: "{{ voot.oidc_checkToken_secret }}"
 
-authz_playground_version: 1
-#authz_playground_snapshot_timestamp: ""
+authz_playground_version: 1.2
+authz_playground_snapshot_timestamp: "20151229.135228-2"
+authz_playground_debug: true
 authzplayground:
-  springapp_oauth_redirect: https://authz-playground.{{ base_domain }}/redirect
-  springapp_oauth_token_url: https://authz.{{ base_domain }}/oauth/token
-  springapp_client_id: cool_app_id
-  springapp_client_secret: "{{ authzplayground_springapp_client_secret }}"
-  springapp_scopes: groups
-  springapp_authorize_url: https://authz.{{ base_domain }}/oauth/authorize
-  springapp_resource_server_api_url: https://voot.{{ base_domain }}/me/groups
+  springapp_authz_client_id: cool_app_id
+  springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
+  springapp_oidc_client_id: https@//oidc.test.surfconext.nl
+  springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151026.081334-16"
-pdp_html_snapshot_timestamp: "20151026.081442-14"
+pdp_version: "1.0.0"
+#pdp_snapshot_timestamp: "20151222.103421-1"
+#pdp_html_snapshot_timestamp: "20151222.103519-1"
+#pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
 pdp:
@@ -398,18 +402,52 @@ pdp:
   db_host: "{{ mysql_host }}"
   db_name: pdp-server
   spring_profiles_active: test
+  cache_policies: false
+  include_inactive_policies: true
+  sab_username: coin-test
+  sab_password: "{{ pdp_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
+
+aa_version: "0.1"
+aa_snapshot_timestamp: "20160119.105504-4"
+aa_html_snapshot_timestamp: "20160119.105533-4"
+#aa_local_html_version: "0.1.4-SNAPSHOT"
+
+aa_debug: true
+aa:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  eb_username: "eb"
+  eb_password: "{{ aa_eb_password }}"
+  db_user: aa-serverrw
+  db_password: "{{ mysql_passwords.aa_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: aaserver
+  authz_client_id: "https@//aa.surfconext.test.nl"
+  authz_secret: "{{ aa_authz_client_secret }}"
+  oidc_client_id: "https@//aa.surfconext.test.nl"
+  oidc_secret: "{{ aa_oidc_client_secret }}"
+  spring_profiles_active: acc
+  sab_username: coin-test
+  sab_password: "{{ aa_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151109.101001-4"
+oidc_snapshot_timestamp: "20151229.105743-13"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   environment: test
   issuer: https://oidc.{{ base_domain }}/
   db_user: oidc-serverrw
-  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_password: "{{ mysql_passwords.oidc_server }}"
   db_host: "{{ mysql_host }}"
   db_name: oidc-server
+  sp_entity_id: https://oidc.test.surfconext.nl
 
 loadbalancing:
   engine: {
@@ -496,6 +534,13 @@ loadbalancing:
       { label: "oidc_backend", ip: "145.100.191.117" },
     ]
   }
+  aa: {
+    port: 615,
+    heartbeat: { url: "/aa/api/health", method: "GET" },
+    servers: [
+      { label: "aa_backend", ip: "145.100.191.117" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
@@ -538,6 +583,7 @@ nginx_ipv4_addresses:
   welcome: 145.100.191.122
   pdp: 145.100.191.122
   oidc: 145.100.191.122
+  aa: 145.100.191.122
 
 nginx_config_templates:
   - engine
@@ -555,3 +601,4 @@ nginx_config_templates:
   - mujina_sp
   - mujina_idp
   - oidc
+  - aa

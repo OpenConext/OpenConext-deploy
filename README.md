@@ -3,8 +3,15 @@ Ansible-driven provisioning of the OpenConext platform.
 
 # Getting started
 
-These steps for setting up are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
-While it is possible to deploy OpenConext using other environments, currently it is unsupported.
+# Deploy to a remote machine
+
+A manual to run the deploy to a single target machine (e.g. a hosted VM) is in the wiki:
+[Installation steps to deploy OpenConext on a single system](https://github.com/OpenConext/OpenConext-deploy/wiki/Installation-steps-to-deploy-OpenConext-on-a-single-system-other-than-the-Vagrant-VM).
+
+# Deploy with Vagrant
+
+To run a development instance on your local machine with Vagrant and VirtualBox, follow these steps.
+They are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
 
 ## Install Vagrant and VirtualBox
 
@@ -67,7 +74,7 @@ These are the steps the above script performs:
 We need pseudo-DNS entries so that your browser can reach the VM-platform we just installed. So, add this very long line to your `/etc/hosts` file:
 
 ```
-192.168.66.78  vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org apis.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org
+192.168.66.78  vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org oidc.vm.openconext.org
 ```
 
 Here, the ip-address `192.168.66.78` refers to the address that is mentioned in ./Vagrantfile.
@@ -91,7 +98,14 @@ To update single applications - e.g. release - use:
 ./provision-single-component ${vm|test|acc|prod} ${remote-user} ${absolute location of secrets file} ${component}
 ```
 
-The secrets used by Ansible are externalized. For the VM the secrets are in this github repp, for test in an internal SURF repo on the build server and for acc and prod the secrets are managed by Prolocation.
+The secrets used by Ansible are externalized. For the VM the secrets are in this GitHub repo, for test in an internal SURF repo on the build server and for acc and prod the secrets are managed by Prolocation.
+
+# Making changes
+
+When making changes, please consider that people are continuously deploying
+vm's from master. Therefore, please do your best to keep HEAD in a working
+state, and make any invasive changes like adding new components or refactoring
+on a separate branch.
 
 # License
 

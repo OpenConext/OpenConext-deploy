@@ -5,41 +5,4 @@ apache_app_listen_address:
   grouper: 145.100.191.202
   teams: 145.100.191.202
   voot: 145.100.191.202
-
-loadbalancing:
-  authzserver: {
-    port: 602,
-    heartbeat: { url: "/media/trans-white.png", method: "GET" },
-    servers: [
-      { label: "prd61", ip: "145.100.191.201" },
-      { label: "prd62", ip: "145.100.191.202" },
-      { label: "prd63", ip: "145.100.191.203" },
-    ]
-  }
-  authz_admin: {
-    port: 603,
-    heartbeat: { url: "/health", method: "GET" },
-    servers: [
-      { label: "prd61", ip: "145.100.191.201" },
-      { label: "prd62", ip: "145.100.191.202" },
-      { label: "prd63", ip: "145.100.191.203" },
-    ]
-  }
-  authz_playground: {
-    port: 604,
-    heartbeat: { url: "/health", method: "GET" },
-    servers: [
-      { label: "prd61", ip: "145.100.191.201" },
-      { label: "prd62", ip: "145.100.191.202" },
-      { label: "prd63", ip: "145.100.191.203" },
-    ]
-  }
-  voot: {
-    port: 605,
-    heartbeat: { url: "/health", method: "GET" },
-    servers: [
-      { label: "prd61", ip: "145.100.191.201" },
-      { label: "prd62", ip: "145.100.191.202" },
-      { label: "prd63", ip: "145.100.191.203" },
-    ]
-  }
+  aa: 145.100.191.202
