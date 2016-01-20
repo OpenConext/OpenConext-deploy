@@ -16,6 +16,7 @@ databases:
     - authz-server
     - pdp-server
     - oidc-server
+    - aaserver
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
@@ -25,6 +26,7 @@ databases:
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
+    - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
@@ -161,6 +163,10 @@ shibboleth_apps:
   pdp:
     entityID: "https://pdp.{{ base_domain }}/shibboleth"
     baseurl: ""
+  aa:
+    entityID: "https://aa.{{ base_domain }}/shibboleth"
+    baseurl: ""
+
 shib:
   engine_domain: "{{ base_domain }}"
 
@@ -181,6 +187,7 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:demo.openconext.org:"
+  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 teams_version: 4.2.1
 # teams_snapshot_timestamp: 20150519.080724-3
@@ -258,6 +265,7 @@ authzserver:
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
 authz_server_version: 1.2
 #authz_server_snapshot_timestamp: 20150429.085158-60
@@ -272,6 +280,9 @@ voot:
   authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
   authz_checkToken_clientId: "vootservice"
   authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
+  oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
+  oidc_checkToken_clientId: "https@//oidc.test.surfconext.nl"
+  oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
   externalGroupProviders:
     - {
         type: "grouper",
@@ -367,16 +378,31 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
+      - clientId: "{{ aa.authz_client_id }}"
+        secret: "{{ aa_authz_client_secret }}"
+        scopes:
+          - groups
+          - attribute-aggregation
+          - saml-attribute-query
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.authz_checkToken_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
+    - clientId: pdp
+      secret: "{{ voot.oidc_checkToken_secret }}"
+    - clientId: "{{ aa.authz_resource_server_id }}"
+      secret: "{{ aa.authz_secret }}"
+
 ##
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1.1
-authz_playground_snapshot_timestamp: 20151124.142135-2
+authz_playground_snapshot_timestamp: 20151205.202004-3
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
@@ -385,11 +411,11 @@ authzplayground:
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151120.123017-19"
-pdp_html_snapshot_timestamp: "20151120.140020-18"
-
+pdp_snapshot_timestamp: "20151222.101918-28"
+pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
 pdp:
   crt_name: "{{ tls_https.crt_name }}"
@@ -403,9 +429,40 @@ pdp:
   spring_profiles_active: test
   cache_policies: false
   include_inactive_policies: true
+  sab_username: coin-test
+  sab_password: "{{ pdp_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
+
+aa_version: "0.1"
+aa_snapshot_timestamp: "20160120.123738-7"
+aa_html_snapshot_timestamp: "20160120.154538-10"
+
+aa_debug: true
+aa:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  eb_username: "eb"
+  eb_password: "{{ aa_eb_password }}"
+  db_user: aa-serverrw
+  db_password: "{{ mysql_passwords.aa_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: aaserver
+  authz_client_id: "https@//aa.test.surfconext.nl"
+  authz_resource_server_id: aa
+  authz_secret: "{{ aa_authz_client_secret }}"
+  oidc_client_id: "https@//aa.surfconext.test.nl"
+  oidc_secret: "{{ aa_oidc_client_secret }}"
+  spring_profiles_active: acc
+  sab_username: coin-test
+  sab_password: "{{ aa_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151126.151623-11"
+oidc_snapshot_timestamp: "20151229.105743-13"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -530,6 +587,13 @@ loadbalancing:
         { label: "pdp_backend", ip: "192.168.66.79" },
       ]
     }
+  aa: {
+    port: 615,
+    heartbeat: { url: "/aa/api/health", method: "GET" },
+    servers: [
+      { label: "aa_backend", ip: "192.168.66.79" },
+    ]
+  }
 
 nginx_backend_ip: 127.0.0.1
 
@@ -551,6 +615,7 @@ nginx_ipv4_addresses:
   welcome: 192.168.66.78
   pdp: 192.168.66.78
   oidc: 192.168.66.78
+  aa: 192.168.66.78
 
 nginx_config_templates:
   - welcome
@@ -569,3 +634,4 @@ nginx_config_templates:
   - pdp
   - serviceregistry
   - oidc
+  - aa
