@@ -362,6 +362,8 @@ authzadmin:
           - groups
         scopes:
           - groups
+          - attribute-aggregation
+          - saml-attribute-query
         grantTypes:
           - authorization_code
           - implicit
@@ -373,6 +375,8 @@ authzadmin:
       secret: "{{ csa_resource_checking_secret }}"
     - clientId: pdp
       secret: "{{ voot.oidc_checkToken_secret }}"
+    - clientId: "{{ aa.authz_resource_server_id }}"
+      secret: "{{ aa.authz_secret }}"
 
 authz_playground_version: 1.2
 authz_playground_snapshot_timestamp: "20151229.135228-2"
@@ -411,9 +415,8 @@ pdp:
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 aa_version: "0.1"
-aa_snapshot_timestamp: "20160119.105504-4"
-aa_html_snapshot_timestamp: "20160119.105533-4"
-#aa_local_html_version: "0.1.4-SNAPSHOT"
+aa_snapshot_timestamp: "20160120.071944-6"
+aa_html_snapshot_timestamp: "20160120.072044-7"
 
 aa_debug: true
 aa:
@@ -426,6 +429,7 @@ aa:
   db_host: "{{ mysql_host }}"
   db_name: aaserver
   authz_client_id: "https@//aa.surfconext.test.nl"
+  authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
   oidc_client_id: "https@//aa.surfconext.test.nl"
   oidc_secret: "{{ aa_oidc_client_secret }}"

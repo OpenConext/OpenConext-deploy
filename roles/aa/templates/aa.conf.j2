@@ -13,6 +13,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     RewriteCond %{REQUEST_URI} !\.svg$
     RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
+    RewriteCond %{REQUEST_URI} !\.gif$
     RewriteCond %{REQUEST_URI} !\.jpeg$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !aa
