@@ -358,8 +358,6 @@ authzadmin:
           - client_credentials
       - clientId: "{{ aa.authz_client_id }}"
         secret: "{{ aa_authz_client_secret }}"
-        resourceIds:
-          - attribute-aggregator
         scopes:
           - groups
           - attribute-aggregation
