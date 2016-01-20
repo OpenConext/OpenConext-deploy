@@ -359,7 +359,7 @@ authzadmin:
       - clientId: "{{ aa.authz_client_id }}"
         secret: "{{ aa_authz_client_secret }}"
         resourceIds:
-          - groups
+          - attribute-aggregator
         scopes:
           - groups
           - attribute-aggregation
@@ -428,7 +428,7 @@ aa:
   db_password: "{{ mysql_passwords.aa_server }}"
   db_host: "{{ mysql_host }}"
   db_name: aaserver
-  authz_client_id: "https@//aa.surfconext.test.nl"
+  authz_client_id: "https@//aa.test.surfconext.nl"
   authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
   oidc_client_id: "https@//aa.surfconext.test.nl"
