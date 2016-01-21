@@ -362,8 +362,6 @@ authzadmin:
       secret: "{{ voot.authz_checkToken_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
-    - clientId: pdp
-      secret: "{{ voot.oidc_checkToken_secret }}"
 
 authz_playground_version: 1.1
 authzplayground:
