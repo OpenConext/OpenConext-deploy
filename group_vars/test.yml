@@ -413,8 +413,8 @@ pdp:
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 aa_version: "0.1"
-aa_snapshot_timestamp: "20160120.123738-7"
-aa_html_snapshot_timestamp: "20160120.154538-10"
+aa_snapshot_timestamp: "20160121.121812-8"
+aa_html_snapshot_timestamp: "20160121.121842-11"
 
 aa_debug: true
 aa:
