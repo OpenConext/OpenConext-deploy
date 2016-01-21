@@ -362,7 +362,7 @@ pdp:
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
-  rollbar_environment: test
+  rollbar_environment: acc
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 oidc_version: "0.1"
