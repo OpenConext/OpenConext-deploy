@@ -6,3 +6,4 @@ apache_app_listen_address:
   teams: 145.100.191.201
   voot: 145.100.191.201
   aa: 145.100.191.201
+  pdp: 145.100.191.201
