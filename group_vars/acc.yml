@@ -356,9 +356,9 @@ pdp:
   db_password: "{{ mysql_passwords.pdp_server }}"
   db_host: "{{ mysql_host }}"
   db_name: pdp-server
-  spring_profiles_active: test
-  cache_policies: false
-  include_inactive_policies: true
+  spring_profiles_active: acc
+  cache_policies: true
+  include_inactive_policies: false
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
