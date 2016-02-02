@@ -1,13 +1,19 @@
+# Log configuration
 logging.config=file://{{ pdp_dir }}/logback.xml
+
+# Port for spring boot application
 server.port={{ springapp_tcpport }}
 
+# We serve from the root. Do not change this
 server.contextPath=
 
+# The environment: test | acc | prod
 spring.profiles.active={{ pdp.spring_profiles_active }}
 
 # 8 hours
 server.session-timeout=28800
 
+# PDP database settings
 spring.datasource.url=jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}
 spring.datasource.username={{ pdp.db_user }}
 spring.datasource.password={{ pdp.db_password }}
@@ -15,40 +21,53 @@ spring.datasource.driverClassName=com.mysql.jdbc.Driver
 spring.datasource.validation-query=SELECT 1
 spring.datasource.testWhileIdle=true
 
+# Set to debug to see all database queries, for acc and prod set to INFO
 logging.level.org.hibernate.SQL=INFO
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=INFO
 
+# Internal API user (e.g. EngineBlock who call the PDP to check policies
 policy.enforcement.point.user.name={{ pdp.username }}
 policy.enforcement.point.user.password={{ pdp.password }}
 
+# The main XACML properties
 xacml.properties.path=file://{{ pdp_dir }}/xacml.conext.properties
 policy.base.dir=file://{{ pdp_dir }}/xacml-policies
 
+# The refresh period for policies (if cached)
 period.policies.refresh.minutes=10
+
+# The refresh period for SR metadata (if cached)
 period.metadata.refresh.minutes=10
 
+# The URL where the metadata is available (only used in prod environment
 metadata.idpRemotePath=http://mgnt03.coin.surf.net/export/saml20-idp-remote.json
 metadata.spRemotePath=http://mgnt03.coin.surf.net/export/saml20-sp-remote.json
 
+# Number of days how long the policy violations are retained
 policy.violation.retention.period.days=30
 
-policy.idp.access.enforcement=false
-policy.include.aggregated.attributes=true
+# Do we include the aggregated attributes in the response to EB (who ignores them for now)
+policy.include.aggregated.attributes=false
 
-#Voot client configuration for the teams PIP
+# Voot client configuration for the teams PIP
 voot.serviceUrl=https://voot.{{ base_domain }}
 voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
 voot.userAuthorizationUri=https://authz.{{ base_domain }}/oauth/authorize
+
+# The OAuth2 client defined in authz-admin
 voot.clientId=pdp_client
 voot.clientSecret={{ pdp_client_secret }}
 voot.scopes = groups
 
+# SAB configuration
 sab.userName={{ pdp.sab_username }}
 sab.password={{ pdp.sab_password }}
 sab.endpoint={{ pdp.sab_endpoint }}
 
+# Do not expose any of the Spring BOOT endpoints except the health and info for loadbalacer health check
 endpoints.enabled=false
 endpoints.health.enabled=true
 endpoints.info.enabled=true
 
+# This is the internal logging of PDP. Leave this to DEBUG for now as it is not much overhead
 logging.level.pdp: DEBUG
