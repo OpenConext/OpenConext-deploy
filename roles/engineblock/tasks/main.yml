@@ -18,6 +18,7 @@
     owner={{ apache_user }}
     group={{ apache_user }}
     recurse=yes
+  when: develop
 
 - name: Create the log dir for Symfony
   file:
@@ -26,6 +27,7 @@
     owner={{ apache_user }}
     group={{ apache_user }}
     recurse=yes
+  when: develop
 
 - name: Create the symfony cache
   command: app/console cache:clear --env=prod --no-debug
