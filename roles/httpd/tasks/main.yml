@@ -21,7 +21,7 @@
   notify: reload httpd
 
 - name: Copy the config file
-        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
   template: src=httpd.conf_httpd24.j2 dest=/etc/httpd/conf/httpd.conf
   tags: httpd
   notify: reload httpd

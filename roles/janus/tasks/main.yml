@@ -31,4 +31,4 @@
 
 # eb_sr_sql is only set if the vm_only_provision_eb_sr tasks have been run 
 - include: janus.yml
-  when: janusDownload.changed or janusDir.changed or ( eb_sr_sql is defined and eb_sr_sql.changed )
+  when: janusDownload.changed or janusDir.changed or ( eb_sr_sql is defined and eb_sr_sql.changed ) 

@@ -1,0 +1,20 @@
+Listen {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.serviceregistry.port }}
+<Virtualhost {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.serviceregistry.port }}>
+    ServerAdmin {{ apache_server_admin}}
+
+    DocumentRoot {{ engine_current_release_symlink }}/web
+    ServerName   {{ engine_domain }}
+
+    Alias /simplesaml {{ janus_installation_current_release_symlink }}/simplesamlphp/www
+    Alias /janus {{ janus_installation_current_release_symlink }}/simplesamlphp/modules/janus/web
+
+    RewriteEngine On
+    RewriteRule ^/$ /simplesaml/module.php/janus/index.php [L,R=301]
+
+
+    #Proxy the requests to FPM 
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:{{ serviceregistry_fpm_port }}/{{ janus_installation_current_release_symlink }}/web/$1
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EB'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB'" combined
+</VirtualHost>

@@ -49,3 +49,7 @@
       || /usr/sbin/sestatus | egrep '^Current mode: *permissive'
     "
   when: selinux_binaries.stat.exists == True
+
+- name: include centOS 7 specific tasks
+  include: main_centos7.yml
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") 
