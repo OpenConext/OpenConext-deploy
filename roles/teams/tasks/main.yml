@@ -43,7 +43,7 @@
 - name: add grouper client config to war
   shell: jar -uf $(readlink teams-current.war) grouper.client.properties chdir={{ teams_dir }}
   sudo_user: "{{ springapp_user }}"
-  when: grouper_client_config_result.changed or springapp_release_released.changed or springapp_snapshot_released.changed
+  when: grouper_client_config_result.changed or (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
 
 - name: copy grouper provision script for teams
   copy: src={{ item }} dest=~/{{ item }}
@@ -79,4 +79,4 @@
 - name: cleanup old wars
   shell: find . ! -name $(basename $(readlink teams-current.war)) -name '*.war' -type f -exec rm {} \; chdir={{ teams_dir }}
   sudo_user: "{{ springapp_user }}"
-  when: springapp_release_released.changed or springapp_snapshot_released.changed
+  when: (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)

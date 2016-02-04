@@ -10,23 +10,23 @@ databases:
   names:
     - teams
     - api
-    - apis
     - "{{ engine_database_name }}"
     - "{{ janus_database_name }}"
     - grouper
     - authz-server
     - pdp-server
     - oidc-server
+    - aaserver
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
-    - { name: apisrw, db_name: apis, password: "{{ mysql_passwords.apis }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
     - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
+    - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
   development_user:
     - { name: development, password: development }
 
@@ -166,6 +166,10 @@ shibboleth_apps:
   pdp:
     entityID: "https://pdp.{{ base_domain }}/shibboleth"
     baseurl: ""
+  aa:
+    entityID: "https://aa.{{ base_domain }}/shibboleth"
+    baseurl: ""
+
 shib:
   engine_domain: "{{ base_domain }}"
 
@@ -186,6 +190,7 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:demo.openconext.org:"
+  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 teams_version: 4.2.1
 # teams_snapshot_timestamp: 20150519.080724-3
@@ -245,24 +250,6 @@ grouper:
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
 
-##
-# VM config for the apis app
-##
-apis:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-  user: apisrw
-  url: jdbc:mysql://{{ mysql_host }}:3306/apis
-  password: "{{ mysql_passwords.apis }}"
-  entity_id: https://apis.{{ base_domain }}
-  group_name: "{{ teams.group_name_context }}org:openconext:teams:managementvo"
-  admin_service:
-    resource_server_key: authorization-server-admin
-    resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
-  api:
-    consumer_key: https://apis.test.surfconext.nl
-    consumer_secret: "{{ apis_api_consumer_secret }}"
-
 mujina_idp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -281,6 +268,7 @@ authzserver:
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
 authz_server_version: 1.2
 #authz_server_snapshot_timestamp: 20150429.085158-60
@@ -394,16 +382,31 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
+      - clientId: "{{ aa.authz_client_id }}"
+        secret: "{{ aa_authz_client_secret }}"
+        scopes:
+          - groups
+          - attribute-aggregation
+          - saml-attribute-query
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.authz_checkToken_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
+    - clientId: pdp
+      secret: "{{ voot.oidc_checkToken_secret }}"
+    - clientId: "{{ aa.authz_resource_server_id }}"
+      secret: "{{ aa.authz_secret }}"
+
 ##
 # VM config for the authz-admin application
 ##
-authz_playground_version: 1.1
-authz_playground_snapshot_timestamp: 20151124.142135-2
+authz_playground_version: 1.2
+authz_playground_snapshot_timestamp: 20160204.074458-4
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
@@ -412,11 +415,11 @@ authzplayground:
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
 pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151120.123017-19"
+pdp_snapshot_timestamp: "20151222.101918-28"
 pdp_html_snapshot_timestamp: "20151222.102014-26"
-
 pdp_debug: true
 pdp:
   crt_name: "{{ tls_https.crt_name }}"
@@ -430,12 +433,39 @@ pdp:
   spring_profiles_active: test
   cache_policies: false
   include_inactive_policies: true
-# these shouldn't be relevant on a dev env.
+# these shouldn't be relevant on a dev env. Famous last words
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
   rollbar_environment: dev
   springapp_rollbar_apikey: "should not matter for a dev env"
+  rollbar_apikey: "should not matter for a dev env"
+
+aa_version: "0.1"
+aa_snapshot_timestamp: "20160120.123738-7"
+aa_html_snapshot_timestamp: "20160120.154538-10"
+
+aa_debug: true
+aa:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  eb_username: "eb"
+  eb_password: "{{ aa_eb_password }}"
+  db_user: aa-serverrw
+  db_password: "{{ mysql_passwords.aa_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: aaserver
+  authz_client_id: "https@//aa.test.surfconext.nl"
+  authz_resource_server_id: aa
+  authz_secret: "{{ aa_authz_client_secret }}"
+  oidc_client_id: "https@//aa.surfconext.test.nl"
+  oidc_secret: "{{ aa_oidc_client_secret }}"
+  spring_profiles_active: acc
+  sab_username: coin-test
+  sab_password: "{{ aa_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151229.105743-13"
@@ -563,6 +593,13 @@ loadbalancing:
         { label: "pdp_backend", ip: "192.168.66.79" },
       ]
     }
+  aa: {
+    port: 615,
+    heartbeat: { url: "/aa/api/health", method: "GET" },
+    servers: [
+      { label: "aa_backend", ip: "192.168.66.79" },
+    ]
+  }
 
 nginx_backend_ip: 127.0.0.1
 
@@ -584,6 +621,7 @@ nginx_ipv4_addresses:
   welcome: 192.168.66.78
   pdp: 192.168.66.78
   oidc: 192.168.66.78
+  aa: 192.168.66.78
 
 nginx_config_templates:
   - welcome
@@ -602,3 +640,4 @@ nginx_config_templates:
   - pdp
   - serviceregistry
   - oidc
+  - aa
