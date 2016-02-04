@@ -77,7 +77,7 @@ These are the steps the above script performs:
 We need pseudo-DNS entries so that your browser can reach the VM-platform we just installed. So, add this very long line to your `/etc/hosts` file:
 
 ```
-192.168.66.78  vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org profile.vm.openconext.org apis.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org oidc.vm.openconext.org
+192.168.66.78  vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org profile.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org oidc.vm.openconext.org aa.vm.openconext.org
 ```
 
 Here, the ip-address `192.168.66.78` refers to the address that is mentioned in ./Vagrantfile.
@@ -104,6 +104,13 @@ To update single applications - e.g. release - use:
 ```
 
 The secrets used by Ansible are externalized. For the VM the secrets are in this GitHub repo, for test in an internal SURF repo on the build server and for acc and prod the secrets are managed by Prolocation.
+
+# Making changes
+
+When making changes, please consider that people are continuously deploying
+vm's from master. Therefore, please do your best to keep HEAD in a working
+state, and make any invasive changes like adding new components or refactoring
+on a separate branch.
 
 # License
 

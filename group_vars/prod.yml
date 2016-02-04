@@ -10,19 +10,19 @@ databases:
   names:
     - teams
     - api
-    - apis
     - "{{ engine_database_name }}"
     - "{{ janus_database_name }}"
     - grouper
     - authz-server
+    - pdp-server
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
-    - { name: apisrw, db_name: apis, password: "{{ mysql_passwords.apis }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
     - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
+    - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
 
 # For apache, the same star-certificate is used.
 tls_https:
@@ -149,11 +149,14 @@ shibboleth_apps:
   "authz-admin":
     entityID: "https://authz-admin.{{ base_domain }}/shibboleth"
     baseurl: ""
+  pdp:
+    entityID: "https://pdp.{{ base_domain }}/shibboleth"
+    baseurl: ""
 shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.2.1
+teams_version: 4.2.6
 #teams_snapshot_timestamp: 20150420.152536-28
 
 api_version: 4.0.1
@@ -162,7 +165,7 @@ api_version: 4.0.1
 mujina_version: 4.0.2
 #mujina_snapshot_timestamp
 
-engine_version: 4.6.4
+engine_version: 4.7.5
 
 teams:
   crt_name: "{{ tls_https.crt_name }}"
@@ -171,7 +174,8 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:test.surfteams.nl:"
+  group_name_context: "urn:collab:group:surfteams.nl:"
+  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -218,21 +222,6 @@ grouper:
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
-
-apis:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-  user: apisrw
-  url: "jdbc:mysql://{{ mysql_host }}/apis"
-  password: "{{ mysql_passwords.apis }}"
-  entity_id: https://apis.{{ base_domain }}
-  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
-  admin_service:
-    resource_server_key: authorization-server-admin
-    resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
-  api:
-    consumer_key: https://apis.test.surfconext.nl
-    consumer_secret: "{{ apis_api_consumer_secret }}"
 
 mujina:
   crt_name: "{{ tls_https.crt_name }}"
@@ -359,6 +348,16 @@ authzadmin:
           - groups
         grantTypes:
           - client_credentials
+      - clientId: pdp_client
+        secret: "{{ pdp_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.authz_checkToken_secret }}"
@@ -373,6 +372,29 @@ authzplayground:
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+
+pdp_version: "1.0.0"
+#pdp_snapshot_timestamp: "20151209.153205-23"
+#pdp_html_snapshot_timestamp: "20151209.153243-21"
+
+pdp_debug: true
+pdp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  username: "pdp_admin"
+  password: "{{ pdp_password }}"
+  db_user: pdp-serverrw
+  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: pdp-server
+  spring_profiles_active: prod
+  cache_policies: true
+  include_inactive_policies: false
+  sab_username: coin-test
+  sab_password: "{{ pdp_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: prod
+  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 loadbalancing:
   engine: {
@@ -465,6 +487,15 @@ loadbalancing:
       { label: "prd63", ip: "145.100.191.203" },
     ]
   }
+  pdp: {
+    port: 613,
+    heartbeat: { url: "/pdp/api/health", method: "GET" },
+    servers: [
+      { label: "prd61", ip: "145.100.191.201" },
+      { label: "prd62", ip: "145.100.191.202" },
+      { label: "prd63", ip: "145.100.191.203" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
@@ -504,3 +535,4 @@ nginx_config_templates:
   - static
   - profile
   - serviceregistry
+  - pdp

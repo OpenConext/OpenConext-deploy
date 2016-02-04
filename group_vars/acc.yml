@@ -10,7 +10,6 @@ databases:
   names:
     - teams
     - api
-    - apis
     - "{{ engine_database_name }}"
     - "{{ janus_database_name }}"
     - grouper
@@ -20,7 +19,6 @@ databases:
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
-    - { name: apisrw, db_name: apis, password: "{{ mysql_passwords.apis }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
     - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
@@ -159,7 +157,7 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.2.1
+teams_version: 4.2.6
 #teams_snapshot_timestamp: 20150420.152536-28
 
 api_version: 4.0.1
@@ -168,7 +166,7 @@ api_version: 4.0.1
 mujina_version: 4.0.2
 #mujina_snapshot_timestamp
 
-engine_version: 4.6.4
+engine_version: 4.7.5
 
 teams:
   crt_name: "{{ tls_https.crt_name }}"
@@ -177,7 +175,8 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:test.surfteams.nl:"
+  group_name_context: "urn:collab:group:acc.surfteams.nl:"
+  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -224,21 +223,6 @@ grouper:
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
-
-apis:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-  user: apisrw
-  url: "jdbc:mysql://{{ mysql_host }}/apis"
-  password: "{{ mysql_passwords.apis }}"
-  entity_id: https://apis.{{ base_domain }}
-  group_name: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:managementvo
-  admin_service:
-    resource_server_key: authorization-server-admin
-    resource_server_secret: "{{ apis_admin_service_resource_server_secret }}"
-  api:
-    consumer_key: https://apis.test.surfconext.nl
-    consumer_secret: "{{ apis_api_consumer_secret }}"
 
 mujina:
   crt_name: "{{ tls_https.crt_name }}"
@@ -359,9 +343,9 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151209.153205-23"
-pdp_html_snapshot_timestamp: "20151209.153243-21"
+pdp_version: "1.0.0"
+#pdp_snapshot_timestamp: "20151209.153205-23"
+#pdp_html_snapshot_timestamp: "20151209.153243-21"
 
 pdp_debug: true
 pdp:
@@ -373,12 +357,14 @@ pdp:
   db_password: "{{ mysql_passwords.pdp_server }}"
   db_host: "{{ mysql_host }}"
   db_name: pdp-server
-  spring_profiles_active: test
-  cache_policies: false
-  include_inactive_policies: true
+  spring_profiles_active: acc
+  cache_policies: true
+  include_inactive_policies: false
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: acc
+  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151126.151623-11"
@@ -474,6 +460,14 @@ loadbalancing:
       { label: "acc62", ip: "145.100.191.136" },
     ]
   }
+  pdp: {
+    port: 613,
+    heartbeat: { url: "/pdp/api/health", method: "GET" },
+    servers: [
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET"},
@@ -513,3 +507,4 @@ nginx_config_templates:
   - static
   - profile
   - serviceregistry
+  - pdp

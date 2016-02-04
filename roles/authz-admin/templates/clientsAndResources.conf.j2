@@ -7,11 +7,13 @@ clients = [
     {% if client.redirectUri is defined %}
       redirectUri= "{{ client.redirectUri}}"
     {% endif %}
+    {% if client.resourceIds is defined %}
     resourceIds = [
       {% for value in client.resourceIds %}
       "{{ value }}"
       {% endfor %}
     ]
+    {% endif %}
     scopes = [
       {% for value in client.scopes %}
       "{{ value }}"

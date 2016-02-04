@@ -19,6 +19,7 @@
     - "db.vm.openconext.org"
     - "pdp.vm.openconext.org"
     - "engine-api.vm.openconext.org"
+    - "aa.vm.openconext.org"
 
 - name: Use IPv4 rather than IPv6 for http://dowloads.opensuse.org
   lineinfile: dest=/etc/hosts line="{{ item }}"

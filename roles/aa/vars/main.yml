@@ -1,0 +1,15 @@
+springapp_artifact_id: aa-server
+springapp_artifact_type: jar
+springapp_artifact_group_dir: /org/openconext
+springapp_version: "{{ aa_version }}"
+springapp_snapshot_timestamp: "{{ aa_snapshot_timestamp }}"
+springapp_dir: "{{ aa_dir }}"
+springapp_user: aa
+springapp_service_name: aa
+springapp_jar: "{{ aa_jar }}"
+springapp_tcpport: 9198
+springapp_local_jar: "{{ aa_local_jar }}"
+springapp_debug: "{{ aa_debug }}"
+springapp_debug_port: 1198
+springapp_heapsize: "512m"
+springapp_rollbar_apiKey: "{{ aa.rollbar_apiKey }}"
