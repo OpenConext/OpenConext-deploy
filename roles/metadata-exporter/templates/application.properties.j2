@@ -1,0 +1,31 @@
+logging.config=file://{{ metadata_exporter_dir }}/logback.xml
+server.port={{ springapp_tcpport }}
+
+spring.profiles.active=prod
+
+spring.datasource.url=jdbc:mysql://{{ metadata_exporter.db_host }}/{{ metadata_exporter.db_name }}
+spring.datasource.username={{ metadata_exporter.db_user }}
+spring.datasource.password={{ metadata_exporter.db_password }}
+spring.datasource.driverClassName=com.mysql.jdbc.Driver
+spring.datasource.validation-query=SELECT 1
+spring.datasource.testWhileIdle=true
+
+flyway.enabled=false
+
+metadata.refresh.minutes=15
+
+client.username=metadata.client
+client.password={{ metadata_exporter_password }}
+
+endpoints.enabled=false
+endpoints.health.enabled=true
+spring.mvc.favicon.enabled=false
+endpoints.jmx.enabled=false
+
+logging.level.me=DEBUG
+
+#enable for debugging information
+
+#logging.level.org.springframework.security=DEBUG
+#logging.level.org.hibernate.SQL=DEBUG
+#logging.level.org.hibernate.type=TRACE

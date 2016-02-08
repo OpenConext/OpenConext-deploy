@@ -1,0 +1,15 @@
+springapp_artifact_id: metadata-exporter
+springapp_artifact_type: jar
+springapp_artifact_group_dir: /org/openconext
+springapp_version: "{{ metadata_exporter_version }}"
+springapp_snapshot_timestamp: "{{ metadata_exporter_snapshot_timestamp }}"
+springapp_dir: "{{ metadata_exporter_dir }}"
+springapp_user: metadata-exporter
+springapp_service_name: metadata-exporter
+springapp_jar: "{{ metadata_exporter_jar }}"
+springapp_tcpport: 9199
+springapp_local_jar: "{{ metadata_exporter_local_jar }}"
+springapp_debug: "{{ metadata_exporter_debug }}"
+springapp_debug_port: 1299
+springapp_heapsize: "64m"
+springapp_rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"

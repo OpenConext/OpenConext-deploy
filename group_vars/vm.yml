@@ -474,6 +474,17 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.{{ base_domain }}
 
+metadata_exporter_version: "0.1"
+metadata_exporter_snapshot_timestamp: "20160208.084759-3"
+metadata_exporter:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  db_user: srrw
+  db_password: "{{ mysql_passwords.sr }}"
+  db_host: "{{ mysql_host }}"
+  db_name: sr
+  password: "{{ metadata_exporter_password }}"
+
 loadbalancing:
   engine: {
     port: 401,
@@ -594,6 +605,13 @@ loadbalancing:
       { label: "aa_backend", ip: "192.168.66.79" },
     ]
   }
+  metadata_exporter: {
+    port: 616,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "metadata_exporter_backend", ip: "192.168.66.79" },
+    ]
+  }
 
 nginx_backend_ip: 127.0.0.1
 
@@ -616,6 +634,7 @@ nginx_ipv4_addresses:
   pdp: 192.168.66.78
   oidc: 192.168.66.78
   aa: 192.168.66.78
+  metadata_exporter: 192.168.66.78
 
 nginx_config_templates:
   - welcome
@@ -635,3 +654,4 @@ nginx_config_templates:
   - serviceregistry
   - oidc
   - aa
+  - metadata_exporter

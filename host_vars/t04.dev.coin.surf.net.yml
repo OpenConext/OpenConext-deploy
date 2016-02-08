@@ -11,3 +11,4 @@ apache_app_listen_address:
   pdp: 145.100.191.117
   oidc: 145.100.191.117
   aa: 145.100.191.117
+  metadata_exporter: 145.100.191.117
