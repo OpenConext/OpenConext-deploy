@@ -451,8 +451,8 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.test.surfconext.nl
 
-metadata_exporter_version: "0.1"
-metadata_exporter_snapshot_timestamp: "20160208.084759-3"
+metadata_exporter_version: "1.0.0"
+#metadata_exporter_snapshot_timestamp: "20160208.084759-3"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"

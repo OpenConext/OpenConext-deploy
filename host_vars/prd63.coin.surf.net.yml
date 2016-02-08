@@ -7,3 +7,5 @@ apache_app_listen_address:
   voot: 145.100.191.203
   aa: 145.100.191.203
   pdp: 145.100.191.203
+  oidc: 145.100.191.203
+  metadata_exporter: 145.100.191.203

@@ -378,6 +378,16 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.acc.surfconext.nl
 
+metadata_exporter_version: "1.0.0"
+metadata_exporter:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  db_user: srrw
+  db_password: "{{ mysql_passwords.sr }}"
+  db_host: "{{ mysql_host }}"
+  db_name: sr
+  password: "{{ metadata_exporter_password }}"
+
 loadbalancing:
   engine: {
     port: 401,
@@ -467,6 +477,30 @@ loadbalancing:
       { label: "acc62", ip: "145.100.191.136" },
     ]
   }
+  aa: {
+    port: 615,
+    heartbeat: { url: "/aa/api/health", method: "GET" },
+    servers: [
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
+    ]
+  }
+  metadata_exporter: {
+    port: 616,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
+    ]
+  }
+  oidc: {
+    port: 617,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET"},
@@ -493,6 +527,10 @@ nginx_ipv4_addresses:
   voot: 145.100.191.145
   grouper: 145.100.191.144
   pdp: 145.100.191.143
+  oidc: ???
+  aa: ???
+  metadata_exporter: ???
+
 
 nginx_config_templates:
   - engine
@@ -507,3 +545,6 @@ nginx_config_templates:
   - profile
   - serviceregistry
   - pdp
+  - oidc
+  - aa
+  - metadata-exporter

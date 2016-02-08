@@ -395,6 +395,16 @@ pdp:
   rollbar_environment: prod
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
+metadata_exporter_version: "1.0.0"
+metadata_exporter:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  db_user: srrw
+  db_password: "{{ mysql_passwords.sr }}"
+  db_host: "{{ mysql_host }}"
+  db_name: sr
+  password: "{{ metadata_exporter_password }}"
+
 loadbalancing:
   engine: {
     port: 401,
@@ -489,6 +499,33 @@ loadbalancing:
   pdp: {
     port: 613,
     heartbeat: { url: "/pdp/api/health", method: "GET" },
+    servers: [
+      { label: "prd61", ip: "145.100.191.201" },
+      { label: "prd62", ip: "145.100.191.202" },
+      { label: "prd63", ip: "145.100.191.203" },
+    ]
+  }
+  aa: {
+    port: 615,
+    heartbeat: { url: "/aa/api/health", method: "GET" },
+    servers: [
+      { label: "prd61", ip: "145.100.191.201" },
+      { label: "prd62", ip: "145.100.191.202" },
+      { label: "prd63", ip: "145.100.191.203" },
+    ]
+  }
+  metadata_exporter: {
+    port: 616,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "prd61", ip: "145.100.191.201" },
+      { label: "prd62", ip: "145.100.191.202" },
+      { label: "prd63", ip: "145.100.191.203" },
+    ]
+  }
+  oidc: {
+    port: 617,
+    heartbeat: { url: "/", method: "HEAD" },
     servers: [
       { label: "prd61", ip: "145.100.191.201" },
       { label: "prd62", ip: "145.100.191.202" },
