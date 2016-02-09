@@ -395,7 +395,7 @@ pdp:
   rollbar_environment: prod
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-metadata_exporter_version: "1.0.0"
+metadata_exporter_version: "1.0.1"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -404,6 +404,7 @@ metadata_exporter:
   db_host: "{{ mysql_host }}"
   db_name: sr
   password: "{{ metadata_exporter_password }}"
+  rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"
 
 loadbalancing:
   engine: {

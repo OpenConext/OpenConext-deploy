@@ -389,8 +389,8 @@ authzplayground:
   rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
 pdp_version: 1.0.3
-pdp_snapshot_timestamp: 20160208.145307-1
-pdp_html_snapshot_timestamp: 20160208.145620-1
+pdp_snapshot_timestamp: 20160209.084231-2
+pdp_html_snapshot_timestamp: 20160209.084315-2
 #pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
@@ -413,8 +413,8 @@ pdp:
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 aa_version: "0.1"
-aa_snapshot_timestamp: "20160208.120749-14"
-aa_html_snapshot_timestamp: "20160208.120853-15"
+aa_snapshot_timestamp: "20160209.084449-15"
+aa_html_snapshot_timestamp: "20160209.084551-16"
 
 aa_debug: true
 aa:
@@ -451,7 +451,7 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.test.surfconext.nl
 
-metadata_exporter_version: "1.0.0"
+metadata_exporter_version: "1.0.1"
 #metadata_exporter_snapshot_timestamp: "20160208.084759-3"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
@@ -461,6 +461,7 @@ metadata_exporter:
   db_host: "{{ mysql_host }}"
   db_name: sr
   password: "{{ metadata_exporter_password }}"
+  rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"
 
 loadbalancing:
   engine: {
