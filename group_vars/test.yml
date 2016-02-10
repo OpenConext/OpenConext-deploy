@@ -157,8 +157,8 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.2.6
-#teams_snapshot_timestamp: 20150915.083452-1
+teams_version: 4.2.7
+teams_snapshot_timestamp: 20160210.111305-1
 
 api_version: 4.0.1
 #api_snapshot_timestamp: 20150419.220130-443
@@ -414,7 +414,7 @@ pdp:
 
 aa_version: "0.1"
 aa_snapshot_timestamp: "20160209.121055-16"
-aa_html_snapshot_timestamp: "20160209.084551-16"
+aa_html_snapshot_timestamp: "20160209.135704-17"
 
 aa_debug: true
 aa:
