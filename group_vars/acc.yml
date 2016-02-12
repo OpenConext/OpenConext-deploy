@@ -157,7 +157,7 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.2.1
+teams_version: 4.2.6
 #teams_snapshot_timestamp: 20150420.152536-28
 
 api_version: 4.0.1
@@ -175,7 +175,8 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:test.surfteams.nl:"
+  group_name_context: "urn:collab:group:acc.surfteams.nl:"
+  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -337,14 +338,14 @@ authz_playground_version: 1.1
 authzplayground:
   springapp_authz_client_id: cool_app_id
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
-  springapp_oidc_client_id: https@//oidc.acc.surfconext.nl
+  springapp_oidc_client_id: https@//oidc.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151209.153205-23"
-pdp_html_snapshot_timestamp: "20151209.153243-21"
+pdp_version: "1.0.2"
+#pdp_snapshot_timestamp: "20151209.153205-23"
+#pdp_html_snapshot_timestamp: "20151209.153243-21"
 
 pdp_debug: true
 pdp:
@@ -356,12 +357,14 @@ pdp:
   db_password: "{{ mysql_passwords.pdp_server }}"
   db_host: "{{ mysql_host }}"
   db_name: pdp-server
-  spring_profiles_active: test
-  cache_policies: false
-  include_inactive_policies: true
+  spring_profiles_active: acc
+  cache_policies: true
+  include_inactive_policies: false
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: acc
+  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151126.151623-11"
@@ -375,6 +378,17 @@ oidc:
   db_host: "{{ mysql_host }}"
   db_name: oidc-server
   sp_entity_id: https://oidc.acc.surfconext.nl
+
+metadata_exporter_version: "1.0.1"
+metadata_exporter:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  db_user: srrw
+  db_password: "{{ mysql_passwords.sr }}"
+  db_host: "{{ mysql_host }}"
+  db_name: sr
+  password: "{{ metadata_exporter_password }}"
+  rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"
 
 loadbalancing:
   engine: {
@@ -457,6 +471,38 @@ loadbalancing:
       { label: "acc62", ip: "145.100.191.136" },
     ]
   }
+  pdp: {
+    port: 613,
+    heartbeat: { url: "/pdp/api/health", method: "GET" },
+    servers: [
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
+    ]
+  }
+  aa: {
+    port: 615,
+    heartbeat: { url: "/aa/api/health", method: "GET" },
+    servers: [
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
+    ]
+  }
+  metadata_exporter: {
+    port: 616,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
+    ]
+  }
+  oidc: {
+    port: 617,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "acc61", ip: "145.100.191.135" },
+      { label: "acc62", ip: "145.100.191.136" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET"},
@@ -483,6 +529,10 @@ nginx_ipv4_addresses:
   voot: 145.100.191.145
   grouper: 145.100.191.144
   pdp: 145.100.191.143
+  oidc: ???
+  aa: ???
+  metadata_exporter: ???
+
 
 nginx_config_templates:
   - engine
@@ -496,3 +546,7 @@ nginx_config_templates:
   - static
   - profile
   - serviceregistry
+  - pdp
+  - oidc
+  - aa
+  - metadata-exporter

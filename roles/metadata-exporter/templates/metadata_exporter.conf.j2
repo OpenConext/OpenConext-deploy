@@ -1,0 +1,11 @@
+Listen {{ apache_app_listen_address.metadata_exporter }}:{{ loadbalancing.metadata_exporter.port }}
+<VirtualHost {{ apache_app_listen_address.metadata_exporter }}:{{ loadbalancing.metadata_exporter.port }}>
+    ServerName https://multidata.{{ base_domain }}
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Metadata-Exporter'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Metadata-Exporter'" combined
+
+    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
+
+</VirtualHost>

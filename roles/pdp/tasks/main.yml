@@ -18,7 +18,6 @@
   file: src=/var/www/pdp/pdp-gui-{{ pdp_local_html_version }} dest=/var/www/pdp/current state=link force=yes
   tags: pdp
   when: pdp_local_html_version != ''
-  notify: restart httpd
 
 - name: download html archive
   get_url:
@@ -34,13 +33,11 @@
   unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz dest=/var/www/pdp/ copy=no
   tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
-  notify: restart httpd
 
 - name: create symlink to downloaded version
   file: src=/var/www/pdp/pdp-gui-{{ pdp_version }} dest=/var/www/pdp/current state=link force=yes
   tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
-  notify: restart httpd
 
 - name: remove downloaded version
   file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz state=absent
@@ -66,7 +63,6 @@
   file: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-SNAPSHOT dest=/var/www/pdp/current state=link force=yes
   tags: pdp
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
-  notify: restart httpd
 
 - name: remove downloaded snapshot version
   file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz state=absent
@@ -76,7 +72,7 @@
 - name: copy virtual host config
   template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
   tags: pdp
-  notify: restart httpd
+  notify: reload httpd
 
 - name: Copy start script
   template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
@@ -108,10 +104,6 @@
 - name: Copy xacml config
   template: src=xacml.conext.properties.j2 dest={{ pdp_dir }}/xacml.conext.properties owner=pdp group=pdp mode=0740
   notify: restart pdp
-
-- name: copy apache config
-  template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
-  notify: reload httpd
 
 # no idea why this is necessary, as the init script returns an ok status also
 # if pdp is still initializing.  Waiting for the port to open works well

@@ -1048,6 +1048,11 @@ janus_service_registry_core:
                 default: false
                 default_allow: true
                 required: false
+            'coin:attribute_aggregation_required':
+                type: boolean
+                default: false
+                default_allow: true
+                required: false
     workflow:
         testaccepted:
             prodaccepted:

@@ -6,3 +6,7 @@ apache_app_listen_address:
   grouper: 145.100.191.136
   teams: 145.100.191.136
   voot: 145.100.191.136
+  aa: 145.100.191.136
+  pdp: 145.100.191.136
+  oidc: 145.100.191.136
+  metadata_exporter: 145.100.191.136

@@ -1,0 +1,50 @@
+Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
+<Virtualhost {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}>
+    # General setup for the virtual host, inherited from global configuration
+    ServerName https://aa.{{ base_domain }}
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-AA'"
+	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-AA'" combined
+
+    RewriteEngine on
+
+    RewriteCond %{REQUEST_URI} !\.html$
+    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.svg$
+    RewriteCond %{REQUEST_URI} !\.css$
+    RewriteCond %{REQUEST_URI} !\.png$
+    RewriteCond %{REQUEST_URI} !\.gif$
+    RewriteCond %{REQUEST_URI} !\.jpeg$
+    RewriteCond %{REQUEST_URI} !\.ico$
+    RewriteCond %{REQUEST_URI} !aa
+    RewriteCond %{REQUEST_URI} !fonts
+    RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
+
+    ProxyPass /Shibboleth.sso !
+    ProxyPass /aa/api http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse /aa/api http://localhost:{{ springapp_tcpport }}/
+
+    DocumentRoot /var/www/aa/current
+
+    <Directory /var/www/aa/current>
+      Order       allow,deny
+      Allow       from all
+      Options     -Indexes
+    </Directory>
+
+
+    # Enable shibboleth for all other URLs, but the SCIM endpoints, EB endpoint and health check
+    <Location ~ "/aa/api/(attribute/aggregate|health|v2/ServiceProviderConfig|v2/ResourceType|v2/Schema|v2/Me)">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location />
+      AuthType shibboleth
+      ShibUseHeaders On
+      ShibRequestSetting applicationId aa
+      ShibRequireSession On
+      require valid-user
+    </Location>
+
+</VirtualHost>
