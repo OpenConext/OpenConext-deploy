@@ -40,11 +40,8 @@ period.policies.refresh.minutes=10
 period.metadata.refresh.minutes=10
 
 # The URL where the metadata is available
-metadata.username=metadata.client
-metadata.password={{ metadata_exporter_password }}
-metadata.refresh.minutes=10
-metadata.spRemotePath=https://multidata.{{ base_domain }}/service-providers.json
-metadata.idpRemotePath=https://multidata.{{ base_domain }}/identity-providers.json
+metadata.idpRemotePath=http://mgnt03.coin.surf.net/export/saml20-idp-remote.json
+metadata.spRemotePath=http://mgnt03.coin.surf.net/export/saml20-sp-remote.json
 
 # Number of days how long the policy violations are retained
 policy.violation.retention.period.days=30
