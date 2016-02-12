@@ -60,8 +60,8 @@
   file:
     path={{ item }}
     state=directory
-    owner={{ engine_fpm_user }}
-    group={{ engine_fpm_user }}
+    owner={{ serviceregistry_fpm_user }}
+    group={{ serviceregistry_fpm_user }}
   with_items:
     - "{{ janus_cache_path }}"
     - "{{ janus_cache_path }}/janus"
@@ -73,9 +73,9 @@
   file:
     path=/var/log/janus-ssp/janus
     state=directory
-    owner={{ engine_fpm_user }}
-    group={{ engine_fpm_user }}
-    notify:
+    owner={{ serviceregistry_fpm_user }}
+    group={{ serviceregistry_fpm_user }}
+  notify:
         - restart httpd
         - restart memcached
 

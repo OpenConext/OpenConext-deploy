@@ -2,8 +2,8 @@ Listen {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.servicer
 <Virtualhost {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.serviceregistry.port }}>
     ServerAdmin {{ apache_server_admin}}
 
-    DocumentRoot {{ engine_current_release_symlink }}/web
-    ServerName   {{ engine_domain }}
+    DocumentRoot {{ janus_installation_current_release_symlink }}/simplesamlphp/www
+    ServerName   {{ janus_domain }}
 
     Alias /simplesaml {{ janus_installation_current_release_symlink }}/simplesamlphp/www
     Alias /janus {{ janus_installation_current_release_symlink }}/simplesamlphp/modules/janus/web
@@ -13,7 +13,9 @@ Listen {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.servicer
 
 
     #Proxy the requests to FPM 
-    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:{{ serviceregistry_fpm_port }}/{{ janus_installation_current_release_symlink }}/web/$1
+<FilesMatch \.php$>
+  SetHandler "proxy:fcgi://127.0.0.1:804"
+</FilesMatch>
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EB'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB'" combined

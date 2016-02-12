@@ -1,5 +1,5 @@
-; Create a new pool named engine.
-[engine]
+; Create a new pool named serviceregistry.
+[serviceregistry]
 
 ; The address on which to accept FastCGI requests.
 ; Valid syntaxes are:
@@ -11,7 +11,7 @@
 ; Note: This value is mandatory.
 
 ; Use unix socket
-listen = 127.0.0.1:{{ engine_fpm_port }}
+listen = 127.0.0.1:{{ serviceregistry_fpm_port }}
 
 ; Set listen(2) backlog. A value of '-1' means unlimited.
 ; Default Value: -1
@@ -37,8 +37,8 @@ listen.allowed_clients = 127.0.0.1
 ; Unix user/group of processes
 ; Note: The user is mandatory. If the group is not set, the default user's group
 ;       will be used.
-user = {{ engine_fpm_user }}
-group = {{ engine_fpm_user }}
+user = {{ serviceregistry_fpm_user }}
+group = {{ serviceregistry_fpm_user }}
 
 ; Choose how the process manager will control the number of child processes.
 ; Possible Values:
@@ -216,10 +216,10 @@ slowlog = /var/log/php-fpm/www-slow.log
 ;                specified at startup with the -d argument
 ;php_admin_value[sendmail_path] = /usr/sbin/sendmail -t -i -f www@my.domain.com
 ;php_flag[display_errors] = off
-php_admin_value[error_log] = /var/log/php-fpm/engine-error.log
+php_admin_value[error_log] = /var/log/php-fpm/serviceregistry-error.log
 php_admin_flag[log_errors] = on
 ;php_admin_value[memory_limit] = 128M
 
 ; Set session path to a directory owned by process user
 php_value[session.save_handler] = files
-php_value[session.save_path] = /var/lib/php/session/engine
+php_value[session.save_path] = /var/lib/php/session/serviceregistry

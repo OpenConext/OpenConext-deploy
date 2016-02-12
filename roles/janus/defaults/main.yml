@@ -73,3 +73,8 @@ janus_ssp_idp_sso_service: "https://engine.{{ base_domain }}/authentication/idp/
 janus_ssp_title_suffix:
 
 janus_domain: serviceregistry.{{ base_domain }}
+
+# Default port for Janus FPM to listen on
+serviceregistry_fpm_port: 804
+# Serviceregistry username 
+serviceregistry_fpm_user: serviceregistry
