@@ -389,8 +389,8 @@ authzplayground:
   rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
 pdp_version: 1.0.3
-pdp_snapshot_timestamp: 20160209.084231-2
-pdp_html_snapshot_timestamp: 20160209.084315-2
+pdp_snapshot_timestamp: 20160212.090819-5
+pdp_html_snapshot_timestamp: 20160212.075613-4
 #pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
@@ -413,7 +413,7 @@ pdp:
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 aa_version: "0.1"
-aa_snapshot_timestamp: "20160212.074448-19"
+aa_snapshot_timestamp: "20160212.090929-21"
 aa_html_snapshot_timestamp: "20160209.135704-17"
 
 aa_debug: true
