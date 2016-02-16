@@ -388,9 +388,9 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
   rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: 1.0.3
-pdp_snapshot_timestamp: 20160212.090819-5
-pdp_html_snapshot_timestamp: 20160212.075613-4
+pdp_version: 1.0.4
+pdp_snapshot_timestamp: 20160216.135430-1
+pdp_html_snapshot_timestamp: 20160216.135448-1
 #pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
@@ -405,7 +405,6 @@ pdp:
   db_name: pdp-server
   spring_profiles_active: test
   cache_policies: false
-  include_inactive_policies: true
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
