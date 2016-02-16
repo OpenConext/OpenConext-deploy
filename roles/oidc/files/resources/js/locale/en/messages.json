@@ -488,7 +488,7 @@
         },
         "welcome" : {
             "title": "Welcome",
-            "body": "OpenID Connect (OIDC) is an identity protocol built on top of the OAuth2 authorization framework. With OIDC SURFconext it is possible for Service Providers to join the SURFnet federation without having to implement the SAML2 protocol."
+            "body": "OpenID Connect (OIDC) is an identity protocol built on top of the OAuth2 authorization framework. With OIDC SURFconext it is possible for Service Providers to join the SURFnet federation without having to implement the SAML2 protocol. Endpoints are available for Service Providers to retrieve personal attributes for a user"
         }
     }
 }
