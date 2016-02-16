@@ -438,8 +438,8 @@ aa:
   rollbar_environment: test
   rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
-oidc_version: "0.1"
-oidc_snapshot_timestamp: "20160216.122343-18"
+oidc_version: "1.0.0"
+#oidc_snapshot_timestamp: "20160216.122343-18"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
