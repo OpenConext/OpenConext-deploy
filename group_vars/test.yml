@@ -439,7 +439,7 @@ aa:
   rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
 oidc_version: "0.1"
-oidc_snapshot_timestamp: "20160210.190042-14"
+oidc_snapshot_timestamp: "20160216.104057-16"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
