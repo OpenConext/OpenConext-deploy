@@ -276,8 +276,8 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.6
-voot_snapshot_timestamp: 20160218.102010-1
+voot_version: 1.6.1
+#voot_snapshot_timestamp: 20160218.102010-1
 voot_debug: true
 
 authz_admin_version: 1.3.4
