@@ -299,9 +299,9 @@ authzadmin:
         secret: "{{ authzplayground.springapp_client_secret }}"
         resourceIds:
           - groups
-          - members
         scopes:
           - groups
+          - members
         grantTypes:
           - authorization_code
           - implicit
