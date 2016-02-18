@@ -241,7 +241,7 @@ authzserver:
   rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
 authz_server_version: 1.3.3
-authz_server_snapshot_timestamp: "20160126.144433-4"
+#authz_server_snapshot_timestamp: "20160126.144433-4"
 authz_server_debug: true
 
 voot:
