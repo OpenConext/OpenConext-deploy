@@ -372,7 +372,7 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
-      - clientId: pdp
+      - clientId: pdp_client
         secret: "{{ pdp_client_secret }}"
         resourceIds:
           - groups
