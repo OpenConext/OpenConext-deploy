@@ -67,17 +67,19 @@
   roles:
     - tomcat
     - java
-    - { role: shibboleth,       tags: ['shib'   ] }
-    - { role: grouper,          tags: ['grouper'] }
-    - { role: teams,            tags: ['teams'  ] }
-    - { role: mujina-idp,       tags: ['legacy' ] }
-    - { role: mujina-sp,        tags: ['legacy' ] }
-    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
-    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
-    - { role: voot,             tags: ['oauth', 'voot'            ] }
-    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
-    - { role: pdp,              tags: ['pdp'] }
+    - { role: shibboleth,        tags: ['shib'   ] }
+    - { role: grouper,           tags: ['grouper'] }
+    - { role: teams,             tags: ['teams'  ] }
+    - { role: mujina-idp,        tags: ['legacy' ] }
+    - { role: mujina-sp,         tags: ['legacy' ] }
+    - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,              tags: ['oauth', 'voot'            ] }
+    - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
+    - { role: pdp,               tags: ['pdp'] }
     - { role: oidc,              tags: ['oidc'] }
+    - { role: aa,                tags: ['aa'] }
+    - { role: metadata-exporter, tags: ['metadata-exporter']}
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

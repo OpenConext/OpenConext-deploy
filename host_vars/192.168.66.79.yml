@@ -17,3 +17,6 @@ apache_app_listen_address:
   aa: 192.168.66.79
   welcome: 192.168.66.79
   oidc: 192.168.66.79
+  aa: 192.168.66.79
+  metadata_exporter: 192.168.66.79
+

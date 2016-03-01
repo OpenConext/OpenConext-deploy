@@ -30,8 +30,8 @@ janus_version: 1.20.5
 teams_version: 4.0.11
 api_version: 4.0.1
 mujina_version: 4.0.2
-voot_version: 1.2.1
-authz_server_version: 1.2
+voot_version: 1.6.1
+authz_server_version: 1.3.3
 authz_admin_version: 1.3.1
 authz_playground_version: 1
 
@@ -191,7 +191,7 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:connect.surfteams.nl:"
+  group_name_context: "urn:collab:group:connect.surfconext.nl:"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -270,9 +270,14 @@ authzserver:
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  resource_checking_secret: "{{ voot_resource_checking_secret }}"
-  oauth_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
-  oauth_checkToken_clientId: "vootservice"
+  authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
+  authz_checkToken_clientId: "vootservice"
+  authz_checkToken_secret: "{{ voot_resource_checking_secret}}"
+  # note: oidc endpoints are defined here because the voot component requires
+  # them.  OIDC is not yes deployed on DIY!
+  oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
+  oidc_checkToken_clientId: "https@//oidc.test.surfconext.nl"
+  oidc_checkToken_secret: "[not defined]"
   externalGroupProviders:
     - {
         type: "grouper",
@@ -297,6 +302,7 @@ authzadmin:
           - groups
         scopes:
           - groups
+          - members
         grantTypes:
           - authorization_code
           - implicit
@@ -351,7 +357,7 @@ authzadmin:
           - client_credentials
   defaultResourceServers:
     - clientId: vootservice
-      secret: "{{ voot.resource_checking_secret }}"
+      secret: "{{ voot.authz_checkToken_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
 

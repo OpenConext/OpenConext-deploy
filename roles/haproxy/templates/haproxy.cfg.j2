@@ -220,6 +220,17 @@ frontend aa 127.0.0.1:{{ loadbalancing.aa.port }}
     default_backend     aa_be
 
 #---------------------------------------------------------------------
+# Metadata Exporter frontend
+#---------------------------------------------------------------------
+frontend metadata_exporter 127.0.0.1:{{ loadbalancing.metadata_exporter.port }}
+
+    capture cookie JSESSIONID len 52
+
+    acl url_all         path_beg        -i /
+    use_backend         metadata_exporter_be        if url_all
+    default_backend     metadata_exporter_be
+
+#---------------------------------------------------------------------
 # engine backend
 #---------------------------------------------------------------------
 backend engine_be
@@ -494,6 +505,24 @@ backend aa_be
     server {{ server.label }} {{ server.ip }}:{{ loadbalancing.aa.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 
+#---------------------------------------------------------------------
+# Metadata Exporter backend
+#---------------------------------------------------------------------
+backend metadata_exporter_be
+
+    option httpchk {{ loadbalancing.metadata_exporter.heartbeat.method }} {{ loadbalancing.metadata_exporter.heartbeat.url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in loadbalancing.metadata_exporter.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.metadata_exporter.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
 
 # Statistics
 listen stats 127.0.0.1:9000       #Listen on all IP's on port 9000

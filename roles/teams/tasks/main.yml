@@ -45,6 +45,14 @@
   sudo_user: "{{ springapp_user }}"
   when: grouper_client_config_result.changed or (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
 
+- name: copy locale languages files
+  copy: src=WEB-INF dest={{ teams_dir }} owner="{{ springapp_user }}" group="{{ springapp_user }}" mode=0740
+
+- name: replace language files in war
+  shell: jar -uvf $(readlink teams-current.war) ./WEB-INF/ chdir={{ teams_dir }}
+  sudo_user: "{{ springapp_user }}"
+  when: (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
+
 - name: copy grouper provision script for teams
   copy: src={{ item }} dest=~/{{ item }}
   with_items:

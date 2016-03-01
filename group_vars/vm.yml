@@ -406,20 +406,20 @@ authzadmin:
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1.2
-authz_playground_snapshot_timestamp: 20160204.074458-4
+authz_playground_snapshot_timestamp: "20160204.074458-4"
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
-  springapp_oidc_client_id: https@//oidc.local.surfconext.nl
+  springapp_oidc_client_id: https@//oidc.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151222.101918-28"
-pdp_html_snapshot_timestamp: "20151222.102014-26"
+pdp_version: "1.0.2"
+#pdp_snapshot_timestamp: "20151222.101918-28"
+#pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
 pdp:
   crt_name: "{{ tls_https.crt_name }}"
@@ -433,7 +433,6 @@ pdp:
   spring_profiles_active: test
   cache_policies: false
   include_inactive_policies: true
-# these shouldn't be relevant on a dev env. Famous last words
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
@@ -479,6 +478,17 @@ oidc:
   db_host: "{{ mysql_host }}"
   db_name: oidc-server
   sp_entity_id: https://oidc.{{ base_domain }}
+
+metadata_exporter_version: "0.1"
+metadata_exporter_snapshot_timestamp: "20160208.084759-3"
+metadata_exporter:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  db_user: srrw
+  db_password: "{{ mysql_passwords.sr }}"
+  db_host: "{{ mysql_host }}"
+  db_name: sr
+  password: "{{ metadata_exporter_password }}"
 
 loadbalancing:
   engine: {
@@ -600,6 +610,13 @@ loadbalancing:
       { label: "aa_backend", ip: "192.168.66.79" },
     ]
   }
+  metadata_exporter: {
+    port: 616,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "metadata_exporter_backend", ip: "192.168.66.79" },
+    ]
+  }
 
 nginx_backend_ip: 127.0.0.1
 
@@ -622,6 +639,7 @@ nginx_ipv4_addresses:
   pdp: 192.168.66.78
   oidc: 192.168.66.78
   aa: 192.168.66.78
+  metadata_exporter: 192.168.66.78
 
 nginx_config_templates:
   - welcome
@@ -641,3 +659,4 @@ nginx_config_templates:
   - serviceregistry
   - oidc
   - aa
+  - metadata_exporter
