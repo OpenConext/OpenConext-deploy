@@ -3,7 +3,8 @@
   file: state=link src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime force=True
 
 - name: Add Epel repo
-  yum: name=http://ftp.nluug.nl/pub/os/Linux/distr/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
+  yum: name=epel-release state=present
+#  yum: name=http://ftp.nluug.nl/pub/os/Linux/distr/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
 
 - name: Install tools / clients
   yum: name={{ item }} state=present
@@ -47,7 +48,7 @@
 
 - name: check SELinux status
   shell: "
-         /usr/sbin/sestatus | egrep '^SELinux status: *disabled' 
+         /usr/sbin/sestatus | egrep '^SELinux status: *disabled'
       || /usr/sbin/sestatus | egrep '^Current mode: *permissive'
     "
   when: selinux_binaries.stat.exists == True
