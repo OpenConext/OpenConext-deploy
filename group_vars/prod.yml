@@ -35,7 +35,7 @@ janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
-
+janus_ssp_title_suffix: "SURFconext productie"
 
 engine_idp_debugging_email_address: "conext-beheer@surfnet.nl"
 engine_syslog_priority: 3
