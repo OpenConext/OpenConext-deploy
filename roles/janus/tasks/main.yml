@@ -31,10 +31,10 @@
 
 - name: Configure Janus - Copy config and metadata
   template: src={{ item.src }} dest={{ item.dest }}
-    with_items:
-     - { src: "janus/config/parameters.j2.yml", dest: "{{ janus_dir }}/app/config/parameters.yml" }
-     - { src: "janus/config/config_janus_core.j2.yml", dest: "{{ janus_dir }}/app/config/config_janus_core.yml" }
-     - { src: "janus/dictionaries/metadatafields.definition.j2.json", dest: "{{ janus_dir }}/dictionaries/metadatafields-custom.definition.json" }
+  with_items:
+    - { src: "janus/config/parameters.j2.yml", dest: "{{ janus_dir }}/app/config/parameters.yml" }
+    - { src: "janus/config/config_janus_core.j2.yml", dest: "{{ janus_dir }}/app/config/config_janus_core.yml" }
+    - { src: "janus/dictionaries/metadatafields.definition.j2.json", dest: "{{ janus_dir }}/dictionaries/metadatafields-custom.definition.json" }
 
 # eb_sr_sql is only set if the vm_only_provision_eb_sr tasks have been run 
 - include: janus.yml
