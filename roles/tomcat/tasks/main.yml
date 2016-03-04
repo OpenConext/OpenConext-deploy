@@ -65,3 +65,7 @@
 
 - name: Make sure Tomcat starts when the system is booted.
   service: name=tomcat6 enabled=yes
+
+- name: Include java keystore when certificate is available
+  include: java_keystore.yml
+  when: certificate_available_for_keystore is defined

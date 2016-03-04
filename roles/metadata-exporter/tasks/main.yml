@@ -33,6 +33,9 @@
   template: src=metadata_exporter.conf.j2 dest=/etc/httpd/conf.d/metadata_exporter.conf
   notify: reload httpd
 
+- meta: flush_handlers
+
+
 - name: ensure the service is started
   service: name=metadata-exporter enabled=yes state=started
   ignore_errors: true

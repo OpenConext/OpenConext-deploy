@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
     apps.vm.network :private_network, ip: "192.168.66.79"
     apps.vm.hostname = "apps.vm.openconext.org"
     config.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "2048"]
+      vb.customize ["modifyvm", :id, "--memory", "3072"]
       vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
   end
