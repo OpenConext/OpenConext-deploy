@@ -34,7 +34,7 @@
 
   <logger name="oidc" level="DEBUG"/>
 
-  <root level="DEBUG">
+  <root level="WARN">
     <appender-ref ref="FILE" />
     <appender-ref ref="SYSLOG" />
   </root>

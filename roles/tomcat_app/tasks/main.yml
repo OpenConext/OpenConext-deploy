@@ -28,3 +28,4 @@
 
 - include: deploy.yml
   when: current_app_stat.stat.exists == false or candidate_app_stat.stat.md5 != current_app_stat.stat.md5
+  register: new_deployment

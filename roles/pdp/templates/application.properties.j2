@@ -33,6 +33,9 @@ policy.enforcement.point.user.password={{ pdp.password }}
 xacml.properties.path=file://{{ pdp_dir }}/xacml.conext.properties
 policy.base.dir=file://{{ pdp_dir }}/xacml-policies
 
+# Do we cache the policies in memory - recommended for production
+policies.cachePolicies={{ pdp.cache_policies }}
+
 # The refresh period for policies (if cached)
 period.policies.refresh.minutes=10
 
@@ -48,9 +51,6 @@ metadata.idpRemotePath=https://multidata.{{ base_domain }}/identity-providers.js
 
 # Number of days how long the policy violations are retained
 policy.violation.retention.period.days=30
-
-# Do we include the aggregated attributes in the response to EB (who ignores them for now)
-policy.include.aggregated.attributes=false
 
 # Voot client configuration for the teams PIP
 voot.serviceUrl=https://voot.{{ base_domain }}

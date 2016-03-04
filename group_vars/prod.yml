@@ -35,7 +35,7 @@ janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
-
+janus_ssp_title_suffix: "SURFconext productie"
 
 engine_idp_debugging_email_address: "conext-beheer@surfnet.nl"
 engine_syslog_priority: 3
@@ -156,7 +156,7 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.2.6
+teams_version: 4.2.8
 #teams_snapshot_timestamp: 20150420.152536-28
 
 api_version: 4.0.1
@@ -303,7 +303,7 @@ voot:
         timeoutMillis: 3000
       }
 
-voot_version: 1.5
+voot_version: 1.6.1
 
 authz_admin_version: 1.3.4
 authz_admin_group: urn:collab:group:surfteams.nl:nl:surfnet:diensten:authz-admins
@@ -373,7 +373,7 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: "1.0.2"
+pdp_version: 1.1.0
 #pdp_snapshot_timestamp: "20151209.153205-23"
 #pdp_html_snapshot_timestamp: "20151209.153243-21"
 
@@ -389,14 +389,13 @@ pdp:
   db_name: pdp-server
   spring_profiles_active: prod
   cache_policies: true
-  include_inactive_policies: false
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
   rollbar_environment: prod
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-metadata_exporter_version: "1.0.1"
+metadata_exporter_version: "1.0.2"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -455,7 +454,7 @@ loadbalancing:
   }
   teams: {
     port: 601,
-    heartbeat: { url: "/", method: "HEAD" },
+    heartbeat: { url: "/media/trans-white.png", method: "GET" },
     servers: [ 
       { label: "prd61", ip: "145.100.191.201" },
       { label: "prd62", ip: "145.100.191.202" },

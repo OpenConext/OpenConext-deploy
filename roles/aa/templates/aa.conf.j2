@@ -34,7 +34,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
 
 
     # Enable shibboleth for all other URLs, but the SCIM endpoints, EB endpoint and health check
-    <Location ~ "/aa/api/(attribute/aggregate|health|v2/ServiceProviderConfig|v2/ResourceType|v2/Schema|v2/Me)">
+    <Location ~ "/aa/api/(attribute/aggregate|attribute/aggregateNoServiceCheck|health|v2/ServiceProviderConfig|v2/ResourceType|v2/Schema|v2/Me)">
       allow from all
       satisfy any
     </Location>

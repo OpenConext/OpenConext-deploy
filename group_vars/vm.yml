@@ -41,7 +41,7 @@ janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
-
+janus_ssp_title_suffix: "SURFconext VM"
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
@@ -130,16 +130,16 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
+#    - {
+#       index: 0,
+#       type: "database",
+#       value: "Doctrine"
+#     }
     - {
         index: 0,
-        type: "database",
-        value: "Doctrine"
+        type: "janus",
+        value: "JanusRestV1"
       }
-#    - {
-#        index: 0,
-#        type: "janus",
-#        value: "JanusRestV1"
-#      }
 
 tomcat_apps:
   - grouper
@@ -190,7 +190,7 @@ teams:
   group_name_context: "urn:collab:group:demo.openconext.org:"
   rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
-teams_version: 4.2.1
+teams_version: 4.2.8
 # teams_snapshot_timestamp: 20150519.080724-3
 teams_debug: true
 
@@ -268,7 +268,7 @@ authzserver:
   key_name: "{{ tls_https.key_name }}"
   rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
-authz_server_version: 1.2
+authz_server_version: 1.3.3
 #authz_server_snapshot_timestamp: 20150429.085158-60
 authz_server_debug: true
 
@@ -296,7 +296,7 @@ voot:
         name: "SURFteams",
         timeoutMillis: 3000
       }
-voot_version: 1.5
+voot_version: 1.6.1
 #voot_snapshot_timestamp: ""
 voot_debug: true
 
@@ -369,7 +369,7 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
-      - clientId: pdp
+      - clientId: pdp_client
         secret: "{{ pdp_client_secret }}"
         resourceIds:
           - groups
@@ -414,7 +414,7 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
   rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: "1.0.2"
+pdp_version: "1.1.0"
 #pdp_snapshot_timestamp: "20151222.101918-28"
 #pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
@@ -429,16 +429,15 @@ pdp:
   db_name: pdp-server
   spring_profiles_active: test
   cache_policies: false
-  include_inactive_policies: true
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
   rollbar_environment: test
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-aa_version: "0.1"
-aa_snapshot_timestamp: "20160120.123738-7"
-aa_html_snapshot_timestamp: "20160120.154538-10"
+aa_version: "1.0.1"
+aa_snapshot_timestamp: "20160302.080912-1"
+aa_html_snapshot_timestamp: "20160302.081013-1"
 
 aa_debug: true
 aa:
@@ -462,8 +461,8 @@ aa:
   rollbar_environment: test
   rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
-oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151229.105743-13"
+oidc_version: "1.0.1"
+oidc_snapshot_timestamp: "20160229.102842-1"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -475,8 +474,8 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.{{ base_domain }}
 
-metadata_exporter_version: "0.1"
-metadata_exporter_snapshot_timestamp: "20160208.084759-3"
+metadata_exporter_version: "1.0.1"
+#metadata_exporter_snapshot_timestamp: "20160208.084759-3"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
