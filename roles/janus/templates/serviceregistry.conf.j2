@@ -4,6 +4,9 @@ Listen {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.servicer
 
     DocumentRoot {{ janus_installation_current_release_symlink }}/simplesamlphp/www
     ServerName   {{ janus_domain }}
+    <Directory /opt/openconext/>
+          Require all granted
+    </Directory>
 
     Alias /simplesaml {{ janus_installation_current_release_symlink }}/simplesamlphp/www
     Alias /janus {{ janus_installation_current_release_symlink }}/simplesamlphp/modules/janus/web
