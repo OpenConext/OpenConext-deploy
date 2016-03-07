@@ -343,7 +343,7 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.1.0
+pdp_version: 1.1.2
 #pdp_snapshot_timestamp: "20151209.153205-23"
 #pdp_html_snapshot_timestamp: "20151209.153243-21"
 
@@ -378,7 +378,7 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.acc.surfconext.nl
 
-metadata_exporter_version: "1.0.2"
+metadata_exporter_version: "1.1.1"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
