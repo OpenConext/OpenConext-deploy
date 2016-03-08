@@ -12,7 +12,7 @@
   sudo: true
   roles:
     - common
-    - { role: tls, tags: ['tls'] }
+    - tls
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
@@ -21,6 +21,7 @@
   gather_facts: true
   sudo: true
   roles:
+    - { role: haproxy, tags: ['lb'] }
     - { role: nginx,   tags: ['lb'] }
 
 - hosts: php-apps:java-apps
@@ -38,7 +39,6 @@
   roles:
     - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
-#    - vm_only_provision_eb_sr
 
 - hosts: php-apps
   gather_facts: no
@@ -49,12 +49,9 @@
   roles:
     - php
     - static
-    - { role: welcome,           tags: ['welcome'] }
     - { role: openconext-common, tags: ['eb','sr'] }
     - { role: engineblock,       tags: ['eb'     ] }
-#    - vm_only_bootstrap_ldap_attributes
     - { role: janus,             tags: ['sr'     ] }
-#    - vm_only_bootstrap_ldap_attributes
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
@@ -67,15 +64,19 @@
   roles:
     - tomcat
     - java
-    - { role: shibboleth,       tags: ['shib'   ] }
-    - { role: grouper,          tags: ['grouper'] }
-    - { role: teams,            tags: ['teams'  ] }
-    - { role: mujina-idp,       tags: ['legacy','mujina' ] }
-    - { role: mujina-sp,        tags: ['legacy','mujina' ] }
-    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
-    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
-    - { role: voot,             tags: ['oauth', 'voot'            ] }
-    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
+    - { role: shibboleth,        tags: ['shib'   ] }
+    - { role: mujina-idp,        tags: ['mujina' ] }
+    - { role: mujina-sp,         tags: ['mujina' ] }
+    - { role: grouper,           tags: ['grouper'] }
+    - { role: teams,             tags: ['teams'  ] }
+    - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,              tags: ['oauth', 'voot'            ] }
+    - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
+    - { role: pdp,               tags: ['pdp'] }
+    - { role: oidc,              tags: ['oidc'] }
+    - { role: aa,                tags: ['aa'] }
+    - { role: metadata-exporter, tags: ['metadata-exporter']}
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

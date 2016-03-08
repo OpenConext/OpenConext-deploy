@@ -20,7 +20,7 @@
   notify:
     - restart httpd
     - restart memcached
-#
+
 - name: Ensure cache is cleared
   file: path={{ janus_cache_path }}/janus state=absent
   changed_when: False # never report change since it is about cache
@@ -51,10 +51,6 @@
       - restart httpd
       - restart memcached
 
-- name: Ensure cache is cleared
-  file: path={{ janus_cache_path }}/janus state=absent
-  changed_when: False # never report change since it is about cache
-
 - name: Ensure cache base dir exists and is writable for the webserver
   when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
   file:
@@ -79,8 +75,6 @@
         - restart httpd
         - restart memcached
 
-
-
 # Note that this migration command probably has created cache directories and files
 # owned by root since it will be run as sudo
 - name: Install Janus - Run database migrations
@@ -90,6 +84,27 @@
   register: janus_migrate_output
   changed_when: "'No migrations to execute' not in janus_migrate_output.stdout"
 
+- name: Ensure cache base and log directories exist and are writable for the webserver
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
+  file:
+    path={{ janus_cache_path }}
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+    recurse=yes
+  changed_when: False # never report change because it is caused by migrate
+  
+- name: Ensure cache base and log directories exist and are writable for the webserver
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  file:
+     path={{ janus_cache_path }}
+     state=directory
+     owner={{ serviceregistry_fpm_user }}
+     group={{ serviceregistry_fpm_user }}
+     recurse=yes
+  changed_when: False # never report change because it is caused by migra 
+  
 - name: Apache 2.2 config
   when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
         (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")

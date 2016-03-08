@@ -4,7 +4,7 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     ServerName https://pdp.{{ base_domain }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-PDP'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PDP'" combined
+	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PDP'" combined
 
     RewriteEngine on
 
@@ -32,7 +32,7 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
 
 
     # Enable shibboleth for all other URLs, but the health check and EB endpoint
-    <Location ~ "/pdp/api/(protected/*|decide/policy|health|info)">
+    <Location ~ "/pdp/api/(decide/policy|health|home)">
       allow from all
       satisfy any
     </Location>
