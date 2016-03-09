@@ -602,14 +602,14 @@ loadbalancing:
     port: 615,
     heartbeat: { url: "/aa/api/health", method: "GET" },
     servers: [
-      { label: "aa_backend", ip: "192.168.66.79" },
+      { label: "aa_backend", ip: "192.168.66.99" },
     ]
   }
   metadata_exporter: {
     port: 616,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "metadata_exporter_backend", ip: "192.168.66.79" },
+      { label: "metadata_exporter_backend", ip: "192.168.66.99" },
     ]
   }
 
@@ -618,24 +618,24 @@ nginx_backend_ip: 127.0.0.1
 # values below seem silly but on acc+prod these differ.
 
 nginx_ipv4_addresses:
-  engine: 192.168.66.78
-  engine_api: 192.168.66.78
-  profile: 192.168.66.78
-  serviceregistry: 192.168.66.78
-  static: 192.168.66.78
-  teams: 192.168.66.78
-  authzserver: 192.168.66.78
-  authz_admin: 192.168.66.78
-  authz_playground: 192.168.66.78
-  voot: 192.168.66.78
-  grouper: 192.168.66.78
-  mujina_sp: 192.168.66.78
-  mujina_idp: 192.168.66.78
-  welcome: 192.168.66.78
-  pdp: 192.168.66.78
-  oidc: 192.168.66.78
-  aa: 192.168.66.78
-  metadata_exporter: 192.168.66.78
+  engine: 192.168.66.98
+  engine_api: 192.168.66.98
+  profile: 192.168.66.98
+  serviceregistry: 192.168.66.98
+  static: 192.168.66.98
+  teams: 192.168.66.98
+  authzserver: 192.168.66.98
+  authz_admin: 192.168.66.98
+  authz_playground: 192.168.66.98
+  voot: 192.168.66.98
+  grouper: 192.168.66.98
+  mujina_sp: 192.168.66.98
+  mujina_idp: 192.168.66.98
+  welcome: 192.168.66.98
+  pdp: 192.168.66.98
+  oidc: 192.168.66.98
+  aa: 192.168.66.98
+  metadata_exporter: 192.168.66.98
 
 nginx_config_templates:
   - welcome
