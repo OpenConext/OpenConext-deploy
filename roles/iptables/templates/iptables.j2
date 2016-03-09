@@ -30,6 +30,7 @@
 -A INPUT -p tcp --dport 403 -j ACCEPT
 -A INPUT -p tcp --dport 404 -j ACCEPT
 -A INPUT -p tcp --dport 405 -j ACCEPT
+-A INPUT -p tcp --dport 609 -j ACCEPT
 {% endif %}
 
 {% if 'java-apps-centos7' in group_names %}
@@ -44,6 +45,7 @@
 -A INPUT -p tcp --dport 608 -j ACCEPT
 -A INPUT -p tcp --dport 613 -j ACCEPT
 -A INPUT -p tcp --dport 615 -j ACCEPT
+-A INPUT -p tcp --dport 616 -j ACCEPT
 {% endif %}
 
 

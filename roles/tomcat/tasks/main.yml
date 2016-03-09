@@ -8,8 +8,7 @@
 - name: Install tomcat
   yum: name="tomcat" state="present"
   when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") or
-        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
-
+        (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7")
   tags: tomcat
 
 - name: "Set TZ variable in tomcat's init-environment"
@@ -64,7 +63,7 @@
   template: src=server_tomcat7.xml.j2 dest={{ tomcat_install_dir }}/server.xml
   when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7") or
         (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") 
-  notify: restart tomcat
+  notify: restart tomcat 7
   tags: tomcat
 
 

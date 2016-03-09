@@ -78,3 +78,7 @@
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: migrate_output
   changed_when: "'no update needed' not in migrate_output.stderr"
+
+- name: Make sure cache dir has correct permissions
+  file: path={{engine_current_release_symlink}}/app/cache  owner=engine group=engine recurse=yes
+

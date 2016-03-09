@@ -125,7 +125,7 @@
       </Realm>
 
  {% for tomcat_app in tomcat_apps %}
-        <Host name="{{ tomcat_app }}.{{ base_domain }}" appBase="/var/lib/tomcat6/{{ tomcat.app_base_dir_name }}-{{ tomcat_app }}" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
+        <Host name="{{ tomcat_app }}.{{ base_domain }}" appBase="/var/lib/tomcat/{{ tomcat.app_base_dir_name }}-{{ tomcat_app }}" unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false"/>
  {% endfor %}
 
         <!-- SingleSignOn valve, share authentication between web applications
