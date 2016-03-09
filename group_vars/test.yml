@@ -281,8 +281,8 @@ voot_version: 1.6.1
 #voot_snapshot_timestamp: 20160218.102010-1
 voot_debug: true
 
-authz_admin_version: 1.3.4
-authz_admin_snapshot_timestamp: "20151223.124726-3"
+authz_admin_version: 1.3.5
+#authz_admin_snapshot_timestamp: "20151223.124726-3"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
