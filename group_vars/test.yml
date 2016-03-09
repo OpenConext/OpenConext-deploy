@@ -413,9 +413,7 @@ pdp:
   rollbar_environment: test
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-aa_version: "1.0.1"
-aa_snapshot_timestamp: "20160305.105154-4"
-aa_html_snapshot_timestamp: "20160305.105253-3"
+aa_version: "1.0.1-SNAPSHOT"
 aa_debug: true
 aa:
   crt_name: "{{ tls_https.crt_name }}"
