@@ -18,10 +18,10 @@
   tags: ldap
 
 - name: correct config present
-  shell: "(test -d /etc/openldap/slapd.d && find /etc/openldap/slapd.d/ | xargs grep -i SURFnet | wc -l) || echo 0"
+  shell: "(test -d /etc/openldap/slapd.d && find /etc/openldap/slapd.d/ -type f| xargs grep -i SURFnet | wc -l) || echo 0"
   register: config_correct
   tags: ldap
-  changed_when: False
+  changed_when: True
 
 - name: Copy slapd.conf
   template: src=slapd.conf.j2 dest=/etc/openldap/slapd.conf
@@ -48,6 +48,10 @@
   lineinfile: dest=/etc/sysconfig/ldap line='SLAPD_URLS=\"{{ ldap_bind_urls }}\"' regexp="^#?SLAPD_URLS="
   when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6")
   tags: ldap
+
+- debug: var=config_correct.stdout
+- debug: var=config_correct
+
 
 - name: start slapd to generate new config
   when: config_correct.stdout == "0"

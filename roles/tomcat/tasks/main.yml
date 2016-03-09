@@ -1,11 +1,17 @@
 ---
 - name: Install tomcat
   yum: name="tomcat6" state="present"
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6")
+  tags: tomcat
+
+- name: Install tomcat
+  yum: name="tomcat" state="present"
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
   tags: tomcat
 
 - name: "Set TZ variable in tomcat's init-environment"
   lineinfile:
-    dest: "{{ tomcat_install_dir }}/tomcat6.conf"
+    dest: "{{ tomcat.config_file }}"
     line: "TZ=\"{{ timezone }}\""
     state: present
     create: no
@@ -51,21 +57,12 @@
   tags: tomcat
 
 - name: Unused webapps dir must still be present
-  file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
+  file: path={{ tomcat.lib_dir }}/webapps state=directory group=tomcat owner=tomcat
   tags: tomcat
 
-- name: Unused webapps dir must still be present
-  file: path=/var/lib/tomcat6/webapps state=directory group=tomcat owner=tomcat
-  tags: tomcat
-
-- name: Check if certificate is available for keystore actions
-  stat: path={{ keytool.current_certificates[0].file }}
-  register: certificate_available_for_keystore
-  tags: tomcat
+- include: java_keystore.yml
+  when: env == 'vm' or
+        env == 'vm-centos7'
 
 - name: Make sure Tomcat starts when the system is booted.
-  service: name=tomcat6 enabled=yes
-
-- name: Include java keystore when certificate is available
-  include: java_keystore.yml
-  when: certificate_available_for_keystore is defined
+  service: name={{ tomcat.service_name }} enabled=yes

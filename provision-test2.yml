@@ -27,7 +27,7 @@
 
 
 
-- hosts: php-apps:java-apps
+- hosts: php-apps:java-apps-centos7
   gather_facts: yes
   sudo: true
   roles:
@@ -60,26 +60,29 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
-##
-##- hosts: java-apps
-##  gather_facts: true
-##  sudo: true
-##  vars:
-##    env_lang: java
-##  roles:
-##    - tomcat
-##    - java
-##    - { role: shibboleth,       tags: ['shib'   ] }
-##    - { role: grouper,          tags: ['grouper'] }
-##    - { role: teams,            tags: ['teams'  ] }
-##    - { role: mujina-idp,       tags: ['legacy' ] }
-##    - { role: mujina-sp,        tags: ['legacy' ] }
-##    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
-##    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
-##    - { role: voot,             tags: ['oauth', 'voot'            ] }
-##    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
-##    - { role: pdp,              tags: ['pdp'] }
-##    - { role: oidc,              tags: ['oidc'] }
-##  handlers:
-##    - include: roles/httpd/handlers/main.yml
-##    - include: roles/nginx/handlers/main.yml
+
+- hosts: java-apps-centos7
+  gather_facts: true
+  sudo: true
+  vars:
+    env_lang: java
+  roles:
+    - { role: tomcat, tags: ['tomcat'] }
+    - { role: java,   tags: ['java'] }
+    - { role: shibboleth,       tags: ['shib'   ] }
+    - { role: grouper,          tags: ['grouper'] }
+    - { role: metadata-exporter, tags: ['metadata-exporter'] }
+    - { role: teams,            tags: ['teams'  ] }
+    - { role: mujina-idp,       tags: ['legacy' ] }
+    - { role: mujina-sp,        tags: ['legacy' ] }
+    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,             tags: ['oauth', 'voot'            ] }
+    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
+    - { role: pdp,              tags: ['pdp'] }
+    - { role: oidc,              tags: ['oidc'] }
+    - { role: aa,              tags: ['aa'] }
+    - { role: pdp,             tags: ['pdp'] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
