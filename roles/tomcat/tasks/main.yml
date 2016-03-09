@@ -1,12 +1,15 @@
 ---
 - name: Install tomcat
   yum: name="tomcat6" state="present"
-  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6")
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
   tags: tomcat
 
 - name: Install tomcat
   yum: name="tomcat" state="present"
-  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+
   tags: tomcat
 
 - name: "Set TZ variable in tomcat's init-environment"
@@ -45,11 +48,25 @@
 - name: Copy tomcat config
   template: src={{ item }}.j2 dest={{ tomcat_install_dir }}/{{ item }}
   with_items:
-    - server.xml
     - catalina.properties
     - tomcat-users.xml
   notify: restart tomcat
   tags: tomcat
+
+- name: Copy tomcat 6 specific config
+  template: src=server_tomcat6.xml.j2 dest={{ tomcat_install_dir }}/server.xml
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Copy tomcat 7 specific config
+  template: src=server_tomcat7.xml.j2 dest={{ tomcat_install_dir }}/server.xml
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") 
+  notify: restart tomcat
+  tags: tomcat
+
 
 - name: Copy sysconfig tomcat
   template: src=tomcat6.conf.j2 dest={{ tomcat_install_dir }}/tomcat6.conf

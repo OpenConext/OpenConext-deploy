@@ -32,7 +32,7 @@
 -A INPUT -p tcp --dport 405 -j ACCEPT
 {% endif %}
 
-{% if 'java-apps' in group_names %}
+{% if 'java-apps-centos7' in group_names %}
 ### JAVA apps rules
 -A INPUT -p tcp --dport 601 -j ACCEPT
 -A INPUT -p tcp --dport 602 -j ACCEPT

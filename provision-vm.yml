@@ -7,13 +7,13 @@
     tags:
       - always
 
-- hosts: loadbalancer:php-apps:java-apps:storage
+- hosts: loadbalancer:php-apps:java-apps-centos7:storage
   gather_facts: yes
   sudo: true
   roles:
     - common
     - hosts
-    - iptables
+    - { role: iptables, tags: ['iptables'] }
     - { role: tls, tags: ['tls'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
@@ -26,7 +26,7 @@
     - { role: haproxy, tags: ['lb'] }
     - { role: nginx,   tags: ['lb'] }
 
-- hosts: php-apps:java-apps
+- hosts: php-apps:java-apps-centos7
   gather_facts: yes
   sudo: true
   roles:
@@ -50,11 +50,11 @@
   vars:
     env_lang: php
   roles:
-    - php
+    - php56fpm
     - static
     - { role: welcome,           tags: ['welcome'] }
     - { role: openconext-common, tags: ['eb','sr'] }
-    - { role: engineblock,       tags: ['eb'     ] }
+    - { role: engineblock5,       tags: ['eb'     ] }
     - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
     - { role: janus,             tags: ['sr'     ] }
     - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
@@ -62,7 +62,7 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
 
-- hosts: java-apps
+- hosts: java-apps-centos7
   gather_facts: true
   sudo: true
   vars:
@@ -77,7 +77,7 @@
     - { role: mujina-idp,        tags: ['legacy' ] }
     - { role: mujina-sp,         tags: ['legacy' ] }
     - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
-    - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
+      #   - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,              tags: ['oauth', 'voot'            ] }
     - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
     - { role: pdp,               tags: ['pdp'] }
