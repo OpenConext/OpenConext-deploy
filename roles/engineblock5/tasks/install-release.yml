@@ -1,0 +1,21 @@
+---
+- name: Check if target dir exists
+  stat: path={{ engine_release_dir }}
+  register: eb_dir
+
+- name: Download current version
+  get_url: url="{{ engine_download_url }}" dest="{{ engine_build_path }}"
+  register: eb_download
+
+- name: Unpack current version
+  unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
+  when: eb_download.changed or not eb_dir.stat.exists
+
+- name: Activate new EngineBlock release
+  file: src={{ engine_release_dir }} dest={{ engine_current_release_symlink }} state=link
+  notify:
+    - restart httpd
+  when: eb_download.changed or not eb_dir.stat.exists
+
+- name: Make sure cache dir has correct permissions
+  file: path={{engine_current_release_symlink}}/app/cache  owner=engine group=engine recurse=yes

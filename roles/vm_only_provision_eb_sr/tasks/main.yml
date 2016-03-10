@@ -19,6 +19,8 @@
     - serviceregistry.sql
     - virtual_organization.sql
 
+- debug: var=mysql_host
+
 - name: run load engineblock sql
   shell: mysql -u {{ item.db_user }} -p{{ item.db_password }} -h {{ mysql_host }} -D {{ item.db_name }} < /tmp/{{ item.sql }}
   with_items:

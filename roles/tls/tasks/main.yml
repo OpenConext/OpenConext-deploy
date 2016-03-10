@@ -5,6 +5,14 @@
     - "{{ tls.certificates }}"
     - "{{ tls.ca_certificates }}"
 
+- name: copy ca certificate to correct location on CentOS 7
+  copy: src=files/{{ env }}/certs/{{ item }} dest=/etc/pki/ca-trust/source/anchors/{{ item }}
+  with_items:
+     "{{ tls.ca_certificates }}"
+  notify: update_ca_trust
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") or
+        (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7")
+
 - name: copy private keys to correct location
   copy: content="{{ https_star_private_key }}" dest={{ tls.cert_private_path }}/{{ item }}
   with_items:

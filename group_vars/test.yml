@@ -62,6 +62,7 @@ engine_database_password: "{{ mysql_passwords.eb }}"
 engine_ldap_host: ldap.{{ base_domain }}
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: test
+engine_apache_symfony_environment: test
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 

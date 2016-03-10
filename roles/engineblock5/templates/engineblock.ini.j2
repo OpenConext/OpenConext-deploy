@@ -1,0 +1,88 @@
+;; EngineBlock version
+version = {{ engine_version }}
+
+;; Engineblock API Configuration
+;; DEPRECATED, use the newer version below
+engineApi.user     = {{ engine_api_janus_user }}
+engineApi.password = {{ engine_api_janus_password }}
+
+;; New version that allows for multiple different API users
+engineApi.users.janus.username = {{ engine_api_janus_user }}
+engineApi.users.janus.password = {{ engine_api_janus_password }}
+engineApi.users.profile.username = {{ engine_api_profile_user }}
+engineApi.users.profile.password = {{ engine_api_profile_password }}
+
+;; EngineBlock API feature toggles
+engineApi.features.metadataPush = 1
+engineApi.features.consentListing = 1
+engineApi.features.metadataApi = 1
+
+;; Symfony specific variables
+symfony.cachePath = "{{ engineblock_symfony_cache_path }}"
+symfony.logPath = "{{ engineblock_symfony_log_path }}"
+
+;; Virtual Organisation Validation api credentials
+api.vovalidate.baseUrl = {{ engine_vovalidate_baseurl }}
+api.vovalidate.key = {{ engine_vovalidate_key }}
+api.vovalidate.secret = {{ engine_vovalidate_secret }}
+
+voot.serviceUrl=https://voot.{{ base_domain }}
+voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
+voot.clientId=engineblock
+voot.clientSecret={{ engineblock_authz_client_secret }}
+voot.scopes = groups
+
+pdp.baseUrl = {{ engine_pdp_baseurl }}
+pdp.username = {{engine_pdp_username }}
+pdp.password = {{ engine_pdp_password }}
+
+api.vovalidate.baseUrl = {{ engine_vovalidate_baseurl }}
+api.vovalidate.key = {{ engine_vovalidate_key }}
+api.vovalidate.secret = {{ engine_vovalidate_secret }}
+
+engine.simplesamlphp.baseurlpath = "{{ engine_engine_idp_baseurlpath }}"
+
+cookie.lang.domain = .{{ base_domain }}
+
+database.master1.dsn = "mysql:host={{ engine_database_host }};dbname={{ engine_database_name }}"
+database.master1.password = {{ engine_database_password }}
+database.master1.user = "{{ engine_database_user }}"
+database.masters[] = master1
+database.slaves[] = master1
+
+debug = {{ engine_debug }}
+
+email.idpDebugging.to.address = {{ engine_idp_debugging_email_address }}
+{% if engine_keys is defined %}
+
+{% for key, value in engine_keys.iteritems() %}
+encryption.keys.{{ key }}.privateFile = {{ value.privateFile }}
+encryption.keys.{{ key }}.publicFile = {{ value.publicFile }}
+{% endfor %}
+
+{% endif %}
+
+ldap.host = {{ engine_ldap_host }}
+ldap.password = "{{ engine_ldap_password }}"
+ldap.userName = "{{ engine_ldap_bind_dn }}"
+
+{% for repository in engine_block.metadataRepositories %}
+metadataRepository.{{ repository.type }}.type = {{ repository.value }}
+metadataRepositories[{{ repository.index }}] = {{ repository.type }}
+{% endfor %}
+
+phpSettings.display_errors = {{ php_display_errors }}
+
+serviceRegistry.caching.lifetime = {{ engine_janus_cache_lifetime }}
+serviceRegistry.location = {{ engine_janus_url }}
+serviceRegistry.user = "{{ engine_janus_user }}"
+serviceRegistry.user_secret = "{{ engine_janus_secret }}"
+{% if engine_trusted_proxy_ips is defined %}
+
+{% for engine_trusted_proxy_ip in engine_trusted_proxy_ips %}
+trustedProxyIps[] = {{ engine_trusted_proxy_ip }}
+{% endfor %}
+
+{% endif %}
+
+base_domain = {{ engine_base_domain }}

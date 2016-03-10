@@ -3,7 +3,7 @@
   file: state=link src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime force=True
 
 - name: Add Epel repo
-  yum: name=https://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
+  yum: name=epel-release.noarch state=present
 
 - name: Install tools / clients
   yum: name={{ item }} state=present
@@ -11,8 +11,6 @@
      - telnet
      - lynx
      - openldap-clients
-     - mysql.x86_64
-     - MySQL-python
      - ntp
      - unzip
 
@@ -33,7 +31,7 @@
   register: selinux_binaries
 
 - name: check for SELinux status
-  command: /usr/sbin/sestatus
+  command: /usr/sbin/sestatus | awk '{ print $3 }'
   when: selinux_binaries.stat.exists == True
   register: selinux_status
 
@@ -43,7 +41,7 @@
 
 - name: disable SELinux NOW
   command: /usr/sbin/setenforce 0
-  when: "selinux_binaries.stat.exists == True and selinux_status.stdout|search('status: *enabled')"
+  when: "selinux_binaries.stat.exists == True and selinux_status == 'enabled'"
 
 - name: check SELinux status
   shell: "
@@ -51,3 +49,7 @@
       || /usr/sbin/sestatus | egrep '^Current mode: *permissive'
     "
   when: selinux_binaries.stat.exists == True
+
+- name: include centOS 7 specific tasks
+  include: main_centos7.yml
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") 

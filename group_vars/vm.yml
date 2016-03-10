@@ -65,6 +65,7 @@ engine_database_password: "{{ mysql_passwords.eb }}"
 engine_ldap_host: localhost
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: vm
+engine_apache_symfony_environment: prod
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
@@ -303,7 +304,6 @@ voot_debug: true
 # VM config for the authz-admin application
 ##
 authz_admin_version: 1.3.5
-#authz_admin_snapshot_timestamp: 20150422.113215-61
 authz_admin_group: "{{ teams.group_name_context }}org:openconext:teams:managementvo"
 authz_admin_debug: true
 authzadmin:
@@ -489,151 +489,152 @@ loadbalancing:
     port: 401,
     heartbeat: { url: "/", method: "GET" },
     servers: [
-      { label: "engine_backend", ip: "192.168.66.79" },
+      { label: "engine_backend", ip: "192.168.66.99" },
     ]
   }
   profile: {
     port: 402,
     heartbeat: { url: "/favicon.ico", method: "HEAD" },
     servers: [
-      { label: "profile_backend", ip: "192.168.66.79" }
+      { label: "profile_backend", ip: "192.168.66.99" }
     ]
   }
   static: {
     port: 403,
     heartbeat: { url: "/media/alive.txt", method: "HEAD" },
     servers: [
-      { label: "static_backend", ip: "192.168.66.79" },
+      { label: "static_backend", ip: "192.168.66.99" },
     ]
   }
   serviceregistry: {
       port: 404,
       heartbeat: { url: "/", method: "HEAD" },
       servers: [
-        { label: "serviceregistry_backend", ip: "192.168.66.79" },
+        { label: "serviceregistry_backend", ip: "192.168.66.99" },
     ]
   }
   engine_api: {
       port: 405,
       heartbeat: { url: "/", method: "GET" },
       servers: [
-        { label: "engine_backend", ip: "192.168.66.79" },
+        { label: "engine_backend", ip: "192.168.66.99" },
       ]
     }
   teams: {
     port: 601,
     heartbeat: { url: "/media/trans-white.png", method: "GET" },
     servers: [
-      { label: "teams_backend", ip: "192.168.66.79" },
+      { label: "teams_backend", ip: "192.168.66.99" },
     ]
   }
   authzserver: {
     port: 602,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_backend", ip: "192.168.66.79" },
+      { label: "authz_backend", ip: "192.168.66.99" },
     ]
   }
   authz_admin: {
     port: 603,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_admin_backend", ip: "192.168.66.79" }
+      { label: "authz_admin_backend", ip: "192.168.66.99" }
     ]
   }
   authz_playground: {
     port: 604,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_playground_backend", ip: "192.168.66.79" },
+      { label: "authz_playground_backend", ip: "192.168.66.99" },
     ]
   }
   voot: {
     port: 605,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "voot_backend", ip: "192.168.66.79" },
+      { label: "voot_backend", ip: "192.168.66.99" },
     ]
   }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper/", method: "HEAD" },
     servers: [
-      { label: "grouper_backend", ip: "192.168.66.79" },
+      { label: "grouper_backend", ip: "192.168.66.99" },
     ]
   }
   mujina_sp: {
     port: 607,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
-      { label: "mujina_sp_backend", ip: "192.168.66.79" },
+      { label: "mujina_sp_backend", ip: "192.168.66.99" },
     ]
   }
   mujina_idp: {
       port: 608,
       heartbeat: { url: "/", method: "HEAD" },
       servers: [
-        { label: "mujina_idp_backend", ip: "192.168.66.79" },
+        { label: "mujina_idp_backend", ip: "192.168.66.99" },
     ]
   }
   welcome: {
       port: 609,
       heartbeat: { url: "/", method: "GET" },
       servers: [
-        { label: "welcome_backend", ip: "192.168.66.79" },
+        { label: "welcome_backend", ip: "192.168.66.99" },
     ]
   }
   oidc: {
     port: 10614,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
-      { label: "oidc_backend", ip: "192.168.66.79" },
+      { label: "oidc_backend", ip: "192.168.66.99" },
     ]
   }
   pdp: {
       port: 613,
       heartbeat: { url: "/pdp/api/health", method: "GET" },
       servers: [
-        { label: "pdp_backend", ip: "192.168.66.79" },
+        { label: "pdp_backend", ip: "192.168.66.99" },
       ]
     }
   aa: {
     port: 615,
     heartbeat: { url: "/aa/api/health", method: "GET" },
     servers: [
-      { label: "aa_backend", ip: "192.168.66.79" },
+      { label: "aa_backend", ip: "192.168.66.99" },
     ]
   }
   metadata_exporter: {
     port: 616,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "metadata_exporter_backend", ip: "192.168.66.79" },
+      { label: "metadata_exporter_backend", ip: "192.168.66.99" },
     ]
   }
 
 nginx_backend_ip: 127.0.0.1
 
 # values below seem silly but on acc+prod these differ.
+
 nginx_ipv4_addresses:
-  engine: 192.168.66.78
-  engine_api: 192.168.66.78
-  profile: 192.168.66.78
-  serviceregistry: 192.168.66.78
-  static: 192.168.66.78
-  teams: 192.168.66.78
-  authzserver: 192.168.66.78
-  authz_admin: 192.168.66.78
-  authz_playground: 192.168.66.78
-  voot: 192.168.66.78
-  grouper: 192.168.66.78
-  mujina_sp: 192.168.66.78
-  mujina_idp: 192.168.66.78
-  welcome: 192.168.66.78
-  pdp: 192.168.66.78
-  oidc: 192.168.66.78
-  aa: 192.168.66.78
-  metadata_exporter: 192.168.66.78
+  engine: 192.168.66.98
+  engine_api: 192.168.66.98
+  profile: 192.168.66.98
+  serviceregistry: 192.168.66.98
+  static: 192.168.66.98
+  teams: 192.168.66.98
+  authzserver: 192.168.66.98
+  authz_admin: 192.168.66.98
+  authz_playground: 192.168.66.98
+  voot: 192.168.66.98
+  grouper: 192.168.66.98
+  mujina_sp: 192.168.66.98
+  mujina_idp: 192.168.66.98
+  welcome: 192.168.66.98
+  pdp: 192.168.66.98
+  oidc: 192.168.66.98
+  aa: 192.168.66.98
+  metadata_exporter: 192.168.66.98
 
 nginx_config_templates:
   - welcome

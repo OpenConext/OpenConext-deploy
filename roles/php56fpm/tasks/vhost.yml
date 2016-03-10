@@ -1,0 +1,50 @@
+# Setup vhost. Call with
+# - comnponent_name: a unique name for the component user in user-, group, directory and file names
+# - vhost_name: the FQDN of the vhost
+
+# Create user & group for FPM pool
+- name: Add group {{ component_name }}
+  group: name={{ component_name }} state=present
+
+- name: Add user {{ component_name }}
+  user: name={{ component_name }} group={{ component_name }} createhome=no state=present
+
+
+- name: Create directory for vhosts to store PHP sessions
+  file: path=/var/lib/php/session/{{ component_name }} state=directory owner={{ component_name }} group=root mode=770
+
+
+# Create a default app
+# When no app is installed yet in the webdirectory then a link to the default app is created
+- name: Create default app directory for {{ vhost_name }}
+  file: path=/opt/default/{{ vhost_name }}/web/ state=directory
+
+- name: Create default /opt/default/{{ vhost_name }}/web/app.php
+  template: src='httpd-index.php.j2' dest='/opt/default/{{ vhost_name }}/web/app.php'
+
+
+- stat: path=/opt/www/{{ vhost_name }}
+  register: r
+
+- name: Install default app when no app is installed (yet)
+  file: src=/opt/default/{{ vhost_name }} dest=/opt/www/{{ vhost_name }} state=link force=no
+  when: (r.stat.exists == false)
+
+
+# Put httpd vhost config
+- name: Put httpd vhost config for {{ vhost_name }}
+  action: template src='nginx-vhost.conf.j2' dest='/etc/nginx/conf.d/{{ vhost_name }}.conf'
+  notify:
+    - restart nginx
+
+
+# Put fpm config
+- name: php-fpm config
+  template: src='php-fpm-pool.conf.j2' dest='/etc/php-fpm.d/{{ vhost_name }}.conf'
+  notify:
+    - restart php-fpm
+
+- name: Put rsyslog vhost config
+  template: src='rsyslog_nginx_vhost.conf.j2' dest='/etc/rsyslog.d/nginx_vhost_{{ component_name }}.conf'
+  notify:
+      - restart rsyslog

@@ -1,0 +1,55 @@
+# IPv4 firewall configuration
+
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+
+# General rules 
+{% for service in iptables_incoming %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} --dport {{ service.port }}  -j ACCEPT
+{% endfor %}
+
+{% if 'loadbalancer' in group_names %}
+### Loadbalancer rules
+-A INPUT -p tcp --dport 443 -j ACCEPT
+-A INPUT -p tcp --dport 80 -j ACCEPT
+{% endif %}
+
+{% if 'php-apps' in group_names %}
+### PHP apps rules
+-A INPUT -p tcp --dport 443 -j ACCEPT
+-A INPUT -p tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp --dport 401 -j ACCEPT
+-A INPUT -p tcp --dport 402 -j ACCEPT
+-A INPUT -p tcp --dport 403 -j ACCEPT
+-A INPUT -p tcp --dport 404 -j ACCEPT
+-A INPUT -p tcp --dport 405 -j ACCEPT
+-A INPUT -p tcp --dport 609 -j ACCEPT
+{% endif %}
+
+{% if 'java-apps-centos7' in group_names %}
+### JAVA apps rules
+-A INPUT -p tcp --dport 601 -j ACCEPT
+-A INPUT -p tcp --dport 602 -j ACCEPT
+-A INPUT -p tcp --dport 603 -j ACCEPT
+-A INPUT -p tcp --dport 604 -j ACCEPT
+-A INPUT -p tcp --dport 605 -j ACCEPT
+-A INPUT -p tcp --dport 606 -j ACCEPT
+-A INPUT -p tcp --dport 607 -j ACCEPT
+-A INPUT -p tcp --dport 608 -j ACCEPT
+-A INPUT -p tcp --dport 613 -j ACCEPT
+-A INPUT -p tcp --dport 615 -j ACCEPT
+-A INPUT -p tcp --dport 616 -j ACCEPT
+{% endif %}
+
+
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+# A newline after COMMIT is required

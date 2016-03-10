@@ -1,0 +1,12 @@
+---
+- name: Add "engineblock" user
+  user: name=engineblock groups={{ apache_user}} append=yes state=present createhome=no
+
+- name: Create the app/cache/dev dir for development (used for SF2 plugin)
+  file:
+    path={{ openconext_releases_dir }}/OpenConext-engineblock/app/cache/dev
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+    recurse=yes
+  when: develop

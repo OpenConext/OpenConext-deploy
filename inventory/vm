@@ -1,38 +1,38 @@
 [local-certs]
-localhost ansible_connection=local ansible_python_interpreter=python
+localhost ansible_connection=local ansible_python_interpreter=python2
 
 [local-certs:children]
 
 [vm]
-192.168.66.79 ansible_ssh_private_key_file=./.vagrant/machines/apps/virtualbox/private_key
+192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
 
 [storage]
-192.168.66.79 ansible_ssh_private_key_file=./.vagrant/machines/apps/virtualbox/private_key
+192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
 
 [storage-vm:children]
 storage
 
-[java-apps]
-192.168.66.79 ansible_ssh_private_key_file=./.vagrant/machines/apps/virtualbox/private_key
+[java-apps-centos7]
+192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
 
 [java-apps-vm:children]
-java-apps
+java-apps-centos7
 
 [php-apps]
-192.168.66.79 ansible_ssh_private_key_file=./.vagrant/machines/apps/virtualbox/private_key
+192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
 
 [php-apps-vm:children]
 php-apps
 
 [loadbalancer]
-192.168.66.78 ansible_ssh_private_key_file=./.vagrant/machines/lb/virtualbox/private_key
+192.168.66.98 ansible_ssh_private_key_file=./.vagrant/machines/lb_centos7/virtualbox/private_key
 
 [loadbalancer-vm:children]
 loadbalancer
 
 [vm:children]
 storage
-java-apps
+java-apps-centos7
 php-apps
 loadbalancer
 local-certs

@@ -1,8 +1,17 @@
 ---
 - name: Add Shibboleth repo
   copy: src={{ item }} dest=/etc/yum.repos.d/{{ item }}
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
   with_items:
     - shibboleth.repo
+    - shibboleth.repo.gpgkey
+
+- name: Add Shibboleth repo
+  copy: src={{ item }} dest=/etc/yum.repos.d/{{ item }}
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  with_items:
+    - shibboleth-centos7.repo
     - shibboleth.repo.gpgkey
 
 - name: Install custom libcurl
@@ -21,9 +30,19 @@
     - shib.conf
 
 - name: Copy default config files
-  copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
+  copy: src={{ item }} dest=/etc/httpd/conf.d/20_shib.conf
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
   with_items:
-    - 20_shib.conf
+    - 20_shib_apache22.conf
+  notify: reload httpd
+
+- name: Copy default config files
+  copy: src={{ item }} dest=/etc/httpd/conf.d/20_shib.conf
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  with_items:
+    - 20_shib_apache24.conf
   notify: reload httpd
 
 - name: Shibboleth config

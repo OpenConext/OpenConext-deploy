@@ -1,4 +1,12 @@
 ---
+- name: Add group {{ serviceregistry_fpm_user }}
+  group: name={{ serviceregistry_fpm_user }} state=present
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+
+- name: Add user {{ serviceregistry_fpm_user }}
+  user: name={{ serviceregistry_fpm_user }} group={{ serviceregistry_fpm_user }} createhome=no state=present
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+
 - name: Install memcached and required modules
   yum: name=memcached state=present
 

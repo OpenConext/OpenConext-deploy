@@ -1,0 +1,84 @@
+---
+- name: Add group {{ engine_fpm_user }}
+  group: name=engine state=present
+
+- name: Add user {{ engine_fpm_user }}
+  user: name={{ engine_fpm_user }} group={{ engine_fpm_user }} createhome=no state=present
+
+- name: Create directory for vhosts to store PHP sessions
+  file: path=/var/lib/php/session/engine state=directory owner={{ engine_fpm_user }} group=root mode=770
+
+- include: install-release.yml
+  when: "engine_branch is not defined or engine_branch == ''"
+
+- include: install-branch.yml
+  when: "engine_branch is defined and engine_branch != ''"
+
+- name: Copy app_dev.php to OpenConext web folder
+  copy: src=app_dev.php dest=/opt/openconext/OpenConext-engineblock/web/app_dev.php owner={{ engine_fpm_user }} group={{ engine_fpm_user }} mode=0644
+  when: develop
+
+- name: Create the cache dir for Symfony
+  file:
+    path={{ engineblock_symfony_cache_path }}
+    state=directory
+    owner={{ engine_fpm_user }}
+    group={{ engine_fpm_user }}
+    recurse=yes
+
+- name: Create the log dir for Symfony
+  file:
+    path={{ engineblock_symfony_log_path }}
+    state=directory
+    owner={{ engine_fpm_user  }}
+    group={{ engine_fpm_user }}
+    recurse=yes
+
+#- name: Create the symfony cache
+#  command: app/console cache:clear --env=prod --no-debug
+#  when: not develop
+
+- include: develop.yml
+  when: develop
+
+- name: Install Apache vhost
+  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
+  with_items:
+    - engine.conf
+#    - engine-api.conf
+  notify:
+    - restart httpd
+
+# Put fpm config
+- name: php-fpm config
+  template: src={{ item }}.j2 dest=/etc/php-fpm.d/{{ item }}
+  with_items:
+     - engine-pool.conf
+  notify:
+    - restart php-fpm
+
+- name: copy over the engineblock keys
+  copy: content="{{ engineblock_private_key }}" dest="{{ item.value.privateFile }}"
+  with_dict: engine_keys
+
+- name: copy engineblock certificates to correct location
+  copy: src=files/{{ env_name }}/certs/{{ item.value.publicKey }} dest={{ item.value.publicFile }}
+  with_dict: engine_keys
+
+- name: Configure EngineBlock
+  template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
+  with_items:
+    - engineblock.ini
+  notify:
+    - restart httpd
+
+- name: Run EngineBlock migrations
+  command: ./bin/migrate
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  register: migrate_output
+  changed_when: "'no update needed' not in migrate_output.stderr"
+
+- name: Make sure cache dir has correct permissions
+  file: path={{engine_current_release_symlink}}/app/cache  owner=engine group=engine recurse=yes
+

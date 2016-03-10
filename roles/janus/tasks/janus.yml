@@ -20,12 +20,14 @@
   notify:
     - restart httpd
     - restart memcached
-#
+
 - name: Ensure cache is cleared
   file: path={{ janus_cache_path }}/janus state=absent
   changed_when: False # never report change since it is about cache
 
 - name: Ensure cache base dir exists and is writable for the webserver
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
   file:
     path={{ item }}
     state=directory
@@ -38,6 +40,8 @@
   changed_when: False # never report change because we remove the directories above...
 
 - name: Ensure log directory exists and is writable for the webserver
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
   file:
     path=/var/log/janus-ssp/janus
     state=directory
@@ -46,6 +50,30 @@
   notify:
       - restart httpd
       - restart memcached
+
+- name: Ensure cache base dir exists and is writable for the webserver
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  file:
+    path={{ item }}
+    state=directory
+    owner={{ serviceregistry_fpm_user }}
+    group={{ serviceregistry_fpm_user }}
+  with_items:
+    - "{{ janus_cache_path }}"
+    - "{{ janus_cache_path }}/janus"
+    - "{{ janus_cache_path }}/janus/sessions"
+  changed_when: False # never report change because we remove the directories above...
+
+- name: Ensure log directory exists and is writable for the webserver
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  file:
+    path=/var/log/janus-ssp/janus
+    state=directory
+    owner={{ serviceregistry_fpm_user }}
+    group={{ serviceregistry_fpm_user }}
+  notify:
+        - restart httpd
+        - restart memcached
 
 # Note that this migration command probably has created cache directories and files
 # owned by root since it will be run as sudo
@@ -57,6 +85,8 @@
   changed_when: "'No migrations to execute' not in janus_migrate_output.stdout"
 
 - name: Ensure cache base and log directories exist and are writable for the webserver
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
   file:
     path={{ janus_cache_path }}
     state=directory
@@ -64,8 +94,35 @@
     group={{ apache_user }}
     recurse=yes
   changed_when: False # never report change because it is caused by migrate
-
-- name: Apache config
+  
+- name: Ensure cache base and log directories exist and are writable for the webserver
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  file:
+     path={{ janus_cache_path }}
+     state=directory
+     owner={{ serviceregistry_fpm_user }}
+     group={{ serviceregistry_fpm_user }}
+     recurse=yes
+  changed_when: False # never report change because it is caused by migra 
+  
+- name: Apache 2.2 config
+  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
   template: src=vhost.j2.conf dest=/etc/httpd/conf.d/serviceregistry.conf
   notify:
     - reload httpd
+
+- name: Apache 2.4 config
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  template: src=serviceregistry.conf.j2 dest=/etc/httpd/conf.d/serviceregistry.conf
+  notify: 
+    - reload httpd
+
+- name: php-fpm config
+  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  template: src={{ item }}.j2 dest=/etc/php-fpm.d/{{ item }}
+  with_items:
+    - serviceregistry-pool.conf
+  notify:
+    - restart php-fpm
+
