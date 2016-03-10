@@ -763,6 +763,15 @@ janus_service_registry_core:
                 default: ''
                 default_allow: false
                 required: false
+            'mdui:PrivacyStatementURL:#':
+                validate: isurl
+                supported:
+                    - en
+                    - nl
+                type: text
+                default: ''
+                default_allow: false
+                required: false
             'logo:0:url':
                 required: true
                 default: 'https://.png'
@@ -791,6 +800,11 @@ janus_service_registry_core:
             'coin:publish_in_edugain_date':
                 validate: isdatetime
                 type: text
+                default: ''
+                default_allow: false
+                required: false
+            'coin:from_edugain':
+                type: boolean
                 default: ''
                 default_allow: false
                 required: false

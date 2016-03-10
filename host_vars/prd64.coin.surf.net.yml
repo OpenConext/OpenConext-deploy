@@ -6,3 +6,7 @@ apache_app_listen_address:
   teams: 145.100.191.225
   voot: 145.100.191.225
   aa: 145.100.191.225
+  pdp: 145.100.191.225
+  oidc: 145.100.191.225
+  metadata_exporter: 145.100.191.225
+

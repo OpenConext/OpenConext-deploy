@@ -5,124 +5,107 @@
 - name: create apache folder
   file: path=/var/www/aa owner=apache group=apache mode=2755 state=directory
 
-- name: upload and extract local html archive
-  unarchive: src=./../OpenConext-aa/aa-gui/target/aa-gui-{{ aa_local_html_version }}.tar.gz dest=/var/www/aa/
-  register: local_aa_archive
-  tags: aa
-  when: aa_local_html_version != ''
-  notify:
-    - replace rollbar-enabled
-    - replace rollbar-environment
-
-- name: create symlink to uploaded version
-  file: src=/var/www/aa/aa-gui-{{ aa_local_html_version }} dest=/var/www/aa/current state=link force=yes
-  tags: aa
-  when: aa_local_html_version != ''
-  notify: restart httpd
-
 - name: download html archive
-  get_url:
-    url: "{{ maven_repo }}/{{ aa_group_url }}/aa-gui/{{ aa_version }}/aa-gui-{{ aa_version }}.tar.gz"
-    dest: /var/www/aa/aa-gui-{{ aa_version }}.tar.gz
+  maven_artifact:
+    group_id: org.openconext
+    artifact_id: aa-gui
+    extension: tar.gz
+    version: "{{ aa_version }}"
+    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in aa_version else maven_repo }}"
+    dest: /var/www/aa
+  register: maven_result
   tags: aa
-  when: aa_html_snapshot_timestamp == '' and aa_local_html_version == ''
-  notify:
-    - replace rollbar-enabled
-    - replace rollbar-environment
 
-- name: extract archive
-  unarchive: src=/var/www/aa/aa-gui-{{ aa_version }}.tar.gz dest=/var/www/aa/ copy=no
+- name: extract html archive
+  unarchive:
+    src: "{{ maven_result.dest }}"
+    dest: /var/www/aa
+    copy: no
+    owner: root
+    group: apache
+  register: unarchive_result
   tags: aa
-  when: aa_html_snapshot_timestamp == '' and aa_local_html_version == ''
-  notify: restart httpd
+  when: maven_result.changed
 
 - name: create symlink to downloaded version
-  file: src=/var/www/aa/aa-gui-{{ aa_version }} dest=/var/www/aa/current state=link force=yes
+  file:
+    src: "{{ unarchive_result.dest }}/aa-gui-{{ aa_version }}"
+    dest: current
+    state: link
+    force: yes
   tags: aa
-  when: aa_html_snapshot_timestamp == '' and aa_local_html_version == ''
-  notify: restart httpd
+  when: unarchive_result.changed
 
 - name: remove downloaded version
   file: path=/var/www/aa/aa-gui-{{ aa_version }}.tar.gz state=absent
   tags: aa
-  when: aa_html_snapshot_timestamp == '' and aa_local_html_version == ''
-
-- name: download snapshot of html archive
-  get_url:
-    url: "{{ maven_snapshot_repo }}/{{ aa_group_url }}/aa-gui/{{ aa_version }}-SNAPSHOT/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.tar.gz"
-    dest: /var/www/aa/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.tar.gz
-  tags: aa
-  when: aa_html_snapshot_timestamp != '' and aa_local_html_version == ''
-  notify:
-    - replace rollbar-enabled
-    - replace rollbar-environment
-
-- name: extract snapshot archive
-  unarchive: src=/var/www/aa/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.tar.gz dest=/var/www/aa/ copy=no
-  tags: aa
-  when: aa_html_snapshot_timestamp != '' and aa_local_html_version == ''
-
-- name: create symlink to downloaded snapshot version
-  file: src=/var/www/aa/aa-gui-{{ aa_version }}-SNAPSHOT dest=/var/www/aa/current state=link force=yes
-  tags: aa
-  when: aa_html_snapshot_timestamp != '' and aa_local_html_version == ''
-  notify: restart httpd
-
-- name: remove downloaded snapshot version
-  file: path=/var/www/aa/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.tar.gz state=absent
-  tags: aa
-  when: aa_html_snapshot_timestamp != '' and aa_local_html_version == ''
+  when: maven_result.changed
 
 - name: copy virtual host config
-  template: src=aa.conf.j2 dest=/etc/httpd/conf.d/aa.conf
+  template: src=httpd/aa.conf.j2 dest=/etc/httpd/conf.d/aa.conf
   tags: aa
   notify: restart httpd
-
-- name: Copy start script
-  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
-  notify: restart aa
-
-- name: enable aa service
-  service: name=aa enabled=yes
 
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=aa group=aa mode=0755
 
-- include: ../../../tasks/springbootapp/install-release.yml
-  when: "aa_snapshot_timestamp == '' and aa_local_jar == ''"
+- name: download aa-server.war
+  maven_artifact:
+    group_id: org.openconext
+    artifact_id: aa-server
+    extension: jar
+    version: "{{ aa_version }}"
+    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in aa_version else maven_repo }}"
+    dest: "{{ aa_dir }}"
+  tags: aa
+  register: maven_result
 
-- include: ../../../tasks/springbootapp/install-snapshot.yml
-  when: "aa_snapshot_timestamp != '' and aa_local_jar == ''"
-
-- include: ../../../tasks/springbootapp/install-local.yml
-  when: "aa_local_jar != ''"
+- name: set ownership of application artifact
+  file: path={{ maven_result.dest }} owner=aa group=aa mode=0500
+  tags: aa
 
 - name: Copy logging config
   template: src=logback.xml.j2 dest={{ aa_dir }}/logback.xml owner=aa group=aa mode=0740
-  notify: restart aa
+  notify: restart aa-server
 
 - name: Copy application config
   template: src=application.properties.j2 dest={{ aa_dir }}/application.properties owner=aa group=aa mode=0740
-  notify: restart aa
+  notify: restart aa-server
 
 - name: Copy attributeAuthorities config
   template: src=attributeAuthorities.yml.j2 dest={{ aa_dir }}/attributeAuthorities.yml owner=aa group=aa mode=0740
-  notify: restart aa
+  notify: restart aa-server
 
-- name: copy apache config
-  template: src=aa.conf.j2 dest=/etc/httpd/conf.d/aa.conf
-  notify: reload httpd
+- name: copy boot startup config
+  template:
+    src: aa-server.conf.j2
+    dest: "{{ aa_dir }}/aa-server.conf"
+    owner: root
+    group: root
+    mode: 0400
+  tags: aa
+  notify: restart aa-server
 
-# no idea why this is necessary, as the init script returns an ok status also
-# if aa is still initializing.  Waiting for the port to open works well
-# though, and seems like to correct way to handle this.
-- name: start the aa service
-  service: name=aa state=started enabled=yes
-  ignore_errors: true
+- name: link boot startup config
+  file:
+    src: "{{ aa_dir }}/aa-server.conf"
+    dest: "{{ aa_dir }}/aa-server-{{ maven_result.version }}.conf"
+    state: link
+  when: maven_result.changed
+  tags: aa
 
-- name: wait for aa to start
-  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
+- name: link init.d service
+  file:
+    src: "{{ maven_result.dest }}"
+    dest: /etc/init.d/aa-server
+    force: yes
+    state: link
+  tags: aa
 
-- name: ensure the service is started
-  service: name=aa enabled=yes state=started
+- name: enable aa-server service
+  service: name=aa-server enabled=yes
 
+- name: restart aa-server
+  service: name=aa-server state=restarted
+  tags: aa
+  when: maven_result.changed

@@ -39,6 +39,7 @@ janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
+janus_ssp_title_suffix: "TEST"
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
@@ -158,8 +159,8 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.2.6
-#teams_snapshot_timestamp: 20150915.083452-1
+teams_version: 4.2.8
+#teams_snapshot_timestamp: 20160217.083701-2
 
 api_version: 4.0.1
 #api_snapshot_timestamp: 20150419.220130-443
@@ -242,7 +243,7 @@ authzserver:
   rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
 authz_server_version: 1.3.3
-authz_server_snapshot_timestamp: "20160126.144433-4"
+#authz_server_snapshot_timestamp: "20160126.144433-4"
 authz_server_debug: true
 
 voot:
@@ -277,12 +278,12 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.5
-#voot_snapshot_timestamp: 20151207.100901-4
+voot_version: 1.6.1
+#voot_snapshot_timestamp: 20160218.102010-1
 voot_debug: true
 
-authz_admin_version: 1.3.4
-authz_admin_snapshot_timestamp: "20151223.124726-3"
+authz_admin_version: 1.3.5
+#authz_admin_snapshot_timestamp: "20151223.124726-3"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -294,6 +295,7 @@ authzadmin:
           - groups
         scopes:
           - groups
+          - members
         grantTypes:
           - authorization_code
           - implicit
@@ -378,20 +380,20 @@ authzadmin:
       secret: "{{ aa.authz_secret }}"
 
 authz_playground_version: 1.2
-authz_playground_snapshot_timestamp: "20160204.074458-4"
+authz_playground_snapshot_timestamp: "20160208.150458-5"
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
-  springapp_oidc_client_id: https@//oidc.test.surfconext.nl
+  springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: 1.0.1
-pdp_snapshot_timestamp: 20160128.101752-6
-pdp_html_snapshot_timestamp: 20160121.121454-1
+pdp_version: 1.1.2
+#pdp_snapshot_timestamp: 20160216.135430-1
+#pdp_html_snapshot_timestamp: 20160216.135448-1
 #pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
@@ -406,17 +408,13 @@ pdp:
   db_name: pdp-server
   spring_profiles_active: test
   cache_policies: false
-  include_inactive_policies: true
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
   rollbar_environment: test
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-aa_version: "0.1"
-aa_snapshot_timestamp: "20160202.153756-13"
-aa_html_snapshot_timestamp: "20160129.141321-14"
-
+aa_version: "1.0.1-SNAPSHOT"
 aa_debug: true
 aa:
   crt_name: "{{ tls_https.crt_name }}"
@@ -439,8 +437,8 @@ aa:
   rollbar_environment: test
   rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
-oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151229.105743-13"
+oidc_version: "1.0.2"
+# oidc_snapshot_timestamp: "20160307.120704-2"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -451,6 +449,18 @@ oidc:
   db_host: "{{ mysql_host }}"
   db_name: oidc-server
   sp_entity_id: https://oidc.test.surfconext.nl
+
+metadata_exporter_version: "1.1.1"
+#metadata_exporter_snapshot_timestamp: "20160208.084759-3"
+metadata_exporter:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  db_user: srrw
+  db_password: "{{ mysql_passwords.sr }}"
+  db_host: "{{ mysql_host }}"
+  db_name: sr
+  password: "{{ metadata_exporter_password }}"
+  rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"
 
 loadbalancing:
   engine: {
@@ -544,6 +554,13 @@ loadbalancing:
       { label: "aa_backend", ip: "145.100.191.117" },
     ]
   }
+  metadata_exporter: {
+    port: 616,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "metadata_exporter_backend", ip: "145.100.191.117" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
@@ -587,6 +604,7 @@ nginx_ipv4_addresses:
   pdp: 145.100.191.122
   oidc: 145.100.191.122
   aa: 145.100.191.122
+  metadata_exporter: 145.100.191.122
 
 nginx_config_templates:
   - engine
@@ -605,3 +623,4 @@ nginx_config_templates:
   - mujina_idp
   - oidc
   - aa
+  - metadata_exporter

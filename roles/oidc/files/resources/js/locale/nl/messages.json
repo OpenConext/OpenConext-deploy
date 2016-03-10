@@ -1,0 +1,494 @@
+{
+    "admin": {
+        "blacklist": "Zwarte lijst",
+        "blacklist-form": {
+            "blacklisted-uris": "Zwarte lijst URI"
+        },
+        "home": "keer terug naar de homepage",
+        "list-widget": {
+            "empty": "Er zijn geen items in deze lijst.",
+            "tooltip": "Klik voor de volledige waarde."
+        },
+        "manage-blacklist": "Beheer Blacklisted Opdrachtgevers",
+        "self-service-client": "Self-service Client Registratie",
+        "self-service-resource": "Self-service Protected Resource Registratie",
+        "user-profile": {
+            "claim": "Claim naam:",
+            "show": "Bekijk profiel",
+            "text": "Uw gebruikersprofiel heeft de volgende informatie:",
+            "value": "Claim waarde:"
+        }
+    },
+    "client": {
+        "client-form": {
+            "access": "Toegang",
+            "access-token-no-timeout": "Toegangstokens niet time-out",
+            "access-token-timeout": "Toegang Token Timeout",
+            "access-token-timeout-help": "Voer deze tijd in seconden, minuten of uren.",
+            "acr-values": "Standaardwaarden",
+            "acr-values-placeholder": "nieuwe ACR waarde",
+            "acr-values-help": "Standaard Authentication Context Referentie aan te vragen voor deze klant",
+            "allow-introspection": "Sta oproepen naar de Introspection Endpoint?",
+            "authentication-method": "Token Endpoint Verificatiemethode",
+            "authorization-code": "autorisatiecode",
+            "client-credentials": "Client-credentials",
+            "client-description": "Beschrijving",
+            "client-description-help": "Leesbare tekst beschrijving",
+            "client-description-placeholder": "Typ een beschrijving",
+            "client-id": "Klant ID",
+            "client-id-help": "Unieke identifier. De identifier moet herleidbaar zijn naar de entity ID van de SP in SR. Vervang elke ':' door een '@' in de entity ID van de SP",
+            "client-id-placeholder": "Typ iets",
+            "client-name": "Klantnaam",
+            "client-name-help": "Mensen leesbare naam van de toepassing",
+            "client-name-placeholder": "Typ iets",
+            "client-secret": "Client geheim",
+            "client-secret-placeholder": "Typ een geheim",
+            "contacts": "Contacten",
+            "contacts-help": "Lijst met contactpersonen voor de beheerders van deze klant.",
+            "contacts-placeholder": "nieuw contactpersoon",
+            "credentials": "Legitimatiegegevens",
+            "crypto": {
+                "a128cbc-hs256": "Samengestelde Geverifieerde encryptie-algoritme met behulp van AES in Cipher Block Chaining (CBC) mode met PKCS # 5 opvullen met een integer berekening met HMAC SHA-256, met behulp van een 256 bit CMK (en 128 bit CEK)",
+                "a256cbc-hs512": "Samengestelde Geverifieerde encryptie-algoritme met behulp van AES in CBC mode met PKCS # 5 opvullen met een integer berekening met HMAC SHA-512, met behulp van een 512 bit CMK (en 256 bit CEK)",
+                "a128gcm": "AES GCM met 128 bits sleutels",
+                "a256gcm": "AES GCM met 256 bits sleutels",
+                "a128kw": "AES Key Wrap Algoritme met 128 bits sleutels",
+                "a256kw": "AES Key Wrap Algoritme met 256 bits sleutels",
+                "default": "Server standaard",
+                "dir": "Direct gebruik van een gedeelde symmetrische sleutel als Content Master Key (CMK) voor het blok versleuteling stap",
+                "ecdh-es": "Elliptische curve Diffie-Hellman Kortstondige Static belangrijke overeenkomst met de Concat KDF, met de afgesproken sleutel wordt direct gebruikt als Content Loper",
+                "ecdh-es-a128kw": "Elliptische Curve Diffie-Hellman efemere statische sleutel overeenkomst per ECDH-ES en sectie 4.7, maar waar de sleutel overeengekomen wrap de inhoud hoofdsleutel (CMK) met de A128KW functie wordt gebruikt",
+                "ecdh-es-a256kw": "Elliptische curve Diffie-Hellman Kortstondige Static key-overeenkomst per ECDH-ES en artikel 4.7, maar waar de afgesproken sleutel wordt gebruikt om de inhoud Master Key (CMK) wrap met de A256KW functie",
+                "none": "Geen versleuteling",
+                "rsa-oaep": "RSAES met Optimal asymmetrische encryptie Padding (OAEP)",
+                "rsa1-5": "RSAES-PKCS1-V1_5"
+            },
+            "cryptography": "Crypto",
+            "display-secret": "Weergave / bewerken client geheim:",
+            "edit": "Klant bewerken",
+            "generate-new-secret": "Genereer een nieuwe klant geheim?",
+            "generate-new-secret-help": "Nieuwe geheime zal worden gegenereerd wanneer u klikt op &#39;Opslaan&#39;",
+            "generate-on-save": "Genereren op Opslaan",
+            "grant-types": "Grant Types",
+            "home": "Homepagina",
+            "home-help": "URL voor de klant de startpagina, wordt weergegeven aan de gebruiker",
+            "hours": "uren",
+            "id": "ID:",
+            "id-token-crypto-algorithm": "ID Token Encryptie-algoritme",
+            "id-token-crypto-method": "ID Token Coderingsmethode",
+            "id-token-signing-algorithm": "ID Token Signing Algorithm",
+            "id-token-timeout": "ID Token Timeout",
+            "implicit": "impliciet",
+            "initiate-login": "Initieren Inloggen",
+            "initiate-login-help": "URL naar login starten op de client",
+            "introspection": "Introspectie",
+            "jwk-set": "Public key",
+            "jwk-set-help": "URL voor JSON Web Key set van de klant (moet bereikbaar met de server)",
+            "jwk-set-value-help": "URL voor JSON Web Key set van de klant (moet bereikbaar met de server)",
+            "logo": "Logo",
+            "logo-help": "URL die verwijst afbeelding van een logo, zal op goedkeuring pagina worden getoond",
+            "main": "Hoofd",
+            "max-age": "Standaard Max Leeftijd",
+            "max-age-help": "Standaard maximum sessie leeftijd alvorens opnieuw gevraagd",
+            "minutes": "minuten",
+            "new": "Nieuwe klant",
+            "other": "Overige",
+            "pairwise": "Paarsgewijze",
+            "password": "wachtwoord",
+            "policy": "Beleidsverklaring",
+            "policy-help": "URL voor de beleidsverklaring van deze klant, zal worden getoond aan de gebruiker",
+            "post-logout": "Post-Afmelden Redirect",
+            "post-logout-help": "URL naar de klant te leiden na een logout operatie",
+            "public": "Openbaar",
+            "redelegation": "herdelegatie",
+            "redirect-uris": "Redirect URI (s)",
+            "redirect-uris-help": "URI&#39;s die de klant kan worden doorgestuurd naar na de pagina machtiging",
+            "refresh": "vernieuw",
+            "refresh-tokens": "Vernieuwen Tokens",
+            "refresh-tokens-issued": "Vernieuwen tokens worden uitgegeven voor deze klant",
+            "refresh-tokens-issued-help": "Dit zal het offline_access scope toevoegen aan scopes van de klant.",
+            "refresh-tokens-reused": "Refresh tokens voor deze klant worden hergebruikt",
+            "clear-access-tokens": "Actieve toegangstokens worden automatisch ingetrokken wanneer de refresh token wordt gebruikt",
+            "refresh-tokens-no-expire": "Vernieuwen tokens niet time-out",
+            "registered": "Geregistreerd bij",
+            "registration-token": "Registratie Token:",
+            "registration-access-token": "Registratie Toegang Token",
+            "registration-token-error": "Er was een probleem laden van de registratie toegang token voor deze klant.",
+            "request-object-signing-algorithm": "Verzoek Object Signing Algorithm",
+            "request-uri": "Verzoek URI",
+            "request-uri-help": "URI&#39;s bevatten verzoek objecten die door deze opdrachtgever",
+            "require-auth-time": "Vereisen Authentication Tijd",
+            "require-auth-time-label": "Vereisen altijd dat de auth_time claim in de id token worden verzonden",
+            "response-types": "Types reactie",
+            "rotate-registration-token": "Roteren registratie token",
+            "rotate-registration-token-confirm": "Weet je zeker dat je deze klant registratie token te draaien?",
+            "rotate-registration-token-error": "Er was een probleem het draaien van de registratie toegang token voor deze klant.",
+            "saved": {
+                "no-secret": "Klant geheim",
+                "saved": "Client Opgeslagen",
+                "secret": "Het geheim:",
+                "show-secret": "Show Secret",
+                "unchanged": "ongewijzigd"
+            },
+            "scope-placeholder": "nieuwe scope",
+            "scope-help": "OAuth scopes deze client mag verzoek",
+            "seconds": "seconden",
+            "secret-asymmetric-jwt": "Asymmetrisch ondertekend JWT bewering",
+            "secret-http": "Client Secret via HTTP Basic",
+            "secret-none": "Geen authenticatie!",
+            "secret-post": "Client Secret via HTTP POST",
+            "secret-symmetric-jwt": "Client Secret via symmetrisch ondertekend JWT bewering",
+            "sector-identifier": "Sector Identifier URI",
+            "signing": {
+                "any": "Elke toegestaan",
+                "default": "Server standaard",
+                "es256": "ECDSA met P-256 curve en SHA-256 hash algoritme",
+                "es384": "ECDSA met P-384 curve en SHA-384 hash algoritme",
+                "es512": "ECDSA met P-512 curve en SHA-512 hash algoritme",
+                "hs256": "HMAC met SHA-256 hash algoritme",
+                "hs384": "HMAC met SHA-384 hash algoritme",
+                "hs512": "HMAC met SHA-512 hash algoritme",
+                "none": "Digitale handtekening",
+                "rs256": "RSASSA met SHA-256 hash algoritme",
+                "rs384": "RSASSA met SHA-384 hash algoritme",
+                "rs512": "RSASSA met SHA-512 hash algoritme",
+                "ps256": "RSASSA-PSS met SHA-256 en MGF1 met SHA-256",
+                "ps384": "RSASSA-PSS met SHA-384 en MGF1 met SHA-384",
+                "ps512": "RSASSA-PSS met SHA-512 en MGF1 met SHA-512"
+            },
+            "subject-type": "Vak Type",
+            "terms": "Algemene voorwaarden",
+            "terms-help": "URL van de Algemene Voorwaarden van deze klant, zal worden getoond aan de gebruiker",
+            "token-signing-algorithm": "Token Endpoint Authenticatie Signing Algorithm",
+            "tokens": "Token",
+            "type": "Toepassing Type",
+            "type-native": "Binnenlands",
+            "type-web": "Website",
+            "unknown": "(onbekend)",
+            "user-info-crypto-algorithm": "Gebruiker Info Endpoint Encryption Algorithm",
+            "user-info-crypto-method": "Gebruiker Info Endpoint Encryption Method",
+            "user-info-signing-algorithm": "Gebruiker Info Endpoint Signing Algorithm"
+        },
+        "client-table": {
+            "allow-introspection-tooltip": "Deze client kan token introspectie uitvoeren",
+            "confirm": "Bent u zeker dat u wilt deze client verwijderen?",
+            "dynamically-registered-tooltip": "Deze client is dynamisch geregistreerd. Klik hier voor registratie access token bekijken",
+            "match": {
+                "contacts": "contacten",
+                "description": "omschrijving",
+                "homepage": "homepage",
+                "id": "id",
+                "logo": "Logo",
+                "name": "naam",
+                "policy": "polis",
+                "redirect": "Omleidings-Uri",
+                "scope": "doelpopulatie",
+                "terms": "vergoedingsvoorwaarde"
+            },
+            "matched-search": "Matched zoeken:",
+            "new": "Nieuwe klant",
+            "no-clients": "Er zijn geen geregistreerde klanten op deze server.",
+            "no-matches": "Er zijn geen klanten die overeenkomen met uw zoekcriteria.",
+            "no-redirect": "Omleidings-Uri",
+            "registered": "Registrered",
+            "search": "Zoek…",
+            "whitelist": "Whitelist",
+            "unknown": "op een onbekende tijd"
+        },
+        "manage": "Beheer Clienten",
+        "more-info": {
+            "contacts": "Administratieve Contacten:",
+            "home": "Homepage:",
+            "more": "meer informatie",
+            "policy": "BELEID",
+            "terms": "Algemene voorwaarden"
+        },
+        "newClient": "Nieuwe klant"
+    },
+    "common": {
+        "cancel": "Annuleer",
+        "client": "Opdrachtgever",
+        "clients": "Clienten",
+        "close": "Sluiten",
+        "delete": "Verwijder",
+        "description": "Beschrijving",
+        "dynamically-registered": "Deze client is dynamisch geregistreerd",
+        "edit": "Bewerken",
+        "expires": "Vervalt over:",
+        "information": "Informatie",
+        "new": "Nieuw",
+        "not-yet-implemented": "Nog niet geïmplementeerd",
+        "not-yet-implemented-content": "De waarde van dit veld wordt opgeslagen met de klant, maar de server heeft momenteel niets mee te verwerken. Toekomstige versies van de server bibliotheek gebruik van maken.",
+        "revoke": "Intrekken",
+        "refresh": "Opnieuw laden",
+        "save": "Opslaan",
+        "scopes": "Scopes",
+        "statistics": "Statistieken"
+    },
+    "dynreg": {
+        "client-id-placeholder": "Voer Client ID",
+        "configuration-url": "Client Configuration URL",
+        "edit-dynamically-registered": "Bewerk een dynamisch Geregistreerd Client",
+        "edit-existing": "Bewerk een bestaande klant",
+        "edit-existing-help": "Plakken in uw client-ID en registratie toegang token voor toegang tot de klant.",
+        "invalid-access-token": "Ongeldige client of registratie access token.",
+        "new-client": "Registreer een nieuwe klant",
+        "or": "-of-",
+        "regtoken-placeholder": "Voer Registratie Toegang Token",
+        "warning": "<strong>Waarschuwing!</strong> U moet uw <b>Client ID, Client Secret (indien aanwezig),</b> en uw <b>registratie Access Token</b> beschermen. Als je verliest uw Client ID of Registratie Toegang Token, zult u geen toegang meer tot uw klant registraties en je nodig hebt om een ​​nieuwe klant te registreren.",
+        "will-be-generated": "Zal worden gegenereerd"
+    },
+    "grant": {
+        "manage-approved-sites": "Beheer Goedgekeurde sites",
+        "refresh": "opnieuw laden",
+        "grant-table": {
+            "active-tokens": "Aantal momenteel actief toegangstokens",
+            "application": "Toepassing",
+            "approved-sites": "Goedgekeurde sites",
+            "authorized": "Geautoriseerd",
+            "dynamically-registered": "Deze client is dynamisch geregistreerd",
+            "expires": "Vervalt over:",
+            "last-accessed": "Laatst geopend:",
+            "never": "Nooit",
+            "no-sites": "U hebt geen goedgekeurde sites.",
+            "no-whitelisted": "U hebt geen toegang tot enige witte lijst plaatsen.",
+            "pre-approved": "Dit zijn sites die zijn vooraf goedgekeurd door een beheerder.",
+            "text": "Dit zijn sites die u handmatig hebt goedgekeurd. Als dezelfde site vraagt ​​om dezelfde toegang in de toekomst zal worden verleend zonder te vragen.",
+            "unknown": "Onbekend",
+            "whitelist-note": "<b>LET OP:</b> Als je ze hier in te trekken, zullen ze automatisch opnieuw worden goedgekeurd bij een volgend bezoek wthout gevraagd.",
+            "whitelisted-site": "Deze site is de witte lijst door een administrator",
+            "whitelisted-sites": "Witte lijst Sites"
+        }
+    },
+    "rsreg": {
+        "resource-id-placeholder": "Voer Resource ID",
+        "configuration-url": "Client Configuration URL",
+        "edit": "Bewerk Protected Resource",
+        "edit-existing": "Bewerk een bestaande beschermde resource",
+        "edit-existing-help": "Plakken in uw ID en registratie toegang token om de eigenschappen van de resource.",
+        "invalid-access-token": "Ongeldige client of registratie access token.",
+        "new": "Nieuwe Protected Resource",
+        "new-resource": "Registreer een nieuwe beschermde resource",
+        "or": "-of-",
+        "regtoken-placeholder": "Voer Registratie Toegang Token",
+        "will-be-generated": "Zal worden gegenereerd",
+        "warning": "<strong>Waarschuwing!</strong> U moet uw <b>Client ID, Client Secret (indien aanwezig),</b> en uw <b>registratie Access Token</b> beschermen. Als je verliest uw Client ID of Registratie Toegang Token, zult u geen toegang meer tot uw klant registraties en je nodig hebt om een ​​nieuwe klant te registreren.",
+        "client-form": {
+            "scope-help": "Scopes dat deze bron kunnen tokens introspectie voor zal zijn."
+        }
+    },
+    "scope": {
+        "manage": "Beheer Systeem Scopes",
+        "scope-list": {
+            "no-scopes": "NO SCOPES"
+        },
+        "system-scope-form": {
+            "default": "standaard scope",
+            "default-help": "Nieuw opgerichte klanten krijgen deze scope standaard?",
+            "description-help": "Leesbare tekst beschrijving",
+            "description-placeholder": "Typ een beschrijving",
+            "restricted": "Afgeschermd",
+            "restricted-help": "Beperkt scopes zijn alleen bruikbaar door systeembeheerders en zijn niet beschikbaar om dynamisch geregistreerde klanten en beveiligde bronnen",
+            "edit": "Scope bewerken",
+            "icon": "Iconen",
+            "new": "Nieuwe Scope",
+            "select-icon": "Pictogram Kiezen",
+            "structured": "een gestructureerd scope",
+            "structured-help": "Wordt de reikwijdte gestructureerd met gestructureerde waarden als <code>base:extension</code>",
+            "structured-param-help": "Leesbare beschrijving van de gestructureerde parameter",
+            "subject-type": "Vak Type",
+            "value": "Scope waarde",
+            "value-help": "Snaar zonder spaties",
+            "value-placeholder": "doelpopulatie"
+        },
+        "system-scope-table": {
+            "confirm": "Bent u zeker dat u wilt deze scope verwijderen? Klanten die dit kader moet nog steeds in staat om het te vragen.",
+            "new": "Nieuwe Scope",
+            "text": "Er zijn geen systeem scopes gedefinieerd. Klanten kunnen nog steeds aangepaste scopes.",
+            "tooltip-restricted": "Deze omvang kan alleen worden gebruikt door adminisrtators. Het is niet beschikbaar voor dynamische registratie.",
+            "tooltip-default": "Dit kader wordt automatisch toegewezen aan nieuw geregistreerde klanten."
+        }
+    },
+    "token": {
+        "manage": "Actief beheer Tokens",
+        "token-table": {
+            "access-tokens": "Toegangstokens",
+            "associated-id": "Deze toegang token werd uitgegeven met een bijbehorende ID token.",
+            "associated-refresh": "Deze toegang token werd uitgegeven met een bijbehorende refresh token.",
+            "click-to-display": "Klik voor de volledige symbolische waarde te geven",
+            "confirm": "Bent u zeker dat u wilt dit token te trekken?",
+            "confirm-refresh": "Bent u zeker dat u wilt deze refresh token en de bijbehorende toegangstokens intrekken?",
+            "expires": "Verloopt",
+            "no-access": "Er zijn geen actieve toegangstokens.",
+            "no-refresh": "Er zijn geen actieve refresh tokens.",
+            "number-of-tokens": "Aantal bijbehorende toegangstokens",
+            "refresh-tokens": "Vernieuwen Tokens",
+            "text": "Toegangstokens zijn meestal van korte duur en bieden klanten toegang tot specifieke resources. ID Tokens zijn gespecialiseerde toegangstokens aan te melden met OpenID verbinding te vergemakkelijken.",
+            "text-refresh": "Vernieuwen tokens zijn meestal een lange levensduur en bieden onze klanten de mogelijkheid om nieuwe toegang tokens te krijgen zonder de betrokkenheid van de eindgebruiker.",
+            "token-info": "Token Informatie"
+        }
+    },
+    "whitelist": {
+        "confirm": "Weet je zeker dat je deze whitelist item wilt verwijderen?",
+        "edit": "Bewerk Whitelist",
+        "manage": "Beheer witte lijst Sites",
+        "new": "Nieuwe Whitelist",
+        "whitelist": "Whitelist",
+        "whitelist-form": {
+            "allowed-scopes": "Toegestaan ​​Scopes",
+            "edit": "Bewerk witte lijst Site",
+            "new": "Nieuwe witte lijst Site",
+            "scope-help": "Lijst van scopes die automatisch zal worden goedgekeurd wanneer deze client een verzoek",
+            "scope-placeholder": "nieuwe scope"
+        },
+        "whitelist-table": {
+            "no-sites": "Er zijn geen witte lijst plaatsen. Gebruik de <strong>whitelist-knop</strong> op de client management pagina naar een te maken."
+        }
+    },
+    "blacklist": {
+        "text": "Zwarte lijst URIs kunnen niet worden gebruikt als redirect URIs door enige geregistreerde klanten, zowel in de admin interface of dynamische registratie.",
+        "blacklist-uri-placeholder": "blacklist uri",
+        "add": "URI toe aan blacklist",
+        "empty": "Er zijn geen zwarte lijst URIs op deze server.",
+        "uri": "Uri"
+    },
+    "copyright": "Aangedreven door <a href=\"https://github.com/mitreid-connect/\">MITREid Connect <span class=\"label\">{0}</span></a> <span class=\"pull-right\">© 2015 The Mitre Corporation en MIT KIT..</span>",
+    "about": {
+        "title": "Over",
+        "body": "Dit OpenID Connect-dienst is opgebouwd uit de MITREid Connect Open Source project, van <a href=\"http://www.mitre.org/\">The Mitre Corporation</a> en de <a href=\"http://kit.mit.edu/\">MIT Kerberos en Internet Trust Consortium.</a> </p><p> Meer informatie over het project is te vinden op <a href=\"http://github.com/mitreid-connect/\">MITREid Verbinden op GitHub.</a> Daar kunt u bug rapporten in te dienen, feedback geven, of zelfs bijdragen code patches voor extra functies die u graag zou willen zien."
+    },
+    "statistics": {
+        "title": "Statistieken",
+        "number_users": "Aantal gebruikers: <span class=\"label label-info\" id=\"userCount\">{0}</span>",
+        "number_clients": "Geautoriseerde klanten: <span class=\"label label-info\" id=\"clientCount\">{0}</span>",
+        "number_approvals": "Goedgekeurde websites: <span class=\"label label-info\" id=\"approvalCount\">{0}</span>"
+    },
+    "home": {
+        "title": "keer terug naar de homepage",
+        "welcome": {
+            "title": "Welkom",
+            "body": "OpenID Connect (OIDC) is een identiteit protocol gebouwd op de top van de OAuth2 kader toestemming. Met OIDC SURFconext is het mogelijk voor Service Providers om de SURFnet federatie toetreden zonder de SAML2 protocol te implementeren."
+        },
+        "more": "Meer",
+        "about": {
+            "title": "Over",
+            "body": "Dit OpenID Connect-dienst is opgebouwd uit de MITREid Connect Open Source project, van <a href=\"http://www.mitre.org/\">The Mitre Corporation</a> en de <a href=\"http://kit.mit.edu/\">MIT Kerberos en Internet Trust Consortium.</a>"
+        },
+        "contact": {
+            "title": "Contact",
+            "body": "Voor meer informatie of ondersteuning, contact opnemen met de beheerder van dit systeem. </p><p> <a class=\"btn\" href=\"mailto:idp@example.com?Subject=OpenID Connect\">E-mail »</a>"
+        },
+        "statistics": {
+            "title": "lopende statistieken",
+            "loading": "Aan het laden",
+            "number_users": "Aantal gebruikers: <span class=\"label label-info\" id=\"userCount\">{0}</span>",
+            "number_clients": "Geautoriseerde klanten: <span class=\"label label-info\" id=\"clientCount\">{0}</span>",
+            "number_approvals": "Goedgekeurde websites: <span class=\"label label-info\" id=\"approvalCount\">{0}</span>"
+        }
+    },
+    "contact": {
+        "title": "Contact",
+        "body": "Bugs met de MITREid Connect-software zelf te melden, gebruik dan de <a href=\"https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/issues\">GitHub issue tracker.</a> Voor problemen met betrekking tot deze server, contact opnemen met de beheerder van de server."
+    },
+    "topbar": {
+        "about": "Over",
+        "contact": "Contact",
+        "statistics": "Statistieken",
+        "home": "keer terug naar de homepage",
+        "login": "Log in",
+        "logout": "Log uit"
+    },
+    "sidebar": {
+        "administrative": {
+            "title": "Administratief",
+            "manage_clients": "Beheer Clienten",
+            "whitelisted_clients": "Witte lijst Clients",
+            "blacklisted_clients": "Zwarte lijst Clients",
+            "system_scopes": "Systeem Scopes"
+        },
+        "personal": {
+            "title": "Flowberichten",
+            "approved_sites": "Beheer Goedgekeurde sites",
+            "active_tokens": "Actief beheer Tokens",
+            "profile_information": "Profiel informatie"
+        },
+        "developer": {
+            "title": "Ontwikkelaar",
+            "client_registration": "Self-service client registratie",
+            "resource_registration": "Zelfbediening beschermde resource registratie"
+        }
+    },
+    "manage": {
+        "ok": "OK",
+        "loading": "Aan het laden",
+        "title": "Microsoft Management Console"
+    },
+    "approve": {
+        "dynamically-registered-unknown": "op een onbekende tijd",
+        "title": "Goedkeuren Toegang",
+        "error": {
+            "not_granted": "De toegang niet kon worden verleend."
+        },
+        "required_for": "Goedkeuring vereist",
+        "dynamically_registered": "Deze client is dynamisch geregistreerd <span class=\"label label-info\" id=\"registrationTime\">{0}.</span>",
+        "caution": {
+            "title": "Voorzichtig",
+            "message": {
+                "none": "<span class=\"label label-important\">Het</span> is nooit eerder goedgekeurd.",
+                "singular": "Het is goedgekeurd <span class=\"label label-warning\">{0}</span> keer eerder.",
+                "plural": "Het is <span class=\"label\">{0}</span> keer goedgekeurd eerder."
+            }
+        },
+        "more_information": "meer informatie",
+        "home_page": "Home page",
+        "policy": "Beleid",
+        "terms": "Algemene voorwaarden",
+        "contacts": "Administratieve Contacten",
+        "warning": "Waarschuwing",
+        "no_redirect_uri": "Deze client heeft geen redirect URI&#39;s geregistreerd en iemand zou kunnen worden met behulp van een kwaadaardig URI hier.",
+        "redirect_uri": "U wordt doorgestuurd naar de volgende pagina als u klikt Goedkeuren: <code>{0}</code>",
+        "pairwise": "Deze client maakt gebruik van een <b>paarsgewijs</b> identifier, waardoor het moeilijker om je identiteit tussen sites correleren.",
+        "no_scopes": "Deze client heeft geen scopes geregistreerd en is dus <em>toegestaan</em> ​​om scopes beschikbaar op het systeem aan te vragen. Ga voorzichtig verder.",
+        "access_to": "Toegang tot de",
+        "remember": {
+            "title": "Vergeet niet deze beslissing",
+            "until_revoke": "onthoud dit besluit totdat ik intrekken",
+            "one_hour": "onthoud dit besluit gedurende een uur",
+            "next_time": "vraagt ​​me weer de volgende keer"
+        },
+        "do_authorize": "Heeft u machtigt",
+        "label": {
+            "authorize": "Machtigen",
+            "deny": "Afkeuren"
+        }
+    },
+    "error": {
+        "title": "Fout",
+        "header": "Error:",
+        "message": "Er is een fout verwerking van uw verzoek. Bericht van de server was:"
+    },
+    "login": {
+        "login_with_username_and_password": "Login met gebruikersnaam en wachtwoord",
+        "error": "Het systeem was niet in staat om u inloggen. Probeer opnieuw."
+    },
+    "openconext": {
+        "header": {
+            "lang_en": "EN",
+            "lang_nl": "NL",
+            "welcome":"Welkom"
+        },
+        "footer": {
+            "org": "SURFnet",
+            "org_link": "http://www.surfnet.nl/en",
+            "service": "Algemene voorwaarden",
+            "service_link": "https://wiki.surfnet.nl/display/conextsupport/Terms of Service (EN)",
+            "mailto": "support@surfconext.nl",
+            "mailto_link": "mailto: support@surfconext.nl",
+            "git_link": "https://github.com/OpenConext/OpenConext-oidc"
+        },
+        "welcome": {
+            "title": "Welkom",
+            "body": "OpenID Connect (OIDC) is een identiteit protocol gebouwd op de top van de OAuth2 kader toestemming. Met OIDC SURFconext is het mogelijk voor Service Providers om de SURFnet federatie toetreden zonder de SAML2 protocol te implementeren."
+        }
+    }
+}

@@ -15,7 +15,6 @@
     environment: "{{ env }}"
     user: "{{ ansible_ssh_user }}"
     revision: "{{ springapp_version }}-{{ springapp_snapshot_timestamp }}"
-  tags: deploy
   when: springapp_snapshot_released.changed and (springapp_rollbar_apiKey is defined and springapp_rollbar_apiKey != "secret")
   ignore_errors: true
 

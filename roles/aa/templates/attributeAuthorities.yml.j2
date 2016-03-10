@@ -77,3 +77,27 @@ authorities:
         }
       ]
     }
+  - {
+      id: "test:mock",
+      description: "Test authority",
+      timeOut: 1000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:isMemberOf",
+          caseExact: True,
+          description: "Test memberOf membership",
+          multiValued: True,
+          mutability: "readOnly",
+          required: False,
+          returned: "default",
+          type: "string",
+          uniqueness: "none",
+        }
+      ],
+      requiredInputAttributes: [
+        {
+        name: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
+        }
+      ]
+    }
+

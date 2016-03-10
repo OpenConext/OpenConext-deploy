@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+    <syslogHost>{{ rsyslog_host }}</syslogHost>
+    <facility>DAEMON</facility>
+    <suffixPattern>MULTIDATAMAIN: [%thread] %logger %msg</suffixPattern>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/var/log/metadata-exporter/metadata-exporter.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>/var/log/metadata-exporter/metadata-exporter-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <!-- keep 30 days' worth of history -->
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+     <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
+   </encoder>
+  </appender>
+
+  {% if metadata_exporter.rollbar_apiKey is defined %}
+  <appender name="ROLLBAR" class="com.tapstream.rollbar.RollbarAppender">
+    <apiKey>{{ metadata_exporter.rollbar_apiKey }}</apiKey>
+    <environment>{{ env }}</environment>
+
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>WARN</level>
+    </filter>
+  </appender>
+  {% endif %}
+
+  <appender name="email" class="ch.qos.logback.classic.net.SMTPAppender">
+    <smtpHost>{{ smtp_server }}</smtpHost>
+    <from>no-reply@surfconext.nl</from>
+    <to>{{ error_mail_to }}</to>
+    <subject>{{ error_subject_prefix }}Unexpected error metadata exporter</subject>
+    <layout class="ch.qos.logback.classic.html.HTMLLayout"/>
+
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+  </appender>
+
+  <logger name="me" level="DEBUG"/>
+
+  <root level="WARN">
+    {% if metadata_exporter.rollbar_apiKey is defined %}
+    <appender-ref ref="ROLLBAR"/>
+    {% endif %}
+    <appender-ref ref="FILE" />
+    <appender-ref ref="SYSLOG" />
+  </root>
+</configuration>

@@ -1,4 +1,16 @@
 ---
+- name: copy locale languages files
+  copy: src=resources dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc owner=tomcat group=tomcat mode=0740
+  register: oidc_language_files
+
+- name: add language files to war
+  shell: jar -uvf {{ tomcat_install_dir }}/wars/{{ deploy_name }}.war ./resources/ chdir={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc
+  sudo_user: tomcat
+  when: new_deployment is defined
+
+- name: change permissions to war
+  file: path={{ tomcat_install_dir }}/wars/{{ deploy_name }}.war owner=tomcat group=tomcat mode=0644
+
 - name: copy oidc configuration
   template: src=application.oidc.properties.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/application.oidc.properties
   tags: oidc
