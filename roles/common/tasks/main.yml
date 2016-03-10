@@ -4,7 +4,6 @@
 
 - name: Add Epel repo
   yum: name=epel-release state=present
-#  yum: name=http://ftp.nluug.nl/pub/os/Linux/distr/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
 
 - name: Install tools / clients
   yum: name={{ item }} state=present

@@ -61,7 +61,7 @@ janus_ssp_technicalcontact_name: "SURFconext operations"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "SURFconext operations"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
-
+janus_ssp_title_suffix: "DIY TEST"
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 

@@ -1,0 +1,18 @@
+---
+- name: add epel repo
+  yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+
+- name: install dependencies for lxml
+  yum: name={{ item }} state=present
+  with_items:
+    - gcc
+    - libxml2
+    - libxslt
+    - libxml2-devel
+    - libxslt-devel
+    - python-devel
+    - python-pip
+
+- name: install lxml (needed by maven_artifact module)
+  pip: name=lxml state=latest
+

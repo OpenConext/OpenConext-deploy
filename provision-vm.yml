@@ -68,6 +68,7 @@
     - tomcat
     - java
     - { role: shibboleth,        tags: ['shib'   ] }
+    - { role: metadata-exporter, tags: ['metadata-exporter'] }
     - { role: grouper,           tags: ['grouper'] }
     - { role: teams,             tags: ['teams'  ] }
     - { role: mujina-idp,        tags: ['legacy' ] }
@@ -79,7 +80,6 @@
     - { role: pdp,               tags: ['pdp'] }
 #    - { role: oidc,              tags: ['oidc'] }
     - { role: aa,                tags: ['aa'] }
-    - { role: metadata-exporter, tags: ['metadata-exporter']}
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
