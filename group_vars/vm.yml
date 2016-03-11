@@ -69,6 +69,8 @@ engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: vm
 engine_apache_symfony_environment: dev
 
+profile_apache_symfony_environment: dev
+
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
 ldap_grouper_user: gadget

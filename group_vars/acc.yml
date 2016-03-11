@@ -63,6 +63,8 @@ engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: acceptance
 engine_apache_symfony_environment: acc
 
+profile_apache_symfony_environment: acc
+
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
 ldap_grouper_user: GrouperSystem

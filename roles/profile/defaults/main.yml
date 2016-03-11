@@ -1,0 +1,51 @@
+# Default variables used to configure Profile
+# These can be overwritten via group or extra vars
+
+# Version of Profile that is installable by this role
+# E.g. profile_version: x.y.z
+
+# Profile installer specific variables
+profile_version_dir: "{{ profile_version | replace('/', '-') }}"
+profile_branch_dir: "{{ openconext_builds_dir }}/OpenConext-profile-{{ profile_branch | replace('/', '-') }}"
+profile_release_dir: "{{ openconext_releases_dir }}/OpenConext-profile-{{ profile_version_dir }}"
+profile_build_path: "{{ openconext_builds_dir }}/OpenConext-profile-{{ profile_version_dir }}.tar.gz"
+profile_download_url: "https://github.com/OpenConext/OpenConext-profile/releases/download/{{ profile_version }}/OpenConext-profile-{{ profile_version_dir }}.tar.gz"
+profile_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-profile"
+
+# Domain under which profile can be found
+profile_domain: profile.{{ base_domain }}
+
+# Cache and log paths
+profile_symfony_cache_path: "/tmp/profile/symfony-cache/{{ profile_version }}"
+profile_symfony_log_path: "/var/log/profile"
+
+# Secret used by application for adding entropy to security related operations
+profile_secret: secret
+
+# Language code for user locale to be set by default
+# E.g. profile_default_locale: en
+profile_default_locale: en
+
+# IP-address and domain of Engine API to enable Profile to send API calls
+engine_api_ip_address: "{{ nginx_ipv4_addresses.engine_api }}"
+engine_api_domain: engine-api.{{ base_domain }}
+
+# Paths of public and private key used for sending SAML AuthnRequests
+profile_saml_sp_publickey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer
+profile_saml_sp_privatekey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem
+
+# Paths of public and private key used for signing metadata
+profile_saml_metadata_publickey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer
+profile_saml_metadata_privatekey: ../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem
+
+# Domain under which EngineBlock can be found
+engine_domain: engine.{{ base_domain }}
+
+# EntityID of remote identity provider
+engine_profile_idp_entityid: https://{{ engine_domain }}/authentication/idp/metadata
+
+# URL for remote identity provider's single sign on
+engine_profile_idp_sso_url: https://{{ engine_domain }}/authentication/idp/single-sign-on
+
+# Contents of certificate used to sign the AuthnResponse with
+engine_profile_idp_certificate: MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMTBkVuZ2luZTERMA8GA1UECxMIU2VydmljZXMxEzARBgNVBAoTCk9wZW5Db25leHQxCzAJBgNVBAYTAk5MMB4XDTE1MDQwMjE0MDE1NFoXDTI1MDQwMTE0MDE1NFowRjEPMA0GA1UEAxMGRW5naW5lMREwDwYDVQQLEwhTZXJ2aWNlczETMBEGA1UEChMKT3BlbkNvbmV4dDELMAkGA1UEBhMCTkwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCeVodghQwFR0pItxGaJ3LXHA+ZLy1w/TMaGDcJaszAZRWRkL/6djwbabR7TB45QN6dfKOFGzobQxG1Oksky3gz4Pki1BSzi/DwsjWCw+Yi40cYpYeg/XM0tvHKVorlsx/7Thm5WuC7rwytujr/lV7f6lavf/ApnLHnOORU2h0ZWctJiestapMaC5mc40msruWWp04axmrYICmTmGhEy7w0qO4/HLKjXtWbJh71GWtJeLzG5Hj04X44wI+D9PUJs9U3SYh9SCFZwq0v+oYeqajiX0JPzB+8aVOPmOOM5WqoT8OCddOM/TlsL/0PcxByGHsgJuWbWMI1PKlK3omR764PAgMBAAGjgagwgaUwHQYDVR0OBBYEFLowmsUCD2CrHU0lich1DMkNppmLMHYGA1UdIwRvMG2AFLowmsUCD2CrHU0lich1DMkNppmLoUqkSDBGMQ8wDQYDVQQDEwZFbmdpbmUxETAPBgNVBAsTCFNlcnZpY2VzMRMwEQYDVQQKEwpPcGVuQ29uZXh0MQswCQYDVQQGEwJOTIIJAPdqJ9JQKN6vMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAIF9tGG1C9HOSTQJA5qL13y5Ad8G57bJjBfTjp/dw308zwagsdTeFQIgsP4tdQqPMwYmBImcTx6vUNdiwlIol7TBCPGuqQAHD0lgTkChCzWezobIPxjitlkTUZGHqn4Kpq+mFelX9x4BElmxdLj0RQV3c3BhoW0VvJvBkqVKWkZ0HcUTQMlMrQEOq6D32jGh0LPCQN7Ke6ir0Ix5knb7oegND49fbLSxpdo5vSuxQd+Zn6nI1/VLWtWpdeHMKhiw2+/ArR9YM3cY8UwFQOj9Y6wI6gPCGh/q1qv2HnngmnPrNzZik8XucGcf1Wm2zE4UIVYKW31T52mqRVDKRk8F3Eo=

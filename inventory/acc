@@ -12,6 +12,9 @@ acc62.coin.surf.net
 acc41.coin.surf.net
 acc42.coin.surf.net
 
+[php56-apps]
+
+
 [loadbalancer]
 acc11.coin.surf.net
 
@@ -19,4 +22,5 @@ acc11.coin.surf.net
 storage
 java-apps
 php-apps
+php56-apps
 loadbalancer

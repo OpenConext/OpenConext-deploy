@@ -1,0 +1,15 @@
+parameters:
+    secret: {{ profile_secret }}
+    default_locale: {{ profile_default_locale }}
+    saml_sp_publickey: {{ profile_saml_sp_publickey }}
+    saml_sp_privatekey: {{ profile_saml_sp_privatekey }}
+    saml_metadata_publickey: {{ profile_saml_metadata_publickey }}
+    saml_metadata_privatekey: {{ profile_saml_metadata_privatekey }}
+    saml_remote_idp_entity_id: {{ engine_profile_idp_entityid }}
+    saml_remote_idp_sso_url: {{ engine_profile_idp_sso_url }}
+    saml_remote_idp_host: {{ engine_domain }}
+    saml_remote_idp_certificate: {{ engine_profile_idp_certificate }}
+    engineblock_api_base_url: 'https://{{ engine_api_domain }}'
+    engineblock_api_username: {{ engine_api_profile_user }}
+    engineblock_api_password: {{ engine_api_profile_password }}
+    engineblock_api_verify_ssl: {{ engineblock_api_verify_ssl }}

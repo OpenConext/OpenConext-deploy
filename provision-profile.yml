@@ -1,0 +1,20 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: Read vars from secrets file
+    include_vars: "{{ secrets_file }}"
+    tags:
+      - always
+
+- hosts: php56-apps
+  gather_facts: no
+  sudo: true
+  roles:
+    - rsyslog
+    - httpd
+    - openconext-common
+    - php56
+    - profile
+  handlers:
+    - include: roles/httpd/handlers/main.yml

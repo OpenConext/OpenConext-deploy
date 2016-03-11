@@ -15,10 +15,13 @@ prd42.coin.surf.net
 prd43.coin.surf.net
 prd44.coin.surf.net
 
+[php56-apps]
+
 [loadbalancer]
 
 [prod:children]
 storage
 java-apps
 php-apps
+php56-apps
 loadbalancer

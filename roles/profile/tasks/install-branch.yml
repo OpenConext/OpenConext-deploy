@@ -1,0 +1,21 @@
+---
+- name: Checkout profile branch
+  git: repo=https://github.com/OpenConext/OpenConext-profile.git dest="{{ profile_branch_dir }}" version={{ profile_branch }} force=yes
+  when: profile_branch != ''
+  register: profile_gitclone
+
+- name: Make release
+  command: "./bin/makeRelease.sh {{ profile_branch }}"
+  args:
+    chdir: "{{ profile_branch_dir }}"
+  when: profile_gitclone.changed
+
+- name: Unpack current version
+  unarchive: src="~/Releases/OpenConext-profile-{{ profile_branch }}.tar.gz" dest="{{ openconext_releases_dir }}" copy=no
+  when: profile_gitclone.changed
+
+- name: Activate new Profile branch
+  file: src="{{ openconext_releases_dir }}/OpenConext-profile-{{ profile_branch }}" dest={{ profile_current_release_symlink }} state=link
+  notify:
+    - restart httpd
+  when: profile_gitclone.changed
