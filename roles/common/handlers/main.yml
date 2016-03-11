@@ -5,3 +5,6 @@
 
 - name: restart ip6tables
   service: name=ip6tables state=restarted
+
+- name: restart journald
+  service: name=systemd-journald state=restarted
