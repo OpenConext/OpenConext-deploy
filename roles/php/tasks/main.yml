@@ -31,3 +31,15 @@
 - name: Enable php in apache
   copy: src=httpd.php.conf dest=/etc/httpd/conf.d/php.conf
   notify: reload httpd
+
+- name: Install PHP with extensions
+  yum: name={{ item }} state=present
+  with_items:
+    - php-pecl-xdebug
+  when: develop
+
+- name: Configure PHP Xdebug
+  template: src=xdebug.ini.j2 dest=/etc/php.d/20-xdebug.ini
+  when: develop
+  notify:
+      - reload httpd

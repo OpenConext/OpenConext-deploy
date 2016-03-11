@@ -35,7 +35,11 @@ global
     daemon
 
     # turn on stats unix socket
+{% if develop %}
+    stats socket /var/lib/haproxy/stats mode 600 level admin
+{% else %}
     stats socket /var/lib/haproxy/stats
+{% endif %}
 
 #---------------------------------------------------------------------
 # common defaults that all the 'listen' and 'backend' sections will

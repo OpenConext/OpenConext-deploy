@@ -6,14 +6,14 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
     ServerName   {{ engine_domain }}
 
     <Directory "{{ engine_current_release_symlink }}/web">
-      Require all granted  
+      Require all granted
       Options -MultiViews
       RewriteEngine On
       RewriteBase /
       RewriteCond %{REQUEST_FILENAME} !-f
-      RewriteRule ^(.*)$ app.php [QSA,L]
+      RewriteRule ^(.*)$ app{% if develop %}_dev{% endif %}.php [QSA,L]
     </Directory>
- 
+
 
     SetEnv ENGINEBLOCK_ENV {{ engine_apache_environment }}
     SetEnv SYMFONY_ENV {{ engine_apache_symfony_environment }}
@@ -24,7 +24,7 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
     RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
     RewriteRule .* - [R=405,L]
 
-    #Proxy the requests to FPM 
+    #Proxy the requests to FPM
     ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:{{ engine_fpm_port }}/{{ engine_current_release_symlink }}/web/$1
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EB'"

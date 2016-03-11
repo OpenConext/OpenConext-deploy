@@ -88,6 +88,8 @@ vagrant ssh lb
 vagrant ssh apps
 ```
 
+(using `vagrant ssh` without a VM specified leads to the Apps VM)
+
 The lb vm contains haproxy and nginx. The apps vm contains all the applications, apache, database and ldap.
 
 # Releases to vm, test, acc, prod
@@ -118,3 +120,6 @@ To provision the VM use the following (password is vagrant and sudo password is 
 ```
 ansible-playbook -u vagrant -i inventory/vm -K selfservice.yml -k
 ```
+
+Setting up a development environment is described in the file [DEVELOPMENT](DEVELOPMENT.md).
+View

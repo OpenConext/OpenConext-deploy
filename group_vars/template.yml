@@ -57,6 +57,7 @@ engine_janus_user: engineblock
 
 engine_database_name: eb
 engine_database_host: localhost
+engine_database_port: 3306
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 

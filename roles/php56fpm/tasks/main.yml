@@ -8,7 +8,7 @@
 
 - name: Install httpd, php-(cli,fpm), smtpd, mysql client libs, bzip2
   yum: name={{item}} state=present
-  with_items: 
+  with_items:
   - mysql
   - bzip2
   - php-fpm
@@ -30,6 +30,18 @@
   with_items:
     - 40-apcu.ini
     - openconext.ini
+
+- name: Install PHP with extensions
+  yum: name={{ item }} state=present
+  with_items:
+    - php-pecl-xdebug
+  when: develop
+
+- name: Configure PHP Xdebug
+  template: src=xdebug.ini.j2 dest=/etc/php.d/20-xdebug.ini
+  when: develop
+  notify:
+      - restart php-fpm
 
 # Remove default distro conf files
 #- name: Remove known default distro files in /etc/php-fpm.d/

@@ -37,3 +37,19 @@
 
 - name: start
   service: name=haproxy state=started
+
+- name: disable health checks for development envs
+  command: 'echo "disable health {{item}}" | socat /var/lib/haproxy/stats stdio'
+  with_items:
+    - engine_be
+    - engine_be_api
+    - profile_be
+    - serviceregistry_be
+    - static_be
+    - grouper_be
+    - teams_be
+    - authz_be
+    - authz_admin_be
+    - authz_playground_be
+    - voot_be
+  when: develop

@@ -53,6 +53,7 @@ engine_janus_user: engineblock
 
 engine_database_name: eb
 engine_database_host: "{{ mysql_host }}"
+engine_database_port: 3306
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
@@ -455,7 +456,7 @@ loadbalancing:
   teams: {
     port: 601,
     heartbeat: { url: "/media/trans-white.png", method: "GET" },
-    servers: [ 
+    servers: [
       { label: "prd61", ip: "145.100.191.201" },
       { label: "prd62", ip: "145.100.191.202" },
       { label: "prd63", ip: "145.100.191.203" },

@@ -59,6 +59,7 @@ engine_janus_user: engineblock
 
 engine_database_name: eb
 engine_database_host: "{{ mysql_host }}"
+engine_database_port: 3306
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
@@ -621,9 +622,9 @@ nginx_ipv4_addresses:
 # values below seem silly but on acc+prod these differ.
 #haproxy:
 #  applications: [
-#  { appname: "engine", 
-#    ip: "145.100.191.114", 
-#    port: "401", 
+#  { appname: "engine",
+#    ip: "145.100.191.114",
+#    port: "401",
 #    heartbeat: { url: "/", method: "GET" },
 #    servers: [
 #      { label: "engine_backend", ip: "145.100.191.119" }

@@ -36,19 +36,15 @@ pdp.baseUrl = {{ engine_pdp_baseurl }}
 pdp.username = {{engine_pdp_username }}
 pdp.password = {{ engine_pdp_password }}
 
-api.vovalidate.baseUrl = {{ engine_vovalidate_baseurl }}
-api.vovalidate.key = {{ engine_vovalidate_key }}
-api.vovalidate.secret = {{ engine_vovalidate_secret }}
-
 engine.simplesamlphp.baseurlpath = "{{ engine_engine_idp_baseurlpath }}"
 
 cookie.lang.domain = .{{ base_domain }}
 
-database.master1.dsn = "mysql:host={{ engine_database_host }};dbname={{ engine_database_name }}"
-database.master1.password = {{ engine_database_password }}
-database.master1.user = "{{ engine_database_user }}"
-database.masters[] = master1
-database.slaves[] = master1
+database.host = {{ engine_database_host }}
+database.port = {{ engine_database_port }}
+database.password = "{{ engine_database_password }}"
+database.user = "{{ engine_database_user }}"
+database.dbname = {{ engine_database_name }}
 
 debug = {{ engine_debug }}
 

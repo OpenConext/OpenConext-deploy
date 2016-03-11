@@ -27,6 +27,8 @@ databases:
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
+  development_user:
+    - { name: development, password: development }
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
@@ -59,6 +61,7 @@ engine_janus_user: engineblock
 
 engine_database_name: eb
 engine_database_host: localhost
+engine_database_port: 3306
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
