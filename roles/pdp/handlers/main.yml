@@ -1,11 +1,3 @@
 ---
 - name: restart pdp
   service: name=pdp state=restarted
-
-- name: replace rollbar-enabled
-  # Fully quoted because of the ': ' on the line. See the Gotchas in the YAML docs.
-  replace: "dest=/var/www/pdp/current/index.html follow=yes regexp='enabled: false' replace='enabled: true'"
-
-- name: replace rollbar-environment
-  # Fully quoted because of the ': ' on the line. See the Gotchas in the YAML docs.
-  replace: "dest=/var/www/pdp/current/index.html follow=yes regexp='rollbar_environment' replace='{{ pdp.rollbar_environment }}'"

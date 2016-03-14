@@ -10,9 +10,6 @@
   register: local_pdp_archive
   tags: pdp
   when: pdp_local_html_version != ''
-  notify:
-    - replace rollbar-enabled
-    - replace rollbar-environment
 
 - name: create symlink to uploaded version
   file: src=/var/www/pdp/pdp-gui-{{ pdp_local_html_version }} dest=/var/www/pdp/current state=link force=yes
@@ -25,9 +22,6 @@
     dest: /var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz
   tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
-  notify:
-    - replace rollbar-enabled
-    - replace rollbar-environment
 
 - name: extract archive
   unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz dest=/var/www/pdp/ copy=no
@@ -50,9 +44,6 @@
     dest: /var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz
   tags: pdp
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
-  notify:
-    - replace rollbar-enabled
-    - replace rollbar-environment
 
 - name: extract snapshot archive
   unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz dest=/var/www/pdp/ copy=no
