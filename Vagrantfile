@@ -68,7 +68,8 @@ Vagrant.configure("2") do |config|
         ansible.extra_vars = {
           user: "vagrant",
           secrets_file: "secrets/vm.yml",
-          develop: true
+          develop: true,
+          engine_apache_symfony_environment: "dev"
         }
       end
 
