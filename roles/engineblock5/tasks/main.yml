@@ -9,12 +9,10 @@
   file: path=/var/lib/php/session/engine state=directory owner={{ engine_fpm_user }} group=root mode=770
 
 - include: install-release.yml
-  when: "engine_branch is not defined or engine_branch == ''"
-  when: not develop
+  when: (engine_branch is not defined or engine_branch == '') and not develop
 
 - include: install-branch.yml
-  when: "engine_branch is defined and engine_branch != ''"
-  when: not develop
+  when: (engine_branch is defined and engine_branch != '') and not develop
 
 - name: Copy app_dev.php to OpenConext web folder
   copy: src=app_dev.php dest=/opt/openconext/OpenConext-engineblock/web/app_dev.php owner={{ engine_fpm_user }} group={{ engine_fpm_user }} mode=0644
