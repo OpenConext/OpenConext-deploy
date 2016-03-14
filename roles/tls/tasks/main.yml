@@ -5,6 +5,12 @@
     - "{{ tls.certificates }}"
     - "{{ tls.ca_certificates }}"
 
+- name: copy ca certificate to correct location on CentOS 7
+  copy: src=files/{{ env }}/certs/{{ item }} dest=/etc/pki/ca-trust/source/anchors/{{ item }}
+  with_items:
+     "{{ tls.ca_certificates }}"
+  notify: update_ca_trust
+
 - name: copy private keys to correct location
   copy: content="{{ https_star_private_key }}" dest={{ tls.cert_private_path }}/{{ item }}
   with_items:
