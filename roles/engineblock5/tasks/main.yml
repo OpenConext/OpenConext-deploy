@@ -86,3 +86,10 @@
 - name: Make sure cache dir has correct permissions
   file: path={{engine_current_release_symlink}}/app/cache  owner=engine group=engine recurse=yes
 
+# This should always run last, it ensures that the env specific
+# configuration is loaded correctly.
+- name: Prepare EngineBlock5 environment
+  sudo: yes
+  command: ./bin/composer.phar prepare-env
+  args:
+      chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
