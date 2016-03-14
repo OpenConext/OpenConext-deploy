@@ -22,7 +22,6 @@
   - php-pecl-memcache
   - php-soap
   - php-xml
-  - php-mcrypt
   - php-gd
   - composer
 
