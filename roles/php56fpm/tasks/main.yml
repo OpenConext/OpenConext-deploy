@@ -38,7 +38,7 @@
   when: develop
 
 - name: Configure PHP Xdebug
-  template: src=xdebug.ini.j2 dest=/etc/php.d/20-xdebug.ini
+  template: src=xdebug.ini.j2 dest=/etc/php.d/15-xdebug.ini
   when: develop
   notify:
       - restart php-fpm
