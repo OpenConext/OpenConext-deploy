@@ -1,10 +1,3 @@
 ---
 - name: restart aa-server
   service: name=aa-server state=restarted
-
-- name: replace rollbar-enabled
-  # Fully quoted because of the ': ' on the line. See the Gotchas in the YAML docs.
-  replace: "dest=/var/www/aa/current/index.html follow=yes regexp='enabled: false' replace='enabled: true'"
-
-- name: replace rollbar-environment
-  replace: "dest=/var/www/aa/current/index.html follow=yes regexp='rollbar_environment' replace='{{ aa.rollbar_environment }}'"

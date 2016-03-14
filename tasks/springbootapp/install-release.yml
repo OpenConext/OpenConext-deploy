@@ -8,12 +8,3 @@
 
 - include: switch-version.yml springapp_released={{ springapp_release_released }}
   when: springapp_release_released.changed
-
-- name: notify Rollbar of deploy
-  rollbar_deployment:
-    token: "{{ springapp_rollbar_apiKey }}"
-    environment: "{{ env }}"
-    user: "{{ ansible_ssh_user }}"
-    revision: "{{ springapp_version }}"
-  when: springapp_release_released.changed and (springapp_rollbar_apiKey is defined and springapp_rollbar_apiKey != "secret")
-  ignore_errors: true
