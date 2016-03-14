@@ -14,7 +14,6 @@
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in aa_version else maven_repo }}"
     dest: /var/www/aa
   register: maven_result
-  tags: aa
 
 - name: extract html archive
   unarchive:
@@ -24,7 +23,6 @@
     owner: root
     group: apache
   register: unarchive_result
-  tags: aa
   when: maven_result.changed
 
 - name: create symlink to downloaded version
@@ -33,17 +31,14 @@
     dest: current
     state: link
     force: yes
-  tags: aa
   when: unarchive_result.changed
 
 - name: remove downloaded version
   file: path=/var/www/aa/aa-gui-{{ aa_version }}.tar.gz state=absent
-  tags: aa
   when: maven_result.changed
 
 - name: copy virtual host config
   template: src=httpd/aa.conf.j2 dest=/etc/httpd/conf.d/aa.conf
-  tags: aa
   notify: restart httpd
 
 - name: Create logging directory
@@ -57,12 +52,10 @@
     version: "{{ aa_version }}"
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in aa_version else maven_repo }}"
     dest: "{{ aa_dir }}"
-  tags: aa
   register: maven_result
 
 - name: set ownership of application artifact
   file: path={{ maven_result.dest }} owner=aa group=aa mode=0500
-  tags: aa
 
 - name: Copy logging config
   template: src=logback.xml.j2 dest={{ aa_dir }}/logback.xml owner=aa group=aa mode=0740
@@ -83,7 +76,6 @@
     owner: root
     group: root
     mode: 0400
-  tags: aa
   notify: restart aa-server
 
 - name: link boot startup config
@@ -92,7 +84,6 @@
     dest: "{{ aa_dir }}/aa-server-{{ maven_result.version }}.conf"
     state: link
   when: maven_result.changed
-  tags: aa
 
 - name: link init.d service
   file:
@@ -100,12 +91,10 @@
     dest: /etc/init.d/aa-server
     force: yes
     state: link
-  tags: aa
 
 - name: enable aa-server service
   service: name=aa-server enabled=yes
 
 - name: restart aa-server
   service: name=aa-server state=restarted
-  tags: aa
   when: maven_result.changed
