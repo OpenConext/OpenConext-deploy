@@ -1,5 +1,6 @@
 ---
 aa_dir: /opt/aa
+aa_group_url: org/openconext/
 aa_version: ''
 aa_snapshot_timestamp: ''
 aa_local_jar: ''
