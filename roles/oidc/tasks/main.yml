@@ -6,6 +6,14 @@
   copy: src=resources dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc owner=tomcat group=tomcat mode=0740
   register: oidc_language_files
 
+- name: copy default oidc client vm
+  copy: src=defaults.vm.sql dest=/tmp
+  when: env == 'vm'
+
+- name: insert default oidc client vm
+  mysql_db: name=oidc-server state=import target=/tmp/defaults.vm.sql
+  when: env == 'vm'
+
 - name: add language files to war
   shell: jar -uvf {{ tomcat_install_dir }}/wars/{{ deploy_name }}.war ./resources/ chdir={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc
   sudo_user: tomcat
