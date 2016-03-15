@@ -434,9 +434,9 @@ pdp:
   rollbar_environment: test
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-aa_version: "1.0.1"
-aa_snapshot_timestamp: "20160302.080912-1"
-aa_html_snapshot_timestamp: "20160302.081013-1"
+aa_version: "1.0.2"
+#aa_snapshot_timestamp: "20160302.080912-1"
+#aa_html_snapshot_timestamp: "20160302.081013-1"
 
 aa_debug: true
 aa:
