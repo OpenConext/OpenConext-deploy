@@ -6,7 +6,7 @@
 - name: Enable REMI repo
   copy: src=remi.repo dest=/etc/yum.repos.d/remi.repo
 
-- name: Install httpd, php-(cli,fpm), smtpd, mysql client libs, bzip2
+- name: Install httpd, php-(cli,fpm), smtpd, mysql client libs, bzip2, composer
   yum: name={{item}} state=present
   with_items:
   - mysql
@@ -22,8 +22,8 @@
   - php-pecl-memcache
   - php-soap
   - php-xml
-  - php-mcrypt
   - php-gd
+  - composer
 
 - name: Configure PHP APC
   template: src={{ item }}.j2 dest=/etc/php.d/{{ item }}

@@ -88,6 +88,6 @@
 # configuration is loaded correctly.
 - name: Prepare EngineBlock5 environment
   sudo: yes
-  command: ./bin/composer.phar prepare-env
+  command: composer prepare-env
   args:
       chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
