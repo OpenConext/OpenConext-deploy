@@ -14,6 +14,7 @@ Listen {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.po
         RewriteRule ^(.*)$ app{% if develop %}_dev{% endif %}.php [QSA,L]
     </Directory>
 
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
     SetEnv ENGINEBLOCK_ENV {{ engine_apache_environment }}
     SetEnv SYMFONY_ENV {{ engine_apache_symfony_environment }}
     SetEnv HTTPS on
