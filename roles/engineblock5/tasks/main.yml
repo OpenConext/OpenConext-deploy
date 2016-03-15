@@ -48,20 +48,25 @@
   notify:
     - restart httpd
 
-- name: Run EngineBlock migrations
-  command: ./bin/migrate
-  args:
-    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  register: migrate_output
-  changed_when: "'no update needed' not in migrate_output.stderr"
-
 - name: Make sure cache dir has correct permissions
   file: path={{engine_current_release_symlink}}/app/cache owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
 
-# This should always run last, it ensures that the env specific
+- name: Make the SYMFONY_ENV var available for scripts
+  sudo: yes
+  lineinfile: dest=/etc/environment state=present line="SYMFONY_ENV={{ engine_apache_symfony_environment }}"
+
+# This should always run before any scripts run, it ensures that the env specific
 # configuration is loaded correctly.
 - name: Prepare EngineBlock5 environment
   sudo: yes
   command: composer prepare-env
   args:
       chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+
+# Any scripts should be placed below this
+- name: Run EngineBlock DbPatch migrations
+  command: ./bin/migrate
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  register: migrate_output
+  changed_when: "'no update needed' not in migrate_output.stderr"
