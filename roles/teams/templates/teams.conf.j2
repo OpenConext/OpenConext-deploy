@@ -14,8 +14,6 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     RewriteRule /teams/(.*)$ /$1  [L,NE,R=permanent]
     RewriteRule /teams$      /    [L,R=permanent]
 
-    ProxyPreserveHost on
-
     # However, do not proxy shibboleth requests through to the app
     ProxyPass /Shibboleth.sso !
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
