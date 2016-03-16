@@ -74,6 +74,7 @@ Vagrant.configure("2") do |config|
       end
 
       apps_centos7.vm.provision :shell, run: "always", inline: "mount -t vboxsf -o uid=engine,gid=engine opt_openconext_OpenConext-engineblock /opt/openconext/OpenConext-engineblock"
+      apps_centos7.vm.provision :shell, run: "always", path: "scripts/prep-dev-env.sh"
     end
 
   end
