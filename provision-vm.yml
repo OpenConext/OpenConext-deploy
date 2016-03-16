@@ -41,7 +41,7 @@
   roles:
     - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
-    - vm_only_provision_eb_sr
+    - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
 
 - hosts: php-apps
   gather_facts: no
@@ -49,8 +49,8 @@
   vars:
     env_lang: php
   roles:
-    - php56fpm
-    - static
+    - { role: php56fpm,          tags: ['php56fpm'] }
+    - { role: static,          tags: ['static'] }
     - { role: welcome,           tags: ['welcome'] }
     - { role: openconext-common, tags: ['eb','sr'] }
     - { role: engineblock5,      tags: ['eb'     ] }
@@ -66,8 +66,8 @@
   vars:
     env_lang: java
   roles:
-    - tomcat
-    - java
+    - { role: tomcat,            tags: ['tomcat'] }
+    - { role: java,              tags: ['java'] }
     - { role: shibboleth,        tags: ['shib'   ] }
     - { role: metadata-exporter, tags: ['metadata-exporter'] }
     - { role: grouper,           tags: ['grouper'] }
