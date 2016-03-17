@@ -189,7 +189,7 @@ teams:
   group_name_context: "urn:collab:group:demo.openconext.org:"
   rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
-teams_version: 4.2.9
+teams_version: 4.2.10
 #teams_snapshot_timestamp: 20160314.083705-5
 teams_debug: true
 
