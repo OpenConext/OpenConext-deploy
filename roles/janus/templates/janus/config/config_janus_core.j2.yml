@@ -70,7 +70,7 @@ janus_service_registry_core:
         schacHomeOrganizationType:
             name: 'urn:mace:terena.org:attribute-def:schacHomeOrganizationType'
         schacPersonalUniqueCode:
-            name: 'urn:mace:terena.org:attribute-def:schacPersonalUniqueCode'
+            name: 'urn:schac:attribute-def:schacPersonalUniqueCode'
         eduPersonAffiliation:
             name: 'urn:mace:dir:attribute-def:eduPersonAffiliation'
             specify_values: true
