@@ -25,6 +25,7 @@
   roles:
     - { role: haproxy, tags: ['lb'] }
     - { role: nginx,   tags: ['lb'] }
+    - { role: bind,    tags: ['bind'] }
 
 - hosts: php-apps:java-apps-centos7
   gather_facts: yes

@@ -19,11 +19,10 @@
     - include: roles/httpd/handlers/main.yml
 
 - hosts: loadbalancer
-  gather_facts: true
+  gather_facts: no
   sudo: true
   roles:
-    - { role: haproxy, tags: ['lb'] }
-    - { role: nginx,   tags: ['lb'] }
+    - { role: haproxy2, tags: ['lb'] }
 
 
 

@@ -39,4 +39,3 @@
 
 - name: check file permissions
   file: path={{ tls_dh_param_file }} owner=root mode=0600
-

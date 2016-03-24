@@ -1,0 +1,132 @@
+#---------------------------------------------------------------------
+# Global settings
+#---------------------------------------------------------------------
+
+global
+  log         127.0.0.1 local2
+  chroot      /var/lib/haproxy
+  pidfile     /var/run/haproxy.pid
+  maxconn     4000
+  user        haproxy
+  group       haproxy
+  nbproc      1
+  ulimit-n    9000
+  daemon
+  stats socket /var/lib/haproxy/stats
+  tune.ssl.default-dh-param 2048
+  ssl-default-bind-options no-sslv3
+  ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+  ssl-default-server-options no-sslv3
+  ssl-default-server-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+
+
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option 		    http-server-close
+    option 		    forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+
+## Frontend configuration
+{% if env == "vm" or env == "test"   %}
+
+#--------------------------------------------------------------------
+#  frontend
+# -------------------------------------------------------------------
+frontend ssl_ip 
+
+    bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{tls_https.haproxy_name}}  no-sslv3 npn spdy/2
+    capture cookie JSESSIONID len 52
+    rspadd  Strict-Transport-Security:\ max-age=15768000
+    bind {{ haproxy_sni_ip }}:80
+    redirect scheme https code 301 if !{ ssl_fc }
+
+
+    {% for application in haproxy_applications %}
+    acl {{ application }} hdr(host) -i {{ application }}.{{ base_domain }}
+    {% endfor %}
+    {% for application in haproxy_applications %}
+    use_backend {{ application }}_be if {{ application }}
+    {% endfor %}
+
+{% for key,value in haproxy_applications.iteritems() %}
+
+
+#---------------------------------------------------------------------
+# {{ key }} backend
+#---------------------------------------------------------------------
+# 
+backend {{ key }}_be 
+  option httpchk {{ value["ha_method"] }} {{ value["ha_url"] }} HTTP/1.0
+  option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in value["servers"] %}
+    server {{ server.label }} {{ server.ip }}:{{ value["port"] }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+
+
+{% endfor %}
+{% endif %}
+
+{% if env == "acc" or env == "prod" or env == "test2" %}
+## Frontend configuration
+
+#--------------------------------------------------------------------
+# {{ item.key }} frontend
+# -------------------------------------------------------------------
+frontend {{ item.key }}
+
+     bind {{item.value.ip}}:443 ssl crt /etc/haproxy/{{item.key}}/{{item.key}}.pem no-sslv3 npn spdy/2
+     rspadd  Strict-Transport-Security:\ max-age=15768000
+     bind {{item.value.ip}}:80
+     redirect scheme https code 301 if !{ ssl_fc }
+     capture cookie JSESSIONID len 52
+     acl url_all         path_beg        -i /
+     use_backend         {{ item.key }}_be       if url_all
+     default_backend     {{ item.key }}_be
+
+
+#---------------------------------------------------------------------
+#  {{ item.key }} backend
+#---------------------------------------------------------------------
+backend {{ item.key }}_be
+
+    option httpchk {{ item.value.ha_method }} {{ item.value.ha_url }} HTTP/1.0
+    option forwardfor # This sets X-Forwarded-For
+
+    mode http
+    balance roundrobin
+    cookie JSESSIONID preserve indirect
+    option httpclose
+
+    cookie HTTPSERVERID insert nocache indirect
+
+    {% for server in item.value.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ item.value.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% endfor %}
+{% endif %}
