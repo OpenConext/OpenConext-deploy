@@ -1,0 +1,11 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - sudo docker build -f tests/Dockerfile.centos-7 surfnet/centos7-openconext
+
+script:
+  - sudo docker run --rm -t surfnet/centos7-openconext
+
