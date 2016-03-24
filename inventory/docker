@@ -4,8 +4,6 @@ localhost ansible_connection=local
 [local-certs]
 localhost
 
-[local-certs:children]
-
 [vm]
 localhost
 

@@ -7,24 +7,16 @@
     tags:
       - always
 
-- hosts: loadbalancer:php-apps:java-apps-centos7:storage
+- hosts: all
   gather_facts: yes
   sudo: true
   roles:
-    - { role: common, tags: ['common'] }
-    - { role: iptables, tags: ['iptables'] }
-    - { role: tls, tags: ['tls'] }
+    - role: common
+    - role: iptables
+    - role: tls
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
-
-- hosts: loadbalancer
-  gather_facts: true
-  sudo: true
-  roles:
-    - { role: haproxy, tags: ['lb'] }
-    - { role: nginx,   tags: ['lb'] }
-    - { role: bind,    tags: ['bind'] }
 
 - hosts: php-apps:java-apps-centos7
   gather_facts: yes
@@ -35,52 +27,26 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
 
-- hosts: storage
-  gather_facts: no
-  sudo: true
-  roles:
-    - { role: mysql, tags: ['mysql'] }
-    - { role: ldap,  tags: ['ldap' ] }
-    - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
-
-- hosts: php-apps
-  gather_facts: no
-  sudo: true
-  vars:
-    env_lang: php
-  roles:
-    - { role: php56fpm,          tags: ['php56fpm'] }
-    - { role: static,          tags: ['static'] }
-    - { role: welcome,           tags: ['welcome'] }
-    - { role: openconext-common, tags: ['eb','sr'] }
-    - { role: engineblock5,      tags: ['eb'     ] }
-    - { role: janus,             tags: ['sr'     ] }
-    - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
-  handlers:
-    - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
-
 - hosts: java-apps-centos7
   gather_facts: true
   sudo: true
   vars:
     env_lang: java
   roles:
-    - { role: tomcat,            tags: ['tomcat'] }
-    - { role: java,              tags: ['java'] }
-    - { role: shibboleth,        tags: ['shib'   ] }
-    - { role: metadata-exporter, tags: ['metadata-exporter'] }
-    - { role: grouper,           tags: ['grouper'] }
-    - { role: teams,             tags: ['teams'  ] }
-    - { role: mujina-idp,        tags: ['legacy' ] }
-    - { role: mujina-sp,         tags: ['legacy' ] }
-    - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
-      #   - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
-    - { role: voot,              tags: ['oauth', 'voot'            ] }
-    - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
-    - { role: pdp,               tags: ['pdp'] }
-    - { role: oidc,              tags: ['oidc'] }
-    - { role: aa,                tags: ['aa'] }
+    - tomcat
+    - java
+    - shibboleth
+    - metadata-exporter
+    - grouper
+    - teams
+    - mujina-idp
+    - mujina-sp
+    - authz-server
+    - voot
+    - authz-playground
+    - pdp
+    - oidc
+    - aa
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

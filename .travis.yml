@@ -8,7 +8,7 @@ before_install:
 
 script:
   - sudo docker run --detach -v "${PWD}":/ansible:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro --privileged --name java-apps surfnet/centos7-openconext
-  - sudo docker exec -t java-apps env TERM=xterm ansible-playbook -l java-apps-centos7 -i /ansible/inventory/docker /ansible/provision-docker.yml -e secrets_file=/ansible/secrets/vm.yml --syntax-check
-  - sudo docker exec -t java-apps env TERM=xterm ansible-playbook -l java-apps-centos7 -i /ansible/inventory/docker /ansible/provision-docker.yml -e secrets_file=/ansible/secrets/vm.yml
+  - sudo docker exec -t java-apps env TERM=xterm ansible-playbook -i /ansible/inventory/docker /ansible/provision-docker.yml -e secrets_file=/ansible/secrets/vm.yml --syntax-check
+  - sudo docker exec -t java-apps env TERM=xterm ansible-playbook -i /ansible/inventory/docker /ansible/provision-docker.yml -e secrets_file=/ansible/secrets/vm.yml
   - sudo docker stop java-apps
 
