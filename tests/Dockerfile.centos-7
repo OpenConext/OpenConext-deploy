@@ -1,12 +1,15 @@
 FROM ansible/centos7-ansible:stable
 
-COPY ./roles /ansible/roles
-COPY ./group_vars /ansible/group_vars
-COPY ./host_vars /ansible/host_vars
-COPY ./tests/test.sh /ansible/test.sh
-COPY ./provision-vm.yml /ansible/provision-vm.yml
-COPY ./inventory/docker /ansible/inventory/docker
-COPY ./secrets/vm.yml /ansible/secrets/vm.yml
+ENV container docker
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-WORKDIR /ansible
-ENTRYPOINT ["./test.sh"]
+VOLUME [ "/sys/fs/cgroup" ]
+
+CMD ["/usr/sbin/init"]

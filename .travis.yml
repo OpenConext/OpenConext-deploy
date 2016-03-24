@@ -4,8 +4,9 @@ services:
   - docker
 
 before_install:
-- sudo docker build -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 .
+  - sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 .
 
 script:
-  - sudo docker run --rm -t surfnet/centos7-openconext
+  - sudo docker run --detach -v "${PWD}":/ansible:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro --privileged --name ansible-test surfnet/centos7-openconext
+  - sudo docker exec ansible-test env TERM=xterm ansible-playbook -i /ansible/inventory/docker /ansible/provision-vm.yml -e secrets_file=/ansible/secrets/vm.yml
 
