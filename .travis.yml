@@ -8,5 +8,8 @@ before_install:
 
 script:
   - sudo docker run --detach -v "${PWD}":/ansible:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro --privileged --name ansible-test surfnet/centos7-openconext
-  - sudo docker exec ansible-test env TERM=xterm ansible-playbook -i /ansible/inventory/docker /ansible/provision-vm.yml -e secrets_file=/ansible/secrets/vm.yml
+  - cd /ansible
+  - sudo docker exec -t ansible-test env TERM=xterm ansible-playbook -i inventory/docker provision-vm.yml -e secrets_file=secrets/vm.yml --syntax-check
+  - sudo docker exec -t ansible-test env TERM=xterm ansible-playbook -i inventory/docker provision-vm.yml -e secrets_file=secrets/vm.yml
+  - sudo docker stop ansible-test
 
