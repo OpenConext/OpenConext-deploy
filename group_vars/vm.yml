@@ -402,7 +402,7 @@ authzadmin:
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1.2
-authz_playground_snapshot_timestamp: "20160204.074458-4"
+#authz_playground_snapshot_timestamp: "20160208.150458-5"
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
@@ -461,7 +461,7 @@ aa:
   rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
 oidc_version: "1.0.1"
-oidc_snapshot_timestamp: "20160229.102842-1"
+#oidc_snapshot_timestamp: "20160229.102842-1"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
