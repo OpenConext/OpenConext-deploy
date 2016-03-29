@@ -80,6 +80,8 @@ janus_service_registry_core:
         eduPersonEntitlement:
             name: 'urn:mace:dir:attribute-def:eduPersonEntitlement'
             specify_values: true
+        eduPersonOrcid:
+            name: 'urn:mace:dir:attribute-def:eduPersonOrcid'
         isMemberOf:
             name: 'urn:mace:dir:attribute-def:isMemberOf'
             specify_values: true
