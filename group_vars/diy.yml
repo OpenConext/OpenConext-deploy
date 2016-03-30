@@ -27,7 +27,7 @@ databases:
 # versions of the components
 engine_version: 4.6.0
 janus_version: 1.20.5
-teams_version: 4.2.9
+teams_version: 4.2.10
 api_version: 4.0.1
 mujina_version: 4.0.2
 voot_version: 1.6.1

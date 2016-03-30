@@ -54,6 +54,11 @@ The VM will install everything on a two boxes for demo purposes.
 To provision the VM please run:
 
 ```bash
+Download the latest release:
+wget https://github.com/OpenConext/OpenConext-deploy/archive/v1.0.tar.gz 
+Untar it:
+tar -xvzf v1.0.tar.gz
+cd OpenConext-deploy-1.0
 ./provision-vagrant
 ```
 

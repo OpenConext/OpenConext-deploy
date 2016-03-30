@@ -157,7 +157,7 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.2.9
+teams_version: 4.2.10
 #teams_snapshot_timestamp: 20150420.152536-28
 
 api_version: 4.0.1
@@ -301,6 +301,28 @@ voot:
         },
         schacHomeOrganization: "sara.nl",
         name: "SURFsara",
+        timeoutMillis: 3000
+      }
+    - {
+        type: "open_social",
+        url: "https://groupprovider.surf.nl",
+        credentials: {
+          username: "conext",
+          secret: "{{ external_group_provider_secrets.surf }}"
+        },
+        schacHomeOrganization: "surf.nl",
+        name: "SURF",
+        timeoutMillis: 3000
+      }
+    - {
+        type: "open_social",
+        url: "https://groupprovider.sans-ec.nl",
+        credentials: {
+          username: "conext",
+          secret: "{{ external_group_provider_secrets.sans }}"
+        },
+        schacHomeOrganization: "sans-ec.nl",
+        name: "SaNS",
         timeoutMillis: 3000
       }
 

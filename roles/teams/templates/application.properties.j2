@@ -21,6 +21,12 @@ datasource.groupzy.password=groupzy
 datasource.groupzy.validation-query=SELECT 1
 datasource.groupzy.testWhileIdle=true
 
+ldap.url=ldap://ldap.{{ base_domain }}:389
+ldap.base=dc=surfconext,dc=nl
+ldap.userDn={{ engine_ldap_bind_dn }}
+ldap.password={{ engine_ldap_password }}
+provision.users=false
+
 #the stem name to find all groups
 defaultStemName=nl:surfnet:diensten
 

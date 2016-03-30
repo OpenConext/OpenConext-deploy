@@ -1,0 +1,8 @@
+---
+- name: copy default oidc client vm
+  copy: src=defaults.vm.sql dest=/tmp
+  when: env == 'vm'
+
+- name: insert default oidc client vm
+  mysql_db: name=oidc-server state=import target=/tmp/defaults.vm.sql
+  when: env == 'vm'
