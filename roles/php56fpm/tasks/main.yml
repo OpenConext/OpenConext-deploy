@@ -25,6 +25,10 @@
   - php-gd
   - composer
 
+- name: enable php-fpm
+  service: name=php-fpm enabled=yes
+
+  
 - name: Configure PHP APC
   template: src={{ item }}.j2 dest=/etc/php.d/{{ item }}
   with_items:

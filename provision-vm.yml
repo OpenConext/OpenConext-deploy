@@ -24,9 +24,7 @@
   sudo: true
   roles:
     - { role: haproxy, tags: ['lb'] }
-    - { role: nginx,   tags: ['lb'] }
-    - { role: bind,    tags: ['bind'] }
-
+    - { role: nginx,    tags: ['lb'] }
 - hosts: php-apps:java-apps-centos7
   gather_facts: yes
   sudo: true
@@ -77,7 +75,7 @@
     - { role: mujina-idp,        tags: ['legacy' ] }
     - { role: mujina-sp,         tags: ['legacy' ] }
     - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
-      #   - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
+    - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,              tags: ['oauth', 'voot'            ] }
     - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
     - { role: pdp,               tags: ['pdp'] }
@@ -86,7 +84,7 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
 
-- hosts: java-apps
+- hosts: java-apps-centos7
   gather_facts: true
   sudo: true
   vars:

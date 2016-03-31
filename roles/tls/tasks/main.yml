@@ -1,12 +1,12 @@
 ---
 - name: copy certificates to correct location
-  copy: src=files/{{ env }}/certs/{{ item }} dest={{ tls.cert_path }}/{{ item }}
+  copy: src={{ inventory_dir }}/files/certs/{{ item }} dest={{ tls.cert_path }}/{{ item }}
   with_items:
     - "{{ tls.certificates }}"
     - "{{ tls.ca_certificates }}"
 
 - name: copy ca certificate to correct location on CentOS 7
-  copy: src=files/{{ env }}/certs/{{ item }} dest=/etc/pki/ca-trust/source/anchors/{{ item }}
+  copy: src={{ inventory_dir }}/files/certs/{{ item }} dest=/etc/pki/ca-trust/source/anchors/{{ item }}
   with_items:
      "{{ tls.ca_certificates }}"
   notify: update_ca_trust

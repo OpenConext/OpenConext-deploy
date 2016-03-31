@@ -9,7 +9,7 @@
   template: src=site/index.html dest=/var/www/welcome/index.html
 
 - name: copy the openconext_ca certificate 
-  copy: src=files/{{ env }}/certs/{{ tls_https.ca_name }} dest=/var/www/welcome/openconext_ca.crt 
+  copy: src={{ inventory_dir }}/files/certs/{{ tls_https.ca_name }} dest=/var/www/welcome/openconext_ca.crt 
   
 - name: copy virtual host config
   template: src=welcome-vm.conf.j2 dest=/etc/httpd/conf.d/welcome-vm.conf
