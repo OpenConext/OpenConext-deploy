@@ -1,3 +1,3 @@
 ---
 - name: restart metadata-exporter
-  service: name=metadata-exporter state=restarted
+  service: name=metadata-exporter state=restarted sleep=45
