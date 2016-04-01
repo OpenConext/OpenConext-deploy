@@ -11,7 +11,7 @@ listcontains() {
 	return 1
 }
 
-known_envs='vm  test acc prod  diy-test diyi test2'
+known_envs='vm  test acc prod  diy-test diy test2'
 if listcontains "$1" ${known_envs}
 then
   echo "The environment '$1' is not a valid environment";
