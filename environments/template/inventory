@@ -1,0 +1,23 @@
+[local-certs]
+localhost ansible_connection=local ansible_python_interpreter=python2
+
+[storage]
+t06.ams.surfconext.nl
+
+[storage-test:children]
+storage
+
+[java-apps-centos7]
+t07.ams.surfconext.nl
+
+[php-apps]
+t06.ams.surfconext.nl
+
+[loadbalancer]
+t01.ams.surfconext.nl
+
+[test2:children]
+storage
+java-apps-centos7
+php-apps
+loadbalancer

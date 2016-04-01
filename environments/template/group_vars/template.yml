@@ -1,8 +1,8 @@
 ---
-env: vm
+env: test2
 
-smtp_server: localhost
-error_mail_to: devnull@example.org
+smtp_server: s01.dev.coin.surf.net
+error_mail_to: coin-logs-dev@list.surfnet.nl
 
 php_display_errors: 1
 
@@ -16,6 +16,7 @@ databases:
     - authz-server
     - pdp-server
     - oidc-server
+    - aaserver
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
@@ -25,21 +26,21 @@ databases:
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
+    - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
 
-# on the VM we use the same certificate for all domains under base_domain.
+# For apache, the same star-certificate is used.
 tls_https:
   key_name: star.{{ base_domain }}.key
   crt_name: star.{{ base_domain }}.pem
   ca_name: star.{{ base_domain }}_ca.pem
   bundle_name: star.{{ base_domain }}_ca_bundle.pem
-
+  haproxy_name: star.{{ base_domain }}_haproxy.pem
 apache_server_admin: unix@prolocation.net
 
 janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
-
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
@@ -53,29 +54,28 @@ tls:
     - "{{ tls_https.key_name }}"
   ca_certificates:
     - "{{ tls_https.ca_name }}"
+
 engine_janus_user: engineblock
 
 engine_database_name: eb
-engine_database_host: localhost
+engine_database_host: "{{ mysql_host }}"
 engine_database_port: 3306
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
-engine_ldap_host: localhost
+engine_ldap_host: ldap.{{ base_domain }}
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
-engine_apache_environment: vm
+engine_apache_environment: test
+engine_apache_symfony_environment: test
 
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
 ldap_grouper_user: gadget
-grouper_ldap_host: localhost
 
 janus_database_name: sr
-janus_database_host: localhost
+janus_database_host: "{{ mysql_host }}"
 janus_database_user: srrw
 janus_database_password: "{{ mysql_passwords.sr }}"
-
-janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
 
 # host for static files (IdP logos)
 static:
@@ -86,6 +86,9 @@ static:
 welcome:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+
+
+janus_teams_oauth_key: https://teams.test.surfconext.nl/teams/teams.xml
 
 engine:
   crt_name: "{{ tls_https.crt_name }}"
@@ -102,15 +105,6 @@ profile:
 janus:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-
-mujina_sp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-mujina_idp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
 
 engine_janus_cache_lifetime: 0
 
@@ -162,18 +156,22 @@ shibboleth_apps:
   pdp:
     entityID: "https://pdp.{{ base_domain }}/shibboleth"
     baseurl: ""
+  aa:
+    entityID: "https://aa.{{ base_domain }}/shibboleth"
+    baseurl: ""
 shib:
   engine_domain: "{{ base_domain }}"
 
+# versions of installed apps
+teams_version: 4.2.9
+#teams_snapshot_timestamp: 20160210.111305-1
+
 api_version: 4.0.1
-#api_snapshot_timestamp
+#api_snapshot_timestamp: 20150419.220130-443
 
 mujina_version: 4.0.2
 #mujina_snapshot_timestamp
 
-##
-# VM config for the teams app
-##
 teams:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -181,30 +179,23 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:demo.openconext.org:"
-
-teams_version: 4.2.1
-# teams_snapshot_timestamp: 20150519.080724-3
-teams_debug: true
+  group_name_context: "urn:collab:group:test.surfteams.nl:"
+  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 
-##
-# VM config for the api app
-##
 api:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   janus:
     user: "{{ engine_janus_user }}"
     secret: "{{ engine_janus_secret }}"
     uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
   jdbc:
     user: apirw
-    url: jdbc:mysql://{{ mysql_host }}:3306/api
+    url: "jdbc:mysql://{{ mysql_host }}/api"
     password: "{{ mysql_passwords.api }} "
   ldap:
     url: ldap://ldap.{{ base_domain }}:389
@@ -216,8 +207,8 @@ api:
     password: "{{ engine_database_password }}"
   teams:
     user: teamsrw
-    url: jdbc:mysql://{{ mysql_host }}:3306/teams
-    password: "{{ mysql_passwords.teams }}"
+    url: "jdbc:mysql://{{ mysql_host }}/{{ teams.db_name }}"
+    password: "{{ teams.db_password }}"
   oauth:
     callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
   staticContentBasePath: https://static.{{ base_domain }}
@@ -227,9 +218,6 @@ api:
   ehcache:
     path: /tmp
 
-##
-# VM config for the grouper app
-##
 grouper:
   db_user: grouperrw
   db_host: "{{ mysql_host }}"
@@ -241,17 +229,14 @@ grouper:
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
 
-mujina_idp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
 mujina_sp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-##
-# VM config for the Authorization Server
-##
+mujina_idp:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+
 authzserver:
   db_user: authz-serverrw
   db_password: "{{ mysql_passwords.authz_server }}"
@@ -259,43 +244,51 @@ authzserver:
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
-authz_server_version: 1.2
-#authz_server_snapshot_timestamp: 20150429.085158-60
+authz_server_version: 1.3.3
+#authz_server_snapshot_timestamp: "20160126.144433-4"
 authz_server_debug: true
 
-##
-# VM config for the Voot app
-##
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
   authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
   authz_checkToken_clientId: "vootservice"
   authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
+  oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
+  oidc_checkToken_clientId: "https@//oidc.test.surfconext.nl"
+  oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
   externalGroupProviders:
     - {
         type: "grouper",
-        url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
+        url: "https://grouper.{{ base_domain }}/grouper-ws/services/GrouperService_v2_0",
         credentials: {
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
         },
-        schacHomeOrganization: "surfnet.nl",
+        schacHomeOrganization: "test.surfteams.nl",
         name: "SURFteams",
+        timeoutMillis: 15000
+      }
+    - {
+        type: "open_social",
+        url: "https://groupprovider-acc.surfnet.nl",
+        credentials: {
+          username: "conext",
+          secret: "{{ external_group_provider_secrets.surfnet }}"
+        },
+        schacHomeOrganization: "surfnet.nl",
+        name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.5
-#voot_snapshot_timestamp: ""
+voot_version: 1.6.1
+#voot_snapshot_timestamp: 20151207.100901-4
 voot_debug: true
 
-##
-# VM config for the authz-admin application
-##
 authz_admin_version: 1.3.4
-#authz_admin_snapshot_timestamp: 20150422.113215-61
-authz_admin_group: "{{ teams.group_name_context }}org:openconext:teams:managementvo"
-authz_admin_debug: true
+authz_admin_snapshot_timestamp: "20151223.124726-3"
+authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -354,11 +347,12 @@ authzadmin:
           - actions
           - cross-idp-services
           - stats
+          - pdp
         grantTypes:
           - authorization_code
           - implicit
           - client_credentials
-      - clientId: pdp
+      - clientId: pdp_client
         secret: "{{ pdp_client_secret }}"
         resourceIds:
           - groups
@@ -368,28 +362,42 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
+      - clientId: "{{ aa.authz_client_id }}"
+        secret: "{{ aa_authz_client_secret }}"
+        scopes:
+          - groups
+          - attribute-aggregation
+          - saml-attribute-query
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.authz_checkToken_secret }}"
     - clientId: csa
       secret: "{{ csa_resource_checking_secret }}"
-##
-# VM config for the authz-admin application
-##
-authz_playground_version: 1.1
-authz_playground_snapshot_timestamp: 20151124.142135-2
+    - clientId: pdp
+      secret: "{{ voot.oidc_checkToken_secret }}"
+    - clientId: "{{ aa.authz_resource_server_id }}"
+      secret: "{{ aa.authz_secret }}"
+
+authz_playground_version: 1.2
+authz_playground_snapshot_timestamp: "20160208.150458-5"
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
-  springapp_oidc_client_id: https@//oidc.local.surfconext.nl
+  springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: "0.1"
-pdp_snapshot_timestamp: "20151120.123017-19"
-pdp_html_snapshot_timestamp: "20151120.140020-18"
+pdp_version: 1.1.2
+#pdp_snapshot_timestamp: 20160212.090819-5
+#pdp_html_snapshot_timestamp: 20160212.075613-4
+#pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
 pdp:
@@ -404,176 +412,372 @@ pdp:
   spring_profiles_active: test
   cache_policies: false
   include_inactive_policies: true
+  sab_username: coin-test
+  sab_password: "{{ pdp_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151126.151623-11"
+aa_version: "1.0.1"
+aa_snapshot_timestamp: "20160212.090929-21"
+aa_html_snapshot_timestamp: "20160209.135704-17"
+
+aa_debug: true
+aa:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  eb_username: "eb"
+  eb_password: "{{ aa_eb_password }}"
+  db_user: aa-serverrw
+  db_password: "{{ mysql_passwords.aa_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: aaserver
+  authz_client_id: "https@//aa.test.surfconext.nl"
+  authz_resource_server_id: aa
+  authz_secret: "{{ aa_authz_client_secret }}"
+  oidc_client_id: "https@//aa.surfconext.test.nl"
+  oidc_secret: "{{ aa_oidc_client_secret }}"
+  spring_profiles_active: acc
+  sab_username: coin-test
+  sab_password: "{{ aa_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  rollbar_environment: test
+  rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
+
+oidc_version: "1.0.1"
+oidc_snapshot_timestamp: "20160210.190042-14"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  environment: vm
+  environment: test
   issuer: https://oidc.{{ base_domain }}/
   db_user: oidc-serverrw
   db_password: "{{ mysql_passwords.oidc_server }}"
   db_host: "{{ mysql_host }}"
   db_name: oidc-server
-  sp_entity_id: https://oidc.{{ base_domain }}
+  sp_entity_id: https://oidc.test.surfconext.nl
+
+metadata_exporter_version: "1.1.1"
+#metadata_exporter_snapshot_timestamp: "20160208.084759-3"
+metadata_exporter:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  db_user: srrw
+  db_password: "{{ mysql_passwords.sr }}"
+  db_host: "{{ mysql_host }}"
+  db_name: sr
+  password: "{{ metadata_exporter_password }}"
+  rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"
+
+
+
 
 loadbalancing:
   engine: {
     port: 401,
     heartbeat: { url: "/", method: "GET" },
     servers: [
-      { label: "engine_backend", ip: "192.168.66.99" },
+      { label: "engine_backend", ip: "145.100.191.119" },
     ]
   }
   profile: {
     port: 402,
     heartbeat: { url: "/favicon.ico", method: "HEAD" },
     servers: [
-      { label: "profile_backend", ip: "192.168.66.99" }
+      { label: "profile_backend", ip: "145.100.191.119" }
     ]
   }
   static: {
     port: 403,
     heartbeat: { url: "/media/alive.txt", method: "HEAD" },
     servers: [
-      { label: "static_backend", ip: "192.168.66.99" },
+      { label: "static_backend", ip: "145.100.191.119" },
     ]
   }
   serviceregistry: {
       port: 404,
       heartbeat: { url: "/", method: "HEAD" },
       servers: [
-        { label: "serviceregistry_backend", ip: "192.168.66.99" },
+        { label: "serviceregistry_backend", ip: "145.100.191.119" },
     ]
   }
   engine_api: {
       port: 405,
       heartbeat: { url: "/", method: "GET" },
       servers: [
-        { label: "engine_backend", ip: "192.168.66.99" },
+        { label: "engine_api_backend", ip: "145.100.191.119" },
       ]
     }
   teams: {
     port: 601,
     heartbeat: { url: "/media/trans-white.png", method: "GET" },
     servers: [
-      { label: "teams_backend", ip: "192.168.66.99" },
+      { label: "teams_backend", ip: "145.100.191.120" },
     ]
   }
   authzserver: {
     port: 602,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_backend", ip: "192.168.66.99" },
+      { label: "authz_backend", ip: "145.100.191.120" },
     ]
   }
   authz_admin: {
     port: 603,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_admin_backend", ip: "192.168.66.99" }
+      { label: "authz_admin_backend", ip: "145.100.191.120" }
     ]
   }
   authz_playground: {
     port: 604,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "authz_playground_backend", ip: "192.168.66.99" },
+      { label: "authz_playground_backend", ip: "145.100.191.120" },
     ]
   }
   voot: {
     port: 605,
     heartbeat: { url: "/health", method: "GET" },
     servers: [
-      { label: "voot_backend", ip: "192.168.66.99" },
+      { label: "voot_backend", ip: "145.100.191.120" },
     ]
   }
-  grouper: {
-    port: 606,
-    heartbeat: { url: "/grouper/", method: "HEAD" },
+  pdp: {
+    port: 613,
+    heartbeat: { url: "/pdp/api/health", method: "GET" },
     servers: [
-      { label: "grouper_backend", ip: "192.168.66.99" },
-    ]
-  }
-  mujina_sp: {
-    port: 607,
-    heartbeat: { url: "/", method: "HEAD" },
-    servers: [
-      { label: "mujina_sp_backend", ip: "192.168.66.99" },
-    ]
-  }
-  mujina_idp: {
-      port: 608,
-      heartbeat: { url: "/", method: "HEAD" },
-      servers: [
-        { label: "mujina_idp_backend", ip: "192.168.66.99" },
-    ]
-  }
-  welcome: {
-      port: 609,
-      heartbeat: { url: "/", method: "GET" },
-      servers: [
-        { label: "welcome_backend", ip: "192.168.66.99" },
+      { label: "pdp_backend", ip: "145.100.191.120" },
     ]
   }
   oidc: {
     port: 10614,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
-      { label: "oidc_backend", ip: "192.168.66.99" },
+      { label: "oidc_backend", ip: "145.100.191.120" },
     ]
   }
-  pdp: {
-      port: 613,
-      heartbeat: { url: "/pdp/api/health", method: "GET" },
+  aa: {
+    port: 615,
+    heartbeat: { url: "/aa/api/health", method: "GET" },
+    servers: [
+      { label: "aa_backend", ip: "145.100.191.120" },
+    ]
+  }
+  metadata_exporter: {
+    port: 616,
+    heartbeat: { url: "/health", method: "GET" },
+    servers: [
+      { label: "metadata_exporter_backend", ip: "145.100.191.120" },
+    ]
+  }
+  grouper: {
+    port: 606,
+    heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
+    servers: [
+      { label: "grouper_backend", ip: "145.100.191.120" },
+    ]
+  }
+  mujina_sp: {
+    port: 607,
+    heartbeat: { url: "/", method: "HEAD" },
+    servers: [
+      { label: "mujina_sp_backend", ip: "145.100.191.120" },
+    ]
+  }
+  mujina_idp: {
+      port: 608,
+      heartbeat: { url: "/", method: "HEAD" },
       servers: [
-        { label: "pdp_backend", ip: "192.168.66.99" },
-      ]
-    }
+        { label: "mujina_idp_backend", ip: "145.100.191.120" },
+    ]
+  }
 
 nginx_backend_ip: 127.0.0.1
 
-# values below seem silly but on acc+prod these differ.
 nginx_ipv4_addresses:
-  engine: 192.168.66.98
-  engine_api: 192.168.66.98
-  profile: 192.168.66.98
-  serviceregistry: 192.168.66.98
-  static: 192.168.66.98
-  teams: 192.168.66.98
-  authzserver: 192.168.66.98
-  authz_admin: 192.168.66.98
-  authz_playground: 192.168.66.98
-  voot: 192.168.66.98
-  grouper: 192.168.66.98
-  mujina_sp: 192.168.66.98
-  mujina_idp: 192.168.66.98
-  welcome: 192.168.66.98
-  pdp: 192.168.66.98
-  oidc: 192.168.66.98
-
-nginx_config_templates:
-  - welcome
-  - mujina_sp
-  - mujina_idp
-  - engine
-  - engine_api
-  - teams
-  - grouper
-  - voot
-  - authz
-  - authz_admin
-  - authz_playground
-  - static
-  - profile
-  - pdp
-  - serviceregistry
-  - oidc
-
-# Added in CentOS7:
-eb_fpm_user
+  engine: 145.100.191.114
+  engine_api: 145.100.191.114
+  profile: 145.100.191.114
+  serviceregistry: 145.100.191.114
+  static: 145.100.191.114
+  teams: 145.100.191.114
+  authzserver: 145.100.191.114
+  authz_admin: 145.100.191.114
+  authz_playground: 145.100.191.114
+  voot: 145.100.191.114
+  grouper: 145.100.191.114
+  mujina_sp: 145.100.191.114
+  mujina_idp: 145.100.191.114
+  welcome: 145.100.191.114
+  pdp: 145.100.191.114
+  oidc: 145.100.191.114
+  aa: 145.100.191.114
+  metadata_exporter: 145.100.191.114
 
 
 
 
+haproxy_applications:
+  
+  engine:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "401"
+    servers: "{{php_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  profile:
+    ip: "145.100.191.114"
+    ha_method: "HEAD"
+    ha_url: "/favicon.ico"
+    port: "402"
+    servers: "{{php_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  static:
+    ip: "145.100.191.114"
+    ha_method: "HEAD"
+    ha_url: "/media/alive.txt"
+    port: "403"
+    servers: "{{php_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+   
+  serviceregistry:
+    ip: "145.100.191.114"
+    ha_method: "HEAD"
+    ha_url: "/"
+    port: "404"
+    servers: "{{php_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+  
+  engine_api:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "405"
+    servers: "{{php_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+   
+  teams:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/media/trans-white.png"
+    port: "601"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+   
+  authzserver:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "602"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  authz_admin:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "603"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+   
+  authz_playground:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "604"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+   
+  voot:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "605"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  pdp:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/pdp/api/health"
+    port: "613"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  oidc:
+    ip: "145.100.191.114"
+    ha_method: "HEAD"
+    ha_url: "/"
+    port: "614"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  aa:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/aa/api/health"
+    port: "615"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  multidata:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "616"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  grouper:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/grouper-ws/status?diagnosticType=db"
+    port: "606"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  mujina-sp:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "607"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+  mujina-idp:
+    ip: "145.100.191.114"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "608"
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
+
+haproxy_sni_ip: 145.100.191.114
+   
+
+php_servers:
+   - { ip: "145.100.191.119", label: "t06"}
+
+java_servers:
+   - { ip: "145.100.191.120", label: "t07"}

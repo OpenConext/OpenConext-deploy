@@ -4,34 +4,34 @@ localhost ansible_connection=local
 [local-certs]
 localhost
 
-[vm]
+[docker]
 localhost
 
 [storage]
 localhost
 
-[storage-vm:children]
+[storage-docker:children]
 storage
 
 [java-apps-centos7]
 localhost
 
-[java-apps-vm:children]
+[java-apps-docker:children]
 java-apps-centos7
 
 [php-apps]
 localhost
 
-[php-apps-vm:children]
+[php-apps-docker:children]
 php-apps
 
 [loadbalancer]
 localhost
 
-[loadbalancer-vm:children]
+[loadbalancer-docker:children]
 loadbalancer
 
-[vm:children]
+[docker:children]
 storage
 java-apps-centos7
 php-apps
