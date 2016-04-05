@@ -176,7 +176,6 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:acc.surfteams.nl:"
-  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -384,8 +383,6 @@ pdp:
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
-  rollbar_environment: acc
-  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 oidc_version: "0.1"
 oidc_snapshot_timestamp: "20151126.151623-11"
@@ -409,7 +406,6 @@ metadata_exporter:
   db_host: "{{ mysql_host }}"
   db_name: sr
   password: "{{ metadata_exporter_password }}"
-  rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"
 
 loadbalancing:
   engine: {

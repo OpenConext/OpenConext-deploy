@@ -12,4 +12,3 @@ springapp_local_jar: "{{ metadata_exporter_local_jar }}"
 springapp_debug: "{{ metadata_exporter_debug }}"
 springapp_debug_port: 1299
 springapp_heapsize: "64m"
-springapp_rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"

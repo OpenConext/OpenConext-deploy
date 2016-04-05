@@ -12,7 +12,6 @@ springapp_local_jar: "{{ aa_local_jar }}"
 springapp_debug: "{{ aa_debug }}"
 springapp_debug_port: 1198
 springapp_heapsize: "512m"
-springapp_rollbar_apiKey: "{{ aa.rollbar_apiKey }}"
 
 js_error_reporting_access_token: "{{ attribute_aggregator_js_access_token }}"
 js_error_enabled: "true"

@@ -175,7 +175,6 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
-  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -239,7 +238,6 @@ authzserver:
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
 authz_server_version: 1.3.4
 #authz_server_snapshot_timestamp: "20160126.144433-4"
@@ -388,9 +386,8 @@ authzplayground:
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: 1.1.4
+pdp_version: 1.1.5
 #pdp_snapshot_timestamp: 20160216.135430-1
 #pdp_html_snapshot_timestamp: 20160216.135448-1
 
@@ -409,12 +406,10 @@ pdp:
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
-  rollbar_environment: test
-  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 aa_version: "1.0.3"
-aa_snapshot_timestamp: "20160331.144252-2"
-aa_html_snapshot_timestamp: "20160404.134651-3"
+#aa_snapshot_timestamp: "20160331.144252-2"
+#aa_html_snapshot_timestamp: "20160404.134651-3"
 
 aa_debug: true
 aa:
@@ -435,8 +430,6 @@ aa:
   sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
-  rollbar_environment: test
-  rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
 oidc_version: "1.0.2"
 # oidc_snapshot_timestamp: "20160307.120704-2"
@@ -461,7 +454,6 @@ metadata_exporter:
   db_host: "{{ mysql_host }}"
   db_name: sr
   password: "{{ metadata_exporter_password }}"
-  rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"
 
 springapp_tcpport_error_handling: 9199
 
