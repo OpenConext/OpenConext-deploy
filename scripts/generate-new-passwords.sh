@@ -124,7 +124,7 @@ do
   if [ "$value" == 'https_star_private_key' ]; then
     line="$key: |"
     echo "$line" >> $SV_FILE
-    cat "$BASEDIR/oc_cert/ssl/star.openconext-qa.openconext.org.key" | sed "s/^/  /g" >> "$SV_FILE"
+    cat "$BASEDIR/oc_cert/ssl/star.$oc_env.openconext.org.key" | sed "s/^/  /g" >> "$SV_FILE"
     continue
   fi
 
