@@ -64,6 +64,9 @@
   tags: aa
   when: aa_html_snapshot_timestamp != '' and aa_local_html_version == ''
 
+- name: add javascript error file
+  template: src=templates/error.reporting.js.j2 dest=/var/www/aa/current/js/error.reporting.js
+
 - name: copy virtual host config
   template: src=aa.conf.j2 dest=/etc/httpd/conf.d/aa.conf
   tags: aa

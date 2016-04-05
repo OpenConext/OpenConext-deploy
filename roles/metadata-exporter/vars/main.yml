@@ -7,7 +7,7 @@ springapp_dir: "{{ metadata_exporter_dir }}"
 springapp_user: metadata-exporter
 springapp_service_name: metadata-exporter
 springapp_jar: "{{ metadata_exporter_jar }}"
-springapp_tcpport: 9199
+springapp_tcpport: "{{ springapp_tcpport_error_handling }}"
 springapp_local_jar: "{{ metadata_exporter_local_jar }}"
 springapp_debug: "{{ metadata_exporter_debug }}"
 springapp_debug_port: 1299

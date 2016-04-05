@@ -26,6 +26,10 @@
   notify: restart metadata-exporter
 
 - name: Copy application config
+  template: src=javascript_error_registrations.json.j2 dest={{ metadata_exporter_dir }}/javascript_error_registrations.json owner=metadata-exporter group=metadata-exporter mode=0740
+  notify: restart metadata-exporter
+
+- name: Copy javascripts client
   template: src=application.properties.j2 dest={{ metadata_exporter_dir }}/application.properties owner=metadata-exporter group=metadata-exporter mode=0740
   notify: restart metadata-exporter
 
