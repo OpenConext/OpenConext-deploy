@@ -1,7 +1,7 @@
 ---
 env: test
 
-smtp_server: s01.dev.coin.surf.net
+smtp_server: localhost
 error_mail_to: coin-logs-dev@list.surfnet.nl
 
 php_display_errors: 1
@@ -444,7 +444,7 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.test.surfconext.nl
 
-metadata_exporter_version: "2.0.0"
+metadata_exporter_version: "2.0.1"
 #metadata_exporter_snapshot_timestamp: "20160406.075154-1"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"

@@ -314,6 +314,7 @@ authzadmin:
           - groups
         scopes:
           - groups
+          - members
         grantTypes:
           - authorization_code
           - implicit
@@ -410,7 +411,7 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.1.4
+pdp_version: 1.1.6
 #pdp_snapshot_timestamp: "20151222.101918-28"
 #pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
@@ -429,7 +430,7 @@ pdp:
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-aa_version: "1.0.2"
+aa_version: "1.0.3"
 #aa_snapshot_timestamp: "20160302.080912-1"
 #aa_html_snapshot_timestamp: "20160302.081013-1"
 
@@ -453,7 +454,7 @@ aa:
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-oidc_version: "1.0.1"
+oidc_version: "1.0.2"
 #oidc_snapshot_timestamp: "20160229.102842-1"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
@@ -466,7 +467,7 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.{{ base_domain }}
 
-metadata_exporter_version: "1.1.2"
+metadata_exporter_version: "2.0.1"
 #metadata_exporter_snapshot_timestamp: "20160208.084759-3"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
@@ -476,6 +477,8 @@ metadata_exporter:
   db_host: "{{ mysql_host }}"
   db_name: sr
   password: "{{ metadata_exporter_password }}"
+
+springapp_tcpport_error_handling: 9199
 
 loadbalancing:
   engine: {
