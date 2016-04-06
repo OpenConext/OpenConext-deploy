@@ -186,7 +186,7 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:demo.openconext.org:"
+  group_name_context: "urn:collab:group:{{ base_domain }}:"
 
 teams_version: 4.2.10
 #teams_snapshot_timestamp: 20160314.083705-5
@@ -233,7 +233,7 @@ api:
     path: /tmp
 
 ##
-# VM config for the grouper app
+# Config for the grouper app
 ##
 grouper:
   db_user: grouperrw
@@ -270,7 +270,7 @@ authz_server_version: 1.3.4
 authz_server_debug: true
 
 ##
-# VM config for the Voot app
+# Config for the Voot app
 ##
 voot:
   crt_name: "{{ tls_https.crt_name }}"
@@ -284,7 +284,7 @@ voot:
   externalGroupProviders:
     - {
         type: "grouper",
-        url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
+        url: "https://grouper.{{ base_domain }}/grouper-ws/services/GrouperService_v2_0",
         credentials: {
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
@@ -298,11 +298,11 @@ voot_version: 1.6.2
 voot_debug: true
 
 ##
-# VM config for the authz-admin application
+# Config for the authz-admin application
 ##
 authz_admin_version: 1.3.6
 #authz_admin_snapshot_timestamp: 20150422.113215-61
-authz_admin_group: urn:collab:group:demo.openconext.org:etc:sysadmingroup
+authz_admin_group: urn:collab:group:{{ base_domain }}:etc:sysadmingroup
 authz_admin_debug: true
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
