@@ -54,7 +54,7 @@ tempfile() {
 
 
 SV_FILE=$(tempfile)
-#trap 'rm -f $SV_FILE; echo "Error: Operation not completed, please restart command"' EXIT INT TERM 
+trap 'rm -f $SV_FILE; echo "Error: Operation not completed, please restart command"' EXIT INT TERM 
 
 BASEDIR=$(dirname $0)
 

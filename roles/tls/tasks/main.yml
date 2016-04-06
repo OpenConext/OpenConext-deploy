@@ -5,7 +5,10 @@
     - "{{ tls.certificates }}"
     - "{{ tls.ca_certificates }}"
 
-- name: copy ca certificate to correct location on CentOS 7
+- name: enable update-ca-trust method
+  command: update-ca-trust force-enable
+
+- name: copy ca certificate
   copy: src=files/{{ env }}/certs/{{ item }} dest=/etc/pki/ca-trust/source/anchors/{{ item }}
   with_items:
      "{{ tls.ca_certificates }}"
