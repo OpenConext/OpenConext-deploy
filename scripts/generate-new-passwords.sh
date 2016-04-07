@@ -90,10 +90,10 @@ do
     # run command echo -n secret | sha1sum
     # where secret is the password
     passwordkey=`echo $key | sed 's/_sha$//g'`
-    passwordline=`cat $SV_FILE | grep $passwordkey`
+    passwordline=`cat $SV_FILE | grep -w $passwordkey`
     password=$(echo $passwordline | cut -f2 -d:)
-    salt=`tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=4 count=1 2>/dev/null;echo`
-    ssha=`( echo -n ${password}${salt} | openssl dgst -sha1 -binary; echo -n ${salt} )  | openssl enc -base64`
+    salt="$(openssl rand -base64 3)"
+    ssha=$(echo -n ${password}${salt}| openssl dgst -binary -sha1 | sed 's#$#'"$salt"'#' | base64);
     line="$key: \"{SSHA}$ssha\""
     echo "$line" >> $SV_FILE
     continue
@@ -129,7 +129,6 @@ do
   fi
 
   echo "$line" >> $SV_FILE
-
   
 done < $SECRET_VARS_TEMPLATE_FILE
 
