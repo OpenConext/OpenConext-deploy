@@ -129,7 +129,6 @@ do
   fi
 
   echo "$line" >> $SV_FILE
-
   
 done < $SECRET_VARS_TEMPLATE_FILE
 
