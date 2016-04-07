@@ -15,6 +15,7 @@
      - MySQL-python
      - ntp
      - unzip
+     - libselinux-python
 
 - name: Start ntpd
   service: name=ntpd state=started enabled=yes
