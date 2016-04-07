@@ -90,10 +90,10 @@ do
     # run command echo -n secret | sha1sum
     # where secret is the password
     passwordkey=`echo $key | sed 's/_sha$//g'`
-    passwordline=`cat $SV_FILE | grep -w $passwordkey`
+    passwordline=`cat $SV_FILE | grep $passwordkey`
     password=$(echo $passwordline | cut -f2 -d:)
-    salt="$(openssl rand -base64 3)"
-    ssha=$(echo -n ${password}${salt}| openssl dgst -binary -sha1 | sed 's#$#'"$salt"'#' | base64);
+    salt=`tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=4 count=1 2>/dev/null;echo`
+    ssha=`( echo -n ${password}${salt} | openssl dgst -sha1 -binary; echo -n ${salt} )  | openssl enc -base64`
     line="$key: \"{SSHA}$ssha\""
     echo "$line" >> $SV_FILE
     continue
@@ -124,7 +124,7 @@ do
   if [ "$value" == 'https_star_private_key' ]; then
     line="$key: |"
     echo "$line" >> $SV_FILE
-    cat "$BASEDIR/oc_cert/ssl/star.$oc_env.openconext.org.key" | sed "s/^/  /g" >> "$SV_FILE"
+    cat "$BASEDIR/oc_cert/ssl/star.$oc_env.$oc_basedomain.key" | sed "s/^/  /g" >> "$SV_FILE"
     continue
   fi
 
