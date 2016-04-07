@@ -129,6 +129,7 @@ do
   fi
 
   echo "$line" >> $SV_FILE
+
   
 done < $SECRET_VARS_TEMPLATE_FILE
 
@@ -137,3 +138,4 @@ done < $SECRET_VARS_TEMPLATE_FILE
 mv -f $SV_FILE $SECRET_VARS_FILE
 trap '' EXIT
 exit 0
+
