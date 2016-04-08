@@ -65,8 +65,8 @@
   vars:
     env_lang: java
   roles:
-    - tomcat
     - java
+    - tomcat
     - { role: shibboleth,       tags: ['shib'   ] }
     - { role: grouper,          tags: ['grouper'] }
     - { role: teams,            tags: ['teams'  ] }
