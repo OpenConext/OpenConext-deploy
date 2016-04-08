@@ -64,9 +64,18 @@
       chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
 
 # Any scripts should be placed below this
+- name: Run EngineBlock Doctrine migrations
+  command: app/console doctrine:migrations:migrate -n
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  register: doctrine_migrations_output
+  changed_when: "'No migrations to execute' not in doctrine_migrations_output.stdout"
+  tags: enginemigrations
+
 - name: Run EngineBlock DbPatch migrations
   command: ./bin/migrate
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: migrate_output
   changed_when: "'no update needed' not in migrate_output.stderr"
+  tags: enginemigrations
