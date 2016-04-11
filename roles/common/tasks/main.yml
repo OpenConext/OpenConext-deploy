@@ -9,6 +9,7 @@
   yum: name={{ item }} state=present
   with_items:
      - telnet
+     - sudo
      - lynx
      - openldap-clients
      - ntp
