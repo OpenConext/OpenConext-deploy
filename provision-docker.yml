@@ -18,6 +18,12 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
 
+- hosts: storage
+  gather_facts: yes
+  sudo: true
+  roles: 
+    - { role: mysql, tags: ['mysql'] }
+      
 - hosts: php-apps:java-apps-centos7
   gather_facts: yes
   sudo: true
