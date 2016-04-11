@@ -15,8 +15,19 @@ acc42.coin.surf.net
 [loadbalancer]
 acc11.coin.surf.net
 
+[oidc]
+oidc.acc.ams.surfconext.nl ansible_ssh_private_key_file=~/.ssh/id_rsa_surfdeploy 
+
+[java-apps-centos7]
+oidc.acc.ams.surfconext.nl
+
+[java-apps-common]
+oidc.acc.ams.surfconext.nl
+
 [acc:children]
 storage
 java-apps
 php-apps
 loadbalancer
+oidc
+

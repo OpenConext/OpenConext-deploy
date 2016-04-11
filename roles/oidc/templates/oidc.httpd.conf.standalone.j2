@@ -1,0 +1,26 @@
+Listen {{ apache_app_listen_address.oidc }}:80
+Listen {{ apache_app_listen_address.oidc }}:443
+
+<Virtualhost {{ apache_app_listen_address.oidc }}:80
+    ServerName https://oidc.{{ base_domain }}
+    Redirect permanent / https://oidc.{{ base_domain }}
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-oicd'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-oidc'" combined
+
+
+
+<Virtualhost {{ apache_app_listen_address.oidc }}:443
+    ServerName https://oidc.{{ base_domain }}
+    SSLEngine On
+    SSLProtocol             all -SSLv2 -SSLv3
+    SSLCipherSuite ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES256-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:DHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA
+    SSLHonorCipherOrder     on
+    Header always set Strict-Transport-Security "max-age=15768000"
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-oicd'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-oidc'" combined
+    SSLCertificateFile      {{ tls.cert_path }}/{{ oidc.crt_name }};
+    SSLCertificateKeyFile  {{ tls.cert_private_path }}/{{ oidc.key_name }};
+    # Proxy requests through to Tomcat using AJP
+    ProxyPass / ajp://localhost:8009/ retry=0
+
+</VirtualHost>

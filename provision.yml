@@ -7,31 +7,28 @@
     tags:
       - always
 
-- hosts: loadbalancer:php-apps:java-apps:storage
-  gather_facts: no
+- hosts: loadbalancer:php-apps:java-apps:storage:oidc
+  gather_facts: yes
   sudo: true
   roles:
-    - common
-    - tls
+    - { role: common,   tags: ['common'] }
+    - { role: tls,      tags: ['tls'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: loadbalancer
   gather_facts: true
   sudo: true
   roles:
-    - { role: haproxy, tags: ['lb'] }
-    - { role: nginx,   tags: ['lb'] }
+    - { role: haproxy2, tags: ['lb'] }
 
-- hosts: php-apps:java-apps
+- hosts: php-apps:java-apps:oidc
   gather_facts: no
   sudo: true
   roles:
-    - httpd
+    - { role: httpd,     tags: ['httpd'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: storage
   gather_facts: no
@@ -47,24 +44,32 @@
   vars:
     env_lang: php
   roles:
-    - php
-    - static
+    - { role: php56fpm,               tags: ['php' ] }
+    - { role: static,            tags: ['static' ] }
     - { role: openconext-common, tags: ['eb5','sr'] }
     - { role: engineblock5,       tags: ['eb5'     ] }
     - { role: janus,             tags: ['sr'     ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
+- hosts: java-apps-common
+  gather_facts: true
+  sudo: true
+  vars:
+    env_lang: java
+  roles:
+    - { role: tomcat,           tags: ['tomcat' ] }
+    - { role: java,             tags: ['java' ] }
+    - { role: shibboleth,       tags: ['shib'   ] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+      
 - hosts: java-apps
   gather_facts: true
   sudo: true
   vars:
     env_lang: java
   roles:
-    - tomcat
-    - java
-    - { role: shibboleth,       tags: ['shib'   ] }
     - { role: mujina-idp,       tags: ['mujina' ] }
     - { role: mujina-sp,        tags: ['mujina' ] }
     - { role: grouper,          tags: ['grouper'] }
@@ -74,7 +79,16 @@
     - { role: voot,             tags: ['oauth', 'voot'            ] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
     - { role: pdp,              tags: ['pdp'] }
-    - { role: oidc,             tags: ['oidc'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
+
+- hosts: oidc
+  gather_facts: true
+  sudo: true
+  vars:
+    env_lang: java
+  roles:
+    - { role: oidc,            tags: ['oidc' ] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/tomcat/handlers/main.yml

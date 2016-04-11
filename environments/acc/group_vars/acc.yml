@@ -1,6 +1,6 @@
 ---
 env: acc
-
+oidc_standalone: true
 smtp_server: localhost
 error_mail_to: coin-logs-dev@list.surfnet.nl
 
@@ -44,8 +44,8 @@ engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
 # when using multiple certificates list them all (and their bundles) under tls.certificates
 tls:
-  cert_path: /etc/nginx/keys/
-  cert_private_path: /etc/nginx/keys/
+  cert_path: /etc/pki/tls/certs/
+  cert_private_path: /etc/pki/tls/private/
   certificates:
     - "{{ tls_https.crt_name }}"
   private_keys:
@@ -388,8 +388,8 @@ pdp:
   rollbar_environment: acc
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-oidc_version: "0.1"
-oidc_snapshot_timestamp: "20151126.151623-11"
+oidc_version: "1.0.2"
+
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -572,3 +572,7 @@ nginx_config_templates:
   - oidc
   - aa
   - metadata-exporter
+
+tomcat_apps:
+  - oidc
+

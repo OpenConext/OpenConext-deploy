@@ -33,3 +33,10 @@
 - name: copy virtual host config
   template: src=oidc.conf.j2 dest=/etc/httpd/conf.d/oidc.conf
   notify: reload httpd
+  when: oidc_standalone is undefined
+
+- name: copy standalone httpd config
+  template: src=oidc.httpd.conf.standalone.j2 dest=/etc/httpd/conf.d/oidc.conf
+  notify: reload httpd
+  when: oidc_standalone is defined
+        
