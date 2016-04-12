@@ -31,8 +31,8 @@ defaults
     log                     global
     option                  httplog
     option                  dontlognull
-    option 		    http-server-close
-    option 		    forwardfor       except 127.0.0.0/8
+    option                  http-server-close
+    option                  forwardfor       except 127.0.0.0/8
     option                  redispatch
     retries                 3
     timeout http-request    10s
@@ -51,7 +51,7 @@ defaults
 #--------------------------------------------------------------------
 #  frontend
 # -------------------------------------------------------------------
-frontend ssl_ip 
+frontend ssl_ip
 
     bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{tls_https.haproxy_name}}  no-sslv3 npn spdy/2
     capture cookie JSESSIONID len 52
@@ -73,8 +73,8 @@ frontend ssl_ip
 #---------------------------------------------------------------------
 # {{ key }} backend
 #---------------------------------------------------------------------
-# 
-backend {{ key }}_be 
+#
+backend {{ key }}_be
   option httpchk {{ value["ha_method"] }} {{ value["ha_url"] }} HTTP/1.0
   option forwardfor # This sets X-Forwarded-For
 
