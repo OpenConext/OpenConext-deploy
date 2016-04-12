@@ -19,7 +19,7 @@ script:
     -e secrets_file=/ansible/environments/vm/secrets/vm.yml
   - >
     sudo docker exec -t ansible-test
-    ansible-playbook /ansible/environments/docker/inventory /ansible/provision-docker.yml
+    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-docker.yml
     -e secrets_file=/ansible/environments/vm/secrets/vm.yml
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
