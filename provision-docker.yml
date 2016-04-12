@@ -22,9 +22,9 @@
   gather_facts: yes
   sudo: true
   roles:
-    - { role: mysql, tags: ['mysql'] }
+    - { role: mysql, tags: [mysql] }
 
-- hosts: php-apps:java-apps-centos7
+- hosts: php-apps:java-apps
   gather_facts: yes
   sudo: true
   roles:
@@ -33,26 +33,26 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
 
-- hosts: java-apps-centos7
-  gather_facts: true
-  sudo: true
-  vars:
-    env_lang: java
-  roles:
-    - tomcat
-    - java
-    - shibboleth
-    - metadata-exporter
-    - grouper
-    - teams
-    - mujina-idp
-    - mujina-sp
-    - authz-server
-    - voot
-    - authz-playground
-    - pdp
-    - oidc
-    - aa
-  handlers:
-    - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
+      #- hosts: java-apps
+      #  gather_facts: true
+      #  sudo: true
+      #  vars:
+      #    env_lang: java
+      #  roles:
+      #    - tomcat
+      #    - java
+      #    - shibboleth
+      #    - metadata-exporter
+      #    - grouper
+      #    - teams
+      #    - mujina-idp
+      #    - mujina-sp
+      #    - authz-server
+      #    - voot
+      #    - authz-playground
+      #    - pdp
+      #    - oidc
+      #    - aa
+      #  handlers:
+      #    - include: roles/httpd/handlers/main.yml
+      #    - include: roles/nginx/handlers/main.yml

@@ -7,11 +7,8 @@ localhost
 [storage]
 localhost
 
-[java-apps-centos7]
+[java-apps]
 localhost
-
-[java-apps-docker:children]
-java-apps-centos7
 
 [php-apps]
 localhost
@@ -21,6 +18,6 @@ localhost
 
 [docker:children]
 storage
-java-apps-centos7
+java-apps
 php-apps
 loadbalancer
