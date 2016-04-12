@@ -23,6 +23,7 @@
   sudo: true
   roles:
     - { role: mysql, tags: [mysql] }
+    - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: php-apps:java-apps
   gather_facts: yes
