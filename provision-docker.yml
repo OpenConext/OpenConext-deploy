@@ -34,6 +34,12 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
 
+- hosts: loadbalancer
+  gather_facts: no
+  sudo: true
+  roles:
+    - { role: haproxy2, tags: ['lb'] }
+
       #- hosts: java-apps
       #  gather_facts: true
       #  sudo: true
