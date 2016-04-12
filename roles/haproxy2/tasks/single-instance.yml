@@ -11,11 +11,11 @@
     - restart haproxy
 
 - name: Create haproxy SSL key directory
-  file: dest=/etc/pki/haproxy/ state=directory owner=haproxy group=haproxy mode=0700 
+  file: dest=/etc/pki/haproxy/ state=directory owner=haproxy group=haproxy mode=0700
 
 - name: Create combined key and certificate file for HAproxy
   shell: cat {{ tls.cert_private_path }}/{{ tls_https.key_name }}  {{ tls.cert_path }}/{{ tls_https.crt_name }} >  /etc/pki/haproxy/{{ tls_https.haproxy_name }}
-    
+
 - name: Copy config
   template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
   notify: reload haproxy

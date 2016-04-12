@@ -36,6 +36,7 @@ tls_https:
   crt_name: star.{{ base_domain }}.pem
   ca_name: star.{{ base_domain }}_ca.pem
   bundle_name: star.{{ base_domain }}_ca_bundle.pem
+  haproxy_name: star.{{ base_domain }}_haproxy.pem
 
 apache_server_admin: unix@prolocation.net
 
