@@ -8,20 +8,18 @@
 - name: Install openldap client utils
   yum: name={{ item }} state=present
   when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
-  with_items: 
+  with_items:
     - openldap-clients
-
-
 
 - name: start slapd at boot
   service: name=slapd enabled=yes
   tags: ldap
 
 - name: correct config present
-  shell: "(test -d /etc/openldap/slapd.d && find /etc/openldap/slapd.d/ -type f| xargs grep -i SURFnet | wc -l) || echo 0"
+  shell: "(test -d /etc/openldap/slapd.d && find /etc/openldap/slapd.d/ -type f | xargs grep -i SURFnet | wc -l) || echo 0"
   register: config_correct
   tags: ldap
-  changed_when: True
+  changed_when: False
 
 - name: Copy slapd.conf
   template: src=slapd.conf.j2 dest=/etc/openldap/slapd.conf
