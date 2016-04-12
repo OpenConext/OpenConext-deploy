@@ -1,24 +1,24 @@
 ---
 
 - name: create haproxy config directories
-  file: dest=/etc/haproxy/{{ item.key }} state=directory owner=haproxy group=haproxy mode=0700
-  with_dict: "{{ haproxy_applications }}"
+  file: dest=/etc/haproxy/{{ item.name }} state=directory owner=haproxy group=haproxy mode=0700
+  with_items: "{{ haproxy_applications }}"
 
 - name: Create SSL certificates
-  shell: cat {{ tls.cert_private_path }}/{{ tls_https.key_name }}  {{ tls.cert_path }}/{{ tls_https.crt_name }} > /etc/haproxy/{{item.key}}/{{item.key}}.pem
-  with_dict: "{{ haproxy_applications }}"
+  shell: cat {{ tls.cert_private_path }}/{{ tls_https.key_name }}  {{ tls.cert_path }}/{{ tls_https.crt_name }} > /etc/haproxy/{{ item.name }}/{{ item.namey }}.pem
+  with_items: "{{ haproxy_applications }}"
 
 - name: create haproxy instance startup file
-  template: src=haproxy.cfg.j2 dest=/etc/haproxy/{{item.key}}/haproxy_{{item.key}}.cfg
-  with_dict: "{{ haproxy_applications }}"
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.cfg
+  with_items: "{{ haproxy_applications }}"
 
 - name: copy systemd startup file
-  template: src=haproxy_systemd.j2 dest=/etc/haproxy/{{item.key}}/haproxy_{{item.key}}.service
-  with_dict: "{{ haproxy_applications }}"
+  template: src=haproxy_systemd.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  with_items: "{{ haproxy_applications }}"
 
 - name: enable systemd startup
-  command: systemctl enable /etc/haproxy/{{item.key}}/haproxy_{{item.key}}.service
-  with_dict: "{{ haproxy_applications }}"
+  command: systemctl enable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  with_items: "{{ haproxy_applications }}"
 
 - name: disable standard systemd haproxy instance
   command: systemctl disable haproxy

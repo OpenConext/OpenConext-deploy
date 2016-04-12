@@ -669,71 +669,71 @@ nginx_config_templates:
 
 haproxy_applications:
 
-  engine:
-    ip: "145.100.191.114"
+  - name: engine
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/"
-    port: "401"
+    port: 401
     servers: "{{php_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  profile:
-    ip: "145.100.191.114"
+  - name: profile
+    ip: 145.100.191.114
     ha_method: "HEAD"
     ha_url: "/favicon.ico"
-    port: "402"
+    port: 402
     servers: "{{php_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  static:
-    ip: "145.100.191.114"
+  - name: static
+    ip: 145.100.191.114
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
-    port: "403"
+    port: 403
     servers: "{{php_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  serviceregistry:
-    ip: "145.100.191.114"
+  - name: serviceregistry
+    ip: 145.100.191.114
     ha_method: "HEAD"
     ha_url: "/"
-    port: "404"
+    port: 404
     servers: "{{php_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  engine_api:
-    ip: "145.100.191.114"
+  - name: engine_api
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/"
-    port: "405"
+    port: 405
     servers: "{{php_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  teams:
-    ip: "145.100.191.114"
-    ha_method: "GET"
+  - name: teams
+    ip: 145.100.191.114
+    ha_method: GET
     ha_url: "/media/trans-white.png"
-    port: "601"
+    port: 601
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  authzserver:
-    ip: "145.100.191.114"
+  - name: authzserver
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/health"
-    port: "602"
+    port: 602
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  authz_admin:
-    ip: "145.100.191.114"
+  - name: authz_admin
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/health"
     port: "603"
@@ -741,7 +741,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  authz_playground:
+  - name: authz_playground
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/health"
@@ -750,25 +750,25 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  voot:
-    ip: "145.100.191.114"
+  - name: voot
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/health"
-    port: "605"
+    port: 605
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  pdp:
-    ip: "145.100.191.114"
+  - name:  pdp
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/pdp/api/health"
-    port: "613"
+    port: 613
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  oidc:
+  - name: oidc
     ip: "145.100.191.114"
     ha_method: "HEAD"
     ha_url: "/"
@@ -777,43 +777,43 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  aa:
-    ip: "145.100.191.114"
+  - name: aa
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/aa/api/health"
-    port: "615"
+    port: 615
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  multidata:
-    ip: "145.100.191.114"
+  - name: multidata
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/health"
-    port: "616"
+    port: 616
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  grouper:
-    ip: "145.100.191.114"
+  - name: grouper
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/grouper-ws/status?diagnosticType=db"
-    port: "606"
+    port: 606
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  mujina-sp:
-    ip: "145.100.191.114"
+  - name: mujina-sp
+    ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/"
-    port: "607"
+    port: 607
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  mujina-idp:
+  - name: mujina-idp
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/"

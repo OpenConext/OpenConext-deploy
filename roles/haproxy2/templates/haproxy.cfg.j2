@@ -61,21 +61,21 @@ frontend ssl_ip
 
 
     {% for application in haproxy_applications %}
-    acl {{ application }} hdr(host) -i {{ application }}.{{ base_domain }}
+    acl {{ application.name }} hdr(host) -i {{ application.name }}.{{ base_domain }}
     {% endfor %}
     {% for application in haproxy_applications %}
-    use_backend {{ application }}_be if {{ application }}
+    use_backend {{ application.name }}_be if {{ application.name }}
     {% endfor %}
 
-{% for key,value in haproxy_applications.iteritems() %}
+{% for application in haproxy_applications %}
 
 
 #---------------------------------------------------------------------
-# {{ key }} backend
+# {{ application.name }} backend
 #---------------------------------------------------------------------
 #
-backend {{ key }}_be
-  option httpchk {{ value["ha_method"] }} {{ value["ha_url"] }} HTTP/1.0
+backend {{ application.name }}_be
+  option httpchk {{ application.ha_method }} {{ application.ha_url] }} HTTP/1.0
   option forwardfor # This sets X-Forwarded-For
 
     mode http
@@ -85,10 +85,9 @@ backend {{ key }}_be
 
     cookie HTTPSERVERID insert nocache indirect
 
-    {% for server in value["servers"] %}
-    server {{ server.label }} {{ server.ip }}:{{ value["port"] }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for server in application.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
-
 
 {% endfor %}
 {% endif %}
@@ -97,26 +96,26 @@ backend {{ key }}_be
 ## Frontend configuration
 
 #--------------------------------------------------------------------
-# {{ item.key }} frontend
+# {{ item.name }} frontend
 # -------------------------------------------------------------------
-frontend {{ item.key }}
+frontend {{ item.name }}
 
-     bind {{item.value.ip}}:443 ssl crt /etc/haproxy/{{item.key}}/{{item.key}}.pem no-sslv3 npn spdy/2
+     bind {{ item.ip }}:443 ssl crt /etc/haproxy/{{ item.name }}/{{ item.name }}.pem no-sslv3 npn spdy/2
      rspadd  Strict-Transport-Security:\ max-age=15768000
-     bind {{item.value.ip}}:80
+     bind {{ item.ip }}:80
      redirect scheme https code 301 if !{ ssl_fc }
      capture cookie JSESSIONID len 52
      acl url_all         path_beg        -i /
-     use_backend         {{ item.key }}_be       if url_all
-     default_backend     {{ item.key }}_be
+     use_backend         {{ item.name }}_be       if url_all
+     default_backend     {{ item.name }}_be
 
 
 #---------------------------------------------------------------------
-#  {{ item.key }} backend
+#  {{ item.name }} backend
 #---------------------------------------------------------------------
-backend {{ item.key }}_be
+backend {{ item.name }}_be
 
-    option httpchk {{ item.value.ha_method }} {{ item.value.ha_url }} HTTP/1.0
+    option httpchk {{ item.ha_method }} {{ item.ha_url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
 
     mode http
@@ -126,7 +125,7 @@ backend {{ item.key }}_be
 
     cookie HTTPSERVERID insert nocache indirect
 
-    {% for server in item.value.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ item.value.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for server in item.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 {% endif %}
