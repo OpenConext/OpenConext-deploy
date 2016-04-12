@@ -661,3 +661,6 @@ nginx_config_templates:
   - oidc
   - aa
   - metadata_exporter
+
+haproxy_sni_ip: 127.0.0.1
+
