@@ -25,7 +25,6 @@ global
 # use if not designated in their block
 #---------------------------------------------------------------------
 
-
 defaults
     mode                    http
     log                     global
@@ -53,7 +52,7 @@ defaults
 # -------------------------------------------------------------------
 frontend ssl_ip
 
-    bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{tls_https.haproxy_name}}  no-sslv3 npn spdy/2
+    bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{ tls_https.haproxy_name }}  no-sslv3 npn spdy/2
     capture cookie JSESSIONID len 52
     rspadd  Strict-Transport-Security:\ max-age=15768000
     bind {{ haproxy_sni_ip }}:80
@@ -75,7 +74,7 @@ frontend ssl_ip
 #---------------------------------------------------------------------
 #
 backend {{ application.name }}_be
-  option httpchk {{ application.ha_method }} {{ application.ha_url] }} HTTP/1.0
+  option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
   option forwardfor # This sets X-Forwarded-For
 
     mode http
