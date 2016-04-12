@@ -11,9 +11,9 @@
   gather_facts: yes
   sudo: true
   roles:
-    - role: common
-    - role: iptables
-    - role: tls
+    - common
+    - iptables
+    - {role: tls, tags: [tls]}
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
@@ -21,9 +21,9 @@
 - hosts: storage
   gather_facts: yes
   sudo: true
-  roles: 
+  roles:
     - { role: mysql, tags: ['mysql'] }
-      
+
 - hosts: php-apps:java-apps-centos7
   gather_facts: yes
   sudo: true

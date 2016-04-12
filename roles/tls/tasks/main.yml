@@ -10,12 +10,12 @@
     - "{{ tls.ca_certificates }}"
   notify: update_ca_trust
   when: tls.ca_certificates is defined
-    
+
 - name: copy private keys to correct location
   copy: content="{{ item }}" dest={{ tls.cert_private_path }}/{{ item }}
   with_items:
     - "{{ tls.private_keys }}"
-  when: https_star_private_key is defined 
+  when: https_star_private_key is defined
 
 - name: install openssl
   yum: name=openssl state=present
@@ -29,7 +29,7 @@
 
 - name: generate Diffie-Hellman group
   command: openssl dhparam -out {{ tls_dh_param_file }} {{ tls_dh_param_keysize }}
-  args: 
+  args:
     creates: "{{ tls_dh_param_file }}"
 
 - name: check file permissions
