@@ -13,7 +13,7 @@
   roles:
     - common
     - iptables
-    - {role: tls, tags: [tls]}
+    - { role: tls, tags: [tls] }
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

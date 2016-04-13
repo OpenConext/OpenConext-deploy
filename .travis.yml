@@ -7,7 +7,31 @@ before_install:
   - sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 .
 
 script:
-  - sudo docker run --detach -v "${PWD}":/ansible:rw -v /sys/fs/cgroup:/sys/fs/cgroup:ro --privileged --name ansible-test surfnet/centos7-openconext
+  - >
+    sudo docker run --detach
+    -v "${PWD}":/ansible:rw
+    -v /sys/fs/cgroup:/sys/fs/cgroup:ro --privileged
+    --add-host static.vm.openconext.org:127.0.0.1
+    --add-host serviceregistry.vm.openconext.org:127.0.0.1
+    --add-host engine.vm.openconext.org:127.0.0.1
+    --add-host profile.vm.openconext.org:127.0.0.1
+    --add-host mujina-sp.vm.openconext.org:127.0.0.1
+    --add-host mujina-idp.vm.openconext.org:127.0.0.1
+    --add-host grouper.vm.openconext.org:127.0.0.1
+    --add-host authz.vm.openconext.org:127.0.0.1
+    --add-host authz-admin.vm.openconext.org:127.0.0.1
+    --add-host authz-playground.vm.openconext.org:127.0.0.1
+    --add-host voot.vm.openconext.org:127.0.0.1
+    --add-host lb.vm.openconext.org:127.0.0.1
+    --add-host apps.vm.openconext.org:127.0.0.1
+    --add-host ldap.vm.openconext.org:127.0.0.1
+    --add-host db.vm.openconext.org:127.0.0.1
+    --add-host pdp.vm.openconext.org:127.0.0.1
+    --add-host engine-api.vm.openconext.org:127.0.0.1
+    --add-host aa.vm.openconext.org:127.0.0.1
+    --add-host multidata.vm.openconext.org:127.0.0.1
+    --add-host oidc.vm.openconext.org:127.0.0.1
+    --name ansible-test surfnet/centos7-openconext
   - >
     sudo docker exec -t ansible-test env TERM=xterm
     ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-docker.yml
