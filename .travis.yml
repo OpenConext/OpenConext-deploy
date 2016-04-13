@@ -49,7 +49,12 @@ script:
   - sudo docker exec -t ansible-test curl -vvv https://multidata.vm.openconext.org/health
 
 after_failure:
-- sudo docker exec -t ansible-test cat /var/log/metadata-exporter/metadata-exporter.log
+  - sudo docker exec -t curl -vvv http://localhost:616/health
+  - sudo docker exec -t ansible-test yum install -y net-tools
+  - sudo docker exec -t ansible-test netstat -ap
+  - sudo docker exec -t ansible-test cat /var/log/metadata-exporter/metadata-exporter.log
+  - sudo docker exec -t ansible-test cat /etc/httpd/conf.d/metadata_exporter.conf
+  - sudo docker exec -t ansible-test cat /etc/haproxy/haproxy.cfg
 
 after_script:
   - sudo docker stop ansible-test
