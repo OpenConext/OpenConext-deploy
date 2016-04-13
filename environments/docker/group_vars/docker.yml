@@ -135,11 +135,6 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
-#    - {
-#       index: 0,
-#       type: "database",
-#       value: "Doctrine"
-#     }
     - {
         index: 0,
         type: "janus",
@@ -196,8 +191,7 @@ teams:
   rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 teams_version: 4.2.10
-#teams_snapshot_timestamp: 20160314.083705-5
-teams_debug: true
+teams_debug: false
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -274,8 +268,7 @@ authzserver:
   rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
 authz_server_version: 1.3.3
-#authz_server_snapshot_timestamp: 20150429.085158-60
-authz_server_debug: true
+authz_server_debug: false
 
 ##
 # VM config for the Voot app
@@ -302,16 +295,14 @@ voot:
         timeoutMillis: 3000
       }
 voot_version: 1.6.1
-#voot_snapshot_timestamp: ""
-voot_debug: true
+voot_debug: false
 
 ##
 # VM config for the authz-admin application
 ##
 authz_admin_version: 1.3.5
-#authz_admin_snapshot_timestamp: 20150422.113215-61
 authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
-authz_admin_debug: true
+authz_admin_debug: false
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -408,8 +399,7 @@ authzadmin:
 # VM config for the authz-admin application
 ##
 authz_playground_version: 1.2
-#authz_playground_snapshot_timestamp: "20160208.150458-5"
-authz_playground_debug: true
+authz_playground_debug: false
 authzplayground:
   springapp_authz_client_id: cool_app_id
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
@@ -420,9 +410,7 @@ authzplayground:
   rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
 pdp_version: 1.1.3
-#pdp_snapshot_timestamp: "20151222.101918-28"
-#pdp_html_snapshot_timestamp: "20151222.102014-26"
-pdp_debug: true
+pdp_debug: false
 pdp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -440,11 +428,9 @@ pdp:
   rollbar_environment: test
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-aa_version: "1.0.2"
-#aa_snapshot_timestamp: "20160302.080912-1"
-#aa_html_snapshot_timestamp: "20160302.081013-1"
+aa_version: 1.0.2
 
-aa_debug: true
+aa_debug: false
 aa:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -466,8 +452,7 @@ aa:
   rollbar_environment: test
   rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
-oidc_version: "1.0.1"
-#oidc_snapshot_timestamp: "20160229.102842-1"
+oidc_version: 1.0.1
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -479,8 +464,7 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.{{ base_domain }}
 
-metadata_exporter_version: "1.0.1"
-#metadata_exporter_snapshot_timestamp: "20160208.084759-3"
+metadata_exporter_version: 2.0.3
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -570,7 +554,7 @@ loadbalancing:
   }
   mujina_sp: {
     port: 607,
-    heartbeat: { url: "/", method: "HEAD" },
+    heartbeat: { url: "/", method: "HEAD" }
     servers: [
       { label: "mujina_sp_backend", ip: "192.168.66.99" },
     ]
@@ -584,85 +568,52 @@ loadbalancing:
   }
   welcome: {
       port: 609,
-      heartbeat: { url: "/", method: "GET" },
-      servers: [
-        { label: "welcome_backend", ip: "192.168.66.99" },
-    ]
+      heartbeat: { url: "/", method: "GET" }
+      servers:
+        - label: welcome_backend
+          ip: 192.168.66.99
   }
   oidc: {
     port: 614,
-    heartbeat: { url: "/", method: "HEAD" },
+    heartbeat: { url: "/", method: "HEAD" }
     servers: [
       { label: "oidc_backend", ip: "192.168.66.99" },
     ]
   }
   pdp: {
       port: 613,
-      heartbeat: { url: "/pdp/api/health", method: "GET" },
-      servers: [
+      heartbeat: { url: "/pdp/api/health", method: "GET" }
+      servers:
         { label: "pdp_backend", ip: "192.168.66.99" },
-      ]
     }
   aa: {
     port: 615,
-    heartbeat: { url: "/aa/api/health", method: "GET" },
-    servers: [
-      { label: "aa_backend", ip: "192.168.66.99" },
-    ]
+    heartbeat: { url: "/aa/api/health", method: "GET" }
+    servers:
+      - label: aa_backend
+        ip: 127.0.0.1
   }
   metadata_exporter: {
     port: 616,
-    heartbeat: { url: "/health", method: "GET" },
-    servers: [
-      { label: "metadata_exporter_backend", ip: "192.168.66.99" },
-    ]
+    heartbeat: { url: "/health", method: "GET" }
+    servers:
+      - label: metadata_exporter_backend
+        ip: 127.0.0.1
   }
 
-nginx_backend_ip: 127.0.0.1
-
-# values below seem silly but on acc+prod these differ.
-
-nginx_ipv4_addresses:
-  engine: 192.168.66.98
-  engine_api: 192.168.66.98
-  profile: 192.168.66.98
-  serviceregistry: 192.168.66.98
-  static: 192.168.66.98
-  teams: 192.168.66.98
-  authzserver: 192.168.66.98
-  authz_admin: 192.168.66.98
-  authz_playground: 192.168.66.98
-  voot: 192.168.66.98
-  grouper: 192.168.66.98
-  mujina_sp: 192.168.66.98
-  mujina_idp: 192.168.66.98
-  welcome: 192.168.66.98
-  pdp: 192.168.66.98
-  oidc: 192.168.66.98
-  aa: 192.168.66.98
-  metadata_exporter: 192.168.66.98
-
-nginx_config_templates:
-  - welcome
-  - mujina_sp
-  - mujina_idp
-  - engine
-  - engine_api
-  - teams
-  - grouper
-  - voot
-  - authz
-  - authz_admin
-  - authz_playground
-  - static
-  - profile
-  - pdp
-  - serviceregistry
-  - oidc
-  - aa
-  - metadata_exporter
-
-haproxy_applications: []
+haproxy_applications:
+  - name: multidata
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: /health
+    port: 616
+    servers: "{{java_servers}}"
+    crt_name: "{{ tls_https.crt_name }}"
+    key_name: "{{ tls_https.key_name }}"
 
 haproxy_sni_ip: 127.0.0.1
+
+java_servers:
+   - ip: 145.100.191.120
+     label: t07
 

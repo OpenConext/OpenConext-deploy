@@ -24,8 +24,6 @@
   roles:
     - { role: haproxy2, tags: ['lb'] }
 
-
-
 - hosts: php-apps:java-apps-centos7
   gather_facts: yes
   sudo: true

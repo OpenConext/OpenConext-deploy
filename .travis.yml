@@ -48,8 +48,9 @@ script:
     (echo 'Idempotence test: fail' && exit 1)
 
 after_failure:
-  - sudo docker exec -t ansible-test cat /var/log/pdp/pdp.log
+- sudo docker exec -t ansible-test cat /var/log/metadata-exporter/metadata-exporter.log
 
 after_script:
+  - curl -vv https://multidata.vm.openconext.org/health
   - sudo docker stop ansible-test
 

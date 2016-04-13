@@ -16,7 +16,6 @@
     - { role: tls, tags: [tls] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: storage
   gather_facts: yes
@@ -30,8 +29,6 @@
   sudo: true
   roles:
     - httpd
-  handlers:
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: loadbalancer
   gather_facts: no
@@ -53,11 +50,10 @@
 #    - mujina-idp
 #    - mujina-sp
 #    - authz-server
-    - voot
-    - authz-playground
-    - pdp
+#    - voot
+#    - authz-playground
+#    - pdp
 #    - oidc
-    - aa
+#    - aa
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
