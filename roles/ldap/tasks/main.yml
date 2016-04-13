@@ -47,10 +47,6 @@
   when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6")
   tags: ldap
 
-- debug: var=config_correct.stdout
-- debug: var=config_correct
-
-
 - name: start slapd to generate new config
   when: config_correct.stdout == "0"
   service: name=slapd state=started
