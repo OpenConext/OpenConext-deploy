@@ -499,18 +499,18 @@ loadbalancing:
     ]
 
   serviceregistry:
-      port: 404
-      heartbeat: { url: "/", method: "HEAD" }
-      servers: [
-        { label: "serviceregistry_backend", ip: "192.168.66.99" }
+    port: 404
+    heartbeat: { url: "/", method: "HEAD" }
+    servers: [
+      { label: "serviceregistry_backend", ip: "192.168.66.99" }
     ]
 
   engine_api:
-      port: 405
-      heartbeat: { url: "/", method: "GET" }
-      servers: [
-        { label: "engine_backend", ip: "192.168.66.99" }
-      ]
+    port: 405
+    heartbeat: { url: "/", method: "GET" }
+    servers: [
+      { label: "engine_backend", ip: "192.168.66.99" }
+    ]
 
   teams:
     port: 601
@@ -562,18 +562,18 @@ loadbalancing:
     ]
 
   mujina_idp:
-      port: 608
-      heartbeat: { url: "/", method: "HEAD" }
-      servers: [
-        { label: "mujina_idp_backend", ip: "192.168.66.99" }
+    port: 608
+    heartbeat: { url: "/", method: "HEAD" }
+    servers: [
+      { label: "mujina_idp_backend", ip: "192.168.66.99" }
     ]
 
   welcome:
-      port: 609
-      heartbeat: { url: "/", method: "GET" }
-      servers:
-        - label: welcome_backend
-          ip: 192.168.66.99
+    port: 609
+    heartbeat: { url: "/", method: "GET" }
+    servers:
+      - label: welcome_backend
+        ip: 192.168.66.99
 
   oidc:
     port: 614
@@ -583,13 +583,19 @@ loadbalancing:
     ]
 
   pdp:
-      port: 613
-      heartbeat: { url: "/pdp/api/health", method: "GET" }
-      servers:
-        { label: "pdp_backend", ip: "192.168.66.99" }
+    port: 613
+    heartbeat:
+      url: /pdp/api/health
+      method: GET
+    servers:
+      - label: pdp_backend
+        ip: 127.0.0.1
+
   aa:
     port: 615
-    heartbeat: { url: "/aa/api/health", method: "GET" }
+    heartbeat:
+      url: /aa/api/health
+      method: GET
     servers:
       - label: aa_backend
         ip: 127.0.0.1
@@ -616,6 +622,6 @@ haproxy_applications:
 haproxy_sni_ip: 127.0.0.1
 
 java_servers:
-   - ip: 145.100.191.120
-     label: t07
+   - ip: 127.0.0.1
+     label: d01
 

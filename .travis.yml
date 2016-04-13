@@ -46,11 +46,11 @@ script:
     grep -q 'changed=0.*failed=0' &&
     (echo 'Idempotence test: pass' && exit 0) ||
     (echo 'Idempotence test: fail' && exit 1)
+  - sudo docker exec -t ansible-test curl -vvv https://multidata.vm.openconext.org/health
 
 after_failure:
 - sudo docker exec -t ansible-test cat /var/log/metadata-exporter/metadata-exporter.log
 
 after_script:
-  - curl -vv https://multidata.vm.openconext.org/health
   - sudo docker stop ansible-test
 
