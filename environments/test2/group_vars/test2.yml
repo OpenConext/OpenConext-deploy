@@ -670,6 +670,7 @@ nginx_config_templates:
 haproxy_applications:
 
   - name: engine
+    vhost_name: "engine"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/"
@@ -679,6 +680,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: profile
+    vhost_name: "profile"
     ip: 145.100.191.114
     ha_method: "HEAD"
     ha_url: "/favicon.ico"
@@ -688,6 +690,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: static
+    vhost_name: "static"
     ip: 145.100.191.114
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
@@ -697,6 +700,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: serviceregistry
+    vhost_name: "serviceregistry"
     ip: 145.100.191.114
     ha_method: "HEAD"
     ha_url: "/"
@@ -706,6 +710,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: engine_api
+    vhost_name: "engine-api"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/"
@@ -715,6 +720,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: teams
+    vhost_name: "teams"
     ip: 145.100.191.114
     ha_method: GET
     ha_url: "/media/trans-white.png"
@@ -724,6 +730,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: authzserver
+    vhost_name: "authz"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/health"
@@ -733,6 +740,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: authz_admin
+    vhost_name: "authz-admin"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/health"
@@ -742,6 +750,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: authz_playground
+    vhost_name: "authz-playground"
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/health"
@@ -751,6 +760,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: voot
+    vhost_name: "voot"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/health"
@@ -760,6 +770,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name:  pdp
+    vhost_name: "pdp"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/pdp/api/health"
@@ -769,6 +780,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: oidc
+    vhost_name: "oidc"
     ip: "145.100.191.114"
     ha_method: "HEAD"
     ha_url: "/"
@@ -778,6 +790,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: aa
+    vhost_name: "aa"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/aa/api/health"
@@ -787,6 +800,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: multidata
+    vhost_name: "multidata"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/health"
@@ -796,6 +810,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: grouper
+    vhost_name: "grouper"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/grouper-ws/status?diagnosticType=db"
@@ -805,6 +820,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: mujina-sp
+    vhost_name: "mujina-sp"
     ip: 145.100.191.114
     ha_method: "GET"
     ha_url: "/"
@@ -814,6 +830,7 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
   - name: mujina-idp
+    vhost_name: "mujina-idp"
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/"
