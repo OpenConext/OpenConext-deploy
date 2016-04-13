@@ -46,7 +46,6 @@
 #    env_lang: java
   roles:
 #    - tomcat
-    -  java
 #    - shibboleth
     - metadata-exporter
 #    - grouper

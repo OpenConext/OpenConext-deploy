@@ -48,5 +48,10 @@ script:
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
+
+after_failure:
+  - sudo docker exec -t ansible-test cat /var/log/pdp/pdp.log
+
+after_script:
   - sudo docker stop ansible-test
 
