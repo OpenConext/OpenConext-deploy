@@ -2,10 +2,10 @@
 - hosts: all
   gather_facts: no
   tasks:
-  - name: Read vars from secrets file
-    include_vars: "{{ secrets_file }}"
-    tags:
-      - always
+    - name: Read vars from secrets file
+      include_vars: "{{ secrets_file }}"
+      tags: always
+      always_run: yes
 
 - hosts: all
   gather_facts: yes
@@ -23,7 +23,7 @@
   sudo: true
   roles:
     - { role: mysql, tags: [mysql] }
-    - { role: ldap,  tags: ['ldap' ] }
+    - { role: ldap,  tags: [ldap] }
 
 - hosts: php-apps:java-apps
   gather_facts: yes
@@ -31,35 +31,34 @@
   roles:
     - httpd
   handlers:
-    - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
 
 - hosts: loadbalancer
   gather_facts: no
   sudo: true
   roles:
-    - { role: haproxy2, tags: ['lb'] }
+    - { role: haproxy2, tags: [lb] }
 
-      #- hosts: java-apps
-      #  gather_facts: true
-      #  sudo: true
-      #  vars:
-      #    env_lang: java
-      #  roles:
-      #    - tomcat
-      #    - java
-      #    - shibboleth
-      #    - metadata-exporter
-      #    - grouper
-      #    - teams
-      #    - mujina-idp
-      #    - mujina-sp
-      #    - authz-server
-      #    - voot
-      #    - authz-playground
-      #    - pdp
-      #    - oidc
-      #    - aa
-      #  handlers:
-      #    - include: roles/httpd/handlers/main.yml
-      #    - include: roles/nginx/handlers/main.yml
+- hosts: java-apps
+  gather_facts: yes
+  sudo: true
+#  vars:
+#    env_lang: java
+  roles:
+#    - tomcat
+    -  java
+#    - shibboleth
+    - metadata-exporter
+#    - grouper
+#    - teams (requires grouper)
+#    - mujina-idp
+#    - mujina-sp
+#    - authz-server
+    - voot
+    - authz-playground
+    - pdp
+#    - oidc
+    - aa
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/nginx/handlers/main.yml
