@@ -35,7 +35,6 @@
 
 - meta: flush_handlers
 
-
 - name: ensure the service is started
   service: name=metadata-exporter enabled=yes state=started
   ignore_errors: true
