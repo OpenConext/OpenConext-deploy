@@ -15,6 +15,10 @@ prd42.coin.surf.net
 prd43.coin.surf.net
 prd44.coin.surf.net
 
+[oidc]
+oidc.prd.ams.surfconext.nl
+
+
 [loadbalancer]
 
 [prod:children]
@@ -22,3 +26,4 @@ storage
 java-apps
 php-apps
 loadbalancer
+oidc
