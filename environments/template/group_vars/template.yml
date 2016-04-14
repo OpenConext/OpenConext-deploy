@@ -619,8 +619,8 @@ nginx_ipv4_addresses:
 
 
 haproxy_applications:
-  
-  engine:
+
+  - name: engine
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/"
@@ -629,7 +629,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  profile:
+  - name: profile
     ip: "145.100.191.114"
     ha_method: "HEAD"
     ha_url: "/favicon.ico"
@@ -638,7 +638,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  static:
+  - name: static
     ip: "145.100.191.114"
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
@@ -646,8 +646,8 @@ haproxy_applications:
     servers: "{{php_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
-   
-  serviceregistry:
+
+  - name:  serviceregistry
     ip: "145.100.191.114"
     ha_method: "HEAD"
     ha_url: "/"
@@ -655,8 +655,8 @@ haproxy_applications:
     servers: "{{php_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
-  
-  engine_api:
+
+  - name: engine_api
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/"
@@ -664,8 +664,8 @@ haproxy_applications:
     servers: "{{php_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
-   
-  teams:
+
+  - name: teams
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/media/trans-white.png"
@@ -673,8 +673,8 @@ haproxy_applications:
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
-   
-  authzserver:
+
+  - name: authzserver
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/health"
@@ -683,7 +683,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  authz_admin:
+  - name: authz_admin
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/health"
@@ -691,8 +691,8 @@ haproxy_applications:
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
-   
-  authz_playground:
+
+  - name: authz_playground
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/health"
@@ -700,8 +700,8 @@ haproxy_applications:
     servers: "{{java_servers}}"
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
-   
-  voot:
+
+  - name: voot
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/health"
@@ -710,7 +710,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  pdp:
+  - name: pdp
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/pdp/api/health"
@@ -719,7 +719,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  oidc:
+  - name: oidc
     ip: "145.100.191.114"
     ha_method: "HEAD"
     ha_url: "/"
@@ -728,7 +728,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  aa:
+  - name: aa
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/aa/api/health"
@@ -737,7 +737,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  multidata:
+  - name: multidata
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/health"
@@ -746,7 +746,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  grouper:
+  - name: grouper
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/grouper-ws/status?diagnosticType=db"
@@ -755,7 +755,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  mujina-sp:
+  - name: mujina-sp
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/"
@@ -764,7 +764,7 @@ haproxy_applications:
     crt_name: "{{ tls_https.crt_name }}"
     key_name: "{{ tls_https.key_name }}"
 
-  mujina-idp:
+  - name: mujina-idp
     ip: "145.100.191.114"
     ha_method: "GET"
     ha_url: "/"
@@ -774,7 +774,6 @@ haproxy_applications:
     key_name: "{{ tls_https.key_name }}"
 
 haproxy_sni_ip: 145.100.191.114
-   
 
 php_servers:
    - { ip: "145.100.191.119", label: "t06"}
