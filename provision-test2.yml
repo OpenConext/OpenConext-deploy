@@ -39,7 +39,6 @@
   roles:
     - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
-    - vm_only_provision_eb_sr
 
 - hosts: php-apps
   gather_facts: yes

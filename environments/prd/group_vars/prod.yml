@@ -1,6 +1,6 @@
 ---
 env: prd
-
+oidc_standalone: true
 smtp_server: localhost
 error_mail_to: coin-logs@list.surfnet.nl
 
@@ -15,6 +15,7 @@ databases:
     - grouper
     - authz-server
     - pdp-server
+    - oidc-server
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
@@ -23,6 +24,7 @@ databases:
     - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
+    - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
 
 # For apache, the same star-certificate is used.
 tls_https:
@@ -418,6 +420,20 @@ pdp:
   rollbar_environment: prod
   rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
+oidc_version: "1.0.2"
+
+oidc:
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  environment: prd
+  issuer: https://oidc.{{ base_domain }}/
+  db_user: oidc-serverrw
+  db_password: "{{ mysql_passwords.oidc_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: oidc-server
+  sp_entity_id: https://oidc.surfconext.nl
+
+  
 metadata_exporter_version: "1.1.1"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
