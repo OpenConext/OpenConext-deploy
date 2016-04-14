@@ -135,11 +135,9 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
-    - {
-        index: 0,
-        type: "janus",
-        value: "JanusRestV1"
-      }
+    - index: 0
+      type: "janus"
+      value: "JanusRestV1"
 
 tomcat_apps:
   - grouper
