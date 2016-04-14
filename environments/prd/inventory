@@ -19,7 +19,7 @@ prd44.coin.surf.net
 oidc.prd.ams.surfconext.nl
 
 [java-apps-common]
-oidc
+oidc.prd.ams.surfconext.nl
 
 [loadbalancer]
 
