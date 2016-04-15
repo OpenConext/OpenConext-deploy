@@ -1,0 +1,25 @@
+---
+
+- name: create haproxy config directories
+  file: dest=/etc/haproxy/{{ item.name }} state=directory owner=haproxy group=haproxy mode=0700
+  with_items: "{{ haproxy_applications }}"
+
+- name: Create SSL certificates
+  shell: cat {{ tls.cert_private_path }}/{{ item.key_name }}  {{ tls.cert_path }}/{{ item.crt_name }} > /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
+  with_items: "{{ haproxy_applications }}"
+
+- name: create haproxy instance startup file
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.cfg
+  with_items: "{{ haproxy_applications }}"
+
+- name: copy systemd startup file
+  template: src=haproxy_systemd.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  with_items: "{{ haproxy_applications }}"
+
+- name: enable systemd startup
+  command: systemctl enable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  with_items: "{{ haproxy_applications }}"
+
+- name: disable standard systemd haproxy instance
+  command: systemctl disable haproxy
+
