@@ -8,4 +8,9 @@ Listen {{ apache_app_listen_address.metadata_exporter }}:{{ loadbalancing.metada
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
 
+    <Location />
+        RewriteEngine On
+        RewriteCond %{REQUEST_URI} ^/jsError$ [NC]
+        RewriteRule ^.*$ - [F,L]
+    </Location>
 </VirtualHost>

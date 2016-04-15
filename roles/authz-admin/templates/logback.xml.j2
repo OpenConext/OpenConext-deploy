@@ -19,7 +19,7 @@
      </encoder>
   </appender>
 
-  <appender name="email" class="ch.qos.logback.classic.net.SMTPAppender">
+  <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
     <smtpHost>{{ smtp_server }}</smtpHost>
     <from>no-reply@surfconext.nl</from>
     <to>{{ error_mail_to }}</to>
@@ -32,10 +32,10 @@
   </appender>
 
   <logger name="authzadmin" level="DEBUG"/>
-  <logger name="org.springframework.security.oauth" level="DEBUG"/>
+
   <root level="WARN">
     <appender-ref ref="FILE" />
     <appender-ref ref="SYSLOG" />
-    <appender-ref ref="email" />
+    <appender-ref ref="EMAIL" />
   </root>
 </configuration>

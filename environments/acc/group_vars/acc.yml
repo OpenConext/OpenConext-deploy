@@ -177,7 +177,6 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:acc.surfteams.nl:"
-  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -237,7 +236,7 @@ authzserver:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-authz_server_version: 1.3.2
+authz_server_version: 1.3.4
 
 voot:
   crt_name: "{{ tls_https.crt_name }}"
@@ -293,10 +292,10 @@ voot:
         name: "SaNS",
         timeoutMillis: 3000
       }
-voot_version: 1.6.1
+voot_version: 1.6.2
 #voot_snapshot_timestamp: 20150420.135435-44
 
-authz_admin_version: 1.3.4
+authz_admin_version: 1.3.6
 authz_admin_group: urn:collab:group:acc.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -308,6 +307,7 @@ authzadmin:
           - groups
         scopes:
           - groups
+          - members
         grantTypes:
           - authorization_code
           - implicit
@@ -357,16 +357,16 @@ authzadmin:
     - clientId: pdp
       secret: "{{ voot.oidc_checkToken_secret }}"
 
-authz_playground_version: 1.1
+authz_playground_version: 1.2
 authzplayground:
   springapp_authz_client_id: cool_app_id
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
-  springapp_oidc_client_id: https@//oidc.{{ base_domain }}
+  springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.1.3
+pdp_version: 1.1.6
 #pdp_snapshot_timestamp: "20151209.153205-23"
 #pdp_html_snapshot_timestamp: "20151209.153243-21"
 
@@ -385,11 +385,8 @@ pdp:
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
-  rollbar_environment: acc
-  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
 oidc_version: "1.0.2"
-
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -401,7 +398,7 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.acc.surfconext.nl
 
-metadata_exporter_version: "1.1.1"
+metadata_exporter_version: 2.0.3
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -410,7 +407,8 @@ metadata_exporter:
   db_host: "{{ mysql_host }}"
   db_name: sr
   password: "{{ metadata_exporter_password }}"
-  rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"
+
+springapp_tcpport_error_handling: 9199
 
 loadbalancing:
   engine: {

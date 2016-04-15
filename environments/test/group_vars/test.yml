@@ -1,7 +1,7 @@
 ---
 env: test
 
-smtp_server: s01.dev.coin.surf.net
+smtp_server: localhost
 error_mail_to: coin-logs-dev@list.surfnet.nl
 
 php_display_errors: 1
@@ -177,7 +177,6 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:test.surfteams.nl:"
-  rollbar_apiKey: "{{ teams_rollbar_apiKey }}"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -241,9 +240,8 @@ authzserver:
   db_name: authz-server
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
-authz_server_version: 1.3.3
+authz_server_version: 1.3.4
 #authz_server_snapshot_timestamp: "20160126.144433-4"
 authz_server_debug: true
 
@@ -279,11 +277,11 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.6.1
+voot_version: 1.6.2
 #voot_snapshot_timestamp: 20160218.102010-1
 voot_debug: true
 
-authz_admin_version: 1.3.5
+authz_admin_version: 1.3.6
 #authz_admin_snapshot_timestamp: "20151223.124726-3"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
@@ -390,12 +388,10 @@ authzplayground:
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-  rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
-pdp_version: 1.1.3
+pdp_version: 1.1.6
 #pdp_snapshot_timestamp: 20160216.135430-1
 #pdp_html_snapshot_timestamp: 20160216.135448-1
-#pdp_local_html_version: "0.1.4-SNAPSHOT"
 
 pdp_debug: true
 pdp:
@@ -412,10 +408,11 @@ pdp:
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
-  rollbar_environment: test
-  rollbar_apiKey: "{{ pdp_rollbar_apiKey }}"
 
-aa_version: "1.0.2"
+aa_version: "1.0.3"
+#aa_snapshot_timestamp: "20160331.144252-2"
+#aa_html_snapshot_timestamp: "20160404.134651-3"
+
 aa_debug: true
 aa:
   crt_name: "{{ tls_https.crt_name }}"
@@ -435,8 +432,6 @@ aa:
   sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
-  rollbar_environment: test
-  rollbar_apiKey: "{{ aa_rollbar_apiKey }}"
 
 oidc_version: "1.0.2"
 # oidc_snapshot_timestamp: "20160307.120704-2"
@@ -451,8 +446,8 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.test.surfconext.nl
 
-metadata_exporter_version: "1.1.1"
-#metadata_exporter_snapshot_timestamp: "20160208.084759-3"
+metadata_exporter_version: 2.0.3
+#metadata_exporter_snapshot_timestamp: "20160406.075154-1"
 metadata_exporter:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -461,7 +456,8 @@ metadata_exporter:
   db_host: "{{ mysql_host }}"
   db_name: sr
   password: "{{ metadata_exporter_password }}"
-  rollbar_apiKey: "{{ metadata_exporter_rollbar_apikey }}"
+
+springapp_tcpport_error_handling: 9199
 
 loadbalancing:
   engine: {

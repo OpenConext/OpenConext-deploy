@@ -60,6 +60,12 @@
   tags: pdp
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
 
+- name: Create js directory
+  file: path=/var/www/pdp/current/js state=directory owner=pdp group=pdp mode=0755
+
+- name: add javascript error file
+  template: src=templates/error.reporting.js.j2 dest=/var/www/pdp/current/js/error.reporting.js
+
 - name: copy virtual host config
   template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
   tags: pdp

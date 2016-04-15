@@ -12,4 +12,8 @@ springapp_local_jar: "{{ pdp_local_jar }}"
 springapp_debug: "{{ pdp_debug }}"
 springapp_debug_port: 1196
 springapp_heapsize: "512m"
-springapp_rollbar_apiKey: "{{ pdp.rollbar_apiKey }}"
+
+js_error_reporting_access_token: "{{ pdp_js_access_token }}"
+js_error_enabled: "true"
+js_error_reporting_client_id: pdp
+js_error_reporting_url: /pdp/api/internal/jsError

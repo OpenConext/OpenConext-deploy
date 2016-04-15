@@ -3,7 +3,10 @@
   copy: content="{{ item.crt_content }}" dest="{{ tls.cert_path }}/{{ item.crt_name }}"
   with_items: "{{ tls_https }}"
 
-- name: copy ca certificate to correct location
+- name: enable update-ca-trust method
+  command: update-ca-trust force-enable
+
+- name: copy ca certificate
   copy: src={{ inventory_dir }}/files/certs/{{ item }} dest={{ tls.cert_path_ca }}/{{ item }}
   with_items:
     - "{{ tls_ca }}"

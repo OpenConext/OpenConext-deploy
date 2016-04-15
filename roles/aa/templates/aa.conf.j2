@@ -21,6 +21,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
+    ProxyPass {{ js_error_reporting_url }} http://localhost:{{ springapp_tcpport_error_handling }}/jsError retry=0
     ProxyPass /aa/api http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse /aa/api http://localhost:{{ springapp_tcpport }}/
 
