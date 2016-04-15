@@ -1,3 +1,4 @@
+#jinja2:lstrip_blocks: True
 #---------------------------------------------------------------------
 # Global settings
 #---------------------------------------------------------------------
@@ -58,7 +59,6 @@ frontend ssl_ip
     bind {{ haproxy_sni_ip }}:80
     redirect scheme https code 301 if !{ ssl_fc }
 
-
     {% for application in haproxy_applications %}
     acl {{ application.name }} hdr(host) -i {{ application.name }}.{{ base_domain }}
     {% endfor %}
@@ -68,7 +68,6 @@ frontend ssl_ip
 
 {% for application in haproxy_applications %}
 
-
 #---------------------------------------------------------------------
 # {{ application.name }} backend
 #---------------------------------------------------------------------
@@ -77,16 +76,16 @@ backend {{ application.name }}_be
   option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
   option forwardfor # This sets X-Forwarded-For
 
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
+  mode http
+  balance roundrobin
+  cookie JSESSIONID preserve indirect
+  option httpclose
 
-    cookie HTTPSERVERID insert nocache indirect
+  cookie HTTPSERVERID insert nocache indirect
 
-    {% for server in application.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
+  {% for server in application.servers %}
+  server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+  {% endfor %}
 
 {% endfor %}
 {% endif %}
