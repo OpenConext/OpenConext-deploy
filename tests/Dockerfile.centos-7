@@ -1,6 +1,9 @@
-FROM ansible/centos7-ansible:stable
+FROM centos:7
+
+MAINTAINER "Alan van Dam" <avandam@zilverline.com>
 
 ENV container docker
+
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\
@@ -10,8 +13,16 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-# expected by ansible playbook
-RUN yum install -y firewalld rsyslog
+# install ansible
+RUN yum clean all && \
+    yum -y install epel-release && \
+    yum -y install PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko python-setuptools git python-pip
+RUN mkdir /etc/ansible/
+RUN echo -e '[local]\nlocalhost' > /etc/ansible/hosts
+RUN pip install ansible
+
+# install packets that the ansible roles expect to be there
+RUN yum -y install firewalld rsyslog
 
 VOLUME [ "/sys/fs/cgroup" ]
 
