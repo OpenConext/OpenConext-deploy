@@ -1,6 +1,0 @@
----
-- include: multiple-instances.yml
-  when: env == 'prod' or env == 'acc'
-
-- include: single-instance.yml
-  when: env == 'vm' or env == 'test' or env == 'test2'

@@ -90,41 +90,6 @@ janus_database_password: "{{ mysql_passwords.sr }}"
 
 janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
 
-# host for static files (IdP logos)
-static:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-
-# the welcome page on: vm.{{ base_domain }}
-welcome:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-
-engine:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-
-engine_api:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-
-profile:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-
-janus:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-
-mujina_sp:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-
-mujina_idp:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-
-
 engine_janus_cache_lifetime: 0
 
 engine_vovalidate_key: oauth_key
@@ -192,8 +157,6 @@ mujina_version: 4.0.2
 # VM config for the teams app
 ##
 teams:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
   db_name: "teams"
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
@@ -213,9 +176,6 @@ engineblock:
 # VM config for the api app
 ##
 api:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-  bundle_name: "{{ tls_https.bundle_name }}"
   janus:
     user: "{{ engine_janus_user }}"
     secret: "{{ engine_janus_secret }}"
@@ -252,20 +212,10 @@ grouper:
   db_user: grouperrw
   db_host: "{{ mysql_host }}"
   db_password: "{{ mysql_passwords.grouper }}"
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
 
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
-
-mujina_idp:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-
-mujina_sp:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
 
 ##
 # VM config for the Authorization Server
@@ -624,49 +574,6 @@ loadbalancing:
     ]
   }
 
-nginx_backend_ip: 127.0.0.1
-
-# values below seem silly but on acc+prod these differ.
-
-nginx_ipv4_addresses:
-  engine: 192.168.66.98
-  engine_api: 192.168.66.98
-  profile: 192.168.66.98
-  serviceregistry: 192.168.66.98
-  static: 192.168.66.98
-  teams: 192.168.66.98
-  authzserver: 192.168.66.98
-  authz_admin: 192.168.66.98
-  authz_playground: 192.168.66.98
-  voot: 192.168.66.98
-  grouper: 192.168.66.98
-  mujina_sp: 192.168.66.98
-  mujina_idp: 192.168.66.98
-  welcome: 192.168.66.98
-  pdp: 192.168.66.98
-  oidc: 192.168.66.98
-  aa: 192.168.66.98
-  metadata_exporter: 192.168.66.98
-
-nginx_config_templates:
-  - welcome
-  - mujina_sp
-  - mujina_idp
-  - engine
-  - engine_api
-  - teams
-  - grouper
-  - voot
-  - authz
-  - authz_admin
-  - authz_playground
-  - static
-  - profile
-  - pdp
-  - serviceregistry
-  - oidc
-  - aa
-  - metadata_exporter
 
 haproxy_applications:
 

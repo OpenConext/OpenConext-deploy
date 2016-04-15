@@ -34,7 +34,7 @@
   gather_facts: no
   sudo: true
   roles:
-    - { role: haproxy2, tags: [lb] }
+    - { role: haproxy, tags: [lb] }
 
 - hosts: java-apps
   gather_facts: yes

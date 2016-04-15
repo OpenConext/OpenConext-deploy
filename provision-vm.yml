@@ -17,13 +17,12 @@
     - { role: tls, tags: ['tls'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: loadbalancer
   gather_facts: true
   sudo: true
   roles:
-    - { role: haproxy2, tags: ['lb'] }
+    - { role: haproxy, tags: ['lb'] }
 
 - hosts: php-apps:java-apps-centos7
   gather_facts: yes
@@ -32,7 +31,6 @@
     - httpd
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: storage
   gather_facts: no
@@ -57,7 +55,6 @@
     - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: java-apps-centos7
   gather_facts: true
@@ -82,7 +79,6 @@
     - { role: aa,                tags: ['aa'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: java-apps-centos7
   gather_facts: true
