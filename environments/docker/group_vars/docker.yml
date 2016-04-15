@@ -49,13 +49,24 @@ databases:
     - name: development
       password: development
 
-# on the VM we use the same certificate for all domains under base_domain.
 tls_https:
-  key_name: star.{{ base_domain }}.key
-  crt_name: star.{{ base_domain }}.pem
-  ca_name: star.{{ base_domain }}_ca.pem
-  bundle_name: star.{{ base_domain }}_ca_bundle.pem
-  haproxy_name: star.{{ base_domain }}_haproxy.pem
+  - name: star
+    key_name: "star.{{ base_domain }}.key"
+    crt_name: "star.{{ base_domain }}.pem"
+    bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_star_private_key }}"
+
+tls:
+  cert_path: /etc/pki/tls/certs
+  cert_path_ca: /etc/pki/ca-trust/source/anchors
+  cert_private_path: /etc/pki/tls/private
+
+tls_ca: star.{{ base_domain }}_ca.pem
+
+tls_star_cert_haproxy: star.{{ base_domain }}_haproxy.pem
+tls_star_cert_bundle_name: star.{{ base_domain }}_ca_bundle.pem
+tls_star_cert: star.{{ base_domain }}.pem
+tls_star_cert_key: star.{{ base_domain }}.key
 
 apache_server_admin: unix@prolocation.net
 
@@ -66,27 +77,6 @@ janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_title_suffix: "SURFconext VM"
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
-
-# when using multiple certificates list them all (and their bundles) under tls.certificates
-tls:
-  cert_path: /etc/pki/tls/certs
-  cert_path_ca: /etc/pki/ca-trust/source/anchors
-  cert_private_path: /etc/pki/tls/private
-
-tls_ca: star.{{ base_domain }}_ca.pem
-
-tls_star_cert_haproxy: star.{{ base_domain }}_haproxy.pem
-tls_star_cert_bundle_name: star.{{ base_domain }}_ca_bundle.pem
-tls_star_cert: star.{{ base_domain }}.crt
-tls_star_cert_key: star.{{ base_domain }}.key
-
-tls_https:
-  - name: star
-    key_name: "star.{{ base_domain }}.key"
-    crt_name: "star.{{ base_domain }}.pem"
-    bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
-    key_content: "{{ https_star_private_key }}"
-    crt_content: "{{ https_star_crt }}"
 
 engine_janus_user: engineblock
 

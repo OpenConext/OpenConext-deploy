@@ -40,7 +40,7 @@ tls_ca: star.{{ base_domain }}_ca.pem
 
 tls_star_cert_haproxy: star.{{ base_domain }}_haproxy.pem
 tls_star_cert_bundle_name: star.{{ base_domain }}_ca_bundle.pem
-tls_star_cert: star.{{ base_domain }}.crt
+tls_star_cert: star.{{ base_domain }}.pem
 tls_star_cert_key: star.{{ base_domain }}.key
 
 tls_https:
