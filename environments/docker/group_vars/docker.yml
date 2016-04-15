@@ -83,7 +83,7 @@ tls_star_cert_key: star.{{ base_domain }}.key
 tls_https:
   - name: star
     key_name: "star.{{ base_domain }}.key"
-    crt_name: "star.{{ base_domain }}.crt"
+    crt_name: "star.{{ base_domain }}.pem"
     bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
     key_content: "{{ https_star_private_key }}"
     crt_content: "{{ https_star_crt }}"
