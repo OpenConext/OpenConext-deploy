@@ -18,17 +18,36 @@ databases:
     - oidc-server
     - aaserver
   users:
-    - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
-    - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
-    - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
-    - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
-    - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
-    - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
-    - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
-    - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
-    - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
+    - name: teamsrw
+      db_name: teams
+      password: "{{ mysql_passwords.teams }}"
+    - name: apirw
+      db_name: api
+      password: "{{ mysql_passwords.api }}"
+    - name: "{{ engine_database_user }}"
+      db_name: "{{ engine_database_name }}"
+      password: "{{ mysql_passwords.eb }}"
+    - name: "{{ janus_database_user }}"
+      db_name: "{{ janus_database_name }}"
+      password: "{{ mysql_passwords.sr }}"
+    - name: grouperrw
+      db_name: grouper
+      password: "{{ mysql_passwords.grouper }}"
+    - name: authz-serverrw
+      db_name: authz-server
+      password: "{{ mysql_passwords.authz_server }}"
+    - name: pdp-serverrw
+      db_name: pdp-server
+      password: "{{ mysql_passwords.pdp_server }}"
+    - name: oidc-serverrw
+      db_name: oidc-server
+      password: "{{ mysql_passwords.oidc_server }}"
+    - name: aa-serverrw
+      db_name: aaserver
+      password: "{{ mysql_passwords.aa_server }}"
   development_user:
-    - { name: development, password: development }
+    - name: development
+      password: development
 
 # on the VM we use the same certificate for all domains under base_domain.
 tls_https:
@@ -51,13 +70,23 @@ engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 # when using multiple certificates list them all (and their bundles) under tls.certificates
 tls:
   cert_path: /etc/pki/tls/certs
+  cert_path_ca: /etc/pki/ca-trust/source/anchors
   cert_private_path: /etc/pki/tls/private
-  certificates:
-    - "{{ tls_https.crt_name }}"
-  private_keys:
-    - "{{ tls_https.key_name }}"
-  ca_certificates:
-    - "{{ tls_https.ca_name }}"
+
+tls_ca: star.{{ base_domain }}_ca.pem
+
+tls_star_cert_haproxy: star.{{ base_domain }}_haproxy.pem
+tls_star_cert_bundle_name: star.{{ base_domain }}_ca_bundle.pem
+tls_star_cert: star.{{ base_domain }}.crt
+tls_star_cert_key: star.{{ base_domain }}.key
+
+tls_https:
+  - name: star
+    key_name: "star.{{ base_domain }}.key"
+    crt_name: "star.{{ base_domain }}.crt"
+    bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_star_private_key }}"
+    crt_content: "{{ https_star_crt }}"
 
 engine_janus_user: engineblock
 
@@ -86,38 +115,37 @@ janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
 
 # host for static files (IdP logos)
 static:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 # the welcome page on: vm.{{ base_domain }}
 welcome:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 engine:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 engine_api:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 profile:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 janus:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 mujina_sp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 mujina_idp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 engine_janus_cache_lifetime: 0
 
@@ -144,6 +172,16 @@ tomcat_apps:
   - mujina-sp
   - mujina-idp
   - oidc
+
+haproxy_applications:
+  - name: multidata
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: /health
+    port: 616
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
 # shibboleth
 shibboleth_apps:
@@ -179,8 +217,8 @@ mujina_version: 4.0.2
 # VM config for the teams app
 ##
 teams:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   db_name: "teams"
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
@@ -199,8 +237,8 @@ engineblock:
 # VM config for the api app
 ##
 api:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   bundle_name: "{{ tls_https.bundle_name }}"
   janus:
     user: "{{ engine_janus_user }}"
@@ -246,12 +284,12 @@ ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
 
 mujina_idp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 mujina_sp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
 
 ##
 # VM config for the Authorization Server
@@ -261,8 +299,8 @@ authzserver:
   db_password: "{{ mysql_passwords.authz_server }}"
   db_host: "{{ mysql_host }}"
   db_name: authz-server
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
 
 authz_server_version: 1.3.3
@@ -272,8 +310,8 @@ authz_server_debug: false
 # VM config for the Voot app
 ##
 voot:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
   authz_checkToken_clientId: "vootservice"
   authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
@@ -302,8 +340,8 @@ authz_admin_version: 1.3.5
 authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
 authz_admin_debug: false
 authzadmin:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
         secret: "{{ authzplayground.springapp_authz_client_secret }}"
@@ -403,15 +441,15 @@ authzplayground:
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
   springapp_oidc_client_id: http@//mock-sp
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
 pdp_version: 1.1.3
 pdp_debug: false
 pdp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   username: "pdp_admin"
   password: "{{ pdp_password }}"
   db_user: pdp-serverrw
@@ -430,8 +468,8 @@ aa_version: 1.0.2
 
 aa_debug: false
 aa:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   eb_username: "eb"
   eb_password: "{{ aa_eb_password }}"
   db_user: aa-serverrw
@@ -452,8 +490,8 @@ aa:
 
 oidc_version: 1.0.1
 oidc:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   environment: vm
   issuer: https://oidc.{{ base_domain }}/
   db_user: oidc-serverrw
@@ -464,8 +502,8 @@ oidc:
 
 metadata_exporter_version: 2.0.3
 metadata_exporter:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   db_user: srrw
   db_password: "{{ mysql_passwords.sr }}"
   db_host: "{{ mysql_host }}"
@@ -614,8 +652,8 @@ haproxy_applications:
     ha_url: /health
     port: 616
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
 haproxy_sni_ip: 127.0.0.1
 
