@@ -65,7 +65,7 @@
 
 # Any scripts should be placed below this
 - name: Run EngineBlock Doctrine migrations
-  command: app/console doctrine:migrations:migrate -n
+  command: "app/console doctrine:migrations:migrate -n --env={{ engine_apache_symfony_env }}"
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: doctrine_migrations_output
