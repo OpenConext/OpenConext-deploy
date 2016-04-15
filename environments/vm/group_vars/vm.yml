@@ -220,15 +220,12 @@ ldap_grouper_engine_user: engine
 # VM config for the Authorization Server
 ##
 authzserver:
+  crt_name: "{{ tls_star_cert }}"
+  key_name: "{{ tls_star_cert_key }}"
   db_user: authz-serverrw
   db_password: "{{ mysql_passwords.authz_server }}"
   db_host: "{{ mysql_host }}"
   db_name: authz-server
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
-  rollbar_apiKey: "{{ authz_server_rollbar_apiKey }}"
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 authz_server_version: 1.3.4
 #authz_server_snapshot_timestamp: 20150429.085158-60
@@ -375,7 +372,6 @@ authzplayground:
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
   crt_name: "{{ tls_star_cert }}"
   key_name: "{{ tls_star_cert_key }}"
-  rollbar_apiKey: "{{ authzplayground_rollbar_apiKey }}"
 
 pdp_version: 1.1.6
 #pdp_snapshot_timestamp: "20151222.101918-28"
@@ -578,6 +574,7 @@ loadbalancing:
 haproxy_applications:
 
   - name: engine
+    vhost_name: "engine"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/"
@@ -587,6 +584,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: profile
+    vhost_name: "profile"
     ip: 192.168.66.98
     ha_method: "HEAD"
     ha_url: "/favicon.ico"
@@ -596,6 +594,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: static
+    vhost_name: "static"
     ip: 192.168.66.98
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
@@ -605,6 +604,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: serviceregistry
+    vhost_name: "serviceregistry"
     ip: 192.168.66.98
     ha_method: "HEAD"
     ha_url: "/"
@@ -614,6 +614,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: engine_api
+    vhost_name: "engine-api"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/"
@@ -621,7 +622,9 @@ haproxy_applications:
     servers: "{{php_servers}}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+  
   - name: teams
+    vhost_name: "teams"
     ip: 192.168.66.98
     ha_method: GET
     ha_url: "/media/trans-white.png"
@@ -631,6 +634,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: authzserver
+    vhost_name: "authz"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
@@ -640,6 +644,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: authz_admin
+    vhost_name: "authz-admin"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
@@ -649,6 +654,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: authz_playground
+    vhost_name: "authz-playground"
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/health"
@@ -658,6 +664,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: voot
+    vhost_name: "voot"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
@@ -667,6 +674,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name:  pdp
+    vhost_name: "pdp"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/pdp/api/health"
@@ -676,6 +684,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: oidc
+    vhost_name: "oidc"
     ip: "192.168.66.98"
     ha_method: "HEAD"
     ha_url: "/"
@@ -685,6 +694,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: aa
+    vhost_name: "aa"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/aa/api/health"
@@ -694,6 +704,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: multidata
+    vhost_name: "multidata"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
@@ -703,6 +714,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: grouper
+    vhost_name: "grouper"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/grouper-ws/status?diagnosticType=db"
@@ -712,6 +724,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: mujina-sp
+    vhost_name: "mujina-sp"
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/"
@@ -721,6 +734,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
 
   - name: mujina-idp
+    vhost_name: "mujina-idp"
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/"
