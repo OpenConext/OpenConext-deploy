@@ -647,6 +647,7 @@ loadbalancing:
 
 haproxy_applications:
   - name: multidata
+    vhost_name: multidata 
     ip: 127.0.0.1
     ha_method: GET
     ha_url: /health
