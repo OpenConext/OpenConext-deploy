@@ -3,6 +3,9 @@
 engine_version: 5.0.0-alpha9
 #engine_branch: "develop"
 
+# Feature toggles
+engine_feature_ldap_integration: 1
+
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"
 engine_branch_dir: "{{ openconext_builds_dir }}/OpenConext-engineblock-{{ engine_branch | replace('/', '-') }}"
