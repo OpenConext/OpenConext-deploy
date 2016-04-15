@@ -60,7 +60,7 @@ frontend ssl_ip
     redirect scheme https code 301 if !{ ssl_fc }
 
     {% for application in haproxy_applications %}
-    acl {{ application.name }} hdr(host) -i {{ application.name }}.{{ base_domain }}
+    acl {{ application.name }} hdr(host) -i {{ application.vhost_name }}.{{ base_domain }}
     {% endfor %}
     {% for application in haproxy_applications %}
     use_backend {{ application.name }}_be if {{ application.name }}
