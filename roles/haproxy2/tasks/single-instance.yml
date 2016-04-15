@@ -14,9 +14,9 @@
   file: dest=/etc/pki/haproxy/ state=directory owner=haproxy group=haproxy mode=0700
 
 - name: Create combined key and certificate file for HAproxy
-  shell: cat {{ tls.cert_private_path }}/{{ tls_https.key_name }}  {{ tls.cert_path }}/{{ tls_https.crt_name }} >  /etc/pki/haproxy/{{ tls_https.haproxy_name }}
+  shell: cat {{ tls.cert_private_path }}/{{ tls_star_cert_key }}  {{ tls.cert_path }}/{{ tls_star_cert }} >  /etc/pki/haproxy/{{ tls_star_cert_haproxy }}
   args:
-    creates: /etc/pki/haproxy/{{ tls_https.haproxy_name }}
+    creates: /etc/pki/haproxy/{{ tls_star_cert_haproxy }}
 
 
 - name: Copy config

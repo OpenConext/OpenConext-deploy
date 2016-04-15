@@ -1,21 +1,18 @@
 ---
 - name: copy certificates to correct location
-  copy: src={{ inventory_dir }}/files/certs/{{ item }} dest={{ tls.cert_path }}/{{ item }}
-  with_items:
-    - "{{ tls_https.crt_name }}"
+  copy: content="{{ item.crt_content }}" dest="{{ tls.cert_path }}/{{ item.crt_name }}"
+  with_items: "{{ tls_https }}"
 
 - name: copy ca certificate to correct location
-  copy: src={{ inventory_dir }}/files/certs/{{ item }} dest=/etc/pki/ca-trust/source/anchors/{{ item }}
+  copy: src={{ inventory_dir }}/files/certs/{{ item }} dest={{ tls.cert_path_ca }}/{{ item }}
   with_items:
-    - "{{ tls.ca_certificates }}"
+    - "{{ tls_ca }}"
   notify: update_ca_trust
-  when: tls.ca_certificates is defined
+  when: tls_ca is defined
 
 - name: copy private keys to correct location
-  copy: content="{{ item }}" dest={{ tls.cert_private_path }}/{{ item }}
-  with_items:
-    - "{{ tls.private_keys }}"
-  when: https_star_private_key is defined
+  copy: content="{{ item.key_content }}" dest={{ tls.cert_private_path }}/{{ item.key_name }}
+  with_items: "{{ tls_https }}"
 
 - name: install openssl
   yum: name=openssl state=present

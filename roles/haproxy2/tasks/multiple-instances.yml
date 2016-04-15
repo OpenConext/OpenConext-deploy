@@ -5,7 +5,7 @@
   with_items: "{{ haproxy_applications }}"
 
 - name: Create SSL certificates
-  shell: cat {{ tls.cert_private_path }}/{{ tls_https.key_name }}  {{ tls.cert_path }}/{{ tls_https.crt_name }} > /etc/haproxy/{{ item.name }}/{{ item.namey }}.pem
+  shell: cat {{ tls.cert_private_path }}/{{ item.key_name }}  {{ tls.cert_path }}/{{ item.crt_name }} > /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
   with_items: "{{ haproxy_applications }}"
 
 - name: create haproxy instance startup file

@@ -52,7 +52,7 @@ defaults
 # -------------------------------------------------------------------
 frontend ssl_ip
 
-    bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{ tls_https.haproxy_name }}  no-sslv3 npn spdy/2
+    bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }}  no-sslv3 npn spdy/2
     capture cookie JSESSIONID len 52
     rspadd  Strict-Transport-Security:\ max-age=15768000
     bind {{ haproxy_sni_ip }}:80
