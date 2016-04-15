@@ -48,8 +48,6 @@
   notify:
     - restart httpd
 
-- name: Make sure cache dir has correct permissions
-  file: path={{engine_current_release_symlink}}/app/cache owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
 
 - name: Make the SYMFONY_ENV var available for scripts
   sudo: yes
@@ -65,7 +63,7 @@
 
 # Any scripts should be placed below this
 - name: Run EngineBlock Doctrine migrations
-  command: "app/console doctrine:migrations:migrate -n --env={{ engine_apache_symfony_env }}"
+  command: "app/console doctrine:migrations:migrate -n --env={{ engine_apache_symfony_environment }}"
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: doctrine_migrations_output
@@ -79,3 +77,9 @@
   register: migrate_output
   changed_when: "'no update needed' not in migrate_output.stderr"
   tags: enginemigrations
+
+- name: Make sure cache dir has correct permissions
+  file: path={{engine_current_release_symlink}}/app/cache owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
+
+- name: Make sure log dir has correct permissions
+  file: path={{engine_current_release_symlink}}/app/logs owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
