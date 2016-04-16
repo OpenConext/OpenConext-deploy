@@ -1,10 +1,4 @@
 ---
 
 - name: restart tomcat
-  service: name=tomcat6 state=restarted
-  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") 
-
-- name: restart tomcat 7
   service: name=tomcat state=restarted
-  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
-
