@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    services_health_checks:
+      - https://pdp.vm.openconext.org/pdp/api/health
+      - https://multidata.vm.openconext.org/health
+  tasks:
+    - uri: url={{ item }} return_content=yes
+      register: result
+      until: "'UP' in result.content"
+      retries: 5
+      delay: 10
+      with_items: "{{ services_health_checks }}"
