@@ -1,11 +1,11 @@
 ---
-- hosts: all
-  gather_facts: no
-  tasks:
-  - name: Read vars from secrets file
-    include_vars: "{{ secrets_file }}"
-    tags:
-      - always
+#- hosts: all
+#  gather_facts: no
+#  tasks:
+#  - name: Read vars from secrets file
+#    include_vars: "{{ secrets_file }}"
+#    tags:
+#      - always
 
 - hosts: loadbalancer:php-apps:java-apps:storage:oidc
   gather_facts: yes
@@ -20,7 +20,8 @@
   gather_facts: true
   sudo: true
   roles:
-    - { role: haproxy2, tags: ['lb'] }
+    - { role: keepalived, tags: ['keepalived'] }
+    - { role: haproxy, tags: ['lb'] }
 
 - hosts: php-apps:java-apps:oidc
   gather_facts: no
@@ -40,7 +41,6 @@
 - hosts: php-apps
   gather_facts: no
   sudo: true
-  gather_facts: no
   vars:
     env_lang: php
   roles:

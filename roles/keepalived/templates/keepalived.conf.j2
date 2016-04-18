@@ -1,0 +1,20 @@
+vrrp_instance master {
+   interface ens32               # interface to monitor
+   state {{ keepalived.state_master }}
+   virtual_router_id 51          # Assign one ID for this route
+   priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
+   virtual_ipaddress {
+        145.101.112.226/32
+        145.101.112.227
+   }
+}
+vrrp_instance backup {
+   interface ens32
+   state {{ keepalived.state_backup }}
+   virtual_router_id 52
+   priority {{ keepalived.backupprio }}
+   virtual_ipaddress {
+        145.101.112.228/32
+        145.101.112.229/32
+   }
+
