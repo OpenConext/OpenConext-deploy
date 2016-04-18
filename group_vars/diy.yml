@@ -31,7 +31,7 @@ teams_version: 4.2.10
 api_version: 4.0.1
 mujina_version: 4.0.2
 voot_version: 1.6.2
-authz_server_version: 1.3.4
+authz_server_version: 1.3.6
 authz_admin_version: 1.3.6
 authz_playground_version: 1.2
 
