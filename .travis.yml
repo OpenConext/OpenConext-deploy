@@ -46,17 +46,16 @@ script:
     grep -q 'changed=0.*failed=0' &&
     (echo 'Idempotence test: pass' && exit 0) ||
     (echo 'Idempotence test: fail' && exit 1)
-  - sudo docker exec -t ansible-test curl -vvv https://multidata.vm.openconext.org/health
+  - sudo docker exec -t ansible-test curl https://multidata.vm.openconext.org/health | grep UP
+  - sudo docker exec -t ansible-test curl https://pdp.vm.openconext.org/pdp/api/health | grep UP
 
 after_failure:
-  - sudo docker exec -t ansible-test curl -vvv http://localhost:9199/health
-  - sudo docker exec -t ansible-test curl -vvv http://localhost:616/health
   - sudo docker exec -t ansible-test yum install -y net-tools
   - sudo docker exec -t ansible-test netstat -apn
   - sudo docker exec -t ansible-test systemctl status -l haproxy
+  - sudo docker exec -t ansible-test systemctl status -l httpd
   - sudo docker exec -t ansible-test cat /var/log/metadata-exporter/metadata-exporter.log
-  - sudo docker exec -t ansible-test cat /etc/httpd/conf.d/metadata_exporter.conf
-  - sudo docker exec -t ansible-test cat /etc/haproxy/haproxy.cfg
+  - sudo docker exec -t ansible-test cat /var/log/pdp/pdp.log
 
 after_script:
   - sudo docker stop ansible-test
