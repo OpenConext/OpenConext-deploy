@@ -163,16 +163,6 @@ tomcat_apps:
   - mujina-idp
   - oidc
 
-haproxy_applications:
-  - name: multidata
-    ip: 127.0.0.1
-    ha_method: GET
-    ha_url: /health
-    port: 616
-    servers: "{{ java_servers }}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
-
 # shibboleth
 shibboleth_apps:
   teams:
@@ -632,12 +622,52 @@ loadbalancing:
 
 haproxy_applications:
   - name: multidata
-    vhost_name: multidata 
+    vhost_name: multidata
     ip: 127.0.0.1
     ha_method: GET
     ha_url: /health
     port: 616
-    servers: "{{java_servers}}"
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+
+  - name:  pdp
+    vhost_name: pdp
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: /pdp/api/health
+    port: 613
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+
+  - name: serviceregistry
+    vhost_name: serviceregistry
+    ip: 127.0.0.1
+    ha_method: HEAD
+    ha_url: /
+    port: 404
+    servers: "{{ php_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+
+  - name: engine_api
+    vhost_name: engine-api
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: /
+    port: 405
+    servers: "{{ php_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+
+  - name: static
+    vhost_name: static
+    ip: 127.0.0.1
+    ha_method: HEAD
+    ha_url: /media/alive.txt
+    port: 403
+    servers: "{{ php_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
 
@@ -646,4 +676,7 @@ haproxy_sni_ip: 127.0.0.1
 java_servers:
    - ip: 127.0.0.1
      label: d01
+php_servers:
+   - ip: 127.0.0.1
+     label: phpapps
 

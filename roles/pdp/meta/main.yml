@@ -2,3 +2,4 @@
 dependencies:
  - java
  - httpd
+ - shibboleth

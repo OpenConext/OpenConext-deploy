@@ -36,6 +36,19 @@
   roles:
     - { role: haproxy, tags: [lb] }
 
+- hosts: php-apps
+  gather_facts: no
+  sudo: true
+  vars:
+    env_lang: php
+  roles:
+    - php56fpm
+    - static
+    - welcome
+    - openconext-common
+    - engineblock5
+    - janus
+
 - hosts: java-apps
   gather_facts: yes
   sudo: true
@@ -43,8 +56,8 @@
 #    env_lang: java
   roles:
 #    - tomcat
-#    - shibboleth
     - metadata-exporter
+    - pdp
 #    - grouper
 #    - teams (requires grouper)
 #    - mujina-idp
@@ -52,7 +65,6 @@
 #    - authz-server
 #    - voot
 #    - authz-playground
-#    - pdp
 #    - oidc
 #    - aa
   handlers:
