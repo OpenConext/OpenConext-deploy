@@ -26,10 +26,102 @@ databases:
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
 
-# For apache, the same star-certificate is used.
+tls:
+  cert_path: /etc/pki/tls/certs
+  cert_path_ca: /etc/pki/ca-trust/source/anchors/
+  cert_private_path: /etc/pki/tls/private
+
 tls_https:
-  key_name: star.{{ base_domain }}.key
-  crt_name: star.{{ base_domain }}.crt
+  - name: engine
+    key_name: "engine.{{ base_domain }}.key"
+    crt_name: "engine.{{ base_domain }}.pem"
+    bundle_name: "engine.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_engine_private_key }}"
+
+  - name: engine_api
+    key_name: "engine-api.{{ base_domain }}.key"
+    crt_name: "engine-api.{{ base_domain }}.pem"
+    bundle_name: "engine-api.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_engine-api_private_key }}"
+
+  - name: profile
+    key_name: "profile.{{ base_domain }}.key"
+    crt_name: "profile.{{ base_domain }}.pem"
+    bundle_name: "profile.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_profile_private_key }}"
+
+  - name: serviceregistry
+    key_name: "serviceregistry.{{ base_domain }}.key"
+    crt_name: "serviceregistry.{{ base_domain }}.pem"
+    bundle_name: "serviceregistry.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_serviceregistry_private_key }}"
+
+  - name: teams
+    key_name: "teams.{{ base_domain }}.key"
+    crt_name: "teams.{{ base_domain }}.pem"
+    bundle_name: "teams.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_teams_private_key }}"
+
+  - name: authzserver
+    key_name: "authz.{{ base_domain }}.key"
+    crt_name: "authz.{{ base_domain }}.pem"
+    bundle_name: "authz.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_authz_private_key }}"
+
+  - name: authz_admin
+    key_name: "authz-admin.{{ base_domain }}.key"
+    crt_name: "authz-admin.{{ base_domain }}.pem"
+    bundle_name: "authz-admin.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_authz-admin_private_key }}"
+
+  - name: authz_playground
+    key_name: "authz-playground.{{ base_domain }}.key"
+    crt_name: "authz-playground.{{ base_domain }}.pem"
+    bundle_name: "authz-playground.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_authz-playground_private_key }}"
+
+  - name: voot
+    key_name: "voot.{{ base_domain }}.key"
+    crt_name: "voot.{{ base_domain }}.pem"
+    bundle_name: "voot.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_voot_private_key }}"
+  
+  - name: pdp
+    key_name: "pdp.{{ base_domain }}.key"
+    crt_name: "pdp.{{ base_domain }}.pem"
+    bundle_name: "pdp.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_pdp_private_key }}"
+
+  - name: oidc
+    key_name: "oidc.{{ base_domain }}.key"
+    crt_name: "oidc.{{ base_domain }}.pem"
+    bundle_name: "oidc.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_oidc_private_key }}"
+
+  - name: aa
+    key_name: "aa.{{ base_domain }}.key"
+    crt_name: "aa.{{ base_domain }}.pem"
+    bundle_name: "aa.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_aa_private_key }}"
+
+  - name: multidata
+    key_name: "multidata.{{ base_domain }}.key"
+    crt_name: "multidata.{{ base_domain }}.pem"
+    bundle_name: "multidata.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_multidata_private_key }}"
+
+  - name: grouper
+    key_name: "grouper.{{ base_domain }}.key"
+    crt_name: "grouper.{{ base_domain }}.pem"
+    bundle_name: "grouper.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_grouper_private_key }}"
+
+
+  - name: api
+    key_name: "api.{{ base_domain }}.key"
+    crt_name: "api.{{ base_domain }}.pem"
+    bundle_name: "api.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_api_private_key }}"
 
 apache_server_admin: unix@prolocation.net
 
@@ -41,15 +133,6 @@ janus_ssp_title_suffix: "SURFconext productie"
 
 engine_idp_debugging_email_address: "conext-beheer@surfnet.nl"
 engine_syslog_priority: 3
-
-# when using multiple certificates list them all (and their bundles) under tls.certificates
-tls:
-  cert_path: /etc/nginx/keys/
-  cert_private_path: /etc/nginx/keys/
-  certificates:
-    - "{{ tls_https.crt_name }}"
-  private_keys:
-    - "{{ tls_https.key_name }}"
 
 engine_janus_user: engineblock
 
@@ -73,33 +156,8 @@ janus_database_host: "{{ mysql_host }}"
 janus_database_user: srrw
 janus_database_password: "{{ mysql_passwords.sr }}"
 
-# host for static files (IdP logos)
-static:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-# the welcome page on: vm.{{ base_domain }}
-welcome:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 janus_teams_oauth_key: https://teams.surfconext.nl/teams/teams.xml
-
-engine:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-engine_api:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-profile:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-janus:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 engine_janus_cache_lifetime: 86400
 
@@ -171,8 +229,6 @@ mujina_version: 4.0.2
 engine_version: 4.7.5
 
 teams:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   db_name: "teams"
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
@@ -184,8 +240,6 @@ engineblock:
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 
 api:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   janus:
     user: "{{ engine_janus_user }}"
     secret: "{{ engine_janus_secret }}"
@@ -219,29 +273,19 @@ grouper:
   db_user: grouperrw
   db_host: "{{ mysql_host }}"
   db_password: "{{ mysql_passwords.grouper }}"
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
-
-mujina:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 authzserver:
   db_user: authz-serverrw
   db_password: "{{ mysql_passwords.authz_server }}"
   db_host: "{{ mysql_host }}"
   db_name: authz-server
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 authz_server_version: 1.3.4
 
 voot:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
   authz_checkToken_clientId: "vootservice"
   authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
@@ -332,8 +376,6 @@ voot_version: 1.6.2
 authz_admin_version: 1.3.6
 authz_admin_group: urn:collab:group:surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
         secret: "{{ authzplayground.springapp_authz_client_secret }}"
@@ -395,8 +437,6 @@ authzplayground:
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
   springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 pdp_version: 1.1.6
 #pdp_snapshot_timestamp: "20151209.153205-23"
@@ -404,8 +444,6 @@ pdp_version: 1.1.6
 
 pdp_debug: true
 pdp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   username: "pdp_admin"
   password: "{{ pdp_password }}"
   db_user: pdp-serverrw
@@ -418,12 +456,9 @@ pdp:
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-<<<<<<< HEAD:environments/prd/group_vars/prod.yml
 oidc_version: "1.0.2"
 
 oidc:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   environment: prd
   issuer: https://oidc.{{ base_domain }}/
   db_user: oidc-serverrw
@@ -433,12 +468,8 @@ oidc:
   sp_entity_id: https://oidc.surfconext.nl
 
   
-metadata_exporter_version: "1.1.1"
-=======
 metadata_exporter_version: 2.0.3
 metadata_exporter:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   db_user: srrw
   db_password: "{{ mysql_passwords.sr }}"
   db_host: "{{ mysql_host }}"
@@ -584,33 +615,117 @@ loadbalancing:
     ]
   }
 
-nginx_backend_ip: 127.0.0.1
+haproxy_applications:
 
-# values below seem silly but on acc+prod these differ.
-nginx_ipv4_addresses:
-  engine: 145.100.191.206
-  engine_api: 145.100.191.207
-  profile: 145.100.191.214
-  serviceregistry: 145.100.191.208
-  static: 145.100.191.215
-  teams: 145.100.191.209
-  authzserver: 145.100.191.216
-  authz_admin: 145.100.191.217
-  authz_playground: 145.100.191.218
-  voot: 145.100.191.212
-  grouper: 145.100.191.211
-  pdp: 145.100.191.210
+  - name: engine
+    vhost_name: "engine"
+    ip: 145.100.191.206
+    ha_method: "GET"
+    ha_url: "/"
+    port: 401
+    servers: "{{php_servers}}"
 
-nginx_config_templates:
-  - engine
-  - engine_api
-  - teams
-  - grouper
-  - voot
-  - authz
-  - authz_admin
-  - authz_playground
-  - static
-  - profile
-  - serviceregistry
-  - pdp
+  - name: profile
+    vhost_name: "profile"
+    ip: 145.100.191.214
+    ha_method: "HEAD"
+    ha_url: "/favicon.ico"
+    port: 402
+    servers: "{{php_servers}}"
+
+  - name: serviceregistry
+    vhost_name: "serviceregistry"
+    ip: 145.100.191.208
+    ha_method: "HEAD"
+    ha_url: "/"
+    port: 404
+    servers: "{{php_servers}}"
+
+  - name: engine_api
+    vhost_name: "engine-api"
+    ip: 145.100.191.207
+    ha_method: "GET"
+    ha_url: "/"
+    port: 405
+    servers: "{{php_servers}}"
+
+  - name: teams
+    vhost_name: "teams"
+    ip: 145.100.191.209
+    ha_method: GET
+    ha_url: "/media/trans-white.png"
+    port: 601
+    servers: "{{java_servers}}"
+
+  - name: authzserver
+    vhost_name: "authz"
+    ip: 145.100.191.216
+    ha_method: "GET"
+    ha_url: "/health"
+    port: 602
+    servers: "{{java_servers}}"
+
+  - name: authz_admin
+    vhost_name: "authz-admin"
+    ip: 145.100.191.217
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "603"
+    servers: "{{java_servers}}"
+
+  - name: authz_playground
+    vhost_name: "authz-playground"
+    ip: 145.100.191.218
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "604"
+    servers: "{{java_servers}}"
+
+  - name: voot
+    vhost_name: "voot"
+    ip: 145.100.191.212
+    ha_method: "GET"
+    ha_url: "/health"
+    port: 605
+    servers: "{{java_servers}}"
+
+  - name: pdp
+    vhost_name: "pdp"
+    ip: 145.100.191.222
+    ha_method: "GET"
+    ha_url: "/pdp/api/health"
+    port: 613
+    servers: "{{java_servers}}"
+
+  - name: oidc
+    vhost_name: "oidc"
+    ip: 145.100.191.227
+    ha_method: "HEAD"
+    ha_url: "/"
+    port: "614"
+    servers: "{{java_servers}}"
+
+  - name: multidata
+    vhost_name: "multidata"
+    ip: 145.100.191.223
+    ha_method: "GET"
+    ha_url: "/health"
+    port: 616
+    servers: "{{java_servers}}"
+
+  - name: grouper
+    vhost_name: "grouper"
+    ip: 145.100.191.211
+    ha_method: "GET"
+    ha_url: "/grouper-ws/status?diagnosticType=db"
+    port: 606
+    servers: "{{java_servers}}"
+
+php_servers:
+   - { ip: "145.100.191.198", label: "PRD41"}
+   - { ip: "145.100.191.199", label: "PRD42"}
+   - { ip: "145.100.191.200", label: "PRD43"}
+java_servers:
+   - { ip: "145.100.191.201", label: "PRD61"}
+   - { ip: "145.100.191.202", label: "PRD62"}
+   - { ip: "145.100.191.203", label: "PRD63"}

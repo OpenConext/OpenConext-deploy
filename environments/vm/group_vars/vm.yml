@@ -220,8 +220,6 @@ ldap_grouper_engine_user: engine
 # VM config for the Authorization Server
 ##
 authzserver:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
   db_user: authz-serverrw
   db_password: "{{ mysql_passwords.authz_server }}"
   db_host: "{{ mysql_host }}"
@@ -235,8 +233,6 @@ authz_server_debug: true
 # VM config for the Voot app
 ##
 voot:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
   authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
   authz_checkToken_clientId: "vootservice"
   authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
@@ -267,8 +263,6 @@ authz_admin_version: 1.3.6
 authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
 authz_admin_debug: true
 authzadmin:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
         secret: "{{ authzplayground.springapp_authz_client_secret }}"
@@ -370,16 +364,12 @@ authzplayground:
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
   springapp_oidc_client_id: http@//mock-sp
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
 
 pdp_version: 1.1.6
 #pdp_snapshot_timestamp: "20151222.101918-28"
 #pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
 pdp:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
   username: "pdp_admin"
   password: "{{ pdp_password }}"
   db_user: pdp-serverrw
@@ -398,8 +388,6 @@ aa_version: "1.0.3"
 
 aa_debug: true
 aa:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
   eb_username: "eb"
   eb_password: "{{ aa_eb_password }}"
   db_user: aa-serverrw
@@ -419,8 +407,6 @@ aa:
 oidc_version: "1.0.2"
 #oidc_snapshot_timestamp: "20160229.102842-1"
 oidc:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
   environment: vm
   issuer: https://oidc.{{ base_domain }}/
   db_user: oidc-serverrw
@@ -432,8 +418,6 @@ oidc:
 metadata_exporter_version: 2.0.3
 #metadata_exporter_snapshot_timestamp: "20160208.084759-3"
 metadata_exporter:
-  crt_name: "{{ tls_star_cert }}"
-  key_name: "{{ tls_star_cert_key }}"
   db_user: srrw
   db_password: "{{ mysql_passwords.sr }}"
   db_host: "{{ mysql_host }}"
@@ -580,8 +564,6 @@ haproxy_applications:
     ha_url: "/"
     port: 401
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: profile
     vhost_name: "profile"
@@ -590,8 +572,6 @@ haproxy_applications:
     ha_url: "/favicon.ico"
     port: 402
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: static
     vhost_name: "static"
@@ -600,8 +580,6 @@ haproxy_applications:
     ha_url: "/media/alive.txt"
     port: 403
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: serviceregistry
     vhost_name: "serviceregistry"
@@ -610,8 +588,6 @@ haproxy_applications:
     ha_url: "/"
     port: 404
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: engine_api
     vhost_name: "engine-api"
@@ -620,8 +596,6 @@ haproxy_applications:
     ha_url: "/"
     port: 405
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
   
   - name: teams
     vhost_name: "teams"
@@ -630,8 +604,6 @@ haproxy_applications:
     ha_url: "/media/trans-white.png"
     port: 601
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: authzserver
     vhost_name: "authz"
@@ -640,8 +612,6 @@ haproxy_applications:
     ha_url: "/health"
     port: 602
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: authz_admin
     vhost_name: "authz-admin"
@@ -650,8 +620,6 @@ haproxy_applications:
     ha_url: "/health"
     port: "603"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: authz_playground
     vhost_name: "authz-playground"
@@ -660,8 +628,6 @@ haproxy_applications:
     ha_url: "/health"
     port: "604"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: voot
     vhost_name: "voot"
@@ -670,8 +636,6 @@ haproxy_applications:
     ha_url: "/health"
     port: 605
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name:  pdp
     vhost_name: "pdp"
@@ -680,8 +644,6 @@ haproxy_applications:
     ha_url: "/pdp/api/health"
     port: 613
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: oidc
     vhost_name: "oidc"
@@ -690,8 +652,6 @@ haproxy_applications:
     ha_url: "/"
     port: "614"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: aa
     vhost_name: "aa"
@@ -700,8 +660,6 @@ haproxy_applications:
     ha_url: "/aa/api/health"
     port: 615
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: multidata
     vhost_name: "multidata"
@@ -710,8 +668,6 @@ haproxy_applications:
     ha_url: "/health"
     port: 616
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: grouper
     vhost_name: "grouper"
@@ -720,8 +676,6 @@ haproxy_applications:
     ha_url: "/grouper-ws/status?diagnosticType=db"
     port: 606
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: mujina-sp
     vhost_name: "mujina-sp"
@@ -730,8 +684,6 @@ haproxy_applications:
     ha_url: "/"
     port: 607
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
 
   - name: mujina-idp
     vhost_name: "mujina-idp"
@@ -740,8 +692,14 @@ haproxy_applications:
     ha_url: "/"
     port: "608"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
+
+  - name: welcome
+    vhost_name: "welcome"
+    ip: "192.168.66.98"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "609"
+    servers: "{{php_servers}}"
 
 haproxy_sni_ip: 192.168.66.98
 

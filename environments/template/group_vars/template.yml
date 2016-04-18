@@ -28,13 +28,26 @@ databases:
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
 
-# For apache, the same star-certificate is used.
+tls:
+  cert_path: /etc/pki/tls/certs
+  cert_path_ca: /etc/pki/ca-trust/source/anchors/
+  cert_private_path: /etc/pki/tls/private
+
+
+tls_ca: star.{{ base_domain }}_ca.pem
+
+tls_star_cert_haproxy: star.{{ base_domain }}_haproxy.pem
+tls_star_cert_bundle_name: star.{{ base_domain }}_ca_bundle.pem
+tls_star_cert: star.{{ base_domain }}.pem
+tls_star_cert_key: star.{{ base_domain }}.key
+
 tls_https:
-  key_name: star.{{ base_domain }}.key
-  crt_name: star.{{ base_domain }}.pem
-  ca_name: star.{{ base_domain }}_ca.pem
-  bundle_name: star.{{ base_domain }}_ca_bundle.pem
-  haproxy_name: star.{{ base_domain }}_haproxy.pem
+  - name: star
+    key_name: "star.{{ base_domain }}.key"
+    crt_name: "star.{{ base_domain }}.pem"
+    bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_star_private_key }}"
+      
 apache_server_admin: unix@prolocation.net
 
 janus_ssp_technicalcontact_name: "Surfconext beheer"
@@ -43,17 +56,6 @@ janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
-
-# when using multiple certificates list them all (and their bundles) under tls.certificates
-tls:
-  cert_path: /etc/pki/tls/certs
-  cert_private_path: /etc/pki/tls/private
-  certificates:
-    - "{{ tls_https.crt_name }}"
-  private_keys:
-    - "{{ tls_https.key_name }}"
-  ca_certificates:
-    - "{{ tls_https.ca_name }}"
 
 engine_janus_user: engineblock
 
@@ -77,34 +79,7 @@ janus_database_host: "{{ mysql_host }}"
 janus_database_user: srrw
 janus_database_password: "{{ mysql_passwords.sr }}"
 
-# host for static files (IdP logos)
-static:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-# the welcome page on: vm.{{ base_domain }}
-welcome:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-
 janus_teams_oauth_key: https://teams.test.surfconext.nl/teams/teams.xml
-
-engine:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-engine_api:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-profile:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-janus:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 engine_janus_cache_lifetime: 0
 
@@ -173,8 +148,6 @@ mujina_version: 4.0.2
 #mujina_snapshot_timestamp
 
 teams:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   db_name: "teams"
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
@@ -186,8 +159,6 @@ engineblock:
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 
 api:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   janus:
     user: "{{ engine_janus_user }}"
     secret: "{{ engine_janus_secret }}"
@@ -221,28 +192,16 @@ grouper:
   db_user: grouperrw
   db_host: "{{ mysql_host }}"
   db_password: "{{ mysql_passwords.grouper }}"
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
-
-mujina_sp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-mujina_idp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 authzserver:
   db_user: authz-serverrw
   db_password: "{{ mysql_passwords.authz_server }}"
   db_host: "{{ mysql_host }}"
   db_name: authz-server
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 authz_server_version: 1.3.3
 #authz_server_snapshot_timestamp: "20160126.144433-4"
@@ -288,8 +247,6 @@ authz_admin_version: 1.3.4
 authz_admin_snapshot_timestamp: "20151223.124726-3"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
         secret: "{{ authzplayground.springapp_authz_client_secret }}"
@@ -388,8 +345,6 @@ authzplayground:
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
   springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
 
 pdp_version: 1.1.2
 #pdp_snapshot_timestamp: 20160212.090819-5
@@ -398,8 +353,6 @@ pdp_version: 1.1.2
 
 pdp_debug: true
 pdp:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   username: "pdp_admin"
   password: "{{ pdp_password }}"
   db_user: pdp-serverrw
@@ -419,8 +372,6 @@ aa_html_snapshot_timestamp: "20160209.135704-17"
 
 aa_debug: true
 aa:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   eb_username: "eb"
   eb_password: "{{ aa_eb_password }}"
   db_user: aa-serverrw
@@ -440,8 +391,6 @@ aa:
 oidc_version: "1.0.1"
 oidc_snapshot_timestamp: "20160210.190042-14"
 oidc:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   environment: test
   issuer: https://oidc.{{ base_domain }}/
   db_user: oidc-serverrw
@@ -453,8 +402,6 @@ oidc:
 metadata_exporter_version: "1.1.1"
 #metadata_exporter_snapshot_timestamp: "20160208.084759-3"
 metadata_exporter:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
   db_user: srrw
   db_password: "{{ mysql_passwords.sr }}"
   db_host: "{{ mysql_host }}"
@@ -585,31 +532,6 @@ loadbalancing:
     ]
   }
 
-nginx_backend_ip: 127.0.0.1
-
-nginx_ipv4_addresses:
-  engine: 145.100.191.114
-  engine_api: 145.100.191.114
-  profile: 145.100.191.114
-  serviceregistry: 145.100.191.114
-  static: 145.100.191.114
-  teams: 145.100.191.114
-  authzserver: 145.100.191.114
-  authz_admin: 145.100.191.114
-  authz_playground: 145.100.191.114
-  voot: 145.100.191.114
-  grouper: 145.100.191.114
-  mujina_sp: 145.100.191.114
-  mujina_idp: 145.100.191.114
-  welcome: 145.100.191.114
-  pdp: 145.100.191.114
-  oidc: 145.100.191.114
-  aa: 145.100.191.114
-  metadata_exporter: 145.100.191.114
-
-
-
-
 haproxy_applications:
 
   - name: engine
@@ -619,8 +541,6 @@ haproxy_applications:
     ha_url: "/"
     port: "401"
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: profile
     vhost_name: "profile"
@@ -629,8 +549,6 @@ haproxy_applications:
     ha_url: "/favicon.ico"
     port: "402"
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: static
     vhost_name: "static"
@@ -639,8 +557,6 @@ haproxy_applications:
     ha_url: "/media/alive.txt"
     port: "403"
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name:  serviceregistry
     vhost_name: "serviceregistry"
@@ -649,8 +565,6 @@ haproxy_applications:
     ha_url: "/"
     port: "404"
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: engine_api
     vhost_name: "engine-api"
@@ -659,8 +573,6 @@ haproxy_applications:
     ha_url: "/"
     port: "405"
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: teams
    
@@ -670,8 +582,6 @@ haproxy_applications:
     ha_url: "/media/trans-white.png"
     port: "601"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: authzserver
     vhost_name: "authz"
@@ -680,8 +590,6 @@ haproxy_applications:
     ha_url: "/health"
     port: "602"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: authz_admin
     vhost_name: "authz-admin"
@@ -690,8 +598,6 @@ haproxy_applications:
     ha_url: "/health"
     port: "603"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: authz_playground
     vhost_name: "authz-playground"
@@ -700,8 +606,6 @@ haproxy_applications:
     ha_url: "/health"
     port: "604"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: voot
     vhost_name: "voot"
@@ -710,8 +614,6 @@ haproxy_applications:
     ha_url: "/health"
     port: "605"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: pdp
     vhost_name: "pdp"
@@ -720,8 +622,6 @@ haproxy_applications:
     ha_url: "/pdp/api/health"
     port: "613"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: oidc
     vhost_name: "oidc"
@@ -730,8 +630,6 @@ haproxy_applications:
     ha_url: "/"
     port: "614"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: aa
     vhost_name: "aa"
@@ -740,8 +638,6 @@ haproxy_applications:
     ha_url: "/aa/api/health"
     port: "615"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: multidata
     vhost_name: "multidata"
@@ -750,8 +646,6 @@ haproxy_applications:
     ha_url: "/health"
     port: "616"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: grouper
     vhost_name: "grouper"
@@ -760,8 +654,6 @@ haproxy_applications:
     ha_url: "/grouper-ws/status?diagnosticType=db"
     port: "606"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: mujina-sp
     vhost_name: "mujina-sp"
@@ -770,8 +662,6 @@ haproxy_applications:
     ha_url: "/"
     port: "607"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
   - name: mujina-idp
     vhost_name: "mujina-idp"
@@ -780,8 +670,6 @@ haproxy_applications:
     ha_url: "/"
     port: "608"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
 
 haproxy_sni_ip: 145.100.191.114
 
