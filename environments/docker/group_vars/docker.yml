@@ -108,9 +108,8 @@ engine_janus_cache_lifetime: 0
 engine_vovalidate_key: oauth_key
 
 engine_trusted_proxy_ips:
-  - 192.168.1.1
-  - 10.0.0.1
-#
+  - 127.0.0.1
+
 engine_keys:
   default:
     privateFile: /etc/openconext/engineblock.pem
@@ -154,10 +153,8 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 api_version: 4.0.1
-#api_snapshot_timestamp
 
 mujina_version: 4.0.2
-#mujina_snapshot_timestamp
 
 ##
 # VM config for the teams app

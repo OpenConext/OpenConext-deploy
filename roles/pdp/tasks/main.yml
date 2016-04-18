@@ -21,6 +21,7 @@
     url: "{{ maven_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}/pdp-gui-{{ pdp_version }}.tar.gz"
     dest: /var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz
   tags: pdp
+  register: download_archive
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
 - name: extract archive
@@ -33,16 +34,17 @@
   tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
-- name: remove downloaded version
-  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz state=absent
+- name: remove old downloaded versions
+  command: find . -type f -not -name pdp-gui-{{ pdp_version }}.tar.gz -name "*.tar.gz" -exec rm -rf {} \; chdir=/var/www/pdp
   tags: pdp
-  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
+  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == '' and download_archive | changed
 
 - name: download snapshot of html archive
   get_url:
     url: "{{ maven_snapshot_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}-SNAPSHOT/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz"
     dest: /var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz
   tags: pdp
+  register: download_snapshot_archive
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
 
 - name: extract snapshot archive
@@ -56,9 +58,9 @@
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
 
 - name: remove downloaded snapshot version
-  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz state=absent
+  command: find . -type f -not -name pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz -name "*.tar.gz" -exec rm -rf {} \; chdir=/var/www/pdp
   tags: pdp
-  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
+  when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == '' and download_snapshot_archive | changed
 
 - name: Create js directory
   file: path=/var/www/pdp/current/js state=directory owner=pdp group=pdp mode=0755
