@@ -4,7 +4,7 @@ Listen {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}
 
     DocumentRoot /var/www/static
 
-	  ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-STATIC'"
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-STATIC'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-STATIC'" combined
 
 </VirtualHost>

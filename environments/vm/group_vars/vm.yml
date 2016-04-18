@@ -622,7 +622,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
-  
+
   - name: teams
     vhost_name: "teams"
     ip: 192.168.66.98
@@ -750,5 +750,4 @@ php_servers:
 
 java_servers:
    - { ip: "192.168.66.99", label: "javapps"}
-                                                
 

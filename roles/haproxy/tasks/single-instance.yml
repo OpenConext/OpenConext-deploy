@@ -18,7 +18,6 @@
   args:
     creates: /etc/pki/haproxy/{{ tls_star_cert_haproxy }}
 
-
 - name: Copy config
   template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
   notify: reload haproxy
