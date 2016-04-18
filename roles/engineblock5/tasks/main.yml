@@ -48,7 +48,6 @@
   notify:
     - restart httpd
 
-
 - name: Make the SYMFONY_ENV var available for scripts
   sudo: yes
   lineinfile: dest=/etc/environment state=present line="SYMFONY_ENV={{ engine_apache_symfony_environment }}"
@@ -60,6 +59,7 @@
   command: composer prepare-env
   args:
       chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  changed_when: False
 
 # Any scripts should be placed below this
 - name: Run EngineBlock Doctrine migrations
