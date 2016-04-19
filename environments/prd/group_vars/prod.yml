@@ -116,12 +116,17 @@ tls_https:
     bundle_name: "grouper.{{ base_domain }}_ca_bundle.pem"
     key_content: "{{ https_grouper_private_key }}"
 
-
   - name: api
     key_name: "api.{{ base_domain }}.key"
     crt_name: "api.{{ base_domain }}.pem"
     bundle_name: "api.{{ base_domain }}_ca_bundle.pem"
     key_content: "{{ https_api_private_key }}"
+  
+  - name: static
+    key_name: "static.{{ base_domain }}.key"
+    crt_name: "static.{{ base_domain }}.pem"
+    bundle_name: "static.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_static_private_key }}"
 
 apache_server_admin: unix@prolocation.net
 
@@ -720,6 +725,14 @@ haproxy_applications:
     ha_url: "/grouper-ws/status?diagnosticType=db"
     port: 606
     servers: "{{java_servers}}"
+  
+  - name: static
+    vhost_name: "static"
+    ip: 145.100.191.215
+    ha_method: "GET"
+    ha_url: "/grouper-ws/status?diagnosticType=db"
+    port: 403
+    servers: "{{ php_servers }}"
 
 php_servers:
    - { ip: "145.100.191.198", label: "PRD41"}
