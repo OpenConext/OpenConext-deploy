@@ -3,6 +3,7 @@ env: prd
 oidc_standalone: true
 smtp_server: localhost
 error_mail_to: coin-logs@list.surfnet.nl
+base_domain: surfconext.nl
 
 php_display_errors: 0
 
@@ -624,7 +625,7 @@ haproxy_applications:
 
   - name: engine
     vhost_name: "engine"
-    ip: 145.100.191.206
+    ip: "{{ engine_ip }}"
     ha_method: "GET"
     ha_url: "/"
     port: 401
@@ -632,7 +633,7 @@ haproxy_applications:
 
   - name: profile
     vhost_name: "profile"
-    ip: 145.100.191.214
+    ip: "{{ profile_ip }}"
     ha_method: "HEAD"
     ha_url: "/favicon.ico"
     port: 402
@@ -640,7 +641,7 @@ haproxy_applications:
 
   - name: serviceregistry
     vhost_name: "serviceregistry"
-    ip: 145.100.191.208
+    ip: "{{ serviceregistry_ip }}"
     ha_method: "HEAD"
     ha_url: "/"
     port: 404
@@ -648,7 +649,7 @@ haproxy_applications:
 
   - name: engine_api
     vhost_name: "engine-api"
-    ip: 145.100.191.207
+    ip: "{{ engine_api_ip }}"
     ha_method: "GET"
     ha_url: "/"
     port: 405
@@ -656,7 +657,7 @@ haproxy_applications:
 
   - name: teams
     vhost_name: "teams"
-    ip: 145.100.191.209
+    ip: "{{ teams_ip }}"
     ha_method: GET
     ha_url: "/media/trans-white.png"
     port: 601
@@ -664,7 +665,7 @@ haproxy_applications:
 
   - name: authzserver
     vhost_name: "authz"
-    ip: 145.100.191.216
+    ip: "{{ authzserver_ip }}"
     ha_method: "GET"
     ha_url: "/health"
     port: 602
@@ -672,7 +673,7 @@ haproxy_applications:
 
   - name: authz_admin
     vhost_name: "authz-admin"
-    ip: 145.100.191.217
+    ip: "{{ authz_admin_ip }}"
     ha_method: "GET"
     ha_url: "/health"
     port: "603"
@@ -680,7 +681,7 @@ haproxy_applications:
 
   - name: authz_playground
     vhost_name: "authz-playground"
-    ip: 145.100.191.218
+    ip: "{{ authz_playground_ip }}"
     ha_method: "GET"
     ha_url: "/health"
     port: "604"
@@ -688,7 +689,7 @@ haproxy_applications:
 
   - name: voot
     vhost_name: "voot"
-    ip: 145.100.191.212
+    ip: "{{ voot_ip }}"
     ha_method: "GET"
     ha_url: "/health"
     port: 605
@@ -696,7 +697,7 @@ haproxy_applications:
 
   - name: pdp
     vhost_name: "pdp"
-    ip: 145.100.191.222
+    ip: "{{ pdp_ip }}"
     ha_method: "GET"
     ha_url: "/pdp/api/health"
     port: 613
@@ -704,7 +705,7 @@ haproxy_applications:
 
   - name: oidc
     vhost_name: "oidc"
-    ip: 145.100.191.227
+    ip: "{{ oidc_ip }}"
     ha_method: "HEAD"
     ha_url: "/"
     port: "614"
@@ -712,7 +713,7 @@ haproxy_applications:
 
   - name: multidata
     vhost_name: "multidata"
-    ip: 145.100.191.223
+    ip: "{{ multidata_ip }}"
     ha_method: "GET"
     ha_url: "/health"
     port: 616
@@ -720,7 +721,7 @@ haproxy_applications:
 
   - name: grouper
     vhost_name: "grouper"
-    ip: 145.100.191.211
+    ip: "{{ grouper_ip }}"
     ha_method: "GET"
     ha_url: "/grouper-ws/status?diagnosticType=db"
     port: 606
@@ -728,7 +729,7 @@ haproxy_applications:
   
   - name: static
     vhost_name: "static"
-    ip: 145.100.191.215
+    ip: "{{ static_ip }}"
     ha_method: "GET"
     ha_url: "/grouper-ws/status?diagnosticType=db"
     port: 403

@@ -1,0 +1,15 @@
+engine_ip: 145.101.112.226
+engine_api_ip: 145.101.112.226
+profile_ip: 145.101.112.234
+serviceregistry_ip: 145.101.112.228
+teams_ip: 145.101.112.229
+authzserver_ip: 145.101.112.236
+authz_admin_ip: 145.101.112.237
+authz_playground_ip: 145.101.112.238
+voot_ip: 145.101.112.232
+pdp_ip: 145.101.112.230
+oidc_ip: 145.101.112.206
+multidata_ip: 145.101.112.240
+grouper_ip: 145.101.112.231
+static_ip: 145.101.112.235
+bind_ip: 145.101.112.225

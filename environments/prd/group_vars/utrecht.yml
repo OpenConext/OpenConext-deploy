@@ -1,0 +1,15 @@
+engine_ip: 195.169.124.226
+engine_api_ip: 195.169.124.226
+profile_ip: 195.169.124.234
+serviceregistry_ip: 195.169.124.228
+teams_ip: 195.169.124.229
+authzserver_ip: 195.169.124.236
+authz_admin_ip: 195.169.124.237
+authz_playground_ip: 195.169.124.238
+voot_ip: 195.169.124.232
+pdp_ip: 195.169.124.230
+oidc_ip: 195.169.124.206
+multidata_ip: 195.169.124.240
+grouper_ip: 195.169.124.231
+static_ip: 195.169.124.235
+bind_ip: 195.169.124.225

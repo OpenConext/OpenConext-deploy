@@ -22,6 +22,7 @@
   roles:
     - { role: keepalived, tags: ['keepalived'] }
     - { role: haproxy, tags: ['lb'] }
+    - { role: bind, tags: ['bind'] }
 
 - hosts: php-apps:java-apps:oidc
   gather_facts: no
