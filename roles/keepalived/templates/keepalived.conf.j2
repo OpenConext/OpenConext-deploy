@@ -1,20 +1,31 @@
 vrrp_instance master {
-   interface ens32               # interface to monitor
+   interface {{ ansible_default_ipv4.interface }}               # interface to monitor
    state {{ keepalived.state_master }}
    virtual_router_id 51          # Assign one ID for this route
    priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
    virtual_ipaddress {
-        145.101.112.226/32
-        145.101.112.227
+       {{ engine_ip }}
    }
 }
 vrrp_instance backup {
-   interface ens32
+   interface {{ ansible_default_ipv4.interface }} 
    state {{ keepalived.state_backup }}
    virtual_router_id 52
    priority {{ keepalived.backupprio }}
    virtual_ipaddress {
-        145.101.112.228/32
-        145.101.112.229/32
-   }
+        {{ engine_api_ip }}
+        {{ profile_ip }}
+        {{ serviceregistry_ip }}
+        {{ teams_ip }}
+        {{ authzserver_ip }}
+        {{ authz_admin_ip }}
+        {{ authz_playground_ip }}
+        {{ voot_ip }}
+        {{ pdp_ip }}
+        {{ oidc_ip }}
+        {{ multidata_ip }}
+        {{ grouper_ip }}
+        {{ static_ip }}
+        {{ bind_ip }}  
+}
 
