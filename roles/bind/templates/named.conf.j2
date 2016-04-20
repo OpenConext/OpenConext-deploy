@@ -4,7 +4,7 @@ options
         dump-file               "data/cache_dump.db";
         statistics-file         "data/named_stats.txt";
         memstatistics-file      "data/named_mem_stats.txt";
-	listen-on port 53       { any; };
+	listen-on port 53       { {{ bind_ip }}; };
         listen-on-v6 port 53    { any; };
 	allow-query             { any; };
         recursion		no;

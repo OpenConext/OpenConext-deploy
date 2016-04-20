@@ -19,6 +19,3 @@
 
 - name: enable bind service
   service: name=named state=started enabled=yes
-
-- include: create_keys.yml
-  when: dns_create_keys
