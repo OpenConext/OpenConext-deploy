@@ -10,5 +10,5 @@ $ORIGIN ha.{{ base_domain }}.
             IN      NS      ns1ha.{{ base_domain }}.
             IN      NS      ns2ha.{{ base_domain }}.
 {% for app in haproxy_applications %}
-{{ app.vhost_name }} IN A   {{app.ip }} 
+{{ app.vhost_name }} 300 IN A  {{app.ip }} 
 {% endfor %}
