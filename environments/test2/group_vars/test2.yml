@@ -98,16 +98,16 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
+    #    - {
+    #    index: 0,
+    #    type: "database",
+    #    value: "Doctrine"
+    #  }
     - {
         index: 0,
-        type: "database",
-        value: "Doctrine"
+        type: "janus",
+        value: "JanusRestV1"
       }
-#    - {
-#        index: 0,
-#        type: "janus",
-#        value: "JanusRestV1"
-#      }
 
 tomcat_apps:
   - grouper
@@ -139,7 +139,7 @@ shib:
   engine_domain: "{{ base_domain }}"
 
 # versions of installed apps
-teams_version: 4.2.9
+teams_version: 4.2.10
 #teams_snapshot_timestamp: 20160210.111305-1
 
 api_version: 4.0.1
@@ -204,7 +204,7 @@ authzserver:
   db_host: "{{ mysql_host }}"
   db_name: authz-server
 
-authz_server_version: 1.3.3
+authz_server_version: 1.3.4
 #authz_server_snapshot_timestamp: "20160126.144433-4"
 authz_server_debug: true
 
@@ -213,7 +213,7 @@ voot:
   authz_checkToken_clientId: "vootservice"
   authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
   oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
-  oidc_checkToken_clientId: "https@//oidc.test.surfconext.nl"
+  oidc_checkToken_clientId: "https@//voot.{{ base_domain }}"
   oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
   externalGroupProviders:
     - {
@@ -243,8 +243,7 @@ voot_version: 1.6.1
 voot_debug: true
 
 authz_admin_version: 1.3.4
-authz_admin_snapshot_timestamp: "20151223.124726-3"
-authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
+authz_admin_group: urn:collab:group:test2.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
@@ -337,7 +336,6 @@ authzadmin:
       secret: "{{ aa.authz_secret }}"
 
 authz_playground_version: 1.2
-authz_playground_snapshot_timestamp: "20160208.150458-5"
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
@@ -345,10 +343,7 @@ authzplayground:
   springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
-pdp_version: 1.1.2
-#pdp_snapshot_timestamp: 20160212.090819-5
-#pdp_html_snapshot_timestamp: 20160212.075613-4
-#pdp_local_html_version: "0.1.4-SNAPSHOT"
+pdp_version: 1.1.6
 
 pdp_debug: true
 pdp:
@@ -365,9 +360,7 @@ pdp:
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-aa_version: "1.0.1"
-aa_snapshot_timestamp: "20160212.090929-21"
-aa_html_snapshot_timestamp: "20160209.135704-17"
+aa_version: "1.0.3"
 
 aa_debug: true
 aa:
@@ -387,8 +380,7 @@ aa:
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-oidc_version: "1.0.1"
-oidc_snapshot_timestamp: "20160210.190042-14"
+oidc_version: "1.0.2"
 oidc:
   environment: test
   issuer: https://oidc.{{ base_domain }}/
@@ -396,10 +388,9 @@ oidc:
   db_password: "{{ mysql_passwords.oidc_server }}"
   db_host: "{{ mysql_host }}"
   db_name: oidc-server
-  sp_entity_id: https://oidc.test.surfconext.nl
+  sp_entity_id: https://oidc.{{ base_domain }}
 
-metadata_exporter_version: "1.1.1"
-#metadata_exporter_snapshot_timestamp: "20160208.084759-3"
+metadata_exporter_version: "2.0.3"
 metadata_exporter:
   db_user: srrw
   db_password: "{{ mysql_passwords.sr }}"
@@ -488,7 +479,7 @@ loadbalancing:
     ]
   }
   oidc: {
-    port: 10614,
+    port: 614,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
       { label: "oidc_backend", ip: "145.100.191.120" },
@@ -540,8 +531,8 @@ haproxy_applications:
     ha_url: "/"
     port: 401
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: profile
     vhost_name: "profile"
@@ -550,8 +541,8 @@ haproxy_applications:
     ha_url: "/favicon.ico"
     port: 402
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: static
     vhost_name: "static"
@@ -560,8 +551,8 @@ haproxy_applications:
     ha_url: "/media/alive.txt"
     port: 403
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: serviceregistry
     vhost_name: "serviceregistry"
@@ -570,8 +561,8 @@ haproxy_applications:
     ha_url: "/"
     port: 404
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: engine_api
     vhost_name: "engine-api"
@@ -580,8 +571,8 @@ haproxy_applications:
     ha_url: "/"
     port: 405
     servers: "{{php_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: teams
     vhost_name: "teams"
@@ -590,8 +581,8 @@ haproxy_applications:
     ha_url: "/media/trans-white.png"
     port: 601
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: authzserver
     vhost_name: "authz"
@@ -600,8 +591,8 @@ haproxy_applications:
     ha_url: "/health"
     port: 602
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: authz_admin
     vhost_name: "authz-admin"
@@ -610,8 +601,8 @@ haproxy_applications:
     ha_url: "/health"
     port: "603"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: authz_playground
     vhost_name: "authz-playground"
@@ -620,8 +611,8 @@ haproxy_applications:
     ha_url: "/health"
     port: "604"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: voot
     vhost_name: "voot"
@@ -630,8 +621,8 @@ haproxy_applications:
     ha_url: "/health"
     port: 605
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name:  pdp
     vhost_name: "pdp"
@@ -640,8 +631,8 @@ haproxy_applications:
     ha_url: "/pdp/api/health"
     port: 613
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: oidc
     vhost_name: "oidc"
@@ -650,8 +641,8 @@ haproxy_applications:
     ha_url: "/"
     port: "614"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: aa
     vhost_name: "aa"
@@ -660,8 +651,8 @@ haproxy_applications:
     ha_url: "/aa/api/health"
     port: 615
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: multidata
     vhost_name: "multidata"
@@ -670,8 +661,8 @@ haproxy_applications:
     ha_url: "/health"
     port: 616
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: grouper
     vhost_name: "grouper"
@@ -680,8 +671,8 @@ haproxy_applications:
     ha_url: "/grouper-ws/status?diagnosticType=db"
     port: 606
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: mujina-sp
     vhost_name: "mujina-sp"
@@ -690,8 +681,8 @@ haproxy_applications:
     ha_url: "/"
     port: 607
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
   - name: mujina-idp
     vhost_name: "mujina-idp"
@@ -700,8 +691,8 @@ haproxy_applications:
     ha_url: "/"
     port: "608"
     servers: "{{java_servers}}"
-    crt_name: "{{ tls_https.crt_name }}"
-    key_name: "{{ tls_https.key_name }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
 
 haproxy_sni_ip: 145.100.191.114
 

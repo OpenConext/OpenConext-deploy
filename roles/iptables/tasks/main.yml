@@ -1,6 +1,11 @@
+---
+- name: Check if firewalld exists
+  shell: "if systemctl -l | grep -q firewalld;   then echo true;   else echo false; fi;"
+  register: firewalld_exists
+
 - name: "Disable firewalld"
   service: name=firewalld enabled=no state=stopped
-  when:  (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+  when: firewalld_exists == True 
 
 - name: Install iptables and ip6tables
   yum: name={{item}} state=present

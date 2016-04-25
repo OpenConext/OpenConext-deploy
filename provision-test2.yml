@@ -7,14 +7,12 @@
     tags:
       - always
 
-- hosts: loadbalancer
+- hosts: all
   gather_facts: yes
   sudo: true
   roles:
-    - common
-    - hosts
-    - iptables
-    - { role: tls, tags: ['tls'] }
+    - { role: common, tags: ['common'] }
+    - { role: iptables, tags: ['iptables'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
@@ -23,6 +21,7 @@
   sudo: true
   roles:
     - { role: haproxy, tags: ['lb'] }
+    - { role: tls, tags: ['tls'] }
 
 - hosts: php-apps:java-apps-centos7
   gather_facts: yes
@@ -49,9 +48,7 @@
     - { role: static,            tags: ['static'] }
     - { role: openconext-common, tags: ['eb5','sr'] }
     - { role: engineblock5,       tags: ['eb5'     ] }
-    - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
     - { role: janus,             tags: ['sr'     ] }
-    - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 

@@ -538,7 +538,7 @@ loadbalancing:
     ]
   }
   oidc: {
-    port: 10614,
+    port: 614,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
       { label: "oidc_backend", ip: "145.100.191.117" },
