@@ -8,6 +8,14 @@
 -A INPUT -p icmp -j ACCEPT
 -A INPUT -i lo -j ACCEPT
 
+# Some ICMP rules
+-A INPUT -p icmp --icmp-type timestamp-request -j DROP
+-A INPUT -p icmp --icmp-type timestamp-reply -j DROP
+-A INPUT -p icmp --icmp-type address-mask-request  -j DROP
+-A INPUT -p icmp --icmp-type address-mask-reply  -j DROP
+-A INPUT -p icmp --icmp-type any -j ACCEPT
+
+
 # General rules
 {% for service in iptables_incoming %}
 {{'##'|e }} {{ service.name }}

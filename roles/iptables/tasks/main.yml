@@ -17,7 +17,7 @@
   notify:
   - restart ip6tables
 
-- name: Start and enable services ntpd, iptables, iptables6
+- name: Start and enable services iptables and iptables6
   service: name={{item}} state=started enabled=true
   with_items:
   - iptables
