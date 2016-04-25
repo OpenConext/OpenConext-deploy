@@ -296,7 +296,7 @@ voot:
   authz_checkToken_clientId: "vootservice"
   authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
   oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
-  oidc_checkToken_clientId: "https@//oidc.test.surfconext.nl"
+  oidc_checkToken_clientId: "https@//voot.{{ base_domain }}"
   oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
   externalGroupProviders:
     - {
