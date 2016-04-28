@@ -33,6 +33,7 @@
 
 - name: start services 
   service: name={{ item.name }} enabled=yes state=started
+  with_items: "{{ haproxy_applications }}"
 
 - name: disable standard systemd haproxy instance
   command: systemctl disable haproxy
