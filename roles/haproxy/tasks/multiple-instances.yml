@@ -20,7 +20,7 @@
   with_items: "{{ haproxy_applications }}"
 
 - name: Chown SSL certificates
-  file: /etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
+  file: path=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
   with_items: "{{ haproxy_applications }}"
 
 - name: create haproxy instance startup file
