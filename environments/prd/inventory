@@ -11,10 +11,10 @@ oidc.prd.ams.surfconext.nl
 oidc.prd.ams.surfconext.nl
 
 [loadbalancer]
-prd13.utr.surfconext.nl ansible_ssh_private_key_file=~/.ssh/id_rsa_surfdeploy
-prd14.utr.surfconext.nl ansible_ssh_private_key_file=~/.ssh/id_rsa_surfdeploy
-prd15.ams.surfconext.nl ansible_ssh_private_key_file=~/.ssh/id_rsa_surfdeploy
-prd16.ams.surfconext.nl ansible_ssh_private_key_file=~/.ssh/id_rsa_surfdeploy
+prd13.utr.surfconext.nl 
+prd14.utr.surfconext.nl 
+prd15.ams.surfconext.nl 
+prd16.ams.surfconext.nl 
 
 [amsterdam]
 prd15.ams.surfconext.nl
