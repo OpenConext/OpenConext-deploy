@@ -19,6 +19,10 @@
   shell: cat {{ tls.cert_private_path }}/{{ item.key_name }}  {{ tls.cert_path }}/{{ item.crt_name }} > /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
   with_items: "{{ haproxy_applications }}"
 
+- name: Chown SSL certificates
+  file: /etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
+  with_items: "{{ haproxy_applications }}"
+
 - name: create haproxy instance startup file
   template: src=haproxy.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.cfg
   with_items: "{{ haproxy_applications }}"
