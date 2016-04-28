@@ -99,12 +99,6 @@ tls_https:
     bundle_name: "oidc.{{ base_domain }}_ca_bundle.pem"
     key_content: "{{ https_oidc_private_key }}"
 
-  - name: aa
-    key_name: "aa.{{ base_domain }}.key"
-    crt_name: "aa.{{ base_domain }}.pem"
-    bundle_name: "aa.{{ base_domain }}_ca_bundle.pem"
-    key_content: "{{ https_aa_private_key }}"
-
   - name: multidata
     key_name: "multidata.{{ base_domain }}.key"
     crt_name: "multidata.{{ base_domain }}.pem"
