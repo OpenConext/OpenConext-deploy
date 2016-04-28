@@ -32,7 +32,7 @@
   with_items: "{{ haproxy_applications }}"
 
 - name: start services 
-  service: name={{ item.name }} enabled=yes state=started
+  service: name=haproxy_{{item.name }} enabled=yes state=started
   with_items: "{{ haproxy_applications }}"
 
 - name: disable standard systemd haproxy instance
