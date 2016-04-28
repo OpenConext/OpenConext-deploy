@@ -624,6 +624,8 @@ haproxy_applications:
     ha_url: "/"
     port: 401
     servers: "{{php_servers}}"
+    key_name: engine.{{ base_domain }}.key
+    crt_name: engine.{{ base_domain }}.pem
 
   - name: profile
     vhost_name: "profile"
@@ -632,6 +634,9 @@ haproxy_applications:
     ha_url: "/favicon.ico"
     port: 402
     servers: "{{php_servers}}"
+    key_name: profile.{{ base_domain }}.key
+    crt_name: profile.{{ base_domain }}.pem
+
 
   - name: serviceregistry
     vhost_name: "serviceregistry"
@@ -640,6 +645,9 @@ haproxy_applications:
     ha_url: "/"
     port: 404
     servers: "{{php_servers}}"
+    key_name: serviceregistry.{{ base_domain }}.key
+    crt_name: serviceregistry.{{ base_domain }}.pem
+
 
   - name: engine_api
     vhost_name: "engine-api"
@@ -648,6 +656,8 @@ haproxy_applications:
     ha_url: "/"
     port: 405
     servers: "{{php_servers}}"
+    key_name: engine-api.{{ base_domain }}.key
+    crt_name: engine-api.{{ base_domain}}.pem
 
   - name: teams
     vhost_name: "teams"
@@ -656,6 +666,8 @@ haproxy_applications:
     ha_url: "/media/trans-white.png"
     port: 601
     servers: "{{java_servers}}"
+    key_name: teams.{{ base_domain }}.key
+    crt_name: teams.{{ base_domain}}.pem
 
   - name: authzserver
     vhost_name: "authz"
@@ -664,6 +676,8 @@ haproxy_applications:
     ha_url: "/health"
     port: 602
     servers: "{{java_servers}}"
+    key_name: authz.{{ base_domain }}.key
+    crt_name: authz.{{ base_domain}}.pem
 
   - name: authz_admin
     vhost_name: "authz-admin"
@@ -672,6 +686,8 @@ haproxy_applications:
     ha_url: "/health"
     port: "603"
     servers: "{{java_servers}}"
+    key_name: authz-admin.{{ base_domain }}.key
+    crt_name: authz-admin.{{ base_domain}}.pem
 
   - name: authz_playground
     vhost_name: "authz-playground"
@@ -680,6 +696,8 @@ haproxy_applications:
     ha_url: "/health"
     port: "604"
     servers: "{{java_servers}}"
+    key_name: authz-playground.{{ base_domain }}.key
+    crt_name: authz-playground.{{ base_domain}}.pem
 
   - name: voot
     vhost_name: "voot"
@@ -688,6 +706,8 @@ haproxy_applications:
     ha_url: "/health"
     port: 605
     servers: "{{java_servers}}"
+    key_name: voot.{{ base_domain }}.key
+    crt_name: voot.{{ base_domain}}.pem
 
   - name: pdp
     vhost_name: "pdp"
@@ -696,6 +716,8 @@ haproxy_applications:
     ha_url: "/pdp/api/health"
     port: 613
     servers: "{{java_servers}}"
+    key_name: pdp.{{ base_domain }}.key
+    crt_name: pdp.{{ base_domain}}.pem
 
   - name: oidc
     vhost_name: "oidc"
@@ -703,7 +725,9 @@ haproxy_applications:
     ha_method: "HEAD"
     ha_url: "/"
     port: "614"
-    servers: "{{java_servers}}"
+    servers: "{{oidc_servers}}"
+    key_name: oidc.{{ base_domain }}.key
+    crt_name: oidc.{{ base_domain}}.pem
 
   - name: multidata
     vhost_name: "multidata"
@@ -712,6 +736,8 @@ haproxy_applications:
     ha_url: "/health"
     port: 616
     servers: "{{java_servers}}"
+    key_name: multidata.{{ base_domain }}.key
+    crt_name: multidata.{{ base_domain}}.pem
 
   - name: grouper
     vhost_name: "grouper"
@@ -720,6 +746,8 @@ haproxy_applications:
     ha_url: "/grouper-ws/status?diagnosticType=db"
     port: 606
     servers: "{{java_servers}}"
+    key_name: grouper.{{ base_domain }}.key
+    crt_name: grouper.{{ base_domain}}.pem
   
   - name: static
     vhost_name: "static"
@@ -728,6 +756,8 @@ haproxy_applications:
     ha_url: "/grouper-ws/status?diagnosticType=db"
     port: 403
     servers: "{{ php_servers }}"
+    key_name: static.{{ base_domain }}.key
+    crt_name: static.{{ base_domain}}.pem
 
 php_servers:
    - { ip: "145.100.191.198", label: "PRD41"}
@@ -737,3 +767,5 @@ java_servers:
    - { ip: "145.100.191.201", label: "PRD61"}
    - { ip: "145.100.191.202", label: "PRD62"}
    - { ip: "145.100.191.203", label: "PRD63"}
+oidc_servers:
+   - { ip: "145.100.191.227", label: "OIDC"}
