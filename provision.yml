@@ -1,11 +1,11 @@
 ---
-#- hosts: all
-#  gather_facts: no
-#  tasks:
-#  - name: Read vars from secrets file
-#    include_vars: "{{ secrets_file }}"
-#    tags:
-#      - always
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: Read vars from secrets file
+    include_vars: "{{ secrets_file }}"
+    tags:
+      - always
 
 - hosts: loadbalancer:php-apps:java-apps:storage:oidc
   gather_facts: yes
@@ -13,6 +13,7 @@
   roles:
     - { role: common,   tags: ['common'] }
     - { role: tls,      tags: ['tls'] }
+    - { role: iptables,      tags: ['iptables'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 

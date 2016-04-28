@@ -80,7 +80,7 @@
   shell: "ldapadd -x -D {{ ldap.admin.user }} -h {{ ldap_host }} -w {{ ldap.admin.password }} -f ~/ldap-entries.ldif"
   register: ldapadd_output
   changed_when: "ldapadd_output.rc != 68"
-  failed_when: "ldapadd_output.rc not in [68,0]"
+  failed_when: "ldapadd_output.rc not in {{ ldap.ldapadd_array }}"
   tags: ldap
 
 - name: restart slapd
