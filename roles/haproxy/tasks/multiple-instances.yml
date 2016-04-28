@@ -1,5 +1,16 @@
 ---
 
+- name: Install haproxy
+  yum: name=haproxy state=present
+
+- name: Install socat
+  yum: name=socat state=present
+
+- name: Enable haproxy
+  service: name=haproxy enabled=yes
+  notify:
+    - restart haproxy
+
 - name: create haproxy config directories
   file: dest=/etc/haproxy/{{ item.name }} state=directory owner=haproxy group=haproxy mode=0700
   with_items: "{{ haproxy_applications }}"
