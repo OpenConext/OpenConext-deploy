@@ -31,6 +31,9 @@
   command: systemctl enable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
   with_items: "{{ haproxy_applications }}"
 
+- name: start services 
+  service: name={{ item.name }} enabled=yes state=started
+
 - name: disable standard systemd haproxy instance
   command: systemctl disable haproxy
 
