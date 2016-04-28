@@ -11,7 +11,7 @@
   when: tls_ca is defined
 
 - name: copy private keys to correct location
-  copy: content="{{ item.key_content }}" dest={{ tls.cert_private_path }}/{{ item.key_name }}
+  copy: content="{{ item.key_content }}" dest={{ tls.cert_private_path }}/{{ item.key_name }} mode 0600
   with_items: "{{ tls_https }}"
 
 - name: install openssl
