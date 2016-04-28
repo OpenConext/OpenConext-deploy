@@ -43,7 +43,7 @@ tls_https:
     key_name: "engine-api.{{ base_domain }}.key"
     crt_name: "engine-api.{{ base_domain }}.pem"
     bundle_name: "engine-api.{{ base_domain }}_ca_bundle.pem"
-    key_content: "{{ https_engine-api_private_key }}"
+    key_content: "{{ https_engine_api_private_key }}"
 
   - name: profile
     key_name: "profile.{{ base_domain }}.key"
@@ -73,13 +73,13 @@ tls_https:
     key_name: "authz-admin.{{ base_domain }}.key"
     crt_name: "authz-admin.{{ base_domain }}.pem"
     bundle_name: "authz-admin.{{ base_domain }}_ca_bundle.pem"
-    key_content: "{{ https_authz-admin_private_key }}"
+    key_content: "{{ https_authz_admin_private_key }}"
 
   - name: authz_playground
     key_name: "authz-playground.{{ base_domain }}.key"
     crt_name: "authz-playground.{{ base_domain }}.pem"
     bundle_name: "authz-playground.{{ base_domain }}_ca_bundle.pem"
-    key_content: "{{ https_authz-playground_private_key }}"
+    key_content: "{{ https_authz_playground_private_key }}"
 
   - name: voot
     key_name: "voot.{{ base_domain }}.key"
