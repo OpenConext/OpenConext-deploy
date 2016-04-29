@@ -1,6 +1,6 @@
 ---
 - name: Install JANUS - Unarchive it
-  unarchive: src={{ janus_tar_location }} dest={{ janus_dir }} copy=no creates={{ janus_dir }}/app
+  unarchive: src={{ janus_tar_location }} dest={{ janus_dir }} copy=no creates={{ janus_dir }}/app owner=root group=root
   notify:
     - restart httpd
     - restart memcached
