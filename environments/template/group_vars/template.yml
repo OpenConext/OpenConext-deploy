@@ -575,7 +575,6 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: teams
-   
     vhost_name: "teams"
     ip: "145.100.191.114"
     ha_method: "GET"

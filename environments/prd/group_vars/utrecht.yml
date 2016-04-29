@@ -13,3 +13,5 @@ multidata_ip: 195.169.124.240
 grouper_ip: 195.169.124.231
 static_ip: 195.169.124.235
 bind_ip: 195.169.124.225
+haproxy_sni_ip: 195.169.124.225
+

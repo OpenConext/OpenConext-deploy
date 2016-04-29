@@ -13,7 +13,6 @@ global
   nbproc      1
   ulimit-n    9000
   daemon
-  stats socket /var/lib/haproxy/stats
   tune.ssl.default-dh-param 2048
   ssl-default-bind-options no-sslv3
   ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
@@ -50,8 +49,8 @@ defaults
     maxconn                 3000
 
 
+{% if env == "test" or env == "test2" or env == "vm"  %}
 ## Frontend configuration
-{% if env == "vm" or env == "test" or env == "test2"  %}
 
 #--------------------------------------------------------------------
 #  frontend
@@ -95,12 +94,53 @@ backend {{ application.name }}_be
 {% endfor %}
 {% endif %}
 
-{% if env == "acc" or env == "prd"  %}
+{% if env == "acc" or env == "prd" %}
 ## Frontend configuration
-
 #--------------------------------------------------------------------
 # {{ item.name }} frontend
 # -------------------------------------------------------------------
+	{% if item.name == "fourthset" %} 
+
+	frontend {{ item.name }}
+
+	bind {{ haproxy_sni_ip }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 npn spdy/2
+    	capture cookie JSESSIONID len 52
+    	rspadd  Strict-Transport-Security:\ max-age=15768000
+    	bind {{ haproxy_sni_ip }}:80
+    	redirect scheme https code 301 if !{ ssl_fc }
+
+    	{% for application in haproxy_applications if not application.hidden %}
+    	acl {{ application.name }} hdr(host) -i {{ application.vhost_name }}.{{ base_domain }}
+    	{% endfor %}
+    	{% for application in haproxy_applications if not application.hidden %}
+    	use_backend {{ application.name }}_be if {{ application.name }}
+    	{% endfor %}
+
+	{% for application in haproxy_applications if not application.hidden %}
+
+	#---------------------------------------------------------------------
+	# {{ application.name }} backend
+	#---------------------------------------------------------------------
+	#
+	backend {{ application.name }}_be
+  	option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
+  	option forwardfor # This sets X-Forwarded-For
+
+  	mode http
+  	balance roundrobin
+  	cookie JSESSIONID preserve indirect
+  	option httpclose
+
+  	cookie HTTPSERVERID insert nocache indirect
+
+  	{% for server in application.servers %}
+  	server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+  	{% endfor %}
+
+	{% endfor %}
+
+	{% else %} 
+
 frontend {{ item.name }}
 
      bind {{ item.ip }}:443 ssl crt /etc/haproxy/{{ item.name }}/{{ item.name }}.pem no-sslv3 npn spdy/2
@@ -132,3 +172,5 @@ backend {{ item.name }}_be
     server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
 {% endif %}
+{% endif %}
+

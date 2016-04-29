@@ -626,6 +626,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
     key_name: engine.{{ base_domain }}.key
     crt_name: engine.{{ base_domain }}.pem
+    hidden: false
 
   - name: profile
     vhost_name: "profile"
@@ -636,6 +637,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
     key_name: profile.{{ base_domain }}.key
     crt_name: profile.{{ base_domain }}.pem
+    hidden: false
 
 
   - name: serviceregistry
@@ -647,7 +649,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
     key_name: serviceregistry.{{ base_domain }}.key
     crt_name: serviceregistry.{{ base_domain }}.pem
-
+    hidden: false
 
   - name: engine_api
     vhost_name: "engine-api"
@@ -658,6 +660,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
     key_name: engine-api.{{ base_domain }}.key
     crt_name: engine-api.{{ base_domain}}.pem
+    hidden: false
 
   - name: teams
     vhost_name: "teams"
@@ -668,6 +671,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
     key_name: teams.{{ base_domain }}.key
     crt_name: teams.{{ base_domain}}.pem
+    hidden: false
 
   - name: authzserver
     vhost_name: "authz"
@@ -678,6 +682,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
     key_name: authz.{{ base_domain }}.key
     crt_name: authz.{{ base_domain}}.pem
+    hidden: false
 
   - name: authz_admin
     vhost_name: "authz-admin"
@@ -688,6 +693,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
     key_name: authz-admin.{{ base_domain }}.key
     crt_name: authz-admin.{{ base_domain}}.pem
+    hidden: false
 
   - name: authz_playground
     vhost_name: "authz-playground"
@@ -698,6 +704,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
     key_name: authz-playground.{{ base_domain }}.key
     crt_name: authz-playground.{{ base_domain}}.pem
+    hidden: false
 
   - name: voot
     vhost_name: "voot"
@@ -708,6 +715,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
     key_name: voot.{{ base_domain }}.key
     crt_name: voot.{{ base_domain}}.pem
+    hidden: false
 
   - name: pdp
     vhost_name: "pdp"
@@ -718,6 +726,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
     key_name: pdp.{{ base_domain }}.key
     crt_name: pdp.{{ base_domain}}.pem
+    hidden: false
 
   - name: oidc
     vhost_name: "oidc"
@@ -728,6 +737,7 @@ haproxy_applications:
     servers: "{{oidc_servers}}"
     key_name: oidc.{{ base_domain }}.key
     crt_name: oidc.{{ base_domain}}.pem
+    hidden: false
 
   - name: multidata
     vhost_name: "multidata"
@@ -738,6 +748,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
     key_name: multidata.{{ base_domain }}.key
     crt_name: multidata.{{ base_domain}}.pem
+    hidden: false
 
   - name: grouper
     vhost_name: "grouper"
@@ -748,6 +759,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
     key_name: grouper.{{ base_domain }}.key
     crt_name: grouper.{{ base_domain}}.pem
+    hidden: false
   
   - name: static
     vhost_name: "static"
@@ -758,6 +770,10 @@ haproxy_applications:
     servers: "{{ php_servers }}"
     key_name: static.{{ base_domain }}.key
     crt_name: static.{{ base_domain}}.pem
+    hidden: false
+ 
+  - name: fourthset
+    hidden: yes
 
 php_servers:
    - { ip: "145.100.191.198", label: "PRD41"}

@@ -13,3 +13,4 @@ multidata_ip: 145.101.112.240
 grouper_ip: 145.101.112.231
 static_ip: 145.101.112.235
 bind_ip: 145.101.112.225
+haproxy_sni_ip: 145.101.112.241 
