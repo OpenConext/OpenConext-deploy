@@ -5,6 +5,8 @@ vrrp_instance master {
    priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
    virtual_ipaddress {
        {{ engine_ip }}
+       {% if engine_ipv6 is defined -%} {{ engine_ipv6 }} {% endif %}
+   
    }
 }
 vrrp_instance backup {
@@ -14,18 +16,32 @@ vrrp_instance backup {
    priority {{ keepalived.backupprio }}
    virtual_ipaddress {
         {{ engine_api_ip }}
+        {% if engine_api_ipv6 is defined -%} {{ engine_api_ipv6 }} {% endif %} 
         {{ profile_ip }}
+        {% if engine_api_ipv6 is defined -%} {{ engine_api_ipv6 }} {% endif %} 
         {{ serviceregistry_ip }}
+        {% if serviceregistry_ipv6 is defined -%} {{ serviceregistry_ipv6 }} {% endif %} 
         {{ teams_ip }}
+        {% if teams_ipv6 is defined -%} {{ teams_ipv6 }} {% endif %} 
         {{ authzserver_ip }}
+        {% if authzserver_ipv6 is defined -%} {{ authzserver_ipv6 }} {% endif %} 
         {{ authz_admin_ip }}
+        {% if authz_admin_ipv6 is defined -%} {{ authz_admin_ipv6 }} {% endif %} 
         {{ authz_playground_ip }}
+        {% if authz_playground_ipv6 is defined -%} {{ authz_playground_ipv6 }} {% endif %} 
         {{ voot_ip }}
+        {% if voot_ipv6 is defined -%} {{ voot_ipv6 }} {% endif %} 
         {{ pdp_ip }}
+        {% if pdp_ipv6 is defined -%} {{ pdp_ipv6 }} {% endif %} 
         {{ oidc_ip }}
+        {% if oidc_ipv6 is defined -%} {{ oidc_ipv6 }} {% endif %} 
         {{ multidata_ip }}
+        {% if multidata_ipv6 is defined -%} {{ multidata_ipv6 }} {% endif %} 
         {{ grouper_ip }}
+        {% if grouper_ipv6 is defined -%} {{ grouper_ipv6 }} {% endif %} 
         {{ static_ip }}
+        {% if static_ipv6 is defined -%} {{ static_ipv6 }} {% endif %} 
         {{ bind_ip }}  
+        {% if bind_ipv6 is defined -%} {{ bind_ipv6 }} {% endif %} 
 }
 
