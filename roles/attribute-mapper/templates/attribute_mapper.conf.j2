@@ -1,0 +1,13 @@
+Listen {{ apache_app_listen_address.attribute_mapper }}:{{ loadbalancing.attribute_mapper.port }}
+<VirtualHost {{ apache_app_listen_address.attribute_mapper }}:{{ loadbalancing.attribute_mapper.port }}>
+    ServerName https://attribute-mapper.{{ base_domain }}
+
+    UseCanonicalName On
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Attribute-Mapper'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Attribute-Mapper'" combined
+
+    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
+
+</VirtualHost>

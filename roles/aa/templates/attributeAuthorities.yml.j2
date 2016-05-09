@@ -78,6 +78,54 @@ authorities:
       ]
     }
   - {
+      id: "iden",
+      description: "With iDIN, you can identify yourself online to companies and organisations using your banks log-in procedure - simple, secure and safe",
+      endpoint: "https://attribute-mappper.{{ base_domain }}/api/user",
+      user: "{{ aa.iden_client_id }}",
+      password: "{{ aa.iden_secret }}",
+      timeOut: 1000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:isMemberOf",
+          caseExact: True,
+          description: "Lists the collaborative organisations / groups the user is a member of",
+          multiValued: True,
+          mutability: "readOnly",
+          required: False,
+          returned: "default",
+          type: "string",
+          uniqueness: "none",
+        },
+        {
+          name: "urn:mace:dir:attribute-def:eduPersonAffiliation",
+          caseExact: True,
+          description: "Indicates a set of roles of the person.",
+          multiValued: True,
+          mutability: "readOnly",
+          required: False,
+          returned: "default",
+          type: "string",
+          uniqueness: "none",
+        },
+        {
+          name: "urn:mace:dir:attribute-def:mail",
+          caseExact: True,
+          description: "The email address of the person.",
+          multiValued: False,
+          mutability: "readOnly",
+          required: True,
+          returned: "default",
+          type: "string",
+          uniqueness: "none",
+        }
+      ],
+      requiredInputAttributes: [
+        {
+        name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        }
+      ]
+    }
+  - {
       id: "test:mock",
       description: "Test authority",
       timeOut: 1000,

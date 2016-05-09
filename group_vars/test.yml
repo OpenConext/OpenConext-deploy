@@ -17,6 +17,7 @@ databases:
     - pdp-server
     - oidc-server
     - aaserver
+    - attribute_mapper
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: apirw, db_name: api, password: "{{ mysql_passwords.api }}" }
@@ -27,6 +28,7 @@ databases:
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
+    - { name: amrw, db_name: attribute_mapper, password: "{{ mysql_passwords.attribute_mapper }}" }
 
 # For apache, the same star-certificate is used.
 tls_https:
@@ -407,9 +409,9 @@ pdp:
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-aa_version: "1.0.3"
-#aa_snapshot_timestamp: "20160331.144252-2"
-#aa_html_snapshot_timestamp: "20160404.134651-3"
+aa_version: "1.0.4"
+aa_snapshot_timestamp: "20160509.113935-1"
+aa_html_snapshot_timestamp: "20160509.114226-2"
 
 aa_debug: true
 aa:
@@ -424,6 +426,8 @@ aa:
   authz_client_id: "https@//aa.test.surfconext.nl"
   authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
+  iden_client_id: am_aa_client
+  iden_secret: "{{ aa_iden_client_secret }}"
   oidc_client_id: "https@//aa.surfconext.test.nl"
   oidc_secret: "{{ aa_oidc_client_secret }}"
   spring_profiles_active: acc
@@ -456,6 +460,24 @@ metadata_exporter:
   password: "{{ metadata_exporter_password }}"
 
 springapp_tcpport_error_handling: 9199
+
+attribute_mapper_version: 0.0.1
+attribute_mapper_snapshot_timestamp: "20160509.143311-2"
+attribute_mapper_debug: false
+
+attribute_mapper:
+  db_user: amrw
+  db_password: "{{ mysql_passwords.attribute_mapper }}"
+  db_host: "{{ mysql_host }}"
+  db_name: attribute_mapper
+  crt_name: "{{ tls_https.crt_name }}"
+  key_name: "{{ tls_https.key_name }}"
+  central_idp_entity_id: https://idin.surfconext.nl/saml2/idp/metadata.php
+  central_idp_certificate: MIIDITCCAgmgAwIBAgIJAISPaYGJ9hmGMA0GCSqGSIb3DQEBCwUAMCcxJTAjBgNVBAMMHFNBTUwgSURQIFNpZ25pbmcgY2VydGlmaWNhdGUwHhcNMTYwMzEwMDkyMTM2WhcNMTYwNDA5MDkyMTM2WjAnMSUwIwYDVQQDDBxTQU1MIElEUCBTaWduaW5nIGNlcnRpZmljYXRlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt1x4CVJOID3XxLhb4NgO7e087QhRJBSUYkZmOXcqU7t3cqJF8HPLdiWFMB9Fo47PSzLvlRAiZ+Gp3abI9MNesqwc67et8IxhKeLBVOfQzdjhfi3/tt2mQfeHn9qFR3wDSDBdoUMSDizpGoj/KZi17L4ZJcrv3AVeMdIr7b/KWA8nXPkNfg+5142mg1V1niMHd+STNWgp1rjS+/NnHDm4grY1jPt8aSorGsCBHnyVId4wTtoZddYgZOjHQ4IsvziWloLj8QWQNWE+316DUb/Pa5yfNMVtR+red9dJOMxnXpF/yd9/Kid+Hz/MkfxoCGqZp7quCUvTY8O226A1siH3CwIDAQABo1AwTjAdBgNVHQ4EFgQUV4HjrhcvxReWlCqJB0yQMM3eQOwwHwYDVR0jBBgwFoAUV4HjrhcvxReWlCqJB0yQMM3eQOwwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEApbAC/vADC/fiepL4LsJvMI2hIYHuIyRpHvrz2x9LJauRI1YiuQzcsGpnj5IjHZlQ1YO1ZPf1CRcjEr/e4XVZH7MrGc5WCQJ9T3FGeQ9x8N7xf4B7neto2K3sZv+/sVs+OyY6S48x5+7nOnIrzWdggP9FPiVfwIzYjhMmv3IbBGb0fA7su+wKfgzNrivEQidCXjGRwr4Zp2Ec4LzxjEiwxhHE231WFwT2xCDlwDJdq4uxmQDVNvR97rhDiQzsxJjYseT9iu1U/L3UfMb+pGaPMf7kzO0NbVLJYCuzNuIrwPG/hi+PXYFz2n/dXvpOaTucElJQmdJb9aY5KQmKoXgXyw==
+  central_idp_schachome: idin.nl
+  eb_certificate: MIIC+zCCAmSgAwIBAgIJAPJvLjQsRR4iMA0GCSqGSIb3DQEBBQUAMF0xCzAJBgNVBAYTAk5MMRAwDgYDVQQIEwdVdHJlY2h0MRAwDgYDVQQHEwdVdHJlY2h0MRAwDgYDVQQKEwdTVVJGbmV0MRgwFgYDVQQDEw90ZXN0MiBzYW1sIGNlcnQwHhcNMTUwMzI0MTQwMzE3WhcNMjUwMzIxMTQwMzE3WjBdMQswCQYDVQQGEwJOTDEQMA4GA1UECBMHVXRyZWNodDEQMA4GA1UEBxMHVXRyZWNodDEQMA4GA1UEChMHU1VSRm5ldDEYMBYGA1UEAxMPdGVzdDIgc2FtbCBjZXJ0MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCxKYrnW8NwqdRwRwaHulueL69gQFTJbdfoASLhYie2bOioJyJw1f+cAvpjsl4SVYpvEseIetXH8Lgpk7K73PkDJL8dFg4sEjFF6jgmjrOES3ox/gtTd9d/VwPHI/vPIcGy1sbVJ4pEMFl5d8GOAzoJkNWdPj9wV4rv4uv35May8wIDAQABo4HCMIG/MB0GA1UdDgQWBBTTIaPwpKpJlY8eIMSzNRZUjStbijCBjwYDVR0jBIGHMIGEgBTTIaPwpKpJlY8eIMSzNRZUjStbiqFhpF8wXTELMAkGA1UEBhMCTkwxEDAOBgNVBAgTB1V0cmVjaHQxEDAOBgNVBAcTB1V0cmVjaHQxEDAOBgNVBAoTB1NVUkZuZXQxGDAWBgNVBAMTD3Rlc3QyIHNhbWwgY2VydIIJAPJvLjQsRR4iMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAK8EvTU0LgHJsSugorOemgRlppMfJAeOmuuZNhSMY2QhumFOZpaAb8NFIwUKUVyyJnSo7k6ktHCKI94sQs976242hTDDYEwWJD9HhAsAqOo21Ua8gZT38/wm62e3KgrKXvnljAbKPXDXJM4akz7y6H6wvvIGT6f0f0iJWHq34jww=
+  private_key: "{{ attribute_mapper_private_key }}"
+  certificate: MIIDEzCCAfugAwIBAgIJAKoK/heBjcOYMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzAeFw0xNTExMTExMDEyMTVaFw0yNTExMTAxMDEyMTVaMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANBGwJ/qpTQNiSgUglSE2UzEkUow+wS8r67etxoEhlzJZfgK/k5TfG1wICDqapHAxEVgUM10aBHRctNocA5wmlHtxdidhzRZroqHwpKy2BmsKX5Z2oK25RLpsyusB1KroemgA/CjUnI6rIL1xxFn3KyOFh1ZBLUQtKNQeMS7HFGgSDAp+sXuTFujz12LFDugX0T0KB5a1+0l8y0PEa0yGa1oi6seONx849ZHxM0PRvUunWkuTM+foZ0jZpFapXe02yWMqhc/2iYMieE/3GvOguJchJt6R+cut8VBb6ubKUIGK7pmoq/TB6DVXpvsHqsDJXechxcicu4pdKVDHSec850CAwEAAaNQME4wHQYDVR0OBBYEFK7RqjoodSYVXGTVEdLf3kJflP/sMB8GA1UdIwQYMBaAFK7RqjoodSYVXGTVEdLf3kJflP/sMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBADNZkxlFXh4F45muCbnQd+WmaXlGvb9tkUyAIxVL8AIu8J18F420vpnGpoUAE+Hy3evBmp2nkrFAgmr055fAjpHeZFgDZBAPCwYd3TNMDeSyMta3Ka+oS7GRFDePkMEm+kH4/rITNKUF1sOvWBTSowk9TudEDyFqgGntcdu/l/zRxvx33y3LMG5USD0x4X4IKjRrRN1BbcKgi8dq10C3jdqNancTuPoqT3WWzRvVtB/q34B7F74/6JzgEoOCEHufBMp4ZFu54P0yEGtWfTwTzuoZobrChVVBt4w/XZagrRtUCDNwRpHNbpjxYudbqLqpi1MQpV9oht/BpTHVJG2i0ro=
 
 loadbalancing:
   engine: {
@@ -556,6 +578,13 @@ loadbalancing:
       { label: "metadata_exporter_backend", ip: "145.100.191.117" },
     ]
   }
+  attribute_mapper: {
+    port: 10617,
+    heartbeat: { url: "/health", method: "HEAD" },
+    servers: [
+      { label: "attribute_mapper_backend", ip: "145.100.191.117" },
+    ]
+  }
   grouper: {
     port: 606,
     heartbeat: { url: "/grouper-ws/status?diagnosticType=db", method: "GET" },
@@ -600,6 +629,7 @@ nginx_ipv4_addresses:
   oidc: 145.100.191.122
   aa: 145.100.191.122
   metadata_exporter: 145.100.191.122
+  attribute_mapper: 145.100.191.122
 
 nginx_config_templates:
   - engine
@@ -619,3 +649,4 @@ nginx_config_templates:
   - oidc
   - aa
   - metadata_exporter
+  - attribute_mapper
