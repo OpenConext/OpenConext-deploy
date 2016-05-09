@@ -4,14 +4,14 @@
 
 server {
     listen       {{ nginx_ipv4_addresses.attribute_mapper }}:80;
-    server_name  multidata.{{ base_domain }};
+    server_name  attribute-mapper.{{ base_domain }};
 
-    return       301 https://multidata.{{ base_domain }}$request_uri;
+    return       301 https://attribute-mapper.{{ base_domain }}$request_uri;
 }
 
 server {
     listen       {{ nginx_ipv4_addresses.attribute_mapper }}:443 ssl spdy;
-    server_name   multidata.{{ base_domain }};
+    server_name   attribute-mapper.{{ base_domain }};
 
     ssl                  on;
     ssl_certificate      {{ tls.cert_path }}/{{ attribute_mapper.crt_name }};
@@ -42,14 +42,14 @@ server {
 
 server {
     listen       [::]:80;
-    server_name  multidata.{{ base_domain }};
+    server_name  attribute-mapper.{{ base_domain }};
 
-    return       301 https://multidata.{{ base_domain }}$request_uri;
+    return       301 https://attribute-mapper.{{ base_domain }}$request_uri;
 }
 
 server {
     listen       [::]:443 ssl spdy;
-    server_name  multidata.{{ base_domain }};
+    server_name  attribute-mapper.{{ base_domain }};
 
     ssl                  on;
     ssl_certificate      {{ tls.cert_path }}/{{ attribute_mapper.crt_name }};
