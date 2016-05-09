@@ -1,0 +1,7 @@
+---
+attribute_mapper_dir: /opt/attribute-mapper
+attribute_mapper_version: ''
+attribute_mapper_snapshot_timestamp: ''
+attribute_mapper_local_jar: ''
+attribute_mapper_jar: attribute-mapper-current.jar
+attribute_mapper_debug: false

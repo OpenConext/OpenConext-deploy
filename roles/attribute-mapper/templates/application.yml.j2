@@ -1,0 +1,85 @@
+# The logging configuration.
+logging:
+  config: file://{{ attribute_mapper_dir }}/logback.xml
+  level:
+    am: DEBUG
+
+server:
+  # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
+  port: {{ springapp_tcpport }}
+  # The context path of the server. You can skip this value in the overriding application.properties on the classpath
+  contextPath:
+
+# The central IdP used for authentication
+# iDEN
+central_idp:
+  metadata_url: "classpath:saml/idin.idp.surfconext.metadata.xml"
+  entity_id: {{ attribute_mapper.central_idp_entity_id }}
+  certificate: {{ attribute_mapper.central_idp_certificate }}
+  schac_home: {{ attribute_mapper.central_idp_schachome }}
+
+# EngineBlock
+surfconext_idp:
+  metadata_url: classpath:saml/eb.idp.metadata.xml
+  entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+  certificate: {{ attribute_mapper.eb_certificate }}
+
+# Entity ID of the Attribute Mapper
+am:
+  entity_id: https://attribute-mapper.{{ base_domain }}
+  # Private key used to sign the SAML response
+  private_key: {{ attribute_mapper.private_key }}
+  # Public certificate to verify the signature of the SAML response
+  certificate: {{ attribute_mapper.certificate }}
+  # base url
+  entity_base_url: https://attribute-mapper.{{ base_domain }}
+  # Passphrase of the keystore
+  passphrase: secret
+  api:
+    # The API User of the AM API
+    name: {{ aa.iden_client_id }}
+    # The API password of the AM API
+    password: {{ aa.iden_secret }}
+
+spring:
+  datasource:
+    url: jdbc:mysql://{{ attribute_mapper.db_host }}/{{ attribute_mapper.db_name }}
+    username: {{ attribute_mapper.db_user }}
+    password: {{ attribute_mapper.db_password }}
+    driverClassName: com.mysql.jdbc.Driver
+    validation-query: SELECT 1
+    testWhileIdle: true
+  mvc:
+    favicon:
+      enabled: false
+  mail:
+    host: localhost
+    port: 25
+  velocity:
+    check-template-location: False
+email:
+  # The base url of the application e.g. https://attribute-mapper.test.surfconext.nl
+  base_url: https://attribute-mapper.{{ base_domain }}
+  # The from email address for confirmation mails
+  from: support@surfconext.nl
+
+# You can skip all the key-value pairs below in the overriding application.properties on the classpath
+
+# 8 hours before we time-out
+session-timeout: 28800
+
+# We disable all endpoints except health for the load-balancer and info for git information.
+endpoints:
+  enabled: false
+  jmx:
+    enabled: false
+  health:
+    enabled: true
+  info:
+    enabled: true
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"

@@ -77,6 +77,7 @@
     - { role: oidc,              tags: ['oidc'] }
     - { role: aa,                tags: ['aa'] }
     - { role: metadata-exporter, tags: ['metadata-exporter']}
+    - { role: attribute-mapper,  tags: ['attribute-mapper']}
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml
