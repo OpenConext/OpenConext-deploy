@@ -389,9 +389,9 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.1.6
-#pdp_snapshot_timestamp: 20160216.135430-1
-#pdp_html_snapshot_timestamp: 20160216.135448-1
+pdp_version: 1.1.7
+#pdp_snapshot_timestamp: 20160511.130135-1
+#pdp_html_snapshot_timestamp: 20160511.130149-1
 
 pdp_debug: true
 pdp:
@@ -410,7 +410,7 @@ pdp:
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
 aa_version: "1.0.4"
-aa_snapshot_timestamp: "20160509.113935-1"
+aa_snapshot_timestamp: "20160510.123256-3"
 aa_html_snapshot_timestamp: "20160509.114226-2"
 
 aa_debug: true
@@ -462,7 +462,7 @@ metadata_exporter:
 springapp_tcpport_error_handling: 9199
 
 attribute_mapper_version: 0.0.1
-attribute_mapper_snapshot_timestamp: "20160509.143311-2"
+attribute_mapper_snapshot_timestamp: "20160510.095353-4"
 attribute_mapper_debug: false
 
 attribute_mapper:
