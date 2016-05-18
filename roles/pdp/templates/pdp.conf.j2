@@ -38,6 +38,11 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
       satisfy any
     </Location>
 
+    <Location ~ "(.*)(js|css|png)$">
+      allow from all
+      satisfy any
+    </Location>
+
     <Location />
       AuthType shibboleth
       ShibUseHeaders On
