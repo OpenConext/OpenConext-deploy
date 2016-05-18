@@ -12,3 +12,4 @@ apache_app_listen_address:
   oidc: 145.100.191.120
   aa: 145.100.191.120
   metadata_exporter: 145.100.191.120
+  attribute_mapper: 145.100.191.120

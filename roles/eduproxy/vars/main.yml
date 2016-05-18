@@ -1,0 +1,14 @@
+springapp_artifact_id: eduproxy
+springapp_artifact_type: jar
+springapp_artifact_group_dir: /org/openconext
+springapp_version: "{{ eduproxy_version }}"
+springapp_snapshot_timestamp: "{{ eduproxy_snapshot_timestamp }}"
+springapp_dir: "{{ eduproxy_dir }}"
+springapp_user: eduproxy
+springapp_service_name: eduproxy
+springapp_jar: "{{ eduproxy_jar }}"
+springapp_tcpport: "{{ springapp_tcpport_error_handling }}"
+springapp_local_jar: "{{ eduproxy_local_jar }}"
+springapp_debug: "{{ eduproxy_debug }}"
+springapp_debug_port: 1399
+springapp_heapsize: 512m
