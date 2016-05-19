@@ -410,8 +410,8 @@ pdp:
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
 aa_version: "1.0.4"
-aa_snapshot_timestamp: "20160510.123256-3"
-aa_html_snapshot_timestamp: "20160509.114226-2"
+aa_snapshot_timestamp: "20160519.065336-5"
+aa_html_snapshot_timestamp: "20160519.064607-3"
 
 aa_debug: true
 aa:
@@ -462,7 +462,7 @@ metadata_exporter:
 springapp_tcpport_error_handling: 9199
 
 attribute_mapper_version: 0.0.1
-attribute_mapper_snapshot_timestamp: "20160518.064321-7"
+attribute_mapper_snapshot_timestamp: "20160518.143029-9"
 attribute_mapper_debug: false
 
 attribute_mapper:
