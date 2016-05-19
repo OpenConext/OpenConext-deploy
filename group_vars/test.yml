@@ -410,7 +410,7 @@ pdp:
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
 aa_version: "1.0.4"
-aa_snapshot_timestamp: "20160519.065336-5"
+aa_snapshot_timestamp: "20160519.090404-6"
 aa_html_snapshot_timestamp: "20160519.064607-3"
 
 aa_debug: true
