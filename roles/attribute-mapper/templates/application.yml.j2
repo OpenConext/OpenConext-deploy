@@ -42,6 +42,8 @@ am:
     password: {{ aa.iden_secret }}
 
 spring:
+  profiles:
+    active: {{ attribute_mapper.environment }}
   datasource:
     url: jdbc:mysql://{{ attribute_mapper.db_host }}/{{ attribute_mapper.db_name }}
     username: {{ attribute_mapper.db_user }}
