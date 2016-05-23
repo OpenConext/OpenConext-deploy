@@ -35,6 +35,11 @@ engine_pdp_baseurl: https://pdp.{{ base_domain }}/pdp/api/decide/policy
 engine_pdp_username: pdp_admin
 engine_pdp_password: secret
 
+## Attribute Aggregation endpoint
+engine_attribute_aggregation_baseurl: "https://aa.{{ base_domain }}/aa/api/attribute/aggregate"
+engine_attribute_aggregation_username: "{{ aa.eb_username }}"
+engine_attribute_aggregation_password: "{{ aa.eb_password }}"
+
 ## Where EngineBlock can go for its (v1) Service Registry API
 engine_janus_url: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
 engine_janus_cache_lifetime: 3600 # Cache for an hour
