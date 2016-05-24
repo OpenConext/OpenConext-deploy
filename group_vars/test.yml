@@ -462,7 +462,7 @@ metadata_exporter:
 springapp_tcpport_error_handling: 9199
 
 attribute_mapper_version: 0.0.1
-attribute_mapper_snapshot_timestamp: "20160519.133331-10"
+attribute_mapper_snapshot_timestamp: "20160524.045736-11"
 attribute_mapper_debug: false
 
 attribute_mapper:
