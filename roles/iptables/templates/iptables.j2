@@ -55,6 +55,8 @@
 -A INPUT -p tcp --dport 614 -j ACCEPT
 -A INPUT -p tcp --dport 615 -j ACCEPT
 -A INPUT -p tcp --dport 616 -j ACCEPT
+-A INPUT -p tcp --dport 10617 -j ACCEPT
+-A INPUT -p tcp --dport 10618 -j ACCEPT
 {% endif %}
 
 {% if 'storage' in group_names and develop %}

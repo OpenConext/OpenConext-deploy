@@ -20,7 +20,7 @@ central_idp:
 
 # EngineBlock
 surfconext_idp:
-  metadata_url: classpath:saml/eb.idp.metadata.xml
+  metadata_url: https://engine.{{ base_domain }}/authentication/idp/metadata
   entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
   certificate: {{ attribute_mapper.eb_certificate }}
 

@@ -1,6 +1,6 @@
 Listen {{ apache_app_listen_address.eduproxy }}:{{ loadbalancing.eduproxy.port }}
 <VirtualHost {{ apache_app_listen_address.eduproxy }}:{{ loadbalancing.eduproxy.port }}>
-    ServerName https://attribute-mapper.{{ base_domain }}
+    ServerName https://eduproxy.{{ base_domain }}
 
     UseCanonicalName On
 

@@ -1,4 +1,4 @@
-# The logging configuration. On a real server this will be a file url. e.g. file://{{ am_dir }}/logback.xml
+# The logging configuration.
 logging:
   config: file://{{ eduproxy_dir }}/logback.xml
   level:
@@ -18,8 +18,10 @@ idp:
   certificate: {{ eduproxy.eb_certificate }}
 
 serviceproviders:
-   feed: classpath:saml/edugain.xml
+  feed: classpath:saml/edugain.xml
 #   feed: http://mds.edugain.org/
+  allow_unknown: false
+
 
 # eduProxy
 proxy:

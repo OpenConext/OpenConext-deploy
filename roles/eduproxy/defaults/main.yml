@@ -1,7 +1,7 @@
 ---
-metadata_exporter_dir: /opt/eduproxy
-metadata_exporter_version: ''
-metadata_exporter_snapshot_timestamp: ''
-metadata_exporter_local_jar: ''
-metadata_exporter_jar: eduproxy-current.jar
-metadata_exporter_debug: false
+eduproxy_dir: /opt/eduproxy
+eduproxy_version: ''
+eduproxy_snapshot_timestamp: ''
+eduproxy_local_jar: ''
+eduproxy_jar: eduproxy-current.jar
+eduproxy_debug: false
