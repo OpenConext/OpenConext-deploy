@@ -414,6 +414,7 @@ attribute_mapper_snapshot_timestamp: "20160518.064321-7"
 attribute_mapper_debug: false
 
 attribute_mapper:
+  environment: test
   db_user: amrw
   db_password: "{{ mysql_passwords.attribute_mapper }}"
   db_host: "{{ mysql_host }}"
