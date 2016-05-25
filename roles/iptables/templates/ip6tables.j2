@@ -19,6 +19,8 @@
 ### Loadbalancer rules
 -A INPUT -p tcp --dport 443 -j ACCEPT
 -A INPUT -p tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp --dport 53 -j ACCEPT
+-A INPUT -p udp --dport 53 -j ACCEPT
 {% endif %}
 
 {% if 'php-apps' in group_names %}
