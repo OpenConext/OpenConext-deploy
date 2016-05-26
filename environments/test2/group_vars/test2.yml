@@ -366,7 +366,7 @@ pdp:
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
 aa_version: "1.0.4"
-aa_snapshot_timestamp: "20160510.123256-3"
+aa_snapshot_timestamp: "20160526.081603-8"
 aa_html_snapshot_timestamp: "20160509.114226-2"
 
 aa_debug: true
@@ -388,6 +388,7 @@ aa:
   sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  aggregate_cache: 0
 
 oidc_version: "1.0.2"
 oidc:
