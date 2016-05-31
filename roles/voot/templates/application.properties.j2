@@ -14,7 +14,10 @@ oidc.checkToken.clientId={{ voot.oidc_checkToken_clientId }}
 oidc.checkToken.secret={{ voot.oidc_checkToken_secret }}
 
 checkToken.cache=true
-checkToken.cache.duration.milliSeconds=300000
+# 10 minutes cache for tokens
+checkToken.cache.duration.milliSeconds=600000
+# check every 5 minutes for expired tokens in the cache
+checkToken.cache.expiryIntervalCheck.milliseconds=300000
 
 endpoints.enabled=false
 endpoints.health.enabled=true

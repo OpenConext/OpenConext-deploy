@@ -293,7 +293,7 @@ voot:
         name: "SURFteams",
         timeoutMillis: 3000
       }
-voot_version: 1.6.2
+voot_version: 1.6.3
 #voot_snapshot_timestamp: ""
 voot_debug: true
 
