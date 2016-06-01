@@ -1,0 +1,8 @@
+# Set galera_bootstrap_node to the inventory_hostname of the node to allow
+# that node to be bootstrapped.
+# Only one node of the cluster must be bootstrapped.
+# It is suggested you specify the node to bootstrap when running the playbook. E.g.:
+# ansible-playbook ... -e "galera_bootstrap_node=<hostname of the node to bootstrap>"
+galera_bootstrap_node: ""
+mariadb_cluster_user: clusteruser
+pacemaker_user: hacluster
