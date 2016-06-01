@@ -1,0 +1,49 @@
+---
+- include: install-release.yml
+  when: profile_branch is not defined or profile_branch == ''
+
+- include: install-branch.yml
+  when: profile_branch is defined and profile_branch != ''
+
+- name: Create the cache dir for Symfony
+  file:
+    path={{ profile_symfony_cache_path }}
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+    recurse=yes
+
+- name: Create the log dir for Symfony
+  file:
+    path={{ profile_symfony_log_path }}
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+    recurse=yes
+
+- name: Create the symfony cache
+  command: app/console cache:clear --env=prod --no-debug
+  when: not develop
+
+- name: Install Apache vhost
+  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
+  with_items:
+    - profile.conf
+  notify:
+    - restart httpd
+  when: not develop
+
+- name: Configure Profile
+  template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
+  with_items:
+    - profile.yml
+  notify:
+    - restart httpd
+
+- name: Place parameters.yml
+  template: src={{ item }}.j2 dest={{ profile_current_release_symlink }}/app/config/{{ item }} owner={{ apache_user }} group={{ apache_user }} mode=0644
+  with_items:
+  - parameters.yml
+
+- name: Add engineblock api to hosts
+  lineinfile: dest=/etc/hosts state=present line="{{ engine_api_ip_address }} {{ engine_api_domain }}"
