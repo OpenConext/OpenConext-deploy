@@ -9,7 +9,7 @@
 
 - hosts: all
   gather_facts: yes
-  sudo: true
+  become: true
   roles:
     - common
     - iptables
@@ -19,26 +19,26 @@
 
 - hosts: storage
   gather_facts: yes
-  sudo: true
+  become: true
   roles:
     - { role: mysql, tags: [mysql] }
     - { role: ldap,  tags: [ldap] }
 
 - hosts: php-apps:java-apps
   gather_facts: yes
-  sudo: true
+  become: true
   roles:
     - httpd
 
 - hosts: loadbalancer
   gather_facts: no
-  sudo: true
+  become: true
   roles:
     - { role: haproxy, tags: [lb] }
 
 - hosts: php-apps
   gather_facts: no
-  sudo: true
+  become: true
   vars:
     env_lang: php
   roles:
@@ -51,7 +51,7 @@
 
 - hosts: java-apps
   gather_facts: yes
-  sudo: true
+  become: true
 #  vars:
 #    env_lang: java
   roles:

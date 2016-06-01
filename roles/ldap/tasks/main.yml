@@ -63,7 +63,7 @@
   tags: ldap
 
 - name: generate new config
-  sudo_user: ldap
+  become_user: ldap
   shell: /usr/sbin/slaptest -f /etc/openldap/slapd.conf -F /etc/openldap/slapd.d
   when: config_correct.stdout == "0"
   tags: ldap

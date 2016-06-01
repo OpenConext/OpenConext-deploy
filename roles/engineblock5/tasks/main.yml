@@ -49,13 +49,13 @@
     - restart httpd
 
 - name: Make the SYMFONY_ENV var available for scripts
-  sudo: yes
+  become: yes
   lineinfile: dest=/etc/environment state=present line="SYMFONY_ENV={{ engine_apache_symfony_environment }}"
 
 # This should always run before any scripts run, it ensures that the env specific
 # configuration is loaded correctly.
 - name: Prepare EngineBlock5 environment
-  sudo: yes
+  become: yes
   command: composer prepare-env
   args:
       chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"

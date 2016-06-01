@@ -7,7 +7,7 @@
 
 
 - name: register api crt content
-  sudo: False
+  become: False
   local_action: "shell awk ' /^-----BEGIN CERT/,/^-----END CERT/ { if ($0 !~ /^-/) printf $0 }; ' files/java-{{ env }}/certs/api.crt"
   register: api_crt_content
   changed_when: False

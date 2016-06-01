@@ -9,7 +9,7 @@
 
 - hosts: loadbalancer:php-apps:java-apps:storage:oidc
   gather_facts: yes
-  sudo: true
+  become: true
   roles:
     - { role: common,   tags: ['common'] }
     - { role: tls,      tags: ['tls'] }
@@ -19,7 +19,7 @@
 
 - hosts: loadbalancer
   gather_facts: true
-  sudo: true
+  become: true
   roles:
     - { role: keepalived, tags: ['keepalived'] }
     - { role: haproxy, tags: ['lb'] }
@@ -27,7 +27,7 @@
 
 - hosts: php-apps:java-apps:oidc
   gather_facts: no
-  sudo: true
+  become: true
   roles:
     - { role: httpd,     tags: ['httpd'] }
   handlers:
@@ -35,14 +35,14 @@
 
 - hosts: storage
   gather_facts: no
-  sudo: true
+  become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: php-apps
   gather_facts: no
-  sudo: true
+  become: true
   vars:
     env_lang: php
   roles:
@@ -56,7 +56,7 @@
 
 - hosts: java-apps-common
   gather_facts: true
-  sudo: true
+  become: true
   vars:
     env_lang: java
   roles:
@@ -68,7 +68,7 @@
       
 - hosts: java-apps
   gather_facts: true
-  sudo: true
+  become: true
   vars:
     env_lang: java
   roles:
@@ -90,7 +90,7 @@
 
 - hosts: oidc
   gather_facts: true
-  sudo: true
+  become: true
   vars:
     env_lang: java
   roles:

@@ -42,7 +42,7 @@
 # grouperClient.jar insists that a file called grouper.client.properties is on the classpath, so we'll put it inside the war.
 - name: add grouper client config to war
   shell: jar -uf $(readlink teams-current.war) grouper.client.properties chdir={{ teams_dir }}
-  sudo_user: "{{ springapp_user }}"
+  become_user: "{{ springapp_user }}"
   when: grouper_client_config_result.changed or (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
 
 - name: copy locale languages files
@@ -50,7 +50,7 @@
 
 - name: replace language files in war
   shell: jar -uvf $(readlink teams-current.war) ./WEB-INF/ chdir={{ teams_dir }}
-  sudo_user: "{{ springapp_user }}"
+  become_user: "{{ springapp_user }}"
   when: (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
 
 - name: copy grouper provision script for teams
@@ -86,5 +86,5 @@
 
 - name: cleanup old wars
   shell: find . ! -name $(basename $(readlink teams-current.war)) -name '*.war' -type f -exec rm {} \; chdir={{ teams_dir }}
-  sudo_user: "{{ springapp_user }}"
+  become_user: "{{ springapp_user }}"
   when: (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)

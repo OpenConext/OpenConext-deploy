@@ -9,7 +9,7 @@
 
 - hosts: all
   gather_facts: yes
-  sudo: true
+  become: true
   roles:
     - { role: common, tags: ['common'] }
     - { role: iptables, tags: ['iptables'] }
@@ -18,14 +18,14 @@
 
 - hosts: loadbalancer
   gather_facts: no
-  sudo: true
+  become: true
   roles:
     - { role: haproxy, tags: ['lb'] }
     - { role: tls, tags: ['tls'] }
 
 - hosts: php-apps:java-apps-centos7
   gather_facts: yes
-  sudo: true
+  become: true
   roles:
     - httpd
   handlers:
@@ -33,14 +33,14 @@
 
 - hosts: storage
   gather_facts: yes
-  sudo: true
+  become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: php-apps
   gather_facts: yes
-  sudo: true
+  become: true
   vars:
     env_lang: php
   roles:
@@ -54,7 +54,7 @@
 
 - hosts: java-apps-centos7
   gather_facts: true
-  sudo: true
+  become: true
   vars:
     env_lang: java
   roles:

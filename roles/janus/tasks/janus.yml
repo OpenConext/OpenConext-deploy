@@ -76,7 +76,7 @@
         - restart memcached
 
 # Note that this migration command probably has created cache directories and files
-# owned by root since it will be run as sudo
+# owned by root since it will be run via sudo
 - name: Install Janus - Run database migrations
   command: ./bin/migrate.sh
   args:
