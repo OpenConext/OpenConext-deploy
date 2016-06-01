@@ -389,7 +389,7 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.2.0
+pdp_version: 1.2.1
 #pdp_snapshot_timestamp: 20160511.150231-1
 #pdp_html_snapshot_timestamp: 20160511.150246-1
 
