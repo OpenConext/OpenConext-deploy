@@ -44,7 +44,7 @@
   gather_facts: yes
   become: true
   roles:
-    - { role: galera, tags: ['galera'} }
+    - { role: galera, tags: ['galera'] }
       
 - hosts: php-apps
   gather_facts: no
