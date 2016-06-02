@@ -7,7 +7,7 @@ server {
 }
 
 server {
-  listen       {{ nginx_ipv4_addresses.authzserver }}:443 ssl spdy;
+  listen       {{ nginx_ipv4_addresses.authzserver }}:443 ssl http2;
   server_name  authz.{{ base_domain }};
 
   ssl                  on;
@@ -44,7 +44,7 @@ server {
 }
 
 server {
-    listen       [::]:443 ssl spdy;
+    listen       [::]:443 ssl http2;
     server_name  authz.{{ base_domain }};
 
     ssl                  on;
