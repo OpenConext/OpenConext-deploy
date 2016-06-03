@@ -7,7 +7,7 @@
     - nginx.repo
 
 - name: Install
-  yum: name=1.10.1-1.el6.ngx state=present
+  yum: name=nginx-1.10.1-1.el6.ngx state=present
 
 - name: Copy empty default.conf
   copy: src=default.conf dest=/etc/nginx/conf.d
