@@ -85,8 +85,8 @@ local7.*                                                /var/log/boot.log
 #$ActionQueueType LinkedList   # run asynchronously
 #$ActionResumeRetryCount -1    # infinite retries if host is down
 # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
-{% if rsyslog_host is defined %}
-*.* @@{{ rsyslog_host }}:5140
+{% if remote_syslog_host is defined %}
+*.* @@{{ remote_syslog_host }}:5140
 {% endif %}
 # ### end of the forwarding rule ###
 
