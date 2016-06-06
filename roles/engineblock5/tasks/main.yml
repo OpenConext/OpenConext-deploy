@@ -1,6 +1,6 @@
 ---
 - name: Add group {{ engine_fpm_user }}
-  group: name=engine state=present
+  group: name={{ engine_fpm_user }} state=present
 
 - name: Add user {{ engine_fpm_user }}
   user: name={{ engine_fpm_user }} group={{ engine_fpm_user }} createhome=no state=present
