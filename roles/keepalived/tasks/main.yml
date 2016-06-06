@@ -1,5 +1,8 @@
-- name: Ensure nonlocal bind kernel parameter is set
+- name: Ensure nonlocal ipv4 bind kernel parameter is set
   sysctl: name=net.ipv4.ip_nonlocal_bind value=1 state=present ignoreerrors=yes
+
+- name: Ensure nonlocal ipv6 bind kernel parameter is set
+  sysctl: name=net.ipv6.ip_nonlocal_bind value=1 state=present ignoreerrors=yes
 
 - name: Install keepalived
   yum: name=keepalived state=present
