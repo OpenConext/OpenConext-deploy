@@ -35,11 +35,11 @@
 
 - name: copy over the engineblock keys
   copy: content="{{ engineblock_private_key }}" dest="{{ item.value.privateFile }}"
-  with_dict: engine_keys
+  with_dict: "{{ engine_keys }}"
 
 - name: copy engineblock certificates to correct location
   copy: src=files/{{ env_name }}/certs/{{ item.value.publicKey }} dest={{ item.value.publicFile }}
-  with_dict: engine_keys
+  with_dict: "{{ engine_keys }}"
 
 - name: Configure EngineBlock
   template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}

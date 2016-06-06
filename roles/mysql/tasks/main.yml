@@ -70,8 +70,8 @@
 - name: Create database user
   mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:ALL state=present
   with_nested:
-    - databases.users
-    - database_clients
+    - "{{ databases.users }}"
+    - "{{ database_clients }}"
   tags: mysql
 
 
