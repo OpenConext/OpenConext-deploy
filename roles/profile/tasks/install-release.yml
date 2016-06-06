@@ -11,4 +11,3 @@
   file: src={{ profile_release_dir }} dest={{ profile_current_release_symlink }} state=link
   notify:
     - restart httpd
-  when: profile_download.changed
