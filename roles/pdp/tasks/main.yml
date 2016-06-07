@@ -6,7 +6,7 @@
   file: path=/var/www/pdp owner=apache group=apache mode=2755 state=directory
 
 - name: upload and extract local html archive
-  unarchive: src=./../OpenConext-pdp/pdp-gui/target/pdp-gui-{{ pdp_local_html_version }}.tar.gz dest=/var/www/pdp/
+  unarchive: src=./../OpenConext-pdp/pdp-gui/target/pdp-gui-{{ pdp_local_html_version }}.zip dest=/var/www/pdp/
   register: local_pdp_archive
   tags: pdp
   when: pdp_local_html_version != ''
@@ -18,13 +18,13 @@
 
 - name: download html archive
   get_url:
-    url: "{{ maven_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}/pdp-gui-{{ pdp_version }}.tar.gz"
-    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz
+    url: "{{ maven_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}/pdp-gui-{{ pdp_version }}.zip"
+    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}.zip
   tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
 - name: extract archive
-  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz dest=/var/www/pdp/ copy=no
+  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}.zip dest=/var/www/pdp/ copy=no
   tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
@@ -34,19 +34,19 @@
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
 - name: remove downloaded version
-  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}.tar.gz state=absent
+  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}.zip state=absent
   tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
 - name: download snapshot of html archive
   get_url:
-    url: "{{ maven_snapshot_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}-SNAPSHOT/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz"
-    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz
+    url: "{{ maven_snapshot_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}-SNAPSHOT/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.zip"
+    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.zip
   tags: pdp
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
 
 - name: extract snapshot archive
-  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz dest=/var/www/pdp/ copy=no
+  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.zip dest=/var/www/pdp/ copy=no
   tags: pdp
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
 
@@ -56,7 +56,7 @@
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
 
 - name: remove downloaded snapshot version
-  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.tar.gz state=absent
+  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}-{{ pdp_html_snapshot_timestamp }}.zip state=absent
   tags: pdp
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
 
