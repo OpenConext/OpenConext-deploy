@@ -61,18 +61,5 @@ engine_syslog_priority: 7
 engineblock_symfony_cache_path: "/tmp/engineblock/cache"
 engineblock_symfony_log_path: "/tmp/engineblock/log"
 
-##
-## Deprecated profile configuration. Keeping this around to make it easier to create a new role for profile later on
-##
-## The Identity Provider that Profile can use (always it's own EngineBlock really)
-#engine_profile_idp_certificate: "{{ engine_keys.default.publicFile }}"
-#engine_profile_idp_entityid: https://{{ engine_domain }}/authentication/idp/metadata
-#engine_profile_idp_sso_location: https://{{ engine_domain }}/authentication/idp/single-sign-on
-#engine_profile_idp_baseurlpath: "https://{{ profile_domain }}/simplesaml/"
-#engine_profile_idp_hostmatch: "{{ profile_domain }}"
-#profile_ipv4_address: "*"
-# profile_ipv6_address
-#profile_domain: profile.{{ base_domain }}
-
 engine_fpm_user: engine
 engine_fpm_port: 801
