@@ -1,5 +1,5 @@
 [local-certs]
-localhost ansible_connection=local ansible_python_interpreter=python2
+localhost ansible_connection=local ansible_python_interpreter=python
 
 [storage]
 t06.ams.surfconext.nl
