@@ -6,7 +6,7 @@
   file: path=/var/www/aa owner=apache group=apache mode=2755 state=directory
 
 - name: upload and extract local html archive
-  unarchive: src=./../OpenConext-aa/aa-gui/target/aa-gui-{{ aa_local_html_version }}.tar.gz dest=/var/www/aa/
+  unarchive: src=./../OpenConext-aa/aa-gui/target/aa-gui-{{ aa_local_html_version }}.zip dest=/var/www/aa/
   register: local_aa_archive
   tags: aa
   when: aa_local_html_version != ''
@@ -19,13 +19,13 @@
 
 - name: download html archive
   get_url:
-    url: "{{ maven_repo }}/{{ aa_group_url }}/aa-gui/{{ aa_version }}/aa-gui-{{ aa_version }}.tar.gz"
-    dest: /var/www/aa/aa-gui-{{ aa_version }}.tar.gz
+    url: "{{ maven_repo }}/{{ aa_group_url }}/aa-gui/{{ aa_version }}/aa-gui-{{ aa_version }}.zip"
+    dest: /var/www/aa/aa-gui-{{ aa_version }}.zip
   tags: aa
   when: aa_html_snapshot_timestamp == '' and aa_local_html_version == ''
 
 - name: extract archive
-  unarchive: src=/var/www/aa/aa-gui-{{ aa_version }}.tar.gz dest=/var/www/aa/ copy=no
+  unarchive: src=/var/www/aa/aa-gui-{{ aa_version }}.zip dest=/var/www/aa/ copy=no
   tags: aa
   when: aa_html_snapshot_timestamp == '' and aa_local_html_version == ''
   notify: restart httpd
@@ -37,19 +37,19 @@
   notify: restart httpd
 
 - name: remove downloaded version
-  file: path=/var/www/aa/aa-gui-{{ aa_version }}.tar.gz state=absent
+  file: path=/var/www/aa/aa-gui-{{ aa_version }}.zip state=absent
   tags: aa
   when: aa_html_snapshot_timestamp == '' and aa_local_html_version == ''
 
 - name: download snapshot of html archive
   get_url:
-    url: "{{ maven_snapshot_repo }}/{{ aa_group_url }}/aa-gui/{{ aa_version }}-SNAPSHOT/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.tar.gz"
-    dest: /var/www/aa/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.tar.gz
+    url: "{{ maven_snapshot_repo }}/{{ aa_group_url }}/aa-gui/{{ aa_version }}-SNAPSHOT/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.zip"
+    dest: /var/www/aa/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.zip
   tags: aa
   when: aa_html_snapshot_timestamp != '' and aa_local_html_version == ''
 
 - name: extract snapshot archive
-  unarchive: src=/var/www/aa/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.tar.gz dest=/var/www/aa/ copy=no
+  unarchive: src=/var/www/aa/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.zip dest=/var/www/aa/ copy=no
   tags: aa
   when: aa_html_snapshot_timestamp != '' and aa_local_html_version == ''
 
@@ -60,7 +60,7 @@
   notify: restart httpd
 
 - name: remove downloaded snapshot version
-  file: path=/var/www/aa/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.tar.gz state=absent
+  file: path=/var/www/aa/aa-gui-{{ aa_version }}-{{ aa_html_snapshot_timestamp }}.zip state=absent
   tags: aa
   when: aa_html_snapshot_timestamp != '' and aa_local_html_version == ''
 
