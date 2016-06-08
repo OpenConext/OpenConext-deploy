@@ -1,0 +1,4 @@
+iptables_incoming_java:
+  - name: Allow traffic to java-ports from test subnet
+    port: 601,602,603,604,605,606,607,608,613,614,615,616,10617,10618
+    source: 145.100.191.112/28

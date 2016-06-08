@@ -1,0 +1,4 @@
+iptables_incoming_db:
+  - name: Allow traffic to  mysql ports from test subnet
+    port: 3306
+    source: 145.100.191.112/28 

@@ -1,0 +1,4 @@
+iptables_incoming_php:
+  - name: Allow traffic to java-ports from test subnet
+    port: 401,402,403,404,405
+    source: 145.100.191.112/28 
