@@ -10,4 +10,4 @@ tomcat:
   lib_dir: /var/lib/tomcat
   app_base_dir_name: appBase
   cache_dir: /var/cache/tomcat
-
+  config_file: /etc/tomcat/tomcat.conf
