@@ -24,7 +24,7 @@
     - { role: haproxy, tags: ['lb'] }
     - { role: tls, tags: ['tls'] }
 
-- hosts: php-apps:java-apps-centos7
+- hosts: php-apps:java-apps
   gather_facts: yes
   become: true
   roles:
@@ -53,7 +53,7 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: java-apps-centos7
+- hosts: java-apps
   gather_facts: true
   become: true
   vars:

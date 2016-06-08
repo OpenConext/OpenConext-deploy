@@ -7,7 +7,7 @@ t06.ams.surfconext.nl
 [storage-test:children]
 storage
 
-[java-apps-centos7]
+[java-apps]
 t07.ams.surfconext.nl
 
 [php-apps]
@@ -18,6 +18,6 @@ t01.ams.surfconext.nl
 
 [test2:children]
 storage
-java-apps-centos7
+java-apps
 php-apps
 loadbalancer

@@ -397,12 +397,15 @@ aa:
   authz_client_id: "https@//aa.test.surfconext.nl"
   authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
+  iden_client_id: am_aa_client
+  iden_secret: "{{ aa_iden_client_secret }}"
   oidc_client_id: "https@//aa.surfconext.test.nl"
   oidc_secret: "{{ aa_oidc_client_secret }}"
   spring_profiles_active: acc
   sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  aggregate_cache: 0
 
 oidc_version: "1.0.2"
 #oidc_snapshot_timestamp: "20160229.102842-1"

@@ -23,42 +23,40 @@
 -A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} --dport {{ service.port }}  -j ACCEPT
 {% endfor %}
 
-{% if 'loadbalancer' in group_names %}
+{% if iptables_incoming_lb is defined %}
 ### Loadbalancer rules
--A INPUT -p tcp --dport 443 -j ACCEPT
--A INPUT -p tcp --dport 80 -j ACCEPT
--A INPUT -p tcp --dport 53 -j ACCEPT
--A INPUT -p udp --dport 53 -j ACCEPT
+{% for service in iptables_incoming_lb %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} --dport {{ service.port }}  -j ACCEPT
+{% endfor %}
 {% endif %}
 
-{% if 'php-apps' in group_names %}
+{% if iptables_incoming_php is defined %}
 ### PHP apps rules
--A INPUT -p tcp --dport 443 -j ACCEPT
--A INPUT -p tcp --dport 80 -j ACCEPT
--A INPUT -p tcp --dport 401 -j ACCEPT
--A INPUT -p tcp --dport 402 -j ACCEPT
--A INPUT -p tcp --dport 403 -j ACCEPT
--A INPUT -p tcp --dport 404 -j ACCEPT
--A INPUT -p tcp --dport 405 -j ACCEPT
--A INPUT -p tcp --dport 609 -j ACCEPT
+{% for service in iptables_incoming_php %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
+{% endfor %}
 {% endif %}
 
-{% if 'java-apps-centos7' in group_names %}
+{% if iptables_incoming_java is defined %}
 ### JAVA apps rules
--A INPUT -p tcp --dport 601 -j ACCEPT
--A INPUT -p tcp --dport 602 -j ACCEPT
--A INPUT -p tcp --dport 603 -j ACCEPT
--A INPUT -p tcp --dport 604 -j ACCEPT
--A INPUT -p tcp --dport 605 -j ACCEPT
--A INPUT -p tcp --dport 606 -j ACCEPT
--A INPUT -p tcp --dport 607 -j ACCEPT
--A INPUT -p tcp --dport 608 -j ACCEPT
--A INPUT -p tcp --dport 613 -j ACCEPT
--A INPUT -p tcp --dport 614 -j ACCEPT
--A INPUT -p tcp --dport 615 -j ACCEPT
--A INPUT -p tcp --dport 616 -j ACCEPT
--A INPUT -p tcp --dport 10617 -j ACCEPT
--A INPUT -p tcp --dport 10618 -j ACCEPT
+{% for service in iptables_incoming_java %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
+{% endfor %}
+{% endif %}
+
+{% if iptables_incoming_db is defined %}
+### DB rules
+{% for service in iptables_incoming_db %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
+{% endfor %}
 {% endif %}
 
 {% if 'storage' in group_names and develop %}
