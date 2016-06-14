@@ -102,12 +102,6 @@ static:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-# the welcome page on: vm.{{ base_domain }}
-welcome:
-  crt_name: "{{ tls_https.crt_name }}"
-  key_name: "{{ tls_https.key_name }}"
-
-
 janus_teams_oauth_key: https://teams.{{ base_domain }}/teams/teams.xml
 
 engine:
