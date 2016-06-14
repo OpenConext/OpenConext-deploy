@@ -31,7 +31,7 @@
     recurse=yes
 
 - name: Place parameters.yml
-  template: src={{ item }}.j2 dest={{ profile_current_release_symlink }}/app/config/{{ item }} owner={{ apache_user }} group={{ apache_user }} mode=0644
+  template: src={{ item }}.j2 dest={{ profile_current_release_symlink }}/app/config/{{ item }} mode=0644
   with_items:
   - parameters.yml
 
