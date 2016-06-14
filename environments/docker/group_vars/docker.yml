@@ -122,6 +122,12 @@ engine_block:
       type: "janus"
       value: "JanusRestV1"
 
+profile_version: 0.3.0
+#profile_branch: develop
+profile_apache_symfony_environment: test
+# Engine's assertion signing certificate:
+engine_profile_idp_certificate:
+
 tomcat_apps:
   - grouper
   - mujina-sp
