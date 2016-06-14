@@ -46,9 +46,10 @@
   roles:
     - php
     - static
-    - { role: openconext-common, tags: ['eb','sr'] }
+    - { role: openconext-common, tags: ['eb','sr','profile'] }
     - { role: engineblock,       tags: ['eb'     ] }
     - { role: janus,             tags: ['sr'     ] }
+    - { role: profile,           tags: ['profile'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 

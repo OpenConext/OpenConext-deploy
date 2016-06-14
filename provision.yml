@@ -55,7 +55,7 @@
   roles:
     - { role: php56fpm,          tags: ['php'     ] }
     - { role: static,            tags: ['static'  ] }
-    - { role: openconext-common, tags: ['eb5','sr'] }
+    - { role: openconext-common, tags: ['eb5','sr','profile'] }
     - { role: engineblock5,      tags: ['eb5'     ] }
     - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }

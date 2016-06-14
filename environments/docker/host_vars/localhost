@@ -16,4 +16,5 @@ apache_app_listen_address:
   welcome: 127.0.0.1
   engine: 127.0.0.1
   engine_api: 127.0.0.1
+  profile: 127.0.0.1
   serviceregistry: 127.0.0.1

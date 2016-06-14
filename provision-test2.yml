@@ -46,10 +46,11 @@
     env_lang: php
   roles:
     - { role: php56fpm,          tags: ['php56fpm'] }
-    - { role: static,            tags: ['static'] }
-    - { role: openconext-common, tags: ['eb5','sr'] }
-    - { role: engineblock5,       tags: ['eb5'     ] }
-    - { role: janus,             tags: ['sr'     ] }
+    - { role: static,            tags: ['static'  ] }
+    - { role: openconext-common, tags: ['eb5','sr','profile'] }
+    - { role: engineblock5,      tags: ['eb5'     ] }
+    - { role: janus,             tags: ['sr'      ] }
+    - { role: profile,           tags: ['profile' ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
