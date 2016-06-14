@@ -100,17 +100,17 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
-    #    - {
-    #    index: 0,
-    #    type: "database",
-    #    value: "Doctrine"
-    #  }
-    - {
+        - {
         index: 0,
-        type: "janus",
-        value: "JanusRestV1"
+        type: "database",
+        value: "Doctrine"
       }
-
+    #  - {
+    #    index: 0,
+    #    type: "janus",
+    #    value: "JanusRestV1"
+    #  }
+engine_feature_ldap_integration: 0
 tomcat_apps:
   - grouper
   - mujina-sp
@@ -240,7 +240,7 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.6.2
+voot_version: 1.6.3
 #voot_snapshot_timestamp: 20160218.102010-1
 voot_debug: true
 
