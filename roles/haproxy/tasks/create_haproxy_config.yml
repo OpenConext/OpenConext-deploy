@@ -1,0 +1,8 @@
+---
+- name: create haproxy {{item.name }} instance config file 
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.cfg
+  register: haproxy_changed
+
+- name: restart haproxy_{{item.name }} instance
+  service: name=haproxy_{{item.name }} enabled=yes state=started
+  when: haproxy_changed
