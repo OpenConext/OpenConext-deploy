@@ -1,8 +1,8 @@
 # IPv4 firewall configuration
 
 *filter
-:INPUT ACCEPT [0:0]
-:FORWARD ACCEPT [0:0]
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
 -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 -A INPUT -p icmp -j ACCEPT
@@ -64,7 +64,5 @@
 -A INPUT -p tcp --dport 3306 -j ACCEPT
 {% endif %}
 
--A INPUT -j DROP 
--A FORWARD -j DROP 
 COMMIT
 # A newline after COMMIT is required
