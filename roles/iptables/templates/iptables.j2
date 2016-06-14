@@ -59,6 +59,11 @@
 {% endfor %}
 {% endif %}
 
+{% if 'loadbalancer' in group_names %}
+### Allow VRRP
+-A INPUT -d 224.0.0.0/8 -p vrrp -j ACCEPT
+{% endif %}
+
 {% if 'storage' in group_names and develop %}
 ### Allow external database connections in development env
 -A INPUT -p tcp --dport 3306 -j ACCEPT
