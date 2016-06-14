@@ -6,19 +6,28 @@
 - name: Install socat
   yum: name=socat state=present
 
+- name: Enable haproxy
+  service: name=haproxy enabled=yes
+  notify:
+    - restart haproxy
+
 - name: create haproxy config directories
   file: dest=/etc/haproxy/{{ item.name }} state=directory owner=haproxy group=haproxy mode=0700
   with_items: "{{ haproxy_applications }}"
 
-  #- name: Create SSL certificates
-  #shell: cat {{ tls.cert_private_path }}/{{ item.key_name }}  {{ tls.cert_path }}/{{ item.crt_name }} > /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
-  #with_items: "{{ haproxy_applications }}"
-  #when: not item.hidden
+- name: Create SSL certificates
+  shell: cat {{ tls.cert_private_path }}/{{ item.key_name }}  {{ tls.cert_path }}/{{ item.crt_name }} > /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
+  with_items: "{{ haproxy_applications }}"
+  when: not item.hidden
 
-  #- name: Chown SSL certificates
-  #file: path=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
-  #with_items: "{{ haproxy_applications }}"
-  #when: not item.hidden
+- name: Chown SSL certificates
+  file: path=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
+  with_items: "{{ haproxy_applications }}"
+  when: not item.hidden
+
+- name: create haproxy instance config file
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.cfg
+  with_items: "{{ haproxy_applications }}"
 
 - name: copy systemd startup file
   template: src=haproxy_systemd.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
@@ -28,10 +37,6 @@
   command: systemctl enable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
   with_items: "{{ haproxy_applications }}"
 
-- name: include haproxy instance config
-  include: create_haproxy_config.yml
-  with_items: "{{ haproxy_applications }}"
-  
 - name: start services 
   service: name=haproxy_{{item.name }} enabled=yes state=started
   with_items: "{{ haproxy_applications }}"
