@@ -9,7 +9,7 @@
 
 - hosts: loadbalancer:php-apps:java-apps:storage
   gather_facts: no
-  sudo: true
+  become: true
   roles:
     - common
     - { role: tls, tags: ['tls'] }
@@ -19,13 +19,13 @@
 
 - hosts: loadbalancer
   gather_facts: true
-  sudo: true
+  become: true
   roles:
     - { role: nginx,   tags: ['lb'] }
 
 - hosts: php-apps:java-apps
   gather_facts: no
-  sudo: true
+  become: true
   roles:
     - httpd
   handlers:
@@ -34,15 +34,14 @@
 
 - hosts: storage
   gather_facts: no
-  sudo: true
+  become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
 #    - vm_only_provision_eb_sr
 
 - hosts: php-apps
-  gather_facts: no
-  sudo: true
+  become: true
   gather_facts: no
   vars:
     env_lang: php
@@ -61,7 +60,7 @@
 
 - hosts: java-apps
   gather_facts: true
-  sudo: true
+  become: true
   vars:
     env_lang: java
   roles:
@@ -76,6 +75,7 @@
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,             tags: ['oauth', 'voot'            ] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
+    - { role: oidc,             tags: ['oidc'  ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

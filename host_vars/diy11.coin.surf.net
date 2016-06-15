@@ -13,6 +13,7 @@ apache_app_listen_address:
   static: 127.0.0.2
   teams: 127.0.0.2
   voot: 127.0.0.2
+  oidc: 127.0.0.2
   welcome: 127.0.0.2
 
 #ldap_bind_urls: "ldap://127.0.0.1:389/"

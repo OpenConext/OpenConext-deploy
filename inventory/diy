@@ -2,19 +2,15 @@
 diy01.coin.surf.net
 
 [storage]
-diy01
-
-[storage-test:children]
-storage
+diy01.coin.surf.net
 
 [java-apps]
-diy01
+diy01.coin.surf.net
 
 [php-apps]
-diy01
-
+diy01.coin.surf.net
 [loadbalancer]
-diy01
+diy01.coin.surf.net
 
 [diy:children]
 storage
