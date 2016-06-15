@@ -11,6 +11,9 @@
   notify:
     - restart haproxy
 
+- name: install OCSP update tool
+  copy: src=hapos-upd dest=/usr/local/sbin/ mode=0755
+
 - name: create haproxy config directories
   file: dest=/etc/haproxy/{{ item.name }} state=directory owner=haproxy group=haproxy mode=0700
   with_items: "{{ haproxy_applications }}"
@@ -22,6 +25,11 @@
 
 - name: Chown SSL certificates
   file: path=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
+  with_items: "{{ haproxy_applications }}"
+  when: not item.hidden
+
+- name: Run hapos-upd for initial OCSP responses
+  shell: hapos-upd --skip-update --good-only --socket /var/lib/haproxy/{{ item.name }}.stats --VAfile /etc/haproxy/{{ item.name }}/{{ item.name }}.pem --cert /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
   with_items: "{{ haproxy_applications }}"
   when: not item.hidden
 
@@ -43,3 +51,8 @@
 
 - name: disable standard systemd haproxy instance
   command: systemctl disable haproxy
+
+- name: install OCSP periodic update script
+  template: src=update_ocsp.j2 dest=/usr/local/sbin/update_ocsp mode=0755
+
+- cron: name="update ocsp info" special_time=hourly job="/usr/local/sbin/update_ocsp"
