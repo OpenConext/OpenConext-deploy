@@ -380,8 +380,8 @@ authzadmin:
     - clientId: "{{ aa.authz_resource_server_id }}"
       secret: "{{ aa.authz_secret }}"
 
-authz_playground_version: 1.2
-authz_playground_snapshot_timestamp: "20160208.150458-5"
+authz_playground_version: 1.4
+#authz_playground_snapshot_timestamp: "20160208.150458-5"
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
