@@ -4,7 +4,7 @@
 # probably we want to continue even if one fails
 #set -e
 
-{% for application in haproxy_applications %}
+{% for application in haproxy_applications if not application.hidden %}
 hapos-upd --good-only --socket /var/lib/haproxy/{{ application.name }}.stats \
 	--VAfile /etc/haproxy/{{ application.name }}/{{ application.name }}.pem \
 	--cert /etc/haproxy/{{ application.name }}/{{ application.name }}.pem
