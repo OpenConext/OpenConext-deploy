@@ -778,5 +778,3 @@ php_servers:
 
 java_servers:
    - { ip: "145.100.191.120", label: "t07"}
-
-remote_syslog_host: 145.100.191.116
