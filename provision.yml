@@ -12,6 +12,7 @@
   become: true
   roles:
     - { role: common,   tags: ['common'] }
+    - { role: users,   tags: ['users'] }
     - { role: tls,      tags: ['tls'] }
     - { role: iptables,      tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
