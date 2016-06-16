@@ -14,25 +14,12 @@
   file: src=/var/www/pdp/pdp-gui-{{ pdp_local_html_version }} dest=/var/www/pdp/current state=link force=yes
   when: pdp_local_html_version != ''
 
-- name: download html archive
-  get_url:
-    url: "{{ maven_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}/pdp-gui-{{ pdp_version }}.zip"
-    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}.zip
-  tags: pdp
-  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
-
-- name: extract archive
-  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}.zip dest=/var/www/pdp/ copy=no
-  tags: pdp
+- name: Download and extract archive
+  unarchive: src="{{ maven_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}/pdp-gui-{{ pdp_version }}.zip" dest=/var/www/pdp/ copy=no creates=/var/www/pdp/pdp-gui-{{ pdp_version }}/
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
 - name: create symlink to downloaded version
   file: src=/var/www/pdp/pdp-gui-{{ pdp_version }} dest=/var/www/pdp/current state=link force=yes
-  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
-
-- name: remove downloaded version
-  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}.zip state=absent
-  tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
 - name: download snapshot of html archive
