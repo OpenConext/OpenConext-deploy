@@ -41,13 +41,15 @@
     chdir: "{{ profile_install_dir }}/app/config/"
 
 - name: Prepare Profile environment
+  environment:
+   - SYMFONY_ENV: "{{ profile_apache_symfony_environment }}"
   command: composer prepare-env
   args:
       chdir: "{{ profile_install_dir }}/"
   changed_when: false
 
 - name: Create the symfony cache
-  command: app/console cache:clear --env=prod --no-debug
+  command: app/console cache:clear --env={{ profile_apache_symfony_environment }} --no-debug
   args:
     chdir: "{{ profile_install_dir }}/"
   when: not develop

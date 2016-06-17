@@ -124,7 +124,7 @@ engine_block:
 
 profile_version: 0.3.0
 #profile_branch: develop
-profile_apache_symfony_environment: test
+profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:
 engine_profile_idp_certificate:
 
