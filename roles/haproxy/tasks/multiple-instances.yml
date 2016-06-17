@@ -1,15 +1,9 @@
 ---
-
 - name: Install haproxy
   yum: name=haproxy state=present
 
 - name: Install socat
   yum: name=socat state=present
-
-- name: Enable haproxy
-  service: name=haproxy enabled=yes
-  notify:
-    - restart haproxy
 
 - name: install OCSP update tool
   copy: src=hapos-upd dest=/usr/local/sbin/ mode=0755
@@ -29,7 +23,7 @@
   when: not item.hidden
 
 - name: Run hapos-upd for initial OCSP responses
-  shell: hapos-upd --skip-update --good-only --socket /var/lib/haproxy/{{ item.name }}.stats --VAfile /etc/haproxy/{{ item.name }}/{{ item.name }}.pem --cert /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
+  shell: /usr/local/sbin/hapos-upd --skip-update --good-only --socket /var/lib/haproxy/{{ item.name }}.stats --VAfile /etc/haproxy/{{ item.name }}/{{ item.name }}.pem --cert /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
   with_items: "{{ haproxy_applications }}"
   when: not item.hidden
 
