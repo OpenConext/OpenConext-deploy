@@ -130,7 +130,7 @@ backend {{ application.name }}_be
 
   	cookie HTTPSERVERID insert nocache indirect
 
-  	{% for server in application.servers %}
+  	{% for server in application.servers_fourthset %}
   	server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
   	{% endfor %}
 
