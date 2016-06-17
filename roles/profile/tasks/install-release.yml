@@ -7,7 +7,4 @@
   unarchive: src={{ profile_build_path }} dest={{ openconext_releases_dir }} copy=no
   when: profile_download.changed
 
-- name: Activate new Profile release
-  file: src={{ profile_release_dir }} dest={{ profile_current_release_symlink }} state=link
-  notify:
-    - restart httpd
+- set_fact: profile_install_dir="{{ profile_release_dir }}"

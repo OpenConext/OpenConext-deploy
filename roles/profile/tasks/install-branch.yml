@@ -14,8 +14,4 @@
   unarchive: src="~/Releases/OpenConext-profile-{{ profile_branch }}.tar.gz" dest="{{ openconext_releases_dir }}" copy=no
   when: profile_gitclone.changed
 
-- name: Activate new Profile branch
-  file: src="{{ openconext_releases_dir }}/OpenConext-profile-{{ profile_branch }}" dest={{ profile_current_release_symlink }} state=link
-  notify:
-    - restart httpd
-  when: profile_gitclone.changed
+- set_fact: profile_install_dir="{{ profile_release_dir }}"
