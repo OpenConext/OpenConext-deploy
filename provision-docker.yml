@@ -47,6 +47,7 @@
     - openconext-common
     - engineblock5
     - janus
+    - profile
 
 - hosts: java-apps
   gather_facts: yes
