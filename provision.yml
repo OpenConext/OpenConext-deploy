@@ -7,7 +7,7 @@
     tags:
       - always
 
-- hosts: loadbalancer:php-apps:java-apps:storage:oidc
+- hosts: loadbalancer:php-apps:java-apps:storage:oidc:dbcluster
   gather_facts: yes
   become: true
   roles:
