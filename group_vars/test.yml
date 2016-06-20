@@ -279,7 +279,7 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.6.4
+voot_version: 1.6.5
 #voot_snapshot_timestamp: 20160615.110529-5
 voot_debug: true
 
@@ -393,7 +393,7 @@ authzplayground:
 
 pdp_version: 1.2.2
 pdp_snapshot_timestamp: 20160617.133835-1
-pdp_html_snapshot_timestamp: 20160618.085357-3
+pdp_html_snapshot_timestamp: 20160620.083037-4
 
 pdp_debug: true
 pdp:
