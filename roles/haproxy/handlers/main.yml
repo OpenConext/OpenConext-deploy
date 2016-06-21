@@ -7,3 +7,8 @@
 
 - name: restart rsyslog
   service: name=rsyslog state=restarted
+# handlers/main.yml
+- name: restart haproxy instances with changed configs
+  service: name=haproxy_{{ item.item.name }} state=restarted
+  when: item.changed
+  with_items: "{{configs_changed.results}}"

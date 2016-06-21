@@ -30,6 +30,8 @@
 - name: create haproxy instance config file
   template: src=haproxy.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.cfg
   with_items: "{{ haproxy_applications }}"
+  register: configs_changed
+  notify: restart haproxy instances with changed configs
 
 - name: copy systemd startup file
   template: src=haproxy_systemd.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
