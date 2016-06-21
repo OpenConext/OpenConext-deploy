@@ -20,6 +20,6 @@ Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
     # Proxy the requests to FPM
     ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:{{ profile_fpm_port }}/{{ profile_current_release_symlink }}/web/$1
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Profile'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Profile'" combined
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-PROFILE'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PROFILE'" combined
 </VirtualHost>
