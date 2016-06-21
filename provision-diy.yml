@@ -38,7 +38,10 @@
     - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: php-apps
+<<<<<<< HEAD
   gather_facts: no
+=======
+>>>>>>> master
   become: true
   gather_facts: no
   vars:
@@ -61,16 +64,16 @@
   roles:
     - tomcat
     - java
-    - { role: shibboleth,        tags: ['shib'   ] }
-    - { role: mujina-idp,        tags: ['mujina' ] }
-    - { role: mujina-sp,         tags: ['mujina' ] }
-    - { role: grouper,           tags: ['grouper'] }
-    - { role: teams,             tags: ['teams'  ] }
-    - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
-    - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
-    - { role: voot,              tags: ['oauth', 'voot'            ] }
-    - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
-    - { role: oidc,              tags: ['oidc'] }
+    - { role: shibboleth,       tags: ['shib'   ] }
+    - { role: grouper,          tags: ['grouper'] }
+    - { role: teams,            tags: ['teams'  ] }
+    - { role: mujina-idp,       tags: ['legacy','mujina' ] }
+    - { role: mujina-sp,        tags: ['legacy','mujina' ] }
+    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,             tags: ['oauth', 'voot'            ] }
+    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
+    - { role: oidc,             tags: ['oidc'  ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/nginx/handlers/main.yml

@@ -21,6 +21,13 @@ spring.datasource.driverClassName=com.mysql.jdbc.Driver
 spring.datasource.validation-query=SELECT 1
 spring.datasource.testWhileIdle=true
 
+spring.mail.host=localhost
+spring.mail.port=25
+
+email.base_url=https://pdp.{{ base_domain }}/conflicts
+email.from={{ pdp_email_from }}
+email.to={{ error_mail_to }}
+
 # Set to debug to see all database queries, for acc and prod set to INFO
 logging.level.org.hibernate.SQL=INFO
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=INFO

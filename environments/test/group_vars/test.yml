@@ -256,6 +256,8 @@ voot:
   oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
   oidc_checkToken_clientId: "https@//voot.{{ base_domain }}"
   oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
+  loggers:
+    - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
     - {
         type: "grouper",
@@ -279,8 +281,8 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.6.3
-#voot_snapshot_timestamp: 20160218.102010-1
+voot_version: 1.6.5
+#voot_snapshot_timestamp: 20160615.110529-5
 voot_debug: true
 
 authz_admin_version: 1.3.6
@@ -380,8 +382,8 @@ authzadmin:
     - clientId: "{{ aa.authz_resource_server_id }}"
       secret: "{{ aa.authz_secret }}"
 
-authz_playground_version: 1.2
-authz_playground_snapshot_timestamp: "20160208.150458-5"
+authz_playground_version: 1.4
+#authz_playground_snapshot_timestamp: "20160208.150458-5"
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
@@ -391,9 +393,9 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.2.1
-#pdp_snapshot_timestamp: 20160511.150231-1
-#pdp_html_snapshot_timestamp: 20160511.150246-1
+pdp_version: 1.2.2
+pdp_snapshot_timestamp: 20160617.133835-1
+pdp_html_snapshot_timestamp: 20160620.083037-4
 
 pdp_debug: true
 pdp:

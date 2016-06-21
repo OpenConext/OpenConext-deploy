@@ -224,6 +224,8 @@ voot:
   oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
   oidc_checkToken_clientId: "https@//voot.{{ base_domain }}"
   oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
+  loggers:
+    - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
     - {
         type: "grouper",
@@ -247,7 +249,7 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 1.6.3
+voot_version: 1.6.5
 #voot_snapshot_timestamp: 20160218.102010-1
 voot_debug: true
 

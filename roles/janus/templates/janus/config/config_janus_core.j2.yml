@@ -381,6 +381,7 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 select_values:
                     - technical
                     - support
@@ -395,6 +396,7 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 type: text
                 default: ''
                 default_allow: false
@@ -404,6 +406,7 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 type: text
                 default: ''
                 default_allow: false
@@ -413,6 +416,7 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 validate: isemail
                 type: text
                 default: ''
@@ -422,8 +426,19 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 type: text
                 default: ''
+                default_allow: false
+                required: false
+            'contacts:#:isSirtfiSecurityContact':
+                supported:
+                    - 0
+                    - 1
+                    - 2
+                    - 3
+                type: boolean
+                default: false
                 default_allow: false
                 required: false
             'OrganizationName:#':
@@ -695,6 +710,7 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 select_values:
                     - technical
                     - support
@@ -709,6 +725,7 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 type: text
                 default: ''
                 default_allow: false
@@ -718,6 +735,7 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 type: text
                 default: ''
                 default_allow: false
@@ -727,6 +745,7 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 validate: isemail
                 type: text
                 default: ''
@@ -736,8 +755,19 @@ janus_service_registry_core:
                     - 0
                     - 1
                     - 2
+                    - 3
                 type: text
                 default: ''
+                default_allow: false
+                required: false
+            'contacts:#:isSirtfiSecurityContact':
+                supported:
+                    - 0
+                    - 1
+                    - 2
+                    - 3
+                type: boolean
+                default: false
                 default_allow: false
                 required: false
             'OrganizationName:#':
