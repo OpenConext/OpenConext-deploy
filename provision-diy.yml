@@ -38,10 +38,6 @@
     - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: php-apps
-<<<<<<< HEAD
-  gather_facts: no
-=======
->>>>>>> master
   become: true
   gather_facts: no
   vars:

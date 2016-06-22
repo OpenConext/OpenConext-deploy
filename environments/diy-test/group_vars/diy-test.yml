@@ -508,7 +508,7 @@ loadbalancing:
     port: 617,
     heartbeat: { url: "/", method: "HEAD" },
     servers: [
-      { label: "oidc_backend", ip: "{{ apache_app_listen_address.oidci }}" },
+      { label: "oidc_backend", ip: "{{ apache_app_listen_address.oidc }}" },
     ]
   }
   grouper: {
