@@ -59,7 +59,7 @@
     - metadata-exporter
     - pdp
     - grouper
-    - teams (requires grouper)
+    - teams
     - mujina-idp
     - mujina-sp
     - authz-server
