@@ -102,7 +102,7 @@ backend {{ application.name }}_be
 	frontend {{ item.name }}
 
 	bind {{ haproxy_sni_ip }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
-	bind {{ haproxy_sni_ip_ipv6 }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
+	bind {{ haproxy_sni_ipv6 }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
     	rspadd  Strict-Transport-Security:\ max-age=15768000
     	bind {{ haproxy_sni_ip }}:80 transparent
     	redirect scheme https code 301 if !{ ssl_fc }
