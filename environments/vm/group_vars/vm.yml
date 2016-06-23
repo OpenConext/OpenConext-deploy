@@ -376,6 +376,7 @@ authzplayground:
 pdp_version: 1.2.3
 pdp_snapshot_timestamp: "20160623.074125-2"
 pdp_html_snapshot_timestamp: "20160623.074205-2"
+
 pdp_debug: true
 pdp:
   username: "pdp_admin"
