@@ -55,17 +55,17 @@
 #  vars:
 #    env_lang: java
   roles:
-#    - tomcat
+    - tomcat
     - metadata-exporter
     - pdp
-#    - grouper
-#    - teams (requires grouper)
-#    - mujina-idp
-#    - mujina-sp
-#    - authz-server
-#    - voot
-#    - authz-playground
-#    - oidc
-#    - aa
+    - grouper
+    - teams (requires grouper)
+    - mujina-idp
+    - mujina-sp
+    - authz-server
+    - voot
+    - authz-playground
+    - oidc
+    - aa
   handlers:
     - include: roles/httpd/handlers/main.yml
