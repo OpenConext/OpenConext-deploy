@@ -10,6 +10,9 @@
 - name: Install memcached and required modules
   yum: name=memcached state=present
 
+- name: Start and enable memcached
+  service: name=memcached state=started enabled=yes
+  
 - name: Install - Installation directory
   file: path={{ janus_installation_dir }} state=directory
   register: janusInstallationDir
