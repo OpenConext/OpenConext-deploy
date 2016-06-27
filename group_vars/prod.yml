@@ -325,7 +325,7 @@ voot:
         timeoutMillis: 3000
       }
 
-voot_version: 1.6.5
+voot_version: 2.0.0
 
 authz_admin_version: 1.3.6
 authz_admin_group: urn:collab:group:surfteams.nl:nl:surfnet:diensten:authz-admins
