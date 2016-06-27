@@ -13,6 +13,16 @@ oidc.checkToken.endpoint.url= {{ voot.oidc_checkToken_endpoint_url }}
 oidc.checkToken.clientId={{ voot.oidc_checkToken_clientId }}
 oidc.checkToken.secret={{ voot.oidc_checkToken_secret }}
 
+spring.datasource.url=jdbc:mysql://{{ grouper.db_host }}:3306/grouper
+spring.datasource.username={{ grouper.db_user }}
+spring.datasource.password={{ grouper.db_password }}
+spring.datasource.driverClassName=com.mysql.jdbc.Driver
+spring.datasource.validation-query=SELECT 1
+spring.datasource.testWhileIdle=true
+
+# Only tests may override this
+flyway.enabled=false
+
 checkToken.cache=true
 # 10 minutes cache for tokens
 checkToken.cache.duration.milliSeconds=600000
