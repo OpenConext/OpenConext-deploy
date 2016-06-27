@@ -15,13 +15,12 @@
     - { role: tls, tags: ['tls'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: loadbalancer
   gather_facts: true
   become: true
   roles:
-    - { role: nginx,   tags: ['lb'] }
+    - { role: haproxy,   tags: ['lb'] }
 
 - hosts: php-apps:java-apps
   gather_facts: no
@@ -30,7 +29,6 @@
     - httpd
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: storage
   gather_facts: no
@@ -54,11 +52,9 @@
     - { role: engineblock,       tags: ['eb'     ] }
     - vm_only_bootstrap_ldap_attributes
     - { role: janus,             tags: ['sr'     ] }
-    - vm_only_bootstrap_ldap_attributes
     - { role: profile,           tags: ['profile'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: java-apps
   gather_facts: true
@@ -66,8 +62,8 @@
   vars:
     env_lang: java
   roles:
-    - java
-    - tomcat
+    - { role: java,             tags: ['java'] }
+    - { role: tomcat,         tags: ['tomcat' ] }
     - { role: shibboleth,       tags: ['shib'   ] }
     - { role: grouper,          tags: ['grouper'] }
     - { role: teams,            tags: ['teams'  ] }
@@ -79,4 +75,3 @@
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
