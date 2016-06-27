@@ -246,6 +246,8 @@ voot:
   oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
   oidc_checkToken_clientId: "http@//mock-sp"
   oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
+  loggers:
+    - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
     - {
         type: "grouper",
@@ -258,7 +260,7 @@ voot:
         name: "SURFteams",
         timeoutMillis: 3000
       }
-voot_version: 1.6.3
+voot_version: 2.0.0
 voot_debug: false
 
 ##
