@@ -81,8 +81,8 @@ authorities:
       id: "idin",
       description: "With iDIN, you can identify yourself online to companies and organisations using your banks log-in procedure - simple, secure and safe",
       endpoint: "https://attribute-mapper.{{ base_domain }}/api/user",
-      user: "{{ aa.iden_client_id }}",
-      password: "{{ aa.iden_secret }}",
+      user: "{{ aa.idin_client_id }}",
+      password: "{{ aa.idin_secret }}",
       timeOut: 1000,
       attributes: [
         {

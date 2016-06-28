@@ -394,8 +394,8 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: 1.2.3
-pdp_snapshot_timestamp: "20160623.074125-2"
-pdp_html_snapshot_timestamp: "20160623.074205-2"
+pdp_snapshot_timestamp: "20160627.135245-3"
+pdp_html_snapshot_timestamp: "20160627.135459-3"
 
 pdp_debug: true
 pdp:
@@ -414,8 +414,8 @@ pdp:
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
 aa_version: "1.0.4"
-aa_snapshot_timestamp: "20160519.090404-6"
-aa_html_snapshot_timestamp: "20160607.122628-5"
+aa_snapshot_timestamp: "20160627.134007-11"
+aa_html_snapshot_timestamp: "20160627.134249-6"
 
 aa_debug: true
 aa:
@@ -430,8 +430,8 @@ aa:
   authz_client_id: "https@//aa.test.surfconext.nl"
   authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
-  iden_client_id: am_aa_client
-  iden_secret: "{{ aa_iden_client_secret }}"
+  idin_client_id: am_aa_client
+  idin_secret: "{{ aa_idin_client_secret }}"
   oidc_client_id: "https@//aa.surfconext.test.nl"
   oidc_secret: "{{ aa_oidc_client_secret }}"
   spring_profiles_active: acc
@@ -442,7 +442,7 @@ aa:
 
 
 oidc_version: "1.0.2"
-# oidc_snapshot_timestamp: "20160307.120704-2"
+oidc_snapshot_timestamp: "20160627.140720-1"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
