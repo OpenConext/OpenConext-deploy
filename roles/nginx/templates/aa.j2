@@ -10,7 +10,7 @@ server {
 }
 
 server {
-    listen       {{ nginx_ipv4_addresses.aa }}:443 ssl spdy;
+    listen       {{ nginx_ipv4_addresses.aa }}:443 ssl http2;
     server_name  aa.{{ base_domain }};
 
     ssl                  on;
@@ -48,7 +48,7 @@ server {
 }
 
 server {
-    listen       [::]:443 ssl spdy;
+    listen       [::]:443 ssl http2;
     server_name  aa.{{ base_domain }};
 
     ssl                  on;
