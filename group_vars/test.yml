@@ -392,8 +392,8 @@ authzplayground:
   key_name: "{{ tls_https.key_name }}"
 
 pdp_version: 1.2.3
-pdp_snapshot_timestamp: "20160627.135245-3"
-pdp_html_snapshot_timestamp: "20160627.135459-3"
+pdp_snapshot_timestamp: "20160629.085802-5"
+pdp_html_snapshot_timestamp: "20160629.085914-5"
 
 pdp_debug: true
 pdp:
