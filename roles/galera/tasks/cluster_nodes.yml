@@ -1,0 +1,88 @@
+- name: Disable redirects of traffic when VPN gateway is unreachable
+  sysctl: name=net.ipv4.conf.all.accept_redirects value=0 state=present ignoreerrors=yes
+
+# Add MariaDB repo and key
+- name: Add MariaDB.org repository
+  template: src='mariadb.repo.j2' dest='/etc/yum.repos.d/mariadb.repo'
+
+- name: Install MariaDB, Galera, rsync, MySQL-python
+  yum: name={{item}} state=installed
+  with_items:
+  - MariaDB-server
+  - MariaDB-client
+  - galera
+  - rsync         # For galera sync
+  - MySQL-python  # Required for using the Ansible mysql_* modules
+
+- name: Put mariadb server.cnf
+  template: src='server.cnf.j2' dest='/etc/my.cnf.d/server.cnf'
+  notify:
+    - restart mariadb
+
+- name: Bootstrap the first node
+  shell: /bin/galera_new_cluster
+  when: (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
+
+
+# Secure the MySQL server
+# - Set root password
+# - Remove anonymous users and test database
+- name: Change mysql root password and remove test database
+  script: mysql_bootstrap.sh "{{ mariadb_root_password }}"
+  when: (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
+  register: db_bootstrap_result
+  changed_when: db_bootstrap_result.rc > 0
+  failed_when: db_bootstrap_result.rc >= 2
+
+# Add cluster user
+- name: add mariadb cluster user
+  mysql_user:
+    name: "{{ mariadb_cluster_user }}"
+    password: "{{ mariadb_cluster_password }}"
+    login_user: root
+    login_password: "{{ mariadb_root_password  }}"
+    priv: "*.*:ALL PRIVILEGES/*.*:USAGE"
+    state: present
+  when: (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
+
+# Add backup user
+- name: add mariadb backup user
+  mysql_user:
+    name: "{{ mariadb_backup_user }}"
+    password: "{{ mariadb_backup_password  }}"
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
+    priv: "*.*:SELECT"
+    state: present
+  when: mariadb_enable_remote_ssh_backup | default(false)
+
+- name: Add "backup" shell user
+  user: name=backup
+  when: mariadb_enable_remote_ssh_backup | default(false)
+
+- name: Put mariadb_backup script
+  template: src='mariadb_backup.sh.j2' dest='/home/backup/mariadb_backup.sh' mode=500 owner=backup
+  when: mariadb_enable_remote_ssh_backup | default(false)
+
+- name:
+  authorized_key:
+    user: "{{ mariadb_backup_user }}"
+    key: "{{ mariadb_backup_sshkey }}"
+    key_options: command="/home/backup/mariadb_backup.sh"
+  when: mariadb_enable_remote_ssh_backup | default(false)
+
+- name: Start and enable the MariaDB (mysql) service on boot.
+  service: name=mysql state=started enabled=true
+  ignore_errors: true
+
+- name: Create database
+  mysql_db: name={{ item }} state=present login_user=root login_password={{mariadb_root_password}}
+  with_items:
+    - "{{ databases.names }}"
+
+- name: Create database user
+  mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:ALL state=present login_user=root login_password={{mariadb_root_password}}
+  with_nested:
+    - "{{ databases.users }}"
+    - "{{ database_clients }}"
+

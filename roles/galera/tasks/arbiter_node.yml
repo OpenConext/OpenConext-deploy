@@ -1,0 +1,21 @@
+- name: Disable redirects of traffic when VPN gateway is unreachable
+  sysctl: name=net.ipv4.conf.all.accept_redirects value=0 state=present ignoreerrors=yes
+
+# Add MariaDB repo and key
+- name: Add MariaDB.org repository
+  template: src='mariadb.repo.j2' dest='/etc/yum.repos.d/mariadb.repo'
+
+- name: Install MariaDB, Galera, rsync, MySQL-python
+  yum: name={{item}} state=installed
+  with_items:
+  - galera
+  - rsync         # For galera sync
+  - MySQL-python  # Required for using the Ansible mysql_* modules
+
+- name: Put garb config file
+  template: src='garb.j2' dest='/etc/sysconfig/garb'
+  notify:
+    - restart garb
+
+- name: Start and enable the Galera arbiter service on boot.
+  service: name=garb state=started enabled=true
