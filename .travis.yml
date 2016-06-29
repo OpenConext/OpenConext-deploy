@@ -55,7 +55,9 @@ after_failure:
   - sudo docker exec -t ansible-test netstat -apn
   - sudo docker exec -t ansible-test systemctl status -l haproxy
   - sudo docker exec -t ansible-test systemctl status -l httpd
+  - sudo docker exec -t ansible-test ls -ltr /var/log
   - sudo docker exec -t ansible-test cat /var/log/metadata-exporter/metadata-exporter.log
+  - sudo docker exec -t ansible-test cat /var/log/voot/voot.log
   - sudo docker exec -t ansible-test cat /var/log/pdp/pdp.log
 
 after_script:
