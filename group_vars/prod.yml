@@ -212,9 +212,9 @@ api:
     path: /tmp
 
 grouper:
-  db_user: grouperrw
+  db_user: teamsrw
   db_host: "{{ mysql_host }}"
-  db_password: "{{ mysql_passwords.grouper }}"
+  db_password: "{{ mysql_passwords.teams }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
