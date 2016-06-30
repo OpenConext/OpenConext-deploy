@@ -52,8 +52,6 @@
 - hosts: java-apps
   gather_facts: yes
   become: true
-#  vars:
-#    env_lang: java
   roles:
     - tomcat
     - metadata-exporter
@@ -63,7 +61,8 @@
     - mujina-idp
     - mujina-sp
     - authz-server
-    - voot
+    #- name: voot
+    #  tags: voot
     - authz-playground
     - oidc
     - aa
