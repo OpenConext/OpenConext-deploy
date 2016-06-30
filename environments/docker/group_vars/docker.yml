@@ -407,6 +407,7 @@ aa:
   sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  aggregate_cache: 0
 
 oidc_version: 1.0.2
 oidc:
