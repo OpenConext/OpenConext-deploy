@@ -241,6 +241,7 @@ grouper:
   db_password: "{{ mysql_passwords.grouper }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  database_name: grouper
 
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
