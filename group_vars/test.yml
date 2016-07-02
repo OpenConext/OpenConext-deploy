@@ -283,7 +283,7 @@ voot_version: 2.0.0
 #voot_snapshot_timestamp: 20160625.124345-2
 voot_debug: true
 
-authz_admin_version: 1.3.6
+authz_admin_version: 2.0.2
 #authz_admin_snapshot_timestamp: "20151223.124726-3"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
@@ -301,7 +301,8 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
-        redirectUri: https://authz-playground.{{ base_domain }}/redirect
+        redirectUris:
+          - https://authz-playground.{{ base_domain }}/redirect
       - clientId: authz-admin
         secret: "{{ authz_admin_client_secret }}"
         resourceIds:
@@ -310,7 +311,8 @@ authzadmin:
           - groups
         grantTypes:
           - authorization_code
-        redirectUri: https://authz-admin.{{ base_domain }}
+        redirectUris:
+          - https://authz-admin.{{ base_domain }}
         autoApprove: true
       - clientId: surf-teams
         secret: "{{ teams_authz_client_secret }}"

@@ -4,8 +4,12 @@ clients = [
   {
     clientId = "{{ client.clientId }}"
     secret = "{{ client.secret }}"
-    {% if client.redirectUri is defined %}
-      redirectUri= "{{ client.redirectUri}}"
+    {% if client.redirectUris is defined %}
+    redirectUris = [
+      {% for value in client.redirectUris %}
+      "{{ value }}"
+      {% endfor %}
+    ]
     {% endif %}
     {% if client.resourceIds is defined %}
     resourceIds = [
