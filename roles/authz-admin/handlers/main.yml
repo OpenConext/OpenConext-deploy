@@ -1,3 +1,3 @@
 ---
 - name: restart authz-admin
-  service: name=authz-admin state=restarted sleep=45
+  service: name=authz-admin state=restarted sleep=45`
