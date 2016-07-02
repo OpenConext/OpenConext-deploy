@@ -11,8 +11,8 @@ Listen {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
 
-    # Enable shibboleth for all other URLs, but the health check
-    <Location ~ "/health">
+    # Enable shibboleth for all other URLs, but the health and info check
+    <Location ~ "/(health|info)">
       allow from all
       satisfy any
     </Location>
