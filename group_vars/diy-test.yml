@@ -34,7 +34,7 @@ api_version: 4.0.1
 mujina_version: 4.0.2
 voot_version: 2.0.0
 authz_server_version: 1.3.5
-authz_admin_version: 2.0.3
+authz_admin_version: 2.0.5
 authz_playground_version: 1.2
 
 # alternatively, use a snapshot
@@ -263,7 +263,7 @@ authzserver:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.2.1
+pdp_version: 1.2.3
 #pdp_snapshot_timestamp: "20151222.101918-28"
 #pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true

@@ -296,7 +296,7 @@ voot:
 voot_version: 2.0.0
 #voot_snapshot_timestamp: 20150420.135435-44
 
-authz_admin_version: 2.0.3
+authz_admin_version: 2.0.5
 authz_admin_group: urn:collab:group:acc.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -369,7 +369,7 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.2.1
+pdp_version: 1.2.3
 #pdp_snapshot_timestamp: "20151209.153205-23"
 #pdp_html_snapshot_timestamp: "20151209.153243-21"
 

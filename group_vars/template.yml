@@ -302,7 +302,7 @@ voot_debug: true
 ##
 # Config for the authz-admin application
 ##
-authz_admin_version: 2.0.3
+authz_admin_version: 2.0.5
 #authz_admin_snapshot_timestamp: 20150422.113215-61
 authz_admin_group: urn:collab:group:{{ base_domain }}:etc:sysadmingroup
 authz_admin_debug: true
@@ -414,7 +414,7 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.2.1
+pdp_version: 1.2.3
 #pdp_snapshot_timestamp: "20151222.101918-28"
 #pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
