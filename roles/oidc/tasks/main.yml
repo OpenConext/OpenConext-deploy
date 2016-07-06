@@ -19,6 +19,11 @@
   tags: oidc
   notify: restart tomcat
 
+- name: copy clients and resources configuration
+  template: src=clientsAndResources.yml.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/clientsAndResources.yml
+  tags: oidc
+  notify: restart tomcat
+
 - name: copy oidc jwks keystore configuration
   template: src=oidc.keystore.jwks.json.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc.keystore.jwks.json
   tags: oidc
