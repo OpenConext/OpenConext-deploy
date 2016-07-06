@@ -63,7 +63,7 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: java-apps-common
+- hosts: java-apps
   gather_facts: true
   become: true
   vars:
