@@ -15,4 +15,4 @@ sp.public.certificate={{ oidc_sp_public_certificate }}
 sp.passphrase={{ oidc_passphrase }}
 sp.entity.base.url=https://oidc.{{ base_domain }}
 
-client.conf.location=file://{{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/clientsAndResources.yml
+client.conf.location=classpath:clientsAndResources.yml

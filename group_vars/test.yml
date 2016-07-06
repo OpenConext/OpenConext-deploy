@@ -279,8 +279,8 @@ voot:
         name: "SURFnet",
         timeoutMillis: 3000
       }
-voot_version: 2.0.0
-#voot_snapshot_timestamp: 20160625.124345-2
+voot_version: 2.0.1
+voot_snapshot_timestamp: 20160706.091456-2
 voot_debug: true
 
 authz_admin_version: 2.0.5
@@ -440,7 +440,7 @@ aa:
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
 oidc_version: "1.0.2"
-oidc_snapshot_timestamp: "20160627.140720-1"
+oidc_snapshot_timestamp: "20160706.143302-4"
 oidc:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
