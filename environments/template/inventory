@@ -1,22 +1,16 @@
-[local-certs]
-localhost ansible_connection=local ansible_python_interpreter=python
-
 [storage]
-t06.ams.surfconext.nl
-
-[storage-test:children]
-storage
+%target_host%
 
 [java-apps]
-t07.ams.surfconext.nl
+%target_host%
 
 [php-apps]
-t06.ams.surfconext.nl
+%target_host%
 
 [loadbalancer]
-t01.ams.surfconext.nl
+%target_host%
 
-[test2:children]
+[%env%:children]
 storage
 java-apps
 php-apps

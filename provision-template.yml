@@ -8,7 +8,7 @@
       - always
 
 - hosts: loadbalancer:php-apps:java-apps:storage
-  gather_facts: no
+  gather_facts: yes
   become: true
   roles:
     - common
@@ -36,21 +36,21 @@
   roles:
     - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
-    - vm_only_provision_eb_sr
+    - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
 
 - hosts: php-apps
-  gather_facts: no
   become: true
   gather_facts: no
   vars:
     env_lang: php
   roles:
-    - php
-    - static
+    - { role: php56fpm,          tags: ['php'     ] }
+    - { role: static,            tags: ['static'  ] }
     - { role: welcome,           tags: ['welcome'] }
-    - { role: openconext-common, tags: ['eb','sr','profile'] }
-    - { role: engineblock,       tags: ['eb'     ] }
-    - vm_only_bootstrap_ldap_attributes
+    - { role: openconext-common, tags: ['eb5','sr','profile'] }
+    - { role: engineblock5,       tags: ['eb5'     ] }
+    - { role: profile,       tags: ['profile'     ] }
+    - { role: vm_only_bootstrap_ldap_attributes, tags: [ 'ldap_bootstrap' ] }
     - { role: janus,             tags: ['sr'     ] }
     - { role: profile,           tags: ['profile'] }
   handlers:
@@ -73,5 +73,10 @@
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,             tags: ['oauth', 'voot'            ] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
+    - { role: oidc, tags: ['oidc'] }
+    - { role: pdp, tags: ['pdp'] }
+    - { role: aa, tags: ['aa'] }
+    - { role: metadata-exporter, tags: ['metadata-exporter']}
+          
   handlers:
     - include: roles/httpd/handlers/main.yml
