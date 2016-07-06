@@ -222,7 +222,7 @@ grouper:
   db_password: "{{ mysql_passwords.grouper }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
-
+  database_name: grouper
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
@@ -285,8 +285,8 @@ voot_version: 2.0.0
 #voot_snapshot_timestamp: 20160625.124345-2
 voot_debug: true
 
-authz_admin_version: 1.3.6
-#authz_admin_snapshot_timestamp: "20151223.124726-3"
+authz_admin_version: 2.0.5
+#authz_admin_snapshot_timestamp: "20160704.064432-1"
 authz_admin_group: urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   crt_name: "{{ tls_https.crt_name }}"
@@ -303,7 +303,8 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
-        redirectUri: https://authz-playground.{{ base_domain }}/redirect
+        redirectUris:
+          - https://authz-playground.{{ base_domain }}/redirect
       - clientId: authz-admin
         secret: "{{ authz_admin_client_secret }}"
         resourceIds:
@@ -312,7 +313,8 @@ authzadmin:
           - groups
         grantTypes:
           - authorization_code
-        redirectUri: https://authz-admin.{{ base_domain }}
+        redirectUris:
+          - https://authz-admin.{{ base_domain }}
         autoApprove: true
       - clientId: surf-teams
         secret: "{{ teams_authz_client_secret }}"
@@ -393,9 +395,9 @@ authzplayground:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.2.3
-pdp_snapshot_timestamp: "20160627.135245-3"
-pdp_html_snapshot_timestamp: "20160627.135459-3"
+pdp_version: 1.2.4
+#pdp_snapshot_timestamp: "20160629.085802-5"
+#pdp_html_snapshot_timestamp: "20160629.085914-5"
 
 pdp_debug: true
 pdp:

@@ -34,7 +34,7 @@ api_version: 4.0.1
 mujina_version: 4.0.2
 voot_version: 2.0.0
 authz_server_version: 1.3.5
-authz_admin_version: 1.3.6
+authz_admin_version: 2.0.5
 authz_playground_version: 1.2
 
 # alternatively, use a snapshot
@@ -235,6 +235,8 @@ grouper:
   db_password: "{{ mysql_passwords.grouper }}"
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
+  database_name: grouper
+
 
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
@@ -267,7 +269,7 @@ authzserver:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
 
-pdp_version: 1.2.1
+pdp_version: 1.2.4
 #pdp_snapshot_timestamp: "20151222.101918-28"
 #pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
@@ -327,7 +329,8 @@ authzadmin:
           - authorization_code
           - implicit
           - client_credentials
-        redirectUri: "{{ authzplayground.springapp_oauth_redirect }}"
+        redirectUris:
+          - "{{ authzplayground.springapp_oauth_redirect }}"
       - clientId: authz-admin
         secret: "{{ authz_admin_client_secret }}"
         resourceIds:
@@ -336,7 +339,8 @@ authzadmin:
           - groups
         grantTypes:
           - authorization_code
-        redirectUri: https://authz-admin.{{ base_domain }}
+        redirectUris:
+          - https://authz-admin.{{ base_domain }}
         autoApprove: true
       - clientId: surf-teams
         secret: "{{ teams_authz_client_secret }}"
