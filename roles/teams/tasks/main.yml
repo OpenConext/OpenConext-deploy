@@ -57,7 +57,7 @@
   copy: src={{ item }} dest=~/{{ item }}
   with_items:
     - create-stems.gsh
-  when: env == 'vm' or env == 'test2'
+  when: env == 'vm' or env == 'test2' or env == 'template'
 
 - name: provision grouper for teams
   shell: "bin/gsh ~/create-stems.gsh"
@@ -65,7 +65,7 @@
   changed_when: "gsh_output.stderr != ''"
   args:
     chdir: /opt/www/grouper-shell
-  when: env == 'vm' or env == 'test2'
+  when: env == 'vm' or env == 'test2' or env == 'template'
 
 - name: copy apache config
   template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
