@@ -49,12 +49,6 @@ while IFS= read -r line; do
   key=$(printf "%s" "$line" | cut -f1 -d:)  
   value=$(echo $line | cut -f2 -d: | xargs)
 
-  if [ "$key" == 'env' ]; then
-    line="env: %env%"
-    echo "$line" >> $SECRET_VARS_TEMP
-    continue
-  fi
-
   if [ "$key" == 'base_domain' ]; then
     line="base_domain: \"$OC_BASEDOMAIN\""
     echo "$line" >> $SECRET_VARS_TEMP
@@ -67,7 +61,7 @@ while IFS= read -r line; do
     # run command echo -n secret | sha1sum
     # where secret is the password
     passwordkey=`echo $key | sed 's/_sha$//g'`
-    passwordline=`cat $SECRET_VARS_TEMP | grep $passwordkey`
+    passwordline=`cat $SECRET_VARS_TEMP | grep -w $passwordkey`
     password=$(echo $passwordline | cut -f2 -d:)
     salt=`tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=4 count=1 2>/dev/null;echo`
     ssha=`( echo -n ${password}${salt} | openssl dgst -sha1 -binary; echo -n ${salt} )  | openssl enc -base64`
@@ -98,6 +92,13 @@ while IFS= read -r line; do
     continue
   fi
 
+  if [ "$value" == 'engine_profile_idp_certificate' ]; then
+    line="$key: |"
+    echo "$line" >> $SECRET_VARS_TEMP
+    cat "${EBCERT_FILES_BASE}.crt" | head -n -1 |tail -n +2 | tr -d '\n'; echo >> "$SECRET_VARS_TEMP"
+    continue
+  fi
+  
   if [ "$value" == 'https_star_private_key' ]; then
     line="$key: |"
     echo "$line" >> $SECRET_VARS_TEMP

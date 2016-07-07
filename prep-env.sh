@@ -83,8 +83,8 @@ scripts/lib/gen_ssl_server_cert.sh  $CACERT_FILES_BASE ${ENV_DIR}/${OC_ENV}/file
 # Copy ca to correct location
 cp $CACERT_FILES_BASE/ca-cert.pem ${ENV_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN"_ca.pem
 # Copy engineblock certificate to correct location
-mkdir -p files/php-"$OC_ENV"/certs
-cp ${ENV_DIR}/${OC_ENV}/files/certs/engineblock.crt files/certs/php-"$OC_ENV"
+mkdir -p files/php-template/certs
+cp ${ENV_DIR}/${OC_ENV}/files/certs/engineblock.crt files/php-template/certs
 
 # Generate Secret vars
 scripts/gen_secrets.sh $SECRET_VARS_TEMPLATE $CERT_FILES_BASE $EBCERT_FILES_BASE $SECRET_VARS_FILE $OC_BASEDOMAIN 
