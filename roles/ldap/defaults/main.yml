@@ -6,7 +6,7 @@ ldap:
     org: surfconext
     user: "{{ ldap_admin_user }}"
     # suffix needs to be the same as in the user
-    suffix: "dc=surfconext,dc=nl"
+    suffix: "{{ ldap_suffix }}"
     password: "{{ ldap_admin_password }}"
     password_sha: "{{ ldap_admin_password_sha }}" # this has to match value in password. Use slappasswd -s 'unecrypted password' to generate
   engine:
