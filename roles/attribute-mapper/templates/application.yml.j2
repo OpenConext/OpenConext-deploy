@@ -9,6 +9,9 @@ server:
   port: {{ springapp_tcpport }}
   # The context path of the server. You can skip this value in the overriding application.properties on the classpath
   contextPath:
+  session:
+    cookie:
+      secure: true
 
 # The central IdP used for authentication
 # iDEN

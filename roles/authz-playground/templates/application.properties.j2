@@ -24,6 +24,7 @@ oidc.jwk_url=https://oidc.{{ base_domain }}/jwk
 oidc.well_known_configuration_url=https://oidc.{{ base_domain }}/.well-known/openid-configuration
 
 server.port={{ springapp_tcpport }}
+server.session.cookie.secure=true
 
 endpoints.enabled=false
 endpoints.health.enabled=true
