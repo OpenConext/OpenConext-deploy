@@ -3,4 +3,4 @@
   when: env == 'prd' or env == 'acc'
 
 - include: single-instance.yml
-  when: env == 'vm' or env == 'test' or env == 'test2'
+  when: env == 'vm' or env == 'test' or env == 'test2' or env == 'template'

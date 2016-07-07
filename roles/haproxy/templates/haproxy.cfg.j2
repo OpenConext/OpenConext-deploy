@@ -18,7 +18,7 @@ global
   ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
   ssl-default-server-options no-sslv3
   ssl-default-server-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
-{% if env == "vm" or env == "test" or env == "test2"  %}
+{% if env == "vm" or env == "test" or env == "test2" or env == "template" %}
   stats socket /var/lib/haproxy/stats
 {% endif %}
 {% if env == "acc" or env == "prd"  %}
@@ -49,7 +49,7 @@ defaults
     maxconn                 3000
 
 
-{% if env == "test" or env == "test2" or env == "vm"  %}
+{% if env == "test" or env == "test2" or env == "vm" or env == "template" %}
 ## Frontend configuration
 
 #--------------------------------------------------------------------
