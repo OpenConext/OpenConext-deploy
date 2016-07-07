@@ -82,7 +82,6 @@ engine_apache_environment: test
 engine_apache_symfony_environment: prod
 
 ldap_admin_user: "cn=admin,{{ ldap_suffix }}"
-
 ldap_grouper_user: gadget
 
 janus_database_name: sr
@@ -202,6 +201,7 @@ grouper:
   key_name: "{{ tls_https.key_name }}"
   database_name: grouper
 
+ldap_org: "openconext"
 ldap_suffix: "dc=openconext,dc=org"
 ldap_user: "cn=ro,{{ ldap_suffix }}"
 ldap_grouper_engine_user: engine

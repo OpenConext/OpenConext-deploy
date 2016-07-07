@@ -3,7 +3,7 @@ ldap:
   user_cn: ro # needs to correspond with cn of ldap_user
   password_sha: "{{ ldap_password_sha }}" # needs to correspond with ldap_password
   admin:
-    org: surfconext
+    org: "{{ ldap_org }}"
     user: "{{ ldap_admin_user }}"
     # suffix needs to be the same as in the user
     suffix: "{{ ldap_suffix }}"
@@ -19,4 +19,4 @@ ldap:
   ldapadd_array: [68,0]
 
 ldap_bind_urls: "ldap:/// ldapi:///" # change this is you want ldap to listen on localhost only, for example
-
+ldap_org: "surfconext"
