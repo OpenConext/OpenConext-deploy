@@ -303,7 +303,7 @@ voot_debug: true
 ##
 # Config for the authz-admin application
 ##
-authz_admin_version: 2.0.6
+authz_admin_version: 2.0.7
 #authz_admin_snapshot_timestamp: 20150422.113215-61
 authz_admin_group: urn:collab:group:{{ base_domain }}:etc:sysadmingroup
 authz_admin_debug: true
