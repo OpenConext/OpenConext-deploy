@@ -73,9 +73,7 @@
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,             tags: ['oauth', 'voot'            ] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
-    - { role: oidc, tags: ['oidc'] }
     - { role: pdp, tags: ['pdp'] }
-    - { role: aa, tags: ['aa'] }
     - { role: metadata-exporter, tags: ['metadata-exporter']}
           
   handlers:
