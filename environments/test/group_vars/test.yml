@@ -67,8 +67,8 @@ engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: test
 engine_apache_symfony_environment: prod 
 
+ldap_suffix: "dc=surfconext,dc=nl"
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
-
 ldap_grouper_user: gadget
 
 janus_database_name: sr

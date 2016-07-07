@@ -23,7 +23,7 @@ pdp_version: 1.2.1
 aa_version: "1.0.3"
 oidc_version: "1.0.1"
 metadata_exporter_version: "1.1.1"
-
+engine_version: "5.0.0-beta2"
 
 
 
@@ -77,11 +77,11 @@ engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
 engine_ldap_host: ldap.{{ base_domain }}
-engine_ldap_bind_dn: "cn=engine,dc=openconext,dc=nl"
+engine_ldap_bind_dn: "cn=engine,{{ ldap_suffix }}"
 engine_apache_environment: test
 engine_apache_symfony_environment: prod
 
-ldap_admin_user: cn=admin,dc=openconext,dc=nl
+ldap_admin_user: "cn=admin,{{ ldap_suffix }}"
 
 ldap_grouper_user: gadget
 
@@ -108,16 +108,16 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
-    - {
-        index: 0,
-        type: "database",
-        value: "Doctrine"
-      }
 #    - {
 #        index: 0,
-#        type: "janus",
-#        value: "JanusRestV1"
+#        type: "database",
+#        value: "Doctrine"
 #      }
+    - {
+        index: 0,
+        type: "janus",
+        value: "JanusRestV1"
+      }
 
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:
@@ -202,8 +202,8 @@ grouper:
   key_name: "{{ tls_https.key_name }}"
   database_name: grouper
 
-
-ldap_user: cn=ro,dc=openconext,dc=nl
+ldap_suffix: "dc=openconext,dc=org"
+ldap_user: "cn=ro,{{ ldap_suffix }}"
 ldap_grouper_engine_user: engine
 
 authzserver:
@@ -597,7 +597,7 @@ haproxy_applications:
     port: "609"
     servers: "{{php_servers}}"
 
-haproxy_sni_ip: {{ ansible_default_ipv4 }} 
+haproxy_sni_ip: 192.168.66.100 
 
 php_servers:
    - { ip: "127.0.0.1", label: "php"}
