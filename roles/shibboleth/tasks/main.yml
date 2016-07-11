@@ -51,6 +51,7 @@
     - attribute-map.xml
     - localLogout.html
     - shibboleth2.xml
+    - attribute-policy.xml
   notify:
     - restart shibd
     - reload httpd
