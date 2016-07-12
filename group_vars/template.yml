@@ -188,7 +188,7 @@ teams:
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:{{ base_domain }}:"
 
-teams_version: 4.2.10
+teams_version: 4.2.12
 #teams_snapshot_timestamp: 20160314.083705-5
 teams_debug: true
 
