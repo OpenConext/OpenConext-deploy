@@ -157,16 +157,21 @@ backend {{ item.name }}_be
 
     option httpchk {{ item.ha_method }} {{ item.ha_url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
-
     mode http
     balance roundrobin
     option httpclose
-
+    option allbackups
     cookie HTTPSERVERID insert nocache indirect
 
     {% for server in item.servers %}
     server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
+    {% if item.servers_backup is defined %}
+    {% for server in item.servers_backup %}
+    server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024 backup
+    {% endfor %} 
+    {% endif %}
+
 {% endif %}
 {% endif %}
 
