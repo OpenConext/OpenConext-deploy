@@ -47,6 +47,7 @@
   become: true
   roles:
     - { role: galera, tags: ['galera'] }
+    - { role: keepalived, tags: ['keepalived'] }
       
 - hosts: php-apps
   gather_facts: no

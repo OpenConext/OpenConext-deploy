@@ -1,0 +1,10 @@
+vrrp_instance master {
+   interface {{ ansible_default_ipv4.interface }}               # interface to monitor
+   state {{ keepalived.state }}
+   virtual_router_id 240          # Assign one ID for this route
+   priority {{ keepalived.prio }}                 # 101 on master, 100 on backup
+   virtual_ipaddress {
+       {{ dbcluster_ip }}
+   
+   }
+}
