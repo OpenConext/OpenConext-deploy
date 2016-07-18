@@ -46,11 +46,27 @@
   when: "selinux_binaries.stat.exists == True and selinux_status == 'enabled'"
 
 - name: check SELinux status
-  shell: "
-         /usr/sbin/sestatus | egrep '^SELinux status: *disabled' 
-      || /usr/sbin/sestatus | egrep '^Current mode: *permissive'
-    "
+  shell: "/usr/sbin/sestatus | egrep '^SELinux status: *disabled' || /usr/sbin/sestatus | egrep '^Current mode: *permissive'"
   when: selinux_binaries.stat.exists == True
+
+- name: Remove exim when sendmail needs to be installed
+  yum: name=exim state=absent
+  
+- name: Install sendmail
+  yum: name={{ item }} state=present
+  with_items:
+     - sendmail
+     - sendmail-cf
+  when: sendmail_smarthost is defined
+
+- name: Copy sendmail template
+  template: src='sendmail.cf.j2' dest='/etc/mail/sendmail.cf'
+  when: sendmail_smarthost is defined
+  notify: rebuild sendmail config
+  
+- name: Start and enable sendmail service
+  service: name=sendmail state=started enabled=yes
+  when: sendmail_smarthost is defined
 
 - name: include centOS 7 specific tasks
   include: main_centos7.yml
