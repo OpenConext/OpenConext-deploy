@@ -1,7 +1,8 @@
 ---
 env: test2
 
-smtp_server: s01.dev.coin.surf.net
+smtp_server: localhost
+sendmail_smarthost: outgoing.mf.surf.net
 error_mail_to: coin-logs-dev@list.surfnet.nl
 
 php_display_errors: 1
