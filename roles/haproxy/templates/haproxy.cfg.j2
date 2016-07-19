@@ -58,6 +58,7 @@ defaults
 frontend ssl_ip
 
     bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }}  no-sslv3 transparent
+    http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
     bind {{ haproxy_sni_ip }}:80 transparent
     redirect scheme https code 301 if !{ ssl_fc }
