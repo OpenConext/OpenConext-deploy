@@ -13,7 +13,6 @@
   roles:
     - { role: common,   tags: ['common'] }
     - { role: users,   tags: ['users'] }
-    - { role: tls,      tags: ['tls'] }
     - { role: iptables,      tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
   handlers:
@@ -23,6 +22,7 @@
   gather_facts: true
   become: true
   roles:
+    - { role: tls,      tags: ['tls'] }
     - { role: keepalived, tags: ['keepalived'] }
     - { role: haproxy, tags: ['lb'] }
     - { role: bind, tags: ['bind'] }
