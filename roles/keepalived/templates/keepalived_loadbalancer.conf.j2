@@ -16,7 +16,9 @@ vrrp_instance backup {
    priority {{ keepalived.backupprio }}
    virtual_ipaddress {
         {{ engine_api_ip }}
-        {% if engine_api_ipv6 is defined -%} {{ engine_api_ipv6 }} {% endif %} 
+        {% if engine_api_ipv6 is defined -%} {{ engine_api_ipv6 }} {% endif %}
+}    
+   virtual_ipaddress_excluded {
         {{ profile_ip }}
         {% if engine_api_ipv6 is defined -%} {{ engine_api_ipv6 }} {% endif %} 
         {{ serviceregistry_ip }}
@@ -44,4 +46,3 @@ vrrp_instance backup {
         {{ bind_ip }}  
         {% if bind_ipv6 is defined -%} {{ bind_ipv6 }} {% endif %} 
 }
-
