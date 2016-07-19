@@ -47,6 +47,10 @@
   become: true
   roles:
     - { role: galera, tags: ['galera'] }
+
+- hosts: dbcluster_nodes
+  gather_facts: yes
+  become: true
     - { role: keepalived, tags: ['keepalived'] }
       
 - hosts: php-apps
