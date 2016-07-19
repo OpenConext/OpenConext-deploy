@@ -51,6 +51,7 @@
 - hosts: dbcluster_nodes
   gather_facts: yes
   become: true
+  roles:
     - { role: keepalived, tags: ['keepalived'] }
       
 - hosts: php-apps
