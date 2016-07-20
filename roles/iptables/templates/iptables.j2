@@ -1,9 +1,20 @@
 # IPv4 firewall configuration
 
+{% if iptables_vpn is defined %}
+*nat
+:PREROUTING ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# VPN routes
+-A POSTROUTING -d {{ ipsec_internal_range }} -j SNAT --to {{ backend_ipv4 }}
+{% endif %}
+
 *filter
 :INPUT DROP [0:0]
 :FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
+
 -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 -A INPUT -p icmp -j ACCEPT
 -A INPUT -i lo -j ACCEPT
