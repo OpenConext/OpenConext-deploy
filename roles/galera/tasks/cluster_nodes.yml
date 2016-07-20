@@ -85,4 +85,4 @@
   with_nested:
     - "{{ databases.users }}"
     - "{{ database_clients }}"
-
+  tags: create_galera_users
