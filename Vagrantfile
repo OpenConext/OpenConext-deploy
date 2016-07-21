@@ -31,6 +31,7 @@ Vagrant.configure("2") do |config|
     lb_centos7.vm.network :private_network, ip: "192.168.66.98"
     lb_centos7.vm.hostname = "lb.vm.openconext.org"
     config.vm.provider :virtualbox do |vb|
+      vb.name = "OpenConext Engineblock Loadbalancer"
       vb.customize ["modifyvm", :id, "--memory", "512"]
       vb.customize ["modifyvm", :id, "--cpus", "1"]
     end
@@ -43,6 +44,7 @@ Vagrant.configure("2") do |config|
         ansible.playbook = "provision-vm.yml"
         ansible.extra_vars = {
           user: "vagrant",
+          env: "vm",
           secrets_file: "environments/vm/secrets/vm.yml",
           develop: true
         }
@@ -54,6 +56,7 @@ Vagrant.configure("2") do |config|
     apps_centos7.vm.network :private_network, ip: "192.168.66.99"
     apps_centos7.vm.hostname = "apps.vm.openconext.org"
     config.vm.provider :virtualbox do |vb|
+      vb.name = "OpenConext Engineblock Apps"
       vb.customize ["modifyvm", :id, "--memory", "3072"]
       vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
@@ -67,6 +70,7 @@ Vagrant.configure("2") do |config|
         ansible.playbook = "provision-vm.yml"
         ansible.extra_vars = {
           user: "vagrant",
+          env: "vm",
           secrets_file: "environments/vm/secrets/vm.yml",
           develop: true,
           engine_apache_symfony_environment: "dev"
