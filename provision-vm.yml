@@ -13,7 +13,6 @@
   roles:
     - { role: common, tags: ['common'] }
     - { role: hosts,  tags: ['hosts'] }
-    - { role: iptables, tags: ['iptables'] }
     - { role: tls, tags: ['tls'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
