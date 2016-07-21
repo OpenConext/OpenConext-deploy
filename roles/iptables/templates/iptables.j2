@@ -8,6 +8,9 @@
 
 # VPN routes
 -A POSTROUTING -d {{ ipsec_internal_range }} -j SNAT --to {{ backend_ipv4 }}
+
+COMMIT
+
 {% endif %}
 
 *filter
