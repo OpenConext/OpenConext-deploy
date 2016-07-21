@@ -2,7 +2,7 @@
 # This config file is to be sourced by garb service script.
 
 # A comma-separated list of node addresses (address[:port]) in the cluster
-GALERA_NODES="gcomm://{% for host in groups['dbcluster'] %}{{ hostvars[host]['backend_ipv4'] }}:4567{% if not loop.last %},{% endif %}{% endfor %}"
+GALERA_NODES="{% for host in groups['dbcluster'] %}{{ hostvars[host]['backend_ipv4'] }}:4567{% if not loop.last %},{% endif %}{% endfor %}"
 
 
 # Galera cluster name, should be the same as on the rest of the nodes.
