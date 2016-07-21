@@ -409,8 +409,8 @@ aa:
   authz_client_id: "https@//aa.test.surfconext.nl"
   authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
-  iden_client_id: am_aa_client
-  iden_secret: "{{ aa_iden_client_secret }}"
+  idin_client_id: am_aa_client
+  idin_secret: "{{ aa_idin_client_secret }}"
   oidc_client_id: "https@//aa.surfconext.test.nl"
   oidc_secret: "{{ aa_oidc_client_secret }}"
   spring_profiles_active: acc
