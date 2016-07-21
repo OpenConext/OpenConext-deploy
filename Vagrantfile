@@ -44,6 +44,7 @@ Vagrant.configure("2") do |config|
         ansible.playbook = "provision-vm.yml"
         ansible.extra_vars = {
           user: "vagrant",
+          env: "vm",
           secrets_file: "environments/vm/secrets/vm.yml",
           develop: true
         }
@@ -69,6 +70,7 @@ Vagrant.configure("2") do |config|
         ansible.playbook = "provision-vm.yml"
         ansible.extra_vars = {
           user: "vagrant",
+          env: "vm",
           secrets_file: "environments/vm/secrets/vm.yml",
           develop: true,
           engine_apache_symfony_environment: "dev"
