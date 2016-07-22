@@ -1,4 +1,9 @@
-vrrp_instance master {
+vrrp_script chk_cluster {
+        script "/usr/local/bin/clustercheck clustercheck {{ galera_clustercheck_password }} 0"
+        interval 1
+}
+
+vrrp_instance galera {
    interface {{ ansible_default_ipv4.interface }}               # interface to monitor
    state {{ keepalived.state }}
    virtual_router_id 240          # Assign one ID for this route
@@ -7,4 +12,11 @@ vrrp_instance master {
        {{ dbcluster_ip }}
    
    }
+   track_script {
+        chk_cluster
+    }
+ 
+    notify_master "/bin/echo 'now master' > /tmp/keepalived.state"
+    notify_backup "/bin/echo 'now backup' > /tmp/keepalived.state"
+    notify_fault "/bin/echo 'now fault' > /tmp/keepalived.state"
 }
