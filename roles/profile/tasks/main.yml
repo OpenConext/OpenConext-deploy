@@ -69,7 +69,6 @@
     - profile.conf
   notify:
     - restart httpd
-  when: not develop
 
 - name: php-fpm config
   template: src={{ item }}.j2 dest=/etc/php-fpm.d/{{ item }}
