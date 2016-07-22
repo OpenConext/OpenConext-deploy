@@ -4,3 +4,9 @@
 
 - include: single-instance.yml
   when: env == 'vm' or env == 'test' or env == 'test2' or env == 'template'
+
+- name: disable health checks for development envs
+  command: 'echo "disable health {{item.name}}" | socat /var/lib/haproxy/stats stdio'
+  with_items:
+    - "{{ haproxy_applications }}"
+  when: develop
