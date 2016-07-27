@@ -294,7 +294,7 @@ voot:
         name: "SaNS",
         timeoutMillis: 3000
       }
-voot_version: 2.0.0
+voot_version: 2.0.2
 #voot_snapshot_timestamp: 20150420.135435-44
 
 authz_admin_version: 2.0.9
