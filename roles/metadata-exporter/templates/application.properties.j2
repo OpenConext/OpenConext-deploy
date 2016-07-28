@@ -1,5 +1,7 @@
 logging.config=file://{{ metadata_exporter_dir }}/logback.xml
 server.port={{ springapp_tcpport }}
+server.session.cookie.secure=true
+
 javascript.error.registrations.config=file://{{ metadata_exporter_dir }}/javascript_error_registrations.json
 spring.profiles.active=prod
 

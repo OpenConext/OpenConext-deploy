@@ -1,0 +1,29 @@
+clients:
+  - client_id: "{{ authzplayground.springapp_oidc_client_id }}"
+    secret: "{{ authzplayground.springapp_oidc_client_secret }}"
+    redirectUris:
+      - "https://authz-playground.{{ base_domain }}/redirect"
+    scopes:
+      - "openid"
+      - "groups"
+      - "attribute-aggregation"
+    grantTypes:
+      - "authorization_code"
+      - "implicit"
+      - "client_credentials"
+      - "refresh_token"
+resourceServers:
+  - client_id: "{{ authzplayground.springapp_oidc_client_id }}"
+    secret: "{{ authzplayground.springapp_oidc_client_secret }}"
+    scopes:
+      - "openid"
+      - "groups"
+  - client_id: "https@//voot.{{ base_domain }}"
+    secret: "{{ voot_oidc_checkToken_secret }}"
+    scopes:
+      - "openid"
+      - "groups"
+  - client_id: "{{ aa.oidc_client_id }}"
+    secret: "{{ aa.oidc_secret }}"
+    scopes:
+      - "attribute-aggregation"

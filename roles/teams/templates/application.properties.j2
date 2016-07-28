@@ -1,6 +1,7 @@
 logging.config=file://{{ teams_dir }}/logback.xml
 server.port={{ springapp_tcpport }}
 server.tomcat.basedir={{ teams_dir }}/tomcat_work
+server.session.cookie.secure=true
 
 application.version= {{ teams_version }}
 

@@ -42,7 +42,6 @@
 # grouperClient.jar insists that a file called grouper.client.properties is on the classpath, so we'll put it inside the war.
 - name: add grouper client config to war
   shell: jar -uf $(readlink teams-current.war) grouper.client.properties chdir={{ teams_dir }}
-  become_user: "{{ springapp_user }}"
   when: grouper_client_config_result.changed or (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
 
 - name: copy locale languages files
@@ -50,8 +49,23 @@
 
 - name: replace language files in war
   shell: jar -uvf $(readlink teams-current.war) ./WEB-INF/ chdir={{ teams_dir }}
-  become_user: "{{ springapp_user }}"
   when: (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
+
+- name: change permissions to war
+  file:
+    path: "{{ springapp_dir }}/{{ springapp_artifact_id }}-{{ springapp_version }}.{{ springapp_artifact_type }}"
+    owner: "{{ springapp_user }}"
+    group: "{{ springapp_user }}"
+    mode: 0644
+  when: "teams_snapshot_timestamp == '' and teams_local_jar == ''"
+
+- name: change permissions to war
+  file:
+    path: "{{ springapp_dir }}/{{ springapp_artifact_id }}-{{ springapp_version }}-{{ springapp_snapshot_timestamp }}.{{ springapp_artifact_type }}"
+    owner: "{{ springapp_user }}"
+    group: "{{ springapp_user }}"
+    mode: 0644
+  when: "teams_snapshot_timestamp != '' and teams_local_jar == ''"
 
 - name: copy grouper provision script for teams
   copy: src={{ item }} dest=~/{{ item }}
@@ -86,5 +100,4 @@
 
 - name: cleanup old wars
   shell: find . ! -name $(basename $(readlink teams-current.war)) -name '*.war' -type f -exec rm {} \; chdir={{ teams_dir }}
-  become_user: "{{ springapp_user }}"
   when: (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)

@@ -8,7 +8,6 @@
 
 - name: add language files to war
   shell: jar -uvf {{ tomcat_install_dir }}/wars/{{ deploy_name }}.war ./resources/ chdir={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc
-  become_user: tomcat
   when: new_deployment is defined
 
 - name: change permissions to war
@@ -16,6 +15,11 @@
 
 - name: copy oidc configuration
   template: src=application.oidc.properties.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/application.oidc.properties
+  tags: oidc
+  notify: restart tomcat
+
+- name: copy clients and resources configuration
+  template: src=clientsAndResources.yml.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/clientsAndResources.yml
   tags: oidc
   notify: restart tomcat
 
