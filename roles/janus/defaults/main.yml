@@ -9,7 +9,7 @@ janus_ssp_version: 1.13.2
 janus_ssp_unarchived_dir: "{{ janus_installation_dir }}/simplesamlphp-{{ janus_ssp_version}}"
 janus_ssp_dir: "{{ janus_installation_dir }}/simplesamlphp"
 janus_ssp_modules_dir: "{{ janus_ssp_dir }}/modules"
-janus_ssp_download_base_url: https://simplesamlphp.org/res/downloads/
+janus_ssp_download_base_url: https://github.com/simplesamlphp/simplesamlphp/releases/download/v{{ janus_ssp_version }}/
 janus_ssp_tar_file: simplesamlphp-{{ janus_ssp_version }}.tar.gz
 janus_ssp_tar_location: "{{ openconext_builds_dir }}/{{ janus_ssp_tar_file }}"
 #
