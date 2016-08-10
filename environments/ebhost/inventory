@@ -1,0 +1,27 @@
+[ebhost]
+host ansible_host=192.168.100.10
+
+[local-certs]
+localhost ansible_connection=local ansible_python_interpreter=python
+
+[local-certs:children]
+
+[vm]
+host
+
+[storage]
+host
+
+[storage-vm:children]
+storage
+
+[php-apps]
+host
+
+[php-apps-vm:children]
+php-apps
+
+[ebhost:children]
+storage
+php-apps
+local-certs

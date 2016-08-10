@@ -2,7 +2,7 @@ janus_service_registry_core:
     admin:
         name: Surfconext
         email: info@surfconext.nl
-    auth: default-sp
+    auth: {{ janus_default_sp }}
     useridattr: NameID
 #    auth: login-admin
 #    useridattr: user

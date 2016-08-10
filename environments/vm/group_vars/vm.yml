@@ -379,6 +379,7 @@ pdp_version: 1.2.4
 #pdp_snapshot_timestamp: "20151222.101918-28"
 #pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
+pdp_enabled: true
 pdp:
   username: "pdp_admin"
   password: "{{ pdp_password }}"

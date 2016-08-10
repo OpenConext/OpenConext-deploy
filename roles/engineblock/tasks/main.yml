@@ -1,4 +1,7 @@
 ---
+- include_vars: vars/defaults_java.yml
+  when: "engineblock.without_java is not defined"
+
 - include: install-release.yml
   when: "engine_branch is not defined or engine_branch == ''"
 

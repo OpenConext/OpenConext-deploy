@@ -1,4 +1,7 @@
 ---
+- include_vars: vars/defaults_java.yml
+  when: "engineblock.without_java is not defined"
+
 - name: Add group {{ engine_fpm_user }}
   group: name={{ engine_fpm_user }} state=present
 

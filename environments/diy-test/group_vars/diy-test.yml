@@ -277,6 +277,7 @@ pdp_version: 1.2.4
 #pdp_snapshot_timestamp: "20151222.101918-28"
 #pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
+pdp_enabled: true
 pdp:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -292,7 +293,7 @@ pdp:
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-  
+
 voot:
   crt_name: "{{ tls_https.crt_name }}"
   key_name: "{{ tls_https.key_name }}"
@@ -424,14 +425,14 @@ aa:
   db_user: aa-serverrw
   db_password: "{{ mysql_passwords.aa_server }}"
   db_host: "{{ mysql_host }}"
-  db_name: aaserver 
+  db_name: aaserver
   authz_client_id: "https@//aa.diy-test.surfconext.nl"
   authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
   oidc_client_id: "https@//aa.surfconext.test.nl"
   oidc_secret: "{{ aa_oidc_client_secret }}"
-  spring_profiles_active: acc       
-  sab_username: coin-test             
+  spring_profiles_active: acc
+  sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 

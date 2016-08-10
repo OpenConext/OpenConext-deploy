@@ -1,10 +1,7 @@
 #---
 ## Version of EngineBlock that is installable by this role
-engine_version: 5.0.0-rc1
+engine_version: 4.7.5
 #engine_branch: "develop"
-
-# Feature toggles
-engine_feature_ldap_integration: 1
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"
@@ -18,38 +15,29 @@ engine_ipv4_address: "*"
 # engine_ipv6_address:
 engine_api_ipv4_address: "*"
 # engine_api_ipv6_address:
-
-# Required for the Symfony routing.
-engine_base_domain: "{{ base_domain }}"
+profile_ipv4_address: "*"
+# profile_ipv6_address
 
 engine_domain: engine.{{ base_domain }}
 engine_api_domain: engine-api.{{ base_domain }}
+profile_domain: profile.{{ base_domain }}
 
 engine_debug: false
-
-## The endpoint it can use to validate Virtual Organizations
-engine_vovalidate_baseurl : https://api.{{ base_domain }}
-
-## PDP endpoint
-engine_pdp_baseurl: https://pdp.{{ base_domain }}/pdp/api/decide/policy
-engine_pdp_username: pdp_admin
-engine_pdp_password: secret
-
-## Attribute Aggregation endpoint
-engine_attribute_aggregation_baseurl: "https://aa.{{ base_domain }}/aa/api/attribute/aggregate"
-engine_attribute_aggregation_username: "{{ aa.eb_username }}"
-engine_attribute_aggregation_password: "{{ aa.eb_password }}"
 
 ## Where EngineBlock can go for its (v1) Service Registry API
 engine_janus_url: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
 engine_janus_cache_lifetime: 3600 # Cache for an hour
 
 engine_api_janus_user: serviceregistry
-engine_api_janus_password: secret
-engine_api_profile_user: profile
-engine_api_profile_password: secret
+#engine_api_janus_password:
 
+## The Identity Provider that Profile can use (always it's own EngineBlock really)
+engine_profile_idp_certificate: "{{ engine_keys.default.publicFile }}"
+engine_profile_idp_entityid: https://{{ engine_domain }}/authentication/idp/metadata
+engine_profile_idp_sso_location: https://{{ engine_domain }}/authentication/idp/single-sign-on
+engine_profile_idp_baseurlpath: "https://{{ profile_domain }}/simplesaml/"
 engine_engine_idp_baseurlpath: "https://{{ engine_domain }}/simplesaml/"
+engine_profile_idp_hostmatch: "{{ profile_domain }}"
 
 ## The priority of messages that should be logged to syslog
 ## 7 = debug
@@ -57,9 +45,3 @@ engine_engine_idp_baseurlpath: "https://{{ engine_domain }}/simplesaml/"
 engine_syslog_priority: 7
 
 #engine_initial_sql: ''
-
-engineblock_symfony_cache_path: "/tmp/engineblock/cache"
-engineblock_symfony_log_path: "/tmp/engineblock/log"
-
-engine_fpm_user: engine
-engine_fpm_port: 801

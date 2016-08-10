@@ -4,5 +4,10 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
+{% if apache_app_listen_address.all is defined %}
+# listen to the HTTPS port only
+Listen *:443
+{% else %}
 # we need an initial dummy port, or apache won't start when it's first installed
 Listen 127.0.0.1:9876
+{% endif %}
