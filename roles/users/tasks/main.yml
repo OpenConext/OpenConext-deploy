@@ -5,12 +5,12 @@
   when: users is defined
 
 - name: Per-user group creation
-  group: name="{{item.username}}" gid="{{item.uid}}"
+  group: name="{{item.username}}" 
   with_items: "{{ users }}"
   when: users is defined
 
 - name: Per-user group creation
-  group: name="{{item.username}}" gid="{{item.uid}}"
+  group: name="{{item.username}}" 
   with_items: "{{ users_php_nodes }}"
   when: users_php_nodes is defined
 
@@ -22,7 +22,6 @@
         shell={{item.shell if item.shell is defined else users_default_shell}}
         password="{{item.password if item.password is defined else '!'}}"
         comment="{{item.name}}"
-        uid="{{item.uid}}"
         createhome="{{'yes' if users_create_homedirs else 'no'}}"
   with_items: "{{ users }}"
   when: users is defined
@@ -35,7 +34,6 @@
         shell={{item.shell if item.shell is defined else users_default_shell}}
         password="{{item.password if item.password is defined else '!'}}"
         comment="{{item.name}}"
-        uid="{{item.uid}}"
         createhome="{{'yes' if users_create_homedirs else 'no'}}"
   with_items: "{{ users_php_nodes }}"
   when: users_php_nodes is defined
