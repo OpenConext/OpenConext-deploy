@@ -2,11 +2,17 @@
 - name: Creating groups
   group: name="{{item}}"
   with_items: "{{ groups_to_create }}"
+  when: users is defined
 
 - name: Per-user group creation
   group: name="{{item.username}}" gid="{{item.uid}}"
   with_items: "{{ users }}"
-  when: users_create_per_user_group
+  when: users is defined
+
+- name: Per-user group creation
+  group: name="{{item.username}}" gid="{{item.uid}}"
+  with_items: "{{ users_php_nodes }}"
+  when: users_php_nodes is defined
 
 - name: User creation
   user: name="{{item.username}}"
@@ -19,6 +25,7 @@
         uid="{{item.uid}}"
         createhome="{{'yes' if users_create_homedirs else 'no'}}"
   with_items: "{{ users }}"
+  when: users is defined
 
 - name: User creation on php nodes
   user: name="{{item.username}}"
@@ -30,13 +37,19 @@
         comment="{{item.name}}"
         uid="{{item.uid}}"
         createhome="{{'yes' if users_create_homedirs else 'no'}}"
-  with_items: "{{ users_php_nodes }}
+  with_items: "{{ users_php_nodes }}"
   when: users_php_nodes is defined
   
 - name: SSH keys
-  authorized_key: "user={{ item.0.username }} key={{ item.1 }}"
+  authorized_key: user={{ item.0.username }} key={{ item.1 }}
   with_subelements:
     - "{{ users }}"
+    - ssh_key
+
+- name: SSH keys on php nodes
+  authorized_key: user={{ item.0.username }} key={{ item.1 }}
+  with_subelements:
+    - "{{ users_php_nodes }}"
     - ssh_key
 
 - name: Deleted user removal
