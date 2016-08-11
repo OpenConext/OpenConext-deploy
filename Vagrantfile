@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "lb_centos7" do |lb_centos7|
     lb_centos7.vm.network :private_network, ip: "192.168.66.98"
     lb_centos7.vm.hostname = "lb.vm.openconext.org"
-    config.vm.provider :virtualbox do |vb|
+    lb_centos7.vm.provider :virtualbox do |vb|
       vb.name = "OpenConext Engineblock Loadbalancer"
       vb.customize ["modifyvm", :id, "--memory", "512"]
       vb.customize ["modifyvm", :id, "--cpus", "1"]
@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "apps_centos7", primary: true do |apps_centos7|
     apps_centos7.vm.network :private_network, ip: "192.168.66.99"
     apps_centos7.vm.hostname = "apps.vm.openconext.org"
-    config.vm.provider :virtualbox do |vb|
+    apps_centos7.vm.provider :virtualbox do |vb|
       vb.name = "OpenConext Engineblock Apps"
       vb.customize ["modifyvm", :id, "--memory", "3072"]
       vb.customize ["modifyvm", :id, "--cpus", "2"]
