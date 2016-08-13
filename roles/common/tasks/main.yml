@@ -41,8 +41,6 @@
   lineinfile: dest=/etc/sysconfig/selinux state=present regexp='^SELINUX=' line='SELINUX=permissive'
   when: selinux_config.stat.exists == True
 
-- debug: msg="selinux_status is {{ selinux_status.stdout }}"
-
 - name: disable SELinux NOW
   command: /usr/sbin/setenforce 0
   when: (selinux_binaries.stat.exists == True and selinux_status.stdout == "enabled")

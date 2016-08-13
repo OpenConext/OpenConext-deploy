@@ -90,16 +90,6 @@ engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
   without_java: true
-  external_idp:
-    name: "SPIP"
-    entityid: "https://spip.muisit.nl/saml2/idp/metadata.php"
-    sso: "https://spip.muisit.nl/saml2/idp/SSOService.php"
-    binding: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-    certificate: "MIID8zCCAtugAwIBAgIJANycpk64MSXjMA0GCSqGSIb3DQEBCwUAMIGPMQswCQYDVQQGEwJOTDETMBEGA1UECAwKR2VsZGVybGFuZDETMBEGA1UEBwwKV2FnZW5pbmdlbjEQMA4GA1UECgwHbXVpcyBJVDEMMAoGA1UECwwDSUNUMRcwFQYDVQQDDA5zcGlwLm11aXNpdC5ubDEdMBsGCSqGSIb3DQEJARYOc3BpcEBtdWlzaXQubmwwHhcNMTYwNjA5MDkyNDE3WhcNMjYwNjA5MDkyNDE3WjCBjzELMAkGA1UEBhMCTkwxEzARBgNVBAgMCkdlbGRlcmxhbmQxEzARBgNVBAcMCldhZ2VuaW5nZW4xEDAOBgNVBAoMB211aXMgSVQxDDAKBgNVBAsMA0lDVDEXMBUGA1UEAwwOc3BpcC5tdWlzaXQubmwxHTAbBgkqhkiG9w0BCQEWDnNwaXBAbXVpc2l0Lm5sMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsNsruaxSPHQGtzI+HQf2DqytAWTmB2JzyW3NvYgnPyH2KtlKXZvsInzx7QfsZBUKZaLwvncGmqBxr1xMbYBAdlyzERcV4db0CGPdzv0sXYqQ+DPzSAKsXSIQW6XNidtFNBP1Pae8gcYfHb4DeLBT+ip/sxSCbegvbjdPFHkk+CAUp9lNXg6TZ0dAm7E4SjBFq2rbQMsTIiCpzvvi6ODzECRcOSQep6j3pGW+BSWOgdZjp50iDLZwRHQ1xOrYG3Etz3TpfsC2TPU/O+Au1gc+nmbal+FkfD4xgcVTt3swV9MLzg7wrI/Q24089Gn5I0ijIWe9yH9S0U71bnE+aAB7/QIDAQABo1AwTjAdBgNVHQ4EFgQUb7TNTPJIcVRTpXABZ4GAeSxUD1AwHwYDVR0jBBgwFoAUb7TNTPJIcVRTpXABZ4GAeSxUD1AwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAdbbSXwah2Hi+iDNtzOi2THvTmQ6l/ig3qr8kKhpxBlBlTAODsO0M5KM7Q6Hfv1agExKZIDD9BpiCiA/paMafrIaoxapi3+E+bazJ6I6y53L7CMbjN1sbgIDj5nwxhQVnXlNFBT2FLCQ7CvPDY8QTvfn9bA4EUaVMDHqB26fM5TJw2Z1Te2EhJifDf7qREvagzrl+7OepQp3tXOxedkxi7e42PgL1TIL1Qii5M9L5DgIa2y5wEtLlWvNbO8/k3WE5CziFz66HEamQgCiM9fq0PT1+z7BYEMuJ/aIMWYE1GjgafzOyM6qQl1xeTO5drjEXDyp9NPoFZrljpiIURCiCkA=="
-    timestamp: "1970-01-01T00:00:00+00:00"
-    ip: "127.0.0.1"
-    email: "info@muisit.nl"
-
 
 ##
 # VM config for the api app
