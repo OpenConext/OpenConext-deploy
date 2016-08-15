@@ -87,6 +87,7 @@ local7.*                                                /var/log/boot.log
 # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
 {% if remote_syslog_host is defined %}
 *.* @@{{ remote_syslog_host }}:5140
+$PreserveFQDN on
 {% endif %}
 # ### end of the forwarding rule ###
 
