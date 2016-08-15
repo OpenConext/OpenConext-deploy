@@ -6,7 +6,7 @@
   user: name={{ profile_fpm_user }} group={{ profile_fpm_user }} createhome=no state=present
 
 - name: Create directory for vhosts to store PHP sessions
-  file: path=/var/lib/php/session/profile state=directory owner={{ profile_fpm_user }} group=root mode=770
+  file: path={{ php_session_dir}}/profile state=directory owner={{ profile_fpm_user }} group=root mode=770
 
 - include: install-release.yml
   when: profile_branch is not defined or profile_branch == ''

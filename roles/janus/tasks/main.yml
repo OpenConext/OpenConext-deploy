@@ -7,6 +7,9 @@
   user: name={{ serviceregistry_fpm_user }} group={{ serviceregistry_fpm_user }} createhome=no state=present
   when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
 
+- name: Create directory for vhosts to store PHP sessions
+  file: path={{ php_session_dir}}/serviceregistry state=directory owner={{ serviceregistry_fpm_user }} group=root mode=770
+  
 - name: Install memcached and required modules
   yum: name=memcached state=present
 
