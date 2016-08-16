@@ -28,9 +28,7 @@
   gather_facts: yes
   become: true
   roles:
-    - httpd
-  handlers:
-    - include: roles/httpd/handlers/main.yml
+    - { role: httpd, tags: ['httpd'] }
 
 - hosts: storage
   gather_facts: yes

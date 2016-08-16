@@ -32,8 +32,6 @@
   become: true
   roles:
     - { role: httpd,     tags: ['httpd'] }
-  handlers:
-    - include: roles/httpd/handlers/main.yml
 
 - hosts: storage
   gather_facts: no
