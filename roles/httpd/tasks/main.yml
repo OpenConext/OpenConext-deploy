@@ -4,7 +4,6 @@
   with_items:
      - httpd
      - mod_ssl
-  tags: httpd
 
 - name: Copy default config files
   copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
@@ -17,20 +16,19 @@
   when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
         (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
   template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
-  tags: httpd
   notify: reload httpd
 
 - name: Copy the config file
   when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
   template: src=httpd.conf_httpd24.j2 dest=/etc/httpd/conf/httpd.conf
-  tags: httpd
   notify: reload httpd
 
-- name: Remove default conf files apache
-  file: path=/etc/httpd/conf.d/{{ item }} state=absent
+- name: Create empty welcome.conf and userdir.conf
+  copy: content="" dest=/etc//httpd/conf.d/{{ item }}
   with_items:
     - welcome.conf
     - userdir.conf
+  notify: reload httpd
 
 - name: Stop listening on port 443
   lineinfile: dest=/etc/httpd/conf.d/ssl.conf state=absent regexp="Listen 443*"
