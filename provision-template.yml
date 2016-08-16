@@ -47,8 +47,8 @@
     - { role: php56fpm,          tags: ['php'     ] }
     - { role: static,            tags: ['static'  ] }
     - { role: welcome,           tags: ['welcome'] }
-    - { role: openconext-common, tags: ['eb5','sr','profile'] }
-    - { role: engineblock5,       tags: ['eb5'     ] }
+    - { role: openconext-common, tags: ['eb','sr','profile'] }
+    - { role: engineblock,       tags: ['eb'     ] }
     - { role: profile,       tags: ['profile'     ] }
     - { role: vm_only_bootstrap_ldap_attributes, tags: [ 'ldap_bootstrap' ] }
     - { role: janus,             tags: ['sr'     ] }

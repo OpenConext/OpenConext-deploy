@@ -49,7 +49,7 @@
     - { role: static,            tags: ['static'] }
     - { role: welcome,           tags: ['welcome'] }
     - { role: openconext-common, tags: ['eb','sr','profile'] }
-    - { role: engineblock5,      tags: ['eb'     ] }
+    - { role: engineblock,      tags: ['eb'     ] }
     - { role: janus,             tags: ['sr'     ] }
     - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
     - { role: profile,           tags: ['profile'] }

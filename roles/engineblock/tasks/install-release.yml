@@ -17,4 +17,5 @@
     - restart httpd
   when: eb_download.changed or not eb_dir.stat.exists
 
-
+- name: Make sure cache dir has correct permissions
+  file: path={{engine_current_release_symlink}}/app/cache  owner=engine group=engine recurse=yes
