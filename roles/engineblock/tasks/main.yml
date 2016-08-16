@@ -34,11 +34,11 @@
     - restart php-fpm
 
 - name: copy over the engineblock keys
-  copy: content="{{ engineblock_private_key }}" dest="{{ item.value.privateFile }}"
+  copy: content="{{ engineblock_private_key }}" dest="{{ item.value.privateFile }}" owner={{ engine_fpm_user }} group=root mode=440
   with_dict: "{{ engine_keys }}"
 
 - name: copy engineblock certificates to correct location
-  copy: src=files/{{ env_name }}/certs/{{ item.value.publicKey }} dest={{ item.value.publicFile }}
+  copy: src={{ inventory_dir }}/files/certs/{{ item.value.publicKey }} dest={{ item.value.publicFile }}
   with_dict: "{{ engine_keys }}"
 
 - name: Configure EngineBlock
