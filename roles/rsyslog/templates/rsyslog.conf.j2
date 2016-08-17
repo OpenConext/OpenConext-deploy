@@ -12,9 +12,9 @@ $ModLoad imjournal # provides access to the systemd journal
 #$ModLoad immark  # provides --MARK-- message capability
 
 # Provides UDP syslog reception
-$UDPServerAddress 127.0.0.1
 $ModLoad imudp
 $UDPServerRun 514
+$UDPServerAddress 127.0.0.1
 
 # Provides TCP syslog reception
 #$ModLoad imtcp
