@@ -79,7 +79,7 @@ frontend ssl_ip
 backend {{ application.name }}_be
   option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
   option forwardfor # This sets X-Forwarded-For
-
+  rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
   mode http
   balance roundrobin
   option httpclose
@@ -125,7 +125,7 @@ backend {{ application.name }}_be
 	backend {{ application.name }}_be
   	option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
   	option forwardfor # This sets X-Forwarded-For
-
+        rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
   	mode http
   	balance roundrobin
   	option httpclose
@@ -160,6 +160,7 @@ backend {{ item.name }}_be
 
     option httpchk {{ item.ha_method }} {{ item.ha_url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
+    rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
     mode http
     balance roundrobin
     option httpclose
