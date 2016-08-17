@@ -48,6 +48,8 @@
     - engineblock
     - janus
     - profile
+  handlers: 
+    - include: roles/httpd/handlers/main.yml
 
 - hosts: java-apps
   gather_facts: yes
