@@ -12,8 +12,9 @@ $ModLoad imjournal # provides access to the systemd journal
 #$ModLoad immark  # provides --MARK-- message capability
 
 # Provides UDP syslog reception
-#$ModLoad imudp
-#$UDPServerRun 514
+$UDPServerAddress 127.0.0.1
+$ModLoad imudp
+$UDPServerRun 514
 
 # Provides TCP syslog reception
 #$ModLoad imtcp
@@ -69,7 +70,9 @@ uucp,news.crit                                          /var/log/spooler
 
 # Save boot messages also to boot.log
 local7.*                                                /var/log/boot.log
-
+{% if ansible_fqdn in groups['loadbalancer'] %}
+local2.*						/var/log/haproxy.log
+{% endif %}
 
 # ### begin forwarding rule ###
 # The statement between the begin ... end define a SINGLE forwarding
