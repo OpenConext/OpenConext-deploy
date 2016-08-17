@@ -60,6 +60,7 @@ frontend ssl_ip
     bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }}  no-sslv3 transparent
     http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
+    capture request header User-agent len 100
     bind {{ haproxy_sni_ip }}:80 transparent
     redirect scheme https code 301 if !{ ssl_fc }
 
@@ -106,6 +107,7 @@ backend {{ application.name }}_be
 	bind {{ haproxy_sni_ipv6 }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
 	http-request del-header Proxy
     	rspadd  Strict-Transport-Security:\ max-age=15768000
+        capture request header User-agent len 100
     	bind {{ haproxy_sni_ip }}:80 transparent
     	redirect scheme https code 301 if !{ ssl_fc }
 
@@ -146,6 +148,7 @@ frontend {{ item.name }}
      bind {{ item.ipv6 }}:443 ssl crt /etc/haproxy/{{ item.name }}/{{ item.name }}.pem no-sslv3 transparent
      http-request del-header Proxy
      rspadd  Strict-Transport-Security:\ max-age=15768000
+     capture request header User-agent len 100
      bind {{ item.ip }}:80
      redirect scheme https code 301 if !{ ssl_fc }
      acl url_all         path_beg        -i /
