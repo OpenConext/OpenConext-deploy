@@ -18,6 +18,7 @@ script:
     --add-host mujina-sp.vm.openconext.org:127.0.0.1
     --add-host mujina-idp.vm.openconext.org:127.0.0.1
     --add-host grouper.vm.openconext.org:127.0.0.1
+    --add-host teams.vm.openconext.org:127.0.0.1
     --add-host authz.vm.openconext.org:127.0.0.1
     --add-host authz-admin.vm.openconext.org:127.0.0.1
     --add-host authz-playground.vm.openconext.org:127.0.0.1

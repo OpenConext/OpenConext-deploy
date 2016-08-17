@@ -220,6 +220,7 @@ grouper:
   db_user: grouperrw
   db_host: "{{ mysql_host }}"
   db_password: "{{ mysql_passwords.grouper }}"
+  database_name: grouper
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
@@ -370,9 +371,9 @@ authzplayground:
   springapp_oidc_client_id: http@//mock-sp
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
-pdp_version: 1.2.3
-pdp_snapshot_timestamp: "20160623.074125-2"
-pdp_html_snapshot_timestamp: "20160623.074205-2"
+pdp_version: 1.2.4
+#pdp_snapshot_timestamp: "20160623.074125-2"
+#pdp_html_snapshot_timestamp: "20160623.074205-2"
 
 pdp_debug: true
 pdp:
@@ -581,12 +582,92 @@ haproxy_applications:
     vhost_name: pdp
     ip: 127.0.0.1
     ha_method: GET
-    ha_url: /pdp/api/health
+    ha_url: /pdp/api/info
     port: 613
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
 
+  - name:  teams
+    vhost_name: teams
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: "/media/trans-white.png"
+    port: 601
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+
+  - name:  authzserver
+    vhost_name: authz
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: "/health"
+    port: 602
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+
+  - name:  authz_admin
+    vhost_name: authz_admin
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: "/health"
+    port: 603
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+
+  - name: authz_playground
+    vhost_name: authz_playground
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: "/health"
+    port: 604
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+   
+  - name: voot
+    vhost_name: voot
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: "/health"
+    port: 605
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+  
+  - name: grouper
+    vhost_name: voot
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: "/grouper-ws/status?diagnosticType=db"
+    port: 606
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+  
+  - name: engine
+    vhost_name: engine
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: /
+    port: 401
+    servers: "{{ php_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+
+  - name: profile
+    vhost_name: profile
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: /
+    port: 402
+    servers: "{{ php_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+  
   - name: serviceregistry
     vhost_name: serviceregistry
     ip: 127.0.0.1

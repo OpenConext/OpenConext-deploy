@@ -22,6 +22,8 @@
   roles:
     - { role: mysql, tags: [mysql] }
     - { role: ldap,  tags: [ldap] }
+    - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
+
 
 - hosts: php-apps:java-apps
   gather_facts: yes
@@ -55,18 +57,16 @@
   gather_facts: yes
   become: true
   roles:
+    - { role: shibboleth,  tags: [shib] }
     - tomcat
     - metadata-exporter
-    - pdp
+    - { role: pdp, tags: [pdp] }
     - grouper
     - teams
     - mujina-idp
     - mujina-sp
     - authz-server
-    #- name: voot
-    #  tags: voot
+    - voot
     - authz-playground
-    - oidc
-    - aa
   handlers:
     - include: roles/httpd/handlers/main.yml
