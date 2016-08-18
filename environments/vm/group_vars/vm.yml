@@ -366,7 +366,7 @@ authzadmin:
 ##
 # VM config for the authz-admin application
 ##
-authz_playground_version: 1.2
+authz_playground_version: 1.4
 #authz_playground_snapshot_timestamp: "20160208.150458-5"
 authz_playground_debug: true
 authzplayground:

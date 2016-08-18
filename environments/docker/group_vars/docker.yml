@@ -363,7 +363,7 @@ authzadmin:
 ##
 # VM config for the authz-admin application
 ##
-authz_playground_version: 1.2
+authz_playground_version: 1.4
 authz_playground_debug: false
 authzplayground:
   springapp_authz_client_id: cool_app_id
