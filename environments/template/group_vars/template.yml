@@ -237,7 +237,6 @@ voot_debug: true
 
 authz_admin_group: urn:collab:group:{{ base_domain }}:etc:sysadmingroup
 authz_admin_debug: true
-authz_admin_group: urn:collab:group:test.conextteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
