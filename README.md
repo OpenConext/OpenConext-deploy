@@ -6,7 +6,7 @@ Ansible-driven provisioning of the OpenConext platform.
 # Deploy to a remote machine
 
 A manual to run the deploy to a single target machine (e.g. a hosted VM) is in the wiki:
-[Installation steps to deploy OpenConext on a single system](https://github.com/OpenConext/OpenConext-deploy/wiki/Installation-steps-to-deploy-OpenConext-on-a-single-system-other-than-the-Vagrant-VM).
+[Installation steps to deploy OpenConext on a single system](https://github.com/OpenConext/OpenConext-deploy/wiki/Installation-steps-to-deploy-OpenConext-on-a-single-system-other-than-the-Vagrant-VM-centOS7).
 
 # Deploy with Vagrant
 
