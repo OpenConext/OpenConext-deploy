@@ -160,7 +160,7 @@ shib:
 
 api_version: 4.0.1
 
-mujina_version: 4.0.2
+mujina_version: 4.1.0
 
 ##
 # VM config for the teams app
