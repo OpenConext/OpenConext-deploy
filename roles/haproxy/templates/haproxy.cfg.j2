@@ -35,7 +35,8 @@ defaults
     mode                    http
     log                     global
     option                  httplog
-    option                  dontlognull
+#   option                  dontlognull
+    option                  http-ignore-probes
     option                  http-server-close
     option                  forwardfor       except 127.0.0.0/8
     option                  redispatch
