@@ -5,9 +5,8 @@
     services_health_checks:
       - https://voot.vm.openconext.org/health
       - https://teams.vm.openconext.org/health
-      - https://aa.vm.openconext.org/aa/api/health
       - https://multidata.vm.openconext.org/health
-      - https://pdp.vm.openconext.org/pdp/api/health
+      - https://pdp.vm.openconext.org/pdp/api/info
   tasks:
     - uri: url={{ item }}
 #      register: result

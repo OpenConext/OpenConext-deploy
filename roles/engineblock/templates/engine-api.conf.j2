@@ -2,25 +2,31 @@ Listen {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.po
 <Virtualhost {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.port }}>
     ServerAdmin {{ apache_server_admin}}
 
-    DocumentRoot {{ engine_current_release_symlink }}/www/api
+    DocumentRoot {{ engine_current_release_symlink }}/web
     ServerName   {{ engine_api_domain }}
 
-    <Directory "{{ engine_current_release_symlink }}/www">
-      AllowOverride All
+    <Directory "{{ engine_current_release_symlink }}/web">
+        Require all granted
+        Options -MultiViews
+        RewriteEngine On
+        RewriteBase /
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ app{% if develop %}_dev{% endif %}.php [QSA,L]
     </Directory>
 
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
     SetEnv ENGINEBLOCK_ENV {{ engine_apache_environment }}
+    SetEnv SYMFONY_ENV {{ engine_apache_symfony_environment }}
     SetEnv HTTPS on
 
     RewriteEngine On
-    # If the requested url does not map to a file or directory, then forward it to index.php/URL.
-    # Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
-    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
-    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
-    # Requests to the domain (no query string)
-    RewriteRule ^$ index.php/ [L]
+    # We support only GET/POST/HEAD
+    RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
+    RewriteRule .* - [R=405,L]
 
+    #Proxy the requests to FPM
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/engine-pool.sock|fcgi://localhost/{{ engine_current_release_symlink }}/web/$1
+     
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EBAPI'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EBAPI'" combined
 </VirtualHost>

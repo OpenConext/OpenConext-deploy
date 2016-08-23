@@ -14,11 +14,11 @@ engine_idp_debugging_email_address: root@localhost
 
 profile_version: 0.3.0
 teams_version: 4.2.12
-mujina_version: 4.0.2
+mujina_version: 4.1.0
 authz_server_version: 1.3.6
 voot_version: 2.0.2
 authz_admin_version: 2.0.9
-authz_playground_version: 1.2
+authz_playground_version: 1.4
 pdp_version: 1.2.1
 aa_version: "1.0.3"
 oidc_version: "1.0.1"
@@ -237,7 +237,6 @@ voot_debug: true
 
 authz_admin_group: urn:collab:group:{{ base_domain }}:etc:sysadmingroup
 authz_admin_debug: true
-authz_admin_group: urn:collab:group:test.conextteams.nl:nl:surfnet:diensten:authz-admins
 authzadmin:
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"

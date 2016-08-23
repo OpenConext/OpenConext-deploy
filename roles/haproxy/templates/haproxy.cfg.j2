@@ -5,6 +5,7 @@
 
 global
   log         127.0.0.1 local2
+  log-send-hostname
   chroot      /var/lib/haproxy
   pidfile     /var/run/haproxy.pid
   maxconn     4000
@@ -34,7 +35,8 @@ defaults
     mode                    http
     log                     global
     option                  httplog
-    option                  dontlognull
+#   option                  dontlognull
+    option                  http-ignore-probes
     option                  http-server-close
     option                  forwardfor       except 127.0.0.0/8
     option                  redispatch
@@ -60,6 +62,7 @@ frontend ssl_ip
     bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }}  no-sslv3 transparent
     http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
+    capture request header User-agent len 100
     bind {{ haproxy_sni_ip }}:80 transparent
     redirect scheme https code 301 if !{ ssl_fc }
 
@@ -79,7 +82,7 @@ frontend ssl_ip
 backend {{ application.name }}_be
   option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
   option forwardfor # This sets X-Forwarded-For
-
+  rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
   mode http
   balance roundrobin
   option httpclose
@@ -106,6 +109,7 @@ backend {{ application.name }}_be
 	bind {{ haproxy_sni_ipv6 }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
 	http-request del-header Proxy
     	rspadd  Strict-Transport-Security:\ max-age=15768000
+        capture request header User-agent len 100
     	bind {{ haproxy_sni_ip }}:80 transparent
     	redirect scheme https code 301 if !{ ssl_fc }
 
@@ -125,7 +129,7 @@ backend {{ application.name }}_be
 	backend {{ application.name }}_be
   	option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
   	option forwardfor # This sets X-Forwarded-For
-
+        rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
   	mode http
   	balance roundrobin
   	option httpclose
@@ -146,6 +150,7 @@ frontend {{ item.name }}
      bind {{ item.ipv6 }}:443 ssl crt /etc/haproxy/{{ item.name }}/{{ item.name }}.pem no-sslv3 transparent
      http-request del-header Proxy
      rspadd  Strict-Transport-Security:\ max-age=15768000
+     capture request header User-agent len 100
      bind {{ item.ip }}:80
      redirect scheme https code 301 if !{ ssl_fc }
      acl url_all         path_beg        -i /
@@ -160,6 +165,7 @@ backend {{ item.name }}_be
 
     option httpchk {{ item.ha_method }} {{ item.ha_url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
+    rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
     mode http
     balance roundrobin
     option httpclose

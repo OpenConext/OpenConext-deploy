@@ -58,14 +58,16 @@
         <afp:AttributeRule attributeID="persistent-id">
             <afp:PermitValueRule xsi:type="saml:NameIDQualifierString"/>
         </afp:AttributeRule>
-<!--
         <!-- Enforce that the values of schacHomeOrganization are a valid Scope. -->
+<!--
         <afp:AttributeRule attributeID="schacHomeOrganization">
             <afp:PermitValueRule xsi:type="saml:AttributeValueMatchesShibMDScope" />
         </afp:AttributeRule>
 -->
         <!-- Catch-all that passes everything else through unmolested. -->
-        <afp:AttributeRule attributeID="*" permitAny="true"/>
+        <afp:AttributeRule attributeID="*">
+            <afp:PermitValueRule xsi:type="ANY"/>
+        </afp:AttributeRule>
 
     </afp:AttributeFilterPolicy>
 

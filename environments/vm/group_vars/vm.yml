@@ -156,7 +156,7 @@ shib:
 api_version: 4.0.1
 #api_snapshot_timestamp
 
-mujina_version: 4.0.2
+mujina_version: 4.1.0
 #mujina_snapshot_timestamp
 
 ##
@@ -366,7 +366,7 @@ authzadmin:
 ##
 # VM config for the authz-admin application
 ##
-authz_playground_version: 1.2
+authz_playground_version: 1.4
 #authz_playground_snapshot_timestamp: "20160208.150458-5"
 authz_playground_debug: true
 authzplayground:

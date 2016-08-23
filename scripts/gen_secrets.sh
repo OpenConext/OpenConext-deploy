@@ -92,13 +92,6 @@ while IFS= read -r line; do
     continue
   fi
 
-  if [ "$value" == 'engine_profile_idp_certificate' ]; then
-    line="$key: |"
-    echo "$line" >> $SECRET_VARS_TEMP
-    cat "${EBCERT_FILES_BASE}.crt" | head -n -1 |tail -n +2 | tr -d '\n'; echo >> "$SECRET_VARS_TEMP"
-    continue
-  fi
-  
   if [ "$value" == 'https_star_private_key' ]; then
     line="$key: |"
     echo "$line" >> $SECRET_VARS_TEMP

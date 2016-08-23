@@ -12,6 +12,7 @@
   become: true
   roles:
     - { role: common,   tags: ['common'] }
+    - { role: surfconext_common,   tags: ['surfconext_common'] }
     - { role: users,   tags: ['users'] }
     - { role: iptables,      tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
@@ -32,8 +33,6 @@
   become: true
   roles:
     - { role: httpd,     tags: ['httpd'] }
-  handlers:
-    - include: roles/httpd/handlers/main.yml
 
 - hosts: storage
   gather_facts: no
@@ -62,8 +61,8 @@
   roles:
     - { role: php56fpm,          tags: ['php'     ] }
     - { role: static,            tags: ['static'  ] }
-    - { role: openconext-common, tags: ['eb5','sr','profile'] }
-    - { role: engineblock5,      tags: ['eb5'     ] }
+    - { role: openconext-common, tags: ['eb','sr','profile'] }
+    - { role: engineblock,      tags: ['eb'     ] }
     - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
   handlers:

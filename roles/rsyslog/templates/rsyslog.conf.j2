@@ -12,8 +12,9 @@ $ModLoad imjournal # provides access to the systemd journal
 #$ModLoad immark  # provides --MARK-- message capability
 
 # Provides UDP syslog reception
-#$ModLoad imudp
-#$UDPServerRun 514
+$ModLoad imudp
+$UDPServerRun 514
+$UDPServerAddress 127.0.0.1
 
 # Provides TCP syslog reception
 #$ModLoad imtcp
@@ -70,7 +71,6 @@ uucp,news.crit                                          /var/log/spooler
 # Save boot messages also to boot.log
 local7.*                                                /var/log/boot.log
 
-
 # ### begin forwarding rule ###
 # The statement between the begin ... end define a SINGLE forwarding
 # rule. They belong together, do NOT split them. If you create multiple
@@ -87,6 +87,7 @@ local7.*                                                /var/log/boot.log
 # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
 {% if remote_syslog_host is defined %}
 *.* @@{{ remote_syslog_host }}:5140
+$PreserveFQDN on
 {% endif %}
 # ### end of the forwarding rule ###
 

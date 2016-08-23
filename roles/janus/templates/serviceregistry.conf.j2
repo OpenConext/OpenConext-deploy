@@ -3,7 +3,7 @@ Listen {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.servicer
     ServerAdmin {{ apache_server_admin}}
 
     DocumentRoot {{ janus_installation_current_release_symlink }}/simplesamlphp/www
-    ServerName   {{ janus_domain }}
+    ServerName   https://{{ janus_domain }}
     <Directory /opt/openconext/>
           Require all granted
     </Directory>
@@ -13,7 +13,7 @@ Listen {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.servicer
 
     RewriteEngine On
     RewriteRule ^/$ /simplesaml/module.php/janus/index.php [L,R=301]
-
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
     #Proxy the requests to FPM
 <FilesMatch \.php$>
   SetHandler "proxy:unix:/var/run/php-fpm/serviceregistry-pool.sock|fcgi://localhost/"
