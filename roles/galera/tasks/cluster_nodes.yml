@@ -56,6 +56,9 @@
     - server.cnf
     - mysql-clients.cnf
 
+- name: Restrict permissions on server.cnf
+  file: path=/etc/my.cnf.d/server.cnf mode=0660 owner=mysql group=root
+
 - name: Bootstrap the first node
   shell: /bin/galera_new_cluster
   when: (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
