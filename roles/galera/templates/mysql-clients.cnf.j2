@@ -1,0 +1,25 @@
+#
+# These groups are read by MariaDB command-line tools
+# Use it for options that affect only one utility
+#
+
+[mysql]
+ssl-ca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }}
+ssl-key = {{ galera_tls_cert_path }}/{{ galera_client_key_name }}
+ssl-cert = {{ galera_tls_cert_path }}/{{ galera_client_crt_name }}
+[mysql_upgrade]
+
+[mysqladmin]
+
+[mysqlbinlog]
+
+[mysqlcheck]
+
+[mysqldump]
+
+[mysqlimport]
+
+[mysqlshow]
+
+[mysqlslap]
+
