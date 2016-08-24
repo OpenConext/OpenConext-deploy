@@ -10,8 +10,9 @@ GALERA_GROUP="{{ mariadb_cluster_name }}"
 
 # Optional Galera internal options string (e.g. SSL settings)
 # see http://galeracluster.com/documentation-webpages/galeraparameters.html
-# GALERA_OPTIONS=""
-
+{% if galera_ssl %}
+GALERA_OPTIONS="socket.ssl_key={{ galera_tls_cert_path }}/{{ galera_server_key_name }};socket.ssl_cert={{ galera_tls_cert_path }}/{{ galera_server_crt_name }};socket.ssl_ca={{ galera_tls_cert_path }}/{{ galera_tls_ca }};;socket.ssl_cipher=AES128-SHA"
+{% endif %}
 # Log file for garbd. Optional, by default logs to syslog
 # LOG_FILE=""
 

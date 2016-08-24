@@ -12,6 +12,7 @@
   become: true
   roles:
     - { role: common, tags: ['common'] }
+    - { role: surfconext_common,   tags: ['surfconext_common'] }
     - { role: iptables, tags: ['iptables'] }
     - { role: rsyslog, tags: ['rsyslog'] }
   handlers:
@@ -34,8 +35,13 @@
   gather_facts: yes
   become: true
   roles:
-    - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
+
+- hosts: dbcluster
+  gather_facts: yes
+  become: true
+  roles:
+    - { role: galera, tags: ['galera'] }
 
 - hosts: php-apps
   gather_facts: yes

@@ -5,14 +5,48 @@
 - name: Add MariaDB.org repository
   template: src='mariadb.repo.j2' dest='/etc/yum.repos.d/mariadb.repo'
 
+- name: Add Percona repository
+  yum: name="http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm" state=installed
+
 - name: Install MariaDB, Galera, rsync, MySQL-python
   yum: name={{item}} state=installed
   with_items:
   - MariaDB-server
   - MariaDB-client
   - galera
-  - rsync         # For galera sync
   - MySQL-python  # Required for using the Ansible mysql_* modules
+  - socat
+  - percona-xtrabackup-24
+
+- name: Create directory to keep Galera key material
+  file: dest=/etc/pki/mysql/ state=directory owner=root group=root mode=775
+  when: galera_ssl
+
+- name: copy ca certificate
+  copy: src={{ inventory_dir }}/files/certs/galera/{{item}} dest={{ galera_tls_cert_path }}/{{ item }}
+  with_items:
+    - "{{ galera_tls_ca }}"
+  when: galera_ssl
+
+- name: copy certificates to correct location
+  copy: src={{ inventory_dir }}/files/certs/galera/{{ item.crt_name }} dest="{{ galera_tls_cert_path }}/{{ item.crt_name }}" owner=mysql mode=0400
+  with_items: 
+     - "{{ galera_tls }}"
+  when: galera_ssl
+
+- name: copy private keys to correct location
+  copy: content="{{ item.key_content }}" dest={{ galera_tls_cert_path }}/{{ item.key_name }} mode=0400 owner=mysql
+  with_items: 
+     - "{{ galera_tls }}"
+  when: galera_ssl
+
+- name: Create state transfer key
+  shell: cat /etc/pki/mysql/{{galera_server_key_name }} /etc/pki/mysql/{{galera_server_crt_name }} > /etc/pki/mysql/{{ galera_sst_crt_name }}
+  when: galera_ssl
+  changed_when: false
+
+- name: chmod and chown state transfer key
+  file: path=/etc/pki/mysql/{{ galera_sst_crt_name }} mode=0400 owner=mysql
 
 - name: Put mariadb server.cnf
   template: src='server.cnf.j2' dest='/etc/my.cnf.d/server.cnf'
@@ -89,6 +123,7 @@
 
 - name: Create database user for clustercheck
   mysql_user: name=clustercheck host=localhost password={{ galera_clustercheck_password }} priv=*.*:USAGE state=present login_user=root login_password={{ mariadb_root_password }} 
+  run_once: true
 
 - name: Put clustercheck script in place
   copy: src=clustercheck dest=/usr/local/bin/ mode=0775 owner=root
