@@ -11,6 +11,12 @@
 - name: copy media files
   copy: src=media dest=/var/www/static
 
+- name: symlink legacy idp and sp logo locations
+  file: src=../logos/{{ item }} dest=/var/www/static/media/{{ item }} state=link
+  with_items:
+    - 'idp'
+    - 'sp'
+
 - name: copy apache config
   template: src=static.conf.j2 dest=/etc/httpd/conf.d/static.conf
   notify: reload httpd
