@@ -1,8 +1,0 @@
-#!/bin/bash
-set -e
-if [ "$#" -ne 2 ]
-then
-  echo "Usage: ./provision-test [YOUR_USERNAME_ON_TARGET_HOSTS] [ABSOLUTE_PATH_TO_SECRETS_FILE]"
-  exit 1
-fi
-./ansible-env test provision.yml "$1" "$2"

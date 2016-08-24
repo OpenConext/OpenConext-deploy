@@ -99,10 +99,10 @@ The lb vm contains haproxy and nginx. The apps vm contains all the applications,
 
 # Releases to vm, test, acc, prod
 
-To update single applications - e.g. release - use:
+To update single applications - e.g. release - use tags:
 
 ```
-./provision-single-component ${vm|test|acc|prod} ${remote-user} ${absolute location of secrets file} ${component}
+ansible-playbook -i /path/to/environmentdir/$env/inventory -u $deploy_USERNAME -K  --extra-var="secrets_file=/path_to_acc_secrets/secrets.yml" provision.yml --tags eb
 ```
 
 The secrets used by Ansible are externalized. For the VM the secrets are in this GitHub repo, for test in an internal SURF repo on the build server and for acc and prod the secrets are managed by Prolocation.
