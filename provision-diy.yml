@@ -7,12 +7,15 @@
     tags:
       - always
 
-- hosts: loadbalancer:php-apps:java-apps:storage
-  gather_facts: no
+- hosts: loadbalancer:php-apps:java-apps:storage:oidc:dbcluster
+  gather_facts: yes
   become: true
   roles:
-    - common
-    - tls
+    - { role: common,   tags: ['common'] }
+    - { role: surfconext_common,   tags: ['surfconext_common'] }
+    - { role: openconext-common,   tags: [openconext-commonn'] }
+    - { role: iptables,      tags: ['iptables'] }
+    - { role: rsyslog,      tags: ['rsyslog'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
@@ -20,15 +23,14 @@
   gather_facts: true
   become: true
   roles:
+    - { role: tls,      tags: ['tls'] }
     - { role: haproxy, tags: ['lb'] }
 
-- hosts: php-apps:java-apps
+- hosts: php-apps:java-apps:oidc
   gather_facts: no
   become: true
   roles:
-    - httpd
-  handlers:
-    - include: roles/httpd/handlers/main.yml
+    - { role: httpd,     tags: ['httpd'] }
 
 - hosts: storage
   gather_facts: no
@@ -38,17 +40,17 @@
     - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: php-apps
-  become: true
   gather_facts: no
+  become: true
   vars:
     env_lang: php
   roles:
-    - php
-    - static
+    - { role: php56fpm,          tags: ['php'     ] }
+    - { role: static,            tags: ['static'  ] }
     - { role: openconext-common, tags: ['eb','sr','profile'] }
-    - { role: engineblock,       tags: ['eb'     ] }
-    - { role: janus,             tags: ['sr'     ] }
-    - { role: profile,           tags: ['profile'] }
+    - { role: engineblock,      tags: ['eb'     ] }
+    - { role: janus,             tags: ['sr'      ] }
+    - { role: profile,           tags: ['profile' ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
@@ -58,18 +60,37 @@
   vars:
     env_lang: java
   roles:
-    - tomcat
-    - java
+    - { role: tomcat,           tags: ['tomcat' ] }
+    - { role: java,             tags: ['java' ] }
     - { role: shibboleth,       tags: ['shib'   ] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+      
+- hosts: java-apps
+  gather_facts: true
+  become: true
+  vars:
+    env_lang: java
+  roles:
     - { role: grouper,          tags: ['grouper'] }
     - { role: teams,            tags: ['teams'  ] }
-    - { role: mujina-idp,       tags: ['legacy','mujina' ] }
-    - { role: mujina-sp,        tags: ['legacy','mujina' ] }
     - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,             tags: ['oauth', 'voot'            ] }
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
-    - { role: oidc,             tags: ['oidc'  ] }
+    - { role: pdp,              tags: ['pdp'] }
+    - { role: metadata-exporter, tags: ['metadata-exporter']}
+
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
+
+- hosts: oidc
+  gather_facts: true
+  become: true
+  vars:
+    env_lang: java
+  roles:
+    - { role: oidc,            tags: ['oidc' ] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/tomcat/handlers/main.yml

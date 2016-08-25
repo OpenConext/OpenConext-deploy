@@ -3,7 +3,7 @@
   when: env == 'prd' or env == 'acc'
 
 - include: single-instance.yml
-  when: env == 'vm' or env == 'test' or env == 'test2' or env == 'template'
+  when: env == 'vm' or env == 'test' or env == 'test2' or env == 'template' or env == 'diy'
 
 - name: disable health checks for development envs
   command: 'echo "disable health {{item.name}}" | socat /var/lib/haproxy/stats stdio'
