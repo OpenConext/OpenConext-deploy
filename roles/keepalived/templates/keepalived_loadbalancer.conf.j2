@@ -44,5 +44,15 @@ vrrp_instance backup {
         {{ static_ip }}
         {% if static_ipv6 is defined -%} {{ static_ipv6 }} {% endif %} 
         {{ bind_ip }}  
-        {% if bind_ipv6 is defined -%} {{ bind_ipv6 }} {% endif %} 
+        {% if bind_ipv6 is defined -%} {{ bind_ipv6 }} {% endif %}
+        {% if sa_mw_ip is defined -%} {{ sa_mw_ip }} {% endif %}
+        {% if sa_mw_ipv6 is defined -%} {{ sa_mw_ipv6 }} {% endif %}
+        {% if sa_ip is defined -%} {{ sa_ip }} {% endif %}
+        {% if sa_ipv6 is defined -%} {{ sa_ipv6 }} {% endif %}
+        {% if sa_tiqr_ip is defined -%} {{ sa_tiqr_ip }} {% endif %}
+        {% if sa_tiqr_ipv6 is defined -%} {{ sa_tiqr_ipv6 }} {% endif %}
+        {% if sa_ra_ip is defined -%} {{ sa_ra_ip }} {% endif %}
+        {% if sa_ra_ipv6 is defined -%} {{ sa_ra_ipv6 }} {% endif %}
+        {% if sa_gw_ip is defined -%} {{ sa_gw_ip }} {% endif %}
+        {% if sa_gw_ipv6 is defined -%} {{ sa_gw_ipv6 }} {% endif %}
 }
