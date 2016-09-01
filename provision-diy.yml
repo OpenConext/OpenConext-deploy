@@ -80,6 +80,9 @@
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
     - { role: pdp,              tags: ['pdp'] }
     - { role: metadata-exporter, tags: ['metadata-exporter']}
+    - { role: mujina-idp,        tags: ['mujina' ] }
+    - { role: mujina-sp,         tags: ['mujina' ] }
+
 
   handlers:
     - include: roles/httpd/handlers/main.yml
