@@ -13,10 +13,13 @@
 - name: Create haproxy SSL key directory
   file: dest=/etc/pki/haproxy/ state=directory owner=haproxy group=haproxy mode=0700
 
-- name: Create combined key and certificate file for HAproxy
-  shell: cat {{ tls.cert_private_path }}/{{ tls_star_cert_key }}  {{ tls.cert_path }}/{{ tls_star_cert }} >  /etc/pki/haproxy/{{ tls_star_cert_haproxy }}
-  args:
-    creates: /etc/pki/haproxy/{{ tls_star_cert_haproxy }}
+- name: Create combined key and certificate file for HAproxy besides wildcard certs
+  shell: cat {{ tls.cert_private_path }}/{{ item.key_name }}  {{ tls.cert_path }}/{{ item.crt_name }} > /etc/pki/haproxy/{{ item.name }}_haproxy.pem
+  with_items: "{{ tls_https }}"
+
+- name: Chown SSL certificates
+  file: path=/etc/pki/haproxy/{{ item.name }}_haproxy.pem mode=0600
+  with_items: "{{ tls_https  }}"
 
 - name: Copy config
   template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg

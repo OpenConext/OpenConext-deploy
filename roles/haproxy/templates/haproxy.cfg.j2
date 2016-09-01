@@ -55,11 +55,11 @@ defaults
 ## Frontend configuration
 
 #--------------------------------------------------------------------
-#  frontend
+#  frontend 
 # -------------------------------------------------------------------
 frontend ssl_ip
 
-    bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }}  no-sslv3 transparent
+    bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/star_haproxy.pem {% for application in haproxy_applications %} {% if application.full_vhost_name is defined %} crt /etc/pki/haproxy/{{ application.name }}_haproxy.pem {% endif %} {% endfor %}   no-sslv3 transparent
     http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
     capture request header User-agent len 100
@@ -67,14 +67,48 @@ frontend ssl_ip
     redirect scheme https code 301 if !{ ssl_fc }
 
     {% for application in haproxy_applications %}
-    acl {{ application.name }} hdr(host) -i {{ application.vhost_name }}.{{ base_domain }}
+    {%if application.restricted is not defined %}
+    acl {{ application.name }} hdr(host) -i {% if application.full_vhost_name is not defined  %} {{ application.vhost_name }}.{{ base_domain }}
+    {% else %} {{ application.full_vhost_name }} 
+    {% endif %}
+    {% endif %}
     {% endfor %}
     {% for application in haproxy_applications %}
+    {%if application.restricted is not defined %}
     use_backend {{ application.name }}_be if {{ application.name }}
+    {% endif %}
     {% endfor %}
 
-{% for application in haproxy_applications %}
 
+{% if haproxy_sni_ip_restricted is defined %}
+#--------------------------------------------------------------------
+##  frontend restricted applications
+## -------------------------------------------------------------------
+frontend ssl_restricted_ip
+
+    bind {{ haproxy_sni_ip_restricted }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }}  no-sslv3 transparent
+    http-request del-header Proxy
+    rspadd  Strict-Transport-Security:\ max-age=15768000
+    capture request header User-agent len 100
+    bind {{ haproxy_sni_ip_restricted }}:80 transparent
+    redirect scheme https code 301 if !{ ssl_fc }
+
+    {% for application in haproxy_applications %}
+    {%if application.restricted is defined %}
+    acl {{ application.name }} hdr(host) -i {% if application.full_vhost_name is not defined  %} {{ application.vhost_name }}.{{ base_domain }}
+    {% else %} {{ application.full_vhost_name }}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% for application in haproxy_applications %}
+    {%if application.restricted is defined %}
+    use_backend {{ application.name }}_be if {{ application.name }}
+    {% endif %}
+    {% endfor %}
+
+
+{% endif %}
+{% for application in haproxy_applications %}
 #---------------------------------------------------------------------
 # {{ application.name }} backend
 #---------------------------------------------------------------------
