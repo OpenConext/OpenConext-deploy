@@ -95,3 +95,6 @@ trustedProxyIps[] = {{ engine_trusted_proxy_ip }}
 {% endif %}
 
 base_domain = {{ engine_base_domain }}
+
+; Minimum execution time in milliseconds when a received response is deemed invalid (default: 5000 ms)
+minimumExecutionTimeOnInvalidReceivedResponse = {{ engine_minimum_execution_time_on_invalid_received_response }}
