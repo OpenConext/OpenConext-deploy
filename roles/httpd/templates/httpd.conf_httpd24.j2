@@ -328,7 +328,14 @@ AddDefaultCharset UTF-8
 # Defaults if commented: EnableMMAP On, EnableSendfile Off
 #
 #EnableMMAP off
-EnableSendfile on
+
+{% if develop %}
+# Disable sendfile for development as modified assets such as JavaScript and CSS will be sent incorrectly
+EnableSendfile Off
+{% else %}
+EnableSendfile On
+{% endif %}
+
 ServerSignature Off
 
 # Supplemental configuration
