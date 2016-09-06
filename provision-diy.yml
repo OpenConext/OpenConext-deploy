@@ -51,6 +51,7 @@
     - { role: engineblock,      tags: ['eb'     ] }
     - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
+    - { role: spform,           tags: ['spform' ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
