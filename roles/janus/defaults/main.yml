@@ -1,11 +1,9 @@
 ---
-janus_installation_version: 5.1.8
-janus_installation_version_dir: "{{ janus_installation_version | replace('/', '-') }}"
+janus_installation_version_dir: "{{ janus_version | replace('/', '-') }}"
 janus_installation_dir: "{{ openconext_releases_dir }}/OpenConext-serviceregistry-{{ janus_installation_version_dir }}"
 janus_installation_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-serviceregistry"
 #
 ## SimpleSAMLphp
-janus_ssp_version: 1.13.2
 janus_ssp_unarchived_dir: "{{ janus_installation_dir }}/simplesamlphp-{{ janus_ssp_version}}"
 janus_ssp_dir: "{{ janus_installation_dir }}/simplesamlphp"
 janus_ssp_modules_dir: "{{ janus_ssp_dir }}/modules"
@@ -14,7 +12,6 @@ janus_ssp_tar_file: simplesamlphp-{{ janus_ssp_version }}.tar.gz
 janus_ssp_tar_location: "{{ openconext_builds_dir }}/{{ janus_ssp_tar_file }}"
 #
 ## Janus
-janus_version: 1.22.0
 janus_dir: "{{ janus_ssp_modules_dir }}/janus"
 janus_download_base_url: "https://github.com/janus-ssp/janus/releases/download/{{ janus_version }}"
 janus_tar_file: "janus-{{ janus_version }}.tar.gz"
