@@ -161,8 +161,6 @@ shibboleth_apps:
 shib:
   engine_domain: "{{ base_domain }}"
 
-api_version: 4.0.1
-
 mujina_version: 4.1.0
 
 ##

@@ -156,9 +156,6 @@ shibboleth_apps:
 shib:
   engine_domain: "{{ base_domain }}"
 
-api_version: 4.0.1
-#api_snapshot_timestamp
-
 mujina_version: 4.1.0
 #mujina_snapshot_timestamp
 
