@@ -1,32 +1,13 @@
 ---
-
-- name: Install mysql server
-  yum: name={{ item }} state=present
-  with_items:
-     - mysql-server.x86_64
-     - MySQL-python
-  tags: mysql
-  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
-        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
-
-
 - name: Install mariadb server
   yum: name={{ item }} state=present
   with_items:
      - mariadb-server.x86_64
      - MySQL-python
-  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
 
-  tags: mysql
-
-- name: Start and enable mysql
-  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
-        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
-  service: name=mysqld state=started enabled=yes
   tags: mysql
 
 - name: Start and enable mariadb
-  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
   service: name=mariadb state=started enabled=yes
   tags: mysql
 

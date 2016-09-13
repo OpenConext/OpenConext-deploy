@@ -7,7 +7,6 @@
 
 - name: Install openldap client utils
   yum: name={{ item }} state=present
-  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
   with_items:
     - openldap-clients
 
@@ -40,11 +39,6 @@
     - SLAPD_LDAP
     - SLAPD_LDAPI
     - SLAPD_LDAPS
-  tags: ldap
-
-- name: set ldap bind host/port
-  lineinfile: dest=/etc/sysconfig/ldap line='SLAPD_URLS=\"{{ ldap_bind_urls }}\"' regexp="^#?SLAPD_URLS="
-  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6")
   tags: ldap
 
 - name: start slapd to generate new config

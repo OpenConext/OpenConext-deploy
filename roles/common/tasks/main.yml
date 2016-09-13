@@ -68,6 +68,10 @@
   service: name=sendmail state=started enabled=yes
   when: sendmail_smarthost is defined
 
-- name: include centOS 7 specific tasks
-  include: main_centos7.yml
-  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") 
+# journald binary logs corrupt on specific engineblock messages.
+# disabling compression fixes that issue
+- name: Disable journald compression
+  copy: src=journald.conf dest='/etc/systemd/journald.conf'
+  notify: 
+    - restart journald
+

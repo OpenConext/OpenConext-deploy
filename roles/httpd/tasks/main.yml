@@ -13,13 +13,6 @@
   notify: reload httpd
 
 - name: Copy the config file
-  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or
-        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
-  template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
-  notify: reload httpd
-
-- name: Copy the config file
-  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
   template: src=httpd.conf_httpd24.j2 dest=/etc/httpd/conf/httpd.conf
   notify: reload httpd
 

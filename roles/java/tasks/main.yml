@@ -10,17 +10,6 @@
   tags: java
 
 - name: Link JDK alternatives to 1.7
-  when: (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6") or 
-        (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6")
-  file: src=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64/{{ item.path }} dest=/usr/bin/{{ item.name }} state=link force=yes
-  with_items:
-      - { name: 'java', path: 'bin/java' }
-      - { name: 'javaws', path: 'bin/javaws' }
-      - { name: 'keytool', path: 'bin/keytool' }
-  tags: java
-
-- name: Link JDK alternatives to 1.7
-  when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
   file: src=/usr/lib/jvm/jre-1.7.0-openjdk/{{ item.path }} dest=/usr/bin/{{ item.name }} state=link force=yes
   with_items:
       - { name: 'java', path: 'bin/java' }
