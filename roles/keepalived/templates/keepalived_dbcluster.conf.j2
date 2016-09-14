@@ -20,7 +20,7 @@ vrrp_instance galera {
         chk_cluster
     }
  
-    notify_master "/bin/echo 'now master' > /tmp/keepalived.state"
-    notify_backup "/bin/echo 'now backup' > /tmp/keepalived.state"
-    notify_fault "/bin/echo 'now fault' > /tmp/keepalived.state"
+    notify_master "/bin/echo 'master' > /tmp/keepalived.state"
+    notify_backup "/bin/echo 'backup' > /tmp/keepalived.state"
+    notify_fault "/bin/echo 'fault' > /tmp/keepalived.state"
 }

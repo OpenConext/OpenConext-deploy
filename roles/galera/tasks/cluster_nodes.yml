@@ -92,7 +92,7 @@
     password: "{{ mariadb_backup_password  }}"
     login_user: root
     login_password: "{{ mariadb_root_password }}"
-    priv: "*.*:SELECT"
+    priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
     state: present
 
 - name: Add "backup" shell user
