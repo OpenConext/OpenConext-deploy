@@ -5,7 +5,7 @@
 # ansible-playbook ... -e "galera_bootstrap_node=<hostname of the node to bootstrap>"
 galera_bootstrap_node: ""
 mariadb_cluster_user: galera_sst_user
-pacemaker_user: hacluster
+mariadb_backup_user: backup_user
 
 # Settings for galera TLS
 galera_ssl: true

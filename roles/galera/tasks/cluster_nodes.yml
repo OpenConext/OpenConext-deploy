@@ -49,7 +49,7 @@
   file: path=/etc/pki/mysql/{{ galera_sst_crt_name }} mode=0400 owner=mysql
 
 - name: Put mariadb config files
-  template: src={{ item }}.j2 dest=/etc/my.cnf.d/{{ item }}
+  template: src={{ item }}.j2 dest=/etc/my.cnf.d/{{ item }} 
   notify:
     - restart mariadb
   with_items:
@@ -57,7 +57,7 @@
     - mysql-clients.cnf
 
 - name: Restrict permissions on server.cnf
-  file: path=/etc/my.cnf.d/server.cnf mode=0660 owner=mysql group=root
+  file: path=/etc/my.cnf.d/server.cnf mode=0660 owner=root group=root
 
 - name: Bootstrap the first node
   shell: /bin/galera_new_cluster
@@ -94,15 +94,13 @@
     login_password: "{{ mariadb_root_password }}"
     priv: "*.*:SELECT"
     state: present
-  when: mariadb_enable_remote_ssh_backup | default(false)
 
 - name: Add "backup" shell user
   user: name=backup
   when: mariadb_enable_remote_ssh_backup | default(false)
 
 - name: Put mariadb_backup script
-  template: src='mariadb_backup.sh.j2' dest='/home/backup/mariadb_backup.sh' mode=500 owner=backup
-  when: mariadb_enable_remote_ssh_backup | default(false)
+  template: src='mariadb_backup.sh.j2' dest='/usr/local/sbin/mariadb_backup.sh' mode=700 owner=root
 
 - name:
   authorized_key:
@@ -132,4 +130,4 @@
   run_once: true
 
 - name: Put clustercheck script in place
-  copy: src=clustercheck dest=/usr/local/bin/ mode=0775 owner=root
+  copy: src=clustercheck dest=/usr/local/bin/ mode=0770 owner=root
