@@ -1,1 +1,1 @@
-keep_alived_config_name: loadbalancer
+keepalived_config_name: loadbalancer

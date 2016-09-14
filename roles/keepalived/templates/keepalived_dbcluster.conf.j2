@@ -6,8 +6,12 @@ vrrp_script chk_cluster {
 vrrp_instance galera {
    interface {{ ansible_default_ipv4.interface }}               # interface to monitor
    state {{ keepalived.state }}
-   virtual_router_id 240          # Assign one ID for this route
+   virtual_router_id {{ keepalived_vrid }}          # Assign one ID for this route
    priority {{ keepalived.prio }}                 # 101 on master, 100 on backup
+   authentication {
+        auth_type PASS
+        auth_pass {{ keepalived_dbcluster_vrrp_password }}
+   } 
    virtual_ipaddress {
        {{ dbcluster_ip }}
    
