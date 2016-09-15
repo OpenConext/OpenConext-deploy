@@ -3,7 +3,7 @@
 # $Id: grouper.hibernate.example.properties,v 1.9 2009-08-11 20:18:09 mchyzer Exp $
 #
 
-hibernate.connection.url = jdbc:mysql://{{ grouper.db_host }}:3306/i{{ grouper.database_name }}
+hibernate.connection.url = jdbc:mysql://{{ grouper.db_host }}:3306/{{ grouper.database_name }}
 
 hibernate.connection.username         = {{ grouper.db_user }}
 # If you are using an empty password, depending upon your version of
@@ -14,11 +14,11 @@ hibernate.connection.password         = {{ grouper.db_password }}
 ################  BELOW HERE YOU GENERALLY DO NOT NEED TO CHANGE ####################
 
 # Leave blank to autodetect based on URL, or specify
-# Hibernate3.  
+# Hibernate3.
 # e.g. org.hibernate.dialect.Oracle10gDialect, org.hibernate.dialect.HSQLDialect
 # e.g. org.hibernate.dialect.PostgreSQLDialect ,org.hibernate.dialect.MySQL5Dialect
 # e.g. org.hibernate.dialect.SQLServerDialect
-hibernate.dialect               = 
+hibernate.dialect               =
 
 # see http://ehcache.org/documentation/user-guide/hibernate#Configure-Ehcache-as-the-Second-Level-Cache-Provider
 # Hibernate 3.0 - 3.2
@@ -40,7 +40,7 @@ hibernate.cache.use_query_cache       = true
 # e.g. hsqldb:          org.hsqldb.jdbcDriver
 # e.g. postgres:        org.postgresql.Driver
 # e.g. mssql:           com.microsoft.sqlserver.jdbc.SQLServerDriver
-hibernate.connection.driver_class = 
+hibernate.connection.driver_class =
 
 
 hibernate.connection.autocommit       = false
