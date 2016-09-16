@@ -3,3 +3,4 @@ mujina_idp_artifact_id: mujina-idp
 # needed as default values
 mujina_snapshot_timestamp: ''
 mujina_idp_local_war: ''
+mujina_idp_signing_algorithm: "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
