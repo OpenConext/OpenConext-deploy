@@ -161,7 +161,7 @@ shibboleth_apps:
 shib:
   engine_domain: "{{ base_domain }}"
 
-mujina_version: 4.1.0
+mujina_version: 4.1.1
 
 ##
 # VM config for the teams app
