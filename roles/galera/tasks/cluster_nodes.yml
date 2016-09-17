@@ -51,13 +51,13 @@
 - name: Put mariadb config files
   template: src={{ item }}.j2 dest=/etc/my.cnf.d/{{ item }} 
   notify:
-    - restart mariadb
+    - restart mysql
   with_items:
     - server.cnf
     - mysql-clients.cnf
 
 - name: Restrict permissions on server.cnf
-  file: path=/etc/my.cnf.d/server.cnf mode=0660 owner=root group=root
+  file: path=/etc/my.cnf.d/server.cnf mode=0664 owner=root group=root
 
 - name: Bootstrap the first node
   shell: /bin/galera_new_cluster

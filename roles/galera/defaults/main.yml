@@ -26,3 +26,4 @@ galera_server_crt_name: galera_server.pem
 galera_client_key_name: galera_client.key
 galera_client_crt_name: galera_client.pem
 galera_sst_crt_name: galera_sst.pem
+galera_gmcast_segment: 1
