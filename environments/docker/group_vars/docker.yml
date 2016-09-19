@@ -173,7 +173,7 @@ teams:
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:demo.openconext.org:"
 
-teams_version: 4.2.10
+teams_version: 4.2.13
 teams_debug: false
 
 engineblock:
