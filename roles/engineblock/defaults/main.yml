@@ -5,6 +5,13 @@ engine_version: ''
 
 # Feature toggles
 engine_feature_ldap_integration: 1
+engine_feature_encrypted_assertions: 1
+engine_feature_encrypted_assertions_require_outer_signature: 1
+engine_feature_run_all_manipulations_prior_to_consent: 0
+
+engine_api_feature_metadata_push: 1
+engine_api_feature_consent_listing: 1
+engine_api_feature_metadata_api: 1
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"
