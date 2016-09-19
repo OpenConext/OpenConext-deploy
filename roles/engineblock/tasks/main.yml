@@ -9,10 +9,10 @@
   file: path={{ php_session_dir}}/engine state=directory owner={{ engine_fpm_user }} group=root mode=770
 
 - include: install-release.yml
-  when: (engine_branch is not defined or engine_branch == '') and not develop
+  when: "(engine_branch is not defined or engine_branch == '') and not develop"
 
 - include: install-branch.yml
-  when: (engine_branch is defined and engine_branch != '') and not develop
+  when: "(engine_branch is defined and engine_branch != '') and not develop"
 
 - include: develop.yml
   when: develop
