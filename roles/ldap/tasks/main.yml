@@ -51,9 +51,13 @@
   service: name=slapd state=stopped sleep=2
   tags: ldap
 
-- name: clean slapd.d
-  shell: rm -rf /etc/openldap/slapd.d/*
+- name: remove slapd.d
+  file: path=/etc/openldap/slapd.d state=absent
   when: config_correct.stdout == "0"
+  tags: ldap
+
+- name: create slapd.d
+  file: path=/etc/openldap/slapd.d state=directory owner=ldap group=ldap mode=0700
   tags: ldap
 
 - name: generate new config
