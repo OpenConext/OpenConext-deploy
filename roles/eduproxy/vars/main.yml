@@ -12,4 +12,3 @@ springapp_local_jar: "{{ eduproxy_local_jar }}"
 springapp_debug: "{{ eduproxy_debug }}"
 springapp_debug_port: 1399
 springapp_heapsize: 512m
-springapp_random_source: "file:///dev/urandom"

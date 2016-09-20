@@ -12,4 +12,3 @@ springapp_local_jar: "{{ voot_local_jar }}"
 springapp_debug: "{{ voot_debug }}"
 springapp_debug_port: 1191
 springapp_heapsize: "128m"
-springapp_random_source: "file:///dev/urandom"
