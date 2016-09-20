@@ -12,4 +12,3 @@ springapp_local_jar: "{{ authz_server_local_jar }}"
 springapp_debug: "{{ authz_server_debug }}"
 springapp_debug_port: 1190
 springapp_heapsize: "64m"
-springapp_random_source: "file:///dev/urandom"
