@@ -12,6 +12,7 @@ springapp_local_jar: "{{ pdp_local_jar }}"
 springapp_debug: "{{ pdp_debug }}"
 springapp_debug_port: 1196
 springapp_heapsize: "512m"
+springapp_random_source: "file:///dev/urandom"
 
 js_error_reporting_access_token: "{{ pdp_js_access_token }}"
 js_error_enabled: "true"
