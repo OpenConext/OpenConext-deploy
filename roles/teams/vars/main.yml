@@ -12,3 +12,4 @@ springapp_local_jar: "{{ teams_local_jar }}"
 springapp_debug: "{{ teams_debug | default(false) }}"
 springapp_debug_port: 1197
 springapp_heapsize: "256m"
+springapp_random_source: "file:///dev/urandom"
