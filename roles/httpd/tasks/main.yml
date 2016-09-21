@@ -21,6 +21,7 @@
   with_items:
     - welcome.conf
     - userdir.conf
+    - autoindex.conf
   notify: reload httpd
 
 - name: Stop listening on port 443
