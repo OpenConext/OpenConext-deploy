@@ -1,10 +1,10 @@
 ---
-- name: Install haproxy
-  yum: name=haproxy state=present
-
-- name: Install socat
-  yum: name=socat state=present
-
+- name: Install haproxy and socat
+  yum: name="{{ item }}" state=present
+  with_items: 
+     - socat
+     - haproxy
+  
 - name: Enable haproxy
   service: name=haproxy enabled=yes
   notify:
@@ -13,9 +13,10 @@
 - name: Create haproxy SSL key directory
   file: dest=/etc/pki/haproxy/ state=directory owner=haproxy group=haproxy mode=0700
 
-- name: Create combined key and certificate file for HAproxy besides wildcard certs
+- name: Create combined key and certificate file for HAproxy 
   shell: cat {{ tls.cert_private_path }}/{{ item.key_name }}  {{ tls.cert_path }}/{{ item.crt_name }} > /etc/pki/haproxy/{{ item.name }}_haproxy.pem
   with_items: "{{ tls_https }}"
+  changed_when: false
 
 - name: Chown SSL certificates
   file: path=/etc/pki/haproxy/{{ item.name }}_haproxy.pem mode=0600

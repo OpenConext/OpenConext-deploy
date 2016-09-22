@@ -4,7 +4,7 @@
 
 - name: Backup current database
   shell: "mysqldump -u root -p{{ mysql_root_password }} --force --comment --set-charset --default-character-set=utf8 --databases {{ janus_database_name }} {{ engine_database_name }} > /opt/OCbackups/sr+eb.$(date +%Y%m%d_%H%M%S).sql"
-
+  changed_when: false
 
 - name: copy load sql
   template: src={{ item }}.j2 dest=/tmp/{{ item }}
@@ -12,7 +12,7 @@
     - engineblock.sql
     - serviceregistry.sql
     - virtual_organization.sql
-
+     
 - name: run load engineblock sql
   shell: mysql -u {{ item.db_user }} -p{{ item.db_password }} -h {{ mysql_host }} -D {{ item.db_name }} < /tmp/{{ item.sql }}
   with_items:
@@ -21,3 +21,6 @@
     - { db_user: "{{ engine_database_user }}", db_password: "{{ engine_database_password }}", db_name: "{{ engine_database_name }}", sql: virtual_organization.sql }
   register: eb_sr_sql
   run_once: true
+  args: 
+    creates: /var/lib/mysql/eb/migration_versions.frm
+
