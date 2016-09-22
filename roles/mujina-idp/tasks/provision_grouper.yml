@@ -3,11 +3,6 @@
   with_items:
     - add-mujina-user.gsh
 
-- name: use correct grouper config
-  template: src={{ item.src }}.j2 dest=/opt/www/grouper.apiBinary-2.1.5/conf/{{ item.dest }}
-  with_items:
-    - { src: sources-grouper-shell.xml, dest: sources.xml }
-
 - name: provision grouper with users
   shell: bin/gsh ~/{{ item }}
   register: gsh_output
