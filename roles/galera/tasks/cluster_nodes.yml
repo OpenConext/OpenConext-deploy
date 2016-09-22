@@ -131,3 +131,8 @@
 
 - name: Put clustercheck script in place
   copy: src=clustercheck dest=/usr/local/bin/ mode=0770 owner=root
+
+- name: MySQL my.cnf
+  template: src=my.cnf.j2 dest=/root/.my.cnf mode=0600 owner=root group=root
+
+
