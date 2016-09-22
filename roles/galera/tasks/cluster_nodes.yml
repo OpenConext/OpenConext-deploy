@@ -95,12 +95,12 @@
     priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
     state: present
 
-- name: Add "backup" shell user
-  user: name=backup
-  when: mariadb_enable_remote_ssh_backup | default(false)
-
 - name: Put mariadb_backup script
   template: src='mariadb_backup.sh.j2' dest='/usr/local/sbin/mariadb_backup.sh' mode=700 owner=root
+
+- name: Create cron symlink for backup script
+  file: src=/usr/local/sbin/mariadb_backup.sh dest=/etc/cron.daily/db_backup state=link mode=700 owner=root
+  when: backup_node is defined
 
 - name:
   authorized_key:
