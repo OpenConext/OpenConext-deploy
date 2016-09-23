@@ -1,3 +1,7 @@
 ---
+# TODO: find a way to make this generic
+- name: systemctl daemon-reload
+  command: "systemctl daemon-reload"
+
 - name: restart teams
   service: name=teams state=restarted sleep=45
