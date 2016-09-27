@@ -20,7 +20,7 @@ voot_version: 2.0.4
 authz_admin_version: 2.0.10
 authz_playground_version: 1.4
 pdp_version: 1.2.1
-aa_version: "1.0.3"
+aa_version: "1.0.4"
 oidc_version: "1.0.1"
 metadata_exporter_version: "1.1.1"
 engine_version: "5.0.0"

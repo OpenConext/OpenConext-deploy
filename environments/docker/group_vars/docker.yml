@@ -390,7 +390,7 @@ pdp:
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-aa_version: 1.0.3
+aa_version: 1.0.4
 
 aa_debug: false
 aa:
