@@ -74,7 +74,7 @@
   when: env == 'vm' or env == 'test2' or env == 'template'
 
 - name: provision grouper for teams
-  shell: "/bin/env GSH_JVMARGS='-Djava.security.egd=file:///dev/urandom' bin/gsh ~/create-stems.gsh"
+  shell: "/bin/env GSH_JVMARGS='-Djava.security.egd={{ teams_random_source }}' bin/gsh ~/create-stems.gsh"
   register: gsh_output
   changed_when: "gsh_output.stderr != ''"
   args:
