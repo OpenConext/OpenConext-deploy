@@ -17,6 +17,7 @@ APP_NAME="{{ springapp_service_name }}"
 APP_JAR="{{ springapp_jar }}"
 APP_USER="{{ springapp_user }}"
 HEAPSIZE="{{ springapp_heapsize }}"
+RANDOM_SOURCE="{{ springapp_random_source }}"
 
 LOG="/var/log/$APP_NAME.log"
 LOCK="/var/lock/subsys/$APP_NAME"
@@ -53,7 +54,7 @@ start() {
     fi
 
     cd "$APPLICATION_HOME"
-    $SU - $APP_USER -c "nohup $JAVA $DEBUG_OPTS -Xms$HEAPSIZE  -Xmx$HEAPSIZE -jar $APP_JAR >> /var/log/$APP_NAME/init.log 2>&1 &"
+    $SU - $APP_USER -c "nohup $JAVA $DEBUG_OPTS -Xms$HEAPSIZE  -Xmx$HEAPSIZE -Djava.security.egd=$RANDOM_SOURCE -jar $APP_JAR >> /var/log/$APP_NAME/init.log 2>&1 &"
 
     pid_of_app > /dev/null
     RETVAL=$?

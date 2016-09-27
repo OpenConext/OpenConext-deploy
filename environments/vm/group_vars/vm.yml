@@ -6,6 +6,21 @@ error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
+profile_version: 0.3.0
+teams_version: 4.2.13
+mujina_version: 4.1.1
+authz_server_version: 1.3.7
+voot_version: 2.0.4
+authz_admin_version: 2.0.10
+authz_playground_version: 1.4
+pdp_version: 1.2.4
+aa_version: "1.0.4"
+oidc_version: "1.0.2"
+metadata_exporter_version: "2.0.3"
+engine_version: "5.0.0"
+janus_version: 1.22.0
+janus_ssp_version: 1.13.2
+
 databases:
   names:
     - teams
@@ -55,15 +70,12 @@ tls_https:
 
 apache_server_admin: unix@prolocation.net
 
-janus_version: 1.22.0
-janus_ssp_version: 1.13.2
 janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_title_suffix: "SURFconext VM"
 
-engine_version: "5.0.0"
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
 # when using multiple certificates list them all (and their bundles) under tls.certificates
@@ -120,7 +132,6 @@ engine_block:
         value: "JanusRestV1"
       }
 
-profile_version: 0.3.0
 #profile_branch: develop
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:
@@ -156,7 +167,6 @@ shibboleth_apps:
 shib:
   engine_domain: "{{ base_domain }}"
 
-mujina_version: 4.1.1
 #mujina_snapshot_timestamp
 
 ##
@@ -169,7 +179,6 @@ teams:
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:demo.openconext.org:"
 
-teams_version: 4.2.13
 #teams_snapshot_timestamp: 20160314.083705-5
 teams_debug: true
 
@@ -231,7 +240,6 @@ authzserver:
   db_host: "{{ mysql_host }}"
   db_name: authz-server
 
-authz_server_version: 1.3.7
 #authz_server_snapshot_timestamp: 20150429.085158-60
 authz_server_debug: true
 
@@ -259,15 +267,11 @@ voot:
         name: "SURFteams",
         timeoutMillis: 3000
       }
-voot_version: 2.0.4
-#voot_snapshot_timestamp: ""
 voot_debug: true
 
 ##
 # VM config for the authz-admin application
 ##
-authz_admin_version: 2.0.10
-#authz_admin_snapshot_timestamp: 20150422.113215-61
 authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
 authz_admin_debug: true
 authzadmin:
@@ -366,8 +370,6 @@ authzadmin:
 ##
 # VM config for the authz-admin application
 ##
-authz_playground_version: 1.4
-#authz_playground_snapshot_timestamp: "20160208.150458-5"
 authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
@@ -375,9 +377,6 @@ authzplayground:
   springapp_oidc_client_id: http@//mock-sp
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
-pdp_version: 1.2.4
-#pdp_snapshot_timestamp: "20151222.101918-28"
-#pdp_html_snapshot_timestamp: "20151222.102014-26"
 pdp_debug: true
 pdp:
   username: "pdp_admin"
@@ -391,10 +390,6 @@ pdp:
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
-
-aa_version: "1.0.3"
-#aa_snapshot_timestamp: "20160302.080912-1"
-#aa_html_snapshot_timestamp: "20160302.081013-1"
 
 aa_debug: true
 aa:
@@ -417,8 +412,6 @@ aa:
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
   aggregate_cache: 0
 
-oidc_version: "1.0.2"
-#oidc_snapshot_timestamp: "20160229.102842-1"
 oidc:
   environment: vm
   issuer: https://oidc.{{ base_domain }}/
@@ -428,8 +421,6 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.{{ base_domain }}
 
-metadata_exporter_version: 2.0.3
-#metadata_exporter_snapshot_timestamp: "20160208.084759-3"
 metadata_exporter:
   db_user: srrw
   db_password: "{{ mysql_passwords.sr }}"
