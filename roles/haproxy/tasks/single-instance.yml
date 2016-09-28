@@ -13,20 +13,10 @@
 - name: Create haproxy SSL key directory
   file: "dest=/etc/pki/haproxy/ state=directory owner=haproxy group=haproxy mode=0700"
 
-- name: Create combined key and certificate file for HAproxy 
-  shell: "umask 600; cat {{ tls.cert_private_path }}/{{ item.key_name }}  {{ tls.cert_path }}/{{ item.crt_name }} > /tmp/{{ item.name }}_haproxy.pem"
-  with_items: "{{ tls_https }}"
-  changed_when: false
-
-- name: Copy combined key and certificate to HAproxy dir
-  copy: "remote_src=True src=/tmp/{{ item.name }}_haproxy.pem dest=/etc/pki/haproxy/{{ item.name }}_haproxy.pem mode=0600"
+- name: Create combined key and certificate file for HAproxy
+  copy: content="{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}" dest=/etc/pki/haproxy/{{ item.name }}_haproxy.pem mode=0600
   with_items: "{{ tls_https }}"
   notify: reload haproxy
-
-- name: remove temp file
-  file: "path=/tmp/{{ item.name }}_haproxy.pem state=absent"
-  with_items: "{{ tls_https }}"
-  changed_when: false
 
 - name: Copy config
   template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg

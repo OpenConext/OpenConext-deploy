@@ -12,10 +12,12 @@
   file: dest=/etc/haproxy/{{ item.name }} state=directory owner=haproxy group=haproxy mode=0700
   with_items: "{{ haproxy_applications }}"
 
-- name: Create SSL certificates
-  shell: cat {{ tls.cert_private_path }}/{{ item.key_name }}  {{ tls.cert_path }}/{{ item.crt_name }} > /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
+- name: Create combined key and certificate file for HAproxy
+  copy: content="{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}" dest=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
   with_items: "{{ haproxy_applications }}"
   when: not item.hidden
+  register: configs_changed
+  notify: restart haproxy instances with changed configs
 
 - name: Chown SSL certificates
   file: path=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
@@ -39,7 +41,9 @@
 
 - name: enable systemd startup
   command: systemctl enable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  register: haproxy_enable_service
   with_items: "{{ haproxy_applications }}"
+  changed_when: "'Created symlink' in haproxy_enable_service.stderr"
 
 - name: start services 
   service: name=haproxy_{{item.name }} enabled=yes state=started
