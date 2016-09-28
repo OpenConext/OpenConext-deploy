@@ -33,7 +33,6 @@ script:
     --add-host multidata.vm.openconext.org:127.0.0.1
     --add-host oidc.vm.openconext.org:127.0.0.1
     --name ansible-test surfnet/centos7-openconext
-  - >
   - sudo docker exec -t ansible-test sh -c 'echo -e "[defaults]\ncallback_plugins=/ansible/callback_plugins\ncallback_whitelist=profile_tasks\n[ssh_connection]\nssh_args=-o ControlMaster=auto -o ControlPersist=60m\npipelining=True" > /ansible/ansible.cfg '
   - >
     sudo docker exec -t ansible-test

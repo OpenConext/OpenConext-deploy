@@ -4,7 +4,9 @@
 
 - name: copy start script
   template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
-  notify: restart teams
+  notify:
+    - "systemctl daemon-reload"
+    - "restart teams"
 
 - name: enable service
   service: name=teams enabled=yes
