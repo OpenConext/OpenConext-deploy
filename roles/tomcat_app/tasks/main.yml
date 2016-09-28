@@ -23,7 +23,7 @@
   register: current_app_stat
 
 - name: Deploying {{ deploy_name }} | get the md5 sum of the candidate
-  stat: path=~/{{ deploy_name }}-candidate.war
+  stat: path={{ candidate_war }}
   register: candidate_app_stat
 
 - include: deploy.yml
