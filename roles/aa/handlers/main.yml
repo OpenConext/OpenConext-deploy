@@ -1,3 +1,3 @@
 ---
 - name: restart aa
-  service: name=aa state=restarted sleep=45
+  service: name=aa state=restarted

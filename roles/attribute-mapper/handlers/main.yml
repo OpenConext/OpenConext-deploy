@@ -1,3 +1,3 @@
 ---
 - name: restart attribute-mapper
-  service: name=attribute-mapper state=restarted sleep=45
+  service: name=attribute-mapper state=restarted
