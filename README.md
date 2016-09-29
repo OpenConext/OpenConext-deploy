@@ -55,10 +55,10 @@ To provision the VM please run:
 
 ```bash
 Download the latest release:
-wget https://github.com/OpenConext/OpenConext-deploy/archive/v1.0.tar.gz 
+wget https://github.com/OpenConext/OpenConext-deploy/archive/v2.0.tar.gz 
 Untar it:
 tar -xvzf v1.0.tar.gz
-cd OpenConext-deploy-1.0
+cd OpenConext-deploy-2.0
 ./provision-vagrant
 ```
 
@@ -71,7 +71,7 @@ These are the steps the above script performs:
 3. Inserts entities and metadata in Janus and initial load of engineblock to bootstrap.
 4. Install all Java apps for the openconext platform.
 5. Install all PHP apps for the openconext platform.
-6. Install Haproxy and Nginx for loadbalacing and SSL termination
+6. Install Haproxy for loadbalacing and SSL termination
 7. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
 
 ## Add hostname entries to your own /etc/hosts file
@@ -79,23 +79,23 @@ These are the steps the above script performs:
 We need pseudo-DNS entries so that your browser can reach the VM-platform we just installed. So, add this very long line to your `/etc/hosts` file:
 
 ```
-192.168.66.78  welcome.vm.openconext.org serviceregistry.vm.openconext.org api.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org manage.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org oidc.vm.openconext.org aa.vm.openconext.org
+192.168.66.98  welcome.vm.openconext.org serviceregistry.vm.openconext.org static.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org oidc.vm.openconext.org aa.vm.openconext.org
 ```
 
-Here, the ip-address `192.168.66.78` refers to the address that is mentioned in ./Vagrantfile.
+Here, the ip-address `192.168.66.98` refers to the address that is mentioned in ./Vagrantfile.
 
 ## Enjoy your new VM!
 
 Go to [https://welcome.vm.openconext.org](https://welcome.vm.openconext.org). To ssh to the machines use the following:
 
 ```
-vagrant ssh lb
-vagrant ssh apps
+vagrant ssh lb_centos7
+vagrant ssh apps_centos7
 ```
 
 (using `vagrant ssh` without a VM specified leads to the Apps VM)
 
-The lb vm contains haproxy and nginx. The apps vm contains all the applications, apache, database and ldap.
+The lb vm contains haproxy. The apps vm contains all the applications, apache, database and ldap.
 
 # Releases to vm, test, acc, prod
 
