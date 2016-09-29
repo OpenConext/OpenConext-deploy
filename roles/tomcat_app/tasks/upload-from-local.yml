@@ -4,7 +4,5 @@
   register: local_app_warfile
   when: app_local_war != ''
 
-- debug: var=local_app_warfile
-
 - set_fact: candidate_war="{{ local_app_warfile.dest }}"
   when: app_local_war != ''
