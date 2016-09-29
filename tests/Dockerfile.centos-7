@@ -21,9 +21,6 @@ RUN mkdir /etc/ansible/
 RUN echo -e '[local]\nlocalhost' > /etc/ansible/hosts
 RUN pip install ansible
 
-# install packets that the ansible roles expect to be there
-RUN yum -y install firewalld rsyslog
-
 VOLUME [ "/sys/fs/cgroup" ]
 
 CMD ["/usr/sbin/init"]
