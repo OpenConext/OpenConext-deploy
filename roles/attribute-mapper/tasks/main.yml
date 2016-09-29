@@ -2,9 +2,14 @@
 - name: Create user
   user: name=attribute-mapper system=yes home={{ attribute_mapper_dir }} shell=/sbin/nologin
 
-- name: Copy start script
-  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
-  notify: restart attribute-mapper
+- name: Copy systemd service file
+  template: src=templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  notify:
+    - "systemctl daemon-reload"
+    - "restart attribute-mapper"
+
+- name: Clean up legacy init script
+  file: path=/etc/init.d/{{ springapp_service_name }} state=absent
 
 - name: enable attribute-mapper service
   service: name=attribute-mapper enabled=yes

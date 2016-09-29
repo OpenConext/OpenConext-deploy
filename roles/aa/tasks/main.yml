@@ -72,9 +72,14 @@
   tags: aa
   notify: restart httpd
 
-- name: Copy start script
-  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
-  notify: restart aa
+- name: Copy systemd service file
+  template: src=templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  notify:
+    - "systemctl daemon-reload"
+    - "restart aa"
+
+- name: Clean up legacy init script
+  file: path=/etc/init.d/{{ springapp_service_name }} state=absent
 
 - name: enable aa service
   service: name=aa enabled=yes

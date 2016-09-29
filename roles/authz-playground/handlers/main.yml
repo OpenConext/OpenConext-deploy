@@ -1,3 +1,6 @@
 ---
+- name: systemctl daemon-reload
+  command: "systemctl daemon-reload"
+
 - name: restart authz-playground
   service: name=authz-playground state=restarted
