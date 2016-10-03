@@ -65,7 +65,8 @@ after_failure:
   - sudo docker exec -t ansible-test systemctl status -l haproxy
   - sudo docker exec -t ansible-test systemctl status -l httpd
   - sudo docker exec -t ansible-test systemctl status metadata-exporter.service
-  - sudo docker exec -t ansible-test env TERM=xterm journalctl -xe
+  - sudo docker exec -t ansible-test cat /var/log/teams/teams.log
+  - sudo docker exec -t ansible-test env TERM=xterm journalctl -xe -l
   - sudo docker exec -t ansible-test ls -ltr /var/log
   - sudo docker exec -t ansible-test cat /var/log/metadata-exporter/metadata-exporter.log
   - sudo docker exec -t ansible-test cat /var/log/voot/voot.log
