@@ -19,7 +19,7 @@
 # $Id: grouper.hibernate.example.properties,v 1.9 2009-08-11 20:18:09 mchyzer Exp $
 #
 
-hibernate.connection.url = jdbc:mysql://{{ grouper.db_host }}:3306/grouper
+hibernate.connection.url = jdbc:mysql://{{ grouper.db_host }}:3306/{{ grouper.database_name }}
 
 hibernate.connection.username         = {{ grouper.db_user }}
 # If you are using an empty password, depending upon your version of

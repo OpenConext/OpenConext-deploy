@@ -2,8 +2,20 @@
 - name: create static dir
   file: path=/var/www/static state=directory
 
+- name: create static idp image directory
+  file: path=/var/www/static/logos/idp state=directory owner={{ static.sync_user }}
+ 
+- name: create static sp image directory
+  file: path=/var/www/static/logos/sp state=directory owner={{ static.sync_user }}
+
 - name: copy media files
   copy: src=media dest=/var/www/static
+
+- name: symlink legacy idp and sp logo locations
+  file: src=../logos/{{ item }} dest=/var/www/static/media/{{ item }} state=link
+  with_items:
+    - 'idp'
+    - 'sp'
 
 - name: copy apache config
   template: src=static.conf.j2 dest=/etc/httpd/conf.d/static.conf

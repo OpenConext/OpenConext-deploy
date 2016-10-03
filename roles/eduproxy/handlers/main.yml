@@ -1,0 +1,6 @@
+---
+- name: systemctl daemon-reload
+  command: "systemctl daemon-reload"
+
+- name: restart eduproxy
+  service: name=eduproxy state=restarted

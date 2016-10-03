@@ -1,0 +1,599 @@
+---
+env: template
+
+smtp_server: localhost
+error_mail_to: root@localhost 
+
+php_display_errors: 1
+apache_server_admin: root@localhost
+janus_ssp_technicalcontact_name: "Technical Contact"
+janus_ssp_technicalcontact_email: "root@localhost"
+janus_ssp_managingcontact_name: "Managing Contact"
+janus_ssp_managingcontact_email: "root@localhost"
+engine_idp_debugging_email_address: root@localhost
+
+profile_version: 0.3.0
+teams_version: 4.2.13
+mujina_version: 4.1.1
+authz_server_version: 1.3.7
+voot_version: 2.0.4
+authz_admin_version: 2.0.10
+authz_playground_version: 1.4
+pdp_version: 1.2.4
+aa_version: "1.0.4"
+oidc_version: "1.0.2"
+metadata_exporter_version: "2.0.3"
+engine_version: "5.0.0"
+janus_version: 1.22.0
+janus_ssp_version: 1.13.2
+
+databases:
+  names:
+    - teams
+    - "{{ engine_database_name }}"
+    - "{{ janus_database_name }}"
+    - grouper
+    - authz-server
+    - pdp-server
+    - oidc-server
+    - aaserver
+  users:
+    - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
+    - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
+    - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
+    - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
+    - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
+    - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
+    - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
+    - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
+
+tls:
+  cert_path: /etc/pki/tls/certs
+  cert_path_ca: /etc/pki/ca-trust/source/anchors/
+  cert_private_path: /etc/pki/tls/private
+
+
+tls_ca: star.{{ base_domain }}_ca.pem
+
+tls_star_cert_haproxy: star.{{ base_domain }}_haproxy.pem
+tls_star_cert_bundle_name: star.{{ base_domain }}_ca_bundle.pem
+tls_star_cert: star.{{ base_domain }}.pem
+tls_star_cert_key: star.{{ base_domain }}.key
+
+tls_https:
+  - name: star
+    key_name: "star.{{ base_domain }}.key"
+    crt_name: "star.{{ base_domain }}.pem"
+    bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_star_private_key }}"
+      
+
+engine_janus_user: engineblock
+
+engine_database_name: eb
+engine_database_host: "{{ mysql_host }}"
+engine_database_port: 3306
+engine_database_user: ebrw
+engine_database_password: "{{ mysql_passwords.eb }}"
+
+engine_ldap_host: ldap.{{ base_domain }}
+engine_ldap_bind_dn: "cn=engine,{{ ldap_suffix }}"
+engine_apache_environment: test
+engine_apache_symfony_environment: prod
+
+ldap_admin_user: "cn=admin,{{ ldap_suffix }}"
+ldap_grouper_user: gadget
+
+janus_database_name: sr
+janus_database_host: "{{ mysql_host }}"
+janus_database_user: srrw
+janus_database_password: "{{ mysql_passwords.sr }}"
+
+janus_teams_oauth_key: https://teams.{{ base_domain }}/teams/teams.xml
+
+engine_janus_cache_lifetime: 0
+
+engine_vovalidate_key: oauth_key
+
+engine_trusted_proxy_ips:
+  - 192.168.1.1
+  - 10.0.0.1
+#
+engine_keys:
+  default:
+    privateFile: /etc/openconext/engineblock.pem
+    publicKey: engineblock.crt
+    publicFile: /etc/openconext/engineblock.crt
+
+engine_block:
+  metadataRepositories:
+#    - {
+#        index: 0,
+#        type: "database",
+#        value: "Doctrine"
+#      }
+    - {
+        index: 0,
+        type: "janus",
+        value: "JanusRestV1"
+      }
+
+profile_apache_symfony_environment: prod
+# Engine's assertion signing certificate:
+engine_profile_idp_certificate:
+
+tomcat_apps:
+  - grouper
+  - mujina-sp
+  - mujina-idp
+  - oidc
+
+# shibboleth
+shibboleth_apps:
+  teams:
+    entityID: "https://teams.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  grouper:
+    entityID: "https://grouper.{{ base_domain }}/grouper/shibboleth"
+    baseurl: "/grouper"
+  authz:
+    entityID: "https://authz.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  "authz-admin":
+    entityID: "https://authz-admin.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  pdp:
+    entityID: "https://pdp.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  aa:
+    entityID: "https://aa.{{ base_domain }}/shibboleth"
+    baseurl: ""
+shib:
+  engine_domain: "{{ base_domain }}"
+
+teams:
+  db_name: "teams"
+  db_user: "teamsrw"
+  db_password: "{{ mysql_passwords.teams }}"
+  db_host: "{{ mysql_host }}"
+  group_name_context: "urn:collab:group:{{ base_domain }}:"
+
+engineblock:
+  idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
+  idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+
+api:
+  janus:
+    user: "{{ engine_janus_user }}"
+    secret: "{{ engine_janus_secret }}"
+    uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
+  jdbc:
+    user: apirw
+    url: "jdbc:mysql://{{ mysql_host }}/api"
+    password: "{{ mysql_passwords.api }} "
+  ldap:
+    url: ldap://ldap.{{ base_domain }}:389
+    userDn: "{{ engine_ldap_bind_dn }}"
+    password: "{{ engine_ldap_password }}"
+  engineblock:
+    user: "{{ engine_database_user }}"
+    url: jdbc:mysql://{{ engine_database_host }}:3306/{{ engine_database_name }}
+    password: "{{ engine_database_password }}"
+  teams:
+    user: teamsrw
+    url: "jdbc:mysql://{{ mysql_host }}/{{ teams.db_name }}"
+    password: "{{ teams.db_password }}"
+  oauth:
+    callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
+  staticContentBasePath: https://static.{{ base_domain }}
+  saml:
+    entityId: https://api.{{ base_domain }}/
+    assertionConsumerURI: https://api.{{ base_domain }}/v1/assertionConsumer
+  ehcache:
+    path: /tmp
+
+grouper:
+  db_user: grouperrw
+  db_host: "{{ mysql_host }}"
+  db_password: "{{ mysql_passwords.grouper }}"
+  database_name: grouper
+
+ldap_org: "openconext"
+ldap_suffix: "dc=openconext,dc=org"
+ldap_user: "cn=ro,{{ ldap_suffix }}"
+ldap_grouper_engine_user: engine
+
+authzserver:
+  db_user: authz-serverrw
+  db_password: "{{ mysql_passwords.authz_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: authz-server
+
+voot:
+  authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
+  authz_checkToken_clientId: "vootservice"
+  authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
+  oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
+  oidc_checkToken_clientId: "https@//oidc.test.surfconext.nl"
+  oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
+  loggers:
+    - { name: "voot", level: "DEBUG" }
+  externalGroupProviders:
+    - {
+        type: "grouper",
+        url: "https://grouper.{{ base_domain }}/grouper-ws/services/GrouperService_v2_0",
+        credentials: {
+          username: "{{ ldap_grouper_user }}",
+          secret: "{{ external_group_provider_secrets.grouper }}"
+        },
+        schacHomeOrganization: "{{ base_domain}}",
+        name: "SURFteams",
+        timeoutMillis: 15000
+      }
+
+##
+# Config for the authz-admin application
+##
+
+authz_admin_group: "urn:collab:group:{{ base_domain }}:nl:surfnet:diensten:authz_admins"
+authzadmin:
+  defaultClients:
+      - clientId: "{{ authzplayground.springapp_authz_client_id }}"
+        secret: "{{ authzplayground.springapp_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
+        redirectUris:
+          - https://authz-playground.{{ base_domain }}/redirect
+      - clientId: authz-admin
+        secret: "{{ authz_admin_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+        redirectUris:
+          - https://authz-admin.{{ base_domain }}
+        autoApprove: true
+      - clientId: surf-teams
+        secret: "{{ teams_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
+      - clientId: engineblock
+        secret: "{{ engineblock_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
+      - clientId: csa_client
+        secret: "{{ csa_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - client_credentials
+      - clientId: dashboard
+        secret: "{{ dashboards_authz_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+          - actions
+          - cross-idp-services
+          - stats
+          - pdp
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
+      - clientId: pdp_client
+        secret: "{{ pdp_client_secret }}"
+        resourceIds:
+          - groups
+        scopes:
+          - groups
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
+      - clientId: "{{ aa.authz_client_id }}"
+        secret: "{{ aa_authz_client_secret }}"
+        scopes:
+          - groups
+          - attribute-aggregation
+          - saml-attribute-query
+        grantTypes:
+          - authorization_code
+          - implicit
+          - client_credentials
+  defaultResourceServers:
+    - clientId: vootservice
+      secret: "{{ voot.authz_checkToken_secret }}"
+    - clientId: csa
+      secret: "{{ csa_resource_checking_secret }}"
+    - clientId: pdp
+      secret: "{{ voot.oidc_checkToken_secret }}"
+    - clientId: "{{ aa.authz_resource_server_id }}"
+      secret: "{{ aa.authz_secret }}"
+
+authzplayground:
+  springapp_authz_client_id: cool_app_id
+  springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
+  springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
+  springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
+
+pdp:
+  username: "pdp_admin"
+  password: "{{ pdp_password }}"
+  db_user: pdp-serverrw
+  db_password: "{{ mysql_passwords.pdp_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: pdp-server
+  spring_profiles_active: test
+  cache_policies: false
+  include_inactive_policies: true
+  sab_username: coin-test
+  sab_password: "{{ pdp_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+
+aa:
+  eb_username: "eb"
+  eb_password: "{{ aa_eb_password }}"
+  db_user: aa-serverrw
+  db_password: "{{ mysql_passwords.aa_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: aaserver
+  authz_client_id: "https@//aa.{{base_domain}}"
+  authz_resource_server_id: aa
+  authz_secret: "{{ aa_authz_client_secret }}"
+  idin_client_id: am_aa_client
+  idin_secret: "{{ aa_idin_client_secret }}"
+  oidc_client_id: "https@//aa.{{base_domain}}"
+  oidc_secret: "{{ aa_oidc_client_secret }}"
+  spring_profiles_active: acc
+  sab_username: coin-test
+  sab_password: "{{ aa_sab_password }}"
+  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  aggregate_cache: 0
+
+oidc:
+  environment: test
+  issuer: https://oidc.{{ base_domain }}/
+  db_user: oidc-serverrw
+  db_password: "{{ mysql_passwords.oidc_server }}"
+  db_host: "{{ mysql_host }}"
+  db_name: oidc-server
+  sp_entity_id: https://oidc.{{base_domain}}
+
+metadata_exporter:
+  db_user: srrw
+  db_password: "{{ mysql_passwords.sr }}"
+  db_host: "{{ mysql_host }}"
+  db_name: sr
+  password: "{{ metadata_exporter_password }}"
+
+springapp_tcpport_error_handling: 9199
+
+
+
+loadbalancing:
+  engine: 
+    port: 401
+  
+  profile: 
+    port: 402
+  
+  static: 
+    port: 403
+  
+  serviceregistry: 
+    port: 404
+  
+  engine_api: 
+    port: 405
+    
+  teams: 
+    port: 601
+ 
+  authzserver: 
+    port: 602
+  
+  authz_admin: 
+    port: 603
+  
+  authz_playground: 
+    port: 604
+  
+  voot: 
+    port: 605
+  
+  pdp: 
+    port: 613
+  
+  oidc: 
+    port: 614
+  
+  aa: 
+    port: 615
+  
+  metadata_exporter: 
+    port: 616
+  
+  grouper: 
+    port: 606
+  
+  mujina_sp: 
+    port: 607
+  
+  mujina_idp: 
+    port: 608
+  
+  welcome: 
+    port: 609
+
+haproxy_applications:
+
+  - name: engine
+    vhost_name: "engine"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "401"
+    servers: "{{php_servers}}"
+
+  - name: profile
+    vhost_name: "profile"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "HEAD"
+    ha_url: "/favicon.ico"
+    port: "402"
+    servers: "{{php_servers}}"
+
+  - name: static
+    vhost_name: "static"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "HEAD"
+    ha_url: "/media/alive.txt"
+    port: "403"
+    servers: "{{php_servers}}"
+
+  - name:  serviceregistry
+    vhost_name: "serviceregistry"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "HEAD"
+    ha_url: "/"
+    port: "404"
+    servers: "{{php_servers}}"
+
+  - name: engine_api
+    vhost_name: "engine-api"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "405"
+    servers: "{{php_servers}}"
+
+  - name: teams
+    vhost_name: "teams"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/media/trans-white.png"
+    port: "601"
+    servers: "{{java_servers}}"
+
+  - name: authzserver
+    vhost_name: "authz"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "602"
+    servers: "{{java_servers}}"
+
+  - name: authz_admin
+    vhost_name: "authz-admin"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "603"
+    servers: "{{java_servers}}"
+
+  - name: authz_playground
+    vhost_name: "authz-playground"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "604"
+    servers: "{{java_servers}}"
+
+  - name: voot
+    vhost_name: "voot"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "605"
+    servers: "{{java_servers}}"
+
+  - name: pdp
+    vhost_name: "pdp"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/pdp/api/health"
+    port: "613"
+    servers: "{{java_servers}}"
+
+  - name: oidc
+    vhost_name: "oidc"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "HEAD"
+    ha_url: "/"
+    port: "614"
+    servers: "{{java_servers}}"
+
+  - name: aa
+    vhost_name: "aa"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/aa/api/health"
+    port: "615"
+    servers: "{{java_servers}}"
+
+  - name: multidata
+    vhost_name: "multidata"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "616"
+    servers: "{{java_servers}}"
+
+  - name: grouper
+    vhost_name: "grouper"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/grouper-ws/status?diagnosticType=db"
+    port: "606"
+    servers: "{{java_servers}}"
+
+  - name: mujina-sp
+    vhost_name: "mujina-sp"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "607"
+    servers: "{{java_servers}}"
+
+  - name: mujina-idp
+    vhost_name: "mujina-idp"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "608"
+    servers: "{{java_servers}}"
+
+  - name: welcome
+    vhost_name: "welcome"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "609"
+    servers: "{{php_servers}}"
+
+haproxy_sni_ip: 192.168.66.100 
+
+php_servers:
+   - { ip: "127.0.0.1", label: "php"}
+
+java_servers:
+   - { ip: "127.0.0.1", label: "java"}

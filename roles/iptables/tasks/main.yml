@@ -1,0 +1,24 @@
+---
+- name: Uninstall firewalld
+  yum: name=firewalld state=absent 
+
+- name: Install iptables and ip6tables
+  yum: name={{item}} state=present
+  with_items:
+  - iptables-services
+
+- name: Put iptables
+  template: src=iptables.j2 dest='/etc/sysconfig/iptables'
+  notify:
+  - restart iptables
+
+- name: Put ip6tables
+  template: src=ip6tables.j2 dest='/etc/sysconfig/ip6tables'
+  notify:
+  - restart ip6tables
+
+- name: Start and enable services iptables and iptables6
+  service: name={{item}} state=started enabled=true
+  with_items:
+  - iptables
+  - ip6tables

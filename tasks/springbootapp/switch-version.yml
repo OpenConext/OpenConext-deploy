@@ -8,3 +8,4 @@
     state=link
     owner={{ springapp_user }}
     group={{ springapp_user }}
+  notify: restart {{ springapp_service_name }}

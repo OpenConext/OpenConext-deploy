@@ -1,0 +1,55 @@
+# IPv6 firewall configuration
+
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p ipv6-icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+
+
+{% for service in iptables6_incoming %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} --dport {{ service.port }}  -j ACCEPT
+{% endfor %}
+
+{% if ip6tables_incoming_lb is defined %}
+### Loadbalancer rules
+{% for service in ip6tables_incoming_lb %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} --dport {{ service.port }} {{'-d '+service.destination if service.destination is defined else ''}}  -j ACCEPT
+{% endfor %}
+{% endif %}
+
+{% if ip6tables_incoming_php is defined %}
+### PHP apps rules
+{% for service in ip6tables_incoming_php %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
+{% endfor %}
+{% endif %}
+
+{% if ip6tables_incoming_java is defined %}
+### JAVA apps rules
+{% for service in ip6tables_incoming_java %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
+{% endfor %}
+{% endif %}
+
+{% if ip6tables_incoming_db is defined %}
+### DB rules
+{% for service in ip6tables_incoming_db %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
+{% endfor %}
+{% endif %}
+
+COMMIT
+# A newline after COMMIT is required

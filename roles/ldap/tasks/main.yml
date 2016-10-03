@@ -5,12 +5,17 @@
      - openldap-servers
   tags: ldap
 
+- name: Install openldap client utils
+  yum: name={{ item }} state=present
+  with_items:
+    - openldap-clients
+
 - name: start slapd at boot
   service: name=slapd enabled=yes
   tags: ldap
 
 - name: correct config present
-  shell: "(test -d /etc/openldap/slapd.d && find /etc/openldap/slapd.d/ | xargs grep -i SURFnet | wc -l) || echo 0"
+  shell: "(test -d /etc/openldap/slapd.d && find /etc/openldap/slapd.d/ -type f | xargs grep -i SURFnet | wc -l) || echo 0"
   register: config_correct
   tags: ldap
   changed_when: False
@@ -28,15 +33,12 @@
   tags: ldap
 
 - name: disable default ldap bindings
+  when: (ansible_distribution == 'RedHat' and ansible_distribution_major_version == '6')
   lineinfile: 'dest=/etc/sysconfig/ldap line="{{ item }}=no" regexp="^#?{{ item }}="'
   with_items:
     - SLAPD_LDAP
     - SLAPD_LDAPI
     - SLAPD_LDAPS
-  tags: ldap
-
-- name: set ldap bind host/port
-  lineinfile: dest=/etc/sysconfig/ldap line='SLAPD_URLS=\"{{ ldap_bind_urls }}\"' regexp="^#?SLAPD_URLS="
   tags: ldap
 
 - name: start slapd to generate new config
@@ -49,13 +51,17 @@
   service: name=slapd state=stopped sleep=2
   tags: ldap
 
-- name: clean slapd.d
-  shell: rm -rf /etc/openldap/slapd.d/*
+- name: remove slapd.d
+  file: path=/etc/openldap/slapd.d state=absent
   when: config_correct.stdout == "0"
   tags: ldap
 
+- name: create slapd.d
+  file: path=/etc/openldap/slapd.d state=directory owner=ldap group=ldap mode=0700
+  tags: ldap
+
 - name: generate new config
-  sudo_user: ldap
+  become_user: ldap
   shell: /usr/sbin/slaptest -f /etc/openldap/slapd.conf -F /etc/openldap/slapd.d
   when: config_correct.stdout == "0"
   tags: ldap
@@ -72,7 +78,7 @@
   shell: "ldapadd -x -D {{ ldap.admin.user }} -h {{ ldap_host }} -w {{ ldap.admin.password }} -f ~/ldap-entries.ldif"
   register: ldapadd_output
   changed_when: "ldapadd_output.rc != 68"
-  failed_when: "ldapadd_output.rc != 0 and ldapadd_output.rc != 68"
+  failed_when: "ldapadd_output.rc not in {{ ldap.ldapadd_array }}"
   tags: ldap
 
 - name: restart slapd

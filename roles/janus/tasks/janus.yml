@@ -1,6 +1,6 @@
 ---
 - name: Install JANUS - Unarchive it
-  unarchive: src={{ janus_tar_location }} dest={{ janus_dir }} copy=no creates={{ janus_dir }}/app
+  unarchive: src={{ janus_tar_location }} dest={{ janus_dir }} copy=no creates={{ janus_dir }}/app owner=root group=root
   notify:
     - restart httpd
     - restart memcached
@@ -20,7 +20,7 @@
   notify:
     - restart httpd
     - restart memcached
-#
+
 - name: Ensure cache is cleared
   file: path={{ janus_cache_path }}/janus state=absent
   changed_when: False # never report change since it is about cache
@@ -29,8 +29,8 @@
   file:
     path={{ item }}
     state=directory
-    owner={{ apache_user }}
-    group={{ apache_user }}
+    owner={{ serviceregistry_fpm_user }}
+    group={{ serviceregistry_fpm_user }}
   with_items:
     - "{{ janus_cache_path }}"
     - "{{ janus_cache_path }}/janus"
@@ -41,14 +41,14 @@
   file:
     path=/var/log/janus-ssp/janus
     state=directory
-    owner={{ apache_user }}
-    group={{ apache_user }}
+    owner={{ serviceregistry_fpm_user }}
+    group={{ serviceregistry_fpm_user }}
   notify:
-      - restart httpd
-      - restart memcached
+        - restart httpd
+        - restart memcached
 
 # Note that this migration command probably has created cache directories and files
-# owned by root since it will be run as sudo
+# owned by root since it will be run via sudo
 - name: Install Janus - Run database migrations
   command: ./bin/migrate.sh
   args:
@@ -58,14 +58,22 @@
 
 - name: Ensure cache base and log directories exist and are writable for the webserver
   file:
-    path={{ janus_cache_path }}
-    state=directory
-    owner={{ apache_user }}
-    group={{ apache_user }}
-    recurse=yes
-  changed_when: False # never report change because it is caused by migrate
+     path={{ janus_cache_path }}
+     state=directory
+     owner={{ serviceregistry_fpm_user }}
+     group={{ serviceregistry_fpm_user }}
+     recurse=yes
+  changed_when: False # never report change because it is caused by migra
 
 - name: Apache config
-  template: src=vhost.j2.conf dest=/etc/httpd/conf.d/serviceregistry.conf
+  template: src=serviceregistry.conf.j2 dest=/etc/httpd/conf.d/serviceregistry.conf
   notify:
     - reload httpd
+
+- name: php-fpm config
+  template: src={{ item }}.j2 dest=/etc/php-fpm.d/{{ item }}
+  with_items:
+    - serviceregistry-pool.conf
+  notify:
+    - restart php-fpm
+

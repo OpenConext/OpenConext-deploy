@@ -9,6 +9,5 @@ springapp_service_name: metadata-exporter
 springapp_jar: "{{ metadata_exporter_jar }}"
 springapp_tcpport: "{{ springapp_tcpport_error_handling }}"
 springapp_local_jar: "{{ metadata_exporter_local_jar }}"
-springapp_debug: "{{ metadata_exporter_debug }}"
-springapp_debug_port: 1299
 springapp_heapsize: 512m
+springapp_random_source: "file:///dev/urandom"

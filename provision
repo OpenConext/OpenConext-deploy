@@ -35,14 +35,14 @@ shift
 if [ "$env" = "vm" ]
 then
 	user="vagrant"
-	secret="secrets/vm.yml"
+	secret="environments/vm/secrets/vm.yml"
 elif [ $# -lt 3 ]
 then
 	echo -e "$help"
 	exit 1
 else
 	# check environment
-	known_envs='vm  test acc prod  diy-test diy'
+	known_envs='vm  test test2 acc prod  diy-test diy'
 	if ! listcontains "$env" ${known_envs}
 	then
 	  echo "The environment '$env' is unknown ";
@@ -61,7 +61,7 @@ listcontains "$env" "vm"            &&  playbook="provision-vm.yml"
 listcontains "$env" "diy diy-test"  &&  playbook="provision-diy.yml"
 
 # find inventory
-inventory="inventory/$env"
+inventory="environments/$env/inventory"
 if ! [ -e $inventory ]
 then
 	echo "Inventory file '$inventory' for environment '$env' not found."

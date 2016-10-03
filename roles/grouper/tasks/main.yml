@@ -58,7 +58,7 @@
   tags: grouper
 
 - name: initialize
-  shell: bin/gsh -registry -runscript -noprompt
+  shell: '/bin/env GSH_JVMARGS="-Djava.security.egd={{ grouper_random_source }}" bin/gsh -registry -runscript -noprompt'
   changed_when: False # this will always report a change... so "sudo be quiet"...
   args:
     chdir: /opt/www/grouper-shell

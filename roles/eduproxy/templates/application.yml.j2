@@ -1,0 +1,69 @@
+# The logging configuration.
+logging:
+  config: file://{{ eduproxy_dir }}/logback.xml
+  level:
+    eduproxy: DEBUG
+#    org.springframework: DEBUG
+
+server:
+  # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
+  port: {{ springapp_tcpport }}
+  # The context path of the server. You can skip this value in the overriding application.properties on the classpath
+  contextPath:
+
+# Identity Provider
+idp:
+  metadata_url: https://engine.{{ base_domain }}/authentication/idp/metadata
+  entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+  certificate: {{ eduproxy.eb_certificate }}
+
+serviceproviders:
+  feed: classpath:saml/edugain.xml
+#   feed: http://mds.edugain.org/
+  allow_unknown: false
+
+
+# eduProxy
+proxy:
+  # base url
+  base_url: https://eduproxy.{{ base_domain }}
+  # Entity ID of the SP
+  entity_id: https://eduproxy.{{ base_domain }}
+  # Private key used to sign the SAML response
+  private_key: {{ eduproxy.private_key }}
+  # Public certificate to verify the signature of the SAML response
+  certificate: {{ eduproxy.certificate }}
+  # Passphrase of the keystore
+  passphrase: secret
+  # ACS location
+  acs_location: https://eduproxy.{{ base_domain }}/saml/SSO
+  # duration of metadata cache (1 day)
+  validity_duration_metadata_ms: 86400000
+
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  velocity:
+    check-template-location: False
+
+# You can skip all the key-value pairs below in the overriding application.properties on the classpath
+
+# 8 hours before we time-out
+session-timeout: 28800
+
+# We disable all endpoints except health for the load-balancer and info for git information.
+endpoints:
+  enabled: false
+  jmx:
+    enabled: false
+  health:
+    enabled: true
+  info:
+    enabled: true
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"

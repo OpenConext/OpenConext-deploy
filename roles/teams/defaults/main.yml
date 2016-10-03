@@ -4,4 +4,4 @@ teams_version: ''
 teams_snapshot_timestamp: ''
 teams_local_jar: ''
 teams_jar: teams-current.war
-teams_server_debug: false
+teams_random_source: 'file:///dev/urandom'

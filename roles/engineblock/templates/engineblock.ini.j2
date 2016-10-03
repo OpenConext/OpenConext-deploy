@@ -1,6 +1,48 @@
-auth.simplesamlphp.idp.entityId = {{ engine_profile_idp_entityid }}
-auth.simplesamlphp.idp.location = {{ engine_profile_idp_sso_location }}
-auth.simplesamlphp.idp.certificate= "{{ engine_profile_idp_certificate }}"
+;; EngineBlock version
+version = {{ engine_version }}
+
+;; Engineblock API Configuration
+;; DEPRECATED, use the newer version below
+engineApi.user     = {{ engine_api_janus_user }}
+engineApi.password = {{ engine_api_janus_password }}
+
+;; New version that allows for multiple different API users
+engineApi.users.janus.username = {{ engine_api_janus_user }}
+engineApi.users.janus.password = {{ engine_api_janus_password }}
+engineApi.users.profile.username = {{ engine_api_profile_user }}
+engineApi.users.profile.password = {{ engine_api_profile_password }}
+
+;; EngineBlock API feature toggles
+engineApi.features.metadataPush = {{ engine_api_feature_metadata_push }}
+engineApi.features.consentListing = {{ engine_api_feature_consent_listing }}
+engineApi.features.metadataApi = {{ engine_api_feature_metadata_api }}
+
+; Whether or not the LDAP should be used as secondary backend for the UserDirectory
+; (database is considered primary).
+engineblock.feature.ldap_integration = {{ engine_feature_ldap_integration }}
+
+;; EngineBlock response capability feature toggles (on, safe by default)
+engineblock.feature.encrypted_assertions = {{ engine_feature_encrypted_assertions }}
+engineblock.feature.encrypted_assertions_require_outer_signature = {{ engine_feature_encrypted_assertions_require_outer_signature }}
+
+;; EngineBlock consent feature toggles
+; Whether or not all input and output filter should run prior to consent.
+engineblock.feature.run_all_manipulations_prior_to_consent = {{ engine_feature_run_all_manipulations_prior_to_consent }}
+
+;; Symfony specific variables
+symfony.cachePath = "{{ engineblock_symfony_cache_path }}"
+symfony.logPath = "{{ engineblock_symfony_log_path }}"
+
+;; Virtual Organisation Validation api credentials
+api.vovalidate.baseUrl = {{ engine_vovalidate_baseurl }}
+api.vovalidate.key = {{ engine_vovalidate_key }}
+api.vovalidate.secret = {{ engine_vovalidate_secret }}
+
+voot.serviceUrl=https://voot.{{ base_domain }}
+voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
+voot.clientId=engineblock
+voot.clientSecret={{ engineblock_authz_client_secret }}
+voot.scopes = groups
 
 pdp.baseUrl = {{ engine_pdp_baseurl }}
 pdp.username = {{engine_pdp_username }}
@@ -10,21 +52,15 @@ attributeAggregation.baseUrl = {{ engine_attribute_aggregation_baseurl }}
 attributeAggregation.username = {{engine_attribute_aggregation_username }}
 attributeAggregation.password = "{{engine_attribute_aggregation_password }}"
 
-api.vovalidate.baseUrl = {{ engine_vovalidate_baseurl }}
-api.vovalidate.key = {{ engine_vovalidate_key }}
-api.vovalidate.secret = {{ engine_vovalidate_secret }}
-
-profile.simplesamlphp.hostMatch = "{{ engine_profile_idp_hostmatch }}"
-profile.simplesamlphp.baseurlpath = "{{ engine_profile_idp_baseurlpath }}"
 engine.simplesamlphp.baseurlpath = "{{ engine_engine_idp_baseurlpath }}"
 
 cookie.lang.domain = .{{ base_domain }}
 
-database.master1.dsn = "mysql:host={{ engine_database_host }};dbname={{ engine_database_name }}"
-database.master1.password = {{ engine_database_password }}
-database.master1.user = "{{ engine_database_user }}"
-database.masters[] = master1
-database.slaves[] = master1
+database.host = {{ engine_database_host }}
+database.port = {{ engine_database_port }}
+database.password = "{{ engine_database_password }}"
+database.user = "{{ engine_database_user }}"
+database.dbname = {{ engine_database_name }}
 
 debug = {{ engine_debug }}
 
@@ -38,12 +74,10 @@ encryption.keys.{{ key }}.publicFile = {{ value.publicFile }}
 
 {% endif %}
 
-engineApi.user = {{ engine_api_janus_user }}
-engineApi.password = {{ engine_api_janus_password }}
-
 ldap.host = {{ engine_ldap_host }}
 ldap.password = "{{ engine_ldap_password }}"
 ldap.userName = "{{ engine_ldap_bind_dn }}"
+ldap.baseDn = "{{ ldap_suffix }}"
 
 {% for repository in engine_block.metadataRepositories %}
 metadataRepository.{{ repository.type }}.type = {{ repository.value }}
@@ -63,3 +97,8 @@ trustedProxyIps[] = {{ engine_trusted_proxy_ip }}
 {% endfor %}
 
 {% endif %}
+
+base_domain = {{ engine_base_domain }}
+
+; Minimum execution time in milliseconds when a received response is deemed invalid (default: 5000 ms)
+minimumExecutionTimeOnInvalidReceivedResponse = {{ engine_minimum_execution_time_on_invalid_received_response }}

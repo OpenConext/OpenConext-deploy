@@ -2,7 +2,7 @@
 - name: Add Shibboleth repo
   copy: src={{ item }} dest=/etc/yum.repos.d/{{ item }}
   with_items:
-    - shibboleth.repo
+    - shibboleth-centos7.repo
     - shibboleth.repo.gpgkey
 
 - name: Install custom libcurl
@@ -21,9 +21,9 @@
     - shib.conf
 
 - name: Copy default config files
-  copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
+  copy: src={{ item }} dest=/etc/httpd/conf.d/20_shib.conf
   with_items:
-    - 20_shib.conf
+    - 20_shib_apache24.conf
   notify: reload httpd
 
 - name: Shibboleth config
@@ -32,6 +32,7 @@
     - attribute-map.xml
     - localLogout.html
     - shibboleth2.xml
+    - attribute-policy.xml
   notify:
     - restart shibd
     - reload httpd

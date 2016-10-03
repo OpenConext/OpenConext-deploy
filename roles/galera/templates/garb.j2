@@ -1,0 +1,18 @@
+# Copyright (C) 2012 Codership Oy
+# This config file is to be sourced by garb service script.
+
+# A comma-separated list of node addresses (address[:port]) in the cluster
+GALERA_NODES="{% for host in groups['dbcluster'] %}{{ hostvars[host]['backend_ipv4'] }}:4567{% if not loop.last %},{% endif %}{% endfor %}"
+
+
+# Galera cluster name, should be the same as on the rest of the nodes.
+GALERA_GROUP="{{ mariadb_cluster_name }}"
+
+# Optional Galera internal options string (e.g. SSL settings)
+# see http://galeracluster.com/documentation-webpages/galeraparameters.html
+{% if galera_ssl %}
+GALERA_OPTIONS="socket.ssl_key={{ galera_tls_cert_path }}/{{ galera_server_key_name }};socket.ssl_cert={{ galera_tls_cert_path }}/{{ galera_server_crt_name }};socket.ssl_ca={{ galera_tls_cert_path }}/{{ galera_tls_ca }};socket.ssl_cipher=AES128-SHA;gmcast.segment={{ galera_gmcast_segment }}"
+{% endif %}
+# Log file for garbd. Optional, by default logs to syslog
+# LOG_FILE=""
+

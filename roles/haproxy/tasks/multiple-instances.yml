@@ -1,0 +1,58 @@
+---
+- name: Install haproxy
+  yum: name=haproxy state=present
+
+- name: Install socat
+  yum: name=socat state=present
+
+- name: install OCSP update tool
+  copy: src=hapos-upd dest=/usr/local/sbin/ mode=0755
+
+- name: create haproxy config directories
+  file: dest=/etc/haproxy/{{ item.name }} state=directory owner=haproxy group=haproxy mode=0700
+  with_items: "{{ haproxy_applications }}"
+
+- name: Create combined key and certificate file for HAproxy
+  copy: content="{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}" dest=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
+  with_items: "{{ haproxy_applications }}"
+  when: not item.hidden
+  register: configs_changed
+  notify: restart haproxy instances with changed configs
+
+- name: Chown SSL certificates
+  file: path=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
+  with_items: "{{ haproxy_applications }}"
+  when: not item.hidden
+
+- name: Run hapos-upd for initial OCSP responses
+  shell: /usr/local/sbin/hapos-upd --skip-update --good-only --socket /var/lib/haproxy/{{ item.name }}.stats --VAfile /etc/haproxy/{{ item.name }}/{{ item.name }}.pem --cert /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
+  with_items: "{{ haproxy_applications }}"
+  when: not item.hidden
+
+- name: create haproxy instance config file
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.cfg
+  with_items: "{{ haproxy_applications }}"
+  register: configs_changed
+  notify: restart haproxy instances with changed configs
+
+- name: copy systemd startup file
+  template: src=haproxy_systemd.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  with_items: "{{ haproxy_applications }}"
+
+- name: enable systemd startup
+  command: systemctl enable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  register: haproxy_enable_service
+  with_items: "{{ haproxy_applications }}"
+  changed_when: "'Created symlink' in haproxy_enable_service.stderr"
+
+- name: start services 
+  service: name=haproxy_{{item.name }} enabled=yes state=started
+  with_items: "{{ haproxy_applications }}"
+
+- name: disable standard systemd haproxy instance
+  command: systemctl disable haproxy
+
+- name: install OCSP periodic update script
+  template: src=update_ocsp.j2 dest=/usr/local/sbin/update_ocsp mode=0755
+
+- cron: name="update ocsp info" special_time=hourly job="/usr/local/sbin/update_ocsp"

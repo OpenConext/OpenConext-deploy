@@ -1,51 +1,42 @@
-#---------------------------------------------------------------------
-# Example configuration for a possible web application.  See the
-# full configuration options online.
-#
-#   http://haproxy.1wt.eu/download/1.4/doc/configuration.txt
-#
-#---------------------------------------------------------------------
-
+#jinja2:lstrip_blocks: True
 #---------------------------------------------------------------------
 # Global settings
 #---------------------------------------------------------------------
+
 global
-    # to have these messages end up in /var/log/haproxy.log you will
-    # need to:
-    #
-    # 1) configure syslog to accept network log events.  This is done
-    #    by adding the '-r' option to the SYSLOGD_OPTIONS in
-    #    /etc/sysconfig/syslog
-    #
-    # 2) configure local2 events to go to the /var/log/haproxy.log
-    #   file. A line like the following can be added to
-    #   /etc/sysconfig/syslog
-    #
-    #    local2.*                       /var/log/haproxy.log
-    #
-    log         127.0.0.1 local2
-
-    chroot      /var/lib/haproxy
-    pidfile     /var/run/haproxy.pid
-    maxconn     4000
-    user        haproxy
-    group       haproxy
-    nbproc      1
-    ulimit-n    9000
-    daemon
-
-    # turn on stats unix socket
-    stats socket /var/lib/haproxy/stats
+  log         127.0.0.1 local2
+  log-send-hostname
+  chroot      /var/lib/haproxy
+  pidfile     /var/run/haproxy.pid
+  maxconn     4000
+  user        haproxy
+  group       haproxy
+  nbproc      1
+  ulimit-n    9000
+  daemon
+  tune.ssl.default-dh-param 2048
+  ssl-default-bind-options no-sslv3
+  ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+  ssl-default-server-options no-sslv3
+  ssl-default-server-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+{% if env == "vm" or env == "test" or env == "test2" or env == "template" or env == "diy" %}
+  stats socket /var/lib/haproxy/stats{% if develop %} mode 600 level admin{% endif %}
+{% endif %}
+{% if env == "acc" or env == "prd"  %}
+  stats socket /var/lib/haproxy/{{ item.name }}.stats
+{% endif %}
 
 #---------------------------------------------------------------------
 # common defaults that all the 'listen' and 'backend' sections will
 # use if not designated in their block
 #---------------------------------------------------------------------
+
 defaults
     mode                    http
     log                     global
     option                  httplog
-    option                  dontlognull
+#   option                  dontlognull
+    option                  http-ignore-probes
     option                  http-server-close
     option                  forwardfor       except 127.0.0.0/8
     option                  redispatch
@@ -60,590 +51,170 @@ defaults
     maxconn                 3000
 
 
-#---------------------------------------------------------------------
-# ENGINE frontend
-#---------------------------------------------------------------------
-frontend engine 127.0.0.1:{{ loadbalancing.engine.port }}
+{% if env == "test" or env == "test2" or env == "vm" or env == "template" or env == "diy" %}
+## Frontend configuration
 
-    capture cookie JSESSIONID len 52
+#--------------------------------------------------------------------
+#  frontend 
+# -------------------------------------------------------------------
+frontend ssl_ip
 
-    acl url_all         path_beg        -i /
-    use_backend         engine_be       if url_all
-    default_backend     engine_be
+    bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/star_haproxy.pem {% for application in haproxy_applications %} {% if application.full_vhost_name is defined %} crt /etc/pki/haproxy/{{ application.name }}_haproxy.pem {% endif %} {% endfor %}   no-sslv3 transparent
+    http-request del-header Proxy
+    rspadd  Strict-Transport-Security:\ max-age=15768000
+    capture request header User-agent len 100
+    bind {{ haproxy_sni_ip }}:80 transparent
+    redirect scheme https code 301 if !{ ssl_fc }
 
-#---------------------------------------------------------------------
-# ENGINE frontend
-#---------------------------------------------------------------------
-frontend engine_api 127.0.0.1:{{ loadbalancing.engine_api.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         engine_api_be       if url_all
-    default_backend     engine_api_be
-
-#---------------------------------------------------------------------
-# PROFILE frontend
-#---------------------------------------------------------------------
-frontend profile 127.0.0.1:{{ loadbalancing.profile.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         profile_be       if url_all
-    default_backend     profile_be
-
-#---------------------------------------------------------------------
-# SERVICE REGISTRY frontend
-#---------------------------------------------------------------------
-frontend serviceregistry 127.0.0.1:{{ loadbalancing.serviceregistry.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         serviceregistry_be       if url_all
-    default_backend     serviceregistry_be
-
-#---------------------------------------------------------------------
-# STATIC frontend
-#---------------------------------------------------------------------
-frontend static 127.0.0.1:{{ loadbalancing.static.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         static_be       if url_all
-    default_backend     static_be
-
-#---------------------------------------------------------------------
-# GROUPER frontend
-#---------------------------------------------------------------------
-frontend grouper 127.0.0.1:{{ loadbalancing.grouper.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         grouper_be        if url_all
-    default_backend     grouper_be
-
-
-#---------------------------------------------------------------------
-# TEAMS frontend
-#---------------------------------------------------------------------
-frontend teams 127.0.0.1:{{ loadbalancing.teams.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         teams_be        if url_all
-    default_backend     teams_be
-
-#---------------------------------------------------------------------
-# AUTHZ frontend
-#---------------------------------------------------------------------
-frontend authz 127.0.0.1:{{ loadbalancing.authzserver.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         authz_be        if url_all
-    default_backend     authz_be
-
-#---------------------------------------------------------------------
-# AUTHZ-ADMIN frontend
-#---------------------------------------------------------------------
-frontend authz_admin 127.0.0.1:{{ loadbalancing.authz_admin.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         authz_admin_be        if url_all
-    default_backend     authz_admin_be
-
-#---------------------------------------------------------------------
-# AUTHZ-PLAYGROUND frontend
-#---------------------------------------------------------------------
-frontend authz_playground 127.0.0.1:{{ loadbalancing.authz_playground.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         authz_playground_be        if url_all
-    default_backend     authz_playground_be
-
-#---------------------------------------------------------------------
-# VOOT frontend
-#---------------------------------------------------------------------
-frontend voot 127.0.0.1:{{ loadbalancing.voot.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         voot_be        if url_all
-    default_backend     voot_be
-
-#---------------------------------------------------------------------
-# PDP frontend
-#---------------------------------------------------------------------
-frontend pdp 127.0.0.1:{{ loadbalancing.pdp.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         pdp_be        if url_all
-    default_backend     pdp_be
-
-#---------------------------------------------------------------------
-# OIDC frontend
-#---------------------------------------------------------------------
-frontend oidc 127.0.0.1:{{ loadbalancing.oidc.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         oidc_be        if url_all
-    default_backend     oidc_be
-
-#---------------------------------------------------------------------
-# AA frontend
-#---------------------------------------------------------------------
-frontend aa 127.0.0.1:{{ loadbalancing.aa.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         aa_be        if url_all
-    default_backend     aa_be
-
-#---------------------------------------------------------------------
-# Metadata Exporter frontend
-#---------------------------------------------------------------------
-frontend metadata_exporter 127.0.0.1:{{ loadbalancing.metadata_exporter.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         metadata_exporter_be        if url_all
-    default_backend     metadata_exporter_be
-
-#---------------------------------------------------------------------
-# Attribute Mapper frontend
-#---------------------------------------------------------------------
-frontend attribute_mapper 127.0.0.1:{{ loadbalancing.attribute_mapper.port }}
-
-    capture cookie JSESSIONID len 52
-
-    acl url_all         path_beg        -i /
-    use_backend         attribute_mapper_be        if url_all
-    default_backend     attribute_mapper_be
-
-#---------------------------------------------------------------------
-# engine backend
-#---------------------------------------------------------------------
-backend engine_be
-
-    # Healthcheck ombouwen naar controle op valide antwoord
-    option httpchk {{ loadbalancing.engine.heartbeat.method }} {{ loadbalancing.engine.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.engine.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.engine.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for application in haproxy_applications %}
+    {%if application.restricted is not defined %}
+    acl {{ application.name }} hdr(host) -i {% if application.full_vhost_name is not defined  %} {{ application.vhost_name }}.{{ base_domain }}
+    {% else %} {{ application.full_vhost_name }} 
+    {% endif %}
+    {% endif %}
     {% endfor %}
-
-#---------------------------------------------------------------------
-# engine-api backend
-#---------------------------------------------------------------------
-backend engine_api_be
-
-    # Healthcheck ombouwen naar controle op valide antwoord
-    option httpchk {{ loadbalancing.engine_api.heartbeat.method }} {{ loadbalancing.engine_api.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.engine_api.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.engine_api.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# profile backend
-#---------------------------------------------------------------------
-backend profile_be
-
-    # Healthcheck ombouwen naar controle op valide antwoord
-    option httpchk {{ loadbalancing.profile.heartbeat.method }} {{ loadbalancing.profile.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.profile.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.profile.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# serviceregistry backend
-#---------------------------------------------------------------------
-backend serviceregistry_be
-
-    option httpchk {{ loadbalancing.serviceregistry.heartbeat.method }} {{ loadbalancing.serviceregistry.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.serviceregistry.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.serviceregistry.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for application in haproxy_applications %}
+    {%if application.restricted is not defined %}
+    use_backend {{ application.name }}_be if {{ application.name }}
+    {% endif %}
     {% endfor %}
 
 
-#---------------------------------------------------------------------
-# static backend
-#---------------------------------------------------------------------
-backend static_be
+{% if haproxy_sni_ip_restricted is defined %}
+#--------------------------------------------------------------------
+##  frontend restricted applications
+## -------------------------------------------------------------------
+frontend ssl_restricted_ip
 
-    # Healthcheck ombouwen naar controle op valide antwoord
-    option httpchk {{ loadbalancing.static.heartbeat.method }} {{ loadbalancing.static.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
+    bind {{ haproxy_sni_ip_restricted }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }}  no-sslv3 transparent
+    http-request del-header Proxy
+    rspadd  Strict-Transport-Security:\ max-age=15768000
+    capture request header User-agent len 100
+    bind {{ haproxy_sni_ip_restricted }}:80 transparent
+    redirect scheme https code 301 if !{ ssl_fc }
 
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.static.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.static.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for application in haproxy_applications %}
+    {%if application.restricted is defined %}
+    acl {{ application.name }} hdr(host) -i {% if application.full_vhost_name is not defined  %} {{ application.vhost_name }}.{{ base_domain }}
+    {% else %} {{ application.full_vhost_name }}
+    {% endif %}
+    {% endif %}
     {% endfor %}
-
-#---------------------------------------------------------------------
-# grouper backend
-#---------------------------------------------------------------------
-backend grouper_be
-
-    # Healthcheck ombouwen naar controle op valide antwoord
-    option httpchk {{ loadbalancing.grouper.heartbeat.method }} {{ loadbalancing.grouper.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.grouper.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.grouper.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for application in haproxy_applications %}
+    {%if application.restricted is defined %}
+    use_backend {{ application.name }}_be if {{ application.name }}
+    {% endif %}
     {% endfor %}
 
 
-#---------------------------------------------------------------------
-# teams backend
-#---------------------------------------------------------------------
-backend teams_be
-
-    option httpchk {{ loadbalancing.teams.heartbeat.method }} {{ loadbalancing.teams.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.teams.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.teams.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# authz backend
-#---------------------------------------------------------------------
-
-backend authz_be
-
-    option httpchk {{ loadbalancing.authzserver.heartbeat.method }} {{ loadbalancing.authzserver.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.authzserver.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authzserver.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# authz-admin backend
-#---------------------------------------------------------------------
-
-backend authz_admin_be
-
-    option httpchk {{ loadbalancing.authz_admin.heartbeat.method }} {{ loadbalancing.authz_admin.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.authz_admin.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_admin.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# authz-playground backend
-#---------------------------------------------------------------------
-backend authz_playground_be
-
-    option httpchk {{ loadbalancing.authz_playground.heartbeat.method }} {{ loadbalancing.authz_playground.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.authz_playground.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.authz_playground.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# voot backend
-#---------------------------------------------------------------------
-backend voot_be
-
-    option httpchk {{ loadbalancing.voot.heartbeat.method }} {{ loadbalancing.voot.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.voot.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.voot.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# pdp backend
-#---------------------------------------------------------------------
-backend pdp_be
-
-    option httpchk {{ loadbalancing.pdp.heartbeat.method }} {{ loadbalancing.pdp.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.pdp.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.pdp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# oidc backend
-#---------------------------------------------------------------------
-backend oidc_be
-
-    option httpchk {{ loadbalancing.oidc.heartbeat.method }} {{ loadbalancing.oidc.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.oidc.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.oidc.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# aa backend
-#---------------------------------------------------------------------
-backend aa_be
-
-    option httpchk {{ loadbalancing.aa.heartbeat.method }} {{ loadbalancing.aa.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.aa.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.aa.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# Metadata Exporter backend
-#---------------------------------------------------------------------
-backend metadata_exporter_be
-
-    option httpchk {{ loadbalancing.metadata_exporter.heartbeat.method }} {{ loadbalancing.metadata_exporter.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.metadata_exporter.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.metadata_exporter.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# Attribute Mapper backend
-#---------------------------------------------------------------------
-backend attribute_mapper_be
-
-    option httpchk {{ loadbalancing.attribute_mapper.heartbeat.method }} {{ loadbalancing.attribute_mapper.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    cookie JSESSIONID preserve indirect
-    option httpclose
-
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.attribute_mapper.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.attribute_mapper.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-# Statistics
-listen stats 127.0.0.1:9000       #Listen on all IP's on port 9000
-    mode http
-    balance
-    timeout client 5000
-    timeout connect 4000
-    timeout server 30000
-
-    #This is the virtual URL to access the stats page
-    stats uri /stats
-
-
-{% if env == 'vm' or env == 'test' %}
-#---------------------------------------------------------------------
-# mujina idp frontend
-#---------------------------------------------------------------------
-frontend mujina_idp 127.0.0.1:{{ loadbalancing.mujina_idp.port }}
-
-    acl url_all         path_beg        -i /
-    use_backend         mujina_idp_be       if url_all
-    default_backend     mujina_idp_be
-
-#---------------------------------------------------------------------
-# mujina idp backend
-#---------------------------------------------------------------------
-backend mujina_idp_be
-
-    # Healthcheck ombouwen naar controle op valide antwoord
-    option httpchk {{ loadbalancing.mujina_idp.heartbeat.method }} {{ loadbalancing.mujina_idp.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    option httpclose
-    cookie JSESSIONID preserve indirect
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.mujina_idp.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.mujina_idp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
-
-#---------------------------------------------------------------------
-# mujina sp frontend
-#---------------------------------------------------------------------
-frontend mujina_sp 127.0.0.1:{{ loadbalancing.mujina_sp.port }}
-
-    acl url_all         path_beg        -i /
-    use_backend         mujina_sp_be       if url_all
-    default_backend     mujina_sp_be
-
-#---------------------------------------------------------------------
-# mujina idp backend
-#---------------------------------------------------------------------
-backend mujina_sp_be
-
-    option httpchk {{ loadbalancing.mujina_sp.heartbeat.method }} {{ loadbalancing.mujina_sp.heartbeat.url }} HTTP/1.0
-    option forwardfor # This sets X-Forwarded-For
-
-    mode http
-    balance roundrobin
-    option httpclose
-    cookie JSESSIONID preserve indirect
-    cookie HTTPSERVERID insert nocache indirect
-
-    {% for server in loadbalancing.mujina_sp.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.mujina_sp.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
-    {% endfor %}
 {% endif %}
-{% if env == 'vm' %}
+{% for application in haproxy_applications %}
 #---------------------------------------------------------------------
-# WELCOME frontend
+# {{ application.name }} backend
 #---------------------------------------------------------------------
-frontend welcome 127.0.0.1:{{ loadbalancing.welcome.port }}
+#
+backend {{ application.name }}_be
+  option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
+  option forwardfor # This sets X-Forwarded-For
+  rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
+  mode http
+  balance roundrobin
+  option httpclose
 
-    acl url_all         path_beg        -i /
-    use_backend         welcome_be       if url_all
-    default_backend     welcome_be
+  cookie HTTPSERVERID insert nocache indirect
+
+  {% for server in application.servers %}
+  server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+  {% endfor %}
+
+{% endfor %}
+{% endif %}
+
+{% if env == "acc" or env == "prd" %}
+## Frontend configuration
+#--------------------------------------------------------------------
+# {{ item.name }} frontend
+# -------------------------------------------------------------------
+	{% if item.name == "fourthset" %}
+
+	frontend {{ item.name }}
+
+	bind {{ haproxy_sni_ip }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
+	bind {{ haproxy_sni_ipv6 }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
+	http-request del-header Proxy
+    	rspadd  Strict-Transport-Security:\ max-age=15768000
+        capture request header User-agent len 100
+    	bind {{ haproxy_sni_ip }}:80 transparent
+    	redirect scheme https code 301 if !{ ssl_fc }
+
+    	{% for application in haproxy_applications if not application.hidden %}
+    	acl {{ application.name }} hdr(host) -i {{ application.vhost_name }}.{{ base_domain }}
+    	{% endfor %}
+    	{% for application in haproxy_applications if not application.hidden %}
+    	use_backend {{ application.name }}_be if {{ application.name }}
+    	{% endfor %}
+
+	{% for application in haproxy_applications if not application.hidden %}
+
+	#---------------------------------------------------------------------
+	# {{ application.name }} backend
+	#---------------------------------------------------------------------
+	#
+	backend {{ application.name }}_be
+  	option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
+  	option forwardfor # This sets X-Forwarded-For
+        rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
+  	mode http
+  	balance roundrobin
+  	option httpclose
+
+  	cookie HTTPSERVERID insert nocache indirect
+
+  	{% for server in application.servers_fourthset %}
+  	server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+  	{% endfor %}
+
+	{% endfor %}
+
+	{% else %}
+
+frontend {{ item.name }}
+
+     bind {{ item.ip }}:443 ssl crt /etc/haproxy/{{ item.name }}/{{ item.name }}.pem no-sslv3 transparent
+     bind {{ item.ipv6 }}:443 ssl crt /etc/haproxy/{{ item.name }}/{{ item.name }}.pem no-sslv3 transparent
+     http-request del-header Proxy
+     rspadd  Strict-Transport-Security:\ max-age=15768000
+     capture request header User-agent len 100
+     bind {{ item.ip }}:80
+     redirect scheme https code 301 if !{ ssl_fc }
+     acl url_all         path_beg        -i /
+     use_backend         {{ item.name }}_be       if url_all
+     default_backend     {{ item.name }}_be
+
 
 #---------------------------------------------------------------------
-# WELCOME backend
+#  {{ item.name }} backend
 #---------------------------------------------------------------------
-backend welcome_be
+backend {{ item.name }}_be
 
-    # Healthcheck ombouwen naar controle op valide antwoord
-    option httpchk {{ loadbalancing.welcome.heartbeat.method }} {{ loadbalancing.welcome.heartbeat.url }} HTTP/1.0
+    option httpchk {{ item.ha_method }} {{ item.ha_url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
-
+    rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
     mode http
     balance roundrobin
     option httpclose
-
+    option allbackups
     cookie HTTPSERVERID insert nocache indirect
 
-    {% for server in loadbalancing.welcome.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ loadbalancing.welcome.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
+    {% for server in item.servers %}
+    server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024
     {% endfor %}
+    {% if item.servers_backup is defined %}
+    {% for server in item.servers_backup %}
+    server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 20000 fall 2 rise 2 maxconn 1024 backup
+    {% endfor %} 
+    {% endif %}
+
 {% endif %}
+{% endif %}
+

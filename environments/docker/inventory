@@ -1,0 +1,23 @@
+[localhost]
+localhost ansible_connection=local
+
+[docker]
+localhost
+
+[storage]
+localhost
+
+[java-apps]
+localhost
+
+[php-apps]
+localhost
+
+[loadbalancer]
+localhost
+
+[docker:children]
+storage
+java-apps
+php-apps
+loadbalancer

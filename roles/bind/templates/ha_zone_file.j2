@@ -1,0 +1,14 @@
+$TTL    4h
+$ORIGIN ha.{{ base_domain }}.
+@           IN      SOA     ns1.ha.{{ base_domain }}.    surfconext-beheer.surfnet.nl. (
+                            {{ ansible_date_time.epoch }}    ; Serial
+                            1d            ; slave refresh (1 day)
+                            2h            ; slave retry time in case of a problem (2 hours)
+                            2w            ; slave expiration time (2 weeks)
+                            2d            ; minimum caching time in case of failed lookups (2 days)
+                            )
+            IN      NS      ns1ha.{{ base_domain }}.
+            IN      NS      ns2ha.{{ base_domain }}.
+{% for app in haproxy_applications if not app.hidden %}
+{{ app.vhost_name }} 300 IN A  {{app.ip }} 
+{% endfor %}

@@ -3,10 +3,10 @@ ldap:
   user_cn: ro # needs to correspond with cn of ldap_user
   password_sha: "{{ ldap_password_sha }}" # needs to correspond with ldap_password
   admin:
-    org: surfconext
+    org: "{{ ldap_org }}"
     user: "{{ ldap_admin_user }}"
     # suffix needs to be the same as in the user
-    suffix: "dc=surfconext,dc=nl"
+    suffix: "{{ ldap_suffix }}"
     password: "{{ ldap_admin_password }}"
     password_sha: "{{ ldap_admin_password_sha }}" # this has to match value in password. Use slappasswd -s 'unecrypted password' to generate
   engine:
@@ -16,7 +16,7 @@ ldap:
     password_sha: "{{ engine_ldap_password_sha }}" # this has to match value in password. Use slappasswd -s 'unecrypted password' to generate
   grouper:
     unit_test_user: gadget
-
+  ldapadd_array: [68,0]
 
 ldap_bind_urls: "ldap:/// ldapi:///" # change this is you want ldap to listen on localhost only, for example
-
+ldap_org: "surfconext"

@@ -78,8 +78,8 @@ if [ $# -lt 3 ]; then
     exit 1;
 fi
 
-if [ -e ${CERT_BASENAME}.key -o -e ${CERT_BASENAME}.crt ]; then
-    echo "'${CERT_BASENAME}.key' or '${CERT_BASENAME}.crt' already exists. Leaving"
+if [ -e ${CERT_BASENAME}.key -o -e ${CERT_BASENAME}.pem ]; then
+    echo "'${CERT_BASENAME}.key' or '${CERT_BASENAME}.pem' already exists. Leaving"
     exit 1;
 fi
 
@@ -126,7 +126,7 @@ else
     fi
 fi
 
-${OPENSSL} x509 -in ${tmpdir}/certificate.pem -out ${CERT_BASENAME}.crt
-if [ $? -ne "0" -o ! -e ${CERT_BASENAME}.crt ]; then
+${OPENSSL} x509 -in ${tmpdir}/certificate.pem -out ${CERT_BASENAME}.pem
+if [ $? -ne "0" -o ! -e ${CERT_BASENAME}.pem ]; then
     error_exit "Error copying certificate"
 fi

@@ -1,0 +1,11 @@
+#!/bin/sh
+# Call hapos-upd to update OCSP stapling info foreach of our haproxy instances.
+
+# probably we want to continue even if one fails
+#set -e
+
+{% for application in haproxy_applications if not application.hidden %}
+/usr/local/sbin/hapos-upd --good-only --socket /var/lib/haproxy/{{ application.name }}.stats \
+	--VAfile /etc/haproxy/{{ application.name }}/{{ application.name }}.pem \
+	--cert /etc/haproxy/{{ application.name }}/{{ application.name }}.pem
+{% endfor %}

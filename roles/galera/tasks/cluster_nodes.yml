@@ -1,0 +1,135 @@
+- name: Disable redirects of traffic when VPN gateway is unreachable
+  sysctl: name=net.ipv4.conf.all.accept_redirects value=0 state=present ignoreerrors=yes
+
+# Add MariaDB repo and key
+- name: Add MariaDB.org repository
+  template: src='mariadb.repo.j2' dest='/etc/yum.repos.d/mariadb.repo'
+
+- name: Add Percona repository
+  yum: name="http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm" state=installed
+
+- name: Install MariaDB, Galera, rsync, MySQL-python
+  yum: name={{item}} state=installed
+  with_items:
+  - MariaDB-server
+  - MariaDB-client
+  - galera
+  - MySQL-python  # Required for using the Ansible mysql_* modules
+  - socat
+  - percona-xtrabackup-24
+
+- name: Create directory to keep Galera key material
+  file: dest=/etc/pki/mysql/ state=directory owner=root group=root mode=775
+  when: galera_ssl
+
+- name: copy ca certificate
+  copy: src={{ inventory_dir }}/files/certs/galera/{{item}} dest={{ galera_tls_cert_path }}/{{ item }}
+  with_items:
+    - "{{ galera_tls_ca }}"
+  when: galera_ssl
+
+- name: copy certificates to correct location
+  copy: src={{ inventory_dir }}/files/certs/galera/{{ item.crt_name }} dest="{{ galera_tls_cert_path }}/{{ item.crt_name }}" owner=mysql mode=0400
+  with_items: 
+     - "{{ galera_tls }}"
+  when: galera_ssl
+
+- name: copy private keys to correct location
+  copy: content="{{ item.key_content }}" dest={{ galera_tls_cert_path }}/{{ item.key_name }} mode=0400 owner=mysql
+  with_items: 
+     - "{{ galera_tls }}"
+  when: galera_ssl
+
+- name: Create state transfer key
+  shell: cat /etc/pki/mysql/{{galera_server_key_name }} /etc/pki/mysql/{{galera_server_crt_name }} > /etc/pki/mysql/{{ galera_sst_crt_name }}
+  when: galera_ssl
+  changed_when: false
+
+- name: chmod and chown state transfer key
+  file: path=/etc/pki/mysql/{{ galera_sst_crt_name }} mode=0400 owner=mysql
+
+- name: Put mariadb config files
+  template: src={{ item }}.j2 dest=/etc/my.cnf.d/{{ item }} 
+  notify:
+    - restart mysql
+  with_items:
+    - server.cnf
+    - mysql-clients.cnf
+
+- name: Restrict permissions on server.cnf
+  file: path=/etc/my.cnf.d/server.cnf mode=0664 owner=root group=root
+
+- name: Bootstrap the first node
+  shell: /bin/galera_new_cluster
+  when: (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
+
+
+# Secure the MySQL server
+# - Set root password
+# - Remove anonymous users and test database
+- name: Change mysql root password and remove test database
+  script: mysql_bootstrap.sh "{{ mariadb_root_password }}"
+  when: (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
+  register: db_bootstrap_result
+  changed_when: db_bootstrap_result.rc > 0
+  failed_when: db_bootstrap_result.rc >= 2
+
+# Add cluster user
+- name: add mariadb cluster sst user
+  mysql_user:
+    name: "{{ mariadb_cluster_user }}"
+    password: "{{ mariadb_cluster_password }}"
+    login_user: root
+    login_password: "{{ mariadb_root_password  }}"
+    priv: "*.*:ALL"
+    state: present
+    #  when: (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
+
+# Add backup user
+- name: add mariadb backup user
+  mysql_user:
+    name: "{{ mariadb_backup_user }}"
+    password: "{{ mariadb_backup_password  }}"
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
+    priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
+    state: present
+
+- name: Put mariadb_backup script
+  template: src='mariadb_backup.sh.j2' dest='/usr/local/sbin/mariadb_backup.sh' mode=700 owner=root
+
+- name: Create cron symlink for backup script
+  file: src=/usr/local/sbin/mariadb_backup.sh dest=/etc/cron.daily/db_backup state=link mode=700 owner=root
+  when: backup_node is defined
+
+- name:
+  authorized_key:
+    user: "{{ mariadb_backup_user }}"
+    key: "{{ mariadb_backup_sshkey }}"
+    key_options: command="/home/backup/mariadb_backup.sh"
+  when: mariadb_enable_remote_ssh_backup | default(false)
+
+- name: Start and enable the MariaDB (mysql) service on boot.
+  service: name=mysql state=started enabled=true
+  ignore_errors: true
+
+- name: Create database
+  mysql_db: name={{ item }} state=present login_user=root login_password={{mariadb_root_password}}
+  with_items:
+    - "{{ databases.names }}"
+
+- name: Create database user
+  mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:{{item[0].privilege}} state=present login_user=root login_password={{mariadb_root_password}}
+  with_nested:
+    - "{{ databases.users }}"
+    - "{{ database_clients }}"
+  tags: create_galera_users
+  run_once: true
+
+- name: Put clustercheck script in place
+  copy: src=clustercheck dest=/usr/local/bin/ mode=0770 owner=root
+
+- name: MySQL my.cnf
+  template: src=my.cnf.j2 dest=/root/.my.cnf mode=0600 owner=root group=root
+
+

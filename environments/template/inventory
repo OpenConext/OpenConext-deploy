@@ -1,0 +1,17 @@
+[storage]
+%target_host%
+
+[java-apps]
+%target_host%
+
+[php-apps]
+%target_host%
+
+[loadbalancer]
+%target_host%
+
+[%env%:children]
+storage
+java-apps
+php-apps
+loadbalancer

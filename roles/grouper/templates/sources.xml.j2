@@ -122,8 +122,8 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
 
 
   <source adapterClass="edu.internet2.middleware.grouper.subj.GrouperJndiSourceAdapter">
-    <id>openconext-ldap</id>
-    <name>OpenConext LDAP</name>
+    <id>{{ grouper_source_ldap_id }}</id>
+    <name>{{ grouper_source_ldap_name }}</name>
     <type>person</type>
     <init-param>
       <param-name>ldapProperties_file</param-name>
@@ -190,7 +190,7 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
         <param-name>base</param-name>
 
         <param-value>
-          dc=surfconext,dc=nl
+	  {{ ldap_suffix }}
         </param-value>
       </param>
 
@@ -214,7 +214,7 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
       <param>
         <param-name>base</param-name>
         <param-value>
-          dc=surfconext,dc=nl
+           {{ ldap_suffix }}
         </param-value>
 
       </param>
@@ -239,7 +239,7 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
       <param>
         <param-name>base</param-name>
         <param-value>
-          dc=surfconext,dc=nl
+           {{ ldap_suffix }} 
         </param-value>
       </param>
     </search>
@@ -255,8 +255,8 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
   </source>
 
   <source adapterClass="edu.internet2.middleware.grouper.subj.GrouperJndiSourceAdapter">
-    <id>applications</id>
-    <name>OpenConext Applications</name>
+    <id>{{grouper_source_applications_id}}</id>
+    <name>{{grouper_source_applications_name}}</name>
     <type>person</type>
     <init-param>
       <param-name>ldapProperties_file</param-name>
@@ -321,7 +321,7 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
       <param>
         <param-name>base</param-name>
         <param-value>
-          dc=surfconext,dc=nl
+          {{ ldap_suffix }} 
         </param-value>
       </param>
 
@@ -346,7 +346,7 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
         <param-name>base</param-name>
 
         <param-value>
-          dc=surfconext,dc=nl
+          {{ ldap_suffix }} 
         </param-value>
       </param>
     </search>
@@ -370,7 +370,7 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
       <param>
         <param-name>base</param-name>
         <param-value>
-          dc=surfconext,dc=nl
+          {{ ldap_suffix }} 
         </param-value>
 
       </param>

@@ -1,0 +1,21 @@
+---
+- name: install bind packages
+  yum: name={{ item }} state=present
+  with_items: bind
+
+- name: create bind directories
+  file: dest=/var/named/{{ item }} state=directory owner=named group=named mode=0750
+  with_items:
+   - master
+   - keys
+
+- name: configure bind
+  template: src=named.conf.j2 dest=/etc/named.conf owner=root group=named mode=0640
+  notify: restart bind
+
+- name: copy ha zone file
+  template: src=ha_zone_file.j2  dest=/var/named/master/ha.{{ base_domain }}.db owner=named group=named
+  notify: reload bind
+
+- name: enable bind service
+  service: name=named state=started enabled=yes

@@ -1,0 +1,25 @@
+Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
+<Virtualhost {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}>
+    ServerName   {{ profile_domain }}
+    ServerAdmin {{ apache_server_admin }}
+
+    DocumentRoot {{ profile_current_release_symlink }}/web
+
+    SetEnv SYMFONY_ENV {{ profile_apache_symfony_environment }}
+    SetEnv HTTPS on
+
+    <Directory "{{ profile_current_release_symlink }}/web">
+        Require all granted
+
+	Options -MultiViews
+	RewriteEngine On
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^(.*)$ app.php [QSA,L]
+    </Directory>
+
+    # Proxy the requests to FPM
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/profile-pool.sock|fcgi://localhost/{{ profile_current_release_symlink }}/web/$1
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-PROFILE'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PROFILE'" combined
+</VirtualHost>

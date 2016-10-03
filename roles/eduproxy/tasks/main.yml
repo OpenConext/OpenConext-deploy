@@ -1,0 +1,53 @@
+---
+- name: Create user
+  user: name=eduproxy system=yes home={{ eduproxy_dir }} shell=/sbin/nologin
+
+- name: Copy systemd service file
+  template: src=templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  notify:
+    - "systemctl daemon-reload"
+    - "restart eduproxy"
+
+- name: Check presence of legacy init script
+  stat: path=/etc/init.d/{{ springapp_service_name }}
+  register: legacy_ep_present
+
+- name: Stop service when legacy init script is present
+  service: name={{ springapp_service_name }} state=stopped
+  when: legacy_ep_present.stat.exists
+
+- name: Clean up legacy init script
+  file: path=/etc/init.d/{{ springapp_service_name }} state=absent
+
+- name: enable eduproxy service
+  service: name=eduproxy enabled=yes
+
+- name: Create logging directory
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner=eduproxy group=eduproxy mode=0755
+
+- include: ../../../tasks/springbootapp/install-release.yml
+  when: "eduproxy_snapshot_timestamp == '' and eduproxy_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-snapshot.yml
+  when: "eduproxy_snapshot_timestamp != '' and eduproxy_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-local.yml
+  when: "eduproxy_local_jar != ''"
+
+- name: Copy logging config
+  template: src=logback.xml.j2 dest={{ eduproxy_dir }}/logback.xml owner=eduproxy group=eduproxy mode=0740
+  notify: restart eduproxy
+
+- name: Copy application config
+  template: src=application.yml.j2 dest={{ eduproxy_dir }}/application.yml owner=eduproxy group=eduproxy mode=0740
+  notify: restart eduproxy
+
+- name: copy apache config
+  template: src=eduproxy.conf.j2 dest=/etc/httpd/conf.d/eduproxy.conf
+  notify: reload httpd
+
+- meta: flush_handlers
+
+- name: ensure the service is started
+  service: name=eduproxy enabled=yes state=started
+  ignore_errors: true

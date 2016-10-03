@@ -1,6 +1,6 @@
 ---
 - name: Set hosts
-  lineinfile: dest=/etc/hosts line="192.168.66.78 {{ item }}"
+  lineinfile: dest=/etc/hosts line="{{ hosts_ip_address }} {{ item }}"
   with_items:
     - "static.vm.openconext.org"
     - "serviceregistry.vm.openconext.org"
@@ -22,3 +22,4 @@
     - "aa.vm.openconext.org"
     - "multidata.vm.openconext.org"
     - "oidc.vm.openconext.org"
+    - "teams.vm.openconext.org"

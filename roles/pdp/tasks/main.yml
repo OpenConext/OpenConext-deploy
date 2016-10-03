@@ -8,34 +8,18 @@
 - name: upload and extract local html archive
   unarchive: src=./../OpenConext-pdp/pdp-gui/target/pdp-gui-{{ pdp_local_html_version }}.zip dest=/var/www/pdp/
   register: local_pdp_archive
-  tags: pdp
   when: pdp_local_html_version != ''
 
 - name: create symlink to uploaded version
   file: src=/var/www/pdp/pdp-gui-{{ pdp_local_html_version }} dest=/var/www/pdp/current state=link force=yes
-  tags: pdp
   when: pdp_local_html_version != ''
 
-- name: download html archive
-  get_url:
-    url: "{{ maven_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}/pdp-gui-{{ pdp_version }}.zip"
-    dest: /var/www/pdp/pdp-gui-{{ pdp_version }}.zip
-  tags: pdp
-  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
-
-- name: extract archive
-  unarchive: src=/var/www/pdp/pdp-gui-{{ pdp_version }}.zip dest=/var/www/pdp/ copy=no
-  tags: pdp
+- name: Download and extract archive
+  unarchive: src="{{ maven_repo }}/{{ pdp_group_url }}/pdp-gui/{{ pdp_version }}/pdp-gui-{{ pdp_version }}.zip" dest=/var/www/pdp/ copy=no creates=/var/www/pdp/pdp-gui-{{ pdp_version }}/
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
 - name: create symlink to downloaded version
   file: src=/var/www/pdp/pdp-gui-{{ pdp_version }} dest=/var/www/pdp/current state=link force=yes
-  tags: pdp
-  when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
-
-- name: remove downloaded version
-  file: path=/var/www/pdp/pdp-gui-{{ pdp_version }}.zip state=absent
-  tags: pdp
   when: pdp_html_snapshot_timestamp == '' and pdp_local_html_version == ''
 
 - name: download snapshot of html archive
@@ -52,7 +36,6 @@
 
 - name: create symlink to downloaded snapshot version
   file: src=/var/www/pdp/pdp-gui-{{ pdp_version }}-SNAPSHOT dest=/var/www/pdp/current state=link force=yes
-  tags: pdp
   when: pdp_html_snapshot_timestamp != '' and pdp_local_html_version == ''
 
 - name: remove downloaded snapshot version
@@ -68,12 +51,24 @@
 
 - name: copy virtual host config
   template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
-  tags: pdp
   notify: reload httpd
 
-- name: Copy start script
-  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
-  notify: restart pdp
+- name: Copy systemd service file
+  template: src=templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  notify:
+    - "systemctl daemon-reload"
+    - "restart pdp"
+
+- name: Check presence of legacy init script
+  stat: path=/etc/init.d/{{ springapp_service_name }}
+  register: legacy_pdp_present
+
+- name: Stop service when legacy init script is present
+  service: name={{ springapp_service_name }} state=stopped
+  when: legacy_pdp_present.stat.exists
+
+- name: Clean up legacy init script
+  file: path=/etc/init.d/{{ springapp_service_name }} state=absent
 
 - name: enable pdp service
   service: name=pdp enabled=yes
@@ -101,17 +96,4 @@
 - name: Copy xacml config
   template: src=xacml.conext.properties.j2 dest={{ pdp_dir }}/xacml.conext.properties owner=pdp group=pdp mode=0740
   notify: restart pdp
-
-# no idea why this is necessary, as the init script returns an ok status also
-# if pdp is still initializing.  Waiting for the port to open works well
-# though, and seems like to correct way to handle this.
-- name: start the pdp service
-  service: name=pdp state=started enabled=yes
-  ignore_errors: true
-
-- name: wait for pdp to start
-  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
-
-- name: ensure the service is started
-  service: name=pdp enabled=yes state=started
 

@@ -1,0 +1,42 @@
+- name: Disable redirects of traffic when VPN gateway is unreachable
+  sysctl: name=net.ipv4.conf.all.accept_redirects value=0 state=present ignoreerrors=yes
+
+# Add MariaDB repo and key
+- name: Add MariaDB.org repository
+  template: src='mariadb.repo.j2' dest='/etc/yum.repos.d/mariadb.repo'
+
+- name: Install MariaDB, Galera, rsync, MySQL-python
+  yum: name={{item}} state=installed
+  with_items:
+  - galera
+  - rsync         # For galera sync
+  - MySQL-python  # Required for using the Ansible mysql_* modules
+
+- name: Create directory to keep Galera key material
+  file: dest=/etc/pki/mysql/ state=directory owner=root group=root mode=775
+  when: galera_ssl
+  
+- name: copy ca certificate
+  copy: src={{ inventory_dir }}/files/certs/galera/{{item}} dest={{ galera_tls_cert_path }}/{{ item }}
+  with_items:
+    - "{{ galera_tls_ca }}"
+  when: galera_ssl
+
+- name: copy certificates to correct location
+  copy: src={{ inventory_dir }}/files/certs/galera/{{ item.crt_name }} dest="{{ galera_tls_cert_path }}/{{ item.crt_name }}" owner=root 
+  with_items: 
+    - "{{ galera_tls }}"
+  when: galera_ssl
+
+  
+- name: copy private keys to correct location
+  copy: content="{{ galera_server_key }}" dest={{ galera_tls_cert_path }}/{{ galera_server_key_name }} mode=0600 owner=nobody
+  when: galera_ssl
+  
+- name: Put garb config file
+  template: src='garb.j2' dest='/etc/sysconfig/garb'
+  notify:
+    - restart garb
+
+- name: Start and enable the Galera arbiter service on boot.
+  service: name=garb state=started enabled=true

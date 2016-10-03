@@ -1,0 +1,107 @@
+#!/bin/bash
+#
+# This script will generate new password, secrets and certificates for OpenConext environment
+# 
+# It is to be used before any Ansible command.
+#
+# When a password must be sha-encoded, the clear-text password must be set before the sha-encoded
+# Key for the sha-encoded password must be the same as the clear-text password with the '_sha'
+#
+
+# ----- configuration
+ENV_DIR="environments"
+SKELETON_DIR="${ENV_DIR}/template"
+SECRET_VARS_TEMPLATE="${SKELETON_DIR}/secrets/skeleton.yml"
+# ----- End configuration
+
+SCRIPT=$(readlink -f "$0")
+BASEDIR=$(dirname "$SCRIPT")
+BASENAME=$(basename "$SCRIPT")
+
+# ----- Input handling
+if [ $# -lt 2 ]
+  then
+    echo "INFO: No arguments supplied, syntax: $BASENAME environment domain"
+    exit 1
+fi
+
+
+if [ $# -gt 3 ]
+  then
+    echo "ERROR: Only 2 or 3 arguments expected, syntax: $BASENAME environment domain [secret-vars-file]"
+    exit 1
+fi
+# ----- End Input handing
+
+if [ $# -eq 3 ]
+  then
+    SECRET_VARS_FILE=$3
+    echo "INFO: Using file " $SECRET_VARS_FILE " for containing the secrets."
+fi
+
+trap 'rm -f $SV_FILE; echo "Error: Operation not completed, please restart command"' EXIT INT TERM 
+
+tempfile() {
+    tempprefix=$(basename "$0")
+    mktemp /tmp/${tempprefix}.XXXXXX
+}
+
+OC_ENV=$1
+OC_BASEDOMAIN=$2
+
+SECRET_VARS_FILE="${ENV_DIR}/${OC_ENV}/secrets/${OC_ENV}.yml"
+CERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/star.${OC_BASEDOMAIN}"
+EBCERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/engineblock"
+CACERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/ca"
+
+echo "OC_ENV: $OC_ENV"
+echo "OC_BASEDOMAIN: $OC_BASEDOMAIN"
+
+echo "SCRIPT: $SCRIPT"
+echo "BASEDIR: $BASEDIR"
+echo "BASENAME: $BASENAME"
+
+echo "SECRET_VARS_TEMPLATE: $SECRET_VARS_TEMPLATE"
+echo "SECRET_VARS_FILE: $SECRET_VARS_FILE"
+
+echo "CERT_CONF_TEMP: $CERT_CONF_TEMP"
+echo "CERT_FILES_BASE: $CERT_FILES_BASE"
+echo "EBCERT_FILES_BASE: $EBCERT_FILES_BASE"
+
+# Clear destination env dir while I'm testing this script, we might want to skip this eventually
+rm -rf "${ENV_DIR}/${OC_ENV}"
+
+# Copy template to new OC_ENV
+cp -a "${SKELETON_DIR}" "${ENV_DIR}/${OC_ENV}"
+
+# Generate new certificates
+#scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $CERT_FILES_BASE
+scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $EBCERT_FILES_BASE
+# Generate CA
+scripts/lib/create_ca.sh $CACERT_FILES_BASE "/CN=OpenConext Demo CA/O=OpenConext/C=NL"
+scripts/lib/gen_ssl_server_cert.sh  $CACERT_FILES_BASE ${ENV_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN" /CN=*.$OC_BASEDOMAIN/O=OpenConext/C=NL
+# Copy ca to correct location
+cp $CACERT_FILES_BASE/ca-cert.pem ${ENV_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN"_ca.pem
+
+# Generate Secret vars
+scripts/gen_secrets.sh $SECRET_VARS_TEMPLATE $CERT_FILES_BASE $EBCERT_FILES_BASE $SECRET_VARS_FILE $OC_BASEDOMAIN 
+
+# Move group_vars skeleton.yml to OC_ENV.yml
+mv "${ENV_DIR}/${OC_ENV}/group_vars/template.yml" "${ENV_DIR}/${OC_ENV}/group_vars/${OC_ENV}.yml"
+
+# Replace %env% with OC_ENV
+sed -i "s/%env%/${OC_ENV}/g" ${ENV_DIR}/${OC_ENV}/*/${OC_ENV}.yml
+
+# Remove skeleton secrets file from target
+rm -f "${ENV_DIR}/${OC_ENV}/secrets/skeleton.yml"
+
+# Replace %env% with OC_ENV in inventory
+sed -i "s/%env%/${OC_ENV}/g" ${ENV_DIR}/${OC_ENV}/inventory
+
+
+echo -e "\n\n*** Please replace all following placeholders ***\n"
+grep -R '%*%' "${ENV_DIR}/${OC_ENV}"
+
+
+trap '' EXIT
+exit 0

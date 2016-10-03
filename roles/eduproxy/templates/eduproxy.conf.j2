@@ -1,0 +1,13 @@
+Listen {{ apache_app_listen_address.eduproxy }}:{{ loadbalancing.eduproxy.port }}
+<VirtualHost {{ apache_app_listen_address.eduproxy }}:{{ loadbalancing.eduproxy.port }}>
+    ServerName https://eduproxy.{{ base_domain }}
+
+    UseCanonicalName On
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EduProxy'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EduProxy'" combined
+
+    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
+
+</VirtualHost>

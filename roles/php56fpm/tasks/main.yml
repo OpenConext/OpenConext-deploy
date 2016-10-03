@@ -1,0 +1,66 @@
+# Install the "REMI" repo which contain newer php packages that override the default
+# that come with the distro (CentOS7: 5.4; CentOS6: 5.3)
+- name: Install REMI repo
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-7.rpm state=present
+
+- name: Enable REMI repo
+  copy: src=remi.repo dest=/etc/yum.repos.d/remi.repo
+
+- name: Install httpd, php-(cli,fpm), smtpd, mysql client libs, bzip2, composer
+  yum: name={{item}} state=present
+  with_items:
+  - mysql
+  - bzip2
+  - php-fpm
+  - php-cli
+  - php-pecl-apcu
+  - php-curl
+  - php-ldap
+  - php-mbstring
+  - php-mcrypt
+  - php-mysql
+  - php-pecl-memcache
+  - php-soap
+  - php-xml
+  - php-gd
+  - composer
+
+- name: enable php-fpm
+  service: name=php-fpm enabled=yes
+
+  
+- name: Configure PHP APC
+  template: src={{ item }}.j2 dest=/etc/php.d/{{ item }}
+  with_items:
+    - 40-apcu.ini
+    - openconext.ini
+
+- name: Install PHP with extensions
+  yum: name={{ item }} state=present
+  with_items:
+    - php-pecl-xdebug
+  when: develop
+
+- name: Configure PHP Xdebug
+  template: src=xdebug.ini.j2 dest=/etc/php.d/15-xdebug.ini
+  when: develop
+  notify:
+      - restart php-fpm
+
+# Remove default distro conf files
+#- name: Remove known default distro files in /etc/php-fpm.d/
+#  file: path={{item}} state=absent
+#  with_items:
+#  - /etc/php-fpm.d/www.conf
+#  notify:
+#  - restart httpd
+#  - restart php-fpm
+
+- name: Put /etc/php-fpm.conf
+  copy: src='php-fpm.conf' dest='/etc/php-fpm.conf'
+  notify:
+      - restart php-fpm
+
+# Set mode to a+x so components can access their subdirectories under session/
+- name: Create directory for vhosts to store PHP sessions
+  file: path={{ php_session_dir }} state=directory mode="771"

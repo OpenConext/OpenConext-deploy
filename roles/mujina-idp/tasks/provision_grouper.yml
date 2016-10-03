@@ -3,13 +3,8 @@
   with_items:
     - add-mujina-user.gsh
 
-- name: use correct grouper config
-  template: src={{ item.src }}.j2 dest=/opt/www/grouper.apiBinary-2.1.5/conf/{{ item.dest }}
-  with_items:
-    - { src: sources-grouper-shell.xml, dest: sources.xml }
-
 - name: provision grouper with users
-  shell: bin/gsh ~/{{ item }}
+  shell: "/bin/env GSH_JVMARGS='-Djava.security.egd={{ mujina_idp_random_source }}' bin/gsh ~/{{ item }}"
   register: gsh_output
   changed_when: "'auto-created' in gsh_output.stderr"
   failed_when: gsh_output.stderr != '' and ("already exists" not in gsh_output.stderr and "auto-created" not in gsh_output.stderr)

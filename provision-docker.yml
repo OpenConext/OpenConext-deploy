@@ -1,0 +1,72 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Read vars from secrets file
+      include_vars: "{{ secrets_file }}"
+      tags: always
+      always_run: yes
+
+- hosts: all
+  gather_facts: yes
+  become: true
+  roles:
+    - common
+    - { role: tls, tags: [tls] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: storage
+  gather_facts: yes
+  become: true
+  roles:
+    - { role: mysql, tags: [mysql] }
+    - { role: ldap,  tags: [ldap] }
+    - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
+
+
+- hosts: php-apps:java-apps
+  gather_facts: yes
+  become: true
+  roles:
+    - httpd
+
+- hosts: loadbalancer
+  gather_facts: no
+  become: true
+  roles:
+    - { role: haproxy, tags: [lb] }
+
+- hosts: php-apps
+  gather_facts: no
+  become: true
+  vars:
+    env_lang: php
+  roles:
+    - php56fpm
+    - static
+    - welcome
+    - openconext-common
+    - engineblock
+    - janus
+    - profile
+  handlers: 
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: java-apps
+  gather_facts: yes
+  become: true
+  roles:
+    - { role: shibboleth,  tags: [shib] }
+    - tomcat
+    - metadata-exporter
+    - { role: pdp, tags: [pdp] }
+    - grouper
+    - teams
+    - mujina-idp
+    - mujina-sp
+    - authz-server
+    - voot
+    - authz-playground
+  handlers:
+    - include: roles/httpd/handlers/main.yml

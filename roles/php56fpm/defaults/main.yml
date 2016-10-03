@@ -1,0 +1,2 @@
+---
+php_session_dir: /var/lib/openconext/session/

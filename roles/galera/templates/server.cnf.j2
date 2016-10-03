@@ -1,0 +1,92 @@
+#
+# These groups are read by MariaDB server.
+# Use it for options that only the server (but not clients) should see
+#
+# See the examples of server my.cnf files in /usr/share/mysql/
+#
+
+# this is read by the standalone daemon and embedded servers
+[server]
+
+# this is only for the mysqld standalone daemon
+[mysqld]
+ssl-ca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }} 
+ssl-key = {{ galera_tls_cert_path }}/{{ galera_server_key_name }}
+ssl-cert = {{ galera_tls_cert_path }}/{{ galera_server_crt_name }} 
+binlog_format=ROW
+default_storage_engine=innodb
+innodb_autoinc_lock_mode=2
+query_cache_size=0
+query_cache_type=0
+bind-address=0.0.0.0
+log_warnings=2
+datadir=/var/lib/mysql
+max_connections = 2000
+skip-external-locking
+skip-name-resolve
+max_allowed_packet = 256M
+table_cache = 4096
+read_buffer_size = 4M
+thread_cache_size = 8
+query_cache_size = 96M
+query_cache_limit = 2M
+query_cache_type = 1
+thread_cache_size = 8
+thread_concurrency = 16
+sort_buffer_size = 16M
+wait_timeout=28800
+query_prealloc_size=32K
+read_buffer_size=20M
+read_rnd_buffer_size=8M
+join_buffer_size=16M
+
+# * InnoDB settings
+innodb_log_file_size=100M
+innodb_file_per_table=1
+innodb_flush_log_at_trx_commit=2
+innodb_data_file_path = ibdata1:32M:autoextend
+innodb_buffer_pool_size = {{ innodb_buffer_pool_size }}
+innodb_log_files_in_group = 2
+innodb_log_buffer_size = 4M
+innodb_flush_method = O_DIRECT
+innodb_open_files = 600
+innodb_thread_concurrency = 2
+innodb_support_xa = 0
+innodb_flush_log_at_trx_commit = 2
+innodb_doublewrite = 0
+
+# this is the config used by the normal mysql service
+[mysqld_safe]
+syslog
+
+[galera]
+wsrep_on=ON
+wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+wsrep_cluster_address="gcomm://{% for host in groups['dbcluster'] %}{{ hostvars[host]['backend_ipv4'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+wsrep_cluster_name='{{ mariadb_cluster_name }}'
+wsrep_node_address='{{ backend_ipv4 }}:4567'
+wsrep_node_name='{{ inventory_hostname }}'
+wsrep_sst_method=xtrabackup-v2
+wsrep_sst_auth={{ mariadb_cluster_user }}:{{ mariadb_cluster_password }}
+wsrep_provider_options="socket.ssl_key={{ galera_tls_cert_path }}/{{ galera_server_key_name }};socket.ssl_cert={{ galera_tls_cert_path }}/{{ galera_server_crt_name }};socket.ssl_ca={{ galera_tls_cert_path }}/{{ galera_tls_ca }};socket.ssl_cipher=AES128-SHA;gmcast.segment={{ galera_gmcast_segment }};gcache.size=1G"
+wsrep_retry_autocommit = 2
+wsrep_slave_threads = 4
+
+
+# this is only for embedded server
+[embedded]
+
+# This group is only read by MariaDB servers, not by MySQL.
+# If you use the same .cnf file for MySQL and MariaDB,
+# you can put MariaDB-only options here
+[mariadb]
+
+# This group is only read by MariaDB-10.0 servers.
+# If you use the same .cnf file for MariaDB of different versions,
+# use this group for options that older servers don't understand
+[mariadb-10.0]
+
+[sst]
+encrypt = 2
+tca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }}
+tcert = {{ galera_tls_cert_path }}/{{ galera_sst_crt_name }} 

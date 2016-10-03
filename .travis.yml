@@ -1,0 +1,73 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 .
+
+script:
+  - >
+    sudo docker run --detach
+    -v "${PWD}":/ansible:rw
+    -v /sys/fs/cgroup:/sys/fs/cgroup:ro --privileged
+    --add-host static.vm.openconext.org:127.0.0.1
+    --add-host serviceregistry.vm.openconext.org:127.0.0.1
+    --add-host engine.vm.openconext.org:127.0.0.1
+    --add-host profile.vm.openconext.org:127.0.0.1
+    --add-host mujina-sp.vm.openconext.org:127.0.0.1
+    --add-host mujina-idp.vm.openconext.org:127.0.0.1
+    --add-host grouper.vm.openconext.org:127.0.0.1
+    --add-host teams.vm.openconext.org:127.0.0.1
+    --add-host authz.vm.openconext.org:127.0.0.1
+    --add-host authz-admin.vm.openconext.org:127.0.0.1
+    --add-host authz-playground.vm.openconext.org:127.0.0.1
+    --add-host voot.vm.openconext.org:127.0.0.1
+    --add-host lb.vm.openconext.org:127.0.0.1
+    --add-host apps.vm.openconext.org:127.0.0.1
+    --add-host ldap.vm.openconext.org:127.0.0.1
+    --add-host db.vm.openconext.org:127.0.0.1
+    --add-host pdp.vm.openconext.org:127.0.0.1
+    --add-host engine-api.vm.openconext.org:127.0.0.1
+    --add-host aa.vm.openconext.org:127.0.0.1
+    --add-host multidata.vm.openconext.org:127.0.0.1
+    --add-host oidc.vm.openconext.org:127.0.0.1
+    --name ansible-test surfnet/centos7-openconext
+  - sudo docker exec -t ansible-test sh -c 'echo -e "[defaults]\ncallback_plugins=/ansible/callback_plugins\ncallback_whitelist=profile_tasks\n[ssh_connection]\nssh_args=-o ControlMaster=auto -o ControlPersist=60m\npipelining=True" > /ansible/ansible.cfg '
+  - >
+    sudo docker exec -t ansible-test
+    env TERM=xterm ANSIBLE_CONFIG=/ansible/ansible.cfg
+    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-docker.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml --syntax-check
+  - >
+    sudo docker exec -t ansible-test
+    env TERM=xterm ANSIBLE_CONFIG=/ansible/ansible.cfg
+    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-docker.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml
+  - >
+    echo "=================================================================";
+    echo "=================================================================";
+    echo "== STARTING IDEMPOTENCY TEST ====================================";
+    echo "=================================================================";
+    echo "================================================================="
+  - >
+    TMPOUT=$(tempfile) &&
+    sudo docker exec -t ansible-test
+    env TERM=xterm ANSIBLE_CONFIG=/ansible/ansible.cfg
+    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-docker.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml | tee $TMPOUT
+    &&
+    grep -q 'changed=0.*failed=0' $TMPOUT && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+
+after_failure:
+  - sudo docker exec -t ansible-test yum install -y net-tools
+  - sudo docker exec -t ansible-test netstat -apn
+  - sudo docker exec -t ansible-test systemctl status -l haproxy
+  - sudo docker exec -t ansible-test systemctl status -l httpd
+  - sudo docker exec -t ansible-test systemctl status metadata-exporter.service
+  - sudo docker exec -t ansible-test env TERM=xterm journalctl -xe
+  - sudo docker exec -t ansible-test ls -ltr /var/log
+  - sudo docker exec -t ansible-test cat /var/log/metadata-exporter/metadata-exporter.log
+  - sudo docker exec -t ansible-test cat /var/log/voot/voot.log
+  - sudo docker exec -t ansible-test cat /var/log/pdp/pdp.log
+
+after_script:
+  - sudo docker stop ansible-test
+

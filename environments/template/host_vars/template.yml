@@ -1,0 +1,20 @@
+apache_app_listen_address:
+  welcome: 127.0.0.1
+  engine: 127.0.0.1
+  engine_api: 127.0.0.1
+  profile: 127.0.0.1
+  mujina_idp: 127.0.0.1
+  mujina_sp: 127.0.0.1
+  serviceregistry: 127.0.0.1
+  static: 127.0.0.1
+  authzserver: 127.0.0.1
+  authz_admin: 127.0.0.1
+  authz_playground: 127.0.0.1
+  grouper: 127.0.0.1
+  teams: 127.0.0.1
+  voot: 127.0.0.1
+  pdp: 127.0.0.1
+  oidc: 127.0.0.1
+  aa: 127.0.0.1
+  metadata_exporter: 127.0.0.1
+

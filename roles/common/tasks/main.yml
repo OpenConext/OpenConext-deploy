@@ -2,17 +2,21 @@
 - name: set timezone
   file: state=link src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime force=True
 
+- name: check that hostname and fqdn are set up correctly
+  command: "/usr/bin/hostname --fqdn"
+  any_errors_fatal: true
+  changed_when: false
+
 - name: Add Epel repo
-  yum: name=https://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
+  yum: name=epel-release.noarch state=present
 
 - name: Install tools / clients
   yum: name={{ item }} state=present
   with_items:
      - telnet
+     - sudo
      - lynx
      - openldap-clients
-     - mysql.x86_64
-     - MySQL-python
      - ntp
      - unzip
      - libselinux-python
@@ -34,7 +38,7 @@
   register: selinux_binaries
 
 - name: check for SELinux status
-  command: /usr/sbin/sestatus
+  shell: /usr/sbin/sestatus | head -1 | awk '{ print $3 }'
   when: selinux_binaries.stat.exists == True
   register: selinux_status
 
@@ -44,11 +48,35 @@
 
 - name: disable SELinux NOW
   command: /usr/sbin/setenforce 0
-  when: "selinux_binaries.stat.exists == True and selinux_status.stdout|search('status: *enabled')"
+  when: "selinux_binaries.stat.exists == True and selinux_status.stdout == 'enabled'"
 
 - name: check SELinux status
-  shell: "
-         /usr/sbin/sestatus | egrep '^SELinux status: *disabled' 
-      || /usr/sbin/sestatus | egrep '^Current mode: *permissive'
-    "
+  shell: "/usr/sbin/sestatus | egrep '^SELinux status: *disabled' || /usr/sbin/sestatus | egrep '^Current mode: *permissive'"
   when: selinux_binaries.stat.exists == True
+
+- name: Remove exim when sendmail needs to be installed
+  yum: name=exim state=absent
+  
+- name: Install sendmail
+  yum: name={{ item }} state=present
+  with_items:
+     - sendmail
+     - sendmail-cf
+  when: sendmail_smarthost is defined
+
+- name: Copy sendmail template
+  template: src='sendmail.cf.j2' dest='/etc/mail/sendmail.cf'
+  when: sendmail_smarthost is defined
+  notify: rebuild sendmail config
+  
+- name: Start and enable sendmail service
+  service: name=sendmail state=started enabled=yes
+  when: sendmail_smarthost is defined
+
+# journald binary logs corrupt on specific engineblock messages.
+# disabling compression fixes that issue
+- name: Disable journald compression
+  copy: src=journald.conf dest='/etc/systemd/journald.conf'
+  notify: 
+    - restart journald
+

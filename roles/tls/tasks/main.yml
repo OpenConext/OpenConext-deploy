@@ -1,23 +1,18 @@
 ---
 - name: copy certificates to correct location
-  copy: src=files/{{ env }}/certs/{{ item }} dest={{ tls.cert_path }}/{{ item }}
-  with_items:
-    - "{{ tls.certificates }}"
-    - "{{ tls.ca_certificates }}"
-
-- name: enable update-ca-trust method
-  command: update-ca-trust force-enable
+  copy: src={{ inventory_dir }}/files/certs/{{ item.crt_name }} dest="{{ tls.cert_path }}/{{ item.crt_name }}"
+  with_items: "{{ tls_https }}"
 
 - name: copy ca certificate
-  copy: src=files/{{ env }}/certs/{{ item }} dest=/etc/pki/ca-trust/source/anchors/{{ item }}
+  copy: src={{ inventory_dir }}/files/certs/{{ item }} dest={{ tls.cert_path_ca }}/{{ item }}
   with_items:
-     "{{ tls.ca_certificates }}"
+    - "{{ tls_ca }}"
   notify: update_ca_trust
+  when: tls_ca is defined
 
 - name: copy private keys to correct location
-  copy: content="{{ https_star_private_key }}" dest={{ tls.cert_private_path }}/{{ item }}
-  with_items:
-    - "{{ tls.private_keys }}"
+  copy: content="{{ item.key_content }}" dest={{ tls.cert_private_path }}/{{ item.key_name }} mode=0600
+  with_items: "{{ tls_https }}"
 
 - name: install openssl
   yum: name=openssl state=present
@@ -25,19 +20,14 @@
 - name: create directory
   file: state=directory dest={{ tls_dh_param_path }} mode=0755 owner=root
 
-- name: install libselinux-python
-  yum: name=libselinux-python state=present
-  when: env == 'vm'
-
 - name: copy default Diffie-Hellman parameters
   copy: src=dh_params_default.pem dest={{ tls_dh_param_file }}
   when: env == 'vm'
 
 - name: generate Diffie-Hellman group
   command: openssl dhparam -out {{ tls_dh_param_file }} {{ tls_dh_param_keysize }}
-  args: 
+  args:
     creates: "{{ tls_dh_param_file }}"
 
 - name: check file permissions
   file: path={{ tls_dh_param_file }} owner=root mode=0600
-

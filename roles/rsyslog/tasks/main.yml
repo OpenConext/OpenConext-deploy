@@ -1,0 +1,12 @@
+- name: install rsyslog
+  yum: name=rsyslog state=present
+  notify:
+  - restart rsyslog
+
+- name: put ryslog config file
+  template: src=rsyslog.conf.j2 dest=/etc/rsyslog.conf
+  notify:
+  - restart rsyslog
+
+
+

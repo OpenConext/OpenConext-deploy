@@ -1,0 +1,12 @@
+---
+
+# MariaDB service from RedHat is called "mariadb", MariaDB service from MariaDB is called "mysql"
+- name: restart mariadb
+  script: mysql_reboot_cluster.sh "{{ mariadb_root_password }}"
+  when: galera_bootstrap_node is not defined
+
+- name: restart garb
+  service: name=garb state=restarted 
+
+- name: restart mysql
+  service: name=mysql state=restarted

@@ -1,0 +1,13 @@
+springapp_artifact_id: eduproxy
+springapp_artifact_type: jar
+springapp_artifact_group_dir: /org/openconext
+springapp_version: "{{ eduproxy_version }}"
+springapp_snapshot_timestamp: "{{ eduproxy_snapshot_timestamp }}"
+springapp_dir: "{{ eduproxy_dir }}"
+springapp_user: eduproxy
+springapp_service_name: eduproxy
+springapp_jar: "{{ eduproxy_jar }}"
+springapp_tcpport: 9299
+springapp_local_jar: "{{ eduproxy_local_jar }}"
+springapp_heapsize: 512m
+springapp_random_source: "file:///dev/urandom"

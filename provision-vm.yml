@@ -8,62 +8,57 @@
       - always
 
 - hosts: loadbalancer:php-apps:java-apps:storage
-  gather_facts: no
-  sudo: true
+  gather_facts: yes
+  become: true
   roles:
-    - common
-    - hosts
+    - { role: common, tags: ['common'] }
+    - { role: hosts,  tags: ['hosts'] }
     - { role: tls, tags: ['tls'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: loadbalancer
   gather_facts: true
-  sudo: true
+  become: true
   roles:
     - { role: haproxy, tags: ['lb'] }
-    - { role: nginx,   tags: ['lb'] }
 
 - hosts: php-apps:java-apps
-  gather_facts: no
-  sudo: true
+  gather_facts: yes
+  become: true
   roles:
     - httpd
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: storage
   gather_facts: no
-  sudo: true
+  become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
     - { role: ldap,  tags: ['ldap' ] }
-    - vm_only_provision_eb_sr
+    - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
 
 - hosts: php-apps
   gather_facts: no
-  sudo: true
-  gather_facts: no
+  become: true
   vars:
     env_lang: php
   roles:
-    - php
-    - static
+    - { role: php56fpm,          tags: ['php56fpm'] }
+    - { role: static,            tags: ['static'] }
     - { role: welcome,           tags: ['welcome'] }
-    - { role: openconext-common, tags: ['eb','sr'] }
-    - { role: engineblock,       tags: ['eb'     ] }
-    - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
+    - { role: openconext-common, tags: ['eb','sr','profile'] }
+    - { role: engineblock,      tags: ['eb'     ] }
     - { role: janus,             tags: ['sr'     ] }
     - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
+    - { role: profile,           tags: ['profile'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: java-apps
   gather_facts: true
-  sudo: true
+  become: true
   vars:
     env_lang: java
   roles:
@@ -84,11 +79,10 @@
     - { role: aa,                tags: ['aa'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-    - include: roles/nginx/handlers/main.yml
 
 - hosts: java-apps
   gather_facts: true
-  sudo: true
+  become: true
   vars:
     env_lang: java
   roles:

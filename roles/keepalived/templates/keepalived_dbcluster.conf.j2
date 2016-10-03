@@ -1,0 +1,26 @@
+vrrp_script chk_cluster {
+        script "/usr/local/bin/clustercheck clustercheck {{ galera_clustercheck_password }} 0"
+        interval 1
+}
+
+vrrp_instance galera {
+   interface {{ ansible_default_ipv4.interface }}               # interface to monitor
+   state {{ keepalived.state }}
+   virtual_router_id {{ keepalived_vrid }}          # Assign one ID for this route
+   priority {{ keepalived.prio }}                 # 101 on master, 100 on backup
+   authentication {
+        auth_type PASS
+        auth_pass {{ keepalived_dbcluster_vrrp_password }}
+   } 
+   virtual_ipaddress {
+       {{ dbcluster_ip }}
+   
+   }
+   track_script {
+        chk_cluster
+    }
+ 
+    notify_master "/bin/echo 'master' > /tmp/keepalived.state"
+    notify_backup "/bin/echo 'backup' > /tmp/keepalived.state"
+    notify_fault "/bin/echo 'fault' > /tmp/keepalived.state"
+}

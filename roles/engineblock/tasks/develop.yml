@@ -1,0 +1,30 @@
+---
+- name: Add "engineblock" user
+  user: name=engineblock groups={{ apache_user}} append=yes state=present createhome=no
+
+- name: Create the app/cache/dev dir for development (used for SF2 plugin)
+  file:
+    path={{ openconext_releases_dir }}/OpenConext-engineblock/app/cache/dev
+    state=directory
+    owner={{ apache_user }}
+    group={{ apache_user }}
+    recurse=yes
+
+- name: Copy app_dev.php to OpenConext web folder
+  copy: src=app_dev.php dest=/opt/openconext/OpenConext-engineblock/web/app_dev.php owner={{ engine_fpm_user }} group={{ engine_fpm_user }} mode=0644
+
+- name: Create the cache dir for Symfony
+  file:
+    path={{ engineblock_symfony_cache_path }}
+    state=directory
+    owner={{ engine_fpm_user }}
+    group={{ engine_fpm_user }}
+    recurse=yes
+
+- name: Create the log dir for Symfony
+  file:
+    path={{ engineblock_symfony_log_path }}
+    state=directory
+    owner={{ engine_fpm_user  }}
+    group={{ engine_fpm_user }}
+    recurse=yes

@@ -1,6 +1,8 @@
 ---
 - name: Deploying {{ app_name }} | Bring warfile to downloads directory
-  copy: src={{ app_local_war }} dest=~/{{ deploy_name }}-candidate.war
+  copy: src={{ app_local_war }} dest=~/{{ app_name }}-downloads/{{ deploy_name }}-candidate.war
   register: local_app_warfile
   when: app_local_war != ''
 
+- set_fact: candidate_war="{{ local_app_warfile.dest }}"
+  when: app_local_war != ''

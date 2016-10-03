@@ -1,0 +1,24 @@
+Listen {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.serviceregistry.port }}
+<Virtualhost {{ apache_app_listen_address.serviceregistry }}:{{ loadbalancing.serviceregistry.port }}>
+    ServerAdmin {{ apache_server_admin}}
+
+    DocumentRoot {{ janus_installation_current_release_symlink }}/simplesamlphp/www
+    ServerName   https://{{ janus_domain }}
+    <Directory /opt/openconext/>
+          Require all granted
+    </Directory>
+
+    Alias /simplesaml {{ janus_installation_current_release_symlink }}/simplesamlphp/www
+    Alias /janus {{ janus_installation_current_release_symlink }}/simplesamlphp/modules/janus/web
+
+    RewriteEngine On
+    RewriteRule ^/$ /simplesaml/module.php/janus/index.php [L,R=301]
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+    #Proxy the requests to FPM
+<FilesMatch \.php$>
+  SetHandler "proxy:unix:/var/run/php-fpm/serviceregistry-pool.sock|fcgi://localhost/"
+</FilesMatch>
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-SR'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-SR'" combined
+</VirtualHost>

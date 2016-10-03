@@ -1,3 +1,6 @@
 ---
+- name: systemctl daemon-reload
+  command: "systemctl daemon-reload"
+
 - name: restart metadata-exporter
-  service: name=metadata-exporter state=restarted sleep=45
+  service: name=metadata-exporter state=restarted

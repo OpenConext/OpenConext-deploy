@@ -1,0 +1,6 @@
+---
+eduproxy_dir: /opt/eduproxy
+eduproxy_version: ''
+eduproxy_snapshot_timestamp: ''
+eduproxy_local_jar: ''
+eduproxy_jar: eduproxy-current.jar

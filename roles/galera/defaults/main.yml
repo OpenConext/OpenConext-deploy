@@ -1,0 +1,29 @@
+# Set galera_bootstrap_node to the inventory_hostname of the node to allow
+# that node to be bootstrapped.
+# Only one node of the cluster must be bootstrapped.
+# It is suggested you specify the node to bootstrap when running the playbook. E.g.:
+# ansible-playbook ... -e "galera_bootstrap_node=<hostname of the node to bootstrap>"
+galera_bootstrap_node: ""
+mariadb_cluster_user: galera_sst_user
+mariadb_backup_user: backup_user
+
+# Settings for galera TLS
+galera_ssl: true
+galera_tls_cert_path: /etc/pki/mysql 
+galera_tls_ca: galera_ca.pem
+galera_tls:
+  - name: "server" 
+    key_name: "{{ galera_server_key_name }}"
+    crt_name: "{{ galera_server_crt_name }}"
+    key_content: "{{ galera_server_key }}"
+  - name: "client"
+    key_name: "{{ galera_client_key_name }}"
+    crt_name: "{{ galera_client_crt_name }}"
+    key_content: "{{ galera_client_key }}"
+
+galera_server_key_name: galera_server.key
+galera_server_crt_name: galera_server.pem
+galera_client_key_name: galera_client.key
+galera_client_crt_name: galera_client.pem
+galera_sst_crt_name: galera_sst.pem
+galera_gmcast_segment: 1

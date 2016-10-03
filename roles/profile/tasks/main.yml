@@ -1,0 +1,90 @@
+---
+- name: Add group {{ profile_fpm_user }}
+  group: name={{ profile_fpm_user }} state=present
+
+- name: Add user {{ profile_fpm_user }}
+  user: name={{ profile_fpm_user }} group={{ profile_fpm_user }} createhome=no state=present
+
+- name: Create directory for vhosts to store PHP sessions
+  file: path={{ php_session_dir}}/profile state=directory owner={{ profile_fpm_user }} group=root mode=770
+
+- include: install-release.yml
+  when: profile_branch is not defined or profile_branch == ''
+
+- include: install-branch.yml
+  when: profile_branch is defined and profile_branch != ''
+
+- name: Create the cache dir for Symfony
+  file:
+    path={{ profile_symfony_cache_path }}
+    state=directory
+    owner={{ profile_fpm_user }}
+    group={{ profile_fpm_user }}
+    recurse=yes
+
+- name: Create the log dir for Symfony
+  file:
+    path={{ profile_symfony_log_path }}
+    state=directory
+    owner={{ profile_fpm_user }}
+    group={{ profile_fpm_user }}
+    recurse=yes
+
+- name: Place parameters.yml
+  template: src={{ item }}.j2 dest={{ profile_install_dir }}/app/config/{{ item }} mode=0644
+  with_items:
+  - parameters.yml
+
+- name: Instantiate global_view_parameters.yml.dist
+  command: creates="{{ profile_install_dir }}/app/config/global_view_parameters.yml" mv global_view_parameters.yml.dist global_view_parameters.yml
+  args:
+    chdir: "{{ profile_install_dir }}/app/config/"
+
+- name: Prepare Profile environment
+  environment:
+   - SYMFONY_ENV: "{{ profile_apache_symfony_environment }}"
+  command: composer prepare-env
+  args:
+      chdir: "{{ profile_install_dir }}/"
+  changed_when: false
+
+- name: Create the symfony cache
+  command: app/console cache:clear --env={{ profile_apache_symfony_environment }} --no-debug
+  args:
+    chdir: "{{ profile_install_dir }}/"
+  when: not develop
+  changed_when: false
+
+- name: Make sure cache dir has correct permissions
+  file: path={{ profile_install_dir }}/app/cache owner={{ profile_fpm_user }} group={{ profile_fpm_user }} recurse=yes
+  changed_when: false
+
+- name: Make sure log dir has correct permissions
+  file: path={{ profile_install_dir }}/app/logs owner={{ profile_fpm_user }} group={{ profile_fpm_user }} recurse=yes
+  changed_when: false
+
+- name: Install Apache vhost
+  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
+  with_items:
+    - profile.conf
+  notify:
+    - restart httpd
+
+- name: php-fpm config
+  template: src={{ item }}.j2 dest=/etc/php-fpm.d/{{ item }}
+  with_items:
+     - profile-pool.conf
+  notify:
+    - restart php-fpm
+
+- name: Configure Profile
+  template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
+  with_items:
+    - profile.yml
+  notify:
+    - restart httpd
+
+- name: Activate new Profile release
+  file: src={{ profile_install_dir }} dest={{ profile_current_release_symlink }} state=link
+  notify:
+    - restart httpd

@@ -438,7 +438,7 @@ CREATE TABLE `service_provider_group_acl` (
 LOCK TABLES `service_provider_group_acl` WRITE;
 /*!40000 ALTER TABLE `service_provider_group_acl` DISABLE KEYS */;
 INSERT INTO `service_provider_group_acl` VALUES (1,1,'https://engine.{{ base_domain }}/authentication/sp/metadata',1,1),
-(2,1,'https://profile.{{ base_domain }}/simplesaml/module.php/saml/sp/metadata.php/default-sp',1,1),
+(2,1,'https://profile.{{ base_domain }}/authentication/metadata',1,1),
 (3,1,'https://manage.{{ base_domain }}/simplesaml/module.php/saml/sp/metadata.php/default-sp',1,1),
 (4,1,'https://serviceregistry.{{ base_domain }}/simplesaml/module.php/saml/sp/metadata.php/default-sp',1,1),
 (5,1,'http://mock-sp',1,1),

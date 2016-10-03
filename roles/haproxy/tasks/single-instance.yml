@@ -1,0 +1,24 @@
+---
+- name: Install haproxy and socat
+  yum: name="{{ item }}" state=present
+  with_items: 
+     - socat
+     - haproxy
+
+- name: Enable haproxy
+  service: name=haproxy enabled=yes
+  notify:
+    - restart haproxy
+
+- name: Create haproxy SSL key directory
+  file: "dest=/etc/pki/haproxy/ state=directory owner=haproxy group=haproxy mode=0700"
+
+- name: Create combined key and certificate file for HAproxy
+  copy: content="{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}" dest=/etc/pki/haproxy/{{ item.name }}_haproxy.pem mode=0600
+  with_items: "{{ tls_https }}"
+  notify: reload haproxy
+
+- name: Copy config
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
+  notify: reload haproxy
+

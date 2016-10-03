@@ -1,14 +1,14 @@
 ---
-
-- name: Install mysql server
+- name: Install mariadb server
   yum: name={{ item }} state=present
   with_items:
-     - mysql-server.x86_64
+     - mariadb-server.x86_64
      - MySQL-python
+
   tags: mysql
 
-- name: Start and enable mysql
-  service: name=mysqld state=started enabled=yes
+- name: Start and enable mariadb
+  service: name=mariadb state=started enabled=yes
   tags: mysql
 
 - name: Set mysql root password for all root accounts
@@ -51,7 +51,19 @@
 - name: Create database user
   mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:ALL state=present
   with_nested:
-    - databases.users
-    - database_clients
+    - "{{ databases.users }}"
+    - "{{ database_clients }}"
   tags: mysql
 
+
+- name: Create development database user
+  mysql_user: name={{ item.name}} host=% password={{ item.password }} priv=*.*:ALL state=present
+  with_items:
+    - "{{ databases.development_user|default([]) }}"
+  when: develop
+  tags: mysql
+
+- name: Allow external connections when in development
+  lineinfile: "dest=/etc/my.cnf.d/server.cnf insertafter='\\[mysqld-5.5\\]' state=present line='bind-address=0.0.0.0'"
+  when: develop
+  tags: mysql

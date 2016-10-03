@@ -9,6 +9,5 @@ springapp_service_name: attribute-mapper
 springapp_jar: "{{ attribute_mapper_jar }}"
 springapp_tcpport: 9292
 springapp_local_jar: "{{ attribute_mapper_local_jar }}"
-springapp_debug: "{{ attribute_mapper_debug }}"
-springapp_debug_port: 1292
 springapp_heapsize: "128m"
+springapp_random_source: "file:///dev/urandom"
