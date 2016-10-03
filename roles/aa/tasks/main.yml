@@ -72,17 +72,25 @@
   tags: aa
   notify: restart httpd
 
+- name: Check presence of legacy init script
+  stat: path=/etc/init.d/{{ springapp_service_name }}
+  register: legacy_aa_present
+  
+- name: Stop aa when legacy init script is present
+  service: name={{ springapp_service_name }} state=stopped
+  when: legacy_aa_present.stat.exists
+
+- name: Clean up legacy init script
+  file: path=/etc/init.d/{{ springapp_service_name }} state=absent
+
 - name: Copy systemd service file
   template: src=templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
   notify:
     - "systemctl daemon-reload"
     - "restart aa"
 
-- name: Clean up legacy init script
-  file: path=/etc/init.d/{{ springapp_service_name }} state=absent
-
 - name: enable aa service
-  service: name=aa enabled=yes
+  service: name=aa enabled=yes state=started
 
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=aa group=aa mode=0755
@@ -112,16 +120,5 @@
   template: src=aa.conf.j2 dest=/etc/httpd/conf.d/aa.conf
   notify: reload httpd
 
-# no idea why this is necessary, as the init script returns an ok status also
-# if aa is still initializing.  Waiting for the port to open works well
-# though, and seems like to correct way to handle this.
-- name: start the aa service
-  service: name=aa state=started enabled=yes
-  ignore_errors: true
-
 - name: wait for aa to start
   wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
-
-- name: ensure the service is started
-  service: name=aa enabled=yes state=started
-

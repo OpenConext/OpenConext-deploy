@@ -9,7 +9,5 @@ springapp_service_name: authz-playground
 springapp_jar: "{{ authz_playground_jar }}"
 springapp_tcpport: 9291
 springapp_local_jar: "{{ authz_playground_local_jar }}"
-springapp_debug: "{{ authz_playground_debug }}"
-springapp_debug_port: 1291
 springapp_heapsize: "64m"
 springapp_random_source: "file:///dev/urandom"

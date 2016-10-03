@@ -8,6 +8,14 @@
     - "systemctl daemon-reload"
     - "restart authz-server"
 
+- name: Check presence of legacy init script
+  stat: path=/etc/init.d/{{ springapp_service_name }}
+  register: legacy_authz_server_present
+
+- name: Stop service when legacy init script is present
+  service: name={{ springapp_service_name }} state=stopped
+  when: legacy_authz_server_present.stat.exists
+
 - name: Clean up legacy init script
   file: path=/etc/init.d/{{ springapp_service_name }} state=absent
 

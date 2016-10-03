@@ -9,8 +9,6 @@ springapp_service_name: aa
 springapp_jar: "{{ aa_jar }}"
 springapp_tcpport: 9198
 springapp_local_jar: "{{ aa_local_jar }}"
-springapp_debug: "{{ aa_debug }}"
-springapp_debug_port: 1198
 springapp_heapsize: "512m"
 springapp_random_source: "file:///dev/urandom"
 
