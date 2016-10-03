@@ -55,6 +55,9 @@ script:
     ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-docker.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml | tee $TMPOUT
     &&
     grep -q 'changed=0.*failed=0' $TMPOUT && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+  - >
+    sudo docker exec -t ansible-test env TERM=xterm
+    ansible-playbook -i /ansible/environments/docker/inventory /ansible/tests/all_services_are_up.yml
 
 after_failure:
   - sudo docker exec -t ansible-test yum install -y net-tools
