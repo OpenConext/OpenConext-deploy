@@ -119,17 +119,12 @@
     - "{{ databases.names }}"
 
 - name: Create database user
-  mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:ALL state=present login_user=root login_password={{mariadb_root_password}}
+  mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:{{item[0].privilege}} state=present login_user=root login_password={{mariadb_root_password}}
   with_nested:
     - "{{ databases.users }}"
     - "{{ database_clients }}"
   tags: create_galera_users
-
-- name: Create database user for clustercheck
-  mysql_user: name=clustercheck host=localhost password={{ galera_clustercheck_password }} priv=*.*:USAGE state=present login_user=root login_password={{ mariadb_root_password }} host={{database_clients}}
   run_once: true
-  tags: create_galera_users
-
 
 - name: Put clustercheck script in place
   copy: src=clustercheck dest=/usr/local/bin/ mode=0770 owner=root

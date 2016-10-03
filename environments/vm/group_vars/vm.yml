@@ -177,7 +177,7 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:demo.openconext.org:"
+  group_name_context: "urn:collab:group:{{ base_domain }}:"
 
 #teams_snapshot_timestamp: 20160314.083705-5
 
@@ -261,7 +261,7 @@ voot:
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
         },
-        schacHomeOrganization: "surfnet.nl",
+        schacHomeOrganization: "{{ base_domain}}",
         name: "SURFteams",
         timeoutMillis: 3000
       }
@@ -269,7 +269,7 @@ voot:
 ##
 # VM config for the authz-admin application
 ##
-authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
+authz_admin_group: "urn:collab:group:{{ base_domain }}:nl:surfnet:diensten:authz_admins"
 authzadmin:
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"

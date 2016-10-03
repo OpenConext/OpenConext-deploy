@@ -227,12 +227,12 @@ voot:
           username: "{{ ldap_grouper_user }}",
           secret: "{{ external_group_provider_secrets.grouper }}"
         },
-        schacHomeOrganization: "test.surfteams.nl",
+        schacHomeOrganization: "{{ base_domain}}",
         name: "SURFteams",
         timeoutMillis: 15000
       }
 
-authz_admin_group: urn:collab:group:{{ base_domain }}:etc:sysadmingroup
+authz_admin_group: "urn:collab:group:{{ base_domain }}:nl:surfnet:diensten:authz_admins"
 authzadmin:
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
