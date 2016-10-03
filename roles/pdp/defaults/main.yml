@@ -5,7 +5,6 @@ pdp_version: ''
 pdp_snapshot_timestamp: ''
 pdp_local_jar: ''
 pdp_jar: pdp.jar
-pdp_debug: false
 pdp_local_html_version: ''
 pdp_html_snapshot_timestamp: ''
 pdp_email_from: pdp@surfconext.nl

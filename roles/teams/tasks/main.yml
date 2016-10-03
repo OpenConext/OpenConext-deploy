@@ -2,11 +2,22 @@
 - name: create user
   user: name=teams system=yes home={{ teams_dir }} shell=/sbin/nologin
 
-- name: copy start script
-  template: src=templates/spring-boot.j2 dest=/etc/init.d/{{ springapp_service_name }} mode=0755
+- name: Copy systemd service file
+  template: src=templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
   notify:
     - "systemctl daemon-reload"
     - "restart teams"
+
+- name: Check presence of legacy init script
+  stat: path=/etc/init.d/{{ springapp_service_name }}
+  register: legacy_teams_present
+
+- name: Stop teams service when legacy init script is present
+  service: name={{springapp_service_name}} state=stopped
+  when: legacy_teams_present.stat.exists
+
+- name: Clean up legacy init script
+  file: path=/etc/init.d/{{ springapp_service_name }} state=absent
 
 - name: enable service
   service: name=teams enabled=yes

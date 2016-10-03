@@ -183,8 +183,6 @@ teams:
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:demo.openconext.org:"
 
-teams_debug: false
-
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
@@ -244,8 +242,6 @@ authzserver:
   db_host: "{{ mysql_host }}"
   db_name: authz-server
 
-authz_server_debug: false
-
 ##
 # VM config for the Voot app
 ##
@@ -270,13 +266,11 @@ voot:
         name: "SURFteams",
         timeoutMillis: 3000
       }
-voot_debug: false
 
 ##
 # VM config for the authz-admin application
 ##
 authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
-authz_admin_debug: false
 authzadmin:
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
@@ -370,14 +364,12 @@ authzadmin:
 ##
 # VM config for the authz-admin application
 ##
-authz_playground_debug: false
 authzplayground:
   springapp_authz_client_id: cool_app_id
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
   springapp_oidc_client_id: http@//mock-sp
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
-pdp_debug: true
 pdp:
   username: "pdp_admin"
   password: "{{ pdp_password }}"
@@ -391,7 +383,6 @@ pdp:
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-aa_debug: false
 aa:
   eb_username: "eb"
   eb_password: "{{ aa_eb_password }}"

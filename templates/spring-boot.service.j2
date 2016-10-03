@@ -1,0 +1,11 @@
+[Unit]
+Description={{ springapp_service_name }}
+
+[Service]
+WorkingDirectory={{ springapp_dir }}
+ExecStart=/usr/lib/jvm/java-1.8.0/bin/java -Xms{{ springapp_heapsize }} -Xmx{{ springapp_heapsize }} -Djava.security.egd={{ springapp_random_source }} -jar {{ springapp_jar }}
+User={{ springapp_user }}
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

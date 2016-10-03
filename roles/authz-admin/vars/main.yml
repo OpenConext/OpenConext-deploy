@@ -9,7 +9,5 @@ springapp_service_name: authz-admin
 springapp_jar: "{{ authz_admin_jar }}"
 springapp_tcpport: 9290
 springapp_local_jar: "{{ authz_admin_local_jar }}"
-springapp_debug: "{{ authz_admin_debug }}"
-springapp_debug_port: 1290
 springapp_heapsize: "128m"
 springapp_random_source: "file:///dev/urandom"

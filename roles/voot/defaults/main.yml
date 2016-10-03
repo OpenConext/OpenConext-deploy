@@ -4,4 +4,3 @@ voot_version: ''
 voot_snapshot_timestamp: ''
 voot_local_jar: ''
 voot_service_jar: voot-service.jar
-voot_debug: false

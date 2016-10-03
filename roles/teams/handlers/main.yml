@@ -1,5 +1,4 @@
 ---
-# TODO: find a way to make this generic
 - name: systemctl daemon-reload
   command: "systemctl daemon-reload"
 
