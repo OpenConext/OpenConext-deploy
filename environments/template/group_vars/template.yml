@@ -210,8 +210,6 @@ authzserver:
   db_host: "{{ mysql_host }}"
   db_name: authz-server
 
-authz_server_debug: true
-
 voot:
   authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
   authz_checkToken_clientId: "vootservice"
@@ -233,10 +231,8 @@ voot:
         name: "SURFteams",
         timeoutMillis: 15000
       }
-voot_debug: true
 
 authz_admin_group: urn:collab:group:{{ base_domain }}:etc:sysadmingroup
-authz_admin_debug: true
 authzadmin:
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
@@ -330,14 +326,12 @@ authzadmin:
     - clientId: "{{ aa.authz_resource_server_id }}"
       secret: "{{ aa.authz_secret }}"
 
-authz_playground_debug: true
 authzplayground:
   springapp_authz_client_id: cool_app_id
   springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
   springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
-pdp_debug: true
 pdp:
   username: "pdp_admin"
   password: "{{ pdp_password }}"
@@ -352,7 +346,6 @@ pdp:
   sab_password: "{{ pdp_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
-aa_debug: true
 aa:
   eb_username: "eb"
   eb_password: "{{ aa_eb_password }}"
