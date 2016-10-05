@@ -13,6 +13,9 @@ engine_api_feature_metadata_push: 1
 engine_api_feature_consent_listing: 1
 engine_api_feature_metadata_api: 1
 
+# Cutoff point for showing unfiltered IdPs on the WAYF
+engine_wayf_cutoff_point_for_showing_unfiltered_idps: 50
+
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"
 engine_branch_dir: "{{ openconext_builds_dir }}/OpenConext-engineblock-{{ engine_branch | replace('/', '-') }}"
