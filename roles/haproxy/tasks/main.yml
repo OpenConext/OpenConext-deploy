@@ -1,9 +1,9 @@
 ---
 - include: multiple-instances.yml
-  when: env == 'prd' or env == 'acc'
+  when: haproxy_multi_instance is defined
 
 - include: single-instance.yml
-  when: env == 'vm' or env == 'test' or env == 'test2' or env == 'template' or env == 'diy'
+  when: haproxy_multi_instance is not defined
 
 - name: disable health checks for development envs
   command: 'echo "disable health {{item.name}}" | socat /var/lib/haproxy/stats stdio'

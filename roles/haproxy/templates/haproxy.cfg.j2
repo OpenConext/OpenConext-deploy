@@ -19,10 +19,10 @@ global
   ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
   ssl-default-server-options no-sslv3
   ssl-default-server-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
-{% if env == "vm" or env == "test" or env == "test2" or env == "template" or env == "diy" %}
+{% if haproxy_multi_instance is not defined %}
   stats socket /var/lib/haproxy/stats{% if develop %} mode 600 level admin{% endif %}
 {% endif %}
-{% if env == "acc" or env == "prd"  %}
+{% if haproxy_multi_instance is defined  %}
   stats socket /var/lib/haproxy/{{ item.name }}.stats
 {% endif %}
 
@@ -50,8 +50,7 @@ defaults
     timeout check           10s
     maxconn                 3000
 
-
-{% if env == "test" or env == "test2" or env == "vm" or env == "template" or env == "diy" %}
+{% if haproxy_multi_instance is not defined %}
 ## Frontend configuration
 
 #--------------------------------------------------------------------
@@ -130,7 +129,7 @@ backend {{ application.name }}_be
 {% endfor %}
 {% endif %}
 
-{% if env == "acc" or env == "prd" %}
+{% if haproxy_multi_instance is defined  %}
 ## Frontend configuration
 #--------------------------------------------------------------------
 # {{ item.name }} frontend
