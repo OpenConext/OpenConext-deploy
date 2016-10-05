@@ -26,7 +26,7 @@ ldap.url=ldap://ldap.{{ base_domain }}:389
 ldap.base={{ ldap_suffix }}
 ldap.userDn={{ engine_ldap_bind_dn }}
 ldap.password={{ engine_ldap_password }}
-provision.users=false
+provision.users={{ teams_provision_users }}
 
 #the stem name to find all groups
 defaultStemName=nl:surfnet:diensten

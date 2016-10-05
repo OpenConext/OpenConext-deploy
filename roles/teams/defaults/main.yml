@@ -5,3 +5,4 @@ teams_snapshot_timestamp: ''
 teams_local_jar: ''
 teams_jar: teams-current.war
 teams_random_source: 'file:///dev/urandom'
+teams_provision_users: false

@@ -13,6 +13,7 @@
   roles:
     - common
     - { role: tls, tags: [tls] }
+    - { role: rsyslog, tags: [rsyslog] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
@@ -43,13 +44,15 @@
   vars:
     env_lang: php
   roles:
-    - php56fpm
-    - static
-    - welcome
-    - openconext-common
-    - engineblock
-    - janus
-    - profile
+    - { role: php56fpm,          tags: ['php56fpm'] }
+    - { role: static,            tags: ['static'] }
+    - { role: welcome,           tags: ['welcome'] }
+    - { role: openconext-common, tags: ['eb','sr','profile'] }
+    - { role: engineblock,      tags: ['eb'     ] }
+    - { role: janus,             tags: ['sr'     ] }
+    - { role: vm_only_bootstrap_ldap_attributes,       tags: ['ldap'     ] }
+    - { role: profile,           tags: ['profile'] }
+
   handlers: 
     - include: roles/httpd/handlers/main.yml
 
@@ -57,16 +60,20 @@
   gather_facts: yes
   become: true
   roles:
-    - { role: shibboleth,  tags: [shib] }
-    - tomcat
-    - metadata-exporter
-    - { role: pdp, tags: [pdp] }
-    - grouper
-    - teams
-    - mujina-idp
-    - mujina-sp
-    - authz-server
-    - voot
-    - authz-playground
+    - { role: tomcat,             tags: ['tomcat'] }
+    - { role: java,              	tags: ['java'] }
+    - { role: shibboleth,  				tags: [shib] }
+    - { role: metadata-exporter, 	tags: ['metadata-exporter'] }
+    - { role: grouper,           	tags: ['grouper'] }
+    - { role: pdp, 								tags: [pdp] }
+    - { role: teams, 							tags: [teams] }
+    - { role: mujina-idp, 				tags: [mujina-idp] }
+    - { role: mujina-sp, 					tags: [mujina-idp] }
+    - { role: authz-server,      	tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,       	tags: ['oauth', 'authz-admin'     ] }
+    - { role: authz-playground,  	tags: ['oauth', 'authz-playground'] }
+    - { role: pdp,               	tags: ['pdp'] }
+    - { role: voot,              	tags: ['oauth', 'voot'            ] }
+
   handlers:
     - include: roles/httpd/handlers/main.yml

@@ -105,6 +105,7 @@ engine_ldap_host: localhost
 engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: vm
 engine_apache_symfony_environment: prod
+engine_feature_ldap_integration: 0
 
 ldap_suffix: "dc=surfconext,dc=nl"
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
@@ -146,7 +147,6 @@ tomcat_apps:
   - grouper
   - mujina-sp
   - mujina-idp
-  - oidc
 
 # shibboleth
 shibboleth_apps:
@@ -181,45 +181,14 @@ teams:
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
-  group_name_context: "urn:collab:group:demo.openconext.org:"
+  group_name_context: "urn:collab:group:{{ base_domain }}:"
+
+teams_provision_users: true
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 
-##
-# VM config for the api app
-##
-api:
-  bundle_name: "{{ tls_https.bundle_name }}"
-  janus:
-    user: "{{ engine_janus_user }}"
-    secret: "{{ engine_janus_secret }}"
-    uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
-  jdbc:
-    user: apirw
-    url: jdbc:mysql://{{ mysql_host }}:3306/api
-    password: "{{ mysql_passwords.api }} "
-  ldap:
-    url: ldap://ldap.{{ base_domain }}:389
-    userDn: "{{ engine_ldap_bind_dn }}"
-    password: "{{ engine_ldap_password }}"
-  engineblock:
-    user: "{{ engine_database_user }}"
-    url: jdbc:mysql://{{ engine_database_host }}:3306/{{ engine_database_name }}
-    password: "{{ engine_database_password }}"
-  teams:
-    user: teamsrw
-    url: jdbc:mysql://{{ mysql_host }}:3306/teams
-    password: "{{ mysql_passwords.teams }}"
-  oauth:
-    callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
-  staticContentBasePath: https://static.{{ base_domain }}
-  saml:
-    entityId: https://api.{{ base_domain }}/
-    assertionConsumerURI: https://api.{{ base_domain }}/v1/assertionConsumer
-  ehcache:
-    path: /tmp
 
 ##
 # VM config for the grouper app
@@ -424,137 +393,40 @@ springapp_tcpport_error_handling: 9199
 loadbalancing:
   engine:
     port: 401
-    heartbeat:
-      url: /
-      method: GET
-    servers: [
-      { label: "engine_backend", ip: "192.168.66.99" }
-    ]
-
   profile:
     port: 402
-    heartbeat: { url: "/favicon.ico", method: "HEAD" }
-    servers: [
-      { label: "profile_backend", ip: "192.168.66.99" }
-    ]
-
   static:
     port: 403
-    heartbeat: { url: "/media/alive.txt", method: "HEAD" }
-    servers: [
-      { label: "static_backend", ip: "192.168.66.99" }
-    ]
-
   serviceregistry:
     port: 404
-    heartbeat: { url: "/", method: "HEAD" }
-    servers: [
-      { label: "serviceregistry_backend", ip: "192.168.66.99" }
-    ]
-
   engine_api:
     port: 405
-    heartbeat: { url: "/", method: "GET" }
-    servers: [
-      { label: "engine_backend", ip: "192.168.66.99" }
-    ]
-
   teams:
     port: 601
-    heartbeat: { url: "/media/trans-white.png", method: "GET" }
-    servers: [
-      { label: "teams_backend", ip: "192.168.66.99" }
-    ]
-
   authzserver:
     port: 602
-    heartbeat: { url: "/health", method: "GET" }
-    servers: [
-      { label: "authz_backend", ip: "192.168.66.99" }
-    ]
-
   authz_admin:
     port: 603
-    heartbeat: { url: "/health", method: "GET" }
-    servers: [
-      { label: "authz_admin_backend", ip: "192.168.66.99" }
-    ]
-
   authz_playground:
     port: 604
-    heartbeat: { url: "/health", method: "GET" }
-    servers: [
-      { label: "authz_playground_backend", ip: "192.168.66.99" }
-    ]
-
   voot:
     port: 605
-    heartbeat: { url: "/health", method: "GET" }
-    servers: [
-      { label: "voot_backend", ip: "192.168.66.99" }
-    ]
-
   grouper:
     port: 606
-    heartbeat: { url: "/grouper/", method: "HEAD" }
-    servers: [
-      { label: "grouper_backend", ip: "192.168.66.99" }
-    ]
-
   mujina_sp:
     port: 607
-    heartbeat: { url: "/", method: "HEAD" }
-    servers: [
-      { label: "mujina_sp_backend", ip: "192.168.66.99" }
-    ]
-
   mujina_idp:
     port: 608
-    heartbeat: { url: "/", method: "HEAD" }
-    servers: [
-      { label: "mujina_idp_backend", ip: "192.168.66.99" }
-    ]
-
   welcome:
     port: 609
-    heartbeat: { url: "/", method: "GET" }
-    servers:
-      - label: welcome_backend
-        ip: 192.168.66.99
-
   oidc:
     port: 614
-    heartbeat: { url: "/", method: "HEAD" }
-    servers: [
-      { label: "oidc_backend", ip: "192.168.66.99" }
-    ]
-
   pdp:
     port: 613
-    heartbeat:
-      url: /pdp/api/health
-      method: GET
-    servers:
-      - label: pdp_backend
-        ip: 127.0.0.1
-
   aa:
     port: 615
-    heartbeat:
-      url: /aa/api/health
-      method: GET
-    servers:
-      - label: aa_backend
-        ip: 127.0.0.1
-
   metadata_exporter:
     port: 616
-    heartbeat:
-      url: /health
-      method: GET
-    servers:
-      - label: metadata_exporter_backend
-        ip: 127.0.0.1
 
 haproxy_applications:
   - name: multidata
@@ -628,7 +500,7 @@ haproxy_applications:
     key_name: "{{ tls_star_cert_key }}"
   
   - name: grouper
-    vhost_name: voot
+    vhost_name: grouper
     ip: 127.0.0.1
     ha_method: GET
     ha_url: "/grouper-ws/status?diagnosticType=db"
@@ -687,7 +559,23 @@ haproxy_applications:
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
 
-haproxy_sni_ip: 127.0.0.1
+  - name: mujina-idp
+    vhost_name: "mujina-idp"
+    ip: "192.168.66.98"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "608"
+    servers: "{{java_servers}}"
+
+  - name: mujina-sp
+    vhost_name: "mujina-sp"
+    ip: "127.0.0.1"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "607"
+    servers: "{{java_servers}}"
+
+haproxy_sni_ip: "*"
 
 java_servers:
    - ip: 127.0.0.1
