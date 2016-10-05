@@ -22,7 +22,7 @@ VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product, downloads
 
 For installation instructions see [the website](https://docs.vagrantup.com/v2/installation/index.html).
 
-You will need at least Vagrant 1.7
+You will need at least Vagrant 1.7. Do not use Vagrant 1.8.5, which contains a bug that makes that the provisioning fails with the message "Warning: Authentication failure. Retrying...". 
 
 To install both with Homebrew:
 
