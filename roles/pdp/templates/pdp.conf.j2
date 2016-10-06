@@ -14,6 +14,7 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
+    RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !pdp
     RewriteCond %{REQUEST_URI} !fonts
     RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
