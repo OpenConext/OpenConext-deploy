@@ -20,7 +20,7 @@ parameters:
     engineblock_api_base_url: 'https://{{ engine_api_domain }}/'
     engineblock_api_username: '{{ engine_api_profile_user }}'
     engineblock_api_password: '{{ engine_api_profile_password }}'
-    engineblock_api_verify_ssl: '{{ engine_api_verify_ssl }}'
+    engineblock_api_verify_ssl: {{ engine_api_verify_ssl }}
 
     mailer_transport:  sendmail
     mailer_host:       ~
