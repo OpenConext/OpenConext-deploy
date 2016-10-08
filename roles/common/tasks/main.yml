@@ -55,13 +55,17 @@
   when: selinux_binaries.stat.exists == True
 
 - name: Remove exim when sendmail needs to be installed
-  yum: name=exim state=absent
+  yum: name={{ item }} state=absent
+  with_items:
+    - exim
+    - postfix
   
 - name: Install sendmail
   yum: name={{ item }} state=present
   with_items:
      - sendmail
      - sendmail-cf
+     - make
   when: sendmail_smarthost is defined
 
 - name: Copy sendmail template
