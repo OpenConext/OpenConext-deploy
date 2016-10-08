@@ -12,7 +12,7 @@
   stat: path=/etc/init.d/{{ springapp_service_name }}
   register: legacy_meta_present
 
-- name: Stop aa when legacy init script is present
+- name: Stop metadata exporter when legacy init script is present
   service: name={{ springapp_service_name }} state=stopped
   when: legacy_meta_present.stat.exists
 
