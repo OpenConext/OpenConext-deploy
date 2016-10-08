@@ -89,9 +89,6 @@
     - "systemctl daemon-reload"
     - "restart aa"
 
-- name: enable aa service
-  service: name=aa enabled=yes state=started
-
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=aa group=aa mode=0755
 
@@ -119,6 +116,9 @@
 - name: copy apache config
   template: src=aa.conf.j2 dest=/etc/httpd/conf.d/aa.conf
   notify: reload httpd
+
+- name: enable aa service
+  service: name=aa enabled=yes state=started
 
 - name: wait for aa to start
   wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
