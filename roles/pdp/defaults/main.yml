@@ -7,4 +7,4 @@ pdp_local_jar: ''
 pdp_jar: pdp.jar
 pdp_local_html_version: ''
 pdp_html_snapshot_timestamp: ''
-pdp_email_from: pdp@surfconext.nl
+pdp_email_from: '{{ noreply_email }}'

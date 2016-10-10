@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-# Home page (SURFconext Teams / all teams)
-jsp.home.MyTeams=SURFconext Teams
+# Home page ({{ instance_name }} Teams / all teams)
+jsp.home.MyTeams={{ instance_name }} Teams
 jsp.home.AllTeams=Public Teams
 jsp.home.SearchTeam=Search all teams
 jsp.home.AddTeam=Add Team
@@ -119,13 +119,13 @@ jsp.detailteam.UniqueId=Unique ID
 
 # Landingpage page
 jsp.landingpage.Content=\
-<p> With SURFconext Teams you can manage teams and reuse these in different applications.</p> \
+<p> With {{ instance_name }} Teams you can manage teams and reuse these in different applications.</p> \
 \
 <h2>Getting started</h2> \
 <ul>\
 <li>Select your institution and login with your institutional account.</li>\
-<li>Is your institution not listed? Use a guest account (<a href=" https://wiki.surfnet.nl/display/conextsupport/SURFconext+teams+and+guest+accounts" target="_blank">more info about guest accounts</a>)</li>\
-<li>Start directly with SURFconext Teams</li>\
+<li>Is your institution not listed? Use a guest account (<a href=" https://wiki.surfnet.nl/display/conextsupport/{{ instance_name }}+teams+and+guest+accounts" target="_blank">more info about guest accounts</a>)</li>\
+<li>Start directly with {{ instance_name }} Teams</li>\
 </ul>
 jsp.landingpage.Login=Log in
 jsp.landingpage.skip=Skip landing page next time
@@ -133,7 +133,7 @@ jsp.landingpage.skip=Skip landing page next time
 # Accept Invitation page
 jsp.acceptinvitation.Title=Accept Invitation
 jsp.acceptinvitation.Accept=Accept
-jsp.acceptinvitation.Explanation=On this page you find a summary of your team invitation including details about you current authentication source. If you click "Accept" below, your invitation will be accepted for this account (the account with which you are currently logged in with at SURFconext Teams).
+jsp.acceptinvitation.Explanation=On this page you find a summary of your team invitation including details about you current authentication source. If you click "Accept" below, your invitation will be accepted for this account (the account with which you are currently logged in with at {{ instance_name }} Teams).
 jsp.acceptinvitation.PersonDetails=Person Details
 jsp.acceptinvitation.InvitationDetails=Invitation Details
 jsp.acceptinvitation.HomeOrganization=Home Organization
@@ -171,7 +171,7 @@ jsp.addallowedserviceproviders.edit=Edit Service Providers
 jsp.addallowedserviceproviders.delete=Delete
 
 # General messages
-jsp.general.Title=SURFconext Teams
+jsp.general.Title={{ instance_name }} Teams
 jsp.general.CloseForm=Close
 jsp.general.TeamName=Team Name
 jsp.general.Email=Email
@@ -199,7 +199,7 @@ jsp.general.NotShared=Not shared
 # JSP error messages
 jsp.error.Title=Error
 jsp.error.Message=Something went wrong. Please try to reload the page or go back to \
-  <a href="home.shtml?teams=my">SURFconext Teams</a>
+  <a href="home.shtml?teams=my">{{ instance_name }} Teams</a>
 
 # Error messages
 error.AdminCannotLeaveTeam=You cannot leave the team, because you are the only administrator. Please assign another administrator.
@@ -244,7 +244,7 @@ no.role.added.guest.status=No role added, guest users may not become admin
 no.role.added.admin.status=No role removed, there must be always one admin
 no.role.action=Unexpected exception occurred, no role was altered
 
-mail.invitation.header=Invitation from {0} via SURFconext Teams
+mail.invitation.header=Invitation from {0} via {{ instance_name }} Teams
 mail.invitation.invitedBy={0} invited you to join team <strong>{1}</strong>. Please read below what steps you must take to accept this invitation.
 mail.invitation.personalMessage=<strong>Personal Message from {0}:</strong><br>"{1}"
 mail.invitation.teamDescription=<strong>Team description:</strong><br>"{0}"
@@ -253,6 +253,6 @@ mail.invitation.expire=If you do not want to accept this invitation, please clic
 mail.invitation.accept=Login to accept this invitation
 mail.invitation.decline=Decline this invitation
 mail.invitation.needHelp=<strong>Need help?</strong><br>{0} invited you to join this team. Please contact {0} &lt;{1}&gt; if you have any questions about this invitation.
-mail.invitation.otherQuestions=For any other questions, consult the <a href="https://wiki.surfnet.nl/display/conextsupport/SURFconext+teams" style="color:#0088CC;">manual for specific information on SURFconext Teams</a> or contact SURFconext Teams support at <a href="mailto:help@surfconext.nl" style="color:#0088CC;">help@surfconext.nl</a>.
-mail.invitation.powerdBy=This service is powered by <a href="https://www.surfconext.nl" style="color:#0088CC;">SURFconext</a> - brought to you by <a href="https://www.surfnet.nl" style="color:#0088CC;">SURFnet</a>
+mail.invitation.otherQuestions=For any other questions, consult the <a href="https://wiki.surfnet.nl/display/conextsupport/{{ instance_name }}+teams" style="color:#0088CC;">manual for specific information on {{ instance_name }} Teams</a> or contact {{ instance_name }} Teams support at <a href="mailto:{{ support_email }}" style="color:#0088CC;">{{ support_email }}</a>.
+mail.invitation.powerdBy=This service is powered by <a href="https://www.surfconext.nl" style="color:#0088CC;">{{ instance_name }}</a> - brought to you by <a href="https://www.surfnet.nl" style="color:#0088CC;">SURFnet</a>
 

@@ -9,8 +9,7 @@ oauthServer.approvalExpirySeconds = 31104000
 
 confirmPage.logoUrl=/images/openconext_logo.png
 
-# This should be 'SurfConext' when deployed by SURF.
-confirmPage.appName=SURFconext
+confirmPage.appName={{ instance_name }}
 
 spring.thymeleaf.mode=HTML5
 
@@ -25,7 +24,7 @@ spring.datasource.testWhileIdle=true
 server.port={{ springapp_tcpport }}
 server.session.cookie.secure=true
 
-errorPage.email=support@surfconext.nl
+errorPage.email={{ support_email }}
 endpoints.enabled=false
 endpoints.health.enabled=true
 endpoints.info.enabled=true

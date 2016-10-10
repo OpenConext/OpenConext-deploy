@@ -12,7 +12,7 @@ options
         pid-file "/run/named/named.pid";
         session-keyfile "/run/named/session.key";
         key-directory "keys";
-        version "SURFconext DNS server";
+        version "{{ instance_name }} DNS server";
 };
 
 logging
