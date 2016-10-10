@@ -106,4 +106,16 @@ vrrp_instance backup {
         {% if sa_gw_ipv6 is defined %}
         {{ sa_gw_ipv6 }}
         {% endif %}
+        {% if sabng_ip is defined %}
+        {{ sabng_ip }}
+        {% endif %}
+        {% if sabng_ipv6 is defined %}
+        {{ sabng_ipv6 }}
+        {% endif %}
+        {% if sab_enroll_ng_ip is defined %}
+        {{ sab_enroll_ng_ip }}
+        {% endif %}
+        {% if sab_enroll_ng_ipv6 is defined %}
+        {{ sab_enroll_ng_ipv6 }}
+        {% endif %}
 }
