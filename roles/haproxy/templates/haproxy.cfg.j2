@@ -147,8 +147,11 @@ backend {{ application.name }}_be
     	bind {{ haproxy_sni_ip }}:80 transparent
     	redirect scheme https code 301 if !{ ssl_fc }
     	{% for application in haproxy_applications if not application.hidden %}
-    	acl {{ application.name }} hdr(host) -i {{ application.vhost_name }}.{{ base_domain }}
+    	acl {{ application.name }} hdr(host) -i {%if application.vhost_name is defined%} {{ application.vhost_name }}.{{ base_domain }} 
+        {% else %}{{ application.full_vhost_name }} 
+        {% endif %}
     	{% endfor %}
+
     	{% for application in haproxy_applications if not application.hidden %}
     	use_backend {{ application.name }}_be if {{ application.name }}
     	{% endfor %}
