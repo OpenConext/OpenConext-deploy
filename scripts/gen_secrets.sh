@@ -11,14 +11,14 @@
 # ----- Input handling
 if [ $# -lt 5 ]
   then
-    echo "INFO: No arguments supplied, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base secret_vars_output base_domain"
+    echo "INFO: Not enough arguments supplied, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base secret_vars_output"
     exit 1
 fi
 
 
-if [ $# -gt 5 ]
+if [ $# -gt 4 ]
   then
-    echo "ERROR: Only 5 arguments expected, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base secret_vars_output base_domain"
+    echo "ERROR: Only 4 arguments expected, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base secret_vars_output"
     exit 1
 fi
 # ----- End Input handing
@@ -48,12 +48,6 @@ while IFS= read -r line; do
 
   key=$(printf "%s" "$line" | cut -f1 -d:)  
   value=$(echo $line | cut -f2 -d: | xargs)
-
-  if [ "$key" == 'base_domain' ]; then
-    line="base_domain: \"$OC_BASEDOMAIN\""
-    echo "$line" >> $SECRET_VARS_TEMP
-    continue
-  fi
 
   if [ "$value" == 'sha' ]; then
     # sha-key must be later in template file
