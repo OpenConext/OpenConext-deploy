@@ -89,7 +89,7 @@ janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_managingcontact_name: "Surfconext beheer"
 janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
-janus_ssp_title_suffix: "SURFconext VM"
+janus_ssp_title_suffix: "OpenConext VM"
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
 
