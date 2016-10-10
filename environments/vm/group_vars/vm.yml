@@ -1,6 +1,11 @@
 ---
 env: vm
 
+instance_name: OpenConext
+base_domain: "vm.openconext.org"
+support_email: help@example.org
+noreply_email: no-reply@example.org
+
 smtp_server: localhost
 error_mail_to: devnull@example.org
 
