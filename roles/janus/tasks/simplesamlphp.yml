@@ -87,9 +87,9 @@
 - name: Install SSP - Copy config and metadata
   template: src={{ item.src }} dest={{ item.dest }}
   with_items:
-    - { src: "simplesamlphp/config/authsources.j2.php", dest: "{{ janus_ssp_dir }}/config/authsources.php" }
-    - { src: "simplesamlphp/config/config.j2.php", dest: "{{ janus_ssp_dir }}/config/config.php" }
-    - { src: "simplesamlphp/metadata/saml20-idp-remote.j2.php", dest: "{{ janus_ssp_dir }}/metadata/saml20-idp-remote.php" }
+    - { src: "simplesamlphp/config/authsources.php.j2", dest: "{{ janus_ssp_dir }}/config/authsources.php" }
+    - { src: "simplesamlphp/config/config.php.j2", dest: "{{ janus_ssp_dir }}/config/config.php" }
+    - { src: "simplesamlphp/metadata/saml20-idp-remote.php.j2", dest: "{{ janus_ssp_dir }}/metadata/saml20-idp-remote.php" }
   notify:
     - restart httpd
     - restart memcached
