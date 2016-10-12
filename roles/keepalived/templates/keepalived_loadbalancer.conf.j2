@@ -1,4 +1,4 @@
-#jinja2: trim_blocks: True, lstrip_blocks: True
+#jinja2: trim_blocks: "true", lstrip_blocks: "true"
 vrrp_instance master {
    interface {{ ansible_default_ipv4.interface }}               # interface to monitor
    state {{ keepalived.state_master }}
