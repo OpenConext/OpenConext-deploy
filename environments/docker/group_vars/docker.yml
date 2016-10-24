@@ -6,7 +6,7 @@ error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
-profile_version: 0.3.0
+profile_version: 0.4.0
 teams_version: 4.2.13
 mujina_version: 4.1.1
 authz_server_version: 1.3.7
@@ -141,7 +141,7 @@ engine_block:
 #profile_branch: develop
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:
-engine_profile_idp_certificate:
+engine_profile_idp_certificate: /etc/openconext/engineblock.crt
 
 tomcat_apps:
   - grouper
