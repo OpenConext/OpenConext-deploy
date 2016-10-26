@@ -77,12 +77,6 @@ vrrp_instance backup {
         {% if bind_ipv6 is defined %}
         {{ bind_ipv6 }}
         {% endif %}
-        {% if sa_mw_ip is defined %}
-        {{ sa_mw_ip }}
-        {% endif %}
-        {% if sa_mw_ipv6 is defined %}
-        {{ sa_mw_ipv6 }}
-        {% endif %}
         {% if sa_ip is defined %}
         {{ sa_ip }}
         {% endif %}
