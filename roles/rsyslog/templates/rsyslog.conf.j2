@@ -90,6 +90,11 @@ local7.*                                                /var/log/boot.log
 #$ActionResumeRetryCount -1    # infinite retries if host is down
 # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
 {% if remote_syslog_host is defined %}
+$ActionQueueType LinkedList
+$ActionQueueMaxDiskSpace 1g
+$ActionQueueFileName syslog_fwd
+$ActionResumeRetryCount -1
+$ActionQueueSaveOnShutdown on
 *.* @@{{ remote_syslog_host }}:5140
 $PreserveFQDN on
 {% endif %}
