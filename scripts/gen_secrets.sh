@@ -9,7 +9,7 @@
 #
 
 # ----- Input handling
-if [ $# -lt 5 ]
+if [ $# -lt 4 ]
   then
     echo "INFO: Not enough arguments supplied, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base secret_vars_output"
     exit 1
