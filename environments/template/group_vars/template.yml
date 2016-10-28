@@ -1,16 +1,21 @@
 ---
 env: template
 
+instance_name: OpenConext
+base_domain: "%base_domain%"
+support_email: help@{{ base_domain }}
+noreply_email: no-reply@{{ base_domain }}
+
 smtp_server: localhost
-error_mail_to: root@localhost 
+error_mail_to: "{{ support_email }}"
 
 php_display_errors: 1
-apache_server_admin: root@localhost
+apache_server_admin: "{{ support_email }}"
 janus_ssp_technicalcontact_name: "Technical Contact"
-janus_ssp_technicalcontact_email: "root@localhost"
+janus_ssp_technicalcontact_email: "{{ support_email }}"
 janus_ssp_managingcontact_name: "Managing Contact"
-janus_ssp_managingcontact_email: "root@localhost"
-engine_idp_debugging_email_address: root@localhost
+janus_ssp_managingcontact_email: "{{ support_email }}"
+engine_idp_debugging_email_address: "{{ support_email }}"
 
 profile_version: 0.4.0
 teams_version: 4.2.13

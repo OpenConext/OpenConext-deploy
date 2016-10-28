@@ -34,7 +34,7 @@ defaultStemName=nl:surfnet:diensten
 grouperPowerUser=GrouperSystem
 
 # App id displayed in the updates / invites section of the portal
-appId=SURFconext Teams
+appId={{ instance_name }} Teams
 
 # The URL where the teams application is run so we can send out emails
 teamsURL=https://teams.{{ base_domain }}
@@ -44,7 +44,7 @@ spring.mail.host={{ smtp_server }}
 spring.mail.port=25
 
 # Email address that is the sender of invitations/requests
-systemEmail=SURFconext Teams <no-reply@surfconext.nl>
+systemEmail={{ instance_name }} Teams <{{ noreply_email }}>
 
 # Maximum amount an invitation can be sent
 maxInvitations=5
@@ -58,7 +58,7 @@ group-name-context={{ teams.group_name_context }}
 ##
 ####################################################################
 
-# If set to false, the link to external group providers will not be shown (only SURFconext Teams and Public Teams are visible)
+# If set to false, the link to external group providers will not be shown
 displayExternalTeams=true
 # If set to false, the link from the list of external groups to the detail view with their members is hidden
 displayExternalTeamMembers=true

@@ -113,9 +113,9 @@ CREATE TABLE `emails` (
 
 LOCK TABLES `emails` WRITE;
 /*!40000 ALTER TABLE `emails` DISABLE KEYS */;
-INSERT INTO `emails` VALUES (1,'introduction_email','Dear {user},<br />\r\n<br />\r\nThis mail is a confirmation that we have created a profile for you on the SURFconext platform. Please visit https://profile.surfconext.nl to see and manage your profile. If you have any questions regarding this mail please contact help@surfconext.nl.<br />\r\n<br />\r\nBest regards, Surfconext ','help@surfconext.nl','Welcome to SURFconext',1),
-(2,'deprovisioning_warning_email','Dear {user},<br /><br />This mail is to inform you that you will be deprovisioned at {deprovision_time}. If you have any questions regarding this mail please contact help@surfconext.nl.<br /><br />You will be deleted as a member of all the groups. Currently you are member of the following groups:<br />{groups}<br />In the groups displayed below you are the only administrator. Please make another member administrator before you are deprovisioned, for these teams will be without an administrator otherwise.&nbsp;<br />{onlyAdminGroups}<br />Best regards,<br />SURFconext','help@surfconext.nl','Deprovisioning SURFconext',NULL),
-(3,'deprovisioning_warning_email_group_members','Dear {user},<br />\r\n<br />\r\nThis mail is to inform you that your administrator in team {team} will be deprovisioned at {deprovision_time}. If you have any questions regarding this mail please contact help@surfconext.nl.<br />\r\n<br />\r\nBest regards<br />, SURFconext','help@surfconext.nl','Deprovisioning  SURFconext',NULL);
+INSERT INTO `emails` VALUES (1,'introduction_email','Dear {user},<br />\r\n<br />\r\nThis mail is a confirmation that we have created a profile for you on the {{ instance_name }} platform. Please visit https://profile.{{ base_domain }} to see and manage your profile. If you have any questions regarding this mail please contact {{ support_email }}.<br />\r\n<br />\r\nBest regards, {{ instance_name }}','{{ support_email }}','Welcome to {{ instance_name }}',1),
+(2,'deprovisioning_warning_email','Dear {user},<br /><br />This mail is to inform you that you will be deprovisioned at {deprovision_time}. If you have any questions regarding this mail please contact {{ support_email }}.<br /><br />You will be deleted as a member of all the groups. Currently you are member of the following groups:<br />{groups}<br />In the groups displayed below you are the only administrator. Please make another member administrator before you are deprovisioned, for these teams will be without an administrator otherwise.&nbsp;<br />{onlyAdminGroups}<br />Best regards,<br />{{ instance_name }}','{{ support_email }}','Deprovisioning {{ instance_name }}',NULL),
+(3,'deprovisioning_warning_email_group_members','Dear {user},<br />\r\n<br />\r\nThis mail is to inform you that your administrator in team {team} will be deprovisioned at {deprovision_time}. If you have any questions regarding this mail please contact {{ support_email }}.<br />\r\n<br />\r\nBest regards<br />, {{ instance_name }}','{{ support_email }}','Deprovisioning {{ instance_name }}',NULL);
 /*!40000 ALTER TABLE `emails` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -382,7 +382,7 @@ CREATE TABLE `log_logins` (
 LOCK TABLES `log_logins` WRITE;
 /*!40000 ALTER TABLE `log_logins` DISABLE KEYS */;
 INSERT INTO `log_logins` VALUES
-('2012-06-27 09:13:33','urn:collab:person:example.com:john.doe','https://serviceregistry.{{ base_domain }}/simplesaml/module.php/saml/sp/metadata.php/default-sp','http://mock-idp','OpenConext ServiceRegistry','OpenConext Mujina','Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:13.0) Gecko/20100101 Firefox/13.0.1',NULL,1);
+('2012-06-27 09:13:33','urn:collab:person:example.com:john.doe','https://serviceregistry.{{ base_domain }}/simplesaml/module.php/saml/sp/metadata.php/default-sp','http://mock-idp','{{ instance_name }} ServiceRegistry','{{ instance_name }} Mujina','Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:13.0) Gecko/20100101 Firefox/13.0.1',NULL,1);
 /*!40000 ALTER TABLE `log_logins` ENABLE KEYS */;
 UNLOCK TABLES;
 

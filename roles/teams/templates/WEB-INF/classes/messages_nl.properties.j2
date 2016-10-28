@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-# Home page (SURFconext Teams / all teams)
-jsp.home.MyTeams=SURFconext Teams
+# Home page ({{ instance_name }} Teams / all teams)
+jsp.home.MyTeams={{ instance_name }} Teams
 jsp.home.AllTeams=Publieke Teams
 jsp.home.SearchTeam=zoek in alle teams
 jsp.home.AddTeam=Nieuw Team
@@ -118,13 +118,13 @@ jsp.detailteam.UniqueId=Uniek ID
 
 # Landingpage page
 jsp.landingpage.Content=\
-<p>Met SURFconext Teams kan je groepen cre\u0117ren en beheren. Deze kan je in \
+<p>Met {{ instance_name }} Teams kan je groepen cre\u0117ren en beheren. Deze kan je in \
 verschillende applicaties gebruiken.</p>\
 <h2>Waar te beginnen</h2>\
 <ul>\
 <li>Selecteer je instelling en log in met dit account</li>\
-<li>Staat jouw instelling er niet bij? Gebruik een gastaccount (<a href=" https://wiki.surfnet.nl/display/conextsupport/SURFconext+teams+and+guest+accounts" target="_blank">meer informatie over gastaccounts</a>)</li>\
-<li>Ga direct aan de slag met SURFconext Teams</li>\
+<li>Staat jouw instelling er niet bij? Gebruik een gastaccount (<a href=" https://wiki.surfnet.nl/display/conextsupport/{{ instance_name }}+teams+and+guest+accounts" target="_blank">meer informatie over gastaccounts</a>)</li>\
+<li>Ga direct aan de slag met {{ instance_name }} Teams</li>\
 </ul>
 jsp.landingpage.Login=Log in
 jsp.landingpage.skip=Laat deze pagina niet meer zien
@@ -170,7 +170,7 @@ jsp.addallowedserviceproviders.delete=Verwijder
 jsp.addallowedserviceproviders.teamswithaccess=Service Providers met toegang tot het team
 
 # General messages
-jsp.general.Title=SURFconext Teams
+jsp.general.Title={{ instance_name }} Teams
 jsp.general.CloseForm=Sluit
 jsp.general.TeamName=Teamnaam
 jsp.general.Email=E-mail
@@ -198,7 +198,7 @@ jsp.general.NotShared=Niet gedeeld
 # JSP error messages
 jsp.error.Title=Fout
 jsp.error.Message=Er is iets mis gegaan. Probeer de pagina te herladen of ga terug naar \
-  <a href="home.shtml?teams=my">SURFconext Teams</a>.
+  <a href="home.shtml?teams=my">{{ instance_name }} Teams</a>.
 
 # Error messages
 error.AdminCannotLeaveTeam=Je mag het team niet verlaten, omdat je de enige beheerder bent. Maak eerst een ander lid beheerder.
@@ -246,7 +246,7 @@ no.role.added.guest.status=Geen rol toegevoegd, gastgebruikers mogen geen beheer
 no.role.added.admin.status=Geen rol verwijderd, er moet altijd 1 beheerder overblijven
 no.role.action=Onverwachte fout opgetreden, geen rol is veranderd
 
-mail.invitation.header=Uitnodiging van {0} via SURFconext Teams
+mail.invitation.header=Uitnodiging van {0} via {{ instance_name }} Teams
 mail.invitation.invitedBy={0} heeft u uitgenodigd om lid te worden van team <strong>{1}</strong>. Lees hieronder wat u moet doen om de uitnodiging te accepteren.
 mail.invitation.personalMessage=<strong>Persoonlijk bericht van {0}:</strong><br>"{1}"
 mail.invitation.teamDescription=<strong>Beschrijving van team:</strong><br>"{0}"
@@ -255,5 +255,5 @@ mail.invitation.expire=Wilt u de uitnodiging niet accepteren? Klik dan op 'De ui
 mail.invitation.accept=Inloggen om de uitnodiging te accepteren
 mail.invitation.decline=De uitnodiging afwijzen
 mail.invitation.needHelp=<strong>Hulp nodig?</strong><br>{0} heeft u uitgenodigd voor dit team. Neem contact op met {0} &lt;{1}&gt; als u vragen hebt over deze uitnodiging.
-mail.invitation.otherQuestions=Voor overige vragen, <a href="https://wiki.surfnet.nl/display/conextsupport/SURFconext+teams" style="color:#0088CC;">raadpleeg deze handleiding, die de werking van SURFconext Teams beschrijft</a>. Neem contact op met SURFconext Teams ondersteuning als u hier nog vragen over heeft via <a href="mailto:help@surfconext.nl" style="color:#0088CC;">help@surfconext.nl</a>.
-mail.invitation.powerdBy=Deze dienst is onderdeel van <a href="https://www.surfconext.nl" style="color:#0088CC;">SURFconext</a> - een product van <a href="https://www.surfnet.nl" style="color:#0088CC;">SURFnet</a>
+mail.invitation.otherQuestions=Voor overige vragen, <a href="https://wiki.surfnet.nl/display/conextsupport/{{ instance_name }}+teams" style="color:#0088CC;">raadpleeg deze handleiding, die de werking van {{ instance_name }} Teams beschrijft</a>. Neem contact op met {{ instance_name }} Teams ondersteuning als u hier nog vragen over heeft via <a href="mailto:{{ support_email }}" style="color:#0088CC;">{{ support_email }}</a>.
+mail.invitation.powerdBy=Deze dienst is onderdeel van <a href="https://www.surfconext.nl" style="color:#0088CC;">{{ instance_name }}</a> - een product van <a href="https://www.surfnet.nl" style="color:#0088CC;">SURFnet</a>

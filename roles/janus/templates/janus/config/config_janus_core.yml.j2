@@ -1,7 +1,7 @@
 janus_service_registry_core:
     admin:
-        name: Surfconext
-        email: info@surfconext.nl
+        name: {{ instance_name }}
+        email: {{ support_email }}
     auth: default-sp
     useridattr: NameID
 #    auth: login-admin
@@ -14,7 +14,7 @@ janus_service_registry_core:
     push:
         remote:
             test:
-                name: "OpenConext EngineBlock"
+                name: "{{ instance_name }} EngineBlock"
                 url: "https://{{ engine_api_janus_user }}:{{ engine_api_janus_password }}@{{ engine_api_domain }}/api/connections"
     entity:
         prettyname: 'name:en'

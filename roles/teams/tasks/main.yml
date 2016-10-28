@@ -57,8 +57,14 @@
   shell: jar -uf $(readlink teams-current.war) grouper.client.properties chdir={{ teams_dir }}
   when: grouper_client_config_result.changed or (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
 
+- name: create directory for locale languages files
+  file: path={{ teams_dir }}/WEB-INF/classes/ state=directory
+
 - name: copy locale languages files
-  copy: src=WEB-INF dest={{ teams_dir }} owner="{{ springapp_user }}" group="{{ springapp_user }}" mode=0740
+  template: src=WEB-INF/classes/{{ item }}.j2 dest={{ teams_dir }}/WEB-INF/classes/{{ item }}.properties owner="{{ springapp_user }}" group="{{ springapp_user }}" mode=0644
+  with_items:
+   - messages_en.properties
+   - messages_nl.properties
 
 - name: replace language files in war
   shell: jar -uvf $(readlink teams-current.war) ./WEB-INF/ chdir={{ teams_dir }}
