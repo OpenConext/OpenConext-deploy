@@ -21,6 +21,25 @@ spring.datasource.driverClassName=com.mysql.jdbc.Driver
 spring.datasource.validation-query=SELECT 1
 spring.datasource.testWhileIdle=true
 
+# Grouper database
+spring.datasource.url=jdbc:mysql://{{ grouper.db_host }}:3306/{{ grouper.database_name }}
+spring.datasource.username={{ grouper.db_user }}
+spring.datasource.password={{ grouper.db_password }}
+spring.datasource.driverClassName=com.mysql.jdbc.Driver
+spring.datasource.validation-query=SELECT 1
+spring.datasource.testWhileIdle=true
+
+# Teams database
+spring.secondDatasource.url=jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
+spring.secondDatasource.username={{ teams.db_user }}
+spring.secondDatasource.password={{ teams.db_password }}
+spring.secondDatasource.driverClassName=com.mysql.jdbc.Driver
+spring.secondDatasource.validation-query=SELECT 1
+spring.secondDatasource.testWhileIdle=true
+
+# Feature toggle for searching for linked GrouperGroups and ExternalGroups
+support.linkedGrouperExternalGroups=true
+
 # Only tests may override this
 flyway.enabled=false
 
