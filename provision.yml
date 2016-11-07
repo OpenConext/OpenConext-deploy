@@ -12,7 +12,7 @@
   become: true
   roles:
     - { role: common,   tags: ['common'] }
-    - { role: surfconext_common,   tags: ['surfconext_common'] }
+    - { role: '{{ inventory_dir }}/../roles/surfconext_common',   tags: ['surfconext_common'] }
     - { role: users,   tags: ['users'] }
     - { role: iptables,      tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
