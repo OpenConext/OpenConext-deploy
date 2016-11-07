@@ -45,6 +45,6 @@
     - icons
 
 - name: enable httpd
-  service: name={{ item }} enabled=yes started=yes
+  service: name={{ item }} enabled=yes state=started
   with_items:
        - httpd
