@@ -1,0 +1,6 @@
+- name: Create database user
+  mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:{{item[0].privilege}} state=present login_user={{ galera_provision_user }} login_password={{ galera_provision_password }} login_host={{ galera_provision_host }}
+  with_nested:
+    - "{{ databases.users }}"
+    - "{{ database_clients }}"
+  run_once: true

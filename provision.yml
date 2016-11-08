@@ -52,7 +52,11 @@
   become: true
   roles:
     - { role: keepalived, tags: ['keepalived'] }
-      
+
+- hosts: galera_provision_host
+  roles:
+    - { role: galera_create_users, tags: ['galera', 'galera_create_users'] }
+
 - hosts: php-apps
   gather_facts: no
   become: true

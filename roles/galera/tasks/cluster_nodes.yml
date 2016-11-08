@@ -102,29 +102,20 @@
   file: src=/usr/local/sbin/mariadb_backup.sh dest=/etc/cron.daily/db_backup state=link mode=700 owner=root
   when: backup_node is defined
 
-- name:
-  authorized_key:
-    user: "{{ mariadb_backup_user }}"
-    key: "{{ mariadb_backup_sshkey }}"
-    key_options: command="/home/backup/mariadb_backup.sh"
-  when: mariadb_enable_remote_ssh_backup | default(false)
-
 - name: Start and enable the MariaDB (mysql) service on boot.
   service: name=mysql state=started enabled=true
   ignore_errors: true
 
 - name: Create database
-  mysql_db: name={{ item }} state=present login_user=root login_password={{mariadb_root_password}}
+  mysql_db: name={{ item }} state=present login_user=root login_password={{ mariadb_root_password }}
   with_items:
     - "{{ databases.names }}"
 
-- name: Create database user
-  mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:{{item[0].privilege}} state=present login_user=root login_password={{mariadb_root_password}}
-  with_nested:
-    - "{{ databases.users }}"
-    - "{{ database_clients }}"
-  tags: create_galera_users
-  run_once: true
+- name: Create database super users for provisioning users and databases
+  mysql_user: name={{ item.0.name }} host={{ item.1 }} password={{ item.0.password }} priv={{ item.0.privs | join('/') }} state=present login_user=root login_password={{ mariadb_root_password }}
+  with_subelements: 
+     - "{{ galera_root_users }}"
+     - hosts
 
 - name: Put clustercheck script in place
   copy: src=clustercheck dest=/usr/local/bin/ mode=0770 owner=root
