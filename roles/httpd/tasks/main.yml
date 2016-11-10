@@ -6,7 +6,7 @@
      - mod_ssl
 
 - name: Copy default config files
-  copy: src={{ item }} dest=/etc/httpd/conf.d/{{ item }}
+  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
   tags: httpd
   with_items:
     - 01_default.conf

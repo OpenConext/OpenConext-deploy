@@ -30,6 +30,7 @@
             </a>
           </div>
         </li>
+        {% if ( not ( engineblock.without_java is defined ) ) or ( not engineblock.without_java ) %}
         <li class="connected" data-id="1">
           <h2>
             <a href="https://teams.{{ base_domain }}/" target="_blank" >
@@ -46,8 +47,9 @@
             </a>
           </div>
         </li>
+        {% endif %}
       </ul>
-      
+
       <h2>OpenConext Administration</h2>
       <ul class="app-grid filters-available lmng-active"
           data-search-placeholder="Search in applications">
@@ -68,6 +70,7 @@
           </div>
         </li>
 
+        {% if ( not ( engineblock.without_java is defined ) ) or ( not engineblock.without_java ) %}
         <li class="connected" data-id="1">
           <h2>
             <a href="https://authz-admin.{{ base_domain }}" target="_blank" >
@@ -84,6 +87,7 @@
             </a>
           </div>
         </li>
+        {% endif %}
 
         <li class="connected" data-id="1">
           <h2>
@@ -101,7 +105,9 @@
             </a>
           </div>
         </li>
-  	<li class="connected" data-id="1">
+
+        {% if ( not ( engineblock.without_java is defined ) ) or ( not engineblock.without_java ) %}
+        <li class="connected" data-id="1">
           <h2>
             <a href="https://oidc.{{ base_domain }}" target="_blank" >
               OpenConext OIDC
@@ -117,9 +123,10 @@
             </a>
           </div>
         </li>
-
+        {% endif %}
       </ul>
-      
+
+      {% if ( not ( engineblock.without_java is defined ) ) or ( not engineblock.without_java ) %}
       <h2>OpenConext Utilities</h2>
       <ul class="app-grid filters-available lmng-active"
           data-search-placeholder="Search in applications">
@@ -174,6 +181,7 @@
           </div>
         </li>
       </ul>
+      {% endif %}
     </section>
   </div>
 

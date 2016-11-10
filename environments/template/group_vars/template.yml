@@ -71,7 +71,6 @@ tls_https:
     crt_name: "star.{{ base_domain }}.pem"
     bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
     key_content: "{{ https_star_private_key }}"
-      
 
 engine_janus_user: engineblock
 
@@ -340,6 +339,8 @@ authzplayground:
   springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
+pdp_enabled: true
+
 pdp:
   username: "pdp_admin"
   password: "{{ pdp_password }}"
@@ -395,58 +396,58 @@ springapp_tcpport_error_handling: 9199
 
 
 loadbalancing:
-  engine: 
+  engine:
     port: 401
-  
-  profile: 
+
+  profile:
     port: 402
-  
-  static: 
+
+  static:
     port: 403
-  
-  serviceregistry: 
+
+  serviceregistry:
     port: 404
-  
-  engine_api: 
+
+  engine_api:
     port: 405
-    
-  teams: 
+
+  teams:
     port: 601
- 
-  authzserver: 
+
+  authzserver:
     port: 602
-  
-  authz_admin: 
+
+  authz_admin:
     port: 603
-  
-  authz_playground: 
+
+  authz_playground:
     port: 604
-  
-  voot: 
+
+  voot:
     port: 605
-  
-  pdp: 
+
+  pdp:
     port: 613
-  
-  oidc: 
+
+  oidc:
     port: 614
-  
-  aa: 
+
+  aa:
     port: 615
-  
-  metadata_exporter: 
+
+  metadata_exporter:
     port: 616
-  
-  grouper: 
+
+  grouper:
     port: 606
-  
-  mujina_sp: 
+
+  mujina_sp:
     port: 607
-  
-  mujina_idp: 
+
+  mujina_idp:
     port: 608
-  
-  welcome: 
+
+  welcome:
     port: 609
 
 haproxy_applications:
@@ -595,7 +596,7 @@ haproxy_applications:
     port: "609"
     servers: "{{php_servers}}"
 
-haproxy_sni_ip: 192.168.66.100 
+haproxy_sni_ip: 192.168.66.100
 
 php_servers:
    - { ip: "127.0.0.1", label: "php"}
