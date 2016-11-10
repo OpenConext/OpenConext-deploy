@@ -1,19 +1,27 @@
 ---
 env: ebhost
 
+instance_name: OpenConext
+base_domain: "%base_domain%"
+support_email: help@{{ base_domain }}
+noreply_email: no-reply@{{ base_domain }}
+
 smtp_server: localhost
-error_mail_to: devnull@example.org
+error_mail_to: "{{ support_email }}"
 
 php_display_errors: 1
-apache_server_admin: root@localhost
+apache_server_admin: "{{ support_email }}"
 janus_ssp_technicalcontact_name: "Technical Contact"
-janus_ssp_technicalcontact_email: "root@localhost"
+janus_ssp_technicalcontact_email: "{{ support_email }}"
 janus_ssp_managingcontact_name: "Managing Contact"
-janus_ssp_managingcontact_email: "root@localhost"
-engine_idp_debugging_email_address: root@localhost
+janus_ssp_managingcontact_email: "{{ support_email }}"
+engine_idp_debugging_email_address: "{{ support_email }}"
 
-profile_version: 0.3.0
-engine_version: "5.0.0-rc1"
+profile_version: 0.4.0
+engine_version: "5.0.0"
+janus_version: 1.22.1
+janus_ssp_version: 1.14.8
+
 
 databases:
   names:
@@ -90,25 +98,3 @@ engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
   without_java: true
-
-##
-# VM config for the api app
-##
-api:
-  janus:
-    user: "{{ engine_janus_user }}"
-    secret: "{{ engine_janus_secret }}"
-    uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
-  engineblock:
-    user: "{{ engine_database_user }}"
-    url: jdbc:mysql://{{ engine_database_host }}:3306/{{ engine_database_name }}
-    password: "{{ engine_database_password }}"
-  staticContentBasePath: https://static.{{ base_domain }}
-  saml:
-    entityId: https://api.{{ base_domain }}/
-    assertionConsumerURI: https://api.{{ base_domain }}/v1/assertionConsumer
-  ehcache:
-    path: /tmp
-
-php_servers:
-   - { ip: "192.168.100.10", label: "php"}
