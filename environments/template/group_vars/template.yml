@@ -339,8 +339,6 @@ authzplayground:
   springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
-pdp_enabled: true
-
 pdp:
   username: "pdp_admin"
   password: "{{ pdp_password }}"
