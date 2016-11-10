@@ -103,4 +103,4 @@
   template: src={{ item.src }} dest={{ item.dest }}
   with_items:
     - { src: "simplesamlphp/modules/exampleauth/enabled.j2", dest: "{{ janus_ssp_modules_dir }}/exampleauth/enabled" }
-  when: janus_no_federative_login
+  when: janus_no_federative_login is defined
