@@ -23,7 +23,7 @@
   register: janusSSP
 
 - include: simplesamlphp.yml
-#  when: janusInstallationDir.changed or janusSSP.changed
+  when: janusInstallationDir.changed or janusSSP.changed
 
 - name: Install JANUS - Download archive
   get_url: url="{{ janus_download_base_url }}/{{ janus_tar_file }}" dest="{{ janus_tar_location }}"
