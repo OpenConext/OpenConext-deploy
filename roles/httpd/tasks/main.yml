@@ -44,6 +44,10 @@
     - html
     - icons
 
+- name: Copy backend CA certificate
+  copy: content="{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}" dest="{{ tls_backend_ca }}" mode=0644 owner=root
+  when: haproxy_backend_tls is defined
+    
 - name: enable httpd
   service: name={{ item }} enabled=yes state=started
   with_items:
