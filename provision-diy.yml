@@ -52,6 +52,7 @@
     - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
     - { role: spform,           tags: ['spform' ] }
+    - { role: diyidp,           tags: ['diyidp' ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 

@@ -1,0 +1,19 @@
+<?php
+/**
+ * SAML 2.0 remote SP metadata for simpleSAMLphp.
+ *
+ * See: http://simplesamlphp.org/docs/trunk/simplesamlphp-reference-sp-remote
+ */
+
+{% for remotesp in diyidp_remotesp %}
+
+
+/*
+ * {{ remotesp.name }}
+ */
+$metadata['{{ remotesp.metadataurl }}'] = array(
+	'AssertionConsumerService' => '{{ remotesp.acslocation }}',
+	'IDPList' => array( 'sql_users', ),
+	'NameIDFormat' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+);
+{% endfor %}

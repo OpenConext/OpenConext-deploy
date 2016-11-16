@@ -1,0 +1,72 @@
+---
+- name: Add group {{ diyidp_fpm_user }}
+  group: name={{ diyidp_fpm_user }} state=present
+
+- name: Add user {{ diyidp_fpm_user }}
+  user: name={{ diyidp_fpm_user }} group={{ diyidp_fpm_user }} createhome=no state=present
+
+- name: Create directory for vhosts to store PHP sessions
+  file: path={{ php_session_dir}}/diyidp state=directory owner={{ diyidp_fpm_user }} group=root mode=770
+
+- name: Download and unarchive the latest release
+  unarchive: src=https://github.com/simplesamlphp/simplesamlphp/releases/download/v{{ simplesamlphp_version }}/simplesamlphp-{{ simplesamlphp_version }}.tar.gz dest="{{ openconext_releases_dir }}" creates="/opt/openconext/simplesamlphp-{{ simplesamlphp_version }}" remote_src=yes
+
+- name: Install Apache vhost
+  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
+  with_items:
+    - diyidp.conf
+  notify:
+    - restart httpd
+
+- name: php-fpm config
+  template: src={{ item }}.j2 dest=/etc/php-fpm.d/{{ item }}
+  with_items:
+     - diyidp-pool.conf
+  notify:
+    - restart php-fpm
+
+- name: Activate new DIY IDP release
+  file: src={{ openconext_releases_dir }}/simplesamlphp-{{  simplesamlphp_version }} dest={{ diyidp_current_release_symlink }} state=link
+  notify:
+    - restart httpd
+
+- name: Create directories
+  file: path={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/{{ item }} state=directory owner=root group=root mode=0775
+  with_items: 
+    - config
+    - metadata
+    - data
+    - cert
+
+- name: Put metadata certificate in place
+  copy: src={{ inventory_dir }}/files/certs/{{ diyidp_cert }} dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/cert/server.crt 
+
+- name: Put metadata key in place
+  copy: content="{{ diyidp_private_key }}" dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/cert/server.key owner={{ diyidp_fpm_user }} mode=0400
+
+- name: Copy simplesamlphp configuration files
+  template: src={{ item }}.j2 dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/config/{{ item }}
+  with_items:
+    - config.php
+    - authsources.php
+
+- name: Copy simplesamlphp metadata files
+  template: src={{ item }}.j2 dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/metadata/{{ item }}
+  with_items:
+    - saml20-idp-hosted.php
+    - saml20-sp-remote.php
+
+- name: Copy showusers php script
+  template: src=showusers.php.j2 dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/www/showusers.php owner=root mode=0644
+
+- name: Copy DIY IdP logo
+  copy: src=keyserver.png dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/www/
+
+- name: Copy the database dump file
+  copy: src=diyidp.sql dest={{ openconext_releases_dir }}/builds/
+  register: copy_diyidp_script
+
+- name: Import the database
+  shell: mysql -u {{ diyidp.db_user }} -p{{ diyidp.db_password }} -h {{ diyidp.db_host }} -D {{ diyidp.db_name }} < {{ openconext_releases_dir }}/builds/diyidp.sql
+  args: 
+    creates: /var/lib/mysql/{{diyidp.db_name}}/users.frm
