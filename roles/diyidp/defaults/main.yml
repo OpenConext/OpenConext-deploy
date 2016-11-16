@@ -4,7 +4,8 @@ simplesamlphp_version: 1.14.9
 diyidp_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-diyidp"
 diyidp_domain: diyidp."{{ base_domain }}"
 diyidp_cert: "diyidp.crt"
-
+diyidp_welcome_text: |
+  "<strong>Congratulations<\/strong>, you have successfully installed SimpleSAMLphp. This is the start page of your installation, where you will find links to test examples, diagnostics, metadata and even links to relevant documentation."
 diyidp:
   db_host: "{{ mysql_host }}"
   db_name: diyidp

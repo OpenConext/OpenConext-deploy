@@ -59,6 +59,9 @@
 - name: Copy showusers php script
   template: src=showusers.php.j2 dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/www/showusers.php owner=root mode=0644
 
+- name: Copy frontpage definitions
+  template: src=frontpage.definition.json.j2 dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/modules/core/dictionaries/frontpage.definition.json
+
 - name: Copy DIY IdP logo
   copy: src=keyserver.png dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/www/
 
@@ -70,3 +73,5 @@
   shell: mysql -u {{ diyidp.db_user }} -p{{ diyidp.db_password }} -h {{ diyidp.db_host }} -D {{ diyidp.db_name }} < {{ openconext_releases_dir }}/builds/diyidp.sql
   args: 
     creates: /var/lib/mysql/{{diyidp.db_name}}/users.frm
+
+
