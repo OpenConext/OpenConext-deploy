@@ -100,7 +100,5 @@
     - restart memcached
 
 - name: Install SSP - Copy config and metadata (2)
-  template: src={{ item.src }} dest={{ item.dest }}
-  with_items:
-    - { src: "simplesamlphp/modules/exampleauth/enabled.j2", dest: "{{ janus_ssp_modules_dir }}/exampleauth/enabled" }
+  file: path="{{ janus_ssp_modules_dir }}/exampleauth/enable" state=touch
   when: janus_no_federative_login is defined
