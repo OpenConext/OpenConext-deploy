@@ -113,4 +113,10 @@ vrrp_instance backup {
         {% if sab_enroll_ng_ipv6 is defined %}
         {{ sab_enroll_ng_ipv6 }}
         {% endif %}
+        {% if grouperui_ip is defined %}
+        {{ grouperui_ip }}
+        {% endif %}
+        {% if grouperui_ipv6 is defined %}
+        {{ grouperui_ipv6 }}
+        {% endif %}
 }
