@@ -17,14 +17,6 @@
     - 'idp'
     - 'sp'
 
-- name: Create SSL key
-  copy: content="{{ backend_tls_key }}" dest={{ tls.cert_private_path }}/backend.{{ base_domain  }}.key mode=0600 owner=root
-  when: haproxy_backend_tls is defined
-
-- name: Create SSL certificate 
-  copy: src={{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem dest="{{ tls.cert_path }}/backend.{{ base_domain}}.pem"
-  when: haproxy_backend_tls is defined
-
 - name: copy apache config
   template: src=static.conf.j2 dest=/etc/httpd/conf.d/static.conf
   notify: reload httpd
