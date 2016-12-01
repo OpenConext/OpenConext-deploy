@@ -590,6 +590,8 @@ haproxy_applications:
     port: "607"
     servers: "{{java_servers}}"
 
+haproxy_backend_tls: false
+
 haproxy_sni_ip: "*"
 
 java_servers:

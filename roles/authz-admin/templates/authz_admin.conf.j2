@@ -25,7 +25,7 @@ Listen {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.
       ShibUseHeaders On
     </Location>
      
-    {% if haproxy_backend_tls is defined %}
+    {% if haproxy_backend_tls %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key

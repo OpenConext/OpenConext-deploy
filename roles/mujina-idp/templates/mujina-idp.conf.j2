@@ -9,7 +9,7 @@ Listen {{ apache_app_listen_address.mujina_idp }}:{{ loadbalancing.mujina_idp.po
     # Proxy requests through to Tomcat using AJP
     ProxyPass / ajp://localhost:8009/ retry=0
 
-    {% if haproxy_backend_tls is defined %}
+    {% if haproxy_backend_tls %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key

@@ -55,7 +55,7 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
       require valid-user
     </Location>
     
-    {% if haproxy_backend_tls is defined %}
+    {% if haproxy_backend_tls %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
