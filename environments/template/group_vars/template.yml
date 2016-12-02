@@ -597,6 +597,8 @@ haproxy_applications:
     port: "609"
     servers: "{{php_servers}}"
 
+haproxy_backend_tls: False
+
 haproxy_sni_ip: 192.168.66.100 
 
 php_servers:

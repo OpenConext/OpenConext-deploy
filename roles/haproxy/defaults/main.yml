@@ -1,0 +1,1 @@
+tls_backend_ca: /etc/pki/haproxy/backend.{{ base_domain }}.pem

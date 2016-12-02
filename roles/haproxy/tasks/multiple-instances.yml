@@ -24,6 +24,10 @@
   with_items: "{{ haproxy_applications }}"
   when: not item.hidden
 
+- name: Copy backend CA certificate
+  copy: content="{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}" dest="{{ tls_backend_ca }}" mode=0644 owner=root
+  when: haproxy_backend_tls
+
 - name: Run hapos-upd for initial OCSP responses
   shell: /usr/local/sbin/hapos-upd --skip-update --good-only --socket /var/lib/haproxy/{{ item.name }}.stats --VAfile /etc/haproxy/{{ item.name }}/{{ item.name }}.pem --cert /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
   with_items: "{{ haproxy_applications }}"
