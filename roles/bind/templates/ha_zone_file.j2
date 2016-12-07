@@ -12,3 +12,8 @@ $ORIGIN ha.{{ base_domain }}.
 {% for app in haproxy_applications if not app.hidden %}
 {{ app.vhost_name }} 300 IN A  {{app.ip }} 
 {% endfor %}
+{% if bind_extra_hosts is defined%}
+{% for host in bind_extra_hosts %}
+{{ host.hostname }} 300 IN A {{host.ip }}
+{% endfor %}
+{% endif %}
