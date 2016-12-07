@@ -61,6 +61,15 @@
 
 - cron: name="update ocsp info" special_time=hourly job="/usr/local/sbin/update_ocsp"
 
-- name: Include haproxy removal tasks
-  include: haproxy_removal.yml
-  when: haproxy_removal_applications is defined 
+- name: stop haproxy instance
+  service: name=haproxy_{{ item.name }} state=stopped
+  with_items: "{{ haproxy_removal_applications }}"
+
+- name: disable systemd startup file
+  command: systemctl disable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  with_items: "{{ haproxy_removal_applications }}"
+
+- name: remove haproxy config directories
+  file: dest=/etc/haproxy/{{ item.name }} state=absent
+  with_items: "{{ haproxy_removal_applications }}"
+
