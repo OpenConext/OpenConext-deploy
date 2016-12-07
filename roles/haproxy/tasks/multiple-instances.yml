@@ -60,3 +60,7 @@
   template: src=update_ocsp.j2 dest=/usr/local/sbin/update_ocsp mode=0755
 
 - cron: name="update ocsp info" special_time=hourly job="/usr/local/sbin/update_ocsp"
+
+- name: Include haproxy removal tasks
+  include: haproxy_removal.yml
+  when: haproxy_removal_applications is defined 
