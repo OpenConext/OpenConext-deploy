@@ -1,5 +1,8 @@
 - name: install rsyslog
-  yum: name=rsyslog state=present
+  yum: name={{ item }} state=present
+  with_items:
+  - rsyslog
+  - rsyslog-gnutls
   notify:
   - restart rsyslog
 
