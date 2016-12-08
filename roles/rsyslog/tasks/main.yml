@@ -3,6 +3,10 @@
   notify:
   - restart rsyslog
 
+- name: place rsyslog CA file
+  copy: src={{ inventory_dir }}/files/certs/rsyslog_ca.pem dest={{ rsyslog_ca }}
+  when: remote_syslog_host is defined 
+  
 - name: put ryslog config file
   template: src=rsyslog.conf.j2 dest=/etc/rsyslog.conf
   notify:

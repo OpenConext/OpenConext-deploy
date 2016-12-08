@@ -1,0 +1,2 @@
+loghost_fqdn: logging.{{ base_domain }}
+rsyslog_ca: /etc/pki/rsyslog/rsyslog_ca.pem
