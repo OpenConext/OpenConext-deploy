@@ -8,3 +8,4 @@ pdp_jar: pdp.jar
 pdp_local_html_version: ''
 pdp_html_snapshot_timestamp: ''
 pdp_email_from: '{{ noreply_email }}'
+pdp_cronjobmaster: true
