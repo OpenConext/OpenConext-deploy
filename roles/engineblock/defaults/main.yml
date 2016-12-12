@@ -62,10 +62,10 @@ engine_engine_idp_baseurlpath: "https://{{ engine_domain }}/simplesaml/"
 # Minimum execution time in milliseconds when a received response is deemed invalid
 engine_minimum_execution_time_on_invalid_received_response: 5000
 
-# Settings for detecting whether the user is stuck in a request loop within his session:
-# within a certain time frame in seconds, how many authentication cycles for the same SP are allowed
+# Settings for detecting whether the user is stuck in a authentication loop within his session:
+# within a certain time frame in seconds, how many authentication procedures for the same SP are allowed
 engine_time_frame_for_authentication_loop_in_seconds: 60
-engine_maximum_authentication_cycles_allowed: 5
+engine_maximum_authentication_procedures_allowed: 5
 
 ## The priority of messages that should be logged to syslog
 ## 7 = debug
