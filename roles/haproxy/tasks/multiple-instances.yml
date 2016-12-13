@@ -72,7 +72,7 @@
 - name: disable systemd startup file
   command: systemctl disable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
   with_items: "{{ haproxy_removal_applications }}"
-  failed__when: false
+  failed_when: false
 
 - name: remove haproxy config directories
   file: dest=/etc/haproxy/{{ item.name }} state=absent
