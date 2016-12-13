@@ -25,7 +25,7 @@
   when: not item.hidden
 
 - name: Create directory to store backend CA file
-  file: dest={{ tls_backend_ca }} mode=0755 owner=root
+  file: dest=/etc/pki/haproxy state=directory mode=0755 owner=root
   
 - name: Copy backend CA certificate
   copy: content="{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}" dest="{{ tls_backend_ca }}" mode=0644 owner=root
