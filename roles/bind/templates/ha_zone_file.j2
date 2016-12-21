@@ -11,9 +11,11 @@ $ORIGIN ha.{{ base_domain }}.
             IN      NS      ns2ha.{{ base_domain }}.
 {% for app in haproxy_applications if not app.hidden %}
 {{ app.vhost_name }} 300 IN A  {{app.ip }} 
+{{ app.vhost_name }} 300 IN AAAA  {{app.ipv6 }} 
 {% endfor %}
 {% if bind_extra_hosts is defined%}
 {% for host in bind_extra_hosts %}
 {{ host.hostname }} 300 IN A {{host.ip }}
+{{ host.hostname }} 300 IN AAAA {{host.ipv6 }}
 {% endfor %}
 {% endif %}
