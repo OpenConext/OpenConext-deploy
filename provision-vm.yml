@@ -5,7 +5,7 @@
     - name: Read vars from secrets file
       include_vars: "{{ secrets_file }}"
       tags: always
-      always_run: yes
+      check_mode: no
 
 - hosts: all
   gather_facts: yes
