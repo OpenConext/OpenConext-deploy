@@ -13,6 +13,7 @@
   roles:
     - { role: common,  tags: ['common'] }
     - { role: tls,     tags: ['tls'] }
+    - { role: hosts,   tags: ['hosts'] }
     - { role: rsyslog, tags: ['rsyslog'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
