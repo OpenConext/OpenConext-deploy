@@ -3,11 +3,11 @@
   copy: src=defaults.vm.sql dest=/tmp
 
 - name: check if databse is already filled
-  command: mysql oidc-server -Ns -e 'SELECT COUNT(*) FROM `client_details`'
-  register: oidc_mysql_numrecords
+  command: mysql oidc-server -Ns -e 'SHOW TABLES LIKE "client_details"'
+  register: oidc_mysql_tables
 
-- debug: var=oidc_mysql_numrecords
+- debug: var=oidc_mysql_tables
 
 - name: insert default oidc client vm
   mysql_db: name=oidc-server state=import target=/tmp/defaults.vm.sql
-  when: "( oidc_mysql_numrecord|succeeded ) and ( oidc_mysql_numrecords.stdout == '0' )"
+  when: "( oidc_mysql_tables|succeeded ) and ( oidc_mysql_tables.stdout == '' )"
