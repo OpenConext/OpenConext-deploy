@@ -5,8 +5,7 @@
 - name: check if databse is already filled
   command: mysql oidc-server -Ns -e 'SHOW TABLES LIKE "client_details"'
   register: oidc_mysql_tables
-
-- debug: var=oidc_mysql_tables
+  changed_when: False
 
 - name: insert default oidc client vm
   mysql_db: name=oidc-server state=import target=/tmp/defaults.vm.sql
