@@ -1,8 +1,13 @@
 ---
 - name: copy default oidc client vm
   copy: src=defaults.vm.sql dest=/tmp
-  when: env == 'vm'
+
+- name: check if databse is already filled
+  command: mysql oidc-server -Ns -e 'SELECT COUNT(*) FROM `client_details`'
+  register: oidc_mysql_numrecords
+
+- debug: var=oidc_mysql_numrecords
 
 - name: insert default oidc client vm
   mysql_db: name=oidc-server state=import target=/tmp/defaults.vm.sql
-  when: env == 'vm'
+  when: "( oidc_mysql_numrecord|succeeded ) and ( oidc_mysql_numrecords.stdout == '0' )"
