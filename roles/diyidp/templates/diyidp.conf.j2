@@ -14,6 +14,8 @@ Listen {{ apache_app_listen_address.diyidp }}:{{ loadbalancing.diyidp.port }}
         RewriteEngine On
     </Directory>
 
+    Redirect permanent /simplesaml/showusers.php /showusers.php
+
     # Proxy the requests to FPM
     ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/diyidp-pool.sock|fcgi://localhost/{{ diyidp_current_release_symlink }}/www/$1
 
