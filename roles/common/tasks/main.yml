@@ -59,7 +59,8 @@
   with_items:
     - exim
     - postfix
-  
+  when: sendmail_smarthost is defined
+
 - name: Install sendmail
   yum: name={{ item }} state=present
   with_items:
