@@ -1008,75 +1008,6 @@ janus_service_registry_core:
                 type: text
                 default: ''
                 default_allow: false
-            'coin:gadgetbaseurl':
-                validate: isurl
-                type: text
-                default: ''
-                default_allow: false
-                required: false
-            'coin:oauth:secret':
-                validate: lengteq20
-                type: text
-                default: ''
-                default_allow: false
-                required: false
-            'coin:oauth:two_legged_allowed':
-                type: boolean
-                default: ''
-                default_allow: false
-                required: false
-            'coin:oauth:consumer_key':
-                type: text
-                default: ''
-                default_allow: false
-                required: false
-            'coin:oauth:consumer_secret':
-                validate: lengteq20
-                type: text
-                default: ''
-                default_allow: false
-                required: false
-            'coin:oauth:key_type':
-                type: select
-                select_values:
-                    - HMAC_SHA1
-                    - RSA_PRIVATE
-                default: HMAC_SHA1
-                default_allow: true
-                required: false
-            'coin:oauth:app_title':
-                default: 'Application Title'
-                default_allow: false
-                type: text
-                required: false
-            'coin:oauth:app_description':
-                type: text
-                default: ''
-                default_allow: false
-                required: false
-            'coin:oauth:app_thumbnail':
-                validate: isurl
-                default: 'https://www.surfnet.nl/thumb.png'
-                default_allow: false
-                type: text
-                required: false
-            'coin:oauth:app_icon':
-                validate: isurl
-                default: 'https://www.surfnet.nl/icon.gif'
-                default_allow: false
-                type: text
-                required: false
-            'coin:oauth:callback_url':
-                validate: isurl
-                type: text
-                default: ''
-                default_allow: false
-                required: false
-            'coin:oauth:consent_not_required':
-                type: boolean
-                default: ''
-                default_allow: false
-                required: false
             'coin:ss:idp_visible_only':
                 type: boolean
                 default: false
@@ -1086,11 +1017,6 @@ janus_service_registry_core:
                 default: 'Application URL'
                 default_allow: false
                 type: text
-                required: false
-            'coin:implicit_vo_id':
-                type: text
-                default: ''
-                default_allow: false
                 required: false
             'coin:transparant_issuer':
                 type: boolean
