@@ -54,7 +54,6 @@
     - "{{ janus_ssp_modules_dir }}/consentSimpleAdmin"
     - "{{ janus_ssp_modules_dir }}/discopower"
     - "{{ janus_ssp_modules_dir }}/exampleattributeserver"
-    - "{{ janus_ssp_modules_dir }}/exampleauth"
     - "{{ janus_ssp_modules_dir }}/expirycheck"
     - "{{ janus_ssp_modules_dir }}/InfoCard"
     - "{{ janus_ssp_modules_dir }}/ldap"
@@ -84,6 +83,12 @@
     - restart httpd
     - restart memcached
 
+- name: Install SSP - Remove unused config files and modules(2)
+  file: path="{{ item }}" state=absent
+  with_items:
+    - "{{ janus_ssp_modules_dir }}/exampleauth"
+  when: janus_no_federative_login is undefined or not janus_no_federative_login
+
 - name: Install SSP - Copy config and metadata
   template: src={{ item.src }} dest={{ item.dest }}
   with_items:
@@ -93,3 +98,7 @@
   notify:
     - restart httpd
     - restart memcached
+
+- name: Install SSP - Copy config and metadata (2)
+  file: path="{{ janus_ssp_modules_dir }}/exampleauth/enable" state=touch
+  when: janus_no_federative_login is defined

@@ -20,7 +20,18 @@ $config = array(
         'core:AdminPassword',
     ),
 
-
+{% if janus_no_federative_login is defined and janus_no_federative_login %}
+   'example-auth' => array(
+        'exampleauth:UserPass',
+        'admin:{{ janus_ssp_auth_admin_password }}' => array(
+            'uid' => array('admin'),
+            'eduPersonAffiliation' => array('member', 'student'),
+            'eduPersonPrincipalName' => '{{ janus_ssp_technicalcontact_email }}',
+            'NameID' => 'admin',
+            'schacHomeOrganisation' => '{{ base_domain }}'
+        )
+    ),
+{% endif %}
     // An authentication source which can authenticate against both SAML 2.0
     // and Shibboleth 1.3 IdPs.
     'default-sp' => array(

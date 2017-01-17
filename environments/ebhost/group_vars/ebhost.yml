@@ -1,0 +1,100 @@
+---
+env: ebhost
+
+instance_name: OpenConext
+base_domain: "%base_domain%"
+support_email: help@{{ base_domain }}
+noreply_email: no-reply@{{ base_domain }}
+
+smtp_server: localhost
+error_mail_to: "{{ support_email }}"
+
+php_display_errors: 1
+apache_server_admin: "{{ support_email }}"
+janus_ssp_technicalcontact_name: "Technical Contact"
+janus_ssp_technicalcontact_email: "{{ support_email }}"
+janus_ssp_managingcontact_name: "Managing Contact"
+janus_ssp_managingcontact_email: "{{ support_email }}"
+engine_idp_debugging_email_address: "{{ support_email }}"
+
+profile_version: 0.4.0
+engine_version: "5.0.0"
+janus_version: 1.22.1
+janus_ssp_version: 1.14.8
+
+
+databases:
+  names:
+    - "{{ engine_database_name }}"
+    - "{{ janus_database_name }}"
+  users:
+    - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
+    - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
+
+tls:
+  cert_path: /etc/pki/tls/certs
+  cert_path_ca: /etc/pki/ca-trust/source/anchors
+  cert_private_path: /etc/pki/tls/private
+
+
+tls_ca: star.{{ base_domain }}_ca.pem
+
+tls_star_cert_bundle_name: star.{{ base_domain }}_ca_bundle.pem
+tls_star_cert: star.{{ base_domain }}.pem
+tls_star_cert_key: star.{{ base_domain }}.key
+
+tls_https:
+  - name: star
+    key_name: "star.{{ base_domain }}.key"
+    crt_name: "star.{{ base_domain }}.pem"
+    bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_star_private_key }}"
+
+engine_janus_user: engineblock
+
+engine_database_name: eb
+engine_database_host: "{{ mysql_host }}"
+engine_database_port: 3306
+engine_database_user: ebrw
+engine_database_password: "{{ mysql_passwords.eb }}"
+
+engine_apache_environment: test
+engine_apache_symfony_environment: prod
+
+janus_database_name: sr
+janus_database_host: "{{ mysql_host }}"
+janus_database_user: srrw
+janus_database_password: "{{ mysql_passwords.sr }}"
+janus_no_federative_login: 1
+janus_default_sp: "example-auth"
+
+engine_janus_cache_lifetime: 0
+
+engine_trusted_proxy_ips:
+  - 192.168.100.1
+  - 10.0.0.1
+#
+engine_keys:
+  default:
+    privateFile: /etc/openconext/engineblock.pem
+    publicKey: engineblock.crt
+    publicFile: /etc/openconext/engineblock.crt
+
+engine_block:
+  metadataRepositories:
+    - {
+        index: 0,
+        type: "janus",
+        value: "JanusRestV1"
+      }
+
+profile_apache_symfony_environment: prod
+# Engine's assertion signing certificate:
+engine_profile_idp_certificate:
+
+engine_feature_ldap_integration: 0
+
+engineblock:
+  idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
+  idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+  without_java: true
