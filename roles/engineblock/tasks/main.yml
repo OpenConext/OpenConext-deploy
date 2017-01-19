@@ -8,7 +8,7 @@
 - name: Create directory for vhosts to store PHP sessions
   file: path={{ php_session_dir}}/engine state=directory owner={{ engine_fpm_user }} group=root mode=770
 - include_vars: vars/defaults_java.yml
-  when: "engineblock.without_java is not defined"
+  when: not minimal_install
 
 - include: install-release.yml
   when: "(engine_branch is not defined or engine_branch == '') and not develop"

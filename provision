@@ -30,7 +30,7 @@ then
 fi
 
 env=$1
-shift 
+shift
 
 if [ "$env" = "vm" ]
 then
@@ -54,6 +54,11 @@ else
 	shift; shift
 fi
 
+FULL=" minimal_install=0"
+if [ "$1" = "--minimal" ]
+then
+    FULL=" minimal_install=1"
+fi
 
 # find matching playbook
 playbook="provision.yml"
@@ -75,5 +80,5 @@ then
 fi
 
 # run ansible
-echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret\" $@"
-exec ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret" $@
+echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret$FULL\" $@"
+#exec ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret$FULL" $@

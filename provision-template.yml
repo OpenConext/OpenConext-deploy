@@ -2,6 +2,15 @@
 - hosts: all
   gather_facts: no
   tasks:
+  - name: Set minimal install variables
+    when: minimal_install>0
+    include_vars: group_vars/minimal.yml
+    tags:
+      - always
+
+- hosts: all
+  gather_facts: no
+  tasks:
   - name: Read vars from secrets file
     include_vars: "{{ secrets_file }}"
     tags:
@@ -23,7 +32,7 @@
   gather_facts: true
   become: true
   roles:
-    - { role: haproxy,   tags: ['lb'] }
+    - { role: haproxy,   tags: ['lb'], when: not minimal_install }
 
 - hosts: php-apps:java-apps
   gather_facts: no
@@ -38,7 +47,7 @@
   become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
-    - { role: ldap,  tags: ['ldap' ] }
+    - { role: ldap,  tags: ['ldap' ], when: not minimal_install }
     - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
 
 - hosts: php-apps
@@ -53,7 +62,7 @@
     - { role: openconext-common, tags: ['eb','sr','profile'] }
     - { role: engineblock,       tags: ['eb'     ] }
     - { role: profile,       tags: ['profile'     ] }
-    - { role: vm_only_bootstrap_ldap_attributes, tags: [ 'ldap_bootstrap' ] }
+    - { role: vm_only_bootstrap_ldap_attributes, tags: [ 'ldap_bootstrap' ], when: not minimal_install }
     - { role: janus,             tags: ['sr'     ] }
     - { role: profile,           tags: ['profile'] }
   handlers:
@@ -62,22 +71,23 @@
 - hosts: java-apps
   gather_facts: true
   become: true
+  when: not minimal_install
   vars:
     env_lang: java
   roles:
-    - { role: java,             tags: ['java'] }
-    - { role: tomcat,         tags: ['tomcat' ] }
-    - { role: shibboleth,       tags: ['shib'   ] }
-    - { role: grouper,          tags: ['grouper'] }
-    - { role: teams,            tags: ['teams'  ] }
-    - { role: mujina-idp,       tags: ['legacy','mujina' ] }
-    - { role: mujina-sp,        tags: ['legacy','mujina' ] }
-    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
-    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
-    - { role: voot,             tags: ['oauth', 'voot'            ] }
-    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
-    - { role: pdp, tags: ['pdp'] }
-    - { role: metadata-exporter, tags: ['metadata-exporter']}
-          
+    - { role: java,             tags: ['java'], when: not minimal_install }
+    - { role: tomcat,         tags: ['tomcat' ], when: not minimal_install }
+    - { role: shibboleth,       tags: ['shib'   ], when: not minimal_install }
+    - { role: grouper,          tags: ['grouper'], when: not minimal_install }
+    - { role: teams,            tags: ['teams'  ], when: not minimal_install }
+    - { role: mujina-idp,       tags: ['legacy','mujina' ], when: not minimal_install }
+    - { role: mujina-sp,        tags: ['legacy','mujina' ], when: not minimal_install }
+    - { role: authz-server,     tags: ['oauth', 'authz-server'    ], when: not minimal_install }
+    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ], when: not minimal_install }
+    - { role: voot,             tags: ['oauth', 'voot'            ], when: not minimal_install }
+    - { role: authz-playground, tags: ['oauth', 'authz-playground'], when: not minimal_install }
+    - { role: pdp, tags: ['pdp'], when: not minimal_install }
+    - { role: metadata-exporter, tags: ['metadata-exporter'], when: not minimal_install}
+
   handlers:
     - include: roles/httpd/handlers/main.yml
