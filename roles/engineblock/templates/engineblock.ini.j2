@@ -106,3 +106,9 @@ base_domain = {{ engine_base_domain }}
 
 ; Minimum execution time in milliseconds when a received response is deemed invalid (default: 5000 ms)
 minimumExecutionTimeOnInvalidReceivedResponse = {{ engine_minimum_execution_time_on_invalid_received_response }}
+
+; Settings for detecting whether the user is stuck in an authentication loop within his session:
+; within a certain time frame in seconds (default: 60)
+; how many authentication procedures for the same SP are allowed (default: 5)
+engineblock.timeFrameForAuthenticationLoopInSeconds = {{ engine_time_frame_for_authentication_loop_in_seconds }}
+engineblock.maximumAuthenticationProceduresAllowed  = {{ engine_maximum_authentication_procedures_allowed }}
