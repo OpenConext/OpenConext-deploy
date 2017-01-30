@@ -1,8 +1,13 @@
 ---
 - name: copy default oidc client vm
   copy: src=defaults.vm.sql dest=/tmp
-  when: env == 'vm'
+
+- name: check if oidc database is present
+  mysql_db: name=oidc-server state=present
+  register: oidc_db_present
+
+- debug: var=oidc_db_present
 
 - name: insert default oidc client vm
   mysql_db: name=oidc-server state=import target=/tmp/defaults.vm.sql
-  when: env == 'vm'
+  when: oidc_db_present.changed
