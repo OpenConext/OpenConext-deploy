@@ -48,7 +48,9 @@ voot.clientId=engineblock
 voot.clientSecret={{ engineblock_authz_client_secret }}
 voot.scopes = groups
 
-pdp.baseUrl = {{ engine_pdp_baseurl }}
+pdp.baseUrl = {{ engine_pdp_baseurl }}{{ engine_pdp_path }}
+pdp.host = {{ engine_pdp_baseurl }}
+pdp.policy_decision_point_path = {{ engine_pdp_path }}
 pdp.username = {{ pdp.username }}
 pdp.password = {{ pdp.password }}
 
