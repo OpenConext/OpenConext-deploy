@@ -41,7 +41,8 @@ engine_debug: false
 engine_vovalidate_baseurl : https://api.{{ base_domain }}
 
 ## PDP endpoint
-engine_pdp_baseurl: https://pdp.{{ base_domain }}/pdp/api/decide/policy
+engine_pdp_baseurl: https://pdp.{{ base_domain }}
+engine_pdp_path: /pdp/api/decide/policy
 
 ## Attribute Aggregation endpoint
 engine_attribute_aggregation_baseurl: "https://aa.{{ base_domain }}/aa/api/attribute/aggregate"
