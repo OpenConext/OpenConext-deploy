@@ -71,7 +71,6 @@
 - hosts: java-apps
   gather_facts: true
   become: true
-  when: not minimal_install
   vars:
     env_lang: java
   roles:
