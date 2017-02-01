@@ -1,0 +1,24 @@
+Listen {{ apache_app_listen_address.diyidp }}:{{ loadbalancing.diyidp.port }}
+<Virtualhost {{ apache_app_listen_address.diyidp }}:{{ loadbalancing.diyidp.port }}>
+    ServerName   https://{{ diyidp_domain }}
+    ServerAdmin {{ apache_server_admin }}
+
+    DocumentRoot {{ diyidp_current_release_symlink }}/www
+
+    SetEnv HTTPS on
+    Alias /simplesaml "{{ diyidp_current_release_symlink }}/www"
+    <Directory "{{ diyidp_current_release_symlink }}/www">
+        Require all granted
+
+        Options -MultiViews
+        RewriteEngine On
+    </Directory>
+
+    Redirect permanent /simplesaml/showusers.php /showusers.php
+
+    # Proxy the requests to FPM
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/diyidp-pool.sock|fcgi://localhost/{{ diyidp_current_release_symlink }}/www/$1
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-DIYIDP'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-DIYIDP'" combined
+</VirtualHost>

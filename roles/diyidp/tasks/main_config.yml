@@ -1,0 +1,18 @@
+---
+
+- name: Copy default config
+  shell: cp -r {{ simplesamlphp_dir }}/config-templates {{ simplesamlphp_dir }}/config
+
+- name: Copy default metadata
+  shell: cp -r {{ simplesamlphp_dir }}/metadata-templates {{ simplesamlphp_dir }}/metadata
+
+- name: Generate secretsalt
+  shell: tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo
+  register: secretsalt_raw
+
+- name: Getting hash of the secretsalt
+  set_fact: simplesamlphp_secretsalt={{ secretsalt_raw.stdout }}
+
+- template:
+    src: simplesaml_config_php.conf
+    dest: "{{ simplesamlphp_dir }}/config/config.php"

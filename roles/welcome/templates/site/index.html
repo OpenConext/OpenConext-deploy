@@ -30,7 +30,7 @@
             </a>
           </div>
         </li>
-        {% if ( not ( engineblock.without_java is defined ) ) or ( not engineblock.without_java ) %}
+        {% if ( not minimal_install ) %}
         <li class="connected" data-id="1">
           <h2>
             <a href="https://teams.{{ base_domain }}/" target="_blank" >
@@ -70,7 +70,7 @@
           </div>
         </li>
 
-        {% if ( not ( engineblock.without_java is defined ) ) or ( not engineblock.without_java ) %}
+        {% if ( not minimal_install ) %}
         <li class="connected" data-id="1">
           <h2>
             <a href="https://authz-admin.{{ base_domain }}" target="_blank" >
@@ -106,7 +106,7 @@
           </div>
         </li>
 
-        {% if ( not ( engineblock.without_java is defined ) ) or ( not engineblock.without_java ) %}
+        {% if ( not minimal_install ) %}
         <li class="connected" data-id="1">
           <h2>
             <a href="https://oidc.{{ base_domain }}" target="_blank" >
@@ -126,7 +126,7 @@
         {% endif %}
       </ul>
 
-      {% if ( not ( engineblock.without_java is defined ) ) or ( not engineblock.without_java ) %}
+      {% if ( not minimal_install ) %}
       <h2>OpenConext Utilities</h2>
       <ul class="app-grid filters-available lmng-active"
           data-search-placeholder="Search in applications">

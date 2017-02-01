@@ -25,7 +25,7 @@
 
 - name: get grouper shell
   get_url:
-    url: https://build.surfconext.nl/repository/public/third-party/edu/internet2/grouper/release/2.1.5/grouper.apiBinary-2.1.5.tar.gz
+    url: https://build.openconext.org/repository/public/third-party/edu/internet2/grouper/release/2.1.5/grouper.apiBinary-2.1.5.tar.gz
     dest: ~/grouper.apiBinary-2.1.5.tar.gz
   tags:
     - grouper

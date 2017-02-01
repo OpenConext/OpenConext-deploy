@@ -27,3 +27,6 @@ galera_client_key_name: galera_client.key
 galera_client_crt_name: galera_client.pem
 galera_sst_crt_name: galera_sst.pem
 galera_gmcast_segment: 1
+
+#Install memcached on the cluster nodes
+memcached_cluster: False

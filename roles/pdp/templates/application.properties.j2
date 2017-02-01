@@ -82,3 +82,7 @@ endpoints.info.enabled=true
 
 # This is the internal logging of PDP. Leave this to DEBUG for now as it is not much overhead
 logging.level.pdp: DEBUG
+
+# In a multi master database setup toggle which machine is reponsible for cron jobs
+pdpCronJobResponsible= {{ pdp_cronjobmaster }}
+

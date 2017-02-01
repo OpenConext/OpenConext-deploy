@@ -1,0 +1,7 @@
+# Default settings to support the minimal installation setup, without LDAP support
+janus_no_federative_login: 1
+janus_default_sp: "example-auth"
+engine_feature_ldap_integration: 0
+
+apache_app_listen_address:
+    all: 0.0.0.0

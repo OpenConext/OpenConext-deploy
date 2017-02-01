@@ -24,6 +24,13 @@
   with_items: "{{ haproxy_applications }}"
   when: not item.hidden
 
+- name: Create directory to store backend CA file
+  file: dest=/etc/pki/haproxy state=directory mode=0755 owner=root
+  
+- name: Copy backend CA certificate
+  copy: content="{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}" dest="{{ tls_backend_ca }}" mode=0644 owner=root
+  when: haproxy_backend_tls
+
 - name: Run hapos-upd for initial OCSP responses
   shell: /usr/local/sbin/hapos-upd --skip-update --good-only --socket /var/lib/haproxy/{{ item.name }}.stats --VAfile /etc/haproxy/{{ item.name }}/{{ item.name }}.pem --cert /etc/haproxy/{{ item.name }}/{{ item.name }}.pem
   with_items: "{{ haproxy_applications }}"
@@ -56,3 +63,19 @@
   template: src=update_ocsp.j2 dest=/usr/local/sbin/update_ocsp mode=0755
 
 - cron: name="update ocsp info" special_time=hourly job="/usr/local/sbin/update_ocsp"
+
+- name: stop haproxy instance
+  service: name=haproxy_{{ item.name }} state=stopped
+  with_items: "{{ haproxy_removal_applications }}"
+  failed_when: false
+
+- name: disable systemd startup file
+  command: systemctl disable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  with_items: "{{ haproxy_removal_applications }}"
+  failed_when: false
+
+- name: remove haproxy config directories
+  file: dest=/etc/haproxy/{{ item.name }} state=absent
+  with_items: "{{ haproxy_removal_applications }}"
+  failed_when: false
+

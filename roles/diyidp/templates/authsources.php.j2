@@ -1,0 +1,24 @@
+<?php
+
+$config = array(
+
+	// This is a authentication source which handles admin authentication.
+	'admin' => array(
+		// The default is to use core:AdminPassword, but it can be replaced with
+		// any authentication source.
+
+		'core:AdminPassword',
+	),
+
+	
+	'sql_user' => array(
+		'sqlauth:SQL',
+		'dsn' => 'mysql:host={{ diyidp.db_host}};port=3306;dbname={{ diyidp.db_name }}',
+		'username' => '{{ diyidp.db_user}}',
+		'password' => '{{ diyidp.db_password}}',
+		'query' => "SELECT uid,givenName,sn,cn, mail,displayName,schacHomeOrganization, CONCAT(uid, '@', schacHomeOrganization) as eduPersonPrincipalName,eduPersonEntitlement,eduPersonAffiliation,isMemberOf 
+                            FROM users WHERE username = :username AND password = :password",
+	),
+);
+
+?>

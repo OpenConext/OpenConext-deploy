@@ -11,18 +11,18 @@ error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
-profile_version: 0.4.0
-teams_version: 4.2.13
+profile_version: 0.5.1
+teams_version: 4.2.14
 mujina_version: 4.1.1
 authz_server_version: 1.3.7
-voot_version: 2.0.4
+voot_version: 2.0.8
 authz_admin_version: 2.0.10
 authz_playground_version: 1.4
-pdp_version: 1.2.4
+pdp_version: 1.2.6
 aa_version: "1.0.4"
 oidc_version: "1.0.2"
 metadata_exporter_version: "2.0.3"
-engine_version: "5.0.0"
+engine_version: "5.1.0"
 janus_version: 1.22.0
 janus_ssp_version: 1.13.2
 
@@ -443,6 +443,9 @@ haproxy_applications:
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name:  pdp
     vhost_name: pdp
@@ -453,6 +456,9 @@ haproxy_applications:
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name:  teams
     vhost_name: teams
@@ -463,6 +469,9 @@ haproxy_applications:
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name:  authzserver
     vhost_name: authz
@@ -473,6 +482,9 @@ haproxy_applications:
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name:  authz_admin 
     vhost_name: authz-admin
@@ -483,6 +495,9 @@ haproxy_applications:
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name: authz_playground
     vhost_name: authz-playground
@@ -493,6 +508,9 @@ haproxy_applications:
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
    
   - name: voot
     vhost_name: voot
@@ -503,6 +521,9 @@ haproxy_applications:
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
   
   - name: aa
     vhost_name: aa
@@ -513,6 +534,9 @@ haproxy_applications:
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
   
   - name: grouper
     vhost_name: grouper
@@ -523,6 +547,9 @@ haproxy_applications:
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
   
   - name: engine
     vhost_name: engine
@@ -533,6 +560,9 @@ haproxy_applications:
     servers: "{{ php_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name: profile
     vhost_name: profile
@@ -543,6 +573,9 @@ haproxy_applications:
     servers: "{{ php_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
   
   - name: serviceregistry
     vhost_name: serviceregistry
@@ -553,6 +586,9 @@ haproxy_applications:
     servers: "{{ php_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name: engine_api
     vhost_name: engine-api
@@ -563,6 +599,9 @@ haproxy_applications:
     servers: "{{ php_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name: static
     vhost_name: static
@@ -573,6 +612,9 @@ haproxy_applications:
     servers: "{{ php_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name: mujina-idp
     vhost_name: "mujina-idp"
@@ -581,6 +623,9 @@ haproxy_applications:
     ha_url: "/"
     port: "608"
     servers: "{{java_servers}}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
 
   - name: mujina-sp
     vhost_name: "mujina-sp"
@@ -589,6 +634,11 @@ haproxy_applications:
     ha_url: "/"
     port: "607"
     servers: "{{java_servers}}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
+
+haproxy_backend_tls: true
 
 haproxy_sni_ip: "*"
 
