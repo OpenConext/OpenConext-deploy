@@ -2,7 +2,7 @@ janus_service_registry_core:
     admin:
         name: {{ instance_name }}
         email: {{ support_email }}
-    auth: default-sp
+    auth: {{ janus_default_sp }}
     useridattr: NameID
 #    auth: login-admin
 #    useridattr: user

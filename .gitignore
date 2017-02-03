@@ -11,3 +11,7 @@ provision-vm.retry
 
 # ignore the directory where our decrypted keystore is kept during execution of playbooks
 .decrypted_keystore
+
+# ignore backup files
+*~
+

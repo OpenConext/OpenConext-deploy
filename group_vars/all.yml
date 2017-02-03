@@ -3,6 +3,9 @@
 # By default, these should not be run
 develop: false
 
+# To enable a minimal installation the following variable should be enabled:
+minimal_install: false
+
 timezone: Europe/Amsterdam
 
 maven_repo: https://build.openconext.org/repository/public/releases
