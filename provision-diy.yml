@@ -56,7 +56,7 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: java-apps
+- hosts: java-apps-common
   gather_facts: true
   become: true
   vars:
