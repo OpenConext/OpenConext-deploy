@@ -38,11 +38,11 @@ script:
   - >
     sudo docker exec -t ansible-test
     env TERM=xterm ANSIBLE_CONFIG=/ansible/ansible.cfg
-    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-docker.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml --syntax-check
+    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-vm.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml --syntax-check
   - >
     sudo docker exec -t ansible-test
     env TERM=xterm ANSIBLE_CONFIG=/ansible/ansible.cfg
-    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-docker.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml
+    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-vm.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml
   - >
     echo "=================================================================";
     echo "=================================================================";
@@ -53,7 +53,7 @@ script:
     TMPOUT=$(tempfile) &&
     sudo docker exec -t ansible-test
     env TERM=xterm ANSIBLE_CONFIG=/ansible/ansible.cfg
-    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-docker.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml | tee $TMPOUT
+    ansible-playbook -i /ansible/environments/docker/inventory /ansible/provision-vm.yml -e secrets_file=/ansible/environments/vm/secrets/vm.yml | tee $TMPOUT
     &&
     grep -q 'changed=0.*failed=0' $TMPOUT && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
   - >
