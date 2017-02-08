@@ -10,6 +10,9 @@ localhost
 [java-apps]
 localhost
 
+[java-apps-common]
+localhost
+
 [php-apps]
 localhost
 

@@ -4,7 +4,7 @@
 # If you experience problems, see http://www.rsyslog.com/doc/troubleshoot.html
 
 #### MODULES ####
-
+$MaxMessageSize 32k
 # The imjournal module bellow is now used as a message source instead of imuxsock.
 $ModLoad imuxsock # provides support for local system logging (e.g. via logger command)
 $ModLoad imjournal # provides access to the systemd journal

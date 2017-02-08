@@ -1,10 +1,16 @@
 # Install the "REMI" repo which contain newer php packages that override the default
 # that come with the distro (CentOS7: 5.4; CentOS6: 5.3)
+- name: check for presence of the remi repository file
+  stat: path=/etc/yum.repos.d/remi.repo
+  register: remi_config
+
 - name: Install REMI repo
   yum: name=http://rpms.famillecollet.com/enterprise/remi-release-7.rpm state=present
+  when: remi_config.stat.exists == False
 
 - name: Enable REMI repo
   copy: src=remi.repo dest=/etc/yum.repos.d/remi.repo
+  when: remi_config.stat.exists == False
 
 - name: Install httpd, php-(cli,fpm), smtpd, mysql client libs, bzip2, composer
   yum: name={{item}} state=present
@@ -28,7 +34,7 @@
 - name: enable php-fpm
   service: name=php-fpm enabled=yes
 
-  
+
 - name: Configure PHP APC
   template: src={{ item }}.j2 dest=/etc/php.d/{{ item }}
   with_items:

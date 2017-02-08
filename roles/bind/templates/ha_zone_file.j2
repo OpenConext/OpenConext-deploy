@@ -1,6 +1,6 @@
 $TTL    4h
 $ORIGIN ha.{{ base_domain }}.
-@           IN      SOA     ns1.ha.{{ base_domain }}.    surfconext-beheer.surfnet.nl. (
+@           IN      SOA     ns1ha.{{ base_domain }}.    surfconext-beheer.surfnet.nl. (
                             {{ ansible_date_time.epoch }}    ; Serial
                             1d            ; slave refresh (1 day)
                             2h            ; slave retry time in case of a problem (2 hours)

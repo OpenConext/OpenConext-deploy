@@ -35,7 +35,7 @@
   register: selinux_binaries
 
 - name: check for SELinux status
-  shell: /usr/sbin/sestatus | head -1 | awk '{ print $3 }'
+  shell: "/usr/sbin/sestatus | grep 'SELinux status' | awk '{ print $3 }'"
   when: selinux_binaries.stat.exists == True
   register: selinux_status
 
@@ -45,7 +45,7 @@
 
 - name: disable SELinux NOW
   command: /usr/sbin/setenforce 0
-  when: "selinux_binaries.stat.exists == True and selinux_status.stdout == 'enabled'"
+  when: (selinux_binaries.stat.exists == True and selinux_status.stdout == "enabled")
 
 - name: check SELinux status
   shell: "/usr/sbin/sestatus | egrep '^SELinux status: *disabled' || /usr/sbin/sestatus | egrep '^Current mode: *permissive'"
@@ -59,7 +59,8 @@
   with_items:
     - exim
     - postfix
-  
+  when: sendmail_smarthost is defined
+
 - name: Install sendmail
   yum: name={{ item }} state=present
   with_items:
@@ -72,7 +73,7 @@
   template: src='sendmail.cf.j2' dest='/etc/mail/sendmail.cf'
   when: sendmail_smarthost is defined
   notify: rebuild sendmail config
-  
+
 - name: Start and enable sendmail service
   service: name=sendmail state=started enabled=yes
   when: sendmail_smarthost is defined

@@ -4,6 +4,9 @@
 [java-apps]
 %target_host%
 
+[java-apps-common]
+%target_host%
+
 [php-apps]
 %target_host%
 

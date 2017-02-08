@@ -1,0 +1,56 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: Read vars from secrets file
+    include_vars: "{{ secrets_file }}"
+    tags:
+      - always
+
+- hosts: loadbalancer:php-apps:storage
+  gather_facts: yes
+  become: true
+  roles:
+    - common
+    - { role: tls, tags: ['tls'] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: loadbalancer
+  gather_facts: true
+  become: true
+  roles:
+    - { role: haproxy,   tags: ['lb'] }
+
+- hosts: php-apps
+  gather_facts: no
+  become: true
+  roles:
+    - httpd
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: storage
+  gather_facts: no
+  become: true
+  roles:
+    - { role: mysql, tags: ['mysql'] }
+    - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
+
+- hosts: php-apps
+  become: true
+  gather_facts: no
+  vars:
+    env_lang: php
+  roles:
+    - { role: php56fpm,          tags: ['php'     ] }
+    - { role: static,            tags: ['static'  ] }
+    - { role: welcome,           tags: ['welcome'] }
+    - { role: openconext-common, tags: ['eb','sr','profile'] }
+    - { role: engineblock,       tags: ['eb'     ] }
+    - { role: profile,       tags: ['profile'     ] }
+    - { role: janus,             tags: ['sr'     ] }
+    - { role: profile,           tags: ['profile'] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
