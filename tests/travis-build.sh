@@ -5,6 +5,8 @@ set -e
 # keep exit status
 status=0
 
+export ANSIBLE_CONFIG=/ansible/ansible.cfg
+
 # start docker container
 docker run --detach                                         \
 	-v "${PWD}":/ansible:rw                                 \
@@ -34,7 +36,7 @@ docker run --detach                                         \
 	--add-host oidc.vm.openconext.org:127.0.0.1             \
 	--hostname test.openconext.org                          \
 	-e TERM=xterm                                           \
-	-e ANSIBLE_CONFIG=/ansible/ansible.cfg                  \
+	-e ANSIBLE_CONFIG=${ANSIBLE_CONFIG}                     \
 	surfnet/centos7-openconext
 
 # initialize ansible.cfg
@@ -46,7 +48,6 @@ cat <<-'EOF' > /tmp/ansible.cfg
 	ssh_args=-o ControlMaster=auto -o ControlPersist=60m
 	pipelining=True
 EOF
-cat /tmp/ansible.cfg
 # and copy it into the container
 docker cp /tmp/ansible.cfg ansible-test:${ANSIBLE_CONFIG}
 
