@@ -10,7 +10,7 @@ before_install:
   - sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 .
 
 script:
-  - sudo /bin/bash -x ./tests/travis-build.sh
+  - sudo /bin/bash ./tests/travis-build.sh
 
 after_failure:
   - sudo docker exec -t ansible-test yum install -y net-tools
