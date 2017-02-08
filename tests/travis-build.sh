@@ -97,7 +97,7 @@ docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
 		-i $ANSIBLE_INVENTORY                                    \
 		-e secrets_file=$ANSIBLE_SECRETS                         \
-		$ANSIBLE_PLAYBOOK
+		$ANSIBLE_PLAYBOOK                                        \
  | tee $TMPOUT
 
 echo
@@ -117,6 +117,6 @@ echo
 docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
 		-i $ANSIBLE_INVENTORY                                    \
-		/ansible/tests/all_services_are_up.yml                   \
+		/ansible/tests/all_services_are_up.yml
 
 exit $status
