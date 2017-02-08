@@ -13,11 +13,11 @@
   command: mysql oidc-server -Ns -e 'SELECT COUNT(*) FROM `client_details`'
   register: oidc_mysql_clients
   changed_when: False
-  when: 'client_details' in oidc_mysql_tables.stdout
+  when: "'client_details' in oidc_mysql_tables.stdout"
 
 - debug: var=oidc_mysql_clients
 
 - name: insert default oidc client vm
   mysql_db: name=oidc-server state=import target=/tmp/defaults.vm.sql
-  when: ('client_details' not in oidc_mysql_tables.stdout)  or  (oidc_mysql_clients.stdout == '0')
+  when: "('client_details' not in oidc_mysql_tables.stdout)  or  (oidc_mysql_clients.stdout == '0')"
 
