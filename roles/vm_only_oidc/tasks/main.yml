@@ -7,16 +7,13 @@
   register: oidc_mysql_tables
   changed_when: False
 
-- debug: var=oidc_mysql_tables
-
 - name: check if database is already filled
   command: mysql oidc-server -Ns -e 'SELECT COUNT(*) FROM `client_details`'
   register: oidc_mysql_clients
   changed_when: False
   when: "'client_details' in oidc_mysql_tables.stdout"
 
-- debug: var=oidc_mysql_clients
-
+# only run if the oidc tables don't exist or are empty
 - name: insert default oidc client vm
   mysql_db: name=oidc-server state=import target=/tmp/defaults.vm.sql
   when: "('client_details' not in oidc_mysql_tables.stdout)  or  (oidc_mysql_clients.stdout == '0')"
