@@ -5,7 +5,11 @@ set -e
 # keep exit status
 status=0
 
-export ANSIBLE_CONFIG=/ansible/ansible.cfg
+ANSIBLE_CONFIG=/ansible/ansible.cfg
+ANSIBLE_PLAYBOOK=/ansible/provision-vm.yml
+ANSIBLE_INVENTORY=/ansible/environments/docker/inventory
+ANSIBLE_SECRETS=/ansible/environments/vm/secrets/vm.yml
+
 
 # start docker container
 docker run --detach                                         \
@@ -61,9 +65,9 @@ echo
 
 docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
-		-i /ansible/environments/docker/inventory                \
-		-e secrets_file=/ansible/environments/vm/secrets/vm.yml  \
-		/ansible/provision-docker.yml                            \
+		-i $ANSIBLE_INVENTORY                                    \
+		-e secrets_file=$ANSIBLE_SECRETS                         \
+		$ANSIBLE_PLAYBOOK                                        \
 		--syntax-check
 
 echo
@@ -76,9 +80,9 @@ echo
 
 docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
-		-i /ansible/environments/docker/inventory                \
-		-e secrets_file=/ansible/environments/vm/secrets/vm.yml  \
-		/ansible/provision-docker.yml 
+		-i $ANSIBLE_INVENTORY                                    \
+		-e secrets_file=$ANSIBLE_SECRETS                         \
+		$ANSIBLE_PLAYBOOK
 
 echo
 echo "================================================================="
@@ -91,9 +95,9 @@ echo
 TMPOUT=$(tempfile)
 docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
-		-i /ansible/environments/docker/inventory                \
-		-e secrets_file=/ansible/environments/vm/secrets/vm.yml  \
-		/ansible/provision-docker.yml                            \
+		-i $ANSIBLE_INVENTORY                                    \
+		-e secrets_file=$ANSIBLE_SECRETS                         \
+		$ANSIBLE_PLAYBOOK
  | tee $TMPOUT
 
 echo
@@ -112,7 +116,7 @@ echo
 
 docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
-		-i /ansible/environments/docker/inventory                \
+		-i $ANSIBLE_INVENTORY                                    \
 		/ansible/tests/all_services_are_up.yml                   \
 
 exit $status
