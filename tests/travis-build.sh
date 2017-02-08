@@ -38,7 +38,7 @@ docker run --detach                                         \
 	surfnet/centos7-openconext
 
 # initialize ansible.cfg
-cat > /tmp/ansible.cfg <<-EOF
+cat <<-'EOF' > /tmp/ansible.cfg
 	[defaults]
 	callback_plugins=/ansible/callback_plugins
 	callback_whitelist=profile_tasks
@@ -46,6 +46,7 @@ cat > /tmp/ansible.cfg <<-EOF
 	ssh_args=-o ControlMaster=auto -o ControlPersist=60m
 	pipelining=True
 EOF
+cat /tmp/ansible.cfg
 # and copy it into the container
 docker cp /tmp/ansible.cfg ansible-test:${ANSIBLE_CONFIG}
 
