@@ -2,13 +2,22 @@
 - name: copy default oidc client vm
   copy: src=defaults.vm.sql dest=/tmp
 
-- name: check if databse is already filled
-  command: mysql oidc-server -Ns -e 'SELECT COUNT(*) FROM `client_details`;'
+- name: check if database exists
+  command: mysql oidc-server -Ns -e 'SHOW TABLES LIKE "client_details"'
   register: oidc_mysql_tables
   changed_when: False
 
 - debug: var=oidc_mysql_tables
 
+- name: check if database is already filled
+  command: mysql oidc-server -Ns -e 'SELECT COUNT(*) FROM `client_details`'
+  register: oidc_mysql_clients
+  changed_when: False
+  when: "'client_details' in {{oidc_mysql_tables.stdout}}"
+
+- debug: var=oidc_mysql_clients
+
 - name: insert default oidc client vm
   mysql_db: name=oidc-server state=import target=/tmp/defaults.vm.sql
-  when: "( oidc_mysql_tables|succeeded ) and ( oidc_mysql_tables.stdout == '' )"
+  when: "'client_details' not in {{oidc_mysql_tables.stdout}}  or  {{oidc_mysql_clients.stdout}}=='0'"
+
