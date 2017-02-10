@@ -4,6 +4,9 @@ logging.config=file://{{ voot_dir }}/logback.xml
 server.port={{ springapp_tcpport }}
 server.session.cookie.secure=true
 
+# An empty value will be replaced with the default
+server.server-header=no
+
 # Details needed so that we may check tokens presented to us by clients. This application uses them to authenticate via
 # Basic authentication with the oAuth server.
 authz.checkToken.endpoint.url= {{ voot.authz_checkToken_endpoint_url }}
