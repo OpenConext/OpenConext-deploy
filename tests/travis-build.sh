@@ -6,7 +6,7 @@ set -e
 status=0
 
 ANSIBLE_CONFIG=/ansible/ansible.cfg
-ANSIBLE_PLAYBOOK=/ansible/provision-docker.yml
+ANSIBLE_PLAYBOOK=/ansible/provision-vm.yml
 ANSIBLE_INVENTORY=/ansible/environments/docker/inventory
 ANSIBLE_SECRETS=/ansible/environments/vm/secrets/vm.yml
 
