@@ -5,6 +5,9 @@ server.session.cookie.secure=true
 logging.config=file://{{ aa_dir }}/logback.xml
 server.port={{ springapp_tcpport }}
 
+# An empty value will be replaced with the default
+server.server-header=no
+
 spring.profiles.active={{ aa.spring_profiles_active }}
 
 scim.server.environment=test.surfconext
