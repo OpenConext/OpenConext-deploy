@@ -26,6 +26,9 @@ oidc.well_known_configuration_url=https://oidc.{{ base_domain }}/.well-known/ope
 server.port={{ springapp_tcpport }}
 server.session.cookie.secure=true
 
+# An empty value will be replaced with the default
+server.server-header=no
+
 endpoints.enabled=false
 endpoints.health.enabled=true
 endpoints.info.enabled=true

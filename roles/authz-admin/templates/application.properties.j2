@@ -17,6 +17,9 @@ spring.datasource.testWhileIdle=true
 server.port={{ springapp_tcpport }}
 server.session.cookie.secure=true
 
+# An empty value will be replaced with the default
+server.server-header=no
+
 voot.serviceUrl=https://voot.{{ base_domain }}
 
 # oauth config for accessing voot.

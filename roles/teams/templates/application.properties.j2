@@ -3,6 +3,9 @@ server.port={{ springapp_tcpport }}
 server.tomcat.basedir={{ teams_dir }}/tomcat_work
 server.session.cookie.secure=true
 
+# An empty value will be replaced with the default
+server.server-header=no
+
 application.version= {{ teams_version }}
 
 datasource.teams.driver-class-name=com.mysql.jdbc.Driver
