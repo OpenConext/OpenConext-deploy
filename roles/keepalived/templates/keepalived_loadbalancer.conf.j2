@@ -125,4 +125,10 @@ vrrp_instance backup {
         {% if sab_enroll_ipv6 is defined %}
         {{ sab_enroll_ipv6 }}
         {% endif %}
+        {% if haproy_sni_ip is defined %}
+        {{ haproy_sni_ip }}
+        {% endif %}
+        {% if haproy_sni_ipv6 is defined %}
+        {{ haproy_sni_ipv6 }}
+        {% endif %}
 }
