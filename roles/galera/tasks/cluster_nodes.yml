@@ -1,6 +1,9 @@
 - name: Disable redirects of traffic when VPN gateway is unreachable
   sysctl: name=net.ipv4.conf.all.accept_redirects value=0 state=present ignoreerrors=yes
 
+- name: Lower swappiness
+  sysctl: name=vm.swappiness value=10 state=present ignoreerrors=yes
+
 # Add MariaDB repo and key
 - name: Add MariaDB.org repository
   template: src='mariadb.repo.j2' dest='/etc/yum.repos.d/mariadb.repo'
