@@ -244,7 +244,7 @@ voot:
 ##
 # VM config for the authz-admin application
 ##
-authz_admin_group: urn:collab:group:surfnet.nl:etc:sysadmingroup
+authz_admin_group: "urn:collab:group:{{ base_domain }}:nl:surfnet:diensten:authz_admins"
 authzadmin:
   defaultClients:
       - clientId: "{{ authzplayground.springapp_authz_client_id }}"
