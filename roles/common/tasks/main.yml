@@ -54,29 +54,24 @@
 - name: Start ntpd
   service: name=ntpd state=started enabled=yes
 
-- name: Remove exim when sendmail needs to be installed
+- name: Remove exim,sendmail when Postfix needs to be installed
   yum: name={{ item }} state=absent
   with_items:
     - exim
-    - postfix
+    - sendmail
+    - sendmail-cf
   when: sendmail_smarthost is defined
 
-- name: Install sendmail
+- name: Install Postfix
   yum: name={{ item }} state=present
   with_items:
-     - sendmail
-     - sendmail-cf
-     - make
+     - postfix
   when: sendmail_smarthost is defined
 
-- name: Copy sendmail template
-  template: src='sendmail.cf.j2' dest='/etc/mail/sendmail.cf'
+- name: Copy Postfix main.cf template
+  template: src='main.cf.j2' dest='/etc/postfix/main.cf'
   when: sendmail_smarthost is defined
-  notify: rebuild sendmail config
-
-- name: Start and enable sendmail service
-  service: name=sendmail state=started enabled=yes
-  when: sendmail_smarthost is defined
+  notify: reload postfix
 
 # journald binary logs corrupt on specific engineblock messages.
 # disabling compression fixes that issue

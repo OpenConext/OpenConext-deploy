@@ -1,7 +1,0 @@
-# journald binary logs corrupt on specific engineblock messages.
-# disabling compression fixes that issue
-- name: Disable journald compression
-  copy: src=journald.conf dest='/etc/systemd/journald.conf' 
-  notify: 
-  - restart journald
-
