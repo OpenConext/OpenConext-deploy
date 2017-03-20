@@ -127,4 +127,4 @@ ansible-playbook -u vagrant -i inventory/vm -K selfservice.yml -k
 ```
 
 Setting up a development environment is described in the file [DEVELOPMENT](DEVELOPMENT.md).
-View
+
