@@ -187,6 +187,7 @@ teams:
   db_password: "{{ mysql_passwords.teams }}"
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:{{ base_domain }}:"
+  voot_api_user: "voot"
 
 teams_provision_users: true
 
@@ -230,11 +231,11 @@ voot:
     - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
     - {
-        type: "grouper",
-        url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
+        type: "teams",
+        url: "https://teams.{{ base_domain }}/api/voot",
         credentials: {
-          username: "{{ ldap_grouper_user }}",
-          secret: "{{ external_group_provider_secrets.grouper }}"
+          username: "{{ teams.voot_api_user }}",
+          secret: "{{ external_group_provider_secrets.teams }}"
         },
         schacHomeOrganization: "surfnet.nl",
         name: "SURFteams",
