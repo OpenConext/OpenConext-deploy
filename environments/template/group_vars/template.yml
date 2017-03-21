@@ -169,36 +169,6 @@ engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 
-api:
-  janus:
-    user: "{{ engine_janus_user }}"
-    secret: "{{ engine_janus_secret }}"
-    uri: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
-  jdbc:
-    user: apirw
-    url: "jdbc:mysql://{{ mysql_host }}/api"
-    password: "{{ mysql_passwords.api }} "
-  ldap:
-    url: ldap://ldap.{{ base_domain }}:389
-    userDn: "{{ engine_ldap_bind_dn }}"
-    password: "{{ engine_ldap_password }}"
-  engineblock:
-    user: "{{ engine_database_user }}"
-    url: jdbc:mysql://{{ engine_database_host }}:3306/{{ engine_database_name }}
-    password: "{{ engine_database_password }}"
-  teams:
-    user: teamsrw
-    url: "jdbc:mysql://{{ mysql_host }}/{{ teams.db_name }}"
-    password: "{{ teams.db_password }}"
-  oauth:
-    callback_url: https://api.{{ base_domain }}/v1/test/oauth-callback.shtml
-  staticContentBasePath: https://static.{{ base_domain }}
-  saml:
-    entityId: https://api.{{ base_domain }}/
-    assertionConsumerURI: https://api.{{ base_domain }}/v1/assertionConsumer
-  ehcache:
-    path: /tmp
-
 grouper:
   db_user: grouperrw
   db_host: "{{ mysql_host }}"
