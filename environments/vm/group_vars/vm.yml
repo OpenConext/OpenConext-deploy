@@ -110,8 +110,6 @@ janus_teams_oauth_key: https://teams.{{ base_domain }}/.*
 
 engine_janus_cache_lifetime: 0
 
-engine_vovalidate_key: oauth_key
-
 engine_trusted_proxy_ips:
   - 192.168.1.1
   - 10.0.0.1

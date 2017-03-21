@@ -37,9 +37,6 @@ engine_api_domain: engine-api.{{ base_domain }}
 
 engine_debug: false
 
-## The endpoint it can use to validate Virtual Organizations
-engine_vovalidate_baseurl : https://api.{{ base_domain }}
-
 ## PDP endpoint
 engine_pdp_baseurl: https://pdp.{{ base_domain }}
 engine_pdp_path: /pdp/api/decide/policy

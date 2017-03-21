@@ -37,17 +37,6 @@ engineblock.feature.run_all_manipulations_prior_to_consent = {{ engine_feature_r
 symfony.cachePath = "{{ engineblock_symfony_cache_path }}"
 symfony.logPath = "{{ engineblock_symfony_log_path }}"
 
-;; Virtual Organisation Validation api credentials
-api.vovalidate.baseUrl = {{ engine_vovalidate_baseurl }}
-api.vovalidate.key = {{ engine_vovalidate_key }}
-api.vovalidate.secret = {{ engine_vovalidate_secret }}
-
-voot.serviceUrl=https://voot.{{ base_domain }}
-voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
-voot.clientId=engineblock
-voot.clientSecret={{ engineblock_authz_client_secret }}
-voot.scopes = groups
-
 pdp.baseUrl = {{ engine_pdp_baseurl }}{{ engine_pdp_path }}
 pdp.host = {{ engine_pdp_baseurl }}
 pdp.policy_decision_point_path = {{ engine_pdp_path }}
