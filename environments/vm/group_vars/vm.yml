@@ -426,7 +426,14 @@ loadbalancing:
       servers: [
         { label: "engine_backend", ip: "192.168.66.99" },
       ]
-    }
+  }
+  metadata: {
+    port: 409,
+    heartbeat: { url: "/alive.txt", method: "HEAD" },
+    servers: [
+      { label: "metadata_backend", ip: "192.168.66.99" },
+    ]
+  }
   teams: {
     port: 601,
     heartbeat: { url: "/media/trans-white.png", method: "GET" },
@@ -560,6 +567,14 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/"
     port: 405
+    servers: "{{php_servers}}"
+
+  - name: metadata
+    vhost_name: "metadata"
+    ip: 192.168.66.98
+    ha_method: "HEAD"
+    ha_url: "/alive.txt"
+    port: 409
     servers: "{{php_servers}}"
   
   - name: teams

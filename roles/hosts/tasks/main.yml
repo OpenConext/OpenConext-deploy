@@ -3,6 +3,7 @@
   lineinfile: dest=/etc/hosts line="{{ hosts_ip_address }} {{ item }}" unsafe_writes=yes
   with_items:
     - "static.vm.openconext.org"
+    - "metadata.vm.openconext.org"
     - "serviceregistry.vm.openconext.org"
     - "engine.vm.openconext.org"
     - "profile.vm.openconext.org"

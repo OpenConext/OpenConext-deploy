@@ -11,6 +11,7 @@ apache_app_listen_address:
   mujina_sp: 127.0.0.2
   serviceregistry: 127.0.0.2
   static: 127.0.0.2
+  metadata: 127.0.0.2
   teams: 127.0.0.2
   voot: 127.0.0.2
   welcome: 127.0.0.2

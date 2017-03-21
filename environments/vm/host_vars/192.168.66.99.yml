@@ -18,3 +18,4 @@ apache_app_listen_address:
   oidc: 192.168.66.99
   aa: 192.168.66.99
   metadata_exporter: 192.168.66.99
+  metadata: 192.168.66.99

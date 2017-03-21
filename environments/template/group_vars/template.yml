@@ -380,6 +380,9 @@ loadbalancing:
   engine_api:
     port: 405
 
+  metadata:
+    port: 409
+
   teams:
     port: 601
 
@@ -443,6 +446,14 @@ haproxy_applications:
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
     port: "403"
+    servers: "{{php_servers}}"
+
+  - name: metadata
+    vhost_name: "metadata"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "HEAD"
+    ha_url: "/alive.txt"
+    port: "409"
     servers: "{{php_servers}}"
 
   - name:  serviceregistry

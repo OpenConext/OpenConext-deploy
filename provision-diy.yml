@@ -47,12 +47,13 @@
   roles:
     - { role: php56fpm,          tags: ['php'     ] }
     - { role: static,            tags: ['static'  ] }
+    - { role: metadata,          tags: ['static'  ] }
     - { role: openconext-common, tags: ['eb','sr','profile'] }
-    - { role: engineblock,      tags: ['eb'     ] }
+    - { role: engineblock,       tags: ['eb'      ] }
     - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
-    - { role: spform,           tags: ['spform' ] }
-    - { role: diyidp,           tags: ['diyidp' ] }
+    - { role: spform,            tags: ['spform'  ] }
+    - { role: diyidp,            tags: ['diyidp'  ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
