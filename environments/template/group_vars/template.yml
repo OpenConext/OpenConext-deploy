@@ -21,7 +21,7 @@ diy_technicalcontact_email: "{{ support_email }}"
 
 profile_version: 0.6.0
 teams_version: 4.2.14
-mujina_version: 4.1.2
+mujina_version: 4.1.3
 authz_server_version: 1.3.7
 voot_version: 2.0.10
 authz_admin_version: 2.0.10
