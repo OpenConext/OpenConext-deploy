@@ -1,6 +1,6 @@
 ---
 - name: create metadata dir
-  file: path={{ metadata_dir }} state=directory
+  file: path={{ metadata_dir }} state=directory owner={{ metadata.sync_user }}
 
 - name: copy dummy files
   copy: src=alive.txt dest={{ metadata_dir }}
