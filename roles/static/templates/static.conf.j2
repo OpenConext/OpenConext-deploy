@@ -6,7 +6,7 @@ Listen {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}
 {% endif %}
     ServerName static.{{ base_domain }}:443
 
-    DocumentRoot /var/www/static
+    DocumentRoot {{ static_dir }}
 {% if apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
