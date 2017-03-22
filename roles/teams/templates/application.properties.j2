@@ -24,6 +24,8 @@ datasource.grouper.testWhileIdle=true
 
 # The key which restricts access to running migrations from Grouper to teams database
 migration.secret_key={{ teams_migration_secret_key }}
+voot.api.user={{ teams.voot_api_user }}
+voot.api.password={{ external_group_provider_secrets.teams }}
 
 spring.jpa.properties.hibernate.naming-strategy=org.hibernate.cfg.ImprovedNamingStrategy
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect
