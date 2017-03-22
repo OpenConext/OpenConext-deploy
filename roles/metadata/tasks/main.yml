@@ -1,4 +1,7 @@
 ---
+- name: create sync user
+  user: name={{ metadata.sync_user }} system=yes
+
 - name: create metadata dir
   file: path={{ metadata_dir }} state=directory owner={{ metadata.sync_user }}
 

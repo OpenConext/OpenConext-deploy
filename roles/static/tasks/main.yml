@@ -1,4 +1,7 @@
 ---
+- name: create sync user
+  user: name={{ static.sync_user }} system=yes
+
 - name: create static dir
   file: path=/var/www/static state=directory
 
