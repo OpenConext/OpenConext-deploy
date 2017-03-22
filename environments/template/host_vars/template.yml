@@ -7,6 +7,7 @@ apache_app_listen_address:
   mujina_sp: 127.0.0.1
   serviceregistry: 127.0.0.1
   static: 127.0.0.1
+  metadata: 127.0.0.1
   authzserver: 127.0.0.1
   authz_admin: 127.0.0.1
   authz_playground: 127.0.0.1

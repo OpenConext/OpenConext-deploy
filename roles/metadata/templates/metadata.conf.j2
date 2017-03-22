@@ -1,12 +1,16 @@
-{% if apache_app_listen_address.static is defined %}
-Listen {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}
-<Virtualhost {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}>
+{% if apache_app_listen_address.metadata is defined %}
+Listen {{ apache_app_listen_address.metadata }}:{{ loadbalancing.metadata.port }}
+<Virtualhost {{ apache_app_listen_address.metadata }}:{{ loadbalancing.metadata.port }}>
 {% else %}
 <Virtualhost *:443 >
 {% endif %}
-    ServerName static.{{ base_domain }}:443
+    ServerName metadata.{{ base_domain }}:443
 
-    DocumentRoot {{ static_dir }}
+    DocumentRoot {{ metadata_dir }}
+    <Directory "{{ metadata_dir }}">
+          Require all granted
+    </Directory>
+
 {% if apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
@@ -14,8 +18,8 @@ Listen {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}
     SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
 {% endif %}
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-STATIC'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-STATIC'" combined
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-METADATA'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-METADATA'" combined
     
     {% if haproxy_backend_tls %}
     SSLEngine on

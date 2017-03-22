@@ -73,6 +73,10 @@ vrrp_instance backup {
         {% if static_ipv6 is defined %}
         {{ static_ipv6 }}
         {% endif %}
+        {{ metadata_ip }}
+        {% if metadata_ipv6 is defined %}
+        {{ metadata_ipv6 }}
+        {% endif %}
         {{ bind_ip }}
         {% if bind_ipv6 is defined %}
         {{ bind_ipv6 }}

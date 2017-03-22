@@ -1,0 +1,4 @@
+---
+metadata_dir: "/opt/openconext/metadata/www"
+metadata:
+  sync_user: root

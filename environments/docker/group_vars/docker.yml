@@ -405,6 +405,8 @@ loadbalancing:
     port: 404
   engine_api:
     port: 405
+  metadata:
+    port: 409
   teams:
     port: 601
   authzserver:
@@ -608,6 +610,19 @@ haproxy_applications:
     ha_method: HEAD
     ha_url: /media/alive.txt
     port: 403
+    servers: "{{ php_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
+
+  - name: metadata
+    vhost_name: metadata
+    ip: 127.0.0.1
+    ha_method: HEAD
+    ha_url: /alive.txt
+    port: 409
     servers: "{{ php_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"

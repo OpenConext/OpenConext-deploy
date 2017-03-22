@@ -48,6 +48,7 @@
   roles:
     - { role: php56fpm,                          tags: ['php56fpm'] }
     - { role: static,                            tags: ['static'] }
+    - { role: metadata,                          tags: ['static'] }
     - { role: welcome,                           tags: ['welcome'] }
     - { role: openconext-common,                 tags: ['eb','sr','profile'] }
     - { role: engineblock,                       tags: ['eb'     ] }

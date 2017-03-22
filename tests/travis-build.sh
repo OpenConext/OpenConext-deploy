@@ -18,6 +18,7 @@ docker run --detach                                         \
 	--privileged                                            \
 	--name ansible-test                                     \
 	--add-host static.vm.openconext.org:127.0.0.1           \
+	--add-host metadata.vm.openconext.org:127.0.0.1         \
 	--add-host serviceregistry.vm.openconext.org:127.0.0.1  \
 	--add-host engine.vm.openconext.org:127.0.0.1           \
 	--add-host profile.vm.openconext.org:127.0.0.1          \

@@ -1,0 +1,1 @@
+dummy file to serve as endpoint for haproxy-healthchecks

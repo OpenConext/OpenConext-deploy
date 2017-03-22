@@ -1,3 +1,4 @@
 ---
+static_dir: "/var/www/static"
 static:
   sync_user: root
