@@ -10,6 +10,7 @@
 
 # this is only for the mysqld standalone daemon
 [mysqld]
+tmpdir = /var/lib/mysqltemp
 ssl-ca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }} 
 ssl-key = {{ galera_tls_cert_path }}/{{ galera_server_key_name }}
 ssl-cert = {{ galera_tls_cert_path }}/{{ galera_server_crt_name }} 
