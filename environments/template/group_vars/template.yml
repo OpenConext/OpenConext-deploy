@@ -20,10 +20,10 @@ diy_technicalcontact_name: "Technical Contact"
 diy_technicalcontact_email: "{{ support_email }}"
 
 profile_version: 0.6.0
-teams_version: 4.2.14
+teams_version: 5.0.0
 mujina_version: 4.1.3
 authz_server_version: 1.3.7
-voot_version: 2.0.10
+voot_version: 3.0.0
 authz_admin_version: 2.0.10
 authz_playground_version: 1.4
 pdp_version: 1.2.6
