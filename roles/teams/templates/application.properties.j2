@@ -8,14 +8,14 @@ server.server-header=no
 
 application.version= {{ teams_version }}
 
-datasource.teams.driver-class-name=com.mysql.jdbc.Driver
+datasource.teams.driver-class-name=org.mariadb.jdbc.Driver
 datasource.teams.url=jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
 datasource.teams.username={{ teams.db_user }}
 datasource.teams.password={{ teams.db_password }}
 datasource.teams.validation-query=SELECT 1
 datasource.teams.testWhileIdle=true
 
-datasource.grouper.driver-class-name=com.mysql.jdbc.Driver
+datasource.grouper.driver-class-name=org.mariadb.jdbc.Driver
 datasource.grouper.url=jdbc:mysql://{{ grouper.db_host }}/{{ grouper.database_name }}
 datasource.grouper.username={{ grouper.db_user }}
 datasource.grouper.password={{ grouper.db_password }}
@@ -28,9 +28,9 @@ voot.api.user={{ teams.voot_api_user }}
 voot.api.password={{ external_group_provider_secrets.teams }}
 
 spring.jpa.properties.hibernate.naming-strategy=org.hibernate.cfg.ImprovedNamingStrategy
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDB53Dialect
 
-datasource.groupzy.driver-class-name=com.mysql.jdbc.Driver
+datasource.groupzy.driver-class-name=org.mariadb.jdbc.Driver
 datasource.groupzy.url=jdbc:mysql://localhost/groupzy
 datasource.groupzy.username=groupzy
 datasource.groupzy.password=groupzy
