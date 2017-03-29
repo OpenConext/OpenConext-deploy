@@ -147,6 +147,7 @@ profile_apache_symfony_environment: prod
 engine_profile_idp_certificate: /etc/openconext/engineblock.crt
 
 tomcat_apps:
+  - oidc
 
 # shibboleth
 shibboleth_apps:
