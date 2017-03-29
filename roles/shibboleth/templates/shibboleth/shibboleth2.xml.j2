@@ -70,15 +70,11 @@
                 ssl="sslError.html"
                 localLogout="localLogout.html"
                 globalLogout="globalLogout.html"
-                logoLocation="/shibboleth-sp/logo.jpg"
-                logoLocation2="../coin/media/logo.jpg"
-                styleSheet="https://os.surfconext.nl/css/oauth.css"
-                styleSheet2="https://os.surfconext.nl/css/oauth_ie.css"
-                supportContact="coin-beheer@surfnet.nl"/>
+                supportContact="{{ support_email }}"/>
 
         <MetadataProvider type="XML"
                           uri="https://engine.{{ shib.engine_domain }}/authentication/idp/metadata"
-                          backingFilePath="metadata-surfconext.xml"
+                          backingFilePath="metadata-engine.xml"
                           reloadInterval="3600">
             <MetadataFilter type="RequireValidUntil" maxValidityInterval="172800"/>
         </MetadataProvider>
