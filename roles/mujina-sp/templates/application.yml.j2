@@ -1,0 +1,57 @@
+# The logging configuration.
+logging:
+  config: file://{{ mujina_sp_dir }}/logback.xml
+  level:
+    mujina: DEBUG
+
+server:
+  # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
+  port: {{ springapp_tcpport }}
+  # The context path of the server. You can skip this value in the overriding application.properties on the classpath
+  contextPath:
+  session:
+    # 8 hours before we time-out
+    timeout: 28800
+    cookie:
+      secure: true
+  server-header: no
+
+# Service Provider
+sp:
+  # base url
+  base_url: https://mujina-sp.{{ base_domain }}
+  # Entity ID of the SP
+  entity_id: http://mock-sp
+  # Private key used to sign the SAML response
+  private_key: {{ mujina_sp.private_key }}
+  # Public certificate to verify the signature of the SAML response
+  certificate: {{ mujina_sp.certificate }}
+  # Passphrase of the keystore
+  passphrase: {{ mujina_sp.passphrase }}
+  # Resource URL for the idp metadata
+  idp_metadata_url: https://engine.{{ base_domain }}/authentication/idp/metadata
+  # SingleSignOnServiceLocation
+  single_sign_on_service_location: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
+  # ACS location
+  acs_location_path: /saml/SSO
+  # Protocol binding
+  protocol_binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+  # Do we sign the authnRequest
+  needs_signing: true
+
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  velocity:
+    check-template-location: False
+
+# We disable all endpoints except health for the load-balancer and info for git information.
+endpoints:
+  enabled: false
+  jmx:
+    enabled: false
+  health:
+    enabled: true
+  info:
+    enabled: true

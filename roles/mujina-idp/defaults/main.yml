@@ -1,7 +1,6 @@
-mujina_idp_group_url: org/surfnet/coin
-mujina_idp_artifact_id: mujina-idp
-# needed as default values
-mujina_snapshot_timestamp: ''
-mujina_idp_local_war: ''
-mujina_idp_signing_algorithm: "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
-mujina_idp_random_source: 'file:///dev/urandom'
+---
+mujina_idp_dir: /opt/mujina-idp
+mujina_idp_version: ''
+mujina_idp_snapshot_timestamp: ''
+mujina_idp_local_jar: ''
+mujina_idp_jar: mujina-idp-current.jar

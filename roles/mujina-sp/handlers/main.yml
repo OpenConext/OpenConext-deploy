@@ -1,0 +1,6 @@
+---
+- name: systemctl daemon-reload
+  command: "systemctl daemon-reload"
+
+- name: restart mujina-sp
+  service: name=mujina-sp state=restarted

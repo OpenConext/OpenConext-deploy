@@ -1,14 +1,15 @@
-Listen {{ apache_app_listen_address.mujina_idp }}:{{ loadbalancing.mujina_idp.port }}
-<Virtualhost {{ apache_app_listen_address.mujina_idp }}:{{ loadbalancing.mujina_idp.port }}>
-    ServerName mujina-idp.{{ base_domain }}:443
-    SetEnv HTTPS on
+Listen {{ apache_app_listen_address.mujina_sp }}:{{ loadbalancing.mujina_sp.port }}
+<VirtualHost {{ apache_app_listen_address.mujina_sp }}:{{ loadbalancing.mujina_sp.port }}>
+    ServerName https://mujina-sp.{{ base_domain }}
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Mujina-Idp'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Mujina-Idp'" combined
+    UseCanonicalName On
 
-    # Proxy requests through to Tomcat using AJP
-    ProxyPass / ajp://localhost:8009/ retry=0
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-mujina-sp'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-mujina-sp'" combined
 
+    ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
+    
     {% if haproxy_backend_tls %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
