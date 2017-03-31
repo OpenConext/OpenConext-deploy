@@ -91,5 +91,6 @@
     - { role: pdp,               tags: ['pdp'] }
     - { role: attribute-mapper,  tags: ['attribute-mapper'] }
     - { role: eduproxy,          tags: ['eduproxy'] }
+    - { role: monitoring-tests,  tags: ['monitoring-tests'] }
   handlers:
     - include: roles/httpd/handlers/main.yml

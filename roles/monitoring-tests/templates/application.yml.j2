@@ -1,0 +1,46 @@
+# The logging configuration.
+logging:
+  config: file://{{ monitoring_tests_dir }}/logback.xml
+  level:
+    monitoring: DEBUG
+
+server:
+  # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
+  port: {{ springapp_tcpport }}
+  # The context path of the server. You can skip this value in the overriding application.properties on the classpath
+  contextPath:
+  server-header: no
+
+eb:
+  metadata_base_url: https://engine.{{ base_domain }}
+  mujina_sp_base_url: {{ monitoring_tests.mujina_sp_base_url }}
+  mujina_idp_entity_id: {{ monitoring_tests.mujina_idp_entity_id }}
+  mujina_username: monitor-user
+
+pdp:
+  user: {{ pdp.username }}
+  password: {{ pdp.password }}
+  idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+  sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
+  base_url: https://pdp.{{ base_domain }}
+
+voot:
+  authz_server_base_url: https://authz.{{ base_domain }}
+  voot_base_url: https://voot.{{ base_domain }}
+  client_id: {{ authzplayground.springapp_authz_client_id }}
+  secret: {{ authzplayground_springapp_authz_client_secret }}
+  person_id: {{ monitoring_tests.person_id }}
+
+# We disable all endpoints except health for the actual monitoring and info for git information.
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+    sensitive: false
+  info:
+    enabled: true
+
+security:
+  user:
+    name: {{ monitoring_tests.user }}
+    password: {{ monitoring_tests.password }}

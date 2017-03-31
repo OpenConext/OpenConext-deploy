@@ -1,0 +1,6 @@
+---
+monitoring_tests_dir: /opt/monitoring-tests
+monitoring_tests_version: ''
+monitoring_tests_snapshot_timestamp: ''
+monitoring_tests_local_jar: ''
+monitoring_tests_jar: monitoring-tests-current.jar

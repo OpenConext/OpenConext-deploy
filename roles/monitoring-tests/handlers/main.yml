@@ -1,0 +1,6 @@
+---
+- name: systemctl daemon-reload
+  command: "systemctl daemon-reload"
+
+- name: restart monitoring-tests
+  service: name=monitoring-tests state=restarted

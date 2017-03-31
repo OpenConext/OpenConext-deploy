@@ -13,14 +13,14 @@ server:
     # 8 hours before we time-out
     timeout: 28800
     cookie:
-      secure: true
+      secure: {{ mujina_idp.cookie_secure }}
   server-header: no
 
 # Identity Provider
 idp:
-  entity_id: http://mock-idp
+  entity_id: {{ mujina_idp.entity_id }}
   # base url
-  base_url: https://mujina-idp.{{ base_domain }}
+  base_url: {{ mujina_idp.base_url }}
   # Private key used to sign the SAML response
   private_key: {{ mujina_idp.private_key }}
   # Public certificate to verify the signature of the SAML response
