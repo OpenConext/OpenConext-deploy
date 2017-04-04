@@ -10,6 +10,8 @@ Listen {{ apache_app_listen_address.metadata_exporter }}:{{ loadbalancing.metada
 
     <Location />
         RewriteEngine On
+        RewriteRule /favicon.ico - [R=410]
+
         RewriteCond %{REQUEST_URI} ^/jsError$ [NC]
         RewriteRule ^.*$ - [F,L]
     </Location>
