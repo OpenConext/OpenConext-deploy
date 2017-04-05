@@ -29,6 +29,9 @@
   service: name=memcached enabled=yes state=started
   when: memcached_cluster
 
+- name: Create mysqltmp directory
+  file: dest=/var/lib/mysqltemp state=directory  owner=mysql group=mysql mode=770
+  
 - name: Create directory to keep Galera key material
   file: dest=/etc/pki/mysql/ state=directory owner=root group=root mode=775
   when: galera_ssl
