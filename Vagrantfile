@@ -57,7 +57,7 @@ Vagrant.configure("2") do |config|
     apps_centos7.vm.hostname = "apps.vm.openconext.org"
     apps_centos7.vm.provider :virtualbox do |vb|
       vb.name = "OpenConext Engineblock Apps"
-      vb.customize ["modifyvm", :id, "--memory", "3072"]
+      vb.customize ["modifyvm", :id, "--memory", "4096"]
       vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
 
