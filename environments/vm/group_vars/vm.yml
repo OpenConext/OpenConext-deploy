@@ -353,7 +353,6 @@ authzplayground:
   springapp_oidc_client_id: http@//mock-sp
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
-pdp_version: 1.2.4
 pdp:
   username: "pdp_admin"
   password: "{{ pdp_password }}"
