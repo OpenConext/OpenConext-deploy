@@ -487,7 +487,7 @@ haproxy_applications:
     vhost_name: teams
     ip: 127.0.0.1
     ha_method: GET
-    ha_url: "/media/trans-white.png"
+    ha_url: "/health"
     port: 601
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"

@@ -602,7 +602,7 @@ haproxy_applications:
     vhost_name: "teams"
     ip: 192.168.66.98
     ha_method: GET
-    ha_url: "/media/trans-white.png"
+    ha_url: "/health"
     port: 601
     servers: "{{java_servers}}"
 
@@ -649,8 +649,8 @@ haproxy_applications:
   - name: oidc
     vhost_name: "oidc"
     ip: "192.168.66.98"
-    ha_method: "HEAD"
-    ha_url: "/"
+    ha_method: "GET"
+    ha_url: "/.well-known/openid-configuration"
     port: "614"
     servers: "{{java_servers}}"
 
