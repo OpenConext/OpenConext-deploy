@@ -236,15 +236,15 @@ voot:
     - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
     - {
-        type: "grouper",
-        url: "https://grouper.vm.openconext.org/grouper-ws/services/GrouperService_v2_0",
+        type: "teams",
+        url: "https://teams.vm.openconext.org/api/voot",
         credentials: {
-          username: "{{ ldap_grouper_user }}",
-          secret: "{{ external_group_provider_secrets.grouper }}"
+          username: "{{ teams.voot_api_user }}",
+          secret: "{{ external_group_provider_secrets.teams }}"
         },
-        schacHomeOrganization: "{{ base_domain}}",
+        schacHomeOrganization: "test.surfteams.nl",
         name: "SURFteams",
-        timeoutMillis: 3000
+        timeoutMillis: 15000
       }
 
 ##
