@@ -6,7 +6,7 @@
   template: src=../../templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
   notify:
     - "systemctl daemon-reload"
-    - "restart monitoring-tests"
+    - restart {{ springapp_service_name }}
 
 - name: enable monitoring-tests service
   service: name={{ springapp_service_name }} enabled=yes
