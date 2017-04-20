@@ -3,13 +3,13 @@
   user: name=monitoring-tests system=yes home={{ monitoring_tests_dir }} shell=/sbin/nologin
 
 - name: Copy systemd service file
-  template: src=templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  template: src=../../templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
   notify:
     - "systemctl daemon-reload"
     - "restart monitoring-tests"
 
 - name: enable monitoring-tests service
-  service: name=monitoring-tests enabled=yes
+  service: name={{ springapp_service_name }} enabled=yes
 
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=monitoring-tests group=monitoring-tests mode=0755
@@ -32,4 +32,4 @@
   notify: restart monitoring-tests
 
 - name: ensure the service is started
-  service: name=monitoring-tests enabled=yes state=started
+  service: name={{ springapp_service_name }} enabled=yes state=started
