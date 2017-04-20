@@ -2,5 +2,5 @@
 - name: systemctl daemon-reload
   command: "systemctl daemon-reload"
 
-- name: restart monitoring-tests
-  service: name={{ springapp_service_name }} state=restarted
+- name: restart {{ springapp_service_name }}
+  service: name={{ springapp_service_name }} state=restarted 
