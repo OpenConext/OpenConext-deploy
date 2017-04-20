@@ -2,10 +2,10 @@
 <configuration>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>/var/log/monitoring-tests/monitoring-tests.log</file>
+	  <file>/var/log/{{ springapp_service_name }}/monitoring-tests.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
        <!-- daily rollover -->
-       <fileNamePattern>/var/log/monitoring-tests/monitoring-tests-%d{yyyy-MM-dd}.log</fileNamePattern>
+       <fileNamePattern>/var/log/{{ springapp_service_name }}/monitoring-tests-%d{yyyy-MM-dd}.log</fileNamePattern>
        <maxHistory>30</maxHistory>
      </rollingPolicy>
      <encoder>
