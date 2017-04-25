@@ -40,6 +40,12 @@
 - name: copy engineblock certificates to correct location
   copy: src={{ inventory_dir }}/files/certs/{{ item.value.publicKey }} dest={{ item.value.publicFile }}
   with_dict: "{{ engine_keys }}"
+  when: not engine_crt_not_in_inventory
+
+- name: copy engineblock certificates to correct location when not located in the inventory dir
+  copy: src=files/certs/{{ item.value.publicKey }} dest={{ item.value.publicFile }}
+  with_dict: "{{ engine_keys }}"
+  when: engine_crt_not_in_inventory
 
 - name: Configure EngineBlock
   template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
