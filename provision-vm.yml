@@ -23,7 +23,6 @@
   become: true
   roles:
     - { role: mysql,                   tags: ['mysql'] }
-    - { role: ldap,                    tags: ['ldap'] }
     - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
 
 - hosts: loadbalancer
@@ -53,7 +52,6 @@
     - { role: openconext-common,                 tags: ['eb','sr','profile'] }
     - { role: engineblock,                       tags: ['eb'     ] }
     - { role: janus,                             tags: ['sr'     ] }
-    - { role: vm_only_bootstrap_ldap_attributes, tags: ['ldap'     ] }
     - { role: profile,                           tags: ['profile'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
@@ -68,7 +66,6 @@
     - { role: java,              tags: ['java'] }
     - { role: shibboleth,        tags: ['shib'   ] }
     - { role: metadata-exporter, tags: ['metadata-exporter'] }
-    - { role: grouper,           tags: ['grouper'] }
     - { role: teams,             tags: ['teams'  ] }
     - { role: mujina-idp,        tags: ['legacy' ] }
     - { role: mujina-sp,         tags: ['legacy' ] }

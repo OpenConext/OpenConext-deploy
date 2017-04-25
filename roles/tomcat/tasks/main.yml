@@ -18,8 +18,6 @@
     - ajp.conf
   notify: restart tomcat
 
-- debug: var=ldap_grouper_user
-
 - name: Create directory for application config
   file: state=directory path={{ tomcat_install_dir }}/{{ tomcat_properties_dir }} owner=tomcat group=tomcat
   tags: tomcat
@@ -42,7 +40,6 @@
   template: src={{ item }}.j2 dest={{ tomcat_install_dir }}/{{ item }}
   with_items:
     - catalina.properties
-    - tomcat-users.xml
   notify: restart tomcat
   tags: tomcat
 

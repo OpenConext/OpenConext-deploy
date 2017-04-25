@@ -47,7 +47,6 @@
   become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
-    - { role: ldap,  tags: ['ldap' ], when: not minimal_install }
     - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
 
 - hosts: php-apps
@@ -63,7 +62,6 @@
     - { role: openconext-common, tags: ['eb','sr','profile'] }
     - { role: engineblock,       tags: ['eb'      ] }
     - { role: profile,           tags: ['profile' ] }
-    - { role: vm_only_bootstrap_ldap_attributes, tags: [ 'ldap_bootstrap' ], when: not minimal_install }
     - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
   handlers:
@@ -78,7 +76,6 @@
     - { role: java,             tags: ['java'], when: not minimal_install }
     - { role: tomcat,         tags: ['tomcat' ], when: not minimal_install }
     - { role: shibboleth,       tags: ['shib'   ], when: not minimal_install }
-    - { role: grouper,          tags: ['grouper'], when: not minimal_install }
     - { role: teams,            tags: ['teams'  ], when: not minimal_install }
     - { role: mujina-idp,       tags: ['legacy','mujina' ], when: not minimal_install }
     - { role: mujina-sp,        tags: ['legacy','mujina' ], when: not minimal_install }

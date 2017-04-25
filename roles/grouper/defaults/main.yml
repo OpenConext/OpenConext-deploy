@@ -1,9 +1,0 @@
----
-grouper_ldap_host: ldap.{{ base_domain }}
-grouper_source_ldap_id: "openconext-ldap"
-grouper_source_ldap_name: "OpenConext LDAP"
-grouper_source_applications_id: "applications"
-grouper_source_applications_name: "OpenConext Applications"
-grouper_random_source: "file:///dev/urandom"
-ldap_ro_password: "{{ ldap_password }}"
-

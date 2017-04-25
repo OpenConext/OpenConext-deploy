@@ -39,7 +39,6 @@
   become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
-    - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: dbcluster
   gather_facts: yes
@@ -91,7 +90,6 @@
   vars:
     env_lang: java
   roles:
-    - { role: grouper,          tags: ['grouper'] }
     - { role: teams,            tags: ['teams'  ] }
     - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }

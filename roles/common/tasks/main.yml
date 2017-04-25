@@ -16,7 +16,6 @@
      - telnet
      - sudo
      - lynx
-     - openldap-clients
      - ntp
      - unzip
      - libselinux-python

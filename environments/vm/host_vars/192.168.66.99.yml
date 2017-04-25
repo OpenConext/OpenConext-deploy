@@ -6,7 +6,6 @@ apache_app_listen_address:
   authzserver: 192.168.66.99
   authz_admin: 192.168.66.99
   authz_playground: 192.168.66.99
-  grouper: 192.168.66.99
   mujina_idp: 192.168.66.99
   mujina_sp: 192.168.66.99
   serviceregistry: 192.168.66.99

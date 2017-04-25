@@ -40,7 +40,6 @@ databases:
     - teams
     - "{{ engine_database_name }}"
     - "{{ janus_database_name }}"
-    - grouper
     - authz-server
     - pdp-server
     - oidc-server
@@ -49,7 +48,6 @@ databases:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
     - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
-    - { name: grouperrw, db_name: grouper, password: "{{ mysql_passwords.grouper }}" }
     - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
@@ -83,13 +81,8 @@ engine_database_port: 3306
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
-engine_ldap_host: ldap.{{ base_domain }}
-engine_ldap_bind_dn: "cn=engine,{{ ldap_suffix }}"
 engine_apache_environment: test
 engine_apache_symfony_environment: prod
-
-ldap_admin_user: "cn=admin,{{ ldap_suffix }}"
-ldap_grouper_user: gadget
 
 janus_database_name: sr
 janus_database_host: "{{ mysql_host }}"
@@ -135,9 +128,6 @@ shibboleth_apps:
   teams:
     entityID: "https://teams.{{ base_domain }}/shibboleth"
     baseurl: ""
-  grouper:
-    entityID: "https://grouper.{{ base_domain }}/grouper/shibboleth"
-    baseurl: "/grouper"
   authz:
     entityID: "https://authz.{{ base_domain }}/shibboleth"
     baseurl: ""
@@ -164,17 +154,6 @@ teams:
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
-
-grouper:
-  db_user: grouperrw
-  db_host: "{{ mysql_host }}"
-  db_password: "{{ mysql_passwords.grouper }}"
-  database_name: grouper
-
-ldap_org: "openconext"
-ldap_suffix: "dc=openconext,dc=org"
-ldap_user: "cn=ro,{{ ldap_suffix }}"
-ldap_grouper_engine_user: engine
 
 mujina_idp:
   private_key: "{{ mujina_idp_private_key }}"
@@ -210,11 +189,11 @@ voot:
     - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
     - {
-        type: "grouper",
-        url: "https://grouper.{{ base_domain }}/grouper-ws/services/GrouperService_v2_0",
+        type: "teams",
+        url: "https://teams.{{ base_domain }}/api/voot",
         credentials: {
-          username: "{{ ldap_grouper_user }}",
-          secret: "{{ external_group_provider_secrets.grouper }}"
+         username: "{{ teams.voot_api_user }}",
+         secret: "{{ external_group_provider_secrets.teams }}"
         },
         schacHomeOrganization: "{{ base_domain}}",
         name: "SURFteams",
@@ -430,9 +409,6 @@ loadbalancing:
   metadata_exporter:
     port: 616
 
-  grouper:
-    port: 606
-
   mujina_sp:
     port: 607
 
@@ -562,14 +538,6 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/health"
     port: "616"
-    servers: "{{java_servers}}"
-
-  - name: grouper
-    vhost_name: "grouper"
-    ip: "{{ ansible_default_ipv4 }}"
-    ha_method: "GET"
-    ha_url: "/grouper-ws/status?diagnosticType=db"
-    port: "606"
     servers: "{{java_servers}}"
 
   - name: mujina-sp

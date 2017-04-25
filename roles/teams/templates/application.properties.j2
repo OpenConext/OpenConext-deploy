@@ -16,9 +16,9 @@ datasource.teams.validation-query=SELECT 1
 datasource.teams.testWhileIdle=true
 
 datasource.grouper.driver-class-name=org.mariadb.jdbc.Driver
-datasource.grouper.url=jdbc:mysql://{{ grouper.db_host }}/{{ grouper.database_name }}
-datasource.grouper.username={{ grouper.db_user }}
-datasource.grouper.password={{ grouper.db_password }}
+datasource.grouper.url=jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
+datasource.grouper.username={{ teams.db_user }}
+datasource.grouper.password={{ teams.db_password }}
 datasource.grouper.validation-query=SELECT 1
 datasource.grouper.testWhileIdle=true
 
@@ -37,16 +37,8 @@ datasource.groupzy.password=groupzy
 datasource.groupzy.validation-query=SELECT 1
 datasource.groupzy.testWhileIdle=true
 
-ldap.url=ldap://ldap.{{ base_domain }}:389
-ldap.base={{ ldap_suffix }}
-ldap.userDn={{ engine_ldap_bind_dn }}
-ldap.password={{ engine_ldap_password }}
-provision.users={{ teams_provision_users }}
-
 #the stem name to find all groups
 defaultStemName=nl:surfnet:diensten
-
-grouperPowerUser=GrouperSystem
 
 # App id displayed in the updates / invites section of the portal
 appId={{ instance_name }} Teams
