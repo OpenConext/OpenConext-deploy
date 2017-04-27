@@ -67,7 +67,7 @@ When the script is done, wait a little while to let all services come up and ini
 These are the steps the above script performs:
 
 1. Setup a Vagrant VM and will make sure the HOSTS file is able to handle the defined base_domain
-2. Setup a MySQL server and LDAP for storage.
+2. Setup a MySQL server.
 3. Inserts entities and metadata in Janus and initial load of engineblock to bootstrap.
 4. Install all Java apps for the openconext platform.
 5. Install all PHP apps for the openconext platform.

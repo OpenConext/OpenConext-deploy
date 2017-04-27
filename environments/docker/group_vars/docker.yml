@@ -105,7 +105,6 @@ engine_database_password: "{{ mysql_passwords.eb }}"
 
 engine_apache_environment: vm
 engine_apache_symfony_environment: prod
-engine_feature_ldap_integration: 0
 
 janus_database_name: sr
 janus_database_host: localhost

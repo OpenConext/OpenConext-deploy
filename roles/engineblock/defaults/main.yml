@@ -4,7 +4,6 @@ engine_version: ''
 #engine_branch: "develop"
 
 # Feature toggles
-engine_feature_ldap_integration: 0
 engine_feature_encrypted_assertions: 1
 engine_feature_encrypted_assertions_require_outer_signature: 1
 engine_feature_run_all_manipulations_prior_to_consent: 0
