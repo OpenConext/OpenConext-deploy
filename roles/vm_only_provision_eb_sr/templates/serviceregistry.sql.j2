@@ -336,7 +336,6 @@ INSERT INTO `janus__hasConnection` (`uid`, `eid`, `created`, `ip`) VALUES (1,9,'
 {% if ( not minimal_install ) %}
 INSERT INTO `janus__hasConnection` (`uid`, `eid`, `created`, `ip`) VALUES (1,6,'2012-06-12T13:07:17+02:00','172.18.5.1');
 INSERT INTO `janus__hasConnection` (`uid`, `eid`, `created`, `ip`) VALUES (1,7,'2012-06-12T13:07:26+02:00','172.18.5.1');
-INSERT INTO `janus__hasConnection` (`uid`, `eid`, `created`, `ip`) VALUES (3,10,'2012-06-19T09:43:48+02:00','172.18.5.1');
 INSERT INTO `janus__hasConnection` (`uid`, `eid`, `created`, `ip`) VALUES (3,11,'2012-06-25T16:34:29+02:00','172.18.5.1');
 INSERT INTO `janus__hasConnection` (`uid`, `eid`, `created`, `ip`) VALUES (4,18,'2015-11-20T09:24:51+01:00','192.168.66.78');
 {% endif %}
@@ -574,33 +573,6 @@ INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`
 INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (7,'NameIDFormats:2','urn:oasis:names:tc:SAML:2.0:nameid-format:persistent','2012-11-28T17:27:02+01:00','192.168.56.1');
 INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (7,'redirect.sign','','2012-06-13T08:02:29+02:00','172.18.5.1');
 {% if ( not minimal_install ) %}
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'AssertionConsumerService:0:Binding','urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:0:contactType','technical','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:0:emailAddress','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:0:givenName','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:0:surName','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:1:contactType','technical','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:1:emailAddress','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:1:givenName','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:1:surName','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:2:contactType','technical','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:2:emailAddress','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:2:givenName','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'contacts:2:surName','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'description:en','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'description:nl','','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'displayName:en','{{ instance_name }} Grouper','2012-06-27T13:24:02+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'displayName:nl','{{ instance_name }} Grouper','2012-06-27T13:24:02+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'logo:0:height','60','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'logo:0:url','https://.png','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'logo:0:width','120','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'name:en','{{ instance_name }} Grouper','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'name:nl','{{ instance_name }} Grouper','2012-06-19T09:44:38+02:00','172.18.5.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'NameIDFormat','urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified','2012-11-28T17:27:02+01:00','192.168.56.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'NameIDFormats:0','urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified','2012-11-28T17:27:02+01:00','192.168.56.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'NameIDFormats:1','urn:oasis:names:tc:SAML:2.0:nameid-format:transient','2012-11-28T17:27:02+01:00','192.168.56.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'NameIDFormats:2','urn:oasis:names:tc:SAML:2.0:nameid-format:persistent','2012-11-28T17:27:02+01:00','192.168.56.1');
-INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (8,'redirect.sign','','2012-06-19T09:44:38+02:00','172.18.5.1');
 INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (9,'AssertionConsumerService:0:Binding','urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST','2012-06-25T16:42:04+02:00','172.18.5.1');
 INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (9,'AssertionConsumerService:0:Location','https://teams.{{ base_domain }}/Shibboleth.sso/SAML2/POST','2012-06-25T16:42:04+02:00','172.18.5.1');
 INSERT INTO `janus__metadata` (`connectionRevisionId`, `key`, `value`, `created`, `ip`) VALUES (9,'coin:gadgetbaseurl','https://teams.{{ base_domain }}/.*','2012-06-25T16:42:04+02:00','172.18.5.1');
