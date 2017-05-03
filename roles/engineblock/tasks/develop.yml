@@ -28,3 +28,20 @@
     owner={{ engine_fpm_user  }}
     group={{ engine_fpm_user }}
     recurse=yes
+
+- name: Ensure setfacl support is present.
+  package: name=acl state=present
+
+- name: Allow vagrant user complete access to all engineblock files
+  become: true
+  acl:
+    entity: vagrant
+    default: "{{ item }}"
+    path: /opt/openconext/OpenConext-engineblock/
+    etype: user
+    permissions: rwx
+    recursive: yes
+    state: present
+  with_items:
+    - "no"
+    - "yes"
