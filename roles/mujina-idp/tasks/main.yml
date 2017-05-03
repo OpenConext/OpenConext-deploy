@@ -20,7 +20,7 @@
   file: path=/etc/init.d/{{ springapp_service_name }} state=absent
 
 - name: enable mujina-idp service
-  service: name=mujina-idp enabled=yes
+  service: name={{ springapp_service_name }} enabled=yes
 
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=mujina-idp group=mujina-idp mode=0755
@@ -50,4 +50,4 @@
   notify: reload httpd
 
 - name: ensure the service is started
-  service: name=mujina-idp enabled=yes state=started
+  service: name={{ springapp_service_name }} enabled=yes state=started
