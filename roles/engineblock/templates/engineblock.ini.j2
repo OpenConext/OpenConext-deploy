@@ -21,6 +21,10 @@ engineApi.features.metadataApi = {{ engine_api_feature_metadata_api }}
 ; Unfiltered IdPs on the WAYF are hidden if there are more IdPs than the cutoff point
 wayf.cutoffPointForShowingUnfilteredIdps = {{ engine_wayf_cutoff_point_for_showing_unfiltered_idps }}
 
+; Whether or not the LDAP should be used as secondary backend for the UserDirectory
+; (database is considered primary).
+engineblock.feature.ldap_integration = {{ engine_feature_ldap_integration }}
+
 ;; EngineBlock response capability feature toggles (on, safe by default)
 engineblock.feature.encrypted_assertions = {{ engine_feature_encrypted_assertions }}
 engineblock.feature.encrypted_assertions_require_outer_signature = {{ engine_feature_encrypted_assertions_require_outer_signature }}
@@ -63,6 +67,13 @@ encryption.keys.{{ key }}.privateFile = {{ value.privateFile }}
 encryption.keys.{{ key }}.publicFile = {{ value.publicFile }}
 {% endfor %}
 
+{% endif %}
+
+{% if engine_feature_ldap_integration%}
+ldap.host = {{ engine_ldap_host }}
+ldap.password = "{{ engine_ldap_password }}"
+ldap.userName = "{{ engine_ldap_bind_dn }}"
+ldap.baseDn = "{{ ldap_suffix }}"
 {% endif %}
 
 {% for repository in engine_block.metadataRepositories %}

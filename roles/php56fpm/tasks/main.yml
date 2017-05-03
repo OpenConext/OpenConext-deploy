@@ -21,6 +21,7 @@
   - php-cli
   - php-pecl-apcu
   - php-curl
+  - php-ldap
   - php-mbstring
   - php-mcrypt
   - php-mysql
