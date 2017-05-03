@@ -79,7 +79,7 @@ Vagrant.configure("2") do |config|
         }
       end
 
-      apps_centos7.vm.provision :shell, run: "always", path: "scripts/prep-dev-env.sh"
+      apps_centos7.vm.provision :shell, privileged: false, run: "always", path: "scripts/prep-dev-env.sh"
     end
 
   end
