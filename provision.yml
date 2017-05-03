@@ -78,7 +78,6 @@
   vars:
     env_lang: java
   roles:
-    - { role: tomcat,           tags: ['tomcat' ] }
     - { role: java,             tags: ['java' ] }
     - { role: shibboleth,       tags: ['shib'   ] }
   handlers:
@@ -107,6 +106,7 @@
   vars:
     env_lang: java
   roles:
+    - { role: tomcat,           tags: ['tomcat' ] }
     - { role: oidc,            tags: ['oidc' ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
