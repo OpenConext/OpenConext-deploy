@@ -23,7 +23,7 @@
   service: name={{ springapp_service_name }} enabled=yes
 
 - name: Create logging directory
-  file: path=/var/log/{{ springapp_service_name }} state=directory owner=mujina-idp group=mujina-idp mode=0755
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner={{ springapp_user }} group={{ springapp_user }} mode=0755
 
 - include: ../../../tasks/springbootapp/install-release.yml
   when: "mujina_idp_snapshot_timestamp == '' and mujina_idp_local_jar == ''"
@@ -35,11 +35,11 @@
   when: "mujina_idp_local_jar != ''"
 
 - name: Copy logging config
-  template: src=logback.xml.j2 dest={{ mujina_idp_dir }}/logback.xml owner=mujina-idp group=mujina-idp mode=0740
+  template: src=logback.xml.j2 dest={{ mujina_idp_dir }}/logback.xml owner={{ springapp_user }} group={{ springapp_user }} mode=0740
   notify: restart mujina-idp
 
 - name: Copy application config
-  template: src=application.yml.j2 dest={{ mujina_idp_dir }}/application.yml owner=mujina-idp group=mujina-idp mode=0740
+  template: src=application.yml.j2 dest={{ mujina_idp_dir }}/application.yml owner={{ springapp_user }} group={{ springapp_user }} mode=0740
   notify: restart mujina-idp
 
 - name: remove old apache config
