@@ -61,7 +61,6 @@
 # This should always run before any scripts run, it ensures that the env specific
 # configuration is loaded correctly.
 - name: Prepare EngineBlock5 environment
-  become: yes
   command: composer prepare-env
   args:
       chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
@@ -86,6 +85,8 @@
 
 - name: Make sure cache dir has correct permissions
   file: path={{engine_current_release_symlink}}/app/cache owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
+  when: not develop
 
 - name: Make sure log dir has correct permissions
   file: path={{engine_current_release_symlink}}/app/logs owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
+  when: not develop

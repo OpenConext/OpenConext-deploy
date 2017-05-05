@@ -28,6 +28,7 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "https://build.openconext.org/vagrant_boxes/virtualbox-centos7.box"
 
   config.vm.define "lb_centos7" do |lb_centos7|
+    lb_centos7.vm.synced_folder ".", "/vagrant", :nfs => true
     lb_centos7.vm.network :private_network, ip: "192.168.66.98"
     lb_centos7.vm.hostname = "lb.vm.openconext.org"
     lb_centos7.vm.provider :virtualbox do |vb|
@@ -62,7 +63,8 @@ Vagrant.configure("2") do |config|
     end
 
     if development
-      apps_centos7.vm.synced_folder "../OpenConext-engineblock", "/opt/openconext/OpenConext-engineblock"
+      apps_centos7.vm.synced_folder ".", "/vagrant", :nfs => true
+      apps_centos7.vm.synced_folder "../OpenConext-engineblock", "/opt/openconext/OpenConext-engineblock", :nfs => true
 
       apps_centos7.vm.provision :ansible do |ansible|
         ansible.limit = ["php-apps", "java-apps", "storage"]
@@ -77,8 +79,7 @@ Vagrant.configure("2") do |config|
         }
       end
 
-      apps_centos7.vm.provision :shell, run: "always", inline: "mount -t vboxsf -o uid=engine,gid=engine opt_openconext_OpenConext-engineblock /opt/openconext/OpenConext-engineblock"
-      apps_centos7.vm.provision :shell, run: "always", path: "scripts/prep-dev-env.sh"
+      apps_centos7.vm.provision :shell, privileged: false, run: "always", path: "scripts/prep-dev-env.sh"
     end
 
   end
