@@ -17,7 +17,7 @@ spring.datasource.testWhileIdle=true
 
 flyway.enabled=false
 
-metadata.refresh.minutes=15
+metadata.refresh.minutes={{ metadata_exporter_refresh_minutes }}
 
 client.username=metadata.client
 client.password={{ metadata_exporter_password }}
