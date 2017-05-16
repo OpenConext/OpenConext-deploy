@@ -21,6 +21,10 @@
      - unzip
      - libselinux-python
 
+- name: Install git on development vm
+  yum: name=git state=present
+  when: develop
+
 # TODO: proper SElinux support.  Would require at least to explicitly open up
 # all non-standard apache ports (9876, loadbalancing.engine.port, etc)
 # we don't use the standard ansible selinux module, because it is way to
