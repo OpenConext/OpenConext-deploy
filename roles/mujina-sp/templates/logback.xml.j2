@@ -2,16 +2,17 @@
 <configuration>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>/var/log/mujina-sp/mujina-sp.log</file>
+	  <file>/var/log/{{ springapp_service_name }}/{{ springapp_service_name }}.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
        <!-- daily rollover -->
-       <fileNamePattern>/var/log/mujina-sp/mujina-sp-%d{yyyy-MM-dd}.log</fileNamePattern>
+       <fileNamePattern>/var/log/{{ springapp_service_name }}/{{ springapp_service_name }}-%d{yyyy-MM-dd}.log</fileNamePattern>
        <maxHistory>30</maxHistory>
      </rollingPolicy>
      <encoder>
        <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
      </encoder>
   </appender>
+
   <logger name="mujina" level="DEBUG"/>
 
   <root level="INFO">

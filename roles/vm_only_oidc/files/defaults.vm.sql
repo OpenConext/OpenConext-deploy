@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS client_contact (
   owner_id BIGINT,
   contact VARCHAR(256)
 );
-REPLACE INTO `client_contact` VALUES (1,'j.doe@example.com');
+REPLACE INTO `client_contact`(owner_id,contact) VALUES (1,'j.doe@example.com');
 
 CREATE TABLE IF NOT EXISTS client_details (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -60,17 +60,17 @@ CREATE TABLE IF NOT EXISTS client_grant_type (
   owner_id BIGINT,
   grant_type VARCHAR(2000)
 );
-REPLACE INTO `client_grant_type` VALUES (1,'client_credentials'),(1,'implicit'),(1,'authorization_code');
+REPLACE INTO `client_grant_type`(owner_id,grant_type) VALUES (1,'client_credentials'),(1,'implicit'),(1,'authorization_code');
 
 CREATE TABLE IF NOT EXISTS client_response_type (
   owner_id BIGINT,
   response_type VARCHAR(2000)
 );
-REPLACE INTO `client_response_type` VALUES (1,'token'),(1,'code');
+REPLACE INTO `client_response_type`(owner_id,response_type) VALUES (1,'token'),(1,'code');
 
 CREATE TABLE IF NOT EXISTS client_scope (
   owner_id BIGINT,
   scope VARCHAR(2048)
 );
-REPLACE INTO `client_scope` VALUES (1,'phone'),(1,'organization'),(1,'email'),(1,'address'),(1,'openid'),(1,'userids'),(1,'entitlement'),(1,'profile'),(1,'members'),(1,'groups');
+REPLACE INTO `client_scope`(owner_id,scope) VALUES (1,'phone'),(1,'organization'),(1,'email'),(1,'address'),(1,'openid'),(1,'userids'),(1,'entitlement'),(1,'profile'),(1,'members'),(1,'groups');
 

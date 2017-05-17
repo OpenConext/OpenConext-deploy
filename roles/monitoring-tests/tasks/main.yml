@@ -1,12 +1,12 @@
 ---
 - name: Create user
-  user: name=monitoring-tests system=yes home={{ monitoring_tests_dir }} shell=/sbin/nologin
+  user: name={{ springapp_user }} system=yes home={{ monitoring_tests_dir }} shell=/sbin/nologin
 
 - name: Copy systemd service file
   template: src=../../templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
   notify:
     - "systemctl daemon-reload"
-    - restart {{ springapp_service_name }}
+    - restart monitoring-tests
 
 - name: enable monitoring-tests service
   service: name={{ springapp_service_name }} enabled=yes

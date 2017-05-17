@@ -1,6 +1,6 @@
 ---
 - name: Create user
-  user: name=mujina-sp system=yes home={{ mujina_sp_dir }} shell=/sbin/nologin
+  user: name={{ springapp_user }} system=yes home={{ mujina_sp_dir }} shell=/sbin/nologin
 
 - name: Copy systemd service file
   template: src=../../templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
@@ -20,10 +20,10 @@
   file: path=/etc/init.d/{{ springapp_service_name }} state=absent
 
 - name: enable mujina-sp service
-  service: name=mujina-sp enabled=yes
+  service: name={{ springapp_service_name}} enabled=yes
 
 - name: Create logging directory
-  file: path=/var/log/{{ springapp_service_name }} state=directory owner=mujina-sp group=mujina-sp mode=0755
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner={{ springapp_user }} group={{ springapp_user }} mode=0755
 
 - include: ../../../tasks/springbootapp/install-release.yml
   when: "mujina_sp_snapshot_timestamp == '' and mujina_sp_local_jar == ''"
@@ -35,11 +35,11 @@
   when: "mujina_sp_local_jar != ''"
 
 - name: Copy logging config
-  template: src=logback.xml.j2 dest={{ mujina_sp_dir }}/logback.xml owner=mujina-sp group=mujina-sp mode=0740
+  template: src=logback.xml.j2 dest={{ mujina_sp_dir }}/logback.xml owner={{ springapp_user }} group={{ springapp_user }} mode=0740
   notify: restart mujina-sp
 
 - name: Copy application config
-  template: src=application.yml.j2 dest={{ mujina_sp_dir }}/application.yml owner=mujina-sp group=mujina-sp mode=0740
+  template: src=application.yml.j2 dest={{ mujina_sp_dir }}/application.yml owner={{ springapp_user }} group={{ springapp_user }} mode=0740
   notify: restart mujina-sp
 
 - name: remove old apache config
@@ -50,4 +50,4 @@
   notify: reload httpd
 
 - name: ensure the service is started
-  service: name=mujina-sp enabled=yes state=started
+  service: name={{ springapp_service_name }} enabled=yes state=started

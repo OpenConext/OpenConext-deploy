@@ -48,11 +48,6 @@
   notify: restart tomcat
   tags: tomcat
 
-- name: Copy sysconfig tomcat
-  template: src=tomcat6.conf.j2 dest={{ tomcat_install_dir }}/tomcat6.conf
-  notify: restart tomcat
-  tags: tomcat
-
 - name: Unused webapps dir must still be present
   file: path={{ tomcat.lib_dir }}/webapps state=directory group=tomcat owner=tomcat
   tags: tomcat

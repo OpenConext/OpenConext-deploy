@@ -74,7 +74,6 @@
     env_lang: java
   roles:
     - { role: java,             tags: ['java'], when: not minimal_install }
-    - { role: tomcat,         tags: ['tomcat' ], when: not minimal_install }
     - { role: shibboleth,       tags: ['shib'   ], when: not minimal_install }
     - { role: teams,            tags: ['teams'  ], when: not minimal_install }
     - { role: mujina-idp,       tags: ['legacy','mujina' ], when: not minimal_install }
