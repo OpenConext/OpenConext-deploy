@@ -1,0 +1,13 @@
+springapp_artifact_id: teams
+springapp_artifact_type: jar
+springapp_artifact_group_dir: /org/openconext
+springapp_version: "{{ teams_server_version }}"
+springapp_snapshot_timestamp: "{{ teams_server_snapshot_timestamp }}"
+springapp_dir: "{{ teams_dir }}"
+springapp_user: teams
+springapp_service_name: teams
+springapp_jar: "{{ teams_jar }}"
+springapp_tcpport: 9197
+springapp_local_jar: "{{ teams_local_jar }}"
+springapp_heapsize: "256m"
+springapp_random_source: "file:///dev/urandom"

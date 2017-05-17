@@ -1,0 +1,49 @@
+---
+- name: create user
+  user: name=teams system=yes home={{ teams_dir }} shell=/sbin/nologin
+
+- name: Copy systemd service file
+  template: src=../../templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  notify:
+    - "systemctl daemon-reload"
+    - "restart teams"
+
+- name: enable service
+  service: name=teams enabled=yes
+
+- name: Create logging directory
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner=teams group=teams mode=0755
+
+- include: ../../../tasks/springbootapp/install-release.yml
+  when: "teams_snapshot_timestamp == '' and teams_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-snapshot.yml
+  when: "teams_snapshot_timestamp != '' and teams_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-local.yml
+  when: "teams_local_jar != ''"
+
+- name: copy logging config
+  template: src=logback.xml.j2 dest={{ teams_dir }}/logback.xml owner=teams group=teams mode=0740
+  notify: restart teams
+
+- name: copy application config
+  template: src=application.yml.j2 dest={{ teams_dir }}/application.yml owner=teams group=teams mode=0740
+  notify: restart teams
+
+# no idea why this is necessary, as the init script returns an ok status also
+# if teams is still initializing.  Waiting for the port to open works well
+# though, and seems like to correct way to handle this.
+- name: start the teams service
+  service: name=teams state=started enabled=yes
+  ignore_errors: true
+
+- name: wait for teams to start
+  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
+
+- name: ensure the service is started
+  service: name=teams enabled=yes state=started
+
+- name: cleanup old jars
+  shell: find . ! -name $(basename $(readlink teams-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ teams_dir }}
+  when: (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
