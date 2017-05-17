@@ -61,7 +61,7 @@
 # This should always run before any scripts run, it ensures that the env specific
 # configuration is loaded correctly.
 - name: Prepare EngineBlock5 environment
-  command: composer prepare-env
+  shell: SYMFONY_ENV=prod composer prepare-env
   args:
       chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   changed_when: False
