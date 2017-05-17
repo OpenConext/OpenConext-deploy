@@ -100,14 +100,8 @@ engine_database_port: 3306
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
-engine_ldap_host: localhost
-engine_ldap_bind_dn: "cn=engine,dc=surfconext,dc=nl"
 engine_apache_environment: vm
 engine_apache_symfony_environment: prod
-engine_feature_ldap_integration: 0
-
-ldap_suffix: "dc=surfconext,dc=nl"
-ldap_admin_user: cn=admin,dc=surfconext,dc=nl
 
 janus_database_name: sr
 janus_database_host: localhost
@@ -180,9 +174,6 @@ engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 
-
-ldap_user: cn=ro,dc=surfconext,dc=nl
-ldap_grouper_engine_user: engine
 
 mujina_idp:
   private_key: "{{ mujina_idp_private_key }}"
