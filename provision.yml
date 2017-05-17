@@ -40,7 +40,6 @@
   become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
-    - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: dbcluster
   gather_facts: yes
@@ -80,7 +79,6 @@
   vars:
     env_lang: java
   roles:
-    - { role: tomcat,           tags: ['tomcat' ] }
     - { role: java,             tags: ['java' ] }
     - { role: shibboleth,       tags: ['shib'   ] }
   handlers:
@@ -92,7 +90,6 @@
   vars:
     env_lang: java
   roles:
-    - { role: grouper,          tags: ['grouper'] }
     - { role: teams,            tags: ['teams'  ] }
     - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
@@ -110,6 +107,7 @@
   vars:
     env_lang: java
   roles:
+    - { role: tomcat,           tags: ['tomcat' ] }
     - { role: oidc,            tags: ['oidc' ] }
   handlers:
     - include: roles/httpd/handlers/main.yml

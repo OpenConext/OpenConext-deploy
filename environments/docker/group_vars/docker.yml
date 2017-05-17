@@ -33,7 +33,6 @@ databases:
     - api
     - "{{ engine_database_name }}"
     - "{{ janus_database_name }}"
-    - grouper
     - authz-server
     - pdp-server
     - oidc-server
@@ -42,18 +41,12 @@ databases:
     - name: teamsrw
       db_name: teams
       password: "{{ mysql_passwords.teams }}"
-    - name: apirw
-      db_name: api
-      password: "{{ mysql_passwords.api }}"
     - name: "{{ engine_database_user }}"
       db_name: "{{ engine_database_name }}"
       password: "{{ mysql_passwords.eb }}"
     - name: "{{ janus_database_user }}"
       db_name: "{{ janus_database_name }}"
       password: "{{ mysql_passwords.sr }}"
-    - name: grouperrw
-      db_name: grouper
-      password: "{{ mysql_passwords.grouper }}"
     - name: authz-serverrw
       db_name: authz-server
       password: "{{ mysql_passwords.authz_server }}"
@@ -115,8 +108,6 @@ engine_feature_ldap_integration: 0
 
 ldap_suffix: "dc=surfconext,dc=nl"
 ldap_admin_user: cn=admin,dc=surfconext,dc=nl
-ldap_grouper_user: gadget
-grouper_ldap_host: localhost
 
 janus_database_name: sr
 janus_database_host: localhost
@@ -155,9 +146,6 @@ shibboleth_apps:
   teams:
     entityID: "https://teams.{{ base_domain }}/shibboleth"
     baseurl: ""
-  grouper:
-    entityID: "https://grouper.{{ base_domain }}/grouper/shibboleth"
-    baseurl: "/grouper"
   authz:
     entityID: "https://authz.{{ base_domain }}/shibboleth"
     baseurl: ""
@@ -192,15 +180,6 @@ engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 
-
-##
-# VM config for the grouper app
-##
-grouper:
-  db_user: grouperrw
-  db_host: "{{ mysql_host }}"
-  db_password: "{{ mysql_passwords.grouper }}"
-  database_name: grouper
 
 ldap_user: cn=ro,dc=surfconext,dc=nl
 ldap_grouper_engine_user: engine
@@ -439,8 +418,6 @@ loadbalancing:
     port: 604
   voot:
     port: 605
-  grouper:
-    port: 606
   mujina_sp:
     port: 607
   mujina_idp:
@@ -554,19 +531,6 @@ haproxy_applications:
     ha_method: GET
     ha_url: "/health"
     port: 615
-    servers: "{{ java_servers }}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
-    sslbackend: yes
-    backend_vhost_name: backend.{{ base_domain }}
-    backend_ca_file: "{{ tls_backend_ca }}"
-  
-  - name: grouper
-    vhost_name: grouper
-    ip: 127.0.0.1
-    ha_method: GET
-    ha_url: "/grouper-ws/status?diagnosticType=db"
-    port: 606
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"

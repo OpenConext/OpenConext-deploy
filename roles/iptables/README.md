@@ -12,7 +12,6 @@ The following lists can be used;
 * iptables_incoming_java
 * iptables_incoming_db_cluster
 * iptables_incoming_db
-* iptables_incoming_ldap 
 
 A list looks like this:
 ```
@@ -45,6 +44,5 @@ Rules for ip6tables can be made as well. The corresponding variables are:
 * ip6tables_incoming_java
 * ip6tables_incoming_db_cluster
 * ip6tables_incoming_db
-* ip6tables_incoming_ldap
 
 

@@ -3,7 +3,6 @@ apache_app_listen_address:
   authzserver: 127.0.0.1
   authz_admin: 127.0.0.1
   authz_playground: 127.0.0.1
-  grouper: 127.0.0.1
   mujina_idp: 127.0.0.1
   mujina_sp: 127.0.0.1
   teams: 127.0.0.1

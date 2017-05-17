@@ -11,7 +11,6 @@ apache_app_listen_address:
   authzserver: 127.0.0.1
   authz_admin: 127.0.0.1
   authz_playground: 127.0.0.1
-  grouper: 127.0.0.1
   teams: 127.0.0.1
   voot: 127.0.0.1
   pdp: 127.0.0.1

@@ -1,5 +1,10 @@
+{% if apache_app_listen_address.teams is defined %}
 Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 <Virtualhost {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}>
+{% else %}
+<Virtualhost *:443 >
+{% endif %}
+
     # General setup for the virtual host, inherited from global configuration
     ServerName https://teams.{{ base_domain }}
 
@@ -38,6 +43,13 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     SSLCipherSuite          ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
     SSLHonorCipherOrder     on
     SSLCompression          off
+    {% endif %}
+    
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
     {% endif %}
 
 </VirtualHost>

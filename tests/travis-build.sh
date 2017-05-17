@@ -24,7 +24,6 @@ docker run --detach                                         \
 	--add-host profile.vm.openconext.org:127.0.0.1          \
 	--add-host mujina-sp.vm.openconext.org:127.0.0.1        \
 	--add-host mujina-idp.vm.openconext.org:127.0.0.1       \
-	--add-host grouper.vm.openconext.org:127.0.0.1          \
 	--add-host teams.vm.openconext.org:127.0.0.1            \
 	--add-host authz.vm.openconext.org:127.0.0.1            \
 	--add-host authz-admin.vm.openconext.org:127.0.0.1      \
@@ -32,7 +31,6 @@ docker run --detach                                         \
 	--add-host voot.vm.openconext.org:127.0.0.1             \
 	--add-host lb.vm.openconext.org:127.0.0.1               \
 	--add-host apps.vm.openconext.org:127.0.0.1             \
-	--add-host ldap.vm.openconext.org:127.0.0.1             \
 	--add-host db.vm.openconext.org:127.0.0.1               \
 	--add-host pdp.vm.openconext.org:127.0.0.1              \
 	--add-host engine-api.vm.openconext.org:127.0.0.1       \

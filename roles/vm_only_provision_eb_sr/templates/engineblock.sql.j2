@@ -137,16 +137,6 @@ CREATE TABLE `group_provider` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `group_provider`
---
-
-LOCK TABLES `group_provider` WRITE;
-/*!40000 ALTER TABLE `group_provider` DISABLE KEYS */;
-INSERT INTO `group_provider` VALUES (1,'grouper','SURFteams grouper','EngineBlock_Group_Provider_Grouper','SURFteams grouper');
-/*!40000 ALTER TABLE `group_provider` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `group_provider_decorator`
 --
 
@@ -264,22 +254,6 @@ CREATE TABLE `group_provider_option` (
   PRIMARY KEY (`group_provider_id`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `group_provider_option`
---
-
-LOCK TABLES `group_provider_option` WRITE;
-/*!40000 ALTER TABLE `group_provider_option` DISABLE KEYS */;
-INSERT INTO `group_provider_option` VALUES (1,'host','grouper.{{ base_domain }}'),
-(1,'password','KJ75DFeg32a'),
-(1,'path','/grouper-ws/servicesRest'),
-(1,'protocol','https'),
-(1,'timeout','10'),
-(1,'user','engine'),
-(1,'version','v1_6_000');
-/*!40000 ALTER TABLE `group_provider_option` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `group_provider_precondition`
@@ -442,7 +416,6 @@ INSERT INTO `service_provider_group_acl` VALUES (1,1,'https://engine.{{ base_dom
 (3,1,'https://manage.{{ base_domain }}/simplesaml/module.php/saml/sp/metadata.php/default-sp',1,1),
 (4,1,'https://serviceregistry.{{ base_domain }}/simplesaml/module.php/saml/sp/metadata.php/default-sp',1,1),
 (5,1,'http://mock-sp',1,1),
-(6,1,'https://grouper.{{ base_domain }}/grouper/shibboleth',1,1),
 (7,1,'https://teams.{{ base_domain }}/shibboleth',1,1),
 (8,1,'https://csa.{{ base_domain }}/',1,1),
 (9,1,'https://dashboard.{{ base_domain }}/',1,1);

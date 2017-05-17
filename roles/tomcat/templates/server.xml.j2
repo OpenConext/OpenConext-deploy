@@ -28,14 +28,6 @@
     <Listener className="org.apache.catalina.mbeans.ServerLifecycleListener"/>
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
 
-    <!-- This is used by Grouper WS -->
-    <GlobalNamingResources>
-      <Resource name="UserDatabase" auth="Container"
-        type="org.apache.catalina.UserDatabase"
-        description="User database that can be updated and saved"
-        factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
-        pathname="conf/tomcat-users.xml" />
-    </GlobalNamingResources>
     <Service name="Catalina">
 
         <!-- Define an AJP 1.3 Connector on port 8009 -->

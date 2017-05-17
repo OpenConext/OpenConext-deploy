@@ -37,7 +37,6 @@
   become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
-    - { role: ldap,  tags: ['ldap' ] }
 
 - hosts: php-apps
   gather_facts: no
@@ -75,7 +74,6 @@
   vars:
     env_lang: java
   roles:
-    - { role: grouper,          tags: ['grouper'] }
     - { role: teams,            tags: ['teams'  ] }
     - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }

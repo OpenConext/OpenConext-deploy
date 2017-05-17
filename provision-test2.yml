@@ -31,12 +31,6 @@
   roles:
     - { role: httpd, tags: ['httpd'] }
 
-- hosts: storage
-  gather_facts: yes
-  become: true
-  roles:
-    - { role: ldap,  tags: ['ldap' ] }
-
 - hosts: dbcluster
   gather_facts: yes
   become: true
@@ -76,7 +70,6 @@
     - { role: tomcat, tags: ['tomcat'] }
     - { role: java,   tags: ['java'] }
     - { role: shibboleth,        tags: ['shib'   ] }
-    - { role: grouper,           tags: ['grouper'] }
     - { role: metadata-exporter, tags: ['metadata-exporter'] }
     - { role: teams,             tags: ['teams'  ] }
     - { role: mujina-idp,        tags: ['legacy','mujina' ] }

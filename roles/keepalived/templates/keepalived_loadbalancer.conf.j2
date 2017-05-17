@@ -65,10 +65,6 @@ vrrp_instance backup {
         {% if multidata_ipv6 is defined %}
         {{ multidata_ipv6 }}
         {% endif %}
-        {{ grouper_ip }}
-        {% if grouper_ipv6 is defined %}
-        {{ grouper_ipv6 }}
-        {% endif %}
         {{ static_ip }}
         {% if static_ipv6 is defined %}
         {{ static_ipv6 }}

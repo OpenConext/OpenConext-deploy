@@ -67,7 +67,7 @@ When the script is done, wait a little while to let all services come up and ini
 These are the steps the above script performs:
 
 1. Setup a Vagrant VM and will make sure the HOSTS file is able to handle the defined base_domain
-2. Setup a MySQL server and LDAP for storage.
+2. Setup a MySQL server.
 3. Inserts entities and metadata in Janus and initial load of engineblock to bootstrap.
 4. Install all Java apps for the openconext platform.
 5. Install all PHP apps for the openconext platform.
@@ -79,7 +79,7 @@ These are the steps the above script performs:
 We need pseudo-DNS entries so that your browser can reach the VM-platform we just installed. So, add this very long line to your `/etc/hosts` file:
 
 ```
-192.168.66.98  welcome.vm.openconext.org serviceregistry.vm.openconext.org static.vm.openconext.org metadata.vm.openconext.org db.vm.openconext.org ldap.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org grouper.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org oidc.vm.openconext.org aa.vm.openconext.org
+192.168.66.98  welcome.vm.openconext.org serviceregistry.vm.openconext.org static.vm.openconext.org metadata.vm.openconext.org db.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org authz.vm.openconext.org voot.vm.openconext.org authz-admin.vm.openconext.org authz-playground.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org oidc.vm.openconext.org aa.vm.openconext.org
 ```
 
 Here, the ip-address `192.168.66.98` refers to the address that is mentioned in ./Vagrantfile.
@@ -95,7 +95,7 @@ vagrant ssh apps_centos7
 
 (using `vagrant ssh` without a VM specified leads to the Apps VM)
 
-The lb vm contains haproxy. The apps vm contains all the applications, apache, database and ldap.
+The lb vm contains haproxy. The apps vm contains all the applications, apache and database.
 
 # Releases to vm, test, acc, prod
 
