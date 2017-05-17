@@ -86,6 +86,7 @@
 - name: Make sure cache dir has correct permissions
   file: path={{engine_current_release_symlink}}/app/cache owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
   when: not develop
+  changed_when: False
 
 - name: Make sure log dir has correct permissions
   file: path={{engine_current_release_symlink}}/app/logs owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
