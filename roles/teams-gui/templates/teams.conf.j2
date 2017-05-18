@@ -23,8 +23,12 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
-    ProxyPass /api/teams http://localhost:{{ springapp_tcpport }}/ retry=0
-    ProxyPassReverse /api/teams http://localhost:{{ springapp_tcpport }}/
+
+    ProxyPass /api/teams/health http://localhost:{{ springapp_tcpport }}/health retry=0
+    ProxyPass /api/teams/info http://localhost:{{ springapp_tcpport }}/info retry=0
+
+    ProxyPass /api/teams http://localhost:{{ springapp_tcpport }}/api/teams retry=0
+    ProxyPassReverse /api/teams http://localhost:{{ springapp_tcpport }}/api/teams
 
     DocumentRoot /var/www/teams/current
 
@@ -35,7 +39,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     </Directory>
 
 
-    # Enable shibboleth for all other URLs, but the health check and EB endpoint
+    # Enable shibboleth for all other URLs, but the health check and info endpoint
     <Location ~ "/api/teams/(health|info)">
       allow from all
       satisfy any
