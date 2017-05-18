@@ -31,14 +31,9 @@
 
 - name: create symlink to downloaded version
   file:
-    src: "{{ unarchive_result.dest }}/teams-{{ teams_version }}"
+    src: "{{ unarchive_result.dest }}/teams-gui-{{ teams_gui_version }}"
     dest: "{{ teams_current }}"
     state: link
     force: yes
-  tags: deploy
-  when: unarchive_result.changed
-
-- name: Create js directory
-  file: path="{{ teams_current }}/js" state=directory owner=apache group=apache mode=0755
   tags: deploy
   when: unarchive_result.changed

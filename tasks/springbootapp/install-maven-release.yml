@@ -1,0 +1,27 @@
+- name: download maven-artifact
+  maven_artifact:
+    group_id: "{{ springapp_artifact_group_dir }}"
+    artifact_id: "{{ springapp_artifact_id }}"
+    extension: "{{ springapp_artifact_type }}"
+    version: "{{ springapp_version }}"
+    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in springapp_version else maven_repo }}"
+    dest: "{{ springapp_dir }}/{{ springapp_artifact_id }}-{{ springapp_version }}.{{ springapp_artifact_type }}"
+  tags: deploy
+  register: maven_result
+
+- name: set ownership of application artifact
+  file: path={{ maven_result.dest }} owner={{ springapp_user }} group={{ springapp_user }} mode=0500
+  tags: deploy
+
+- name: stop app
+  service: name={{ springapp_service_name }} state=stopped
+
+- name: change symlink to current version
+  file:
+    src: "{{ maven_result.dest }}"
+    dest: "{{ springapp_dir }}/{{ springapp_jar }}"
+    state: link
+    owner: "{{ springapp_user }}"
+    group: "{{ springapp_user }}"
+  notify: restart {{ springapp_service_name }}
+  when: maven_result.changed

@@ -1,4 +1,4 @@
-springapp_artifact_id: teams
+springapp_artifact_id: teams-server
 springapp_artifact_type: jar
 springapp_artifact_group_dir: /org/openconext
 springapp_version: "{{ teams_server_version }}"

@@ -14,11 +14,8 @@
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=teams group=teams mode=0755
 
-- include: ../../../tasks/springbootapp/install-release.yml
-  when: "teams_snapshot_timestamp == '' and teams_local_jar == ''"
-
-- include: ../../../tasks/springbootapp/install-snapshot.yml
-  when: "teams_snapshot_timestamp != '' and teams_local_jar == ''"
+- include: ../../../tasks/springbootapp/install-maven-release.yml
+  when: "teams_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-local.yml
   when: "teams_local_jar != ''"
@@ -46,4 +43,4 @@
 
 - name: cleanup old jars
   shell: find . ! -name $(basename $(readlink teams-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ teams_dir }}
-  when: (springapp_release_released is defined and springapp_release_released.changed) or (springapp_snapshot_released is defined and springapp_snapshot_released.changed)
+  when: maven_result.changed
