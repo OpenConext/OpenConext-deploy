@@ -1,6 +1,8 @@
 # The logging configuration. On a real server this will be a file url. e.g. file://{{ monitoring_tests_dir }}/logback.xml
 logging:
   config: file://{{ teams_dir }}/logback.xml
+  level:
+    org.hibernate.SQL: INFO
 
 server:
   # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}

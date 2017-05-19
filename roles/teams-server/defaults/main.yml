@@ -1,0 +1,8 @@
+---
+teams_dir: /opt/teams
+teams_version: ''
+teams_snapshot_timestamp: ''
+teams_local_jar: ''
+teams_jar: teams-current.jar
+teams_random_source: 'file:///dev/urandom'
+teams_cronjobmaster: true
