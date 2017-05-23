@@ -7,3 +7,4 @@ teams_jar: teams-current.war
 teams_random_source: 'file:///dev/urandom'
 teams_provision_users: false
 teams_cronjobmaster: true
+teams_stemname: 'nl:surfnet:diensten'
