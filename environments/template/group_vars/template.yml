@@ -26,7 +26,7 @@ authz_server_version: 1.3.7
 voot_version: 3.0.0
 authz_admin_version: 2.0.10
 authz_playground_version: 1.4
-pdp_version: 1.2.6
+pdp_version: 1.2.7
 aa_version: "1.0.4"
 oidc_version: "1.0.6"
 metadata_exporter_version: "2.0.3"
