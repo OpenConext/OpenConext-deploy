@@ -72,8 +72,8 @@
     - { role: shibboleth,        tags: ['shib'   ] }
     - { role: metadata-exporter, tags: ['metadata-exporter'] }
     - { role: teams,             tags: ['teams-legacy'  ] }
-    - { role: teams-gui,         tags: ['teams'  ] }
-    - { role: teams-server,      tags: ['teams'  ] }
+    - { role: teams-gui,         tags: ['teams', 'teams-gui'  ] }
+    - { role: teams-server,      tags: ['teams', 'teams-server'  ] }
     - { role: mujina-idp,        tags: ['legacy','mujina' ] }
     - { role: mujina-sp,         tags: ['legacy','mujina' ] }
     - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
