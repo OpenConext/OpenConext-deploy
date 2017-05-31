@@ -29,11 +29,11 @@ cron:
   expression: "0 0/15 * * * ?"
 
 teams:
-  default-stem-name: "nl:surfnet:diensten"
+  default-stem-name: "{{ teams.default_stem_name }}"
   group-name-context: "{{ teams.group_name_context }}"
-  product-name: "SURFconext Teams"
+  product-name: "{{ teams.product_name }}"
   non-guest-member-of: "urn:collab:org:surf.nl"
-
+  openconext-mails: "{{ teams.openconext_mails }}"
 voot:
   serviceUrl: https://voot.{{ base_domain }}
   accessTokenUri: https://authz.{{ base_domain }}/oauth/token
