@@ -74,6 +74,7 @@
   register: migrate_output
   changed_when: "'no update needed' not in migrate_output.stderr"
   tags: enginemigrations
+  when: engine_db_migration is undefined
 
 - name: Run EngineBlock Doctrine migrations
   command: "app/console doctrine:migrations:migrate -n --env={{ engine_apache_symfony_environment }}"
@@ -82,6 +83,7 @@
   register: doctrine_migrations_output
   changed_when: "'No migrations to execute' not in doctrine_migrations_output.stdout"
   tags: enginemigrations
+  when: engine_db_migration is undefined
 
 - name: Make sure cache dir has correct permissions
   file: path={{engine_current_release_symlink}}/app/cache owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
