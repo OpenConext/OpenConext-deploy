@@ -1,3 +1,5 @@
+#TODO change this to use the maven_artifact plugin where you don't need the timestamp. also remove the option to install local files
+
 - name: download snapshot
   get_url:
     url: "{{ maven_snapshot_repo }}{{ springapp_artifact_group_dir }}/{{ springapp_artifact_id }}/{{ springapp_version }}-SNAPSHOT/{{ springapp_artifact_id }}-{{ springapp_version }}-{{ springapp_snapshot_timestamp }}.{{ springapp_artifact_type }}"

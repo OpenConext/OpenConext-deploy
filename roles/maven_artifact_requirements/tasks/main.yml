@@ -14,5 +14,5 @@
     - python-pip
 
 - name: install lxml (needed by maven_artifact module)
-  pip: name=lxml state=latest
+  pip: name=lxml state=present
 

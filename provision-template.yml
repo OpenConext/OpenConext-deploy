@@ -75,7 +75,9 @@
   roles:
     - { role: java,             tags: ['java'], when: not minimal_install }
     - { role: shibboleth,       tags: ['shib'   ], when: not minimal_install }
-    - { role: teams,            tags: ['teams'  ], when: not minimal_install }
+    - { role: teams,            tags: ['teams-legacy', when: not minimal_install  ] }
+    - { role: teams-gui,        tags: ['teams'  ], when: not minimal_install }
+    - { role: teams-server,     tags: ['teams'  ], when: not minimal_install }
     - { role: mujina-idp,       tags: ['legacy','mujina' ], when: not minimal_install }
     - { role: mujina-sp,        tags: ['legacy','mujina' ], when: not minimal_install }
     - { role: authz-server,     tags: ['oauth', 'authz-server'    ], when: not minimal_install }

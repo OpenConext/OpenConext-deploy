@@ -1,0 +1,67 @@
+# The logging configuration.
+logging:
+  config: file://{{ teams_dir }}/logback.xml
+  level:
+    org.hibernate.SQL: INFO
+
+server:
+  # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
+  port: {{ springapp_tcpport }}
+  # We serve from the root. Do not change this
+  contextPath:
+  session:
+    cookie:
+      secure: true
+  server-header: no
+  session-timeout: 3600
+
+feature-toggles:
+  expiry-date-membership: true
+  person-email-picker: true
+
+security:
+  user:
+    name: {{ teams.voot_api_user }}
+    password: {{ external_group_provider_secrets.teams }}
+
+# Is this node in a load-balanced topology responsible for cleaning up resources (See ExpiredInvitationsRemover)
+cron:
+  node-cron-job-responsible: {{ teams_cronjobmaster }}
+  expression: "0 0/15 * * * ?"
+
+teams:
+  default-stem-name: "{{ teams.default_stem_name }}"
+  group-name-context: "{{ teams.group_name_context }}"
+  product-name: "{{ teams.product_name }}"
+  non-guest-member-of: "urn:collab:org:surf.nl"
+  openconext-mails: "{{ teams.openconext_mails }}"
+voot:
+  serviceUrl: https://voot.{{ base_domain }}
+  accessTokenUri: https://authz.{{ base_domain }}/oauth/token
+  clientId: surf-teams
+  clientSecret: {{ teams_authz_client_secret }}
+  scopes: groups
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        dialect: org.hibernate.dialect.MariaDB53Dialect
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
+    username: {{ teams.db_user }}
+    password: {{ teams.db_password }}
+    dbcp2:
+      test-while-idle: true
+      validation-query: SELECT 1
+  mail:
+    host: {{ smtp_server }}
+    port: 25
+  main:
+    banner-mode: "off"
+
+email:
+  from: {{ instance_name }} Teams <{{ noreply_email }}>
+  base-url: https://teams.{{ base_domain }}
