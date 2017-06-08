@@ -11,9 +11,3 @@ springapp_tcpport: 9198
 springapp_local_jar: "{{ aa_local_jar }}"
 springapp_heapsize: "512m"
 springapp_random_source: "file:///dev/urandom"
-
-js_error_reporting_access_token: "{{ attribute_aggregator_js_access_token }}"
-js_error_enabled: "true"
-js_error_reporting_client_id: attribute-aggregator
-js_error_reporting_url: /aa/api/internal/jsError
-
