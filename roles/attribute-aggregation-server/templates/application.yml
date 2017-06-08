@@ -1,0 +1,63 @@
+logging:
+  config: file://{{ attribute_aggregation_dir }}/logback.xml
+  level:
+    org.hibernate.SQL: INFO
+
+server:
+  # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
+  port: {{ springapp_tcpport }}
+  contextPath: /aa/api
+  session:
+    cookie:
+      secure: true
+  server-header: no
+  session:
+    timeout: 28800
+
+scim_server_environment: test.surfconext
+attribute_authorities_config_path: classpath:/attributeAuthorities.yml
+authorization_access_token_url: https://authz.{{ base_domain }}.surfconext.nl/oauth/token
+aggregate_cache_duration_milliseconds: 300000
+
+orcid:
+  authorization_uri: https://sandbox.orcid.org/oauth/authorize
+  access_token_uri: https://sandbox.orcid.org/oauth/token
+  client_id: APP-IP57TTCD5F8BAIGS
+  client_secret: d3d8ddf6-9de9-49f7-9e18-9760cdebe208
+  redirect_uri: https://aa.{{ base_domain }}.surfconext.nl/aa/api/redirect
+
+security:
+  internal_user_name: {{ aa.eb_username }}
+  internal_password: {{ aa.eb_password }}
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        dialect: org.hibernate.dialect.MariaDB53Dialect
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://{{ aa.db_host }}/{{ aa.db_name }}
+    username: {{ aa.db_user }}
+    password: {{ aa.db_password }}
+    dbcp2:
+      test-while-idle: true
+      validation-query: SELECT 1
+  main:
+    banner-mode: "off"
+
+# We disable all endpoints except health for the load-balancer and info for git information.
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+    sensitive: false
+  info:
+    enabled: true
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"

@@ -1,27 +1,27 @@
 ---
 - name: create apache folder
-  file: path=/var/www/teams owner=apache group=apache mode=2755 state=directory
+  file: path=/var/www/attribute-aggregation owner=apache group=apache mode=2755 state=directory
 
 - name: copy virtual host config
-  template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
+  template: src=attribute_aggregation.conf.j2 dest=/etc/httpd/conf.d/attribute_aggregation.conf
   notify: restart httpd
   tags: deploy
 
 - name: download html archive
   maven_artifact:
     group_id: org.openconext
-    artifact_id: teams-gui
+    artifact_id: attribute-aggregation-gui
     extension: zip
-    version: "{{ teams_gui_version }}"
-    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in teams_gui_version else maven_repo }}"
-    dest: /var/www/teams
+    version: "{{ attribute_aggregation_gui_version }}"
+    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in attribute_aggregation_gui_version else maven_repo }}"
+    dest: /var/www/attribute-aggregation
   register: maven_result
   tags: deploy
 
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: /var/www/teams
+    dest: /var/www/attribute-aggregation
     copy: no
     owner: root
     group: apache
@@ -31,8 +31,8 @@
 
 - name: create symlink to downloaded version
   file:
-    src: "{{ unarchive_result.dest }}/teams-gui-{{ teams_gui_version }}"
-    dest: "{{ teams_current }}"
+    src: "{{ unarchive_result.dest }}/attribute_aggregation-gui-{{ attribute_aggregation_gui_version }}"
+    dest: "{{ attribute_aggregation_current }}"
     state: link
     force: yes
   tags: deploy

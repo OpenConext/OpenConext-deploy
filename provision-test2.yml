@@ -69,23 +69,25 @@
   roles:
     - { role: tomcat, tags: ['tomcat'] }
     - { role: java,   tags: ['java'] }
-    - { role: shibboleth,        tags: ['shib'   ] }
-    - { role: metadata-exporter, tags: ['metadata-exporter'] }
-    - { role: teams,             tags: ['teams-legacy'  ] }
-    - { role: teams-gui,         tags: ['teams', 'teams-gui'  ] }
-    - { role: teams-server,      tags: ['teams', 'teams-server'  ] }
-    - { role: mujina-idp,        tags: ['legacy','mujina' ] }
-    - { role: mujina-sp,         tags: ['legacy','mujina' ] }
-    - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
-    - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
-    - { role: voot,              tags: ['oauth', 'voot'            ] }
-    - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
-    - { role: pdp,               tags: ['pdp'] }
-    - { role: oidc,              tags: ['oidc'] }
-    - { role: aa,                tags: ['aa'] }
-    - { role: pdp,               tags: ['pdp'] }
-    - { role: attribute-mapper,  tags: ['attribute-mapper'] }
-    - { role: eduproxy,          tags: ['eduproxy'] }
-    - { role: monitoring-tests,  tags: ['monitoring-tests'] }
+    - { role: shibboleth,                   tags: ['shib'   ] }
+    - { role: metadata-exporter,            tags: ['metadata-exporter'] }
+    - { role: teams,                        tags: ['teams-legacy'  ] }
+    - { role: teams-gui,                    tags: ['teams', 'teams-gui'  ] }
+    - { role: teams-server,                 tags: ['teams', 'teams-server'  ] }
+    - { role: mujina-idp,                   tags: ['legacy','mujina' ] }
+    - { role: mujina-sp,                    tags: ['legacy','mujina' ] }
+    - { role: authz-server,                 tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,                  tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,                         tags: ['oauth', 'voot'            ] }
+    - { role: authz-playground,             tags: ['oauth', 'authz-playground'] }
+    - { role: pdp,                          tags: ['pdp'] }
+    - { role: oidc,                         tags: ['oidc'] }
+    - { role: aa,                           tags: ['aa-legacy'] }
+    - { role: attribute-aggregator-server,  tags: ['aa', 'aa-server'] }
+    - { role: attribute-aggregator-gui,     tags: ['aa', 'aa-gui'] }
+    - { role: pdp,                          tags: ['pdp'] }
+    - { role: attribute-mapper,             tags: ['attribute-mapper'] }
+    - { role: eduproxy,                     tags: ['eduproxy'] }
+    - { role: monitoring-tests,             tags: ['monitoring-tests'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
