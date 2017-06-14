@@ -1,8 +1,7 @@
 ---
-attribute_aggregationdir: /opt/teams
-attribute_aggregationversion: ''
-attribute_aggregationsnapshot_timestamp: ''
-attribute_aggregationlocal_jar: ''
-attribute_aggregationjar: teams-current.jar
-attribute_aggregationrandom_source: 'file:///dev/urandom'
-attribute_aggregationcronjobmaster: true
+attribute_aggregation_dir: /opt/attribute-aggregation
+attribute_aggregation_version: ''
+attribute_aggregation_snapshot_timestamp: ''
+attribute_aggregation_local_jar: ''
+attribute_aggregation_jar: attribute-aggregation-current.jar
+attribute_aggregation_random_source: 'file:///dev/urandom'

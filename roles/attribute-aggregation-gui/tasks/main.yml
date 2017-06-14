@@ -1,6 +1,12 @@
 ---
+- name: clean up old aa log directory
+  file: path=/var/www/aa state=absent
+
 - name: create apache folder
   file: path=/var/www/attribute-aggregation owner=apache group=apache mode=2755 state=directory
+
+- name: clean up old aa apache conf
+  file: path=/etc/httpd/conf.d/aa.conf state=absent
 
 - name: copy virtual host config
   template: src=attribute_aggregation.conf.j2 dest=/etc/httpd/conf.d/attribute_aggregation.conf
@@ -31,7 +37,7 @@
 
 - name: create symlink to downloaded version
   file:
-    src: "{{ unarchive_result.dest }}/attribute_aggregation-gui-{{ attribute_aggregation_gui_version }}"
+    src: "{{ unarchive_result.dest }}/attribute-aggregation-gui-{{ attribute_aggregation_gui_version }}"
     dest: "{{ attribute_aggregation_current }}"
     state: link
     force: yes

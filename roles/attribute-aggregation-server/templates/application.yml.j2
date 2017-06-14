@@ -1,3 +1,4 @@
+# The logging configuration.
 logging:
   config: file://{{ attribute_aggregation_dir }}/logback.xml
   level:
@@ -8,23 +9,22 @@ server:
   port: {{ springapp_tcpport }}
   contextPath: /aa/api
   session:
+    timeout: 28800
     cookie:
       secure: true
   server-header: no
-  session:
-    timeout: 28800
 
 scim_server_environment: test.surfconext
 attribute_authorities_config_path: classpath:/attributeAuthorities.yml
-authorization_access_token_url: https://authz.{{ base_domain }}.surfconext.nl/oauth/token
+authorization_access_token_url: https://authz.{{ base_domain }}/oauth/token
 aggregate_cache_duration_milliseconds: 300000
 
 orcid:
-  authorization_uri: https://sandbox.orcid.org/oauth/authorize
-  access_token_uri: https://sandbox.orcid.org/oauth/token
-  client_id: APP-IP57TTCD5F8BAIGS
-  client_secret: d3d8ddf6-9de9-49f7-9e18-9760cdebe208
-  redirect_uri: https://aa.{{ base_domain }}.surfconext.nl/aa/api/redirect
+  authorization_uri: "{{ aa.orcid_authorization_uri }}"
+  access_token_uri: "{{ aa.access_token_uri }}"
+  client_id: "{{ aa.orcid_client_id }}"
+  client_secret: "{{ aa.orcid_secret }}"
+  redirect_uri: https://aa.{{ base_domain }}/redirect
 
 security:
   internal_user_name: {{ aa.eb_username }}

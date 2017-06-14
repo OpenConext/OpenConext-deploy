@@ -67,8 +67,8 @@
   vars:
     env_lang: java
   roles:
-    - { role: tomcat, tags: ['tomcat'] }
-    - { role: java,   tags: ['java'] }
+    - { role: tomcat,                       tags: ['tomcat'] }
+    - { role: java,                         tags: ['java'] }
     - { role: shibboleth,                   tags: ['shib'   ] }
     - { role: metadata-exporter,            tags: ['metadata-exporter'] }
     - { role: teams,                        tags: ['teams-legacy'  ] }
@@ -83,8 +83,8 @@
     - { role: pdp,                          tags: ['pdp'] }
     - { role: oidc,                         tags: ['oidc'] }
     - { role: aa,                           tags: ['aa-legacy'] }
-    - { role: attribute-aggregator-server,  tags: ['aa', 'aa-server'] }
-    - { role: attribute-aggregator-gui,     tags: ['aa', 'aa-gui'] }
+    - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
+    - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
     - { role: pdp,                          tags: ['pdp'] }
     - { role: attribute-mapper,             tags: ['attribute-mapper'] }
     - { role: eduproxy,                     tags: ['eduproxy'] }

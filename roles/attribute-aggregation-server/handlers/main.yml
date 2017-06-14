@@ -3,4 +3,4 @@
   command: "systemctl daemon-reload"
 
 - name: restart attribute-aggregation
-  service: name=attribute-aggregtion state=restarted
+  service: name=attribute-aggregation state=restarted
