@@ -3,8 +3,6 @@
   stat: path={{ engine_current_release_symlink }} follow=no
   register: eb_dir
 
-- debug: var=eb_dir
-
 - name: Download current version
   get_url: url="{{ engine_download_url }}" dest="{{ engine_build_path }}"
   register: eb_download
