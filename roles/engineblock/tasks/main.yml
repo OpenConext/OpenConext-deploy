@@ -74,7 +74,7 @@
   register: migrate_output
   changed_when: "'no update needed' not in migrate_output.stderr"
   tags: enginemigrations
-  when: no_engine_db_migration is undefined
+  when: engine_skip_db_migration is undefined
   run_once: true
 
 - name: Run EngineBlock Doctrine migrations
@@ -84,7 +84,7 @@
   register: doctrine_migrations_output
   changed_when: "'No migrations to execute' not in doctrine_migrations_output.stdout"
   tags: enginemigrations
-  when: no_engine_db_migration is undefined
+  when: engine_skip_db_migration is undefined
   run_once: true
 
 - name: Make sure cache dir has correct permissions
