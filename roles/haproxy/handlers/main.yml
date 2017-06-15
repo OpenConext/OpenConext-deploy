@@ -11,4 +11,9 @@
 - name: restart haproxy instances with changed configs
   service: name=haproxy_{{ item.item.name }} state=restarted
   when: item.changed
-  with_items: "{{configs_changed.results}}"
+  with_items: "{{ configs_changed.results }}"
+
+- name: restart haproxy instances with changed keys
+  service: name=haproxy_{{ item.item.name }} state=restarted
+  when: item.changed
+  with_items: "{{ keys_changed.results }}"

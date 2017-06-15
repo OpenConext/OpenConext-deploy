@@ -16,8 +16,8 @@
   copy: content="{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}" dest=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
   with_items: "{{ haproxy_applications }}"
   when: not item.hidden
-  register: configs_changed
-  notify: restart haproxy instances with changed configs
+  register: keys_changed
+  notify: restart haproxy instances with changed keys
 
 - name: Chown SSL certificates
   file: path=/etc/haproxy/{{ item.name }}/{{ item.name }}.pem mode=0600
