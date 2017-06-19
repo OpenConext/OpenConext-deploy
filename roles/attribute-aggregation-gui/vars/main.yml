@@ -1,0 +1,4 @@
+---
+attribute_aggregation_current: /var/www/attribute-aggregation/current
+#TODO - make this into a variable, see also attribute-aggregation-server/var/main.yml
+springapp_tcpport: 9198

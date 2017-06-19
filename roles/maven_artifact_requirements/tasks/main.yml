@@ -1,6 +1,6 @@
 ---
-- name: add epel repo
-  yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+#- name: add epel repo
+#  yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
 
 - name: install dependencies for lxml
   yum: name={{ item }} state=present

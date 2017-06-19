@@ -1,0 +1,60 @@
+---
+- name: clean up old aa directory
+  file: path=/opt/aa state=absent
+
+- name: clean up old aa log directory
+  file: path=/var/log/aa state=absent
+
+- name: create user
+  user: name=attribute-aggregation system=yes home={{ attribute_aggregation_dir }} shell=/sbin/nologin
+
+- name: Copy systemd service file
+  template: src=../../templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  notify:
+    - "systemctl daemon-reload"
+    - "restart attribute-aggregation"
+
+- name: enable service
+  service: name=attribute-aggregation enabled=yes
+
+- name: Create logging directory
+  file: path=/var/log/aa state=directory owner=attribute-aggregation group=attribute-aggregation mode=0755
+
+- include: ../../../tasks/springbootapp/install-maven-release.yml
+  when: "attribute_aggregation_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-local.yml
+  when: "attribute_aggregation_local_jar != ''"
+
+- name: copy logging config
+  template: src=logback.xml.j2 dest={{ attribute_aggregation_dir }}/logback.xml owner=attribute-aggregation group=attribute-aggregation mode=0740
+  notify: restart attribute-aggregation
+
+- name: copy application config
+  template: src=application.yml.j2 dest={{ attribute_aggregation_dir }}/application.yml owner=attribute-aggregation group=attribute-aggregation mode=0740
+  notify: restart attribute-aggregation
+
+- name: Copy attributeAuthorities config
+  template: src=attributeAuthorities.yml.j2 dest={{ attribute_aggregation_dir }}/attributeAuthorities.yml owner=attribute-aggregation group=attribute-aggregation mode=0740
+  notify: restart attribute-aggregation
+
+- name: copy application config
+  template: src=application.yml.j2 dest={{ attribute_aggregation_dir }}/application.yml owner=attribute-aggregation group=attribute-aggregation mode=0740
+  notify: restart attribute-aggregation
+
+# no idea why this is necessary, as the init script returns an ok status also
+# if the application is still initializing.  Waiting for the port to open works well
+# though, and seems like to correct way to handle this.
+- name: start the attribute-aggregation service
+  service: name=attribute-aggregation state=started enabled=yes
+  ignore_errors: true
+
+- name: wait for attribute-aggregation to start
+  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
+
+- name: ensure the service is started
+  service: name=attribute-aggregation enabled=yes state=started
+
+#- name: cleanup old jars
+#  shell: find . ! -name $(basename $(readlink attribute-aggregation-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ attribute_aggregation_dir }}
+#  when: maven_result.changed
