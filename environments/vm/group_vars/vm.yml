@@ -500,7 +500,7 @@ haproxy_applications:
     vhost_name: "teams"
     ip: 192.168.66.98
     ha_method: GET
-    ha_url: "/health"
+    ha_url: "/api/teams/health"
     port: 601
     servers: "{{java_servers}}"
 
@@ -536,7 +536,7 @@ haproxy_applications:
     port: 605
     servers: "{{java_servers}}"
 
-  - name:  pdp
+  - name: pdp
     vhost_name: "pdp"
     ip: 192.168.66.98
     ha_method: "GET"
