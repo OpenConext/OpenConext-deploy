@@ -82,7 +82,6 @@
     - { role: authz-playground,             tags: ['oauth', 'authz-playground'] }
     - { role: pdp,                          tags: ['pdp'] }
     - { role: oidc,                         tags: ['oidc'] }
-    - { role: aa,                           tags: ['aa-legacy'] }
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
     - { role: pdp,                          tags: ['pdp'] }
