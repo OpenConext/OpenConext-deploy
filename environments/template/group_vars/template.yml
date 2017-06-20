@@ -476,7 +476,7 @@ haproxy_applications:
     vhost_name: "teams"
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
-    ha_url: "/health"
+    ha_url: "/api/teams/health"
     port: "601"
     servers: "{{java_servers}}"
 

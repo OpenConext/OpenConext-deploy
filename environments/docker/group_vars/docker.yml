@@ -445,11 +445,11 @@ haproxy_applications:
     backend_vhost_name: backend.{{ base_domain }}
     backend_ca_file: "{{ tls_backend_ca }}"
 
-  - name:  pdp
+  - name: pdp
     vhost_name: pdp
     ip: 127.0.0.1
     ha_method: GET
-    ha_url: /pdp/api/info
+    ha_url: /pdp/api/health
     port: 613
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
@@ -458,11 +458,11 @@ haproxy_applications:
     backend_vhost_name: backend.{{ base_domain }}
     backend_ca_file: "{{ tls_backend_ca }}"
 
-  - name:  teams
+  - name: teams
     vhost_name: teams
     ip: 127.0.0.1
     ha_method: GET
-    ha_url: "/health"
+    ha_url: "/api/teams/health"
     port: 601
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
@@ -471,7 +471,7 @@ haproxy_applications:
     backend_vhost_name: backend.{{ base_domain }}
     backend_ca_file: "{{ tls_backend_ca }}"
 
-  - name:  authzserver
+  - name: authzserver
     vhost_name: authz
     ip: 127.0.0.1
     ha_method: GET
@@ -484,7 +484,7 @@ haproxy_applications:
     backend_vhost_name: backend.{{ base_domain }}
     backend_ca_file: "{{ tls_backend_ca }}"
 
-  - name:  authz_admin 
+  - name: authz_admin
     vhost_name: authz-admin
     ip: 127.0.0.1
     ha_method: GET
@@ -527,7 +527,7 @@ haproxy_applications:
     vhost_name: aa
     ip: 127.0.0.1
     ha_method: GET
-    ha_url: "/health"
+    ha_url: "/aa/api/health"
     port: 615
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
