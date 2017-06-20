@@ -77,7 +77,7 @@
     - { role: pdp,               tags: ['pdp'] }
     - { role: oidc,              tags: ['oidc'] }
     - { role: vm_only_oidc,      tags: ['oidc'] }
-#    - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
-#    - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
+    - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
+    - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
