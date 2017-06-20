@@ -1,10 +1,14 @@
 ---
+# Add MariaDB repo and key
+- name: Add MariaDB.org repository
+  template: src='mariadb.repo.j2' dest='/etc/yum.repos.d/mariadb.repo'
+
 - name: Install mariadb server
   yum: name={{ item }} state=present
   with_items:
-     - mariadb-server.x86_64
+     - MariaDB-server
+     - MariaDB-client
      - MySQL-python
-
   tags: mysql
 
 - name: Start and enable mariadb
