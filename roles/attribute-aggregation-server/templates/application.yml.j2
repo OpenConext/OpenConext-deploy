@@ -17,7 +17,7 @@ server:
 scim_server_environment: test.surfconext
 attribute_authorities_config_path: classpath:/attributeAuthorities.yml
 authorization_access_token_url: https://authz.{{ base_domain }}/oauth/token
-aggregate_cache_duration_milliseconds: 300000
+aggregate_cache_duration_milliseconds: -1
 
 orcid:
   authorization_uri: "{{ aa.orcid_authorization_uri }}"

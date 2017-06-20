@@ -3,10 +3,10 @@
 <configuration scan="true">
 
  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-   <file>/var/log/aa/aa.log</file>
+   <file>/var/log/attribute-aggregation/attribute-aggregation.log</file>
    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
      <!-- daily rollover -->
-     <fileNamePattern>/var/log/aa/aa-%d{yyyy-MM-dd}.log</fileNamePattern>
+     <fileNamePattern>/var/log/attribute-aggregation/attribute-aggregation-%d{yyyy-MM-dd}.log</fileNamePattern>
      <maxHistory>30</maxHistory>
    </rollingPolicy>
    <encoder>

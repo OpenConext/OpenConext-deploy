@@ -18,7 +18,7 @@
   service: name=attribute-aggregation enabled=yes
 
 - name: Create logging directory
-  file: path=/var/log/aa state=directory owner=attribute-aggregation group=attribute-aggregation mode=0755
+  file: path=/var/log/attribute-aggregation state=directory owner=attribute-aggregation group=attribute-aggregation mode=0755
 
 - include: ../../../tasks/springbootapp/install-maven-release.yml
   when: "attribute_aggregation_local_jar == ''"

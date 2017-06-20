@@ -23,7 +23,7 @@ after_failure:
   - sudo docker exec -t ansible-test ls -ltr /var/log
   - sudo docker exec -t ansible-test cat /var/log/metadata-exporter/metadata-exporter.log
   - sudo docker exec -t ansible-test cat /var/log/voot/voot.log
-  - sudo docker exec -t ansible-test cat /var/log/aa/aa.log
+  - sudo docker exec -t ansible-test cat /var/log/attribute-aggregation/attribute-aggregation.log
   - sudo docker exec -t ansible-test cat /var/log/pdp/pdp.log
   - sudo docker exec -t ansible-test env TERM=xterm tail -500 /var/log/messages
 
