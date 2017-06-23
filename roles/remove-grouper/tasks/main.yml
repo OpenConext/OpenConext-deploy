@@ -1,0 +1,16 @@
+---
+
+- name: Remove grouper files
+  file: path={{ item }} state=absent
+  with_items: 
+      - /etc/tomcat/appconf/grouper.hibernate.properties 
+      - /etc/tomcat/appconf/grouper.properties
+      - /etc/tomcat/wars/grouper-ws.war
+      - /etc/tomcat/wars/grouper.war
+      - /etc/tomcat/Catalina/grouper.test2.surfconext.nl
+      - /etc/tomcat/Catalina/grouper.test2.surfconext.nl/grouper-ws.xml
+      - /etc/tomcat/Catalina/grouper.test2.surfconext.nl/grouper.xml
+      - /etc/tomcat/appconf/sources.xml
+      - /etc/tomcat/appconf/log4j.properties 
+  notify: restart tomcat
+

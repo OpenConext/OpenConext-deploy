@@ -85,6 +85,7 @@
     - { role: metadata-exporter, tags: ['metadata-exporter']}
     - { role: mujina-idp,        tags: ['mujina' ] }
     - { role: mujina-sp,         tags: ['mujina' ] }
+    - { role: remove-grouper,               tags: ['remove-grouper'] }
 
 
   handlers:

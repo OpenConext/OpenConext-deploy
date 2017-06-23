@@ -99,6 +99,7 @@
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
     - { role: pdp,              tags: ['pdp'] }
     - { role: metadata-exporter, tags: ['metadata-exporter']}
+    - { role: remove-grouper,               tags: ['remove-grouper'] }
 
   handlers:
     - include: roles/httpd/handlers/main.yml
