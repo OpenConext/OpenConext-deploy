@@ -71,6 +71,7 @@ metadataRepositories[{{ repository.index }}] = {{ repository.type }}
 {% endfor %}
 
 phpSettings.display_errors = {{ php_display_errors }}
+phpSettings.date.timezone = {{ timezone }}
 
 serviceRegistry.caching.lifetime = {{ engine_janus_cache_lifetime }}
 serviceRegistry.location = {{ engine_janus_url }}
