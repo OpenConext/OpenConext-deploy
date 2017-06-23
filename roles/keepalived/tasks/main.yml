@@ -9,5 +9,5 @@
   notify: reload keepalived
 
 - name: Start keepalived
-  service: name=keepalived state=running enabled=yes
+  service: name=keepalived state=started enabled=yes
 
