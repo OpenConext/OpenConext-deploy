@@ -74,7 +74,7 @@
   vars:
     env_lang: java
   roles:
-    - { role: teams,            tags: ['teams-legacy'  ] }
+    - { role: teams-legacy,     tags: ['teams-legacy'  ] }
     - { role: teams-gui,        tags: ['teams'  ] }
     - { role: teams-server,     tags: ['teams'  ] }
     - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
