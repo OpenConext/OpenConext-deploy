@@ -12,5 +12,8 @@
       - /etc/tomcat/Catalina/grouper.test2.surfconext.nl/grouper.xml
       - /etc/tomcat/appconf/sources.xml
       - /etc/tomcat/appconf/log4j.properties 
-  notify: restart tomcat
+      - /etc/httpd/conf.d/grouper.conf
+  notify: 
+    - restart tomcat
+    - restart httpd
 
