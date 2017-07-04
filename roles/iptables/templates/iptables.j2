@@ -69,6 +69,14 @@
 {% endfor %}
 {% endif %}
 
+{% if iptables_incoming_oidc is defined %}
+### OIDC rules
+{% for service in iptables_incoming_oidc %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
+{% endfor %}
+
 {% if 'loadbalancer' in group_names %}
 ### Allow VRRP
 -A INPUT -d 224.0.0.0/8 -p vrrp -j ACCEPT
