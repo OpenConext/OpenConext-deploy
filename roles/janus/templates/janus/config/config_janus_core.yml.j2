@@ -101,6 +101,12 @@ janus_service_registry_core:
             name: 'urn:mace:surffederatie.nl:attribute-def:nlDigitalAuthorIdentifier'
         'collabPersonId (deprecated)':
             name: 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1'
+
+    attribute_sources:
+{% for source in janus_attribute_sources %}
+      - {{ source }}
+{% endfor %}
+
     md:
         mapping:
             'UIInfo:Logo:0:height': 'logo:0:height'
