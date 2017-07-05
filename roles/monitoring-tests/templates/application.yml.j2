@@ -25,11 +25,18 @@ pdp:
   base_url: https://pdp.{{ base_domain }}
 
 voot:
-  authz_server_base_url: https://authz.{{ base_domain }}
-  voot_base_url: https://voot.{{ base_domain }}
-  client_id: {{ authzplayground.springapp_authz_client_id }}
-  secret: {{ authzplayground_springapp_authz_client_secret }}
-  person_id: {{ monitoring_tests.person_id }}
+  authz:
+    authorization_url: https://authz.{{ base_domain }}/oauth/token
+    voot_base_url: https://voot.{{ base_domain }}
+    client_id: {{ authzplayground.springapp_authz_client_id }}
+    secret: {{ authzplayground_springapp_authz_client_secret }}
+    person_id: {{ monitoring_tests.person_id }}
+  oidc:
+    authorization_url: https://oidc.{{ base_domain }}/token
+    voot_base_url: https://voot.{{ base_domain }}
+    client_id: {{ authzplayground.springapp_oidc_client_id }}
+    secret: {{ authzplayground_springapp_oidc_client_secret }}
+    person_id: {{ monitoring_tests.person_id }}
 
 # We disable all endpoints except health for the actual monitoring and info for git information.
 endpoints:
