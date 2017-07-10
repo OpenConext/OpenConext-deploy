@@ -1,0 +1,3 @@
+#!/bin/sh
+for i in `find . -name \*.j2`; do scripts/syntax-jinja $i; done
+for i in `find . -name \*.yml`; do scripts/syntax-yml $i; done

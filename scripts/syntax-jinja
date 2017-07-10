@@ -1,0 +1,9 @@
+#!/usr/bin/python
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+from jinja2 import Environment
+
+env = Environment()
+with open(sys.argv[1]) as template:
+    env.parse(template.read())
