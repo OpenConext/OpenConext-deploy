@@ -86,6 +86,8 @@
     - { role: authz-playground, tags: ['oauth', 'authz-playground'], when: not minimal_install }
     - { role: pdp, tags: ['pdp'], when: not minimal_install }
     - { role: metadata-exporter, tags: ['metadata-exporter'], when: not minimal_install}
+    - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
+    - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
 
   handlers:
     - include: roles/httpd/handlers/main.yml
