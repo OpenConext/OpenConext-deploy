@@ -57,6 +57,10 @@ vrrp_instance backup {
         {% if pdp_ipv6 is defined %}
         {{ pdp_ipv6 }}
         {% endif %}
+        {{ aa_ip }}
+        {% if aa_ipv6 is defined %}
+        {{ aa_ipv6 }}
+        {% endif %}
         {{ oidc_ip }}
         {% if oidc_ipv6 is defined %}
         {{ oidc_ipv6 }}
