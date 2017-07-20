@@ -1,0 +1,453 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "saml20_sp",
+  "definitions": {
+    "AssertionConsumerServiceBinding": {
+      "type": "string",
+      "enum": [
+        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+        "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
+        "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
+        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+        "urn:oasis:names:tc:SAML:2.0:bindings:URI"
+      ],
+      "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+    },
+    "NameIDFormat": {
+      "type": "string",
+      "enum": [
+        "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+        "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+        "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+      ],
+      "default": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+    },
+    "ArpAttribute": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "eid": {
+      "type": "number"
+    },
+    "entityid": {
+      "type": "string"
+    },
+    "revisionid": {
+      "type": "number"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "prodaccepted",
+        "testaccepted"
+      ]
+    },
+    "metadataurl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "allowedall": {
+      "type": "boolean"
+    },
+    "manipulation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string"
+    },
+    "ip": {
+      "type": "string"
+    },
+    "revisionnote": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "allowedEntities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "arp": {
+      "type": "object",
+      "sources": [
+        "idp",
+        "orcid",
+        "sab",
+        "voot"
+      ],
+      "properties": {
+        "_class": {
+          "type": "string",
+          "default": "mr.migration.ArpAttributes"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "attributes": {
+          "properties": {
+            "urn:mace:dir:attribute-def:eduPersonTargetedID": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:dir:attribute-def:eduPersonPrincipalName": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:dir:attribute-def:displayName": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:dir:attribute-def:cn": {
+              "$ref": "#/definitions/ArpAttribute",
+              "description": "common name"
+            },
+            "urn:mace:dir:attribute-def:givenName": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:dir:attribute-def:sn": {
+              "$ref": "#/definitions/ArpAttribute",
+              "description": "surname"
+            },
+            "urn:mace:dir:attribute-def:mail": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:terena.org:attribute-def:schacHomeOrganization": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:terena.org:attribute-def:schacHomeOrganizationType": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:schac:attribute-def:schacPersonalUniqueCode": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:dir:attribute-def:eduPersonAffiliation": {
+              "$ref": "#/definitions/ArpAttribute",
+              "multiplicity": true
+            },
+            "urn:mace:dir:attribute-def:eduPersonScopedAffiliation": {
+              "$ref": "#/definitions/ArpAttribute",
+              "multiplicity": true
+            },
+            "urn:mace:dir:attribute-def:eduPersonEntitlement": {
+              "$ref": "#/definitions/ArpAttribute",
+              "multiplicity": true
+            },
+            "urn:mace:dir:attribute-def:eduPersonOrcid": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:dir:attribute-def:isMemberOf": {
+              "$ref": "#/definitions/ArpAttribute",
+              "multiplicity": true
+            },
+            "urn:mace:dir:attribute-def:uid": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:dir:attribute-def:preferredLanguage": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
+            "urn:mace:surffederatie.nl:attribute-def:nlEduPersonOrgUnit": {
+              "$ref": "#/definitions/ArpAttribute",
+              "deprecated": true,
+              "multiplicity": true
+            },
+            "urn:mace:surffederatie.nl:attribute-def:nlEduPersonStudyBranch": {
+              "$ref": "#/definitions/ArpAttribute",
+              "deprecated": true,
+              "multiplicity": true
+            },
+            "urn:mace:surffederatie.nl:attribute-def:nlStudielinkNummer": {
+              "$ref": "#/definitions/ArpAttribute",
+              "deprecated": true
+            },
+            "urn:mace:surffederatie.nl:attribute-def:nlDigitalAuthorIdentifier": {
+              "$ref": "#/definitions/ArpAttribute",
+              "deprecated": true
+            },
+            "urn:oid:1.3.6.1.4.1.1076.20.40.40.1": {
+              "$ref": "#/definitions/ArpAttribute",
+              "displayName": "collabPersonId",
+              "deprecated": true
+            }
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metaDataFields": {
+      "type": "object",
+      "properties": {
+        "NameIDFormat": {
+          "$ref": "#/definitions/NameIDFormat"
+        },
+        "certData": {
+          "type": "string",
+          "format": "certificate"
+        },
+        "certData2": {
+          "type": "string",
+          "format": "certificate"
+        },
+        "certData3": {
+          "type": "string",
+          "format": "certificate"
+        },
+        "SingleLogoutService_Binding": {
+          "type": "string",
+          "enum": [
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+            "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
+            "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+            "urn:oasis:names:tc:SAML:2.0:bindings:URI"
+          ],
+          "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "SingleLogoutService_Location": {
+          "type": "string",
+          "format": "url"
+        },
+        "mdrpi:RegistrationInfo": {
+          "type": "string"
+        },
+        "logo:0:url": {
+          "type": "string",
+          "format": "url"
+        },
+        "logo:0:width": {
+          "type": "string",
+          "format": "number"
+        },
+        "logo:0:height": {
+          "type": "string",
+          "format": "number"
+        },
+        "redirect.sign": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:publish_in_edugain": {
+          "type": "string",
+          "format": "boolean",
+          "default": false
+        },
+        "coin:publish_in_edugain_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "coin:interfed_source": {
+          "type": "string",
+          "enum": [
+            "Entree",
+            "eduGAIN"
+          ]
+        },
+        "coin:additional_logging": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:institution_id": {
+          "type": "string"
+        },
+        "coin:institution_guid": {
+          "type": "string",
+          "format" : "uuid"
+        },
+        "coin:trusted_proxy": {
+          "type": "string",
+          "format": "boolean",
+          "default": "false"
+        },
+        "coin:no_consent_required": {
+          "type": "string",
+          "format": "boolean",
+          "info": "Select this option to skip the consent for a user after the first login."
+        },
+        "coin:eula": {
+          "type": "string",
+          "format": "url"
+        },
+        "coin:ss:idp_visible_only": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:application_url": {
+          "type": "string",
+          "format": "url"
+        },
+        "coin:transparant_issuer": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:do_not_add_attribute_aliases": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:display_unconnected_idps_wayf": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:policy_enforcement_decision_required": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:attribute_aggregation_required": {
+          "type": "string",
+          "format": "boolean"
+        }
+      },
+      "patternProperties": {
+        "^name:(en|nl)$": {
+          "type": "string"
+        },
+        "^displayName:(en|nl)$": {
+          "type": "string"
+        },
+        "^description:(en|nl)$": {
+          "type": "string"
+        },
+        "^AssertionConsumerService:([0-9]{1}):Binding$": {
+          "$ref": "#/definitions/AssertionConsumerServiceBinding",
+          "multiplicity": 10
+        },
+        "^AssertionConsumerService:([0-9]{1}):Location$": {
+          "type": "string",
+          "format": "url",
+          "multiplicity": 10
+        },
+        "^AssertionConsumerService:([0-9]{1}):index$": {
+          "type": "string",
+          "format": "number",
+          "multiplicity": 10
+        },
+        "^NameIDFormats:([0-2]{1})$": {
+          "$ref": "#/definitions/NameIDFormat",
+          "multiplicity": 3
+        },
+        "^contacts:([0-3]{1}):surName$": {
+          "type": "string",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):givenName$": {
+          "type": "string",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):emailAddress$": {
+          "type": "string",
+          "format": "saml-email",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):telephoneNumber$": {
+          "type": "string",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):isSirtfiSecurityContact$": {
+          "type": "string",
+          "format": "boolean",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):contactType$": {
+          "type": "string",
+          "enum": [
+            "technical",
+            "support",
+            "administrative",
+            "billing",
+            "other"
+          ],
+          "multiplicity": 4
+        },
+        "^OrganizationName:(en|nl)$": {
+          "type": "string"
+        },
+        "^OrganizationDisplayName:(en|nl)$": {
+          "type": "string"
+        },
+        "^OrganizationURL:(en|nl)$": {
+          "type": "string",
+          "format": "url"
+        },
+        "^url:(en|nl)$": {
+          "type": "string",
+          "format": "url"
+        },
+        "^mdui:PrivacyStatementURL:(en|nl)$": {
+          "type": "string",
+          "format": "url"
+        },
+        "^mdrpi:RegistrationPolicy:(en|nl)$": {
+          "type": "string"
+        },
+        "^coin:entity_categories:([1-2]{1})$": {
+          "type": "string",
+          "enum": [
+            "http://refeds.org/category/research-and-scholarship",
+            "http://refeds.org/category/hide-from-discovery",
+            "http://www.geant.net/uri/dataprotection-code-of-conduct/v1"
+          ],
+          "multiplicity": 2,
+          "startIndex": 1
+        }
+      },
+      "required": [
+        "name:en",
+        "AssertionConsumerService:0:Binding",
+        "AssertionConsumerService:0:Location",
+        "NameIDFormat"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "entityid",
+    "state",
+    "allowedall",
+    "metaDataFields"
+  ],
+  "additionalProperties": false,
+  "indexes": [
+    {
+      "name": "field_entityid",
+      "type": "field",
+      "fields": [
+        "entityid"
+      ],
+      "unique": true
+    }
+  ]
+}

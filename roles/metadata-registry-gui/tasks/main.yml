@@ -1,0 +1,39 @@
+---
+- name: create apache folder
+  file: path=/var/www/metadata-registry owner=apache group=apache mode=2755 state=directory
+
+- name: copy virtual host config
+  template: src=metadata-registry.conf.j2 dest=/etc/httpd/conf.d/metadata-registry.conf
+  notify: restart httpd
+  tags: deploy
+
+- name: download html archive
+  maven_artifact:
+    group_id: org.openconext
+    artifact_id: metadata-registry-gui
+    extension: zip
+    version: "{{ metadata_registry_gui_version }}"
+    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in metadata_registry_gui_version else maven_repo }}"
+    dest: /var/www/metadata-registry
+  register: maven_result
+  tags: deploy
+
+- name: extract html archive
+  unarchive:
+    src: "{{ maven_result.dest }}"
+    dest: /var/www/metadata-registry
+    copy: no
+    owner: root
+    group: apache
+  register: unarchive_result
+  tags: deploy
+  when: maven_result.changed
+
+- name: create symlink to downloaded version
+  file:
+    src: "{{ unarchive_result.dest }}/metadata-registry-gui-{{ metadata_registry_gui_version }}"
+    dest: "{{ metadata_registry_current }}"
+    state: link
+    force: yes
+  tags: deploy
+  when: unarchive_result.changed

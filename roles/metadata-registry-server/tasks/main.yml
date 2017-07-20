@@ -1,0 +1,85 @@
+---
+- name: create user
+  user: name=metadata-registry system=yes home={{ metadata_registry_dir }} shell=/sbin/nologin
+
+- name: Copy systemd service file
+  template: src=../../templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  notify:
+    - "systemctl daemon-reload"
+    - "restart metadata-registry"
+
+- name: enable service
+  service: name=metadata-registry enabled=yes
+
+- name: Create logging directory
+  file: path=/var/log/{{ springapp_service_name }} state=directory owner=metadata-registry group=metadata-registry mode=0755
+
+- include: ../../../tasks/springbootapp/install-maven-release.yml
+  when: "metadata_registry_local_jar == ''"
+
+- include: ../../../tasks/springbootapp/install-local.yml
+  when: "metadata_registry_local_jar != ''"
+
+- name: copy logging config
+  template: src=logback.xml.j2 dest={{ metadata_registry_dir }}/logback.xml owner=metadata-registry group=metadata-registry mode=0740
+  notify: restart metadata-registry
+
+- name: copy application config
+  template: src=application.yml.j2 dest={{ metadata_registry_dir }}/application.yml owner=metadata-registry group=metadata-registry mode=0740
+  notify: restart metadata-registry
+
+- name: Create metadata configuration directory
+  file: path={{ metadata_registry_dir }}/metadata_configuration state=directory owner=metadata-registry group=metadata-registry mode=0740
+
+- name: copy metadata configuration
+  copy:
+    src: metadata_configuration
+    dest: "{{ metadata_registry_dir }}"
+    owner: metadata-registry
+    group: metadata-registry
+    mode: 0640
+  tags: deploy
+  notify: restart metadata-registry
+
+- name: Create metadata export directory
+  file: path={{ metadata_registry_dir }}/metadata_export state=directory owner=metadata-registry group=metadata-registry mode=0740
+
+- name: copy metadata export
+  copy:
+    src: metadata_export
+    dest: "{{ metadata_registry_dir }}"
+    owner: metadata-registry
+    group: metadata-registry
+    mode: 0640
+  tags: deploy
+  notify: restart metadata-registry
+
+- name: Create metadata templates directory
+  file: path={{ metadata_registry_dir }}/metadata_templates state=directory owner=metadata-registry group=metadata-registry mode=0740
+
+- name: copy metadata templates
+  copy:
+    src: metadata_templates
+    dest: "{{ metadata_registry_dir }}"
+    owner: metadata-registry
+    group: metadata-registry
+    mode: 0640
+  tags: deploy
+  notify: restart metadata-registry
+
+# no idea why this is necessary, as the init script returns an ok status also
+# if metadata-registry is still initializing.  Waiting for the port to open works well
+# though, and seems like to correct way to handle this.
+- name: start the metadata-registry service
+  service: name=metadata-registry state=started enabled=yes
+  ignore_errors: true
+
+- name: wait for metadata-registry to start
+  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
+
+- name: ensure the service is started
+  service: name=metadata-registry enabled=yes state=started
+
+- name: cleanup old jars
+  shell: find . ! -name $(basename $(readlink metadata-registry-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ metadata_registry_dir }}
+  when: maven_result.changed

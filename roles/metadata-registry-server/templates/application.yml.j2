@@ -1,0 +1,50 @@
+logging:
+  config: file://{{ metadata_registry_dir }}/logback.xml
+  level:
+    org.springframework.data.mongodb: INFO
+
+server:
+  # The port to where this Spring Boot application listens to.
+  port: {{ springapp_tcpport }}
+  # We serve from the root. Do not change this
+  contextPath:
+  session:
+    cookie:
+      secure: true
+  server-header: no
+  session-timeout: 3600
+
+features: {{ metadata_registry.features }}
+
+metadata_configuration_path: file://{{ metadata_registry_dir }}/metadata_configuration
+metadata_templates_path: file://{{ metadata_registry_dir }}/metadata_templates
+metadata_exports_path: file://{{ metadata_registry_dir }}/metadata_export
+migrate_data_from_janus: false
+
+security:
+  internal_user_name: {{ metadata_registry.internal_api_user }}
+  internal_password: {{ metadata_registry_internal_api_password }}
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://{{ metadata_registry.mongo_host }}:{{ metadata_registry.mongo_port }}/metadata
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://{{ metadata_registry.db_host }}/{{ metadata_registry.db_name }}
+    username: {{ metadata_registry.db_user }}
+    password: {{ metadata_registry.db_password }}
+    dbcp2:
+      test-while-idle: true
+      validation-query: SELECT 1
+  main:
+    banner-mode: "off"
+
+# We disable all endpoints except health for the load-balancer and info for git information.
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+    sensitive: false
+  info:
+    enabled: true

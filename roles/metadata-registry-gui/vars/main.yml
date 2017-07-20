@@ -1,0 +1,4 @@
+---
+metadata_registry_current: /var/www/metadata-registry/current
+#TODO - make this into a variable, see also metadata-registry-server/var/main.yml
+springapp_tcpport: 9393

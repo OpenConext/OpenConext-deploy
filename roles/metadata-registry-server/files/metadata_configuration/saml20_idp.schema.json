@@ -1,0 +1,298 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "saml20_idp",
+  "definitions": {
+    "SingleSignOnService": {
+      "type": "string",
+      "enum": [
+        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+        "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
+        "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
+        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+        "urn:oasis:names:tc:SAML:2.0:bindings:URI"
+      ],
+      "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+    },
+    "NameIDFormat": {
+      "type": "string",
+      "enum": [
+        "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+        "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+        "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+      ],
+      "default": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+    }
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "eid": {
+      "type": "number"
+    },
+    "entityid": {
+      "type": "string"
+    },
+    "revisionid": {
+      "type": "number"
+    },
+
+    "state": {
+      "type": "string",
+      "enum": [
+        "prodaccepted",
+        "testaccepted"
+      ]
+    },
+    "metadataurl": {
+      "type": ["string", "null"]
+    },
+    "allowedall": {
+      "type": "boolean"
+    },
+    "manipulation": {
+      "type": ["string", "null"]
+    },
+    "user": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string"
+    },
+    "ip": {
+      "type": "string"
+    },
+    "revisionnote": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "allowedEntities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "disableConsent": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": ["string", "null"]
+    },
+    "metaDataFields": {
+      "type": "object",
+      "properties": {
+        "certData": {
+          "type": "string",
+          "format": "certificate"
+        },
+        "certData2": {
+          "type": "string",
+          "format": "certificate"
+        },
+        "certData3": {
+          "type": "string",
+          "format": "certificate"
+        },
+        "SingleLogoutService_Binding": {
+          "type": "string",
+          "enum": [
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+            "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
+            "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+            "urn:oasis:names:tc:SAML:2.0:bindings:URI"
+          ],
+          "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "SingleLogoutService_Location": {
+          "type": "string",
+          "format": "url"
+        },
+        "logo:0:url": {
+          "type": "string",
+          "format": "url"
+        },
+        "logo:0:width": {
+          "type": "string",
+          "format": "number"
+        },
+        "logo:0:height": {
+          "type": "string",
+          "format": "number"
+        },
+        "redirect.sign": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:publish_in_edugain": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:publish_in_edugain_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "coin:additional_logging": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:institution_id": {
+          "type": "string"
+        },
+        "coin:institution_guid": {
+          "type": "string",
+          "format" : "uuid"
+        },
+        "coin:guest_qualifier": {
+          "type": "string",
+          "enum": [
+            "All",
+            "Some",
+            "None"
+          ],
+          "default": "All"
+        },
+        "coin:schachomeorganization": {
+          "type": "string"
+        },
+        "NameIDFormat": {
+          "$ref": "#/definitions/NameIDFormat"
+        },
+        "coin:disable_scoping": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:hidden": {
+          "type": "string",
+          "format": "boolean"
+        }
+      },
+      "patternProperties": {
+        "^name:(en|nl)$": {
+          "type": "string"
+        },
+        "^displayName:(en|nl)$": {
+          "type": "string"
+        },
+        "^description:(en|nl)$": {
+          "type": "string"
+        },
+        "^contacts:([0-3]{1}):surName$": {
+          "type": "string",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):givenName$": {
+          "type": "string",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):emailAddress$": {
+          "type": "string",
+          "format": "saml-email",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):telephoneNumber$": {
+          "type": "string",
+          "format": "string",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):isSirtfiSecurityContact$": {
+          "type": "string",
+          "format": "boolean",
+          "multiplicity": 4
+        },
+        "^contacts:([0-3]{1}):contactType$": {
+          "type": "string",
+          "enum": [
+            "technical",
+            "support",
+            "administrative",
+            "billing",
+            "other"
+          ],
+          "multiplicity": 4
+        },
+        "^OrganizationName:(en|nl)$": {
+          "type": "string"
+        },
+        "^OrganizationDisplayName:(en|nl)$": {
+          "type": "string"
+        },
+        "^OrganizationURL:(en|nl)$": {
+          "type": "string",
+          "format": "url"
+        },
+        "^coin:entity_categories:([1-2]{1})$": {
+          "type": "string",
+          "enum": [
+            "http://refeds.org/category/research-and-scholarship",
+            "http://refeds.org/category/hide-from-discovery",
+            "http://www.geant.net/uri/dataprotection-code-of-conduct/v1"
+          ],
+          "multiplicity": 2,
+          "startIndex": 1
+        },
+        "^SingleSignOnService:([0-9]{1}):Binding$": {
+          "$ref": "#/definitions/SingleSignOnService",
+          "multiplicity": 10
+        },
+        "^SingleSignOnService:([0-9]{1}):Location$": {
+          "type": "string",
+          "format": "url",
+          "multiplicity": 10
+        },
+        "^keywords:(en|nl)$": {
+          "type": "string"
+        },
+        "^shibmd:scope:([0-5]{1}):allowed$": {
+          "type": "string",
+          "multiplicity": 5
+        },
+        "^shibmd:scope:([0-5]{1}):regexp$": {
+          "type": "string",
+          "multiplicity": 5
+        }
+      },
+      "required": [
+        "name:en",
+        "SingleSignOnService:0:Binding",
+        "SingleSignOnService:0:Location"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "entityid",
+    "state",
+    "allowedall",
+    "metaDataFields"
+  ],
+  "additionalProperties": false,
+  "indexes": [
+    {
+      "name": "field_entityid",
+      "type": "field",
+      "fields": [
+        "entityid"
+      ],
+      "unique": true
+    }
+  ]
+}
