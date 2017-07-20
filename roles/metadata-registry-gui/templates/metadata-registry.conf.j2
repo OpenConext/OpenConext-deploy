@@ -54,7 +54,7 @@ Listen {{ apache_app_listen_address.metadata_registry }}:{{ loadbalancing.metada
     <Location />
       AuthType shibboleth
       ShibUseHeaders On
-      ShibRequestSetting applicationId metadata_
+      ShibRequestSetting applicationId metadata-registry
       ShibRequireSession On
       require valid-user
     </Location>
