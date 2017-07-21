@@ -7,6 +7,11 @@
   notify: restart httpd
   tags: deploy
 
+- name: copy virtual host backdoor config
+  template: src=metadata-registry.conf.backdoor.j2 dest=/etc/httpd/conf.d/metadata-registry.conf.backdoor
+  notify: restart httpd
+  tags: deploy
+
 - name: download html archive
   maven_artifact:
     group_id: org.openconext

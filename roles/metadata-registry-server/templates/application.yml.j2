@@ -24,6 +24,9 @@ migrate_data_from_janus: false
 security:
   internal_user_name: {{ metadata_registry.internal_api_user }}
   internal_password: {{ metadata_registry_internal_api_password }}
+  backdoor_user_name: {{ metadata_registry.backdoor_api_user }}
+  backdoor_password: {{ metadata_registry_backdoor_api_password }}
+
 
 spring:
   data:
