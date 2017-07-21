@@ -124,7 +124,7 @@
         <md:SurName>{{metaDataFields.contacts:0:surName}}</md:SurName>
         {{/metaDataFields.contacts:0:surName}}
         {{#metaDataFields.contacts:0:emailAddress}}
-        <md:EmailAddress>{{metaDataFields.contacts:0:emailAddress}}</md:EmailAddress>
+        <md:EmailAddress>mailto:{{metaDataFields.contacts:0:emailAddress}}</md:EmailAddress>
         {{/metaDataFields.contacts:0:emailAddress}}
     </md:ContactPerson>
     {{/metaDataFields.contacts:0:contactType}}
@@ -137,7 +137,7 @@
         <md:SurName>{{metaDataFields.contacts:1:surName}}</md:SurName>
         {{/metaDataFields.contacts:1:surName}}
         {{#metaDataFields.contacts:1:emailAddress}}
-        <md:EmailAddress>{{metaDataFields.contacts:1:emailAddress}}</md:EmailAddress>
+        <md:EmailAddress>mailto:{{metaDataFields.contacts:1:emailAddress}}</md:EmailAddress>
         {{/metaDataFields.contacts:1:emailAddress}}
     </md:ContactPerson>
     {{/metaDataFields.contacts:1:contactType}}
@@ -150,7 +150,7 @@
         <md:SurName>{{metaDataFields.contacts:2:surName}}</md:SurName>
         {{/metaDataFields.contacts:2:surName}}
         {{#metaDataFields.contacts:2:emailAddress}}
-        <md:EmailAddress>{{metaDataFields.contacts:2:emailAddress}}</md:EmailAddress>
+        <md:EmailAddress>mailto:{{metaDataFields.contacts:2:emailAddress}}</md:EmailAddress>
         {{/metaDataFields.contacts:2:emailAddress}}
     </md:ContactPerson>
     {{/metaDataFields.contacts:2:contactType}}
@@ -163,7 +163,7 @@
         <md:SurName>{{metaDataFields.contacts:3:surName}}</md:SurName>
         {{/metaDataFields.contacts:3:surName}}
         {{#metaDataFields.contacts:3:emailAddress}}
-        <md:EmailAddress>{{metaDataFields.contacts:3:emailAddress}}</md:EmailAddress>
+        <md:EmailAddress>mailto:{{metaDataFields.contacts:3:emailAddress}}</md:EmailAddress>
         {{/metaDataFields.contacts:3:emailAddress}}
     </md:ContactPerson>
     {{/metaDataFields.contacts:3:contactType}}

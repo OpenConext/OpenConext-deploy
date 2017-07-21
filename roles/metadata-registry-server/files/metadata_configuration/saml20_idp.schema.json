@@ -205,7 +205,7 @@
         },
         "^contacts:([0-3]{1}):emailAddress$": {
           "type": "string",
-          "format": "saml-email",
+          "format": "email",
           "multiplicity": 4
         },
         "^contacts:([0-3]{1}):telephoneNumber$": {
