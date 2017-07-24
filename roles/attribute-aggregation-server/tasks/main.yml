@@ -38,10 +38,6 @@
   template: src=attributeAuthorities.yml.j2 dest={{ attribute_aggregation_dir }}/attributeAuthorities.yml owner=attribute-aggregation group=attribute-aggregation mode=0740
   notify: restart attribute-aggregation
 
-- name: copy application config
-  template: src=application.yml.j2 dest={{ attribute_aggregation_dir }}/application.yml owner=attribute-aggregation group=attribute-aggregation mode=0740
-  notify: restart attribute-aggregation
-
 # no idea why this is necessary, as the init script returns an ok status also
 # if the application is still initializing.  Waiting for the port to open works well
 # though, and seems like to correct way to handle this.
