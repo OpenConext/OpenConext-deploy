@@ -88,3 +88,15 @@
   file: src={{ profile_install_dir }} dest={{ profile_current_release_symlink }} state=link
   notify:
     - restart httpd
+
+# Remove all dirs, but keep the current version and from the rest the most recent one.
+- name: Clean up old releases
+  shell: ls -td {{ openconext_releases_dir }}/OpenConext-profile-* | grep -v $(readlink {{ profile_current_release_symlink }}) | tail -n +2 | xargs --no-run-if-empty rm -rv
+  register: clean_releases
+  changed_when: '"removed" in clean_releases.stdout'
+
+# Remove all tarballs, but keep the current version and from the rest the most recent one.
+- name: Clean up old builds
+  shell: ls -td {{ openconext_builds_dir }}/OpenConext-profile-* | grep -v {{ profile_build_path }} | tail -n +2 | xargs --no-run-if-empty rm -rv
+  register: clean_builds
+  changed_when: '"removed" in clean_builds.stdout'
