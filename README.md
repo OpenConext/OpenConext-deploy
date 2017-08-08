@@ -15,6 +15,9 @@ A manual to run the deploy to a single target machine (e.g. a hosted VM) is in t
 To run a development instance on your local machine with Vagrant and VirtualBox, follow these steps.
 They are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
 
+It is also possible to deploy using Vagrant and libvirt/qemu (on Linux).
+Instructions are provided below.
+
 ## Install Vagrant and VirtualBox
 
 VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product, downloads and user manual can be found on the [VirtualBox website](https://www.virtualbox.org/wiki/Downloads).
@@ -22,7 +25,7 @@ VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product, downloads
 
 For installation instructions see [the website](https://docs.vagrantup.com/v2/installation/index.html).
 
-You will need at least Vagrant 1.7. Do not use Vagrant 1.8.5, which contains a bug that makes that the provisioning fails with the message "Warning: Authentication failure. Retrying...". 
+You will need at least Vagrant 1.7. Do not use Vagrant 1.8.5, which contains a bug that makes that the provisioning fails with the message "Warning: Authentication failure. Retrying...".  Also, more recent versions (around 1.9.1) have problems detecting the network devices inside the VM, causing vagrant to fail to connect using ssh.
 
 To install both with Homebrew:
 
@@ -96,6 +99,45 @@ vagrant ssh apps_centos7
 (using `vagrant ssh` without a VM specified leads to the Apps VM)
 
 The lb vm contains haproxy. The apps vm contains all the applications, apache and database.
+
+## Deploy using libvirt/qemu
+
+Instead of using Virtualbox as described above, it is also possible to use libvirt/qemu on Linux
+machines.  This requires a number of additional steps.
+
+1. Make sure you have a recent version of vagrant, and that libvirt/qemu is
+   working as expected for normal VMs (e.g., check if virt-manager works
+   correctly to create a new VM).
+2. Install the `vagrant-libvirt` and `vagrant-mutate` plugins:
+
+```
+╰─▶ vagrant plugin install vagrant-libvirt
+╰─▶ vagrant plugin install vagrant-mutate
+```
+   (or use the version provided by your distribution).
+3. Download the Openconext base CentOS7 image.  This is a Virtualbox-image, so
+   it needs to be converted to a libvirt-image using `vagrant mutate`:
+```
+╰─▶ vagrant box add https://build.openconext.org/vagrant_boxes/virtualbox-centos7.box --name CentOS-7.0
+╰─▶ vagrant mutate CentOS-7.0 libvirt --force-virtio
+```
+4. Vagrant should now have two variants of the CentOS-7.0 image:
+```
+╰─▶ vagrant box list
+CentOS-7.0 (libvirt, 0)
+CentOS-7.0 (virtualbox, 0)
+```
+5. From a checked-out version of the OpenConext-deploy repository, run the
+   following command to check if the boxes come up:
+```
+╰─▶ vagrant up --provider libvirt lb_centos7
+╰─▶ vagrant up --provider libvirt apps_centos7
+```
+(set the environment variable `VAGRANT_LOG=debug` to increase verbosity of
+anything goes wrong.
+6. You should be set to run the `provision-vagrant script`.
+
+
 
 # Releases to vm, test, acc, prod
 
