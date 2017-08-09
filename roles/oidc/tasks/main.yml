@@ -29,7 +29,7 @@
   notify: restart tomcat
 
 - name: copy oidc logging configuration
-  copy: src=oidc-logback.xml dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc-logback.xml group=tomcat owner=tomcat
+  template: src=oidc-logback.xml.j2 dest={{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc-logback.xml group=tomcat owner=tomcat
   notify: restart tomcat
 
 - meta: flush_handlers
@@ -37,10 +37,3 @@
 - name: copy virtual host config
   template: src=oidc.conf.j2 dest=/etc/httpd/conf.d/oidc.conf
   notify: reload httpd
-  when: oidc_standalone is undefined
-
-- name: copy standalone httpd config
-  template: src=oidc.httpd.conf.standalone.j2 dest=/etc/httpd/conf.d/oidc.conf
-  notify: reload httpd
-  when: oidc_standalone is defined
-        
