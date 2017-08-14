@@ -427,8 +427,7 @@
       "required": [
         "name:en",
         "AssertionConsumerService:0:Binding",
-        "AssertionConsumerService:0:Location",
-        "NameIDFormat"
+        "AssertionConsumerService:0:Location"
       ],
       "additionalProperties": false
     }
