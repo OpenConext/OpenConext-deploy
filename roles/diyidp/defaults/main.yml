@@ -1,6 +1,6 @@
 ---
 diyidp_fpm_user: diyidp
-simplesamlphp_version: 1.14.9
+simplesamlphp_version: 1.14.15
 diyidp_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-diyidp"
 diyidp_domain: diyidp."{{ base_domain }}"
 diyidp_cert: "diyidp.crt"
