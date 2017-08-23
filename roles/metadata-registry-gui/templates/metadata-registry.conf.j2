@@ -59,7 +59,7 @@ Listen {{ apache_app_listen_address.metadata_registry }}:{{ loadbalancing.metada
       require valid-user
     </Location>
 
-    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' static.surfconext.nl data:;"
+    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' static.surfconext.nl static.{{ base_domain }} data:;"
     Header set X-Frame-Options "DENY"
     Header set Referrer-Policy "origin-when-cross-origin"
     Header set X-Content-Type-Options "nosniff"
