@@ -49,6 +49,12 @@
     "entityid": {
       "type": "string"
     },
+    "type": {
+      "type": "string",
+      "enum": [
+        "saml20-sp"
+      ]
+    },
     "revisionid": {
       "type": "number"
     },

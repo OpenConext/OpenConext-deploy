@@ -35,6 +35,12 @@
     "entityid": {
       "type": "string"
     },
+    "type": {
+      "type": "string",
+      "enum": [
+        "saml20-idp"
+      ]
+    },
     "revisionid": {
       "type": "number"
     },
@@ -125,6 +131,9 @@
         "SingleLogoutService_Location": {
           "type": "string",
           "format": "url"
+        },
+        "mdrpi:RegistrationInfo": {
+          "type": "string"
         },
         "logo:0:url": {
           "type": "string",
@@ -239,6 +248,9 @@
           "type": "string",
           "format": "url"
         },
+        "^mdrpi:RegistrationPolicy:(en|nl)$": {
+          "type": "string"
+        },
         "^coin:entity_categories:([1-2]{1})$": {
           "type": "string",
           "enum": [
@@ -266,7 +278,7 @@
           "multiplicity": 5
         },
         "^shibmd:scope:([0-5]{1}):regexp$": {
-          "type": "string",
+          "type": "boolean",
           "multiplicity": 5
         }
       },

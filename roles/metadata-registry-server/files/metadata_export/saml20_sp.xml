@@ -103,6 +103,25 @@
                                      Location="{{metaDataFields.AssertionConsumerService:9:Location}}"
                                      index="{{metaDataFields.AssertionConsumerService:9:index}}{{^metaDataFields.AssertionConsumerService:9:index}}9{{/metaDataFields.AssertionConsumerService:9:index}}"/>
         {{/metaDataFields.AssertionConsumerService:9:Location}}
+        {{#AttributeConsumingService}}
+        <md:AttributeConsumingService index="0">
+            {{#metaDataFields.name:en}}
+            <md:ServiceName xml:lang="en">{{metaDataFields.name:en}}</md:ServiceName>
+            {{/metaDataFields.name:en}}
+            {{#metaDataFields.name:nl}}
+            <md:ServiceName xml:lang="nl">{{metaDataFields.name:nl}}</md:ServiceName>
+            {{/metaDataFields.name:nl}}
+            {{#metaDataFields.description:en}}
+            <md:ServiceDescription xml:lang="en">{{metaDataFields.description:en}}</md:ServiceDescription>
+            {{/metaDataFields.description:en}}
+            {{#metaDataFields.description:nl}}
+            <md:ServiceDescription xml:lang="nl">{{metaDataFields.description:nl}}</md:ServiceDescription>
+            {{/metaDataFields.description:nl}}
+            {{#requestedAttributes}}
+            <md:RequestedAttribute Name="{{toString}}"/>
+            {{/requestedAttributes}}
+        </md:AttributeConsumingService>
+        {{/AttributeConsumingService}}
     </md:SPSSODescriptor>
     {{#metaDataFields.OrganizationName}}
     <md:Organization>
