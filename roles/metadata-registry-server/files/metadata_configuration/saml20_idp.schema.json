@@ -278,7 +278,8 @@
           "multiplicity": 5
         },
         "^shibmd:scope:([0-5]{1}):regexp$": {
-          "type": "boolean",
+          "type": "string",
+          "format": "boolean",
           "multiplicity": 5
         }
       },
