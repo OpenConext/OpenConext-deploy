@@ -24,6 +24,10 @@
   template: src=logback.xml.j2 dest={{ metadata_registry_dir }}/logback.xml owner=metadata-registry group=metadata-registry mode=0740
   notify: restart metadata-registry
 
+- name: Include vars of engineblock
+  include_vars:
+    file: ../../engineblock/defaults/main.yml
+
 - name: copy application config
   template: src=application.yml.j2 dest={{ metadata_registry_dir }}/application.yml owner=metadata-registry group=metadata-registry mode=0740
   notify: restart metadata-registry

@@ -16,6 +16,14 @@ server:
 
 features: {{ metadata_registry.features }}
 
+push:
+  url: https://{{ engine_api_janus_user }}:{{ engine_api_janus_password }}@{{ engine_api_domain }}/api/connections
+  name: SURFConext EngineBlock
+
+product:
+  name: Metadata Registry
+  organization: OpenConext
+
 metadata_configuration_path: file://{{ metadata_registry_dir }}/metadata_configuration
 metadata_templates_path: file://{{ metadata_registry_dir }}/metadata_templates
 metadata_exports_path: file://{{ metadata_registry_dir }}/metadata_export
