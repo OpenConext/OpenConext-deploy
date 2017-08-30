@@ -17,7 +17,9 @@ server:
 features: {{ metadata_registry.features }}
 
 push:
-  url: https://{{ engine_api_janus_user }}:{{ engine_api_janus_password }}@{{ engine_api_domain }}/api/connections
+  url: https://{{ engine_api_domain }}/api/connections
+  user: {{ engine_api_janus_user }}
+  password: {{ engine_api_janus_password }}
   name: SURFConext EngineBlock
 
 product:
