@@ -32,6 +32,10 @@
   template: src=application.yml.j2 dest={{ metadata_registry_dir }}/application.yml owner=metadata-registry group=metadata-registry mode=0740
   notify: restart metadata-registry
 
+- name: copy api users
+  template: src=mr-api-users.yml.j2 dest={{ metadata_registry_dir }}/mr-api-users.yml owner=metadata-registry group=metadata-registry mode=0740
+  notify: restart metadata-registry
+
 - name: Create metadata configuration directory
   file: path={{ metadata_registry_dir }}/metadata_configuration state=directory owner=metadata-registry group=metadata-registry mode=0740
 
