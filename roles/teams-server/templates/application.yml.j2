@@ -19,6 +19,13 @@ feature-toggles:
   expiry-date-membership: false
   person-email-picker: false
 
+config:
+  support-email: {{ support_email }}
+  help-link-en: {{ teams_help_link_en }}
+  help-link-nl: {{ teams_help_link_nl }}
+  help-tos-en: {{ teams_tos_en }}
+  help-tos-nl: {{ teams_tos_nl }}
+
 security:
   user:
     name: {{ teams.voot_api_user }}
