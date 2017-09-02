@@ -51,6 +51,16 @@ spring:
   main:
     banner-mode: "off"
 
+eb:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://{{ metadata_registry.eb_db_host }}/{{ metadata_registry.eb_db_name }}
+    username: {{ metadata_registry.eb_db_user }}
+    password: {{ metadata_registry.eb_db_password }}
+    dbcp2:
+      test-while-idle: true
+      validation-query: SELECT 1
+
 # We disable all endpoints except health for the load-balancer and info for git information.
 endpoints:
   enabled: false
