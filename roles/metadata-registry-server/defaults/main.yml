@@ -5,4 +5,4 @@ metadata_registry_snapshot_timestamp: ''
 metadata_registry_local_jar: ''
 metadata_registry_jar: metadata-registry-current.jar
 metadata_registry_random_source: 'file:///dev/urandom'
-metadata_registry_cronjobmaster: true
+manage_cronjobmaster: true

@@ -16,11 +16,19 @@ server:
 
 features: {{ metadata_registry.features }}
 
+manage_cronjobmaster: {{ manage_cronjobmaster }}
+manage_cronjob_minutes: 30
+
 push:
   url: https://{{ engine_api_domain }}/api/connections
   user: {{ engine_api_janus_user }}
   password: {{ engine_api_janus_password }}
   name: SURFConext EngineBlock
+
+email:
+  base_url: https://manage.{{ base_domain }}
+  from: {{ noreply_email }}
+  to: {{ error_mail_to }}
 
 product:
   name: Metadata Registry
@@ -37,6 +45,11 @@ security:
   api_users_config_path: file://{{ metadata_registry_dir }}/mr-api-users.yml
 
 spring:
+  profiles:
+    active: test
+  mail:
+    host: localhost
+    port: 25
   data:
     mongodb:
       uri: mongodb://{{ metadata_registry.mongo_host }}:{{ metadata_registry.mongo_port }}/metadata
@@ -60,6 +73,11 @@ eb:
     dbcp2:
       test-while-idle: true
       validation-query: SELECT 1
+
+management:
+  health:
+    mail:
+      enabled: true
 
 # We disable all endpoints except health for the load-balancer and info for git information.
 endpoints:
