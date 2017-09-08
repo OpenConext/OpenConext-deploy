@@ -6,11 +6,11 @@ teams_local_jar: ''
 teams_jar: teams-current.jar
 teams_random_source: 'file:///dev/urandom'
 teams_cronjobmaster: true
-teams_help_link_en: https://wiki.surfnet.nl/pages/viewpage.action?pageId=35422637
-teams_help_link_nl: https://wiki.surfnet.nl/display/conextsupport/SURFconext+teams
-teams_tos_en: https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29
-teams_tos_nl: https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29
-teams_main_link: https://www.surfconext.nl
-teams_organization: SURFconext
+teams_help_link_en: https://example.org
+teams_help_link_nl: https://example.org
+teams_tos_en: https://example.org
+teams_tos_nl: https://example.org
+teams_main_link: https://www.openconext.org
+teams_organization: "{{ instance_name}}"
 
 
