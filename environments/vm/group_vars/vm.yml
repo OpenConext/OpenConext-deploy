@@ -171,7 +171,6 @@ teams:
   voot_api_user: "voot"
   product_name: "OpenConext Teams"
   default_stem_name: "demo:openconext:org"
-  openconext_mails: true
 
 #teams_snapshot_timestamp: 20160314.083705-5
 

@@ -25,6 +25,8 @@ config:
   help-link-nl: {{ teams_help_link_nl }}
   help-tos-en: {{ teams_tos_en }}
   help-tos-nl: {{ teams_tos_nl }}
+  main-link: {{ teams_main_link }}
+  organization: {{ teams_organization }}
 
 security:
   user:
@@ -41,7 +43,6 @@ teams:
   group-name-context: "{{ teams.group_name_context }}"
   product-name: "{{ teams.product_name }}"
   non-guest-member-of: "urn:collab:org:surf.nl"
-  openconext-mails: "{{ teams.openconext_mails }}"
 voot:
   serviceUrl: https://voot.{{ base_domain }}
   accessTokenUri: https://authz.{{ base_domain }}/oauth/token

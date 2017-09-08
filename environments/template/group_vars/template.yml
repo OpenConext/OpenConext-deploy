@@ -157,7 +157,6 @@ teams:
   voot_api_user: "voot"
   product_name: "OpenConext Teams"
   default_stem_name: "demo:openconext:org"
-  openconext_mails: true
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on

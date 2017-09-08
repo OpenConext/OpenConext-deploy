@@ -174,7 +174,6 @@ teams:
   voot_api_user: "voot"
   product_name: "OpenConext Teams"
   default_stem_name: "demo:openconext:org"
-  openconext_mails: true
 
 teams_provision_users: true
 
