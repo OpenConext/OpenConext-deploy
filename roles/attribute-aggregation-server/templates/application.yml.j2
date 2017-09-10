@@ -30,6 +30,9 @@ security:
   internal_user_name: {{ aa.eb_username }}
   internal_password: {{ aa.eb_password }}
 
+pseudo:
+  mail_postfix: {{ attribute_aggregation_pseudo_mail_postfix }}
+
 spring:
   jpa:
     properties:
