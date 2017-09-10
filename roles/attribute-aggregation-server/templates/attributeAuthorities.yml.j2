@@ -1,5 +1,26 @@
 authorities:
   - {
+      id: "pseudo_email",
+      description: "Pseudo email provides a pseudo email address to be used by Service Providers. Mails sent to this pseudo email address will be delivered to the real email address",
+      endpoint: "",
+      user: "",
+      password: "",
+      timeOut: 1000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:mail",
+          description: "The pseudo email address of the user.",
+          type: "string",
+          example: "john.doe@example.org"
+        }
+      ],
+      requiredInputAttributes: [
+        {
+        name: "urn:mace:dir:attribute-def:mail"
+        }
+      ]
+    }
+  - {
       id: "orcid",
       description: "ORCID provides a persistent digital identifier that distinguishes you from every other researcher and, through integration in key research workflows such as manuscript and grant submission, supports automated linkages between you and your professional activities ensuring that your work is recognized",
       endpoint: "",
