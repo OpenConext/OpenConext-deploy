@@ -444,6 +444,9 @@ loadbalancing:
   metadata_exporter:
     port: 616
 
+  manage:
+    port: 617
+
   mujina_sp:
     port: 607
 
@@ -573,6 +576,14 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/health"
     port: 616
+    servers: "{{java_servers}}"
+
+  - name: manage
+    vhost_name: "manage"
+    ip: 192.168.66.98
+    ha_method: "GET"
+    ha_url: "/manage/api/health"
+    port: 617
     servers: "{{java_servers}}"
 
   - name: mujina-sp

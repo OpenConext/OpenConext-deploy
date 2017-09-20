@@ -432,6 +432,8 @@ loadbalancing:
     port: 615
   metadata_exporter:
     port: 616
+  manage:
+    port: 617
 
 haproxy_applications:
   - name: multidata
@@ -440,6 +442,19 @@ haproxy_applications:
     ha_method: GET
     ha_url: /health
     port: 616
+    servers: "{{ java_servers }}"
+    crt_name: "{{ tls_star_cert }}"
+    key_name: "{{ tls_star_cert_key }}"
+    sslbackend: yes
+    backend_vhost_name: backend.{{ base_domain }}
+    backend_ca_file: "{{ tls_backend_ca }}"
+
+  - name: manage
+    vhost_name: manage
+    ip: 127.0.0.1
+    ha_method: GET
+    ha_url: /manage/api/health
+    port: 617
     servers: "{{ java_servers }}"
     crt_name: "{{ tls_star_cert }}"
     key_name: "{{ tls_star_cert_key }}"
