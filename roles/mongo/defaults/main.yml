@@ -1,0 +1,16 @@
+# The global variable file mongodb installation
+
+# The port for mongo server
+mongod_port: 27017
+
+# The password for admin user
+mongo_admin_pass: "{{ mongo_admin_password }}"
+
+# The name of the replication set
+replica_set_name: "{{ instance_name }}"
+
+mongo_tls_ca: mongo.{{ base_domain }}_ca.pem
+
+mongo_primary: false
+mongo_tls: false
+mongo_cluster: false

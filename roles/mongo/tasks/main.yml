@@ -1,0 +1,103 @@
+---
+- name: Check if mongo is installed. If not, the admin user is created
+  stat: path=/var/lib/mongo
+  register: mongo_present
+  when: mongo_primary
+
+- name: Create the repository for mongodb
+  copy: src=mongo.repo dest=/etc/yum.repos.d/mongo.repo
+
+- name: Install the mongodb package
+  yum: name={{ item }} state=installed
+  with_items:
+    - mongodb-org
+
+- name: Install pymongo 
+  pip: name=pymongo state=present
+
+- name: Install mongod.conf file without configuration on the primary host
+  template: src=mongod_standalone.conf.j2 dest=/etc/mongod.conf
+  when: 
+     - mongo_primary
+     - mongo_present.stat.exists == False
+
+- name: Enable and start mongod on the primary host
+  service: name=mongod.service enabled=yes state=started
+  when: mongo_primary
+
+- name: Add the admin user using tls
+  mongodb_user: database=admin login_port={{ mongod_port }} roles='root' state=present ssl=True  ssl_cert_reqs=CERT_NONE
+  when: 
+     - mongo_primary
+     - mongo_tls
+     - mongo_present.stat.exists == False
+
+- name: Add the admin user 
+  mongodb_user: database=admin name=admin password={{ mongo_admin_password }} login_port={{ mongod_port }} roles='root' state=present
+  when: 
+     - mongo_primary
+     - mongo_tls == false
+     - mongo_present.stat.exists == False
+     
+- name: Create directory to keep mongo key material
+  file: dest=/etc/pki/mongo/ state=directory owner=root group=root mode=775
+  when: mongo_tls
+
+- name: copy ca certificate
+  copy: src={{ inventory_dir }}/files/certs/mongo/{{ mongo_tls_ca }} dest=/etc/pki/mongo/{{ mongo_tls_ca }}
+  when: mongo_tls
+
+- name: Create combined key and certificate file for mongo
+  copy: content="{{ mongo_tls_key }}{{lookup('file', '{{ inventory_dir }}/files/certs/mongo/mongo.{{ base_domain }}.crt')}}" dest=/etc/pki/mongo/mongo.{{ base_domain }}.pem mode=0600 owner=mongod
+  when: mongo_tls
+
+- name: Install mongodb.conf file  with authorisation enabled
+  template: src=mongod.conf.j2 dest=/etc/mongod.conf
+  register: mongo_conf_changed
+
+- name: Restart Mongo
+  service: name=mongod.service enabled=yes state=restarted
+  when: mongo_conf_changed.changed
+
+- name: Install replica set initialization file
+  template: src=repset_init.j2 dest=/tmp/repset_init.js
+  when: 
+    - mongo_primary 
+    - mongo_cluster
+
+- name: Install arbiter and slave creation file
+  template: src=arbslave_init.j2 dest=/tmp/arbslave_init.j2
+  when: 
+    - mongo_primary
+    - mongo_cluster
+
+- name: Initialize the replication set on the primary, tls enabled
+  shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem --authenticationDatabase admin /tmp/repset_init.js --host 127.0.0.1 --sslAllowInvalidHostnames
+  when: 
+    - mongo_primary
+    - mongo_cluster
+    - mongo_tls
+
+- name: Create arbiters and slaves, tls enabled
+  shell: /usr/bin/mongo --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/arbslave_init.j2 --host 127.0.0.1 --sslAllowInvalidHostnames
+  when: 
+    - mongo_primary
+    - mongo_cluster
+    - mongo_tls
+
+- name: Initialize the replication set on the primary
+  shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/repset_init.js --host 127.0.0.1
+  when: 
+    - mongo_primary
+    - mongo_cluster
+    - mongo_tls
+
+- name: Create arbiters and slaves
+  shell: /usr/bin/mongo -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/arbslave_init.j2 --host 127.0.0.1 
+  when: 
+    - mongo_primary
+    - mongo_cluster
+    - mongo_tls
+
+- name: Create mongo database users
+  mongodb_user: login_database=admin database={{ mongo.metadata_database }} login_user=admin login_password={{ mongo_admin_pass }} name={{ mongo.metadata_user }} password={{ mongo.metadata_password }} roles=readWrite 
