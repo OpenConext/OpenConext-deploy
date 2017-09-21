@@ -1,3 +1,9 @@
-#!/bin/sh
-for i in `find . -name \*.j2`; do scripts/syntax-jinja $i; done
-for i in `find . -name \*.yml`; do scripts/syntax-yml $i; done
+#!/bin/bash
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+find . -name '*.j2'  -print0 | xargs -0 ${DIR}/syntax-jinja
+find . -name '*.yml' -print0 | xargs -0 ${DIR}/syntax-yml
+
+exit 0

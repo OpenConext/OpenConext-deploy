@@ -1,5 +1,19 @@
-#!/usr/bin/python
-import yaml,sys
+#!/usr/bin/env python3
+from __future__ import print_function
+import yaml
+import sys
 
-with open(sys.argv[1]) as y:
-	yaml.safe_load(y.read())
+for filename in sys.argv[1:]:
+	print("Checking {}... ".format(filename), end='')
+
+	try:
+		with open(filename, encoding='utf-8') as y:
+			yaml.safe_load(y.read())
+	except Exception as e:
+		print("failed: {}".format(e))
+		exit(1)
+
+	print("ok")
+
+sys.exit(0)
+
