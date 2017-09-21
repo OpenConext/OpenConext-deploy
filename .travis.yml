@@ -2,11 +2,18 @@ sudo: required
 
 language:
   - bash
+  - python
+
+python:
+  - 3.5
+cache: pip
 
 services:
   - docker
 
 before_install:
+  - pip install yamllint
+  - pip install jinja2
   - ./scripts/syntax-check
   - sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 .
 
