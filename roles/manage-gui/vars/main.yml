@@ -1,0 +1,4 @@
+---
+manage_current: /var/www/manage/current
+#TODO - make this into a variable, see also manage-server/var/main.yml
+springapp_tcpport: 9393

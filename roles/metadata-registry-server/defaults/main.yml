@@ -1,8 +1,0 @@
----
-metadata_registry_dir: /opt/metadata-registry
-metadata_registry_version: ''
-metadata_registry_snapshot_timestamp: ''
-metadata_registry_local_jar: ''
-metadata_registry_jar: metadata-registry-current.jar
-metadata_registry_random_source: 'file:///dev/urandom'
-manage_cronjobmaster: true

@@ -1,5 +1,5 @@
 logging:
-  config: file://{{ metadata_registry_dir }}/logback.xml
+  config: file://{{ manage_dir }}/logback.xml
   level:
     org.springframework.data.mongodb: INFO
 
@@ -14,7 +14,7 @@ server:
   server-header: no
   session-timeout: 3600
 
-features: {{ metadata_registry.features }}
+features: {{ manage.features }}
 
 manage_cronjobmaster: {{ manage_cronjobmaster }}
 manage_cronjob_minutes: 30
@@ -31,18 +31,18 @@ email:
   to: {{ error_mail_to }}
 
 product:
-  name: Metadata Registry
+  name: Manage
   organization: OpenConext
 
-metadata_configuration_path: file://{{ metadata_registry_dir }}/metadata_configuration
-metadata_templates_path: file://{{ metadata_registry_dir }}/metadata_templates
-metadata_exports_path: file://{{ metadata_registry_dir }}/metadata_export
+metadata_configuration_path: file://{{ manage_dir }}/metadata_configuration
+metadata_templates_path: file://{{ manage_dir }}/metadata_templates
+metadata_exports_path: file://{{ manage_dir }}/metadata_export
 migrate_data_from_janus: false
 
 security:
-  backdoor_user_name: {{ metadata_registry.backdoor_api_user }}
-  backdoor_password: {{ metadata_registry_backdoor_api_password }}
-  api_users_config_path: file://{{ metadata_registry_dir }}/mr-api-users.yml
+  backdoor_user_name: {{ manage.backdoor_api_user }}
+  backdoor_password: {{ manage_backdoor_api_password }}
+  api_users_config_path: file://{{ manage_dir }}/manage-api-users.yml
 
 spring:
   profiles:
@@ -52,12 +52,12 @@ spring:
     port: 25
   data:
     mongodb:
-      uri: mongodb://{{ metadata_registry.mongo_host }}:{{ metadata_registry.mongo_port }}/metadata
+      uri: mongodb://{{ manage.mongo_host }}:{{ manage.mongo_port }}/metadata
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://{{ metadata_registry.db_host }}/{{ metadata_registry.db_name }}
-    username: {{ metadata_registry.db_user }}
-    password: {{ metadata_registry.db_password }}
+    url: jdbc:mysql://{{ manage.db_host }}/{{ manage.db_name }}
+    username: {{ manage.db_user }}
+    password: {{ manage.db_password }}
     dbcp2:
       test-while-idle: true
       validation-query: SELECT 1
@@ -67,9 +67,9 @@ spring:
 eb:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://{{ metadata_registry.eb_db_host }}/{{ metadata_registry.eb_db_name }}
-    username: {{ metadata_registry.eb_db_user }}
-    password: {{ metadata_registry.eb_db_password }}
+    url: jdbc:mysql://{{ manage.eb_db_host }}/{{ manage.eb_db_name }}
+    username: {{ manage.eb_db_user }}
+    password: {{ manage.eb_db_password }}
     dbcp2:
       test-while-idle: true
       validation-query: SELECT 1

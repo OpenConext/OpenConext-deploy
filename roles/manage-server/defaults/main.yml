@@ -1,0 +1,8 @@
+---
+manage_dir: /opt/manage
+manage_version: ''
+manage_snapshot_timestamp: ''
+manage_local_jar: ''
+manage_jar: manage-current.jar
+manage_random_source: 'file:///dev/urandom'
+manage_cronjobmaster: true

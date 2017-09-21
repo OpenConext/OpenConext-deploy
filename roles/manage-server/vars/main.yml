@@ -1,0 +1,13 @@
+springapp_artifact_id: manage-server
+springapp_artifact_type: jar
+springapp_artifact_group_dir: org.openconext
+springapp_version: "{{ manage_server_version }}"
+springapp_snapshot_timestamp: "{{ manage_server_snapshot_timestamp }}"
+springapp_dir: "{{ manage_dir }}"
+springapp_user: manage
+springapp_service_name: manage
+springapp_jar: "{{ manage_jar }}"
+springapp_tcpport: 9393
+springapp_local_jar: "{{ manage_local_jar }}"
+springapp_heapsize: "256m"
+springapp_random_source: "file:///dev/urandom"

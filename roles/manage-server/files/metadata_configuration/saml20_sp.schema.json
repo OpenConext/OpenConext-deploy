@@ -117,7 +117,7 @@
       "properties": {
         "_class": {
           "type": "string",
-          "default": "mr.migration.ArpAttributes"
+          "default": "manage.migration.ArpAttributes"
         },
         "enabled": {
           "type": "boolean"

@@ -84,8 +84,8 @@
     - { role: oidc,                         tags: ['oidc'] }
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
-    - { role: metadata-registry-gui,        tags: ['metadata-registry', 'metadata-registry-gui'] }
-    - { role: metadata-registry-server,     tags: ['metadata-registry', 'metadata-registry-server'] }
+    - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
+    - { role: manage-server,                tags: ['manage', 'manage-server'] }
     - { role: pdp,                          tags: ['pdp'] }
     - { role: attribute-mapper,             tags: ['attribute-mapper'] }
     - { role: eduproxy,                     tags: ['eduproxy'] }

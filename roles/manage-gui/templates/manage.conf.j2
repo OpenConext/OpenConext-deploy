@@ -1,10 +1,10 @@
-Listen {{ apache_app_listen_address.metadata_registry }}:{{ loadbalancing.metadata_registry.port }}
-<Virtualhost {{ apache_app_listen_address.metadata_registry }}:{{ loadbalancing.metadata_registry.port }}>
+Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
+<Virtualhost {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}>
     # General setup for the virtual host, inherited from global configuration
-    ServerName https://metadata-registry.{{ base_domain }}
+    ServerName https://manage.{{ base_domain }}
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Metadata-Repository'"
-	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Metadata-Repository'" combined
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Manage'"
+	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Manage'" combined
 
     RewriteEngine on
 
@@ -18,30 +18,30 @@ Listen {{ apache_app_listen_address.metadata_registry }}:{{ loadbalancing.metada
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
-    RewriteCond %{REQUEST_URI} !mr
+    RewriteCond %{REQUEST_URI} !manage
     RewriteCond %{REQUEST_URI} !fonts
     RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
-    ProxyPass /mr/api http://localhost:{{ springapp_tcpport }}/ retry=0
-    ProxyPassReverse /mr/api http://localhost:{{ springapp_tcpport }}/
+    ProxyPass /manage/api http://localhost:{{ springapp_tcpport }}/ retry=0
+    ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}/
 
-    DocumentRoot /var/www/metadata-registry/current
+    DocumentRoot /var/www/manage/current
 
-    <Directory /var/www/metadata-registry/current>
+    <Directory /var/www/manage/current>
       Order       allow,deny
       Allow       from all
       Options     -Indexes
     </Directory>
 
     # Enable shibboleth for all other URLs, but the health check and info endpoint
-    <Location ~ "/mr/api/(health|info)">
+    <Location ~ "/manage/api/(health|info)">
       allow from all
       satisfy any
     </Location>
 
     # The internal API is secured with basic auth
-    <Location ~ "/mr/api/internal/">
+    <Location ~ "/manage/api/internal/">
       allow from all
       satisfy any
     </Location>
@@ -54,7 +54,7 @@ Listen {{ apache_app_listen_address.metadata_registry }}:{{ loadbalancing.metada
     <Location />
       AuthType shibboleth
       ShibUseHeaders On
-      ShibRequestSetting applicationId metadata-registry
+      ShibRequestSetting applicationId manage
       ShibRequireSession On
       require valid-user
     </Location>

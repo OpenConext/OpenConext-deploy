@@ -1,0 +1,6 @@
+---
+- name: systemctl daemon-reload
+  command: "systemctl daemon-reload"
+
+- name: restart manage
+  service: name=manage state=restarted
