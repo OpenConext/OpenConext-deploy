@@ -12,7 +12,7 @@
   become: true
   roles:
     - { role: common,   tags: ['common'] }
-    - { role: surfconext_common,   tags: ['surfconext_common'] }
+    - { role: '{{ inventory_dir }}/../roles/surfconext_common',   tags: ['surfconext_common'] }
     - { role: openconext-common,   tags: [openconext-commonn'] }
     - { role: iptables,      tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
@@ -52,7 +52,7 @@
     - { role: engineblock,       tags: ['eb'      ] }
     - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
-    - { role: spform,            tags: ['spform'  ] }
+    - { role: '{{ inventory_dir }}/../roles/spform',            tags: ['spform' ] }
     - { role: diyidp,            tags: ['diyidp'  ] }
     - { role: manage-gui,        tags: ['manage', 'manage-gui'] }
     - { role: manage-server,     tags: ['manage', 'manage-server'] }
