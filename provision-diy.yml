@@ -37,6 +37,7 @@
   become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
+    - { role: mongo, tags: ['mongo'] }
 
 - hosts: php-apps
   gather_facts: no
@@ -53,6 +54,9 @@
     - { role: profile,           tags: ['profile' ] }
     - { role: spform,            tags: ['spform'  ] }
     - { role: diyidp,            tags: ['diyidp'  ] }
+    - { role: manage-gui,        tags: ['manage', 'manage-gui'] }
+    - { role: manage-server,     tags: ['manage', 'manage-server'] }
+
   handlers:
     - include: roles/httpd/handlers/main.yml
 
