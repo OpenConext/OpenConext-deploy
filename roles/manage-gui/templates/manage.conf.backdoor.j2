@@ -1,5 +1,9 @@
+{% if apache_app_listen_address.manage is defined %}
 Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
 <Virtualhost {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}>
+{% else %}
+<Virtualhost *:443 >
+{% endif %}
     # General setup for the virtual host, inherited from global configuration
     ServerName https://manage.{{ base_domain }}
 
