@@ -44,6 +44,12 @@
     - { role: keepalived, tags: ['keepalived'] }
     - { role: galera_create_users, tags: ['galera', 'galera_create_users'] } 
 
+- hosts: mongo_servers
+  gather_facts: yes
+  become: true
+  roles:
+    - { role: mongo, tags: ['mongo'] }
+
 - hosts: php-apps
   gather_facts: yes
   become: true
@@ -56,7 +62,7 @@
     - { role: engineblock,       tags: ['eb'     ] }
     - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
-    - { role: spform,            tags: ['spform' ] }
+    - { role: '{{ inventory_dir }}/../roles/spform',            tags: ['spform' ] }
 
   handlers:
     - include: roles/httpd/handlers/main.yml
