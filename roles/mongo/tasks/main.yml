@@ -11,6 +11,7 @@
   yum: name={{ item }} state=installed
   with_items:
     - mongodb-org
+    - python2-pip 
 
 - name: Install pymongo 
   pip: name=pymongo state=present
@@ -101,3 +102,5 @@
 
 - name: Create mongo database users
   mongodb_user: login_database=admin database={{ mongo.metadata_database }} login_user=admin login_password={{ mongo_admin_pass }} name={{ mongo.metadata_user }} password={{ mongo.metadata_password }} roles=readWrite 
+  when: 
+    - mongo_primary
