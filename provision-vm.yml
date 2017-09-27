@@ -79,5 +79,9 @@
     - { role: pdp,               tags: ['pdp'] }
     - { role: oidc,              tags: ['oidc'] }
     - { role: vm_only_oidc,      tags: ['oidc'] }
+    - { role: mongo,             tags: ['mongo'] }
+    - { role: manage-gui,        tags: ['manage', 'manage-gui'] }
+    - { role: manage-server,     tags: ['manage', 'manage-server'] }
+
   handlers:
     - include: roles/httpd/handlers/main.yml

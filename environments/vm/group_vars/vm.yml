@@ -28,6 +28,8 @@ engine_version: "5.4.0"
 janus_version: 1.23.1
 janus_ssp_version: 1.14.15
 monitoring_tests_version: 6.0.0
+manage_server_version: 1.0.1-SNAPSHOT
+manage_gui_version: 1.0.1-SNAPSHOT
 
 databases:
   names:
@@ -48,6 +50,16 @@ databases:
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
   development_user:
     - { name: development, password: development }
+
+mongo_host: localhost
+mongo_port: 27017
+mongo_cluster: false
+mongo_tls: false
+
+mongo:
+  manage_user: managerw
+  manage_password: "{{ mongo_passwords.manage }}"
+  manage_database: manage
 
 tls:
   cert_path: /etc/pki/tls/certs
@@ -154,6 +166,9 @@ shibboleth_apps:
     baseurl: ""
   aa:
     entityID: "https://aa.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  "manage":
+    entityID: "https://manage.{{ base_domain }}/shibboleth"
     baseurl: ""
 
 shib:
@@ -395,6 +410,40 @@ monitoring_tests:
   person_id: "{{ monitoring_tests_person_id }}"
   user: monitor
   password: "{{ monitoring_tests_password }}"
+
+manage:
+  db_user: "{{ janus_database_user }}"
+  db_password: "{{ mysql_passwords.sr }}"
+  db_name: "{{ janus_database_name }}"
+  db_host: "{{ mysql_host }}"
+  eb_db_user: "{{ engine_database_user }}"
+  eb_db_password: "{{ mysql_passwords.eb }}"
+  eb_db_name: "{{ engine_database_name }}"
+  eb_db_host: "{{ mysql_host }}"
+  mongo_host: "{{ mongo_host }}"
+  mongo_port: "{{ mongo_port }}"
+  mongo_user: "{{ mongo.manage_user }}"
+  mongo_password: "{{ mongo.manage_password }}"
+  mongo_database: "manage"
+  backdoor_api_user: backdoor_api_user
+  features: migration, validation, push_preview, push
+  apiUsers:
+    - {
+        name: "attribute-aggregator",
+        password: "{{ manage_attribute_aggregator_secret }}",
+        scopes: ["READ"]
+      }
+    - {
+        name: "pdp",
+        password: "{{ manage_pdp_secret }}",
+        scopes: ["READ"]
+      }
+    - {
+        name: "sp-portal",
+        password: "{{ manage_sp_portal_secret }}",
+        scopes: ["READ", "WRITE", "PUSH"]
+      }
+
 
 springapp_tcpport_error_handling: 9199
 

@@ -33,9 +33,13 @@ php-apps
 [loadbalancer-vm:children]
 loadbalancer
 
+[mongod_primary]
+192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
+
 [vm:children]
 storage
 java-apps
 php-apps
 loadbalancer
 local-certs
+mongod_primary
