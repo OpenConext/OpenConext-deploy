@@ -12,8 +12,14 @@
     - 01_default.conf
   notify: reload httpd
 
-- name: Copy the config file
+- name: Copy the main config file
   template: src=httpd.conf_httpd24.j2 dest=/etc/httpd/conf/httpd.conf
+  notify: reload httpd
+
+- name: Copy include files
+  copy: src={{ item }} dest=/etc/httpd/{{ item }}
+  with_items:
+    - ssl_backend.conf
   notify: reload httpd
 
 - name: Create empty welcome.conf and userdir.conf

@@ -42,10 +42,7 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
-    SSLProtocol             all -SSLv3 -TLSv1 -TLSv1.1
-    SSLCipherSuite          ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
-    SSLHonorCipherOrder     on
-    SSLCompression          off
+    Include ssl_backend.conf
     {% endif %}
 
 </VirtualHost>
