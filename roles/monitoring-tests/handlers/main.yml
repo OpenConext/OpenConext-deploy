@@ -5,4 +5,8 @@
 - name: restart monitoring-tests
   service: name={{ springapp_service_name }} state=restarted
 
+- name: restart monitoring-tests-acc
+  service: name=monitoring-tests-acc state=restarted
 
+- name: restart monitoring-tests-prod
+  service: name=monitoring-tests-acc state=restarted
