@@ -18,5 +18,6 @@ apache_app_listen_address:
   engine_api: 127.0.0.1
   profile: 127.0.0.1
   serviceregistry: 127.0.0.1
+  manage: 127.0.0.1
 
 mongo_primary: True
