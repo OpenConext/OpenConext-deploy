@@ -8,5 +8,5 @@
 - name: restart monitoring-tests-acc
   service: name=monitoring-tests-acc state=restarted
 
-- name: restart monitoring-tests-prod
-  service: name=monitoring-tests-acc state=restarted
+- name: restart monitoring-tests-prd
+  service: name=monitoring-tests-prd state=restarted
