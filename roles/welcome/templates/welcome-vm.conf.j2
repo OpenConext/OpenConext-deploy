@@ -25,4 +25,12 @@ Listen {{ apache_app_listen_address.welcome }}:{{ loadbalancing.welcome.port }}
     Include ssl_backend.conf
     {% endif %}
 
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
+    Include ssl_backend.conf
+    {% endif %}
+
 </VirtualHost>

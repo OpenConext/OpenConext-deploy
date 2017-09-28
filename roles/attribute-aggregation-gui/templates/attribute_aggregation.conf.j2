@@ -1,5 +1,10 @@
+{% if apache_app_listen_address.aa is defined %}
 Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
 <Virtualhost {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}>
+{% else %}
+<Virtualhost *:443 >
+{% endif %}
+
     # General setup for the virtual host, inherited from global configuration
     ServerName https://aa.{{ base_domain }}
 
@@ -62,6 +67,14 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
+
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
     Include ssl_backend.conf
     {% endif %}
 

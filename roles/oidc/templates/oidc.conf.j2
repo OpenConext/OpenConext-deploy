@@ -1,5 +1,10 @@
+{% if apache_app_listen_address.oidc is defined %}
 Listen {{ apache_app_listen_address.oidc }}:{{ loadbalancing.oidc.port }}
 <Virtualhost {{ apache_app_listen_address.oidc }}:{{ loadbalancing.oidc.port }}>
+{% else %}
+<Virtualhost *:443 >
+{% endif %}
+
     # General setup for the virtual host, inherited from global configuration
     ServerName https://oidc.{{ base_domain }}
 
@@ -24,5 +29,12 @@ Listen {{ apache_app_listen_address.oidc }}:{{ loadbalancing.oidc.port }}
     Require env env_allow_1
     </Location>
 {% endif %}
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
+    Include ssl_backend.conf
+    {% endif %}
 
 </VirtualHost>

@@ -15,17 +15,19 @@ Listen {{ apache_app_listen_address.mujina_sp }}:{{ loadbalancing.mujina_sp.port
 
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
-{% if apache_app_listen_address.all is defined %}
-    SSLEngine on
-    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
-    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
-    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
-{% endif %}
     
     {% if haproxy_backend_tls %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
+
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
     Include ssl_backend.conf
     {% endif %}
 
