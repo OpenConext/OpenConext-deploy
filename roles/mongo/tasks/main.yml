@@ -104,3 +104,4 @@
   mongodb_user: login_database=admin database={{ mongo.manage_database }} login_user=admin login_password={{ mongo_admin_pass }} name={{ mongo.manage_user }} password={{ mongo.manage_password }} roles=readWrite 
   when: 
     - mongo_primary
+  changed_when: False
