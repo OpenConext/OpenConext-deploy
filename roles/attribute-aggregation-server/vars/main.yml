@@ -1,6 +1,6 @@
 springapp_artifact_id: attribute-aggregation-server
 springapp_artifact_type: jar
-springapp_artifact_group_dir: /org/openconext
+springapp_artifact_group_dir: org.openconext
 springapp_version: "{{ attribute_aggregation_server_version }}"
 springapp_snapshot_timestamp: "{{ attribute_aggregation_server_snapshot_timestamp }}"
 springapp_dir: "{{ attribute_aggregation_dir }}"
