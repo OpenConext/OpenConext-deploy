@@ -28,8 +28,8 @@ engine_version: "5.4.0"
 janus_version: 1.23.1
 janus_ssp_version: 1.14.15
 monitoring_tests_version: 6.0.5
-manage_server_version: 1.0.1-SNAPSHOT
-manage_gui_version: 1.0.1-SNAPSHOT
+manage_server_version: 1.0.3-SNAPSHOT
+manage_gui_version: 1.0.3-SNAPSHOT
 
 databases:
   names:
