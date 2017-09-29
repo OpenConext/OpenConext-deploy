@@ -70,7 +70,10 @@ spring:
     port: 25
   main:
     banner-mode: "off"
-
+management:
+  health:
+    mail:
+      enabled: false
 email:
   from: {{ instance_name }} Teams <{{ noreply_email }}>
   base-url: https://teams.{{ base_domain }}
