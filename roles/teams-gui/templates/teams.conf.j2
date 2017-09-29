@@ -13,7 +13,6 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 
     RewriteEngine on
 
-    RewriteCond %{REQUEST_URI} !\.html$
     RewriteCond %{REQUEST_URI} !\.js$
     RewriteCond %{REQUEST_URI} !\.svg$
     RewriteCond %{REQUEST_URI} !\.css$
@@ -56,7 +55,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
       satisfy any
     </Location>
 
-    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|html|js|css|png|jpg|ico)$">
+    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|js|css|png|jpg|ico)$">
       allow from all
       satisfy any
     </Location>
