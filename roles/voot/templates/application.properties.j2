@@ -17,15 +17,6 @@ oidc.checkToken.endpoint.url= {{ voot.oidc_checkToken_endpoint_url }}
 oidc.checkToken.clientId={{ voot.oidc_checkToken_clientId }}
 oidc.checkToken.secret={{ voot.oidc_checkToken_secret }}
 
-# Teams database
-spring.datasource.url=jdbc:mysql://{{ teams.db_host }}:3306/{{ teams.db_name }}
-spring.datasource.username={{ teams.db_user }}
-spring.datasource.password={{ teams.db_password }}
-spring.datasource.driverClassName=com.mysql.jdbc.Driver
-spring.datasource.validationQuery=SELECT 1
-spring.datasource.testWhileIdle=true
-spring.datasource.testOnBorrow=true
-
 # Feature toggle for searching for linked GrouperGroups and ExternalGroups
 support.linkedGrouperExternalGroups=true
 
