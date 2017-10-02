@@ -12,8 +12,9 @@ spring.datasource.url=jdbc:mysql://{{ metadata_exporter.db_host }}/{{ metadata_e
 spring.datasource.username={{ metadata_exporter.db_user }}
 spring.datasource.password={{ metadata_exporter.db_password }}
 spring.datasource.driverClassName=com.mysql.jdbc.Driver
-spring.datasource.validation-query=SELECT 1
+spring.datasource.validationQuery=SELECT 1
 spring.datasource.testWhileIdle=true
+spring.datasource.testOnBorrow=true
 
 flyway.enabled=false
 

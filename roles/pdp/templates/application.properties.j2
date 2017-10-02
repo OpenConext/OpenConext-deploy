@@ -22,8 +22,9 @@ spring.datasource.url=jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}
 spring.datasource.username={{ pdp.db_user }}
 spring.datasource.password={{ pdp.db_password }}
 spring.datasource.driverClassName=com.mysql.jdbc.Driver
-spring.datasource.validation-query=SELECT 1
+spring.datasource.validationQuery=SELECT 1
 spring.datasource.testWhileIdle=true
+spring.datasource.testOnBorrow=true
 
 spring.mail.host=localhost
 spring.mail.port=25
