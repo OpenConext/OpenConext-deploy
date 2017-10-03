@@ -40,6 +40,7 @@ databases:
     - pdp-server
     - oidc-server
     - aaserver
+    - spdashboard
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
@@ -48,6 +49,7 @@ databases:
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
+    - { name: spdrw, db_name: spdashboard, password: "{{ mysql_passwords.spdashboard }}" }
   development_user:
     - { name: development, password: development }
 
