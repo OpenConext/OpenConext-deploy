@@ -66,6 +66,7 @@
     - mongo_primary 
     - mongo_cluster
 
+
 - name: Install arbiter and slave creation file
   template: src=arbslave_init.j2 dest=/tmp/arbslave_init.j2
   when: 
@@ -91,17 +92,26 @@
   when: 
     - mongo_primary
     - mongo_cluster
-    - mongo_tls
+    - not mongo_tls
 
 - name: Create arbiters and slaves
   shell: /usr/bin/mongo -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/arbslave_init.j2 --host 127.0.0.1 
   when: 
     - mongo_primary
     - mongo_cluster
-    - mongo_tls
+    - not mongo_tls
 
 - name: Create mongo database users
   mongodb_user: login_database=admin database={{ mongo.manage_database }} login_user=admin login_password={{ mongo_admin_pass }} name={{ mongo.manage_user }} password={{ mongo.manage_password }} roles=readWrite 
   when: 
     - mongo_primary
+    - not mongo_tls
   changed_when: False
+
+- name: Create mongo database users, tls enabled
+  mongodb_user: login_database=admin database={{ mongo.manage_database }} login_user=admin login_password={{ mongo_admin_pass }} name={{ mongo.manage_user }} password={{ mongo.manage_password }} roles=readWrite ssl=True ssl_cert_reqs=CERT_NONE
+  when: 
+    - mongo_primary
+    - mongo_tls
+  changed_when: False
+
