@@ -52,7 +52,7 @@ spring:
     port: 25
   data:
     mongodb:
-      uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{{ manage.mongo_host }}:{{ manage.mongo_port }}/{{ manage.mongo_database }} 
+      uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ manage.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ manage.mongo_database }} 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mysql://{{ manage.db_host }}/{{ manage.db_name }}
