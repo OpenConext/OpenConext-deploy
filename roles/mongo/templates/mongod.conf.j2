@@ -12,7 +12,7 @@ net:
   port: 27017
 {% if mongo_tls %}
   ssl:
-    mode: requireSSL
+    mode: preferSSL
     PEMKeyFile: /etc/pki/mongo/mongo.{{ base_domain }}.pem
     CAFile: /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem
     allowConnectionsWithoutCertificates: true
@@ -30,9 +30,10 @@ storage:
 {% if mongo_tls %}
 replication:
   replSetName: {{ replica_set_name }}
-  replSetName: configReplSet
 {% endif %}
 
 security: 
     authorization: enabled
-
+{% if mongo_tls %}
+    clusterAuthMode: x509
+{% endif %}
