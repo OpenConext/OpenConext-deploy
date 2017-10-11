@@ -1,3 +1,4 @@
+.venv
 secrets_test.yml
 .vagrant
 .idea/
