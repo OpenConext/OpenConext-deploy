@@ -412,8 +412,8 @@ manage:
         scopes: ["READ"]
       }
     - {
-        name: "sp-portal",
-        password: "{{ manage_sp_portal_secret }}",
+        name: "sp-dashboard",
+        password: "{{ manage_sp_dashboard_secret }}",
         scopes: ["READ", "WRITE", "PUSH"]
       }
 
