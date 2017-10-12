@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+# Variables
+
+$backupdir = "/home/backup";
+$username = "admin";
+$password = "{{ mongo_admin_password }}";
+
+# First check if this is the keepalived master: If it is, no backups are performed, to keep the backup load on the database standby node
+
+my $keepalived_status;
+    open(my $fh, '<', "/tmp/keepalived.state") or die "cannot open file $filename";
+    {
+        local $/;
+        $keepalived_status = <$fh>;
+    }
+    close($fh);
+chomp $keepalived_status;
+if ($keepalived_status eq "master") {
+    die "No backups on master nodes";
+}
+if ($keepalived_status eq "fault") {
+    die "Keepalived is at fault";
+}
+if ($keepalived_status eq "backup") {
+    print "This is the keepalived backup node, continuing to backup";
+}
+
+# Determine current day
+$day = `/bin/date +'%a'`;
+chomp($day);
+
+# Remove old backups if exists
+if ( -e "$backupdir/mongo-dump-$day/") {
+`rm -f $backupdir/mongo-dump-$day/*`;
+}
+
+# Dump databases
+`mongodump --username $username --password $password --host {{replica_set_name }}/{% for host in groups["mongo_servers"] %}"{{hostvars[host].mongo_hostname }}:{{ mongod_port }}"{% if not loop.last %},{% endif %}{% endfor %} --authenticationDatabase admin --out $backupdir/mongo-dump-$day`;
+
+# Gzip dumps
+opendir(BDIR, "$backupdir/mongo-dump-$day/");
+my @files = readdir(BDIR);
+closedir(BDIR);
+chdir("$backupdir/mongo-dump-$day/");
+foreach $dir (@files) {
+if ($dir !~ /^\.+$/) {
+if ($dir !~ /\.\./g) {
+if ( -d "$backupdir/mongo-dump-$day/$dir") {
+`tar -cvzf $backupdir/mongo-dump-$day/$dir.tar.gz $dir/`;
+`rm -rf $backupdir/mongo-dump-$day/$dir/`;
+}
+}
+}
+}
+
