@@ -16,6 +16,18 @@
 - name: Install pymongo 
   pip: name=pymongo state=present
 
+- name: Create directory to keep mongo key material
+  file: dest=/etc/pki/mongo/ state=directory owner=root group=root mode=775
+  when: mongo_tls
+
+- name: copy ca certificate
+  copy: src={{ inventory_dir }}/files/certs/mongo/{{ mongo_tls_ca }} dest=/etc/pki/mongo/{{ mongo_tls_ca }}
+  when: mongo_tls
+
+- name: Create combined key and certificate file for mongo
+  copy: content="{{ mongo_tls_key }}{{lookup('file', '{{ inventory_dir }}/files/certs/mongo/mongo.{{ base_domain }}.crt')}}" dest=/etc/pki/mongo/mongo.{{ base_domain }}.pem mode=0600 owner=mongod
+  when: mongo_tls
+
 - name: Install mongod.conf file without configuration on the primary host
   template: src=mongod_standalone.conf.j2 dest=/etc/mongod.conf
   when: 
@@ -40,17 +52,6 @@
      - mongo_tls == false
      - mongo_present.stat.exists == False
      
-- name: Create directory to keep mongo key material
-  file: dest=/etc/pki/mongo/ state=directory owner=root group=root mode=775
-  when: mongo_tls
-
-- name: copy ca certificate
-  copy: src={{ inventory_dir }}/files/certs/mongo/{{ mongo_tls_ca }} dest=/etc/pki/mongo/{{ mongo_tls_ca }}
-  when: mongo_tls
-
-- name: Create combined key and certificate file for mongo
-  copy: content="{{ mongo_tls_key }}{{lookup('file', '{{ inventory_dir }}/files/certs/mongo/mongo.{{ base_domain }}.crt')}}" dest=/etc/pki/mongo/mongo.{{ base_domain }}.pem mode=0600 owner=mongod
-  when: mongo_tls
 
 - name: Install mongodb.conf file  with authorisation enabled
   template: src=mongod.conf.j2 dest=/etc/mongod.conf
@@ -74,14 +75,14 @@
     - mongo_cluster
 
 - name: Initialize the replication set on the primary, tls enabled
-  shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem --authenticationDatabase admin /tmp/repset_init.js --host 127.0.0.1 --sslAllowInvalidHostnames
+  shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem --authenticationDatabase admin /tmp/repset_init.js --host "{{mongo_hostname }}" 
   when: 
     - mongo_primary
     - mongo_cluster
     - mongo_tls
 
 - name: Create arbiters and slaves, tls enabled
-  shell: /usr/bin/mongo --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/arbslave_init.j2 --host 127.0.0.1 --sslAllowInvalidHostnames
+  shell: /usr/bin/mongo --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/arbslave_init.j2 --host "{{ mongo_hostname }}" 
   when: 
     - mongo_primary
     - mongo_cluster
@@ -114,4 +115,3 @@
     - mongo_primary
     - mongo_tls
   changed_when: False
-

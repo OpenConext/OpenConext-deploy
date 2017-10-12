@@ -4,3 +4,6 @@
 
 - name: restart manage
   service: name=manage state=restarted
+
+- name: update_ca_trust
+  command: update-ca-trust

@@ -1,8 +1,8 @@
 {% for host in groups["mongod_arbiters"] %}
-rs.addArb("{{ hostvars[host].inventory_hostname }}:{{ mongod_port }}");
+rs.addArb("{{ hostvars[host].mongo_hostname }}:{{ mongod_port }}");
 {% endfor %}
 {% for host in groups["mongod_slaves"] %}
-rs.add("{{ hostvars[host].inventory_hostname }}:{{ mongod_port }}");
+rs.add("{{ hostvars[host].mongo_hostname }}:{{ mongod_port }}");
 {% endfor %}
-rs.initiate( { _id: "configReplSet", configsvr: true, members: [ {% for host in groups["mongo_servers"] %} { _id: {{ loop.index }}, host: "{{hostvars[host].inventory_hostname }}:{{ mongod_port }}"},  {% endfor %}   ] } )
+rs.initiate( { _id: "configReplSet", configsvr: true, members: [ {% for host in groups["mongo_servers"] %} { _id: {{ loop.index }}, host: "{{hostvars[host].mongo_hostname }}:{{ mongod_port }}"},  {% endfor %}   ] } )
 printjson(rs.status());
