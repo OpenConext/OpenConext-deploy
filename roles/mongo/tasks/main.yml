@@ -30,9 +30,11 @@
 
 - name: Install the backup script
   template: src=backup_mongo.pl.j2 dest="/usr/local/sbin/backup_mongo.pl" mode=700 owner=root 
+  when: mongo_cluster
 
 - name: Create cron symlink for backup script
   file: src="/usr/local/sbin/backup_mongo.pl" dest="/etc/cron.daily/mongodb_backup" state=link mode=700 owner=root
+  when: mongo_cluster
 
 - name: Install mongod.conf file without configuration on the primary host
   template: src=mongod_standalone.conf.j2 dest=/etc/mongod.conf
