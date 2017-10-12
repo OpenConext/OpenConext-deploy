@@ -442,7 +442,7 @@ manage:
       }
     - {
         name: "sp-dashboard",
-        password: "{{ manage_sp_dasbboard_secret }}",
+        password: "{{ manage_sp_dashboard_secret }}",
         scopes: ["READ", "WRITE", "PUSH"]
       }
 
