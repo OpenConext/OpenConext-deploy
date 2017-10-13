@@ -53,7 +53,6 @@ databases:
   development_user:
     - { name: development, password: development }
 
-mongo_host: localhost
 mongo_port: 27017
 mongo_cluster: false
 mongo_tls: false
@@ -422,7 +421,6 @@ manage:
   eb_db_password: "{{ mysql_passwords.eb }}"
   eb_db_name: "{{ engine_database_name }}"
   eb_db_host: "{{ mysql_host }}"
-  mongo_host: "{{ mongo_host }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: "{{ mongo.manage_user }}"
   mongo_password: "{{ mongo.manage_password }}"
