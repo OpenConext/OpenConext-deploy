@@ -102,6 +102,8 @@
     - { role: remove-grouper,               tags: ['remove-grouper'] }
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
+    - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
+    - { role: manage-server,                tags: ['manage', 'manage-server'] }
 
   handlers:
     - include: roles/httpd/handlers/main.yml
