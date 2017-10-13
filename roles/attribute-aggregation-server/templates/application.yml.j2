@@ -51,6 +51,11 @@ spring:
   main:
     banner-mode: "off"
 
+# In a multi master database setup toggle which machine is reponsible for cron jobs
+cron_job_responsible: {{ aa_cronjobmaster }}
+pseudo_emails_retention_days_period: {{ attribute_aggregation_pseudo_emails_retention_days_period }}
+
+
 # We disable all endpoints except health for the load-balancer and info for git information.
 endpoints:
   enabled: false

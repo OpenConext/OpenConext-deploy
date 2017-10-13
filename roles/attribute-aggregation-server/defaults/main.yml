@@ -6,3 +6,4 @@ attribute_aggregation_local_jar: ''
 attribute_aggregation_jar: attribute-aggregation-current.jar
 attribute_aggregation_random_source: 'file:///dev/urandom'
 attribute_aggregation_pseudo_mail_postfix: surfconext.nl
+attribute_aggregation_pseudo_emails_retention_days_period: 90
