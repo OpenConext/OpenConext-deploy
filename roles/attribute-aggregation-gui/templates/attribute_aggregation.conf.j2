@@ -9,7 +9,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     ServerName https://aa.{{ base_domain }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-AA'"
-	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-AA'" combined
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-AA'" combined
 
     RewriteEngine on
 
@@ -26,7 +26,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     RewriteCond %{REQUEST_URI} !aa
     RewriteCond %{REQUEST_URI} !redirect
     RewriteCond %{REQUEST_URI} !fonts
-    RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
+    RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
 
@@ -77,5 +77,72 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
     Include ssl_backend.conf
     {% endif %}
+</VirtualHost>
 
+{% if apache_app_listen_address.aa is defined %}
+<Virtualhost {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}>
+{% else %}
+<Virtualhost *:443 >
+{% endif %}
+
+    # General setup for the virtual host, inherited from global configuration
+    ServerName https://link.{{ base_domain }}
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-AAlink'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-AAlink'" combined
+
+    RewriteEngine on
+
+    RewriteCond %{REQUEST_URI} !\.html$
+    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.svg$
+    RewriteCond %{REQUEST_URI} !\.css$
+    RewriteCond %{REQUEST_URI} !\.png$
+    RewriteCond %{REQUEST_URI} !\.ico$
+    RewriteCond %{REQUEST_URI} !\.woff$
+    RewriteCond %{REQUEST_URI} !\.woff2$
+    RewriteCond %{REQUEST_URI} !\.ttf$
+    RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !aa
+    RewriteCond %{REQUEST_URI} !redirect
+    RewriteCond %{REQUEST_URI} !fonts
+    RewriteCond %{REQUEST_URI} !orcid
+    RewriteRule (.*) /index.html [L]
+
+    Redirect /orcid https://link.{{ base_domain }}/aa/api/client/information.html
+
+    ProxyPass /Shibboleth.sso !
+
+    ProxyPass /redirect http://localhost:{{ springapp_tcpport }}/aa/api/redirect retry=0
+    ProxyPass /aa/api/client http://localhost:{{ springapp_tcpport }}/aa/api/client retry=0
+    ProxyPassReverse /aa/api/client http://localhost:{{ springapp_tcpport }}/aa/api/client
+
+    # Disable shibboleth for health / info check
+    <Location ~ "/aa/api/(health|info)">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location />
+      AuthType shibboleth
+      ShibUseHeaders On
+      ShibRequestSetting applicationId attribute-aggregation-link
+      ShibRequireSession On
+      require valid-user
+    </Location>
+
+    {% if haproxy_backend_tls %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
+
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
+    Include ssl_backend.conf
+    {% endif %}
 </VirtualHost>

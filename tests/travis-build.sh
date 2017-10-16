@@ -35,6 +35,7 @@ docker run --detach                                         \
 	--add-host pdp.vm.openconext.org:127.0.0.1              \
 	--add-host engine-api.vm.openconext.org:127.0.0.1       \
 	--add-host aa.vm.openconext.org:127.0.0.1               \
+	--add-host link.vm.openconext.org:127.0.0.1             \
 	--add-host multidata.vm.openconext.org:127.0.0.1        \
 	--add-host oidc.vm.openconext.org:127.0.0.1             \
 	--add-host manage.vm.openconext.org:127.0.0.1           \

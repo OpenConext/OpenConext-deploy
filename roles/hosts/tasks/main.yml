@@ -19,6 +19,7 @@
     - "pdp.vm.openconext.org"
     - "engine-api.vm.openconext.org"
     - "aa.vm.openconext.org"
+    - "link.vm.openconext.org"
     - "multidata.vm.openconext.org"
     - "oidc.vm.openconext.org"
     - "teams.vm.openconext.org"
