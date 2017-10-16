@@ -1,6 +1,6 @@
 ---
 pdp_dir: /opt/pdp/
-pdp_group_url: org/openconext/
+pdp_group_url: org/openconext
 pdp_version: ''
 pdp_snapshot_timestamp: ''
 pdp_local_jar: ''
