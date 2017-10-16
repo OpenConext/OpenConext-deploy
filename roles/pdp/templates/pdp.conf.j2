@@ -9,7 +9,7 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     ServerName https://pdp.{{ base_domain }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-PDP'"
-	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PDP'" combined
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-PDP'" combined
 
     RewriteEngine on
 
@@ -25,7 +25,7 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !pdp
     RewriteCond %{REQUEST_URI} !fonts
-    RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
+    RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
     ProxyPass {{ js_error_reporting_url }} http://localhost:{{ springapp_tcpport_error_handling }}/jsError retry=0

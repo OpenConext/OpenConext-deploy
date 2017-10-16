@@ -8,7 +8,7 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     ServerName https://manage.{{ base_domain }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Manage'"
-	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Manage'" combined
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Manage'" combined
 
     RewriteEngine on
 
@@ -24,7 +24,7 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !manage
     RewriteCond %{REQUEST_URI} !fonts
-    RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
+    RewriteRule (.*) /index.html [L]
 
     ProxyPass /manage/api http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}/

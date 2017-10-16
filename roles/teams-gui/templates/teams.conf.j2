@@ -9,7 +9,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     ServerName https://teams.{{ base_domain }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-teams'"
-	  CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-teams'" combined
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-teams'" combined
 
     RewriteEngine on
 
@@ -24,7 +24,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !api
     RewriteCond %{REQUEST_URI} !fonts
-    RewriteRule (.*) /index.html [L]    RewriteRule (.*) /index.html [L]
+    RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
 
