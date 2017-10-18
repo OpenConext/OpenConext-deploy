@@ -1,6 +1,6 @@
 springapp_artifact_id: voot-service
 springapp_artifact_type: jar
-springapp_artifact_group_dir: /org/openconext
+springapp_artifact_group_dir: org/openconext
 springapp_version: "{{ voot_version }}"
 springapp_snapshot_timestamp: "{{ voot_snapshot_timestamp }}"
 springapp_dir: "{{ voot_dir }}"

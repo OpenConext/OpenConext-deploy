@@ -1,6 +1,6 @@
 springapp_artifact_id: coin-teams-war
 springapp_artifact_type: war
-springapp_artifact_group_dir: /org/surfnet/coin
+springapp_artifact_group_dir: org/surfnet/coin
 springapp_version: "{{ teams_version }}"
 springapp_snapshot_timestamp: "{{ teams_snapshot_timestamp }}"
 springapp_dir: "{{ teams_dir }}"

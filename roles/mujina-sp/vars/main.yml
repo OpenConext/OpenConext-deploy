@@ -1,6 +1,6 @@
 springapp_artifact_id: mujina-sp
 springapp_artifact_type: jar
-springapp_artifact_group_dir: /org/openconext
+springapp_artifact_group_dir: org/openconext
 springapp_version: "{{ mujina_version }}"
 springapp_snapshot_timestamp: "{{ mujina_sp_snapshot_timestamp }}"
 springapp_dir: "{{ mujina_sp_dir }}"

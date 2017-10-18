@@ -1,6 +1,6 @@
 springapp_artifact_id: metadata-exporter
 springapp_artifact_type: jar
-springapp_artifact_group_dir: /org/openconext
+springapp_artifact_group_dir: org/openconext
 springapp_version: "{{ metadata_exporter_version }}"
 springapp_snapshot_timestamp: "{{ metadata_exporter_snapshot_timestamp }}"
 springapp_dir: "{{ metadata_exporter_dir }}"

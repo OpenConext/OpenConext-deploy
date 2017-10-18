@@ -1,6 +1,6 @@
 springapp_artifact_id: attribute-mapper
 springapp_artifact_type: jar
-springapp_artifact_group_dir: /org/openconext
+springapp_artifact_group_dir: org/openconext
 springapp_version: "{{ attribute_mapper_version }}"
 springapp_snapshot_timestamp: "{{ attribute_mapper_snapshot_timestamp }}"
 springapp_dir: "{{ attribute_mapper_dir }}"

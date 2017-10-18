@@ -1,6 +1,6 @@
 springapp_artifact_id: eduproxy
 springapp_artifact_type: jar
-springapp_artifact_group_dir: /org/openconext
+springapp_artifact_group_dir: org/openconext
 springapp_version: "{{ eduproxy_version }}"
 springapp_snapshot_timestamp: "{{ eduproxy_snapshot_timestamp }}"
 springapp_dir: "{{ eduproxy_dir }}"
