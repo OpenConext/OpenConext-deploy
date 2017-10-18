@@ -113,7 +113,8 @@
         "idp",
         "orcid",
         "sab",
-        "voot"
+        "voot",
+        "pseudo_email"
       ],
       "properties": {
         "_class": {

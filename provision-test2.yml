@@ -80,8 +80,8 @@
     - { role: teams-legacy,                 tags: ['teams-legacy'  ] }
     - { role: teams-gui,                    tags: ['teams', 'teams-gui'  ] }
     - { role: teams-server,                 tags: ['teams', 'teams-server'  ] }
-    - { role: mujina-idp,                   tags: ['legacy','mujina' ] }
-    - { role: mujina-sp,                    tags: ['legacy','mujina' ] }
+    - { role: mujina-idp,                   tags: ['mujina','mujina-idp' ] }
+    - { role: mujina-sp,                    tags: ['mujina','mujina-sp' ] }
     - { role: authz-server,                 tags: ['oauth', 'authz-server'    ] }
     - { role: authz-admin,                  tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,                         tags: ['oauth', 'voot'            ] }
