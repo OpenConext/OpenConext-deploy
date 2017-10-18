@@ -79,3 +79,6 @@ engine_fpm_port: 801
 
 # When using vagrant for provisioning, it's not possible to put something in the inventory dir
 engine_crt_not_in_inventory: false
+
+# The value for guest qualifier. Can be overridden for specific non-surfnet environments
+engine_guestqualifier_value: "urn:collab:org:surf.nl"
