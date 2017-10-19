@@ -96,6 +96,7 @@ engine_database_password: "{{ mysql_passwords.eb }}"
 
 engine_apache_environment: test
 engine_apache_symfony_environment: prod
+engine_guestqualifier_value: "urn:collab:org:{{ base_domain }}"
 
 janus_database_name: sr
 janus_database_host: "{{ mysql_host }}"
