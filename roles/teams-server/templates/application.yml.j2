@@ -42,7 +42,7 @@ teams:
   default-stem-name: "{{ teams.default_stem_name }}"
   group-name-context: "{{ teams.group_name_context }}"
   product-name: "{{ teams.product_name }}"
-  non-guest-member-of: "urn:collab:org:surf.nl"
+  non-guest-member-of: "{{ guest_qualifier }}"
 voot:
   serviceUrl: https://voot.{{ base_domain }}
   accessTokenUri: https://authz.{{ base_domain }}/oauth/token
