@@ -86,6 +86,7 @@ tls_https:
     bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
     key_content: "{{ https_star_private_key }}"
 
+# Value for the isMemberOf attribute for users from IdPs that are marked as 'guest'.
 guest_qualifier: "urn:collab:org:{{ base_domain }}"
 
 engine_janus_user: engineblock
