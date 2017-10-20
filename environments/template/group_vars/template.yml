@@ -65,7 +65,7 @@ mongo:
   manage_user: managerw
   manage_password: "{{ mongo_passwords.manage }}" 
   manage_database: manage
-      
+
 tls:
   cert_path: /etc/pki/tls/certs
   cert_path_ca: /etc/pki/ca-trust/source/anchors/
@@ -85,6 +85,8 @@ tls_https:
     crt_name: "star.{{ base_domain }}.pem"
     bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
     key_content: "{{ https_star_private_key }}"
+
+guest_qualifier: "urn:collab:org:{{ base_domain }}"
 
 engine_janus_user: engineblock
 

@@ -83,7 +83,7 @@ tls_https:
     key_content: "{{ https_star_private_key }}"
     crt_content: "{{ https_star_crt }}"
 
-
+guest_qualifier: "urn:collab:org:{{ base_domain }}"
 
 apache_server_admin: unix@prolocation.net
 
