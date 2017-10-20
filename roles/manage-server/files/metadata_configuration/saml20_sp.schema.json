@@ -338,6 +338,113 @@
         "coin:attribute_aggregation_required": {
           "type": "string",
           "format": "boolean"
+        },
+        "coin:original_metadata_url": {
+          "type": "string",
+          "format": "url"
+        },
+        "coin:service_team_id": {
+          "type": "string"
+        },
+        "coin:privacy:what_data": {
+          "type": "string"
+        },
+        "coin:privacy:access_data": {
+          "type": "string"
+        },
+        "coin:privacy:country": {
+          "type": "string"
+        },
+        "coin:privacy:security_measures": {
+          "type": "string"
+        },
+        "coin:privacy:certification": {
+          "type": "string",
+	  "format": "boolean"
+        },
+        "coin:privacy:certification_location": {
+          "type": "string"
+        },
+        "coin:privacy:certification_valid_from": {
+          "type": "string",
+	  "format": "number"
+        },
+        "coin:privacy:certification_valid_to": {
+          "type": "string",
+	  "format": "number"
+        },
+        "coin:privacy:surfmarket_dpa_agreement": {
+          "type": "string",
+	  "format": "boolean"
+        },
+        "coin:privacy:surfnet_dpa_agreement": {
+          "type": "string",
+	  "format": "boolean"
+        },
+        "coin:privacy:sn_dpa_why_not": {
+          "type": "string"
+        },
+        "coin:privacy:privacy_policy": {
+          "type": "string",
+	  "format": "boolean"
+        },
+        "coin:privacy:privacy_policy_url": {
+          "type": "string",
+          "format": "url"
+        },
+        "coin:privacy:other_info": {
+          "type": "string"
+        },
+        "coin:attr_motivation:eduPersonTargetedID": {
+          "type": "string"
+        },
+        "coin:attr_motivation:eduPersonPrincipalName": {
+          "type": "string"
+        },
+        "coin:attr_motivation:displayName": {
+          "type": "string"
+        },
+        "coin:attr_motivation:cn": {
+          "type": "string"
+        },
+        "coin:attr_motivation:givenName": {
+          "type": "string"
+        },
+        "coin:attr_motivation:sn": {
+          "type": "string"
+        },
+        "coin:attr_motivation:mail": {
+          "type": "string"
+        },
+        "coin:attr_motivation:schacHomeOrganization": {
+          "type": "string"
+        },
+        "coin:attr_motivation:schacHomeOrganizationType": {
+          "type": "string"
+        },
+        "coin:attr_motivation:schacPersonalUniqueCode": {
+          "type": "string"
+        },
+        "coin:attr_motivation:eduPersonAffiliation": {
+          "type": "string"
+        },
+        "coin:attr_motivation:eduPersonScopedAffiliation": {
+          "type": "string"
+        },
+        "coin:attr_motivation:eduPersonEntitlement": {
+          "type": "string"
+        },
+        "coin:attr_motivation:eduPersonOrcid": {
+          "type": "string"
+        },
+        "coin:attr_motivation:isMemberOf": {
+          "type": "string"
+        },
+        "coin:attr_motivation:uid": {
+          "type": "string"
+        },
+        "coin:attr_motivation:preferredLanguage": {
+          "type": "string"
         }
       },
       "patternProperties": {
