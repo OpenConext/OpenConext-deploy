@@ -95,6 +95,8 @@ tls_star_cert_bundle_name: star.{{ base_domain }}_ca_bundle.pem
 tls_star_cert: star.{{ base_domain }}.pem
 tls_star_cert_key: star.{{ base_domain }}.key
 
+guest_qualifier: "urn:collab:org:{{ base_domain }}"
+
 apache_server_admin: unix@prolocation.net
 
 janus_ssp_technicalcontact_name: "Surfconext beheer"

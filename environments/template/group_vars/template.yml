@@ -65,7 +65,7 @@ mongo:
   manage_user: managerw
   manage_password: "{{ mongo_passwords.manage }}" 
   manage_database: manage
-      
+
 tls:
   cert_path: /etc/pki/tls/certs
   cert_path_ca: /etc/pki/ca-trust/source/anchors/
@@ -86,6 +86,8 @@ tls_https:
     bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
     key_content: "{{ https_star_private_key }}"
 
+guest_qualifier: "urn:collab:org:{{ base_domain }}"
+
 engine_janus_user: engineblock
 
 engine_database_name: eb
@@ -96,7 +98,6 @@ engine_database_password: "{{ mysql_passwords.eb }}"
 
 engine_apache_environment: test
 engine_apache_symfony_environment: prod
-engine_guestqualifier_value: "urn:collab:org:{{ base_domain }}"
 
 janus_database_name: sr
 janus_database_host: "{{ mysql_host }}"
