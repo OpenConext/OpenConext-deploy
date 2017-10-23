@@ -43,7 +43,7 @@ With the above commands you get the latest versions. There might be incompatibil
 
 Ansible is the configuration tool we use to describe our servers.
 Installation instruction can be found on the [Ansible website](http://docs.ansible.com/intro_installation.html).
-The minimum required version of Ansible is 1.9.
+The minimum required version of Ansible is 1.9. Version 2.4 and higher are not yet supported. Please use 2.3 or lower. 
 To install for development with Homebrew:
 
     brew install python
