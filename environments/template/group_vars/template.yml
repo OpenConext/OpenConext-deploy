@@ -28,8 +28,8 @@ voot_version: 3.0.1
 authz_admin_version: 2.0.10
 authz_playground_version: 1.5
 pdp_version: 1.2.10
-attribute_aggregation_server_version: 2.0.3
-attribute_aggregation_gui_version: 2.0.3
+attribute_aggregation_server_version: 2.0.4
+attribute_aggregation_gui_version: 2.0.4
 oidc_version: "1.0.10"
 metadata_exporter_version: "2.0.4"
 engine_version: "5.4.0"
