@@ -192,6 +192,9 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	epa.eduPersonAffiliation as 'urn:oid:1.3.6.1.4.1.5923.1.1.1.1 (eduPersonAffiliation)',
 	epe.eduPersonEntitlement as 'urn:oid:1.3.6.1.4.1.5923.1.1.1.7 (eduPersonEntitlement)',
 	imo.isMemberOf as 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1 (isMemberOf)'
+        spuc.schacPersonalUniqueCode as 'urn:oid:1.3.6.1.4.1.25178.1.2.14 (schacPersonalUniqueCode)',
+        epsa.eduPersonScopedAffiliation as 'urn:oid:1.3.6.1.4.1.5923.1.1.1.9 (eduPersonScopedAffiliation)'
+	
 
 	FROM {{ diyidp.db_name }}.users diy
 	LEFT JOIN
@@ -274,6 +277,27 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 		GROUP BY uid
 	) AS imo
 	ON diy.uid = imo.uid
+
+        LEFT JOIN
+        (       SELECT uid, GROUP_CONCAT(schacPersonalUniqueCode SEPARATOR ', ') as schacPersonalUniqueCode from 
+                ( SELECT uid, schacPersonalUniqueCode FROM diyidp.users
+                  GROUP BY uid, schacPersonalUniqueCode
+                  ORDER BY UID
+                ) schacPersonalUniqueCode
+                GROUP BY uid
+        ) AS spuc
+        ON diy.uid = spuc.uid
+        
+        LEFT JOIN 
+        (       SELECT uid, GROUP_CONCAT(eduPersonScopedAffiliation SEPARATOR ', ') as eduPersonScopedAffiliation from 
+                ( SELECT uid, eduPersonScopedAffiliation FROM diyidp.users
+                  GROUP BY uid, eduPersonScopedAffiliation
+                  ORDER BY UID
+                ) eduPersonScopedAffiliation
+                GROUP BY uid
+        ) AS epsa
+        ON diy.uid = epsa.uid
+
 
 GROUP BY diy.uid
 ORDER BY LPAD(lower(username), 2,0), LPAD(lower(username), 10,0)";
