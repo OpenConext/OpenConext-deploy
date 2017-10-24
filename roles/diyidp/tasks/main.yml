@@ -62,6 +62,9 @@
 - name: Copy frontpage definitions
   template: src=frontpage.definition.json.j2 dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/modules/core/dictionaries/frontpage.definition.json
 
+- name: Copy login page definition
+  template: src=login.definition.json.j2 dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/dictionaries/login.definition.json
+
 - name: Copy DIY IdP logo
   copy: src=keyserver.png dest={{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/www/
 
