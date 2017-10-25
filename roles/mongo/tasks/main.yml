@@ -63,7 +63,7 @@
   when: mongo_primary
 
 - name: Add the admin user using tls
-  mongodb_user: database=admin login_port={{ mongod_port }} roles='root' state=present ssl=True  ssl_cert_reqs=CERT_NONE
+  mongodb_user: database=admin name=admin login_port={{ mongod_port }} roles='root' state=present ssl=True  ssl_cert_reqs=CERT_NONE
   when: 
      - mongo_primary
      - mongo_tls
