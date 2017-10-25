@@ -61,7 +61,7 @@
   gather_facts: yes
   become: true
   roles:
-    - { role: mongo, tags: ['mongo'] 
+    - { role: mongo, tags: ['mongo'] }
 
 - hosts: php-apps
   gather_facts: no
