@@ -57,6 +57,12 @@
   roles:
     - { role: galera_create_users, tags: ['galera', 'galera_create_users'] }
 
+- hosts: mongo_servers
+  gather_facts: yes
+  become: true
+  roles:
+    - { role: mongo, tags: ['mongo'] 
+
 - hosts: php-apps
   gather_facts: no
   become: true
