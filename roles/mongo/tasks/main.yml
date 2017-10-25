@@ -62,20 +62,11 @@
   service: name=mongod.service enabled=yes state=started
   when: mongo_primary
 
-- name: Add the admin user using tls
-  mongodb_user: database=admin name=admin login_port={{ mongod_port }} roles='root' state=present ssl=True  ssl_cert_reqs=CERT_NONE
-  when: 
-     - mongo_primary
-     - mongo_tls
-     - mongo_present.stat.exists == False
-
 - name: Add the admin user 
   mongodb_user: database=admin name=admin password={{ mongo_admin_password }} login_port={{ mongod_port }} roles='root' state=present
   when: 
      - mongo_primary
-     - mongo_tls == false
      - mongo_present.stat.exists == False
-     
 
 - name: Install mongodb.conf file  with authorisation enabled
   template: src=mongod.conf.j2 dest=/etc/mongod.conf
@@ -90,7 +81,6 @@
   when: 
     - mongo_primary 
     - mongo_cluster
-
 
 - name: Install arbiter and slave creation file
   template: src=arbslave_init.j2 dest=/tmp/arbslave_init.j2
