@@ -2,7 +2,9 @@
 - name: Import the mongo CA file
   copy: src={{ inventory_dir }}/files/certs/mongo/{{ mongo_tls_ca }} dest={{ tls.cert_path_ca }}/
   when: mongo_tls
-  notify: update_ca_trust
+
+- name: Update the ca trust store
+  command: /bin/update-ca-trust
 
 - name: create user
   user: name=manage system=yes home={{ manage_dir }} shell=/sbin/nologin
