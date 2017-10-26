@@ -82,12 +82,6 @@
     - mongo_primary 
     - mongo_cluster
 
-- name: Install arbiter and slave creation file
-  template: src=arbslave_init.j2 dest=/tmp/arbslave_init.j2
-  when: 
-    - mongo_primary
-    - mongo_cluster
-
 - name: Initialize the replication set on the primary, tls enabled
   shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem --authenticationDatabase admin /tmp/repset_init.js --host "{{mongo_hostname }}" 
   when: 
@@ -95,22 +89,8 @@
     - mongo_cluster
     - mongo_tls
 
-- name: Create arbiters and slaves, tls enabled
-  shell: /usr/bin/mongo --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/arbslave_init.j2 --host "{{ mongo_hostname }}" 
-  when: 
-    - mongo_primary
-    - mongo_cluster
-    - mongo_tls
-
 - name: Initialize the replication set on the primary
   shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/repset_init.js --host 127.0.0.1
-  when: 
-    - mongo_primary
-    - mongo_cluster
-    - not mongo_tls
-
-- name: Create arbiters and slaves
-  shell: /usr/bin/mongo -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/arbslave_init.j2 --host 127.0.0.1 
   when: 
     - mongo_primary
     - mongo_cluster
