@@ -1,4 +1,5 @@
-rs.initiate( { _id: "{{ replica_set_name }}", members: [ {% for host in groups["mongod_primary"] %} { _id: {{ loop.index }}, host: "{{hostvars[host].mongo_hostname }}:{{ mongod_port }}"},  {% endfor %}   ] } )
+rs.initiate( { _id: "{{ replica_set_name }}", members: [ {% for host in groups["mongod_primary"] %} { _id: {{ loop.index }}, host: "{{hostvars[host].mongo_hostname }}:{{ mongod_port }}"},  {% endfor %}   ] } );
+sleep(3000);
 {% for host in groups["mongod_arbiters"] %}
 rs.addArb("{{ hostvars[host].mongo_hostname }}:{{ mongod_port }}");
 {% endfor %}
