@@ -52,9 +52,5 @@
   file: path={{ tomcat.lib_dir }}/webapps state=directory group=tomcat owner=tomcat
   tags: tomcat
 
-- include: java_keystore.yml
-  when: env == 'vm' or
-        env == 'vm-centos7'
-
 - name: Make sure Tomcat starts when the system is booted.
   service: name={{ tomcat.service_name }} enabled=yes
