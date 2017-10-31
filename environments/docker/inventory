@@ -1,4 +1,4 @@
-[localhost]
+[all]
 localhost ansible_connection=local
 
 [docker]
