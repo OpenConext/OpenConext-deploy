@@ -9,13 +9,13 @@
 
 - name: Unpack current version
   unarchive: src={{ engine_build_path }} dest={{ openconext_releases_dir }} copy=no
-  when: eb_download.changed or eb_dir.stat.lnk_source != "{{ engine_release_dir }}"
+  when: eb_download.changed or eb_dir.stat.lnk_source != engine_release_dir
 
 - name: Activate new EngineBlock release
   file: src={{ engine_release_dir }} dest={{ engine_current_release_symlink }} state=link
   notify:
     - restart httpd
-  when: eb_download.changed or  eb_dir.stat.lnk_source != "{{ engine_release_dir }}"
+  when: eb_download.changed or  eb_dir.stat.lnk_source != engine_release_dir
 
 - name: Make sure cache dir has correct permissions
   file: path={{engine_current_release_symlink}}/app/cache  owner=engine group=engine recurse=yes
