@@ -5,6 +5,7 @@
 
 - name: Update the ca trust store
   command: /bin/update-ca-trust
+  changed_when: False
 
 - name: create user
   user: name=manage system=yes home={{ manage_dir }} shell=/sbin/nologin
