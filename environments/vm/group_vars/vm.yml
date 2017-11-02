@@ -413,6 +413,7 @@ monitoring_tests:
   password: "{{ monitoring_tests_password }}"
 
 manage:
+  base_url: https://manage.{{ base_domain }}
   db_user: "{{ janus_database_user }}"
   db_password: "{{ mysql_passwords.sr }}"
   db_name: "{{ janus_database_name }}"
@@ -426,6 +427,7 @@ manage:
   mongo_password: "{{ mongo.manage_password }}"
   mongo_database: "manage"
   backdoor_api_user: backdoor_api_user
+  sp_dashboard_user: sp-dashboard
   features: migration, validation, push_preview, push
   apiUsers:
     - {
@@ -439,7 +441,7 @@ manage:
         scopes: ["READ"]
       }
     - {
-        name: "sp-dashboard",
+        name: "{{ manage.sp_dashboard_user }}",
         password: "{{ manage_sp_dashboard_secret }}",
         scopes: ["READ", "WRITE", "PUSH"]
       }
