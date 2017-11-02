@@ -134,6 +134,12 @@ vrrp_instance backup {
         {{ sab_enroll_ipv6 }}
         {% endif %}
         {% if haproxy_sni_ip is defined %}
+        {% if link_ip is defined %}
+        {{ link_ip }}
+        {% endif %}
+        {% if link_ipv6 is defined %}
+        {{ link_ipv6 }}
+        {% endif %}
         {{ haproxy_sni_ip }}
         {% endif %}
         {% if haproxy_sni_ipv6 is defined %}
