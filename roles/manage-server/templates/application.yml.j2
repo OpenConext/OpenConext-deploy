@@ -63,6 +63,7 @@ spring:
       test-on-borrow: true
       validation-query: SELECT 1
       remove-abandoned: true
+      test-while-idle: true
   main:
     banner-mode: "off"
 
@@ -73,9 +74,11 @@ eb:
     username: {{ manage.eb_db_user }}
     password: {{ manage.eb_db_password }}
     tomcat:
+    tomcat:
       test-on-borrow: true
       validation-query: SELECT 1
       remove-abandoned: true
+      test-while-idle: true
 
 management:
   health:
