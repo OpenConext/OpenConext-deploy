@@ -91,3 +91,4 @@ wsrep_log_conflicts=ON
 encrypt = 2
 tca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }}
 tcert = {{ galera_tls_cert_path }}/{{ galera_sst_crt_name }} 
+sockopt= ",commonname='{{ galera_server_commonname }}'"
