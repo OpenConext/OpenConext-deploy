@@ -262,7 +262,6 @@ authzadmin:
         grantTypes:
           - authorization_code
           - implicit
-          - client_credentials
         redirectUri: https://authz-playground.{{ base_domain }}/redirect
       - clientId: authz-admin
         secret: "{{ authz_admin_client_secret }}"

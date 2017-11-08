@@ -258,11 +258,9 @@ authzadmin:
           - groups
         scopes:
           - groups
-          - members
         grantTypes:
           - authorization_code
           - implicit
-          - client_credentials
         redirectUris:
           - https://authz-playground.{{ base_domain }}/redirect
       - clientId: authz-admin
