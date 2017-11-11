@@ -18,8 +18,8 @@ features: {{ manage.features }}
 
 manage_cronjobmaster: {{ manage_cronjobmaster }}
 manage_cronjob_minutes: 10
-run_migrations: {{ manage_run_migrations }}
-push_after_migration: {{ push_after_migration }}
+run_migrations: {{ manage.run_migrations }}
+push_after_migration: {{ manage.push_after_migration }}
 
 push:
   url: https://{{ engine_api_domain }}/api/connections
