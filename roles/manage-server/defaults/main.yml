@@ -6,3 +6,5 @@ manage_local_jar: ''
 manage_jar: manage-current.jar
 manage_random_source: 'file:///dev/urandom'
 manage_cronjobmaster: false
+manage_run_migrations: false
+push_after_migration: false
