@@ -400,6 +400,8 @@ manage:
   mongo_password: "{{ mongo.manage_password }}"
   mongo_database: "manage"
   backdoor_api_user: backdoor_api_user
+  run_migrations: false
+  push_after_migration: false
   features: migration, validation, push_preview, push
   apiUsers:
     - {
