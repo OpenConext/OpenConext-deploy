@@ -1,6 +1,8 @@
 vrrp_script chk_cluster {
         script "/usr/local/bin/clustercheck clustercheck {{ galera_clustercheck_password }} 0"
-        interval 1
+        interval 5
+	fall 3
+	rise 1
 }
 
 vrrp_instance galera {
