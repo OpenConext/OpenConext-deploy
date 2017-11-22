@@ -77,9 +77,14 @@
   notify: reload postfix
 
 - name: Copy Postfix pseudo-email config
-  template: src='mysql-pseudo.cf.j2' dest='/etc/postfix/mysql-pseudo.cf' mode=0600
+  template: src='{{item}}.j2' dest='/etc/postfix/{{item}}'
   when: sendmail_smarthost is defined and handle_pseudo_email
-  notify: reload postfix
+  with_items: 
+    - mysql-pseudo.cf
+    - header_checks
+  notify: 
+    - reload postfix
+    - rebuild header_checks
 
 # journald binary logs corrupt on specific engineblock messages.
 # disabling compression fixes that issue

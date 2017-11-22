@@ -685,5 +685,7 @@ smtp_tls_security_level = may
 {% if handle_pseudo_email %}
 canonical_maps = mysql:/etc/postfix/mysql-pseudo.cf
 remote_header_rewrite_domain = anomail.conext.surfnetlabs.nl 
+smtp_header_checks = pcre:/etc/postfix/header_checks
+smtp_mime_header_checks = pcre:/etc/postfix/header_checks
 {% endif %}
 
