@@ -681,3 +681,9 @@ readme_directory = /usr/share/doc/postfix-2.10.1/README_FILES
 
 smtp_tls_loglevel = 1
 smtp_tls_security_level = may
+
+{% if handle_pseudo_email %}
+virtual_alias_domains = {{attribute_aggregation_pseudo_mail_postfix}}
+virtual_alias_maps = mysql:/etc/postfix/mysql-pseudo.cf
+{% endif %}
+

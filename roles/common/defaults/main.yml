@@ -1,1 +1,2 @@
 sendmail_smarthost: localhost
+handle_pseudo_email: false
