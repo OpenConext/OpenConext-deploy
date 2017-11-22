@@ -683,7 +683,7 @@ smtp_tls_loglevel = 1
 smtp_tls_security_level = may
 
 {% if handle_pseudo_email %}
-virtual_alias_domains = {{attribute_aggregation_pseudo_mail_postfix}}
-virtual_alias_maps = mysql:/etc/postfix/mysql-pseudo.cf
+canonical_maps = mysql:/etc/postfix/mysql-pseudo.cf
+remote_header_rewrite_domain = anomail.conext.surfnetlabs.nl 
 {% endif %}
 
