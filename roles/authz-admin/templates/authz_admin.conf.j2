@@ -1,4 +1,4 @@
-{% if apache_app_listen_address.authz_admin is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.authz_admin is defined %}
 Listen {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.port }}
 <VirtualHost {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.port }}>
 {% else %}
@@ -36,7 +36,7 @@ Listen {{ apache_app_listen_address.authz_admin }}:{{ loadbalancing.authz_admin.
     Include ssl_backend.conf
     {% endif %}
 
-    {% if apache_app_listen_address.all is defined %}
+    {% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}

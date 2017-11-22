@@ -1,4 +1,4 @@
-{% if apache_app_listen_address.teams is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.teams is defined %}
 Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 <Virtualhost {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}> 
 {% else %}
@@ -75,7 +75,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     Include ssl_backend.conf
     {% endif %}
     
-    {% if apache_app_listen_address.all is defined %}
+    {% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}

@@ -1,4 +1,4 @@
-{% if apache_app_listen_address.engine_api is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.engine_api is defined %}
 Listen {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.port }}
 <Virtualhost {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.port }}>
 {% else %}
@@ -17,7 +17,7 @@ Listen {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.po
         RewriteCond %{REQUEST_FILENAME} !-f
         RewriteRule ^(.*)$ app{% if develop %}_dev{% endif %}.php [QSA,L]
     </Directory>
-{% if apache_app_listen_address.all is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}

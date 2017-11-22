@@ -7,7 +7,7 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
-{% if apache_app_listen_address.all is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
 # listen to the HTTPS port only
 Listen *:443
 {% else %}

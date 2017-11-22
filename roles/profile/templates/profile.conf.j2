@@ -1,4 +1,4 @@
-{% if apache_app_listen_address.profile is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.profile is defined %}
 Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
 <Virtualhost {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}>
 {% else %}
@@ -11,7 +11,7 @@ Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
 
     SetEnv SYMFONY_ENV {{ profile_apache_symfony_environment }}
     SetEnv HTTPS on
-{% if apache_app_listen_address.all is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
@@ -39,7 +39,7 @@ Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
     Include ssl_backend.conf
     {% endif %}
 
-    {% if apache_app_listen_address.all is defined %}
+    {% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}

@@ -1,4 +1,4 @@
-{% if apache_app_listen_address.voot is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.voot is defined %}
 Listen {{ apache_app_listen_address.voot }}:{{ loadbalancing.voot.port }}
 <Virtualhost {{ apache_app_listen_address.voot }}:{{ loadbalancing.voot.port }}>
 {% else %}
@@ -19,7 +19,7 @@ Listen {{ apache_app_listen_address.voot }}:{{ loadbalancing.voot.port }}
     Include ssl_backend.conf
     {% endif %}
 
-    {% if apache_app_listen_address.all is defined %}
+    {% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
