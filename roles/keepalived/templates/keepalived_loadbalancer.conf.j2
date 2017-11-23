@@ -10,6 +10,10 @@ vrrp_instance master {
        {% if engine_ipv6 is defined %}
        {{ engine_ipv6 }}
        {% endif %}
+       {{ bind_ip }}
+       {% if bind_ipv6 is defined %}
+       {{ bind_ipv6 }}
+       {% endif %}
    
    }
 }
@@ -80,10 +84,6 @@ vrrp_instance backup {
         {{ manage_ip }}
         {% if manage_ipv6 is defined %}
         {{ manage_ipv6 }}
-        {% endif %}
-        {{ bind_ip }}
-        {% if bind_ipv6 is defined %}
-        {{ bind_ipv6 }}
         {% endif %}
         {% if sa_ip is defined %}
         {{ sa_ip }}
