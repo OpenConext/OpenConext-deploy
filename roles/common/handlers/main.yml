@@ -11,3 +11,8 @@
 
 - name: reload postfix
   service: name=postfix state=reloaded
+
+- name: rebuild header_checks
+  command: /usr/sbin/postmap header_checks
+  args:
+    chdir: /etc/postfix
