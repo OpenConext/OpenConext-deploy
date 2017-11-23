@@ -37,22 +37,30 @@
   stat: path=/usr/sbin/setenforce
   register: selinux_binaries
 
-- name: check for SELinux status
-  shell: "/usr/sbin/sestatus | grep 'SELinux status' | awk '{ print $3 }'"
-  when: selinux_binaries.stat.exists == True
-  register: selinux_status
+- name: check if SELinux is enabled
+  shell: "/usr/sbin/sestatus | awk -F': *' '$1~/SELinux status/ {print $2}'"
+  when: selinux_binaries.stat.exists
+  register: selinux_enabled
+  changed_when: false
 
-- name: disable SELinux
+- name: check SELinux mode
+  shell: "/usr/sbin/sestatus | awk -F': *' '$1~/Current mode/ {print $2}'"
+  when: selinux_binaries.stat.exists and selinux_enabled.stdout == 'enabled'
+  register: selinux_mode
+  changed_when: false
+
+- name: set SELinux mode to permissive
   lineinfile: dest=/etc/sysconfig/selinux state=present regexp='^SELINUX=' line='SELINUX=permissive'
-  when: selinux_config.stat.exists == True
+  when: selinux_config.stat.exists
 
 - name: disable SELinux NOW
   command: /usr/sbin/setenforce 0
-  when: (selinux_binaries.stat.exists == True and selinux_status.stdout == "enabled")
+  when: selinux_binaries.stat.exists and selinux_enabled.stdout == 'enabled' and selinux_mode.stdout != 'permissive'
 
 - name: check SELinux status
-  shell: "/usr/sbin/sestatus | egrep '^SELinux status: *disabled' || /usr/sbin/sestatus | egrep '^Current mode: *permissive'"
-  when: selinux_binaries.stat.exists == True
+  shell: "/usr/sbin/sestatus | awk -F': *' '$1~/Current mode|SELinux status/ {print $2; q}'|grep -qE 'disabled|permissive'"
+  when: selinux_binaries.stat.exists
+  changed_when: false
 
 - name: Start ntpd
   service: name=ntpd state=started enabled=yes
