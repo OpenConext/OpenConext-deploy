@@ -1,4 +1,4 @@
-{% if apache_app_listen_address.welcome is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.welcome is defined %}
 Listen {{ apache_app_listen_address.welcome }}:{{ loadbalancing.welcome.port }}
 <Virtualhost {{ apache_app_listen_address.welcome }}:{{ loadbalancing.welcome.port }}>
 {% else %}
@@ -8,7 +8,7 @@ Listen {{ apache_app_listen_address.welcome }}:{{ loadbalancing.welcome.port }}
     ServerName {{ base_domain }}:443
 
     DocumentRoot /var/www/welcome
-{% if apache_app_listen_address.all is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
@@ -25,7 +25,7 @@ Listen {{ apache_app_listen_address.welcome }}:{{ loadbalancing.welcome.port }}
     Include ssl_backend.conf
     {% endif %}
 
-    {% if apache_app_listen_address.all is defined %}
+    {% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}

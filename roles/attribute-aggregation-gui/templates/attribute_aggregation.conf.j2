@@ -1,4 +1,4 @@
-{% if apache_app_listen_address.aa is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.aa is defined %}
 Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
 <Virtualhost {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}>
 {% else %}
@@ -70,7 +70,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     Include ssl_backend.conf
     {% endif %}
 
-    {% if apache_app_listen_address.all is defined %}
+    {% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
@@ -79,7 +79,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     {% endif %}
 </VirtualHost>
 
-{% if apache_app_listen_address.aa is defined %}
+{% if apache_app_listen_address is defined and apache_app_listen_address.aa is defined %}
 <Virtualhost {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}>
 {% else %}
 <Virtualhost *:443 >
@@ -138,7 +138,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     Include ssl_backend.conf
     {% endif %}
 
-    {% if apache_app_listen_address.all is defined %}
+    {% if apache_app_listen_address is defined and apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
