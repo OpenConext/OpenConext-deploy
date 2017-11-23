@@ -55,7 +55,7 @@
 
 - name: disable SELinux NOW
   command: /usr/sbin/setenforce 0
-  when: selinux_enabled.stdout == 'enabled' and selinux_mode.stdout != 'permissive'
+  when: selinux_binaries.stat.exists and selinux_enabled.stdout == 'enabled' and selinux_mode.stdout != 'permissive'
 
 - name: check SELinux status
   shell: "/usr/sbin/sestatus | awk -F': *' '$1~/Current mode|SELinux status/ {print $2; q}'|grep -qE 'disabled|permissive'"
