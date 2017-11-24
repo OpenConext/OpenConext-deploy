@@ -86,3 +86,24 @@ authorities:
         }
       ]
     }
+  - {
+      id: "surfmarket_entitlements",
+      description: "SURFmarket entitlements",
+      endpoint: "http://attributeproviderapp.azurewebsites.net",
+      user: "aggregation@openconext.org",
+      password: "{{ aa_surfmarket_password }}",
+      timeOut: 15000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:eduPersonEntitlement",
+          description: "The entitlements of the user.",
+          type: "string",
+          example: "urn:mace:surfnet.nl:surfmarket.nl:estudybooks:entitlement:E1"
+        }
+      ],
+      requiredInputAttributes: [
+        {
+        name: "urn:mace:dir:attribute-def:eduPersonPrincipalName",
+        }
+      ]
+    }
