@@ -8,12 +8,6 @@ Listen {{ apache_app_listen_address.welcome }}:{{ loadbalancing.welcome.port }}
     ServerName {{ base_domain }}:443
 
     DocumentRoot /var/www/welcome
-{% if apache_app_listen_address.all is defined %}
-    SSLEngine on
-    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
-    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
-    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
-{% endif %}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Welcome'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Welcome'" combined
