@@ -156,8 +156,11 @@ shibboleth_apps:
   pdp:
     entityID: "https://pdp.{{ base_domain }}/shibboleth"
     baseurl: ""
-  aa:
+  "attribute-aggregation":
     entityID: "https://aa.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  "attribute-aggregation-link":
+    entityID: "https://link.{{ base_domain }}/shibboleth"
     baseurl: ""
   "manage":
     entityID: "https://manage.{{ base_domain }}/shibboleth"
