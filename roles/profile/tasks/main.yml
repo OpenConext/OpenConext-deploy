@@ -83,11 +83,13 @@
     - profile.yml
   notify:
     - restart httpd
+    - restart php-fpm
 
 - name: Activate new Profile release
   file: src={{ profile_install_dir }} dest={{ profile_current_release_symlink }} state=link
   notify:
     - restart httpd
+    - restart php-fpm
 
 # Remove all dirs, but keep the current version and from the rest the most recent one.
 - name: Clean up old releases
