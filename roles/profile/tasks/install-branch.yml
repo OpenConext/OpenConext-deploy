@@ -5,7 +5,7 @@
   register: profile_gitclone
 
 - name: Make release
-  command: "./bin/makeRelease.sh {{ profile_branch }}"
+  command: "./makeRelease.sh {{ profile_branch }}"
   args:
     chdir: "{{ profile_branch_dir }}"
   when: profile_gitclone.changed
