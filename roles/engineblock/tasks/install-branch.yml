@@ -31,3 +31,4 @@
     state=link
   notify:
     - restart httpd
+    - restart php-fpm
