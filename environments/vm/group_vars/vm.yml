@@ -621,6 +621,14 @@ haproxy_applications:
     ha_url: "/aa/api/health"
     port: 615
     servers: "{{java_servers}}"
+  
+  - name: link
+    vhost_name: "link"
+    ip: 192.168.66.98
+    ha_method: "GET"
+    ha_url: "/aa/api/health"
+    port: 615
+    servers: "{{java_servers}}"
 
   - name: multidata
     vhost_name: "multidata"
