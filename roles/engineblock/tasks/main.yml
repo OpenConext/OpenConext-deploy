@@ -104,6 +104,6 @@
 
 # Remove all tarballs, but keep the current version and from the rest the most recent one.
 - name: Clean up old builds
-  shell: ls -td {{ openconext_builds_dir }}/OpenConext-engineblock-* | grep -v {{ engine_build_path }} | tail -n +2 | xargs --no-run-if-empty rm -rv
+  shell: ls -td {{ openconext_builds_dir }}/OpenConext-engineblock-* {{ openconext_builds_dir }}/Releases/ | grep -v {{ engine_build_path }} | tail -n +2 | xargs --no-run-if-empty rm -rv
   register: clean_engine_builds
   changed_when: '"removed" in clean_engine_builds.stdout'
