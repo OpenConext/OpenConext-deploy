@@ -115,6 +115,9 @@ frontend ssl_restricted_ip
 backend {{ application.name }}_be
   option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
   option forwardfor # This sets X-Forwarded-For
+  {%if application.x_forwarded_port is defined %}
+  http-request set-header X-Forwarded-Port {{ application.x_forwarded_port }}
+  {% endif %}
   rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
   mode http
   balance roundrobin
@@ -165,6 +168,9 @@ backend {{ application.name }}_be
 	backend {{ application.name }}_be
   	option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
   	option forwardfor # This sets X-Forwarded-For
+        {%if application.x_forwarded_port is defined %}
+        http-request set-header X-Forwarded-Port {{ application.x_forwarded_port }}
+        {% endif %}
         rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
   	mode http
   	balance roundrobin
@@ -199,6 +205,9 @@ backend {{ item.name }}_be
 
     option httpchk {{ item.ha_method }} {{ item.ha_url }} HTTP/1.0
     option forwardfor # This sets X-Forwarded-For
+    {%if application.x_forwarded_port is defined %}
+    http-request set-header X-Forwarded-Port {{ application.x_forwarded_port }}
+    {% endif %}
     rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
     mode http
     balance roundrobin
