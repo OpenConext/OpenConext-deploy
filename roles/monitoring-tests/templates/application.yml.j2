@@ -28,8 +28,8 @@ voot:
   authz:
     authorization_url: https://authz.{{ base_domain }}/oauth/token
     voot_base_url: https://voot.{{ base_domain }}
-    client_id: {{ authzplayground.springapp_authz_client_id }}
-    secret: {{ authzplayground_springapp_authz_client_secret }}
+    client_id: {{ monitoring_tests.authz_client_id }}
+    secret: {{ monitoring_tests_authz_client_secret }}
     person_id: {{ monitoring_tests.person_id }}
   oidc:
     authorization_url: https://oidc.{{ base_domain }}/token
