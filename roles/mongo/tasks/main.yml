@@ -20,7 +20,7 @@
   copy: src=mongo_kernel_settings.sh dest=/usr/local/sbin/mongo_kernel_settings.sh mode=0700 owner=root group=root
   register: mongo_kernel_settings
 
-- debug: var=mongo_kernel_settings
+#- debug: var=mongo_kernel_settings
 
 - name: Set kernel parameters
   command: /usr/local/sbin/mongo_kernel_settings.sh
@@ -71,6 +71,9 @@
 - name: Install mongodb.conf file  with authorisation enabled
   template: src=mongod.conf.j2 dest=/etc/mongod.conf
   register: mongo_conf_changed
+
+- name: Add logrotate snippet
+  copy: src=mongodb.logrotate dest=/etc/logrotate.d/mongodb
 
 - name: Restart Mongo
   service: name=mongod.service enabled=yes state=restarted
