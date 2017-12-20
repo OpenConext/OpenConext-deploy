@@ -3,6 +3,7 @@
 
 # Version of Profile that is installable by this role
 # E.g. profile_version: x.y.z
+profile_version: ''
 
 # Profile installer specific variables
 profile_version_dir: "{{ profile_version | replace('/', '-') }}"
@@ -16,7 +17,7 @@ profile_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-profi
 profile_domain: profile.{{ base_domain }}
 
 # Cache and log paths
-profile_symfony_cache_path: "/tmp/profile/symfony-cache/{{ profile_version }}"
+profile_symfony_cache_path: "/tmp/profile/symfony-cache/"
 profile_symfony_log_path: "/var/log/profile"
 
 # Secret used by application for adding entropy to security related operations
