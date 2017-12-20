@@ -7,4 +7,8 @@
        notifempty
        missingok
        dateext
+       sharedscripts
+       postrotate
+              /usr/bin/pkill -USR1 mongod
+       endscript
 }
