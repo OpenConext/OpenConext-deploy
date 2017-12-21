@@ -73,18 +73,18 @@
   vars:
     env_lang: java
   roles:
-    - { role: java,             tags: ['java'], when: not minimal_install }
-    - { role: shibboleth,       tags: ['shib'   ], when: not minimal_install }
-    - { role: teams-gui,        tags: ['teams'  ], when: not minimal_install }
-    - { role: teams-server,     tags: ['teams'  ], when: not minimal_install }
-    - { role: mujina-idp,       tags: ['legacy','mujina' ], when: not minimal_install }
-    - { role: mujina-sp,        tags: ['legacy','mujina' ], when: not minimal_install }
-    - { role: authz-server,     tags: ['oauth', 'authz-server'    ], when: not minimal_install }
-    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ], when: not minimal_install }
-    - { role: voot,             tags: ['oauth', 'voot'            ], when: not minimal_install }
-    - { role: authz-playground, tags: ['oauth', 'authz-playground'], when: not minimal_install }
-    - { role: pdp, tags: ['pdp'], when: not minimal_install }
-    - { role: metadata-exporter, tags: ['metadata-exporter'], when: not minimal_install}
+    - { role: java,              tags: ['java'                     ], when: not minimal_install }
+    - { role: shibboleth,        tags: ['shib'                     ], when: not minimal_install }
+    - { role: teams-gui,         tags: ['teams', 'teams-gui'       ], when: not minimal_install }
+    - { role: teams-server,      tags: ['teams', 'teams-server'    ], when: not minimal_install }
+    - { role: mujina-idp,        tags: ['legacy','mujina'          ], when: not minimal_install }
+    - { role: mujina-sp,         tags: ['legacy','mujina'          ], when: not minimal_install }
+    - { role: authz-server,      tags: ['oauth', 'authz-server'    ], when: not minimal_install }
+    - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ], when: not minimal_install }
+    - { role: voot,              tags: ['oauth', 'voot'            ], when: not minimal_install }
+    - { role: authz-playground,  tags: ['oauth', 'authz-playground'], when: not minimal_install }
+    - { role: pdp,               tags: ['pdp'                      ], when: not minimal_install }
+    - { role: metadata-exporter, tags: ['metadata-exporter'        ], when: not minimal_install}
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
 

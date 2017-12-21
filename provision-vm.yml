@@ -66,8 +66,8 @@
     - { role: java,              tags: ['java'] }
     - { role: shibboleth,        tags: ['shib'   ] }
     - { role: metadata-exporter, tags: ['metadata-exporter'] }
-    - { role: teams-gui,         tags: ['teams'  ] }
-    - { role: teams-server,      tags: ['teams'  ] }
+    - { role: teams-gui,         tags: ['teams', 'teams-gui' ] }
+    - { role: teams-server,      tags: ['teams', 'teams-server' ] }
     - { role: mujina-idp,        tags: ['legacy' ] }
     - { role: mujina-sp,         tags: ['legacy' ] }
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }

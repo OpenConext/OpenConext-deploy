@@ -97,8 +97,8 @@
     env_lang: java
   roles:
     - { role: teams-legacy,     tags: ['teams-legacy'  ] }
-    - { role: teams-gui,        tags: ['teams'  ] }
-    - { role: teams-server,     tags: ['teams'  ] }
+    - { role: teams-gui,        tags: ['teams', 'teams-gui'       ] }
+    - { role: teams-server,     tags: ['teams', 'teams-server'    ] }
     - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
     - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,             tags: ['oauth', 'voot'            ] }
