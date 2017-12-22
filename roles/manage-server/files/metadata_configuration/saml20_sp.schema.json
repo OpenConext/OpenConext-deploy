@@ -116,7 +116,8 @@
         "orcid",
         "sab",
         "voot",
-        "pseudo_email"
+        "pseudo_email",
+        "surfmarket_entitlements"
       ],
       "properties": {
         "_class": {
