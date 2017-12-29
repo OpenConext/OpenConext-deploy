@@ -23,7 +23,7 @@ global
   stats socket /var/lib/haproxy/stats{% if develop %} mode 600 level admin{% endif %}
 {% endif %}
 {% if haproxy_multi_instance is defined  %}
-  stats socket /var/lib/haproxy/{{ item.name }}.stats
+  stats socket /var/lib/haproxy/{{ item.name }}.stats {% if haproxy_rolling_updates %} mode 660 level admin user root group lbops{%endif%}
 {% endif %}
 
 #---------------------------------------------------------------------
