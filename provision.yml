@@ -14,7 +14,6 @@
     - { role: common,   tags: ['common'] }
     - { role: '{{ inventory_dir }}/../roles/surfconext_common',   tags: ['surfconext_common'] }
     - { role: '{{ inventory_dir }}/../roles/sysadmin_common',   tags: ['sysadmin_common'] }
-    - { role: users,   tags: ['users'] }
     - { role: iptables,      tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
   handlers:
