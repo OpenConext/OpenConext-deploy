@@ -4,7 +4,7 @@
 
 - name: Check haproxy version
   command: haproxy -v | grep version | awk '{ print $3 }' | sed 's/\.//g'
-  register: haproxy_minor_version
+  register: haproxy_version
 
 - name: Install socat
   yum: name=socat state=present
