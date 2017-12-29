@@ -2,9 +2,14 @@
 - name: Install haproxy
   yum: name=haproxy state=present
 
-- name: Check haproxy version
-  command: haproxy -v | grep version | awk '{ print $3 }' | sed 's/\.//g'
+- name: get haproxy version
+  yum:
+    list: haproxy
   register: haproxy_version
+
+- name: set package version
+  set_fact:
+    haproxy_version: "{{ haproxy_version.results|selectattr('yumstate','equalto','installed')|map(attribute='version')|list|first }}"
 
 - name: Install socat
   yum: name=socat state=present
