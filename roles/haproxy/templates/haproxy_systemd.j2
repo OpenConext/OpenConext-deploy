@@ -6,9 +6,9 @@ After=syslog.target network.target
 EnvironmentFile=/etc/sysconfig/haproxy
 {% if haproxy_version < 1800 %} 
 ExecStart=/usr/sbin/haproxy-systemd-wrapper -f /etc/haproxy/{{item.name}}/haproxy_{{item.name}}.cfg -p /run/haproxy_{{item.name}}.pid $OPTIONS
-{% elif %}
+{% else %}
 ExecStart=/usr/sbin/haproxy -db  -f /etc/haproxy/{{item.name}}/haproxy_{{item.name}}.cfg -p /run/haproxy_{{item.name}}.pid $OPTIONS
-{% ifend %}
+{% endif %}
 ExecReload=/bin/kill -USR2 $MAINPID
 
 [Install]
