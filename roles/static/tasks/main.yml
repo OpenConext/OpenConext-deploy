@@ -11,6 +11,9 @@
 - name: create static sp image directory
   file: path={{ static_dir }}/logos/sp state=directory owner={{ static.sync_user }}
 
+- name: create static aa image directory
+  file: path={{ static_dir }}/logos/aa state=directory owner={{ static.sync_user }}
+
 - name: copy media files
   copy: src=media dest={{ static_dir }}
 
@@ -19,6 +22,7 @@
   with_items:
     - 'idp'
     - 'sp'
+    - 'aa'
 
 - name: copy apache config
   template: src=static.conf.j2 dest=/etc/httpd/conf.d/static.conf
