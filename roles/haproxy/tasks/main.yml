@@ -1,6 +1,6 @@
 ---
 - name: Install haproxy 1.8 yum repo
-  copy: src=haproxy18.repo dest=/etc/yum.repos.d/ owner=root mode=0544
+  copy: src=haproxy18.repo dest=/etc/yum.repos.d/ owner=root mode=0644
   when: haproxy_18
 
 - include: multiple-instances.yml
