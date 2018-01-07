@@ -14,7 +14,7 @@
    </encoder>
  </appender>
 
- <!--appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+ <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
    <syslogHost>{{ rsyslog_host }}</syslogHost>
    <facility>DAEMON</facility>
    <suffixPattern>aa: [%thread] %logger %msg</suffixPattern>
@@ -30,13 +30,13 @@
    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
      <level>ERROR</level>
    </filter>
- </appender-->
+ </appender>
 
  <logger name="aa" level="DEBUG" />
  <root level="WARN">
    <appender-ref ref="FILE" />
-   <!--appender-ref ref="EMAIL" />
-   <appender-ref ref="SYSLOG" /-->
+   <appender-ref ref="EMAIL" />
+   <appender-ref ref="SYSLOG" />
  </root>
 
 </configuration>
