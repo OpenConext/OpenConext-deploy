@@ -21,7 +21,8 @@ authorities:
         {
         name: "SPentityID"
         }
-      ]
+      ],
+      validationRegExp: "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$"
     }
   - {
       id: "orcid",
@@ -42,7 +43,8 @@ authorities:
         {
         name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
         }
-      ]
+      ],
+      validationRegExp: "^(http://orcid\\.org/|)[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$"
     }
   - {
       id: "sab",
@@ -63,7 +65,8 @@ authorities:
         {
         name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
         }
-      ]
+      ],
+      validationRegExp: "^urn:mace:surfnet.nl:surfnet.nl:sab:(role|organizationCode|organizationGUID):[A-Z0-9-]+$"
     }
   - {
       id: "voot",
@@ -84,7 +87,8 @@ authorities:
         {
         name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
         }
-      ]
+      ],
+      validationRegExp: "^urn:collab:group:.*$"
     }
   - {
       id: "surfmarket_entitlements",
@@ -105,5 +109,6 @@ authorities:
         {
         name: "urn:mace:dir:attribute-def:eduPersonPrincipalName",
         }
-      ]
+      ],
+      validationRegExp: "^urn:mace:surfnet.nl:surfmarket.nl:.*$"
     }
