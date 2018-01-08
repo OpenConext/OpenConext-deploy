@@ -19,6 +19,9 @@ global
   ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
   ssl-default-server-options no-sslv3
   ssl-default-server-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+{% if haproxy_metricbeat %}
+  stats socket 127.0.0.1:14567
+{% endif %}
 {% if haproxy_multi_instance is not defined %}
   stats socket /var/lib/haproxy/stats{% if develop %} mode 600 level admin{% endif %}
 
@@ -28,6 +31,7 @@ global
 {% endif %}
 {% if haproxy_multi_instance is defined  %}
   stats socket /var/lib/haproxy/{{ item.name }}.stats {% if haproxy_rolling_updates %} mode 660 level admin user root group lbops{%endif%}
+
 {% if  haproxy_version | version_compare('1.8.0', '>=')  %}
   server-state-file /etc/haproxy/{{ item.name }}/state
 {% endif %}
