@@ -2,4 +2,4 @@
 name=HAproxy 1.8 repo
 baseurl=https://build.surfconext.nl/yum/
 enabled=1
-
+gpgcheck=0
