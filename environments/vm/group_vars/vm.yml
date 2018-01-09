@@ -267,17 +267,6 @@ authzadmin:
           - implicit
         redirectUris:
           - https://authz-playground.{{ base_domain }}/redirect
-      - clientId: authz-admin
-        secret: "{{ authz_admin_client_secret }}"
-        resourceIds:
-          - groups
-        scopes:
-          - groups
-        grantTypes:
-          - authorization_code
-        redirectUris:
-          - https://authz-admin.{{ base_domain }}
-        autoApprove: true
       - clientId: surf-teams
         secret: "{{ teams_authz_client_secret }}"
         resourceIds:
