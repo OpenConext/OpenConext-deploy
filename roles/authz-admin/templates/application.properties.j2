@@ -3,8 +3,6 @@ defaultClientsAndResourceServers.config.path = file://{{ authz_admin_dir }}/clie
 
 logging.config=file://{{ authz_admin_dir }}/logback.xml
 
-allowed_group={{ authz_admin_group }}
-
 flyway.enabled=false
 
 spring.datasource.url=jdbc:mysql://{{ authzserver.db_host }}/{{ authzserver.db_name }}
@@ -20,16 +18,6 @@ server.session.cookie.secure=true
 
 # An empty value will be replaced with the default
 server.server-header=no
-
-voot.serviceUrl=https://voot.{{ base_domain }}
-
-# oauth config for accessing voot.
-voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
-voot.userAuthorizationUri=https://authz.{{ base_domain }}/oauth/authorize
-voot.clientId=authz-admin
-voot.clientSecret={{ authz_admin_client_secret }}
-voot.redirectUri=https://authz-admin.{{ base_domain }}
-voot.scopes = groups
 
 errorPage.email=surfconext-beheer@surfnet.nl
 endpoints.enabled=false
