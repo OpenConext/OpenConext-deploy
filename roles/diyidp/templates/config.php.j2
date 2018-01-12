@@ -1,8 +1,6 @@
 <?php
 /* 
  * The configuration of simpleSAMLphp
- * 
- * $Id: config.php 2725 2011-01-28 08:48:53Z olavmrk $
  */
 
 $config = array (
@@ -86,7 +84,7 @@ $config = array (
 	 *
 	 * See this page for a list of valid timezones: http://php.net/manual/en/timezones.php
 	 */
-	'timezone' => 'Europe/Amsterdam',
+	'timezone' => '{{ timezone }}',
 
 	/*
 	 * Logging.
@@ -203,7 +201,7 @@ $config = array (
 	 */
 	'session.phpsession.cookiename'  => null,
 	'session.phpsession.savepath'    => null,
-	'session.phpsession.httponly'    => FALSE,
+	'session.phpsession.httponly'    => true,
 	
 	/*
 	 * Languages available and what language is default
@@ -562,4 +560,5 @@ $config = array (
 	 */
 	'proxy' => NULL,
 
+	'trusted.url.domains' => array(),
 );
