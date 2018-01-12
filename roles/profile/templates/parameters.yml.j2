@@ -22,7 +22,7 @@ parameters:
     engineblock_api_password: '{{ engine_api_profile_password }}'
     engineblock_api_verify_ssl: {{ engine_api_verify_ssl }}
 
-    attribute_aggregation_api_base_url: 'https://aa.{{ base_domain }}/aa/api/internal/accounts/'
+    attribute_aggregation_api_base_url: 'https://aa.{{ base_domain }}/aa/api/internal/'
     attribute_aggregation_api_username: '{{ engine_attribute_aggregation_username }}'
     attribute_aggregation_api_password: '{{ engine_attribute_aggregation_password }}'
     attribute_aggregation_api_verify_ssl: true
@@ -30,7 +30,6 @@ parameters:
     # orcid aa attribute settings for orcid
     attribute_aggregation_orcid_logo_path: '/images/orcid.png'
     attribute_aggregation_orcid_connect_url: 'https://link.{{ base_domain }}/orcid?redirectUrl=https://profile.{{ base_domain }}/my-connections'
-    attribute_aggregation_orcid_disconnect_url: 'https://link.{{ base_domain }}/orcid?redirectUrl=https://profile.{{ base_domain }}.nl/my-connections'
 
     mailer_transport:  sendmail
     mailer_host:       ~
