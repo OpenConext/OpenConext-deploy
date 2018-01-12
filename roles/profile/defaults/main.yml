@@ -50,3 +50,5 @@ engine_profile_idp_sso_url: https://{{ engine_domain }}/authentication/idp/singl
 
 profile_fpm_user: profile
 profile_fpm_port: 802
+
+profile_info_request_email: "{{ support_email }}"
