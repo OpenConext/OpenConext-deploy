@@ -104,6 +104,10 @@ janus_ssp_managingcontact_email: "surfconext-beheer@surfnet.nl"
 janus_ssp_title_suffix: "OpenConext VM"
 
 engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
+engine_idp_debugging_from_name: "Surfconext EngineBlock"
+engine_idp_debugging_from_address: "noreply@surfnet.nl"
+engine_idp_debugging_to_name: "Surfconext beheer"
+engine_idp_debugging_subject: "IdP debug info van %1$s"
 
 engine_janus_user: engineblock
 
