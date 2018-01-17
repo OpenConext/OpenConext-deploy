@@ -47,6 +47,9 @@ engine.simplesamlphp.baseurlpath = "{{ engine_engine_idp_baseurlpath }}"
 
 cookie.lang.domain = .{{ base_domain }}
 
+defaults.title  = "{{ instance_name }}"
+defaults.header = "{{ instance_name }}"
+
 database.host = {{ engine_database_host }}
 database.port = {{ engine_database_port }}
 database.password = "{{ engine_database_password }}"
