@@ -15,7 +15,6 @@ janus_ssp_technicalcontact_name: "Technical Contact"
 janus_ssp_technicalcontact_email: "{{ support_email }}"
 janus_ssp_managingcontact_name: "Managing Contact"
 janus_ssp_managingcontact_email: "{{ support_email }}"
-engine_idp_debugging_email_address: "{{ support_email }}"
 diy_technicalcontact_name: "Technical Contact"
 diy_technicalcontact_email: "{{ support_email }}"
 

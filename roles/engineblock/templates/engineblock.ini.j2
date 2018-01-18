@@ -55,7 +55,11 @@ database.dbname = {{ engine_database_name }}
 
 debug = {{ engine_debug }}
 
+email.idpDebugging.from.name  = "{{ engine_idp_debugging_from_name }}"
+email.idpDebugging.from.address = "{{ engine_idp_debugging_from_address }}"
 email.idpDebugging.to.address = {{ engine_idp_debugging_email_address }}
+email.idpDebugging.to.name    = "{{ engine_idp_debugging_to_name }}"
+email.idpDebugging.subject    = "{{ engine_idp_debugging_subject }}"
 {% if engine_keys is defined %}
 
 {% for key, value in engine_keys.iteritems() %}

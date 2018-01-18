@@ -79,3 +79,9 @@ engine_fpm_port: 801
 
 # When using vagrant for provisioning, it's not possible to put something in the inventory dir
 engine_crt_not_in_inventory: false
+
+engine_idp_debugging_from_name: "{{ instance_name }} EngineBlock"
+engine_idp_debugging_from_address: "{{ noreply_email }}"
+engine_idp_debugging_to_name: "{{ instance_name }} Admin"
+engine_idp_debugging_email_address: "{{ support_email }}"
+engine_idp_debugging_subject: "IdP debug info from %1$s"
