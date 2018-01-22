@@ -5,6 +5,7 @@ vrrp_instance master {
    state {{ keepalived.state_master }}
    virtual_router_id 51          # Assign one ID for this route
    priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
+   advert_int 5
    virtual_ipaddress {
        {{ engine_ip }}
        {% if engine_ipv6 is defined %}
@@ -22,6 +23,7 @@ vrrp_instance backup {
    state {{ keepalived.state_backup }}
    virtual_router_id 52
    priority {{ keepalived.backupprio }}
+   advert_int 5
    virtual_ipaddress {
         {{ engine_api_ip }}
         {% if engine_api_ipv6 is defined %}
