@@ -85,3 +85,9 @@ engine_idp_debugging_from_address: "{{ noreply_email }}"
 engine_idp_debugging_to_name: "{{ instance_name }} Admin"
 engine_idp_debugging_email_address: "{{ support_email }}"
 engine_idp_debugging_subject: "IdP debug info from %1$s"
+
+engine_php_sendmail_from: "{{ instance_name }} EngineBlock <engineblock@{{ base_domain }}>"
+
+engine_edugain_publication_publisher: "https://engine.{{ base_domain }}/authentication/proxy/edugain-metadata"
+engine_edugain_publication_policy_url: "http://www.edugain.org/policy/metadata-tou_1_0.txt"
+engine_edugain_termsofuse: "Use of this metadata is subject to the Terms of Use at http://www.edugain.org/policy/metadata-tou_1_0.txt"
