@@ -1,7 +1,30 @@
 <?xml version="1.0"?>
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+                     xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+                     xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
                      entityID="{{entityid}}" validUntil="{{validUntil}}" cacheDuration="PT86400S">
     <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        {{#UIInfoExtension}}
+        <md:Extensions>
+            <mdui:UIInfo>
+                {{#metaDataFields.name:en}}
+                <mdui:DisplayName xml:lang="en">{{metaDataFields.name:en}}</mdui:DisplayName>
+                {{/metaDataFields.name:en}}
+                {{#metaDataFields.name:nl}}
+                <mdui:DisplayName xml:lang="nl">{{metaDataFields.name:nl}}</mdui:DisplayName>
+                {{/metaDataFields.name:nl}}
+                {{#metaDataFields.description:en}}
+                <mdui:Description xml:lang="en">{{metaDataFields.description:en}}</mdui:Description>
+                {{/metaDataFields.description:en}}
+                {{#metaDataFields.description:nl}}
+                <mdui:Description xml:lang="nl">{{metaDataFields.description:nl}}</mdui:Description>
+                {{/metaDataFields.description:nl}}
+                {{#Logo}}
+                <mdui:Logo width="{{metaDataFields.logo:0:width}}" height="{{metaDataFields.logo:0:height}}" xml:lang="en">{{metaDataFields.logo:0:url}}</mdui:Logo>
+                {{/Logo}}
+            </mdui:UIInfo>
+        </md:Extensions>
+        {{/UIInfoExtension}}
         {{#metaDataFields.certData}}
         <md:KeyDescriptor use="signing">
             <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
@@ -123,17 +146,28 @@
         </md:AttributeConsumingService>
         {{/AttributeConsumingService}}
     </md:SPSSODescriptor>
-    {{#metaDataFields.OrganizationName}}
+    {{#metaDataFields.OrganizationInfo}}
     <md:Organization>
-        <md:OrganizationName xml:lang="en">{{metaDataFields.OrganizationName}}</md:OrganizationName>
-        {{#metaDataFields.OrganizationDisplayName}}
-        <md:OrganizationDisplayName xml:lang="en">{{metaDataFields.OrganizationDisplayName}}</md:OrganizationDisplayName>
-        {{/metaDataFields.OrganizationDisplayName}}
-        {{#metaDataFields.OrganizationURL}}
-        <md:OrganizationURL xml:lang="en">{{metaDataFields.OrganizationURL}}</md:OrganizationURL>
-        {{/metaDataFields.OrganizationURL}}
+        {{#metaDataFields.OrganizationName:en}}
+        <md:OrganizationName xml:lang="en">{{metaDataFields.OrganizationName:en}}</md:OrganizationName>
+        {{/metaDataFields.OrganizationName:en}}
+        {{#metaDataFields.OrganizationName:nl}}
+        <md:OrganizationName xml:lang="nl">{{metaDataFields.OrganizationName:nl}}</md:OrganizationName>
+        {{/metaDataFields.OrganizationName:nl}}
+        {{#metaDataFields.OrganizationDisplayName:en}}
+        <md:OrganizationDisplayName xml:lang="en">{{metaDataFields.OrganizationDisplayName:en}}</md:OrganizationDisplayName>
+        {{/metaDataFields.OrganizationDisplayName:en}}
+        {{#metaDataFields.OrganizationDisplayName:nl}}
+        <md:OrganizationDisplayName xml:lang="nl">{{metaDataFields.OrganizationDisplayName:nl}}</md:OrganizationDisplayName>
+        {{/metaDataFields.OrganizationDisplayName:nl}}
+        {{#metaDataFields.OrganizationURL:en}}
+        <md:OrganizationURL xml:lang="en">{{metaDataFields.OrganizationURL:en}}</md:OrganizationURL>
+        {{/metaDataFields.OrganizationURL:en}}
+        {{#metaDataFields.OrganizationURL:nl}}
+        <md:OrganizationURL xml:lang="nl">{{metaDataFields.OrganizationURL:nl}}</md:OrganizationURL>
+        {{/metaDataFields.OrganizationURL:nl}}
     </md:Organization>
-    {{/metaDataFields.OrganizationName}}
+    {{/metaDataFields.OrganizationInfo}}
     {{#metaDataFields.contacts:0:contactType}}
     <md:ContactPerson contactType="{{metaDataFields.contacts:0:contactType}}">
         {{#metaDataFields.contacts:0:givenName}}
@@ -145,6 +179,9 @@
         {{#metaDataFields.contacts:0:emailAddress}}
         <md:EmailAddress>mailto:{{metaDataFields.contacts:0:emailAddress}}</md:EmailAddress>
         {{/metaDataFields.contacts:0:emailAddress}}
+        {{#metaDataFields.contacts:0:telephoneNumber}}
+        <md:TelephoneNumber>{{metaDataFields.contacts:0:telephoneNumber}}</md:TelephoneNumber>
+        {{/metaDataFields.contacts:0:telephoneNumber}}
     </md:ContactPerson>
     {{/metaDataFields.contacts:0:contactType}}
     {{#metaDataFields.contacts:1:contactType}}
@@ -158,6 +195,9 @@
         {{#metaDataFields.contacts:1:emailAddress}}
         <md:EmailAddress>mailto:{{metaDataFields.contacts:1:emailAddress}}</md:EmailAddress>
         {{/metaDataFields.contacts:1:emailAddress}}
+        {{#metaDataFields.contacts:1:telephoneNumber}}
+        <md:TelephoneNumber>{{metaDataFields.contacts:1:telephoneNumber}}</md:TelephoneNumber>
+        {{/metaDataFields.contacts:1:telephoneNumber}}
     </md:ContactPerson>
     {{/metaDataFields.contacts:1:contactType}}
     {{#metaDataFields.contacts:2:contactType}}
@@ -171,6 +211,9 @@
         {{#metaDataFields.contacts:2:emailAddress}}
         <md:EmailAddress>mailto:{{metaDataFields.contacts:2:emailAddress}}</md:EmailAddress>
         {{/metaDataFields.contacts:2:emailAddress}}
+        {{#metaDataFields.contacts:2:telephoneNumber}}
+        <md:TelephoneNumber>{{metaDataFields.contacts:2:telephoneNumber}}</md:TelephoneNumber>
+        {{/metaDataFields.contacts:2:telephoneNumber}}
     </md:ContactPerson>
     {{/metaDataFields.contacts:2:contactType}}
     {{#metaDataFields.contacts:3:contactType}}
@@ -184,6 +227,9 @@
         {{#metaDataFields.contacts:3:emailAddress}}
         <md:EmailAddress>mailto:{{metaDataFields.contacts:3:emailAddress}}</md:EmailAddress>
         {{/metaDataFields.contacts:3:emailAddress}}
+        {{#metaDataFields.contacts:3:telephoneNumber}}
+        <md:TelephoneNumber>{{metaDataFields.contacts:3:telephoneNumber}}</md:TelephoneNumber>
+        {{/metaDataFields.contacts:3:telephoneNumber}}
     </md:ContactPerson>
     {{/metaDataFields.contacts:3:contactType}}
 
