@@ -49,9 +49,8 @@
     - { role: static,                            tags: ['static'] }
     - { role: metadata,                          tags: ['static'] }
     - { role: welcome,                           tags: ['welcome'] }
-    - { role: openconext-common,                 tags: ['eb','sr','profile'] }
+    - { role: openconext-common,                 tags: ['eb','profile'] }
     - { role: engineblock,                       tags: ['eb'     ] }
-    - { role: janus,                             tags: ['sr'     ] }
     - { role: profile,                           tags: ['profile'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
@@ -82,6 +81,7 @@
     - { role: mongo,             tags: ['mongo'] }
     - { role: manage-gui,        tags: ['manage', 'manage-gui'] }
     - { role: manage-server,     tags: ['manage', 'manage-server'] }
+    - { role: vm_only_provision_manage_eb, tags: ['vm_only_provision_manage_eb'] }
 
   handlers:
     - include: roles/httpd/handlers/main.yml

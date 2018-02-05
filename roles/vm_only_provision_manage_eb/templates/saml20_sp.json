@@ -1,0 +1,761 @@
+{
+  "_id": "e3c7e198-3fa7-4ac0-9962-0942e099a7dd",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-12T08:38:18.000Z"
+    },
+    "updatedBy": "admin"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "1"
+    },
+    "eid": {
+      "$numberLong": "1"
+    },
+    "entityid": "https://engine.vm.openconext.org/authentication/sp/metadata",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "admin",
+    "created": "2012-06-12T10:38:18+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "administrative",
+      "logo:0:height": "96",
+      "displayName:nl": "OpenConext Engine",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "contacts:1:contactType": "support",
+      "contacts:1:givenName": "Support",
+      "description:en": "OpenConext SSO Proxy",
+      "contacts:2:givenName": "Support",
+      "name:nl": "OpenConext Engine",
+      "contacts:1:surName": "OpenConext",
+      "contacts:2:surName": "OpenConext",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "contacts:2:emailAddress": "help@example.org",
+      "description:nl": "OpenConext SSO Proxy",
+      "logo:0:width": "96",
+      "displayName:en": "OpenConext Engine",
+      "logo:0:url": "https://static.vm.openconext.org/media/conext_logo.png",
+      "name:en": "OpenConext Engine",
+      "contacts:0:givenName": "Support",
+      "contacts:0:surName": "OpenConext",
+      "contacts:1:emailAddress": "help@example.org",
+      "contacts:0:emailAddress": "help@example.org",
+      "AssertionConsumerService:0:Location": "https://engine.vm.openconext.org/authentication/sp/consume-assertion"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "c985ef1d-f531-4329-acf7-fcca97cdd8fd",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-12T08:39:39.000Z"
+    },
+    "updatedBy": "admin"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "3"
+    },
+    "eid": {
+      "$numberLong": "3"
+    },
+    "entityid": "https://profile.vm.openconext.org/authentication/metadata",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "admin",
+    "created": "2012-06-12T10:39:39+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "NameIDFormats:1": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+      "displayName:nl": "OpenConext Profile",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "NameIDFormats:2": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+      "description:en": "OpenConext Profile management",
+      "contacts:2:givenName": "Support",
+      "contacts:1:surName": "OpenConext",
+      "contacts:2:surName": "OpenConext",
+      "contacts:2:emailAddress": "help@example.org",
+      "description:nl": "OpenConext Profile management",
+      "logo:0:width": "96",
+      "logo:0:url": "https://static.vm.openconext.org/media/conext_logo.png",
+      "name:en": "OpenConext Profile",
+      "contacts:0:givenName": "Support",
+      "contacts:0:surName": "OpenConext",
+      "contacts:1:emailAddress": "help@example.org",
+      "contacts:0:emailAddress": "help@example.org",
+      "AssertionConsumerService:0:Location": "https://profile.vm.openconext.org/authentication/consume-assertion",
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "administrative",
+      "logo:0:height": "96",
+      "contacts:1:contactType": "support",
+      "contacts:1:givenName": "Support",
+      "name:nl": "OpenConext Profile",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "displayName:en": "OpenConext Profile"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "6d166b2c-20f9-43e3-9eb4-054d3a749d03",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-12T11:07:26.000Z"
+    },
+    "updatedBy": "admin"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "6"
+    },
+    "eid": {
+      "$numberLong": "7"
+    },
+    "entityid": "http://mock-sp",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "admin",
+    "created": "2012-06-12T13:07:26+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "NameIDFormats:1": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+      "displayName:nl": "OpenConext Mujina SP",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "NameIDFormats:2": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+      "description:en": "OpenConext Mujina Test Service Provider",
+      "contacts:2:givenName": "Support",
+      "contacts:1:surName": "OpenConext",
+      "contacts:2:surName": "OpenConext",
+      "contacts:2:emailAddress": "help@example.org",
+      "description:nl": "OpenConext Mujina Test Service Provider",
+      "logo:0:width": "96",
+      "logo:0:url": "https://static.vm.openconext.org/media/conext_logo.png",
+      "name:en": "OpenConext Mujina SP",
+      "contacts:0:givenName": "Support",
+      "contacts:0:surName": "OpenConext",
+      "contacts:1:emailAddress": "help@example.org",
+      "contacts:0:emailAddress": "help@example.org",
+      "AssertionConsumerService:0:Location": "https://mujina-sp.vm.openconext.org/saml/SSO",
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "administrative",
+      "logo:0:height": "96",
+      "contacts:1:contactType": "support",
+      "contacts:1:givenName": "Support",
+      "name:nl": "OpenConext Mujina SP",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "displayName:en": "OpenConext Mujina SP"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "2d96e27a-76cf-4ca2-ac70-ece5d4c49523",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-13T06:00:55.000Z"
+    },
+    "updatedBy": "admin"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "7"
+    },
+    "eid": {
+      "$numberLong": "9"
+    },
+    "entityid": "https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/sp/metadata.php/default-sp",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "admin",
+    "created": "2012-06-13T08:00:55+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "NameIDFormats:1": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+      "displayName:nl": "OpenConext ServiceRegistry",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "NameIDFormats:2": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+      "description:en": "OpenConext Service Registry, register all SPs and IdPs here",
+      "contacts:2:givenName": "Support",
+      "contacts:1:surName": "OpenConext",
+      "contacts:2:surName": "OpenConext",
+      "contacts:2:emailAddress": "help@example.org",
+      "description:nl": "OpenConext Service Registry, register all SPs and IdPs here",
+      "logo:0:width": "96",
+      "logo:0:url": "https://static.vm.openconext.org/media/conext_logo.png",
+      "name:en": "OpenConext ServiceRegistry",
+      "contacts:0:givenName": "Support",
+      "contacts:0:surName": "OpenConext",
+      "contacts:1:emailAddress": "help@example.org",
+      "contacts:0:emailAddress": "help@example.org",
+      "AssertionConsumerService:0:Location": "https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp",
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "administrative",
+      "logo:0:height": "96",
+      "contacts:1:contactType": "support",
+      "contacts:1:givenName": "Support",
+      "name:nl": "OpenConext ServiceRegistry",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "displayName:en": "OpenConext ServiceRegistry"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "5ca0d714-29c8-4016-94b5-00ba22915c01",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-25T14:34:29.000Z"
+    },
+    "updatedBy": "urn:collab:person:example.com:john.doe"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "9"
+    },
+    "eid": {
+      "$numberLong": "11"
+    },
+    "entityid": "https://teams.vm.openconext.org/shibboleth",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "urn:collab:person:example.com:john.doe",
+    "created": "2012-06-25T16:34:29+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "technical",
+      "logo:0:height": "60",
+      "displayName:nl": "OpenConext Teams",
+      "contacts:1:contactType": "technical",
+      "name:nl": "OpenConext Teams",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "logo:0:width": "120",
+      "displayName:en": "OpenConext Teams",
+      "logo:0:url": "https://.png",
+      "name:en": "OpenConext Teams",
+      "AssertionConsumerService:0:Location": "https://teams.vm.openconext.org/Shibboleth.sso/SAML2/POST"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "0c3d3f0d-928b-4cab-8ba3-28df674cf901",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-25T14:34:29.000Z"
+    },
+    "updatedBy": "urn:collab:person:example.com:john.doe"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "13"
+    },
+    "eid": {
+      "$numberLong": "15"
+    },
+    "entityid": "https://authz.vm.openconext.org/shibboleth",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "urn:collab:person:example.com:john.doe",
+    "created": "2012-06-25T16:34:29+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "technical",
+      "logo:0:height": "60",
+      "displayName:nl": "OpenConext Authz Server",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "contacts:1:contactType": "technical",
+      "name:nl": "OpenConext Authz Server",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "logo:0:width": "120",
+      "displayName:en": "OpenConext Authz Server",
+      "logo:0:url": "https://.png",
+      "name:en": "OpenConext Authz Server",
+      "AssertionConsumerService:0:Location": "https://authz.vm.openconext.org/Shibboleth.sso/SAML2/POST",
+      "coin:no_consent_required": "1"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "46abc2c2-8ffb-4508-9b99-d7cb4f11b9b4",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-25T14:34:29.000Z"
+    },
+    "updatedBy": "urn:collab:person:example.com:john.doe"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "14"
+    },
+    "eid": {
+      "$numberLong": "16"
+    },
+    "entityid": "https://authz-admin.vm.openconext.org/shibboleth",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "urn:collab:person:example.com:john.doe",
+    "created": "2012-06-25T16:34:29+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "technical",
+      "logo:0:height": "60",
+      "displayName:nl": "OpenConext Authz Admin",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "contacts:1:contactType": "technical",
+      "name:nl": "OpenConext Authz Admin",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "logo:0:width": "120",
+      "displayName:en": "OpenConext Authz Admin",
+      "logo:0:url": "https://.png",
+      "name:en": "OpenConext Authz Admin",
+      "AssertionConsumerService:0:Location": "https://authz-admin.vm.openconext.org/Shibboleth.sso/SAML2/POST",
+      "coin:no_consent_required": "1"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "16449b7c-a2fc-4d7a-8628-8cb638b9b06a",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-25T14:34:29.000Z"
+    },
+    "updatedBy": "urn:collab:person:example.com:john.doe"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "15"
+    },
+    "eid": {
+      "$numberLong": "17"
+    },
+    "entityid": "https://pdp.vm.openconext.org/shibboleth",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "urn:collab:person:example.com:john.doe",
+    "created": "2012-06-25T16:34:29+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "technical",
+      "logo:0:height": "60",
+      "displayName:nl": "OpenConext PDP Server",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "contacts:1:contactType": "technical",
+      "name:nl": "OpenConext PDP Server",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "logo:0:width": "120",
+      "displayName:en": "OpenConext PDP Server",
+      "logo:0:url": "https://.png",
+      "name:en": "OpenConext PDP Server",
+      "AssertionConsumerService:0:Location": "https://pdp.vm.openconext.org/Shibboleth.sso/SAML2/POST",
+      "coin:no_consent_required": "1"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "b4739e34-580a-44f1-addb-63fe41c74fa1",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 6,
+    "created": {
+      "$date": "2015-11-20T10:11:37.000Z"
+    },
+    "updatedBy": "urn:collab:person:example.com:admin"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "22"
+    },
+    "eid": {
+      "$numberLong": "18"
+    },
+    "entityid": "https://oidc.vm.openconext.org",
+    "revisionid": {
+      "$numberLong": "6"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": "https://oidc.vm.openconext.org/saml/metadata",
+    "allowedall": true,
+    "manipulation": null,
+    "user": "urn:collab:person:example.com:admin",
+    "created": "2015-11-20T11:11:37+01:00",
+    "ip": "192.168.66.78",
+    "revisionnote": "No revision note",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "contacts:0:contactType": "technical",
+      "AssertionConsumerService:0:index": "0",
+      "AssertionConsumerService:1:index": "1",
+      "contacts:2:contactType": "technical",
+      "logo:0:height": "60",
+      "contacts:1:contactType": "technical",
+      "name:nl": "OpenConext OpenID Connect Gateway",
+      "AssertionConsumerService:1:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "AssertionConsumerService:1:Location": "https://oidc.vm.openconext.org/saml/SSO",
+      "logo:0:width": "120",
+      "logo:0:url": "https://.png",
+      "name:en": "OpenConext OpenID Connect Gateway",
+      "certData": "MIIDEzCCAfugAwIBAgIJAIXwoDmV8lb3MA0GCSqGSIb3DQEBCwUAMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzAeFw0xNTExMTgxNDUyMTVaFw0yNTExMTcxNDUyMTVaMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM4DDoIHcwygrhv4f4BCWxdCaGc951sSlZcjMINE3aJ8aXAntHmSjRDws+53A1GK5lJHPPmnFXZFy3p4H8BVMv1p4N0m6sjrj4Ok/gVgZXMoIt9a0MZC8SFLiR25/b3YEeOI5riyAVcgTevt+NWXdnNtyd4QscKG70UYc+rUBcBy2uWxmqLsqcsAdfgkxajOZPj9eNA4Y2ls/bB9UBmO+cVPEpLZKlh3OSJVZAWa3NX1XyBGgEKMYXoOKDcau1ynMCeSTd6hQwxnY5FN+n0yMH/rtYu7Z9etdMSmTcDkQpWHicOxBaQ7onYQ5faoy5zp1w6pV1uCglxiwoD7LOpFlQcCAwEAAaNQME4wHQYDVR0OBBYEFKwusxoVUAzJ9cJX946xs1IRvZXuMB8GA1UdIwQYMBaAFKwusxoVUAzJ9cJX946xs1IRvZXuMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAEsu7vbvITCiLvJI/KgZKh67gOBMoxaepfgcN0xQEma0IqOlafhumcw+4HTi7+r+WN8bheCFgKDqFXnr+U/gwTULDzQNpDChMeP+y9miO4Ry3dlANZXyeavmQ9DdSuwebKMJxKaENx5GW+6b17+viMrWPytLmkc+tutoAKaf5DEyR0moj8gpsAkBT13BwIhWCOIhRl1+ZhGa04YpEb5oBepTfrXMhhlwCMuEV9GV/wmNsmpjooCC4Ihc4W0xgyCdb7jwiXkABSQAEqsF+ysqDSyfWMCzx8RrghVDpViG2yZV8HhU0t1/1VxLRs0uaIaSmcC3CnRonJQy7AOwc1Mc/dM=",
+      "AssertionConsumerService:0:Location": "https://oidc.vm.openconext.org/saml/SSO"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "4f6c2254-9ce2-4d73-9984-88f18338f99c",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2017-09-27T11:39:59.000Z"
+    },
+    "updatedBy": "admin"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "24"
+    },
+    "eid": {
+      "$numberLong": "19"
+    },
+    "entityid": "https://manage.vm.openconext.org/shibboleth",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "admin",
+    "created": "2017-09-27T13:39:59+02:00",
+    "ip": "192.168.33.1",
+    "revisionnote": "No revision note",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "contacts:0:contactType": "technical",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "contacts:2:contactType": "technical",
+      "logo:0:height": "60",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "contacts:1:contactType": "technical",
+      "logo:0:width": "120",
+      "logo:0:url": "https://.png",
+      "name:en": "OpenConext Manage",
+      "contacts:3:contactType": "technical",
+      "AssertionConsumerService:0:Location": "https://manage.vm.openconext.org/Shibboleth.sso/SAML2/POST",
+      "name:nl": "OpenConext Manage"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "9a5b3109-49d8-4838-8888-3c3c9c470855",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-25T14:34:29.000Z"
+    },
+    "updatedBy": "urn:collab:person:example.com:john.doe"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "25"
+    },
+    "eid": {
+      "$numberLong": "20"
+    },
+    "entityid": "https://aa.vm.openconext.org/shibboleth",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "urn:collab:person:example.com:john.doe",
+    "created": "2012-06-25T16:34:29+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "technical",
+      "logo:0:height": "60",
+      "displayName:nl": "OpenConext Attribute Aggregation Server",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "contacts:1:contactType": "technical",
+      "name:nl": "OpenConext Attribute Aggregation Server",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "logo:0:width": "120",
+      "displayName:en": "OpenConext Attribute Aggregation Server",
+      "logo:0:url": "https://.png",
+      "name:en": "OpenConext Attribute Aggregation Server",
+      "AssertionConsumerService:0:Location": "https://aa.vm.openconext.org/Shibboleth.sso/SAML2/POST",
+      "coin:no_consent_required": "1"
+    },
+    "allowedEntities": []
+  }
+}
+{
+  "_id": "4c7a4b7a-38be-43cf-a3ce-1083682c0d14",
+  "_class": "manage.model.MetaData",
+  "version": {
+    "$numberLong": "0"
+  },
+  "type": "saml20_sp",
+  "revision": {
+    "number": 0,
+    "created": {
+      "$date": "2012-06-25T14:34:29.000Z"
+    },
+    "updatedBy": "urn:collab:person:example.com:john.doe"
+  },
+  "data": {
+    "id": {
+      "$numberLong": "26"
+    },
+    "eid": {
+      "$numberLong": "21"
+    },
+    "entityid": "https://link.vm.openconext.org/shibboleth",
+    "revisionid": {
+      "$numberLong": "0"
+    },
+    "state": "prodaccepted",
+    "type": "saml20-sp",
+    "metadataurl": null,
+    "allowedall": true,
+    "manipulation": null,
+    "user": "urn:collab:person:example.com:john.doe",
+    "created": "2012-06-25T16:34:29+02:00",
+    "ip": "172.18.5.1",
+    "revisionnote": "Entity created.",
+    "active": true,
+    "arp": {
+      "attributes": {},
+      "enabled": false
+    },
+    "notes": null,
+    "metaDataFields": {
+      "contacts:0:contactType": "technical",
+      "contacts:2:contactType": "technical",
+      "logo:0:height": "60",
+      "displayName:nl": "OpenConext Linking Service",
+      "NameIDFormats:0": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "contacts:1:contactType": "technical",
+      "name:nl": "OpenConext Linking Service",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "logo:0:width": "120",
+      "displayName:en": "OpenConext Linking Service",
+      "logo:0:url": "https://.png",
+      "name:en": "OpenConext Linking Service",
+      "AssertionConsumerService:0:Location": "https://link.vm.openconext.org/Shibboleth.sso/SAML2/POST",
+      "coin:no_consent_required": "1"
+    },
+    "allowedEntities": []
+  }
+}

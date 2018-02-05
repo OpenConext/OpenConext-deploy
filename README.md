@@ -165,7 +165,11 @@ These files are licensed under version 2.0 of the Apache License, as described i
 To provision the VM use the following (password is vagrant and sudo password is <enter>
 
 ```
-ansible-playbook -u vagrant -i inventory/vm -K selfservice.yml -k
+ansible-playbook -u vagrant -i ./environments/vm/inventory -K --e secrets_file=./environments/vm/secrets/vm.yml provision-vm.yml
+```
+To provision a certain role use tags:
+```
+ansible-playbook -u vagrant -i ./environments/vm/inventory -K --e secrets_file=./environments/vm/secrets/vm.yml provision-vm.yml --tags vm_only_provision_manage_eb
 ```
 
 Setting up a development environment is described in the file [DEVELOPMENT](DEVELOPMENT.md).
