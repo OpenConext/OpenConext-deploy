@@ -11,7 +11,7 @@
     - { coll:  "saml20_sp"}
   run_once: true
 
-- name: Include vars of engineblock
+- name: Include vars of manage-server
   include_vars:
     file: ../../manage-server/vars/main.yml
 
