@@ -507,7 +507,7 @@ haproxy_applications:
     vhost_name: "engine"
     ip: 192.168.66.98
     ha_method: "GET"
-    ha_url: "/"
+    ha_url: "/health"
     port: 401
     servers: "{{php_servers}}"
 
@@ -515,7 +515,7 @@ haproxy_applications:
     vhost_name: "profile"
     ip: 192.168.66.98
     ha_method: "HEAD"
-    ha_url: "/favicon.ico"
+    ha_url: "/health"
     port: 402
     servers: "{{php_servers}}"
 

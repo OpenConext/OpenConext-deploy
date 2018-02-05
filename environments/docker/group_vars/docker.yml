@@ -605,7 +605,7 @@ haproxy_applications:
     vhost_name: engine
     ip: 127.0.0.1
     ha_method: GET
-    ha_url: /
+    ha_url: "/health"
     port: 401
     servers: "{{ php_servers }}"
     crt_name: "{{ tls_star_cert }}"
@@ -618,7 +618,7 @@ haproxy_applications:
     vhost_name: profile
     ip: 127.0.0.1
     ha_method: GET
-    ha_url: /
+    ha_url: "/health"
     port: 402
     servers: "{{ php_servers }}"
     crt_name: "{{ tls_star_cert }}"

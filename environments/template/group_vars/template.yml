@@ -482,7 +482,7 @@ haproxy_applications:
     vhost_name: "engine"
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
-    ha_url: "/"
+    ha_url: "/health"
     port: "401"
     servers: "{{php_servers}}"
 
@@ -490,7 +490,7 @@ haproxy_applications:
     vhost_name: "profile"
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "HEAD"
-    ha_url: "/favicon.ico"
+    ha_url: "/health"
     port: "402"
     servers: "{{php_servers}}"
 
