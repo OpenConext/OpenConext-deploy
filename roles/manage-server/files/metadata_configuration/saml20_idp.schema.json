@@ -206,26 +206,31 @@
         },
         "^contacts:([0-3]{1}):surName$": {
           "type": "string",
-          "multiplicity": 4
+          "multiplicity": 4,
+          "sibblingIndependent": true
         },
         "^contacts:([0-3]{1}):givenName$": {
           "type": "string",
-          "multiplicity": 4
+          "multiplicity": 4,
+          "sibblingIndependent": true
         },
         "^contacts:([0-3]{1}):emailAddress$": {
           "type": "string",
           "format": "email",
-          "multiplicity": 4
+          "multiplicity": 4,
+          "sibblingIndependent": true
         },
         "^contacts:([0-3]{1}):telephoneNumber$": {
           "type": "string",
           "format": "string",
-          "multiplicity": 4
+          "multiplicity": 4,
+          "sibblingIndependent": true
         },
         "^contacts:([0-3]{1}):isSirtfiSecurityContact$": {
           "type": "string",
           "format": "boolean",
-          "multiplicity": 4
+          "multiplicity": 4,
+          "sibblingIndependent": true
         },
         "^contacts:([0-3]{1}):contactType$": {
           "type": "string",
@@ -236,7 +241,8 @@
             "billing",
             "other"
           ],
-          "multiplicity": 4
+          "multiplicity": 4,
+          "sibblingIndependent": true
         },
         "^OrganizationName:(en|nl)$": {
           "type": "string"
