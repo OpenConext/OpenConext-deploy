@@ -10,6 +10,8 @@
     - { coll:  "saml20_idp"}
     - { coll:  "saml20_sp"}
   run_once: true
+  changed_when: false
+
 
 - name: Include vars of manage-server
   include_vars:
@@ -24,3 +26,4 @@
     force_basic_auth: yes
     run_once: true
     status_code: 200
+  changed_when: false
