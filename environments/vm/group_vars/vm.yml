@@ -134,16 +134,16 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
-#    - {
-#       index: 0,
-#       type: "database",
-#       value: "Doctrine"
-#     }
     - {
-        index: 0,
-        type: "janus",
-        value: "JanusRestV1"
-      }
+       index: 0,
+       type: "database",
+       value: "Doctrine"
+     }
+#    - {
+#        index: 0,
+#        type: "janus",
+#        value: "JanusRestV1"
+#      }
 
 #profile_branch: develop
 profile_apache_symfony_environment: prod
