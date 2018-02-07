@@ -7,6 +7,7 @@ jdbc.username={{ oidc.db_user }}
 jdbc.password={{ oidc.db_password }}
 
 idp.metadata.url=https://engine.{{ base_domain }}/authentication/idp/metadata
+idp.metadata.proxies.url=https://engine.{{ base_domain }}/authentication/proxy/idps-metadata
 idp.entity.id=https://engine.{{ base_domain }}/authentication/idp/metadata
 idp.public.certificate={{ oidc_idp_public_certificate }}
 sp.entity.id={{ oidc.sp_entity_id }}
