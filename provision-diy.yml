@@ -78,14 +78,15 @@
   vars:
     env_lang: java
   roles:
-    - { role: teams-legacy,     tags: ['teams-legacy'  ] }
-    - { role: teams-gui,        tags: ['teams', 'teams-gui'       ] }
-    - { role: teams-server,     tags: ['teams', 'teams-server'    ] }
-    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
-    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
-    - { role: voot,             tags: ['oauth', 'voot'            ] }
-    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
-    - { role: pdp,              tags: ['pdp'] }
+    - { role: teams-legacy,      tags: ['teams-legacy'  ] }
+    - { role: teams-gui,         tags: ['teams', 'teams-gui'       ] }
+    - { role: teams-server,      tags: ['teams', 'teams-server'    ] }
+    - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,              tags: ['oauth', 'voot'            ] }
+    - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
+    - { role: pdp-server,        tags: ['pdp-server'] }
+    - { role: pdp-gui,           tags: ['pdp-gui'] }
     - { role: metadata-exporter, tags: ['metadata-exporter']}
     - { role: mujina-idp,        tags: ['mujina' ] }
     - { role: mujina-sp,         tags: ['mujina' ] }

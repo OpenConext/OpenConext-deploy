@@ -1,0 +1,44 @@
+---
+- name: Create user
+  user: name=pdp system=yes home={{ pdp_dir }} shell=/sbin/nologin
+
+- name: create apache folder
+  file: path=/var/www/pdp owner=apache group=apache mode=2755 state=directory
+
+- name: Create js directory
+  file: path=/var/www/pdp/current/js state=directory owner=pdp group=pdp mode=0755
+
+- name: copy virtual host config
+  template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
+  notify: reload httpd
+
+- name: download html archive
+  maven_artifact:
+    group_id: org.openconext
+    artifact_id: pdp-gui
+    extension: zip
+    version: "{{ pdp_gui_version }}"
+    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in pdp_gui_version else maven_repo }}"
+    dest: /var/www/pdp
+  register: maven_result
+  tags: deploy
+
+- name: extract html archive
+  unarchive:
+    src: "{{ maven_result.dest }}"
+    dest: /var/www/pdp
+    copy: no
+    owner: root
+    group: apache
+  register: unarchive_result
+  tags: deploy
+  when: maven_result.changed
+
+- name: create symlink to downloaded version
+  file:
+    src: "{{ unarchive_result.dest }}/pdp-gui-{{ pdp_gui_version }}"
+    dest: "{{ pdp_current }}"
+    state: link
+    force: yes
+  tags: deploy
+  when: unarchive_result.changed

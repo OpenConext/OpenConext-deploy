@@ -416,8 +416,6 @@ manage:
         scopes: ["READ", "WRITE", "PUSH"]
       }
 
-springapp_tcpport_error_handling: 9199
-
 loadbalancing:
   engine:
     port: 401

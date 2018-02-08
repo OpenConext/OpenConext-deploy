@@ -1,11 +1,8 @@
 ---
 pdp_dir: /opt/pdp/
 pdp_group_url: org/openconext
-pdp_version: ''
-pdp_snapshot_timestamp: ''
+pdp_server_version: ''
 pdp_local_jar: ''
 pdp_jar: pdp.jar
-pdp_local_html_version: ''
-pdp_html_snapshot_timestamp: ''
 pdp_email_from: '{{ noreply_email }}'
 pdp_cronjobmaster: true

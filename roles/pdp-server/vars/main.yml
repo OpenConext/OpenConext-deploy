@@ -1,7 +1,7 @@
 springapp_artifact_id: pdp-server
 springapp_artifact_type: jar
 springapp_artifact_group_dir: org/openconext
-springapp_version: "{{ pdp_version }}"
+springapp_version: "{{ pdp_server_version }}"
 springapp_snapshot_timestamp: "{{ pdp_snapshot_timestamp }}"
 springapp_dir: "{{ pdp_dir }}"
 springapp_user: pdp

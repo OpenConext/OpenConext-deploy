@@ -1,0 +1,8 @@
+---
+pdp_current: /var/www/pdp/current
+springapp_tcpport: 9196
+
+js_error_reporting_access_token: "{{ pdp_js_access_token }}"
+js_error_enabled: "true"
+js_error_reporting_client_id: pdp
+js_error_reporting_url: /pdp/api/internal/jsError

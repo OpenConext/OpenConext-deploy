@@ -76,7 +76,8 @@
     - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,              tags: ['oauth', 'voot'            ] }
     - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
-    - { role: pdp,               tags: ['pdp'] }
+    - { role: pdp-gui,           tags: ['pdp', 'pdp-gui'] }
+    - { role: pdp-server,        tags: ['pdp', 'pdp-server'] }
     - { role: oidc,              tags: ['oidc'] }
     - { role: vm_only_oidc,      tags: ['oidc'] }
     - { role: mongo,             tags: ['mongo'] }

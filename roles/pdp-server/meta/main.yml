@@ -3,3 +3,4 @@ dependencies:
  - java
  - httpd
  - shibboleth
+ - role: maven_artifact_requirements
