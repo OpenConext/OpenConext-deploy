@@ -425,8 +425,8 @@ manage:
   features: migration, validation, push_preview, push
   apiUsers:
     - {
-        name: "attribute-aggregator",
-        password: "{{ manage_attribute_aggregator_secret }}",
+        name: "dashboard",
+        password: "{{ manage_dashboard_secret }}",
         scopes: ["READ"]
       }
     - {
