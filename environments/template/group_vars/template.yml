@@ -373,7 +373,7 @@ metadata_exporter:
   db_password: "{{ mysql_passwords.sr }}"
   db_host: "{{ mysql_host }}"
   db_name: sr
-  password: "{{ metadata_exporter_password }}"
+  password: "{{ manage_api_password }}"
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp

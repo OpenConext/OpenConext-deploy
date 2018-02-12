@@ -51,14 +51,10 @@ policies.cachePolicies={{ pdp.cache_policies }}
 # The refresh period for policies (if cached)
 period.policies.refresh.minutes=10
 
-# The refresh period for SR metadata (if cached)
-period.metadata.refresh.minutes=10
-
-# The URL where the metadata is available
-metadata.username=metadata.client
-metadata.password={{ metadata_exporter_password }}
-metadata.refresh.minutes=10
-metadata.manageBaseUrl=https://manage.{{ base_domain }}
+manage.username=pdp
+manage.password={{ manage_api_password }}
+period.manage.refresh.minutes=10
+manage.manageBaseUrl=https://manage.{{ base_domain }}
 
 # Number of days how long the policy violations are retained
 policy.violation.retention.period.days=30

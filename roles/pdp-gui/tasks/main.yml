@@ -5,9 +5,6 @@
 - name: create apache folder
   file: path=/var/www/pdp owner=apache group=apache mode=2755 state=directory
 
-- name: Create js directory
-  file: path=/var/www/pdp/current/js state=directory owner=pdp group=pdp mode=0755
-
 - name: copy virtual host config
   template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
   notify: reload httpd
