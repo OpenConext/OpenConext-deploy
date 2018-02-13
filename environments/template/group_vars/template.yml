@@ -18,9 +18,9 @@ janus_ssp_managingcontact_email: "{{ support_email }}"
 diy_technicalcontact_name: "Technical Contact"
 diy_technicalcontact_email: "{{ support_email }}"
 
-profile_version: "1.0.0"
+profile_version: "1.0.1"
 #profile_branch: "develop"
-teams_server_version: 7.0.15
+teams_server_version: 7.0.16
 teams_gui_version: 7.0.13
 mujina_version: 5.0.3
 authz_server_version: 1.3.7
