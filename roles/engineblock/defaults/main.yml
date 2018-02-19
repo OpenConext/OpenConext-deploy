@@ -36,6 +36,8 @@ engine_api_domain: engine-api.{{ base_domain }}
 
 engine_debug: false
 
+engine_profile_baseurl: "https://profile.{{ base_domain }}"
+
 ## PDP endpoint
 engine_pdp_baseurl: https://pdp.{{ base_domain }}
 engine_pdp_path: /pdp/api/decide/policy
