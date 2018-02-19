@@ -886,7 +886,7 @@ janus_service_registry_core:
                 default_allow: false
                 required: false
             'coin:institution_guid':
-#               validate: isguid
+                validate: isguid
                 type: text
                 default: ''
                 default_allow: false
@@ -896,6 +896,15 @@ janus_service_registry_core:
                 default: false
                 default_allow: true
                 required: false
+            'coin:signature_method':
+                type: select
+                validate: isurl
+                required: false
+                select_values:
+                    - 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
+                    - 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256'
+                default: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256'
+                default_allow: true
             'AssertionConsumerService:0:Binding':
                 type: select
                 select_values:

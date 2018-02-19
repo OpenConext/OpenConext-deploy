@@ -444,6 +444,15 @@
         },
         "coin:attr_motivation:preferredLanguage": {
           "type": "string"
+        },
+        "coin:signature_method": {
+          "type": "string",
+          "format": "url",
+          "enum": [
+              "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
+              "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+          ],
+          "default": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
         }
       },
       "patternProperties": {

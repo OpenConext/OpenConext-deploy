@@ -10,7 +10,8 @@
     "name:en": "",
     "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
     "AssertionConsumerService:0:Location": "",
-    "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+    "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+    "coin:signature_method": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
   },
   "allowedEntities": []
 }
