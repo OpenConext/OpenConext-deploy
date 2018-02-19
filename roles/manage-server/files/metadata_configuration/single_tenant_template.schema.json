@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "saml20_sp",
-  "order": 1,
+  "title": "single_tenant_template",
+  "order": 3,
   "definitions": {
     "AssertionConsumerServiceBinding": {
       "type": "string",
@@ -17,15 +17,6 @@
         "urn:oasis:names:tc:SAML:2.0:bindings:URI"
       ],
       "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-    },
-    "NameIDFormat": {
-      "type": "string",
-      "enum": [
-        "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-        "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
-        "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
-      ],
-      "default": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
     },
     "ArpAttribute": {
       "type": "array",
@@ -47,16 +38,13 @@
     "id": {
       "type": "number"
     },
-    "eid": {
-      "type": "number"
-    },
     "entityid": {
       "type": "string"
     },
     "type": {
       "type": "string",
       "enum": [
-        "saml20-sp"
+        "single-tenant-template"
       ]
     },
     "revisionid": {
@@ -78,19 +66,10 @@
     "allowedall": {
       "type": "boolean"
     },
-    "manipulation": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "user": {
       "type": "string"
     },
     "created": {
-      "type": "string"
-    },
-    "ip": {
       "type": "string"
     },
     "revisionnote": {
@@ -219,38 +198,6 @@
     "metaDataFields": {
       "type": "object",
       "properties": {
-        "NameIDFormat": {
-          "$ref": "#/definitions/NameIDFormat"
-        },
-        "certData": {
-          "type": "string",
-          "format": "certificate"
-        },
-        "certData2": {
-          "type": "string",
-          "format": "certificate"
-        },
-        "certData3": {
-          "type": "string",
-          "format": "certificate"
-        },
-        "SingleLogoutService_Binding": {
-          "type": "string",
-          "enum": [
-            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
-            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign",
-            "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
-            "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
-            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
-            "urn:oasis:names:tc:SAML:2.0:bindings:URI"
-          ],
-          "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-        },
-        "SingleLogoutService_Location": {
-          "type": "string",
-          "format": "url"
-        },
         "mdrpi:RegistrationInfo": {
           "type": "string"
         },
@@ -295,7 +242,7 @@
         },
         "coin:institution_guid": {
           "type": "string",
-          "format" : "uuid"
+          "format": "uuid"
         },
         "coin:trusted_proxy": {
           "type": "string",
@@ -311,33 +258,9 @@
           "type": "string",
           "format": "url"
         },
-        "coin:ss:idp_visible_only": {
-          "type": "string",
-          "format": "boolean"
-        },
         "coin:application_url": {
           "type": "string",
           "format": "url"
-        },
-        "coin:transparant_issuer": {
-          "type": "string",
-          "format": "boolean"
-        },
-        "coin:do_not_add_attribute_aliases": {
-          "type": "string",
-          "format": "boolean"
-        },
-        "coin:display_unconnected_idps_wayf": {
-          "type": "string",
-          "format": "boolean"
-        },
-        "coin:policy_enforcement_decision_required": {
-          "type": "string",
-          "format": "boolean"
-        },
-        "coin:attribute_aggregation_required": {
-          "type": "string",
-          "format": "boolean"
         },
         "coin:original_metadata_url": {
           "type": "string",
@@ -360,33 +283,33 @@
         },
         "coin:privacy:certification": {
           "type": "string",
-	  "format": "boolean"
+          "format": "boolean"
         },
         "coin:privacy:certification_location": {
           "type": "string"
         },
         "coin:privacy:certification_valid_from": {
           "type": "string",
-	  "format": "number"
+          "format": "number"
         },
         "coin:privacy:certification_valid_to": {
           "type": "string",
-	  "format": "number"
+          "format": "number"
         },
         "coin:privacy:surfmarket_dpa_agreement": {
           "type": "string",
-	  "format": "boolean"
+          "format": "boolean"
         },
         "coin:privacy:surfnet_dpa_agreement": {
           "type": "string",
-	  "format": "boolean"
+          "format": "boolean"
         },
         "coin:privacy:sn_dpa_why_not": {
           "type": "string"
         },
         "coin:privacy:privacy_policy": {
           "type": "string",
-	  "format": "boolean"
+          "format": "boolean"
         },
         "coin:privacy:privacy_policy_url": {
           "type": "string",
@@ -445,15 +368,6 @@
         },
         "coin:attr_motivation:preferredLanguage": {
           "type": "string"
-        },
-        "coin:signature_method": {
-          "type": "string",
-          "format": "url",
-          "enum": [
-              "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
-              "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
-          ],
-          "default": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
         }
       },
       "patternProperties": {
@@ -465,24 +379,6 @@
         },
         "^description:(en|nl)$": {
           "type": "string"
-        },
-        "^AssertionConsumerService:([0-9]{1}):Binding$": {
-          "$ref": "#/definitions/AssertionConsumerServiceBinding",
-          "multiplicity": 10
-        },
-        "^AssertionConsumerService:([0-9]{1}):Location$": {
-          "type": "string",
-          "format": "url",
-          "multiplicity": 10
-        },
-        "^AssertionConsumerService:([0-9]{1}):index$": {
-          "type": "string",
-          "format": "number",
-          "multiplicity": 10
-        },
-        "^NameIDFormats:([0-2]{1})$": {
-          "$ref": "#/definitions/NameIDFormat",
-          "multiplicity": 3
         },
         "^contacts:([0-3]{1}):surName$": {
           "type": "string",
@@ -556,17 +452,13 @@
         }
       },
       "required": [
-        "name:en",
-        "AssertionConsumerService:0:Binding",
-        "AssertionConsumerService:0:Location"
+        "name:en"
       ],
       "additionalProperties": false
     }
   },
   "required": [
-    "entityid",
     "state",
-    "allowedall",
     "metaDataFields"
   ],
   "additionalProperties": false,
@@ -577,7 +469,7 @@
       "fields": [
         "entityid"
       ],
-      "unique": true
+      "unique": false
     }
   ]
 }

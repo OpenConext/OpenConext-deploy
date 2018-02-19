@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+                     xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+                     xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+                     entityID="{{entityid}}" validUntil="{{validUntil}}" cacheDuration="PT86400S">
+    <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        {{#UIInfoExtension}}
+        <md:Extensions>
+            <mdui:UIInfo>
+                {{#metaDataFields.name:en}}
+                <mdui:DisplayName xml:lang="en">{{metaDataFields.name:en}}</mdui:DisplayName>
+                {{/metaDataFields.name:en}}
+                {{#metaDataFields.name:nl}}
+                <mdui:DisplayName xml:lang="nl">{{metaDataFields.name:nl}}</mdui:DisplayName>
+                {{/metaDataFields.name:nl}}
+                {{#metaDataFields.description:en}}
+                <mdui:Description xml:lang="en">{{metaDataFields.description:en}}</mdui:Description>
+                {{/metaDataFields.description:en}}
+                {{#metaDataFields.description:nl}}
+                <mdui:Description xml:lang="nl">{{metaDataFields.description:nl}}</mdui:Description>
+                {{/metaDataFields.description:nl}}
+                {{#Logo}}
+                <mdui:Logo width="{{metaDataFields.logo:0:width}}" height="{{metaDataFields.logo:0:height}}" xml:lang="en">{{metaDataFields.logo:0:url}}</mdui:Logo>
+                {{/Logo}}
+            </mdui:UIInfo>
+        </md:Extensions>
+        {{/UIInfoExtension}}
+        {{#metaDataFields.certData}}
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>{{metaDataFields.certData}}</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:KeyDescriptor use="encryption">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>{{metaDataFields.certData}}</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        {{/metaDataFields.certData}}
+        {{#metaDataFields.certData2}}
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>{{metaDataFields.certData2}}</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:KeyDescriptor use="encryption">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>{{metaDataFields.certData2}}</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        {{/metaDataFields.certData2}}
+        {{#metaDataFields.certData3}}
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>{{metaDataFields.certData3}}</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:KeyDescriptor use="encryption">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>{{metaDataFields.certData3}}</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        {{/metaDataFields.certData3}}
+        {{#metaDataFields.NameIDFormat}}
+        <md:NameIDFormat>{{metaDataFields.NameIDFormat}}</md:NameIDFormat>
+        {{/metaDataFields.NameIDFormat}}
+        {{#metaDataFields.AssertionConsumerService:0:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:0:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:0:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:0:index}}{{^metaDataFields.AssertionConsumerService:0:index}}0{{/metaDataFields.AssertionConsumerService:0:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:0:Location}}
+        {{#metaDataFields.AssertionConsumerService:1:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:1:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:1:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:1:index}}{{^metaDataFields.AssertionConsumerService:1:index}}1{{/metaDataFields.AssertionConsumerService:1:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:1:Location}}
+        {{#metaDataFields.AssertionConsumerService:2:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:2:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:2:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:2:index}}{{^metaDataFields.AssertionConsumerService:2:index}}2{{/metaDataFields.AssertionConsumerService:2:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:2:Location}}
+        {{#metaDataFields.AssertionConsumerService:3:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:3:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:3:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:3:index}}{{^metaDataFields.AssertionConsumerService:3:index}}3{{/metaDataFields.AssertionConsumerService:3:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:3:Location}}
+        {{#metaDataFields.AssertionConsumerService:4:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:4:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:4:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:4:index}}{{^metaDataFields.AssertionConsumerService:4:index}}4{{/metaDataFields.AssertionConsumerService:4:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:4:Location}}
+        {{#metaDataFields.AssertionConsumerService:5:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:5:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:5:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:5:index}}{{^metaDataFields.AssertionConsumerService:5:index}}5{{/metaDataFields.AssertionConsumerService:5:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:5:Location}}
+        {{#metaDataFields.AssertionConsumerService:6:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:6:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:6:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:6:index}}{{^metaDataFields.AssertionConsumerService:6:index}}6{{/metaDataFields.AssertionConsumerService:6:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:6:Location}}
+        {{#metaDataFields.AssertionConsumerService:7:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:7:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:7:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:7:index}}{{^metaDataFields.AssertionConsumerService:7:index}}7{{/metaDataFields.AssertionConsumerService:7:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:7:Location}}
+        {{#metaDataFields.AssertionConsumerService:8:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:8:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:8:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:8:index}}{{^metaDataFields.AssertionConsumerService:8:index}}8{{/metaDataFields.AssertionConsumerService:8:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:8:Location}}
+        {{#metaDataFields.AssertionConsumerService:9:Location}}
+        <md:AssertionConsumerService Binding="{{metaDataFields.AssertionConsumerService:9:Binding}}"
+                                     Location="{{metaDataFields.AssertionConsumerService:9:Location}}"
+                                     index="{{metaDataFields.AssertionConsumerService:9:index}}{{^metaDataFields.AssertionConsumerService:9:index}}9{{/metaDataFields.AssertionConsumerService:9:index}}"/>
+        {{/metaDataFields.AssertionConsumerService:9:Location}}
+        {{#AttributeConsumingService}}
+        <md:AttributeConsumingService index="0">
+            {{#metaDataFields.name:en}}
+            <md:ServiceName xml:lang="en">{{metaDataFields.name:en}}</md:ServiceName>
+            {{/metaDataFields.name:en}}
+            {{#metaDataFields.name:nl}}
+            <md:ServiceName xml:lang="nl">{{metaDataFields.name:nl}}</md:ServiceName>
+            {{/metaDataFields.name:nl}}
+            {{#metaDataFields.description:en}}
+            <md:ServiceDescription xml:lang="en">{{metaDataFields.description:en}}</md:ServiceDescription>
+            {{/metaDataFields.description:en}}
+            {{#metaDataFields.description:nl}}
+            <md:ServiceDescription xml:lang="nl">{{metaDataFields.description:nl}}</md:ServiceDescription>
+            {{/metaDataFields.description:nl}}
+            {{#requestedAttributes}}
+            <md:RequestedAttribute Name="{{toString}}"/>
+            {{/requestedAttributes}}
+        </md:AttributeConsumingService>
+        {{/AttributeConsumingService}}
+    </md:SPSSODescriptor>
+    {{#metaDataFields.OrganizationInfo}}
+    <md:Organization>
+        {{#metaDataFields.OrganizationName:en}}
+        <md:OrganizationName xml:lang="en">{{metaDataFields.OrganizationName:en}}</md:OrganizationName>
+        {{/metaDataFields.OrganizationName:en}}
+        {{#metaDataFields.OrganizationName:nl}}
+        <md:OrganizationName xml:lang="nl">{{metaDataFields.OrganizationName:nl}}</md:OrganizationName>
+        {{/metaDataFields.OrganizationName:nl}}
+        {{#metaDataFields.OrganizationDisplayName:en}}
+        <md:OrganizationDisplayName xml:lang="en">{{metaDataFields.OrganizationDisplayName:en}}</md:OrganizationDisplayName>
+        {{/metaDataFields.OrganizationDisplayName:en}}
+        {{#metaDataFields.OrganizationDisplayName:nl}}
+        <md:OrganizationDisplayName xml:lang="nl">{{metaDataFields.OrganizationDisplayName:nl}}</md:OrganizationDisplayName>
+        {{/metaDataFields.OrganizationDisplayName:nl}}
+        {{#metaDataFields.OrganizationURL:en}}
+        <md:OrganizationURL xml:lang="en">{{metaDataFields.OrganizationURL:en}}</md:OrganizationURL>
+        {{/metaDataFields.OrganizationURL:en}}
+        {{#metaDataFields.OrganizationURL:nl}}
+        <md:OrganizationURL xml:lang="nl">{{metaDataFields.OrganizationURL:nl}}</md:OrganizationURL>
+        {{/metaDataFields.OrganizationURL:nl}}
+    </md:Organization>
+    {{/metaDataFields.OrganizationInfo}}
+    {{#metaDataFields.contacts:0:contactType}}
+    <md:ContactPerson contactType="{{metaDataFields.contacts:0:contactType}}">
+        {{#metaDataFields.contacts:0:givenName}}
+        <md:GivenName>{{metaDataFields.contacts:0:givenName}}</md:GivenName>
+        {{/metaDataFields.contacts:0:givenName}}
+        {{#metaDataFields.contacts:0:surName}}
+        <md:SurName>{{metaDataFields.contacts:0:surName}}</md:SurName>
+        {{/metaDataFields.contacts:0:surName}}
+        {{#metaDataFields.contacts:0:emailAddress}}
+        <md:EmailAddress>mailto:{{metaDataFields.contacts:0:emailAddress}}</md:EmailAddress>
+        {{/metaDataFields.contacts:0:emailAddress}}
+        {{#metaDataFields.contacts:0:telephoneNumber}}
+        <md:TelephoneNumber>{{metaDataFields.contacts:0:telephoneNumber}}</md:TelephoneNumber>
+        {{/metaDataFields.contacts:0:telephoneNumber}}
+    </md:ContactPerson>
+    {{/metaDataFields.contacts:0:contactType}}
+    {{#metaDataFields.contacts:1:contactType}}
+    <md:ContactPerson contactType="{{metaDataFields.contacts:1:contactType}}">
+        {{#metaDataFields.contacts:1:givenName}}
+        <md:GivenName>{{metaDataFields.contacts:1:givenName}}</md:GivenName>
+        {{/metaDataFields.contacts:1:givenName}}
+        {{#metaDataFields.contacts:1:surName}}
+        <md:SurName>{{metaDataFields.contacts:1:surName}}</md:SurName>
+        {{/metaDataFields.contacts:1:surName}}
+        {{#metaDataFields.contacts:1:emailAddress}}
+        <md:EmailAddress>mailto:{{metaDataFields.contacts:1:emailAddress}}</md:EmailAddress>
+        {{/metaDataFields.contacts:1:emailAddress}}
+        {{#metaDataFields.contacts:1:telephoneNumber}}
+        <md:TelephoneNumber>{{metaDataFields.contacts:1:telephoneNumber}}</md:TelephoneNumber>
+        {{/metaDataFields.contacts:1:telephoneNumber}}
+    </md:ContactPerson>
+    {{/metaDataFields.contacts:1:contactType}}
+    {{#metaDataFields.contacts:2:contactType}}
+    <md:ContactPerson contactType="{{metaDataFields.contacts:2:contactType}}">
+        {{#metaDataFields.contacts:2:givenName}}
+        <md:GivenName>{{metaDataFields.contacts:2:givenName}}</md:GivenName>
+        {{/metaDataFields.contacts:2:givenName}}
+        {{#metaDataFields.contacts:2:surName}}
+        <md:SurName>{{metaDataFields.contacts:2:surName}}</md:SurName>
+        {{/metaDataFields.contacts:2:surName}}
+        {{#metaDataFields.contacts:2:emailAddress}}
+        <md:EmailAddress>mailto:{{metaDataFields.contacts:2:emailAddress}}</md:EmailAddress>
+        {{/metaDataFields.contacts:2:emailAddress}}
+        {{#metaDataFields.contacts:2:telephoneNumber}}
+        <md:TelephoneNumber>{{metaDataFields.contacts:2:telephoneNumber}}</md:TelephoneNumber>
+        {{/metaDataFields.contacts:2:telephoneNumber}}
+    </md:ContactPerson>
+    {{/metaDataFields.contacts:2:contactType}}
+    {{#metaDataFields.contacts:3:contactType}}
+    <md:ContactPerson contactType="{{metaDataFields.contacts:3:contactType}}">
+        {{#metaDataFields.contacts:3:givenName}}
+        <md:GivenName>{{metaDataFields.contacts:3:givenName}}</md:GivenName>
+        {{/metaDataFields.contacts:3:givenName}}
+        {{#metaDataFields.contacts:3:surName}}
+        <md:SurName>{{metaDataFields.contacts:3:surName}}</md:SurName>
+        {{/metaDataFields.contacts:3:surName}}
+        {{#metaDataFields.contacts:3:emailAddress}}
+        <md:EmailAddress>mailto:{{metaDataFields.contacts:3:emailAddress}}</md:EmailAddress>
+        {{/metaDataFields.contacts:3:emailAddress}}
+        {{#metaDataFields.contacts:3:telephoneNumber}}
+        <md:TelephoneNumber>{{metaDataFields.contacts:3:telephoneNumber}}</md:TelephoneNumber>
+        {{/metaDataFields.contacts:3:telephoneNumber}}
+    </md:ContactPerson>
+    {{/metaDataFields.contacts:3:contactType}}
+
+</md:EntityDescriptor>
