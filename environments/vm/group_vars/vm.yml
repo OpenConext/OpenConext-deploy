@@ -107,6 +107,12 @@ engine_database_port: 3306
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
 
+engine_test_database_name: eb_test
+engine_test_database_host: localhost
+engine_test_database_port: 3306
+engine_test_database_user: eb_testrw
+engine_test_database_password: "{{ mysql_passwords.eb }}"
+
 engine_apache_environment: vm
 engine_apache_symfony_environment: prod
 

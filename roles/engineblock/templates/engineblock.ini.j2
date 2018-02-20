@@ -56,6 +56,14 @@ database.password = "{{ engine_database_password }}"
 database.user = "{{ engine_database_user }}"
 database.dbname = {{ engine_database_name }}
 
+{% if develop %}
+database.test.host = {{ engine_test_database_host }}
+database.test.port = {{ engine_test_database_port }}
+database.test.password = "{{ engine_test_database_password }}"
+database.test.user = "{{ engine_test_database_user }}"
+database.test.dbname = {{ engine_test_database_name }}
+{% endif %}
+
 debug = {{ engine_debug }}
 
 email.idpDebugging.from.name  = "{{ engine_idp_debugging_from_name }}"

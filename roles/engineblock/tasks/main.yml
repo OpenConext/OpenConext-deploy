@@ -66,6 +66,14 @@
       chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   changed_when: False
 
+- name: Create EngineBlock test database
+  mysql_db: name={{ engine_test_database_name }} state=present
+  when: develop
+
+- name: Create EngineBlock test database user
+  mysql_user: name={{ engine_test_database_user }} host={{ engine_test_database_host }} password={{ engine_test_database_password }} priv={{ engine_test_database_name }}.*:ALL state=present
+  when: develop
+
 # Any scripts should be placed below this
 - name: Run EngineBlock DbPatch migrations
   command: ./bin/migrate
