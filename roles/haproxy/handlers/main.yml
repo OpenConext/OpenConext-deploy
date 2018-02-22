@@ -17,3 +17,8 @@
   service: name=haproxy_{{ item.item.name }} state=restarted
   when: item.changed
   with_items: "{{ keys_changed.results }}"
+
+- name: reload systemd
+  systemd: name=haproxy_{{ item.item.name }} daemon_reload=yes
+  when: item.changed
+  with_items: "{{ systemd_changed.results }}"

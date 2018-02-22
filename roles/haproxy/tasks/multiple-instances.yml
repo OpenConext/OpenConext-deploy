@@ -7,9 +7,9 @@
   register: haproxy_version
   changed_when: False
 
-- name: Set haproxy version fact
-  set_fact:
-    haproxy_version: "{{ haproxy_version.stdout }}" 
+  #- name: Set haproxy version fact
+  #set_fact:
+  #  haproxy_version: "{{ haproxy_version.stdout }}" 
 
 - name: Install socat
   yum: name=socat state=present
@@ -54,6 +54,8 @@
 - name: copy systemd startup file
   template: src=haproxy_systemd.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
   with_items: "{{ haproxy_applications }}"
+  register: systemd_changed
+  notify: reload systemd
 
 - name: enable systemd startup
   command: systemctl enable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
