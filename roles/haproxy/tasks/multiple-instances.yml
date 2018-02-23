@@ -9,7 +9,7 @@
 
 - name: Set haproxy version fact
   set_fact:
-  haproxy_version: "{{ haproxy_version.stdout }}" 
+    haproxy_version: "{{ haproxy_version.stdout }}" 
 
 - name: Install socat
   yum: name=socat state=present
