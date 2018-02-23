@@ -21,6 +21,9 @@ net:
 
 storage:
   dbPath: /var/lib/mongo
+  wiredTiger:
+    engineConfig:
+      cacheSizeGB: {{ mongo_cache_size }}
   journal:
     enabled: {% if 'mongod_arbiters' in group_names %}false{% else %}true{% endif %}  
 {% if 'mongod_arbiters' in group_names %}
