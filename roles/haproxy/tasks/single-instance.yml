@@ -13,6 +13,8 @@
 - name: Set haproxy version fact
   set_fact:
     haproxy_version: "{{ haproxy_version.stdout }}" 
+- name: Create haproxy socket dir
+  file: path=/var/lib/haproxy state=directory owner=haproxy group=haproxy mode=0755
 
 - name: Enable haproxy
   service: name=haproxy enabled=yes
