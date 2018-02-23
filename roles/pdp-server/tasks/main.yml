@@ -26,10 +26,10 @@
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=pdp group=pdp mode=0755
 
 - include: ../../../tasks/springbootapp/install-maven-release.yml
-  when: "manage_local_jar == ''"
+  when: "pdp_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-local.yml
-  when: "manage_local_jar != ''"
+  when: "pdp_local_jar != ''"
 
 - name: Copy logging config
   template: src=logback.xml.j2 dest={{ pdp_dir }}/logback.xml owner=pdp group=pdp mode=0740
