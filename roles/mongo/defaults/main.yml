@@ -21,6 +21,9 @@ mongo_primary: false
 mongo_tls: false
 mongo_cluster: false
 
+# Default cache size
+mongo_cache_size: 1
+
 # Add a database
 mongo:
   manage_user: managerw
