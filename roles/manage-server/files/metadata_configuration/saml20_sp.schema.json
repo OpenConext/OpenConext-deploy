@@ -468,8 +468,7 @@
           "enum": [
             "license_required_by_service_provider",
             "license_not_required",
-            "license_available_through_surfmarket",
-            "license_unknown"
+            "license_available_through_surfmarket"
           ],
           "default": "license_required_by_service_provider"
         }
