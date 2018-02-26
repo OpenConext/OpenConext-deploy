@@ -295,7 +295,7 @@
         },
         "coin:institution_guid": {
           "type": "string",
-          "format" : "uuid"
+          "format": "uuid"
         },
         "coin:trusted_proxy": {
           "type": "string",
@@ -360,33 +360,33 @@
         },
         "coin:privacy:certification": {
           "type": "string",
-	  "format": "boolean"
+          "format": "boolean"
         },
         "coin:privacy:certification_location": {
           "type": "string"
         },
         "coin:privacy:certification_valid_from": {
           "type": "string",
-	  "format": "number"
+          "format": "number"
         },
         "coin:privacy:certification_valid_to": {
           "type": "string",
-	  "format": "number"
+          "format": "number"
         },
         "coin:privacy:surfmarket_dpa_agreement": {
           "type": "string",
-	  "format": "boolean"
+          "format": "boolean"
         },
         "coin:privacy:surfnet_dpa_agreement": {
           "type": "string",
-	  "format": "boolean"
+          "format": "boolean"
         },
         "coin:privacy:sn_dpa_why_not": {
           "type": "string"
         },
         "coin:privacy:privacy_policy": {
           "type": "string",
-	  "format": "boolean"
+          "format": "boolean"
         },
         "coin:privacy:privacy_policy_url": {
           "type": "string",
@@ -450,10 +450,28 @@
           "type": "string",
           "format": "url",
           "enum": [
-              "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
-              "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+            "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
+            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
           ],
           "default": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+        },
+        "coin:requires_strong_authentication": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:privacy:gdpr_is_in_wiki": {
+          "type": "string",
+          "format": "boolean"
+        },
+        "coin:license_status": {
+          "type": "string",
+          "enum": [
+            "license_required_by_service_provider",
+            "license_not_required",
+            "license_available_through_surfmarket",
+            "license_unknown"
+          ],
+          "default": "license_required_by_service_provider"
         }
       },
       "patternProperties": {
@@ -462,6 +480,10 @@
         },
         "^displayName:(en|nl)$": {
           "type": "string"
+        },
+        "^coin:wiki_url:(en|nl)$": {
+          "type": "string",
+          "format": "url"
         },
         "^description:(en|nl)$": {
           "type": "string"
