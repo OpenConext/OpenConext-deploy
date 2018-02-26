@@ -86,6 +86,11 @@ management:
     mail:
       enabled: true
 
+gui:
+  disclaimer:
+    background-color: {{ manage_disclaimer_background_color }}
+    content: {{ manage_disclaimer_content }}
+
 # We disable all endpoints except health for the load-balancer and info for git information.
 endpoints:
   enabled: false

@@ -95,9 +95,25 @@
         "properties": {
           "name": {
             "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "no_consent",
+              "minimal_consent"
+            ],
+            "default": "no_consent"
+          },
+          "explanation": {
+            "type": "string"
           }
         }
-      }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "additionalProperties": false
     },
     "notes": {
       "type": ["string", "null"]
