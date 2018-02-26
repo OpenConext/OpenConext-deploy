@@ -62,6 +62,7 @@
 # configuration is loaded correctly.
 - name: Prepare EngineBlock5 environment
   shell: SYMFONY_ENV=prod composer prepare-env
+  become: no
   args:
       chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   changed_when: False
