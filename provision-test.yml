@@ -1,0 +1,112 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: Read vars from secrets file
+    include_vars: "{{ secrets_file }}"
+    tags:
+      - always
+
+- hosts: loadbalancer:php-apps:java-apps:storage:oidc:dbcluster
+  gather_facts: yes
+  become: true
+  roles:
+    - { role: common,   tags: ['common'] }
+    - { role: '{{ inventory_dir }}/../roles/surfconext_common',   tags: ['surfconext_common'] }
+    - { role: openconext-common,   tags: [openconext-commonn'] }
+    - { role: iptables,      tags: ['iptables'] }
+    - { role: rsyslog,      tags: ['rsyslog'] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: loadbalancer
+  gather_facts: true
+  become: true
+  roles:
+    #    - { role: tls,      tags: ['tls'] }
+    - { role: haproxy, tags: ['lb'] }
+
+- hosts: php-apps:java-apps:oidc
+  gather_facts: no
+  become: true
+  roles:
+    - { role: httpd,     tags: ['httpd'] }
+
+- hosts: storage
+  gather_facts: no
+  become: true
+  roles:
+    - { role: mysql, tags: ['mysql'] }
+    - { role: mongo, tags: ['mongo'] }
+
+- hosts: php-apps
+  gather_facts: no
+  become: true
+  vars:
+    env_lang: php
+  roles:
+    - { role: php56fpm,          tags: ['php'     ] }
+    - { role: static,            tags: ['static'  ] }
+    - { role: openconext-common, tags: ['eb','sr','profile'] }
+    - { role: engineblock,       tags: ['eb'      ] }
+    - { role: profile,           tags: ['profile' ] }
+    - { role: diyidp,            tags: ['diyidp'  ] }
+    - { role: '../sp-dashboard/ansible/roles/spdashboard',       tags: ['spdashboard' ] }
+
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: java-apps-common
+  gather_facts: true
+  become: true
+  vars:
+    env_lang: java
+  roles:
+    - { role: tomcat,           tags: ['tomcat' ] }
+    - { role: java,             tags: ['java' ] }
+    - { role: shibboleth,       tags: ['shib'   ] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: java-apps
+  gather_facts: true
+  become: true
+  vars:
+    env_lang: java
+  roles:
+    - { role: manage-gui,        tags: ['manage', 'manage-gui'] }
+    - { role: manage-server,     tags: ['manage', 'manage-server'] }
+    - { role: vm_only_provision_manage_eb,     tags: ['vm_only_provision_manage_eb'] }
+
+- hosts: java-apps
+  gather_facts: true
+  become: true
+  vars:
+    env_lang: java
+  roles:
+    - { role: teams-gui,         tags: ['teams', 'teams-gui'       ] }
+    - { role: teams-server,      tags: ['teams', 'teams-server'    ] }
+    - { role: authz-server,      tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,       tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,              tags: ['oauth', 'voot'            ] }
+    - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
+    - { role: pdp-server,        tags: ['pdp-server'] }
+    - { role: pdp-gui,           tags: ['pdp-gui'] }
+    - { role: metadata-exporter, tags: ['metadata-exporter']}
+    - { role: mujina-idp,        tags: ['mujina' ] }
+    - { role: mujina-sp,         tags: ['mujina' ] }
+
+
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: oidc
+  gather_facts: true
+  become: true
+  vars:
+    env_lang: java
+  roles:
+    - { role: oidc,            tags: ['oidc' ] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+    - include: roles/tomcat/handlers/main.yml
