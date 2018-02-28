@@ -20,7 +20,8 @@
     -->
 
     <!-- The ApplicationDefaults element is where most of Shibboleth's SAML bits are defined. -->
-    <ApplicationDefaults entityID="https://override-me" REMOTE_USER="name-id" signing="true" encryption="true">
+    <ApplicationDefaults entityID="https://override-me" REMOTE_USER="name-id" signing="true" encryption="true"
+	signingAlg="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256">
 
         <!--
         Controls session lifetimes, address checks, cookie handling, and the protocol handlers.
