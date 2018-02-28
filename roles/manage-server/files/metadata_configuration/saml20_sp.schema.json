@@ -487,6 +487,9 @@
         "^description:(en|nl)$": {
           "type": "string"
         },
+        "^coin:type_of_service:(en|nl)$": {
+          "type": "string"
+        },
         "^AssertionConsumerService:([0-9]{1}):Binding$": {
           "$ref": "#/definitions/AssertionConsumerServiceBinding",
           "multiplicity": 10
