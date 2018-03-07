@@ -2,7 +2,6 @@
 ## Version of EngineBlock that is installable by this role
 engine_version: ''
 #engine_branch: "develop"
-
 # Feature toggles
 engine_feature_encrypted_assertions: 1
 engine_feature_encrypted_assertions_require_outer_signature: 1
@@ -87,3 +86,8 @@ engine_idp_debugging_from_address: "{{ noreply_email }}"
 engine_idp_debugging_to_name: "{{ instance_name }} Admin"
 engine_idp_debugging_email_address: "{{ support_email }}"
 engine_idp_debugging_subject: "IdP debug info from %1$s"
+
+eb_edugain_authority_url: "https://example.org"
+eb_edugain_policy_url: "https://example.org"
+eb_support_url: "https://example.org"
+eb_tos_url: "https://example.org"
