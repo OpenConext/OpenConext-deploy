@@ -5,11 +5,6 @@
     - shibboleth-centos7.repo
     - shibboleth.repo.gpgkey
 
-- name: Install custom libcurl
-  yum: name={{ item }} state=present
-  with_items:
-    - libcurl-openssl.x86_64
-
 - name: Install
   yum: name={{ item }} state=present
   with_items:
