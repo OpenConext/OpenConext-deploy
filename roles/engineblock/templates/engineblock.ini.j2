@@ -5,11 +5,6 @@ base_domain = {{ engine_base_domain }}
 hostname = engine.{{ engine_base_domain }}
 
 ;; Engineblock API Configuration
-;; DEPRECATED, use the newer version below
-engineApi.user     = {{ engine_api_janus_user }}
-engineApi.password = {{ engine_api_janus_password }}
-
-;; New version that allows for multiple different API users
 engineApi.users.janus.username = {{ engine_api_janus_user }}
 engineApi.users.janus.password = {{ engine_api_janus_password }}
 engineApi.users.profile.username = {{ engine_api_profile_user }}
@@ -80,18 +75,20 @@ encryption.keys.{{ key }}.publicFile = {{ value.publicFile }}
 
 {% endif %}
 
-{% for repository in engine_block.metadataRepositories %}
-metadataRepository.{{ repository.type }}.type = {{ repository.value }}
-metadataRepositories[{{ repository.index }}] = {{ repository.type }}
-{% endfor %}
-
-phpSettings.display_errors = {{ php_display_errors }}
-phpSettings.date.timezone = {{ timezone }}
-
+{% if  engine_version | version_compare('5.7.0', '<')  %}
 serviceRegistry.caching.lifetime = {{ engine_janus_cache_lifetime }}
 serviceRegistry.location = {{ engine_janus_url }}
 serviceRegistry.user = "{{ engine_janus_user }}"
 serviceRegistry.user_secret = "{{ engine_janus_secret }}"
+{% for repository in engine_block.metadataRepositories %}
+metadataRepository.{{ repository.type }}.type = {{ repository.value }}
+metadataRepositories[{{ repository.index }}] = {{ repository.type }}
+{% endfor %}
+{% endif %}
+
+phpSettings.display_errors = {{ php_display_errors }}
+phpSettings.date.timezone = {{ timezone }}
+
 {% if engine_trusted_proxy_ips is defined %}
 
 {% for engine_trusted_proxy_ip in engine_trusted_proxy_ips %}
