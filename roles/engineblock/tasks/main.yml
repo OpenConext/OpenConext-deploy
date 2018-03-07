@@ -82,6 +82,28 @@
   mysql_user: name={{ engine_test_database_user }} host={{ engine_test_database_host }} password={{ engine_test_database_password }} priv={{ engine_test_database_name }}.*:ALL state=present
   when: develop
 
+- name: Check existence of the eb database
+  shell: app/console doctrine:migrations:status | grep  "Current Version"  | awk '{print $4 }'  
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  register: eb_database_version
+  changed_when: False
+  run_once: True
+
+- name: Create the database schema
+  command: "app/console doctrine:schema:create -n --env={{ engine_apache_symfony_environment }}"
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  when: eb_database_version.stdout == '0'
+  run_once: True
+
+- name: Add migration versions to the database
+  command: "app/console doctrine:migrations:version --add --all"
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  when: eb_database_version.stdout == '0'
+  run_once: True
+
 - name: Run EngineBlock Doctrine migrations
   command: "app/console doctrine:migrations:migrate -n --env={{ engine_apache_symfony_environment }}"
   args:
