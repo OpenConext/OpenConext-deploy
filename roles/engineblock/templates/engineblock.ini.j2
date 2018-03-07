@@ -69,6 +69,7 @@ database.test.dbname = {{ engine_test_database_name }}
 
 debug = {{ engine_debug }}
 
+email.help = "{{ support_email }}"
 email.idpDebugging.from.name  = "{{ engine_idp_debugging_from_name }}"
 email.idpDebugging.from.address = "{{ engine_idp_debugging_from_address }}"
 email.idpDebugging.to.address = {{ engine_idp_debugging_email_address }}
@@ -116,3 +117,12 @@ minimumExecutionTimeOnInvalidReceivedResponse = {{ engine_minimum_execution_time
 ; how many authentication procedures for the same SP are allowed (default: 5)
 engineblock.timeFrameForAuthenticationLoopInSeconds = {{ engine_time_frame_for_authentication_loop_in_seconds }}
 engineblock.maximumAuthenticationProceduresAllowed  = {{ engine_maximum_authentication_procedures_allowed }}
+
+; Edugain URLs
+edugain.publication.publisher = "https://engine.{{ base_domain }}/authentication/proxy/edugain-metadata"
+edugain.registration.authority = "{{ eb_edugain_authority_url }}"
+edugain.registration.policy = "{{ eb_edugain_policy_url }}"
+
+; General URLs
+openconext.supportUrl = "{{ eb_support_url }}"
+openconext.termsOfUse = "{{ eb_tos_url }}"
