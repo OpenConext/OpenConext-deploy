@@ -32,10 +32,6 @@ engineblock.feature.encrypted_assertions_require_outer_signature = {{ engine_fea
 ; Whether or not all input and output filter should run prior to consent.
 engineblock.feature.run_all_manipulations_prior_to_consent = {{ engine_feature_run_all_manipulations_prior_to_consent }}
 
-;; Symfony specific variables
-symfony.cachePath = "{{ engineblock_symfony_cache_path }}"
-symfony.logPath = "{{ engineblock_symfony_log_path }}"
-
 pdp.baseUrl = {{ engine_pdp_baseurl }}{{ engine_pdp_path }}
 pdp.host = {{ engine_pdp_baseurl }}
 pdp.policy_decision_point_path = {{ engine_pdp_path }}
