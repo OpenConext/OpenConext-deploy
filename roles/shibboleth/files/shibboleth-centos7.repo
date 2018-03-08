@@ -2,6 +2,7 @@
 name=Shibboleth (CentOS_7)
 type=rpm-md
 baseurl=http://download.opensuse.org/repositories/security:/shibboleth/CentOS_7/
+        http://downloadcontent.opensuse.org/repositories/security:/shibboleth/CentOS_7/
 gpgcheck=1
 gpgkey=file:///etc/yum.repos.d/shibboleth.repo.gpgkey
 enabled=1
