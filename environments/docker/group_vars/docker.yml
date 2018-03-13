@@ -97,7 +97,7 @@ tls_star_cert_key: star.{{ base_domain }}.key
 
 guest_qualifier: "urn:collab:org:{{ base_domain }}"
 
-apache_server_admin: unix@prolocation.net
+apache_server_admin: "root@{{ base_domain }}"
 
 janus_ssp_technicalcontact_name: "Surfconext beheer"
 janus_ssp_technicalcontact_email: "surfconext-beheer@surfnet.nl"
