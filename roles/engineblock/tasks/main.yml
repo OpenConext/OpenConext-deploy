@@ -17,6 +17,9 @@
 - include: develop.yml
   when: develop
 
+- name: Copy language specific overrides
+  copy: src="{{ inventory_dir }}/files/eb/languages/" dest="{{ openconext_releases_dir }}/OpenConext-engineblock/languages"
+
 - name: Install Apache vhost
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
   with_items:
