@@ -101,6 +101,10 @@ engine_database_password: "{{ mysql_passwords.eb }}"
 engine_apache_environment: test
 engine_apache_symfony_environment: prod
 
+engine_edugain_registration_authority: "http://www.{{ base_domain }}"
+engine_edugain_registration_policy: "https://wiki.{{ base_domain }}/display/eduGAIN/EduGAIN"
+engine_openconext_termsofuse_url: "https://wiki.{{ base_domain }}/display/conextsupport/Terms+of+Service+%28EN%29"
+
 janus_database_name: sr
 janus_database_host: "{{ mysql_host }}"
 janus_database_user: srrw

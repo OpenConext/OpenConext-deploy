@@ -66,6 +66,14 @@ database.test.dbname = {{ engine_test_database_name }}
 
 debug = {{ engine_debug }}
 
+edugain.publication.publisher = "{{ engine_edugain_publication_publisher }}"
+edugain.publication.policy = "{{ engine_edugain_publication_policy_url }}"
+edugain.registration.authority = "{{ engine_edugain_registration_authority }}"
+edugain.registration.policy = "{{ engine_edugain_registration_policy }}"
+edugain.termsOfUse = "{{ engine_edugain_termsofuse }}"
+
+email.help = "{{ support_email }}"
+
 email.idpDebugging.from.name  = "{{ engine_idp_debugging_from_name }}"
 email.idpDebugging.from.address = "{{ engine_idp_debugging_from_address }}"
 email.idpDebugging.to.address = {{ engine_idp_debugging_email_address }}
@@ -87,6 +95,7 @@ metadataRepositories[{{ repository.index }}] = {{ repository.type }}
 
 phpSettings.display_errors = {{ php_display_errors }}
 phpSettings.date.timezone = {{ timezone }}
+phpSettings.sendmail_from = "{{ engine_php_sendmail_from }}"
 
 serviceRegistry.caching.lifetime = {{ engine_janus_cache_lifetime }}
 serviceRegistry.location = {{ engine_janus_url }}
@@ -115,3 +124,5 @@ minimumExecutionTimeOnInvalidReceivedResponse = {{ engine_minimum_execution_time
 ; how many authentication procedures for the same SP are allowed (default: 5)
 engineblock.timeFrameForAuthenticationLoopInSeconds = {{ engine_time_frame_for_authentication_loop_in_seconds }}
 engineblock.maximumAuthenticationProceduresAllowed  = {{ engine_maximum_authentication_procedures_allowed }}
+
+openconext.termsOfUse = "{{ engine_openconext_termsofuse_url }}"
