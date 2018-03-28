@@ -5,7 +5,7 @@ instance_name: OpenConext
 base_domain: "vm.openconext.org"
 support_email: help@example.org
 noreply_email: no-reply@example.org
-
+replica_set_name: 
 smtp_server: localhost
 error_mail_to: devnull@example.org
 

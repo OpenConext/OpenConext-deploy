@@ -5,7 +5,7 @@ instance_name: OpenConext
 base_domain: "%base_domain%"
 support_email: help@{{ base_domain }}
 noreply_email: no-reply@{{ base_domain }}
-
+replica_set_name:
 smtp_server: localhost
 error_mail_to: "{{ support_email }}"
 

@@ -18,6 +18,9 @@ The cluster installation is intended to have at two mongo hosts and one arbiter 
 * Add the following switch in your group_vars:
 mongo_cluster: true
 
+* Add a replicate set name to your group_vars:
+replica_set_name: "set_a_name_here"
+
 * Make sure the following groups exist in your inventory:
 ```
 [mongo_servers]

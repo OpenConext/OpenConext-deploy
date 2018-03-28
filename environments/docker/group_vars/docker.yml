@@ -1,7 +1,7 @@
 ---
 env: vm
-
 instance_name: OpenConext
+replica_set_name:
 base_domain: "vm.openconext.org"
 support_email: help@{{ base_domain }}
 noreply_email: no-reply@{{ base_domain }}
