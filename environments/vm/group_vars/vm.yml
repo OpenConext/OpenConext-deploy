@@ -403,7 +403,6 @@ metadata_exporter:
   db_password: "{{ mysql_passwords.sr }}"
   db_host: "{{ mysql_host }}"
   db_name: sr
-  password: "{{ manage_api_password }}"
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
@@ -445,7 +444,6 @@ manage:
         password: "{{ manage_sp_dashboard_secret }}",
         scopes: ["READ", "WRITE", "PUSH"]
       }
-
 
 loadbalancing:
   engine:
