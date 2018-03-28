@@ -100,14 +100,14 @@
     - not mongo_tls
 
 - name: Create mongo database users
-  mongodb_user: login_database=admin database={{ mongo.manage_database }} login_user=admin login_password={{ mongo_admin_pass }} name={{ mongo.manage_user }} password={{ mongo.manage_password }} roles=readWrite 
+  mongodb_user: login_database=admin database={{ mongo.manage_database }} login_user=admin login_password={{ mongo_admin_pass }} name={{ mongo.manage_user }} password={{ mongo.manage_password }} roles=readWrite replica_set="{{ replica_set_name }}"
   when: 
     - mongo_primary
     - not mongo_tls
   changed_when: False
 
 - name: Create mongo database users, tls enabled
-  mongodb_user: login_database=admin database={{ mongo.manage_database }} login_user=admin login_password={{ mongo_admin_pass }} name={{ mongo.manage_user }} password={{ mongo.manage_password }} roles=readWrite ssl=True ssl_cert_reqs=CERT_NONE
+  mongodb_user: login_database=admin database={{ mongo.manage_database }} login_user=admin login_password={{ mongo_admin_pass }} name={{ mongo.manage_user }} password={{ mongo.manage_password }} roles=readWrite ssl=True ssl_cert_reqs=CERT_NONE replica_set="{{ replica_set_name }}"
   when: 
     - mongo_primary
     - mongo_tls
