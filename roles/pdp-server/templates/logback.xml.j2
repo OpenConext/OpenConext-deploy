@@ -7,6 +7,12 @@
     <suffixPattern>PDPMAIN: [%thread] %logger %msg</suffixPattern>
   </appender>
 
+  <appender name="SYSLOG-DECISIONS" class="ch.qos.logback.classic.net.SyslogAppender">
+    <syslogHost>{{ rsyslog_host }}</syslogHost>
+    <facility>DAEMON</facility>
+    <suffixPattern>PDPANALYTICS: %msg</suffixPattern>
+  </appender>
+
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>/var/log/pdp/pdp.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -20,17 +26,8 @@
    </encoder>
   </appender>
 
-    <appender name="DECISIONS-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/var/log/pdp/pdp_decisions.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/var/log/pdp_decisions.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>90</maxHistory>
-        </rollingPolicy>
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
-    </appender>
-
     <logger name="analytics" level="INFO" additivity="false">
-        <appender-ref ref="DECISIONS-FILE"/>
+        <appender-ref ref="SYSLOG-DECISIONS"/>
     </logger>
 
   <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
