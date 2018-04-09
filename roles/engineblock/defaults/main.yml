@@ -50,7 +50,6 @@ engine_attribute_aggregation_password: "{{ aa.eb_password }}"
 engine_janus_url: https://serviceregistry.{{ base_domain }}/simplesaml/module.php/janus/services/rest/
 engine_janus_cache_lifetime: 3600 # Cache for an hour
 
-engine_api_janus_user: serviceregistry
 engine_api_profile_user: profile
 
 engine_engine_idp_baseurlpath: "https://{{ engine_domain }}/simplesaml/"
