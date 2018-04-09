@@ -19,13 +19,17 @@
   when: app_local_war != ''
 
 - name: Deploying {{ app_name }} | get the sha1 sum of current war
-  stat: path={{ tomcat_install_dir }}/wars/{{ deploy_name }}.war
+  stat: path={{ tomcat_install_dir }}/wars/{{ deploy_name }}.war  checksum_algorithm=sha1
   register: current_app_stat
 
 - name: Deploying {{ deploy_name }} | get the sha1 sum of the candidate
-  stat: path={{ candidate_war }}
+  stat: path={{ candidate_war }} checksum_algorithm=sha1
   register: candidate_app_stat
 
+- debug: var=current_app_stat
+
+- debug: var=candidate_app_stat
+
 - include: deploy.yml
-  when: current_app_stat.stat.exists == false or candidate_app_stat.stat.sha1 != current_app_stat.stat.sha1
+  when: current_app_stat.stat.exists == false or candidate_app_stat.stat.checksum != current_app_stat.stat.checksum
   register: new_deployment
