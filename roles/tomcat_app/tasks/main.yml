@@ -18,14 +18,14 @@
 - include: upload-from-local.yml
   when: app_local_war != ''
 
-- name: Deploying {{ app_name }} | get the md5 sum of current war
+- name: Deploying {{ app_name }} | get the sha1 sum of current war
   stat: path={{ tomcat_install_dir }}/wars/{{ deploy_name }}.war
   register: current_app_stat
 
-- name: Deploying {{ deploy_name }} | get the md5 sum of the candidate
+- name: Deploying {{ deploy_name }} | get the sha1 sum of the candidate
   stat: path={{ candidate_war }}
   register: candidate_app_stat
 
 - include: deploy.yml
-  when: current_app_stat.stat.exists == false or candidate_app_stat.stat.md5 != current_app_stat.stat.md5
+  when: current_app_stat.stat.exists == false or candidate_app_stat.stat.sha1 != current_app_stat.stat.sha1
   register: new_deployment
