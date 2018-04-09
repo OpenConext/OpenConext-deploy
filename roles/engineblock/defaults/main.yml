@@ -32,7 +32,6 @@ engine_api_ipv4_address: "*"
 engine_base_domain: "{{ base_domain }}"
 
 engine_domain: engine.{{ base_domain }}
-engine_api_domain: engine-api.{{ base_domain }}
 
 engine_debug: false
 

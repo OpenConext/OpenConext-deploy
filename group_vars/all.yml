@@ -23,3 +23,5 @@ tls_dh_param_path: /etc/pki/tls
 tls_dh_param_file: "{{ tls_dh_param_path }}/dh_params.pem"
 tls_dh_param_keysize: 2048
 
+# Engine api URL is shared between profile, eb and manage
+engine_api_domain: engine-api.{{ base_domain }}

@@ -28,7 +28,6 @@ profile_secret: secret
 profile_default_locale: en
 
 # IP-address and domain of Engine API to enable Profile to send API calls
-engine_api_domain: engine-api.{{ base_domain }}
 engine_api_verify_ssl: true
 
 # Paths of public and private key used for sending SAML AuthnRequests
