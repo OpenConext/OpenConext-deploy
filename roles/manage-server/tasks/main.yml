@@ -32,10 +32,6 @@
   template: src=logback.xml.j2 dest={{ manage_dir }}/logback.xml owner=manage group=manage mode=0740
   notify: restart manage
 
-- name: Include vars of engineblock
-  include_vars:
-    file: ../../engineblock/defaults/main.yml
-
 - name: copy application config
   template: src=application.yml.j2 dest={{ manage_dir }}/application.yml owner=manage group=manage mode=0740
   notify: restart manage
