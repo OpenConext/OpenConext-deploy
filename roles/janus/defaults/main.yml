@@ -75,3 +75,4 @@ janus_domain: serviceregistry.{{ base_domain }}
 serviceregistry_fpm_port: 804
 # Serviceregistry username
 serviceregistry_fpm_user: serviceregistry
+php_fpm_sr_mem: 128M
