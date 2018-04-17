@@ -4,7 +4,7 @@ After=syslog.target network.target
 
 [Service]
 {% if  haproxy_version | version_compare('1.8.0', '<')  %}  
-ExecStart=/usr/sbin/haproxy-systemd-wrapper -f etc/haproxy/haproxy_global.cfg -f /etc/haproxy/haproxy_frontend.cfg -f /etc/ha    proxy/haproxy_backend.cfg -p /var/run/haproxy.pid
+ExecStart=/usr/sbin/haproxy-systemd-wrapper -f etc/haproxy/haproxy_global.cfg -f /etc/haproxy/haproxy_frontend.cfg -f /etc/haproxy/haproxy_backend.cfg -p /var/run/haproxy.pid
 
 {% else %}
 ExecStart=/usr/sbin/haproxy -db  -f /etc/haproxy/haproxy_global.cfg -f /etc/haproxy/haproxy_frontend.cfg -f /etc/haproxy/haproxy_backend.cfg  -p /var/run/haproxy.pid
