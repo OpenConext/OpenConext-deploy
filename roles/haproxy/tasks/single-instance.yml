@@ -13,8 +13,12 @@
 - name: Set haproxy version fact
   set_fact:
     haproxy_version: "{{ haproxy_version.stdout }}" 
+
 - name: Create haproxy socket dir
   file: path=/var/lib/haproxy state=directory owner=haproxy group=haproxy mode=0755
+
+- name: Install haproxy systemd single instance file
+  template: src=haproxy_systemd_single.j2 dest=/etc/systemd/system/haproxy.service
 
 - name: Enable haproxy
   service: name=haproxy enabled=yes
@@ -33,7 +37,14 @@
   copy: content="{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}" dest="{{ tls_backend_ca }}" mode=0644 owner=root
   when: haproxy_backend_tls
 
-- name: Copy config
-  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
+- name: Copy global haproxy config
+  template: src=haproxy_global.cfg.j2 dest=/etc/haproxy/haproxy_global.cfg
   notify: reload haproxy
 
+- name: Copy frontend haproxy config
+  template: src=haproxy_frontend_single.cfg.j2 dest=/etc/haproxy/haproxy_frontend.cfg
+  notify: reload haproxy
+
+- name: Copy backend haproxy config
+  template: src=haproxy_backend_single.cfg.j2 dest=/etc/haproxy/haproxy_backend.cfg
+  notify: reload haproxy

@@ -1,0 +1,55 @@
+#jinja2: lstrip_blocks: True
+## Frontend configuration
+#--------------------------------------------------------------------
+# {{ item.name }} frontend
+# -------------------------------------------------------------------
+{% if item.name == "fourthset" %}
+
+frontend {{ item.name }}
+
+     bind {{ haproxy_sni_ip }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
+     bind {{ haproxy_sni_ipv6 }}:443 ssl {% for application in haproxy_applications if not application.hidden %} crt /etc/haproxy/{{ application.name }}/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
+     http-request del-header Proxy
+     rspadd  Strict-Transport-Security:\ max-age=15768000
+     capture request header User-agent len 100
+     bind {{ haproxy_sni_ip }}:80 transparent
+
+     {% for application in haproxy_applications if not application.hidden %}
+     acl valid_vhost hdr(host) -i {%if application.vhost_name is defined%} {{ application.vhost_name }}.{{ base_domain }}
+     {% else %}{{ application.full_vhost_name }}
+     {% endif %}
+     acl {{ application.name }} hdr(host) -i {%if application.vhost_name is defined%} {{ application.vhost_name }}.{{ base_domain }}
+     {% else %}{{ application.full_vhost_name }}
+     {% endif %}
+     {% endfor %}
+
+     http-request deny if ! valid_vhost
+     redirect scheme https code 301 if !{ ssl_fc }
+
+     {% for application in haproxy_applications if not application.hidden %}
+     use_backend {{ application.name }}_be if {{ application.name }}
+     {% endfor %}
+
+{% else %}
+frontend {{ item.name }}
+
+     bind {{ item.ip }}:443 ssl crt /etc/haproxy/{{ item.name }}/{{ item.name }}.pem no-sslv3 transparent
+     bind {{ item.ipv6 }}:443 ssl crt /etc/haproxy/{{ item.name }}/{{ item.name }}.pem no-sslv3 transparent
+     http-request del-header Proxy
+     rspadd  Strict-Transport-Security:\ max-age=15768000
+     capture request header User-agent len 100
+     bind {{ item.ip }}:80
+
+     acl valid_vhost hdr(host) -i {% if item.full_vhost_name is not defined  %} {{ item.vhost_name }}.{{ base_domain }}
+     {% else %} {{ item.full_vhost_name }}
+     {% endif %}
+
+     http-request deny if ! valid_vhost
+     redirect scheme https code 301 if !{ ssl_fc }
+
+     acl url_all         path_beg        -i /
+     use_backend         {{ item.name }}_be       if url_all
+     default_backend     {{ item.name }}_be
+
+{% endif %}
+
