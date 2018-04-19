@@ -298,12 +298,12 @@
         },
         "^shibmd:scope:([0-5]{1}):allowed$": {
           "type": "string",
-          "multiplicity": 5
+          "multiplicity": 10
         },
         "^shibmd:scope:([0-5]{1}):regexp$": {
           "type": "string",
           "format": "boolean",
-          "multiplicity": 5
+          "multiplicity": 10
         }
       },
       "required": [
