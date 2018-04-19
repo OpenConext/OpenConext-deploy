@@ -156,7 +156,8 @@
               "$ref": "#/definitions/ArpAttribute"
             },
             "urn:schac:attribute-def:schacPersonalUniqueCode": {
-              "$ref": "#/definitions/ArpAttribute"
+              "$ref": "#/definitions/ArpAttribute",
+              "multiplicity": true
             },
             "urn:mace:dir:attribute-def:eduPersonAffiliation": {
               "$ref": "#/definitions/ArpAttribute",
