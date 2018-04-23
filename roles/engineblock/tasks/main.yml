@@ -52,7 +52,7 @@
   with_items:
     - engineblock.ini
   notify:
-    - restart httpd
+    - restart php-fpm
 
 - name: Make the SYMFONY_ENV var available for scripts
   become: yes

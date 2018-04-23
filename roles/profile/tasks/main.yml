@@ -82,7 +82,6 @@
   with_items:
     - profile.yml
   notify:
-    - restart httpd
     - restart php-fpm
 
 # Remove all dirs, but keep the current version and from the rest the most recent one.
