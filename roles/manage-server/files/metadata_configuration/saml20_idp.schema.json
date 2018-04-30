@@ -296,11 +296,11 @@
         "^keywords:(en|nl)$": {
           "type": "string"
         },
-        "^shibmd:scope:([0-5]{1}):allowed$": {
+        "^shibmd:scope:([0-9]{1}):allowed$": {
           "type": "string",
           "multiplicity": 10
         },
-        "^shibmd:scope:([0-5]{1}):regexp$": {
+        "^shibmd:scope:([0-9]{1}):regexp$": {
           "type": "string",
           "format": "boolean",
           "multiplicity": 10
