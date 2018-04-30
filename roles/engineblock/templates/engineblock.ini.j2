@@ -1,12 +1,10 @@
 ;; EngineBlock version
 version = {{ engine_version }}
 
-;; Engineblock API Configuration
-;; DEPRECATED, use the newer version below
-engineApi.user     = {{ engine_api_janus_user }}
-engineApi.password = {{ engine_api_janus_password }}
+base_domain = {{ engine_base_domain }}
+hostname = engine.{{ engine_base_domain }}
 
-;; New version that allows for multiple different API users
+;; Engineblock API Configuration
 engineApi.users.janus.username = {{ engine_api_janus_user }}
 engineApi.users.janus.password = {{ engine_api_janus_password }}
 engineApi.users.profile.username = {{ engine_api_profile_user }}
@@ -28,10 +26,6 @@ engineblock.feature.encrypted_assertions_require_outer_signature = {{ engine_fea
 ;; EngineBlock consent feature toggles
 ; Whether or not all input and output filter should run prior to consent.
 engineblock.feature.run_all_manipulations_prior_to_consent = {{ engine_feature_run_all_manipulations_prior_to_consent }}
-
-;; Symfony specific variables
-symfony.cachePath = "{{ engineblock_symfony_cache_path }}"
-symfony.logPath = "{{ engineblock_symfony_log_path }}"
 
 pdp.baseUrl = {{ engine_pdp_baseurl }}{{ engine_pdp_path }}
 pdp.host = {{ engine_pdp_baseurl }}
@@ -66,6 +60,7 @@ database.test.dbname = {{ engine_test_database_name }}
 
 debug = {{ engine_debug }}
 
+email.help = "{{ support_email }}"
 email.idpDebugging.from.name  = "{{ engine_idp_debugging_from_name }}"
 email.idpDebugging.from.address = "{{ engine_idp_debugging_from_address }}"
 email.idpDebugging.to.address = {{ engine_idp_debugging_email_address }}
@@ -80,18 +75,20 @@ encryption.keys.{{ key }}.publicFile = {{ value.publicFile }}
 
 {% endif %}
 
-{% for repository in engine_block.metadataRepositories %}
-metadataRepository.{{ repository.type }}.type = {{ repository.value }}
-metadataRepositories[{{ repository.index }}] = {{ repository.type }}
-{% endfor %}
-
-phpSettings.display_errors = {{ php_display_errors }}
-phpSettings.date.timezone = {{ timezone }}
-
+{% if  engine_version | version_compare('5.7.0', '<')  %}
 serviceRegistry.caching.lifetime = {{ engine_janus_cache_lifetime }}
 serviceRegistry.location = {{ engine_janus_url }}
 serviceRegistry.user = "{{ engine_janus_user }}"
 serviceRegistry.user_secret = "{{ engine_janus_secret }}"
+{% for repository in engine_block.metadataRepositories %}
+metadataRepository.{{ repository.type }}.type = {{ repository.value }}
+metadataRepositories[{{ repository.index }}] = {{ repository.type }}
+{% endfor %}
+{% endif %}
+
+phpSettings.display_errors = {{ php_display_errors }}
+phpSettings.date.timezone = {{ timezone }}
+
 {% if engine_trusted_proxy_ips is defined %}
 
 {% for engine_trusted_proxy_ip in engine_trusted_proxy_ips %}
@@ -99,8 +96,6 @@ trustedProxyIps[] = {{ engine_trusted_proxy_ip }}
 {% endfor %}
 
 {% endif %}
-
-base_domain = {{ engine_base_domain }}
 
 profile.baseUrl = "{{ engine_profile_baseurl }}"
 
@@ -115,3 +110,12 @@ minimumExecutionTimeOnInvalidReceivedResponse = {{ engine_minimum_execution_time
 ; how many authentication procedures for the same SP are allowed (default: 5)
 engineblock.timeFrameForAuthenticationLoopInSeconds = {{ engine_time_frame_for_authentication_loop_in_seconds }}
 engineblock.maximumAuthenticationProceduresAllowed  = {{ engine_maximum_authentication_procedures_allowed }}
+
+; Edugain URLs
+edugain.publication.publisher = "https://engine.{{ base_domain }}/authentication/proxy/edugain-metadata"
+edugain.registration.authority = "{{ eb_edugain_authority_url }}"
+edugain.registration.policy = "{{ eb_edugain_policy_url }}"
+
+; General URLs
+openconext.supportUrl = "{{ eb_support_url }}"
+openconext.termsOfUse = "{{ eb_tos_url }}"
