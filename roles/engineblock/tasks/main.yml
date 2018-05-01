@@ -17,8 +17,13 @@
 - include: develop.yml
   when: develop
 
+- name: Check presence of language specific overrides
+  local_action: stat path="{{ inventory_dir }}/files/eb/languages/"
+  register: overrides_present
+
 - name: Copy language specific overrides
   copy: src="{{ inventory_dir }}/files/eb/languages/" dest="{{ openconext_releases_dir }}/OpenConext-engineblock/languages"
+  when: overrides_present.stat.exists
 
 - name: Install Apache vhost
   template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
