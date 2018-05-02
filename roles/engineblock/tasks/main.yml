@@ -83,12 +83,14 @@
   when: develop
 
 - name: Check existence of the eb database
-  shell: app/console doctrine:migrations:status | grep  "Current Version"  | awk '{print $4 }'  
+  shell: app/console doctrine:migrations:status --env={{ engine_apache_symfony_environment }} | grep  "Current Version"  | awk '{print $4 }'  
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: eb_database_version
   changed_when: False
   run_once: True
+
+- debug: var=eb_database_version
 
 - name: Create the database schema
   command: "app/console doctrine:schema:create -n --env={{ engine_apache_symfony_environment }}"
@@ -98,7 +100,7 @@
   run_once: True
 
 - name: Add migration versions to the database
-  command: "app/console doctrine:migrations:version --add --all"
+  command: "app/console doctrine:migrations:version --add --all --env={{ engine_apache_symfony_environment }}"
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   when: eb_database_version.stdout == '0'
