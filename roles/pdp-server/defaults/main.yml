@@ -6,3 +6,4 @@ pdp_local_jar: ''
 pdp_jar: pdp.jar
 pdp_email_from: '{{ noreply_email }}'
 pdp_cronjobmaster: true
+pdp_invalid_policies_error_mail_to: '{{ error_mail_to }}'
