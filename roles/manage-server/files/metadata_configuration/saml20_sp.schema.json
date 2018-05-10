@@ -521,7 +521,7 @@
           "default": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
           "info": "Select the Secure Hash Algorithm (SHA) as used by the service provider."
         },
-        "coin:requires_strong_authentication": {
+        "coin:supports_strong_authentication": {
           "type": "string",
           "format": "boolean",
           "info": "Set if StepUp is supported."
