@@ -25,6 +25,11 @@ Listen {{ apache_app_listen_address.authzserver }}:{{ loadbalancing.authzserver.
       satisfy any
     </Location>
 
+    # The internal lifecycle API is secured with basic auth
+    <Location ~ "/deprovision/">
+      allow from all
+      satisfy any
+    </Location>
 
     # Enable shibboleth for all other URLs
     <Location />
