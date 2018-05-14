@@ -372,7 +372,7 @@ aa:
   sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
-  orcid_client_id: "APP-IP57TTCD5F8BAIGS"
+  orcid_client_id: "anonymous"
   orcid_secret: "{{ aa_orcid_password }}"
   orcid_authorization_uri: "https://sandbox.orcid.org/oauth/authorize"
   access_token_uri: "https://sandbox.orcid.org/oauth/token"

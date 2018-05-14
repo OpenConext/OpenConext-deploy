@@ -351,6 +351,8 @@ aa:
   oidc_client_id: "https@//aa.{{base_domain}}"
   oidc_secret: "{{ aa_oidc_client_secret }}"
   orcid_authorization_uri: "https://sandbox.orcid.org/oauth/authorize"
+  orcid_client_id: "anonymous"
+  orcid_secret: "{{ aa_orcid_password }}"
   access_token_uri: "https://sandbox.orcid.org/oauth/token"
   spring_profiles_active: acc
   sab_username: coin-test

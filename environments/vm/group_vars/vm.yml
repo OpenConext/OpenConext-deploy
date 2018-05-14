@@ -375,7 +375,7 @@ aa:
   idin_secret: "{{ aa_idin_client_secret }}"
   oidc_client_id: "https@//aa.surfconext.test.nl"
   oidc_secret: "{{ aa_oidc_client_secret }}"
-  orcid_client_id: "APP-IP57TTCD5F8BAIGS"
+  orcid_client_id: "anonymous"
   orcid_secret: "{{ aa_orcid_password }}"
   orcid_authorization_uri: "https://sandbox.orcid.org/oauth/authorize"
   access_token_uri: "https://sandbox.orcid.org/oauth/token"
