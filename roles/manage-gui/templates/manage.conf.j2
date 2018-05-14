@@ -60,6 +60,7 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
       ShibUseHeaders On
       ShibRequestSetting applicationId manage
       ShibRequireSession On
+      ShibRequestSetting REMOTE_ADDR X-Forwarded-For
       require valid-user
     </Location>
 
