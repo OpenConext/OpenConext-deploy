@@ -105,7 +105,6 @@
     - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
     - { role: pdp-gui,          tags: ['pdp', 'pdp-gui'] }
     - { role: pdp-server,       tags: ['pdp', 'pdp-server'] }
-    - { role: metadata-exporter, tags: ['metadata-exporter']}
     - { role: remove-grouper,               tags: ['remove-grouper'] }
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }

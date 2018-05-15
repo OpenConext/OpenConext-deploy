@@ -65,7 +65,6 @@
     - { role: tomcat,            tags: ['tomcat'] }
     - { role: java,              tags: ['java'] }
     - { role: shibboleth,        tags: ['shib'   ] }
-    - { role: metadata-exporter, tags: ['metadata-exporter'] }
     - { role: teams-gui,         tags: ['teams', 'teams-gui' ] }
     - { role: teams-server,      tags: ['teams', 'teams-server' ] }
     - { role: mujina-idp,        tags: ['legacy' ] }

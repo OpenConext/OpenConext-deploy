@@ -21,7 +21,6 @@ janus_ssp_version: 1.14.17
 janus_version: 1.23.1
 manage_gui_version: 2.0.6
 manage_server_version: 2.0.6
-metadata_exporter_version: "2.0.4"
 monitoring_tests_version: 6.0.5
 mujina_version: 5.0.7
 oidc_version: "1.2.7"
@@ -390,12 +389,6 @@ oidc:
   db_name: oidc-server
   sp_entity_id: https://oidc.{{ base_domain }}
 
-metadata_exporter:
-  db_user: srrw
-  db_password: "{{ mysql_passwords.sr }}"
-  db_host: "{{ mysql_host }}"
-  db_name: sr
-
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
   mujina_sp_base_url: https://mujina-sp.{{ base_domain }}
@@ -476,25 +469,10 @@ loadbalancing:
     port: 613
   aa:
     port: 615
-  metadata_exporter:
-    port: 616
   manage:
     port: 617
 
 haproxy_applications:
-  - name: multidata
-    vhost_name: multidata
-    ip: 127.0.0.1
-    ha_method: GET
-    ha_url: /health
-    port: 616
-    servers: "{{ java_servers }}"
-    crt_name: "{{ tls_star_cert }}"
-    key_name: "{{ tls_star_cert_key }}"
-    sslbackend: yes
-    backend_vhost_name: backend.{{ base_domain }}
-    backend_ca_file: "{{ tls_backend_ca }}"
-
   - name: manage
     vhost_name: manage
     ip: 127.0.0.1

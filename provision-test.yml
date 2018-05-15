@@ -92,7 +92,6 @@
     - { role: authz-playground,  tags: ['oauth', 'authz-playground'] }
     - { role: pdp-server,        tags: ['pdp-server'] }
     - { role: pdp-gui,           tags: ['pdp-gui'] }
-    - { role: metadata-exporter, tags: ['metadata-exporter']}
     - { role: mujina-idp,        tags: ['mujina' ] }
     - { role: mujina-sp,         tags: ['mujina' ] }
 

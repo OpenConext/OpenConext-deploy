@@ -8,7 +8,6 @@
       - https://voot.vm.openconext.org/health
       - https://teams.vm.openconext.org/api/teams/health
       - https://manage.vm.openconext.org/health
-      - https://multidata.vm.openconext.org/health
       - https://pdp.vm.openconext.org/pdp/api/health
       - https://voot.vm.openconext.org/health
       - https://aa.vm.openconext.org/aa/api/health

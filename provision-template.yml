@@ -85,7 +85,6 @@
     - { role: authz-playground,  tags: ['oauth', 'authz-playground'], when: not minimal_install }
     - { role: pdp-server,        tags: ['pdp', 'pdp-server'        ], when: not minimal_install  }
     - { role: pdp-gui,           tags: ['pdp', 'pdp-gui'           ], when: not minimal_install  }
-    - { role: metadata-exporter, tags: ['metadata-exporter'        ], when: not minimal_install}
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
 
