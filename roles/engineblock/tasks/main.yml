@@ -82,16 +82,29 @@
   mysql_user: name={{ engine_test_database_user }} host={{ engine_test_database_host }} password={{ engine_test_database_password }} priv={{ engine_test_database_name }}.*:ALL state=present
   when: develop
 
-# Any scripts should be placed below this
-- name: Run EngineBlock DbPatch migrations
-  command: ./bin/migrate
+- name: Check existence of the eb database
+  shell: app/console doctrine:migrations:status --env={{ engine_apache_symfony_environment }} | grep  "Current Version"  | awk '{print $4 }'  
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  register: migrate_output
-  changed_when: "'no update needed' not in migrate_output.stderr"
-  tags: enginemigrations
-  when: engine_skip_db_migration is undefined
-  run_once: true
+  register: eb_database_version
+  changed_when: False
+  run_once: True
+
+- debug: var=eb_database_version
+
+- name: Create the database schema
+  command: "app/console doctrine:schema:create -n --env={{ engine_apache_symfony_environment }}"
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  when: eb_database_version.stdout == '0'
+  run_once: True
+
+- name: Add migration versions to the database
+  command: "app/console doctrine:migrations:version --add --all --env={{ engine_apache_symfony_environment }}"
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  when: eb_database_version.stdout == '0'
+  run_once: True
 
 - name: Run EngineBlock Doctrine migrations
   command: "app/console doctrine:migrations:migrate -n --env={{ engine_apache_symfony_environment }}"

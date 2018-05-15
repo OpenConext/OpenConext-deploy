@@ -23,7 +23,6 @@
   become: true
   roles:
     - { role: mysql,                   tags: ['mysql'] }
-    - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
 
 - hosts: loadbalancer
   gather_facts: true
@@ -49,9 +48,8 @@
     - { role: static,                            tags: ['static'] }
     - { role: metadata,                          tags: ['static'] }
     - { role: welcome,                           tags: ['welcome'] }
-    - { role: openconext-common,                 tags: ['eb','sr','profile'] }
+    - { role: openconext-common,                 tags: ['eb','profile'] }
     - { role: engineblock,                       tags: ['eb'     ] }
-    - { role: janus,                             tags: ['sr'     ] }
     - { role: profile,                           tags: ['profile'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
