@@ -10,7 +10,7 @@
   tags: java
 
 - name: Link JDK alternatives to 1.7
-  file: src=/usr/lib/jvm/jre-1.7.0-openjdk/{{ item.path }} dest=/usr/bin/{{ item.name }} state=link force=yes
+  file: src=/usr/lib/jvm/jre-1.7.0-openjdk/{{ item.path }} dest=/usr/bin/{{ item.name }} state=link force=yes follow=no
   with_items:
       - { name: 'java', path: 'bin/java' }
       - { name: 'keytool', path: 'bin/keytool' }
