@@ -13,7 +13,6 @@
   file: src=/usr/lib/jvm/jre-1.7.0-openjdk/{{ item.path }} dest=/usr/bin/{{ item.name }} state=link force=yes
   with_items:
       - { name: 'java', path: 'bin/java' }
-      - { name: 'javaws', path: 'bin/javaws' }
       - { name: 'keytool', path: 'bin/keytool' }
   tags: java
 

@@ -5,3 +5,4 @@ oidc_snapshot_timestamp: ''
 oidc_local_war: ''
 deploy_name: oidc
 oidc_resource_cleaner_period: 15
+oidc_cronjobmaster: true

@@ -25,11 +25,8 @@
 - name: Create logging directory
   file: path=/var/log/{{ springapp_service_name }} state=directory owner=authz-server group=authz-server mode=0755
 
-- include: ../../../tasks/springbootapp/install-release.yml
-  when: "authz_server_snapshot_timestamp == '' and authz_server_local_jar == ''"
-
-- include: ../../../tasks/springbootapp/install-snapshot.yml
-  when: "authz_server_snapshot_timestamp != '' and authz_server_local_jar == ''"
+- include: ../../../tasks/springbootapp/install-maven-release.yml
+  when: "authz_server_local_jar == ''"
 
 - include: ../../../tasks/springbootapp/install-local.yml
   when: "authz_server_local_jar != ''"

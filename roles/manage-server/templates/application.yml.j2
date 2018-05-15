@@ -9,10 +9,10 @@ server:
   # We serve from the root. Do not change this
   contextPath:
   session:
+    timeout: 28800
     cookie:
       secure: true
   server-header: no
-  session-timeout: 3600
 
 features: {{ manage.features }}
 
@@ -96,6 +96,5 @@ endpoints:
   enabled: false
   health:
     enabled: true
-    sensitive: false
   info:
     enabled: true

@@ -1,7 +1,0 @@
----
-metadata_exporter_dir: /opt/metadata-exporter
-metadata_exporter_version: ''
-metadata_exporter_snapshot_timestamp: ''
-metadata_exporter_local_jar: ''
-metadata_exporter_jar: metadata-exporter-current.jar
-metadata_exporter_refresh_minutes: 15

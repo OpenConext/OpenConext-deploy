@@ -76,7 +76,6 @@
     - { role: tomcat,                       tags: ['tomcat'] }
     - { role: java,                         tags: ['java'] }
     - { role: shibboleth,                   tags: ['shib'   ] }
-    - { role: metadata-exporter,            tags: ['metadata-exporter'] }
     - { role: teams-legacy,                 tags: ['teams-legacy'  ] }
     - { role: teams-gui,                    tags: ['teams', 'teams-gui'  ] }
     - { role: teams-server,                 tags: ['teams', 'teams-server'  ] }
@@ -97,5 +96,6 @@
     - { role: eduproxy,                     tags: ['eduproxy'] }
     - { role: monitoring-tests,             tags: ['monitoring-tests'] }
     - { role: remove-grouper,               tags: ['remove-grouper'] }
+    - { role: remove-metadata-exporter,     tags: ['remove-metadata-exporter'] }
   handlers:
     - include: roles/httpd/handlers/main.yml

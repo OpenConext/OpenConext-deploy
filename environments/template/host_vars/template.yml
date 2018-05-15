@@ -16,6 +16,5 @@ apache_app_listen_address:
   pdp: 127.0.0.1
   oidc: 127.0.0.1
   aa: 127.0.0.1
-  metadata_exporter: 127.0.0.1
 
 mongo_primary: True
