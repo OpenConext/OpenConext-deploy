@@ -106,7 +106,10 @@
             ],
             "default": "no_consent"
           },
-          "explanation": {
+          "explanation:en": {
+            "type": "string"
+          },
+          "explanation:nl": {
             "type": "string"
           }
         }
