@@ -1,0 +1,17 @@
+---
+- name: ensure the service is stopped
+  service: name=metadata-exporter enabled=no state=stopped
+  ignore_errors: true
+
+- name: Remove metadata-exporter files
+  file: path={{ item }} state=absent
+  with_items: 
+      - /etc/httpd/conf.d/metadata_exporter.conf
+      - /etc/systemd/system/metadata-exporter.service
+      - /opt/metadata-exporter/
+      - /var/log/metadata-exporter/
+  notify: 
+    - restart httpd
+
+- name: Remove user
+  user: name=metadata-exporter state=absent

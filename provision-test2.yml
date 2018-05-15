@@ -96,5 +96,6 @@
     - { role: eduproxy,                     tags: ['eduproxy'] }
     - { role: monitoring-tests,             tags: ['monitoring-tests'] }
     - { role: remove-grouper,               tags: ['remove-grouper'] }
+    - { role: remove-metadata-exporter,     tags: ['remove-metadata-exporter'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
