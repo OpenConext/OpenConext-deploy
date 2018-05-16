@@ -4,6 +4,11 @@ logging:
   level:
     org.hibernate.SQL: INFO
 
+api:
+  lifecycle:
+    username: {{ teams_api_lifecycle_username }}
+    password: {{ teams_api_lifecycle_password }}
+
 server:
   # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
   port: {{ springapp_tcpport }}
