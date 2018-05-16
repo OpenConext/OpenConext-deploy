@@ -141,10 +141,11 @@ engine_keys:
 
 engine_block:
   metadataRepositories:
-    - index: 0
-      type: "janus"
-      value: "JanusRestV1"
-
+    - {
+      index: 0
+      type: "database"
+      value: "Doctrine"
+     }
 #profile_branch: develop
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:
