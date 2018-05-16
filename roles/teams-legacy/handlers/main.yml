@@ -1,6 +1,0 @@
----
-- name: systemctl daemon-reload
-  command: "systemctl daemon-reload"
-
-- name: restart teams
-  service: name=teams state=restarted

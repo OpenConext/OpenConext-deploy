@@ -76,7 +76,6 @@
     - { role: tomcat,                       tags: ['tomcat'] }
     - { role: java,                         tags: ['java'] }
     - { role: shibboleth,                   tags: ['shib'   ] }
-    - { role: teams-legacy,                 tags: ['teams-legacy'  ] }
     - { role: teams-gui,                    tags: ['teams', 'teams-gui'  ] }
     - { role: teams-server,                 tags: ['teams', 'teams-server'  ] }
     - { role: mujina-idp,                   tags: ['mujina','mujina-idp' ] }
