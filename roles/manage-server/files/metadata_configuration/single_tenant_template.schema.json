@@ -135,7 +135,8 @@
               "$ref": "#/definitions/ArpAttribute"
             },
             "urn:schac:attribute-def:schacPersonalUniqueCode": {
-              "$ref": "#/definitions/ArpAttribute"
+              "$ref": "#/definitions/ArpAttribute",
+              "multiplicity": true
             },
             "urn:mace:dir:attribute-def:eduPersonAffiliation": {
               "$ref": "#/definitions/ArpAttribute",
@@ -382,14 +383,15 @@
           "type": "string",
           "format": "boolean"
         },
-        "coin:license_status": {
+        "coin:ss:license_status": {
           "type": "string",
           "enum": [
             "license_required_by_service_provider",
             "license_not_required",
             "license_available_through_surfmarket"
           ],
-          "default": "license_required_by_service_provider"
+          "default": "license_required_by_service_provider",
+          "info": "Set the applicable license for this service as provisioned by the SP Dashboard."
         }
       },
       "patternProperties": {
@@ -401,6 +403,10 @@
         },
         "^description:(en|nl)$": {
           "type": "string"
+        },
+        "^coin:ss:type_of_service:(en|nl)$": {
+          "type": "string",
+          "info": "The type of service used in the facet search in dashboard."
         },
         "^contacts:([0-3]{1}):surName$": {
           "type": "string",

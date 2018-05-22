@@ -303,16 +303,14 @@
           "type": "string",
           "format": "date-time",
           "info": "When to add metadata to the eduGAIN feed. Usually the current time."
-
         },
         "coin:interfed_source": {
           "type": "string",
           "enum": [
             "Entree",
             "eduGAIN"
-                  ],
+          ],
           "info": "Must be set if the federation source is either eduGAIN or Entree."
-
         },
         "coin:additional_logging": {
           "type": "string",
@@ -322,7 +320,6 @@
         "coin:institution_id": {
           "type": "string",
           "info": "The defined client code."
-
         },
         "coin:institution_guid": {
           "type": "string",
@@ -384,7 +381,6 @@
           "type": "string",
           "format": "url",
           "info": "The provided URL to the metadata of the service."
-
         },
         "coin:service_team_id": {
           "type": "string",
@@ -541,7 +537,7 @@
           "format": "boolean",
           "info": "Set if the 'General Data Protection Regulation' (GDPR) is available on the SURF wiki. In Dutch known as 'Algemene Verordening Gegevensbescherming' (AVG). "
         },
-        "coin:license_status": {
+        "coin:ss:license_status": {
           "type": "string",
           "enum": [
             "license_required_by_service_provider",
@@ -570,8 +566,9 @@
           "type": "string",
           "info": "The description of the service."
         },
-        "^coin:type_of_service:(en|nl)$": {
-          "type": "string"
+        "^coin:ss:type_of_service:(en|nl)$": {
+          "type": "string",
+          "info": "The type of service used in the facet search in dashboard."
         },
         "^AssertionConsumerService:([0-9]{1}):Binding$": {
           "$ref": "#/definitions/AssertionConsumerServiceBinding",
