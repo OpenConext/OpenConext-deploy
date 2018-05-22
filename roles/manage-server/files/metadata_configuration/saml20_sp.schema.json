@@ -557,7 +557,7 @@
           "type": "string",
           "info": "Name as displayed in applications."
         },
-        "^coin:wiki_url:(en|nl)$": {
+        "^coin:ss:wiki_url:(en|nl)$": {
           "type": "string",
           "format": "url",
           "info": "Add the URL to the SURF wiki for additional information of this service."
