@@ -347,6 +347,11 @@
           "format": "boolean",
           "info": "Set to make invisible in the dashboard for institutions that are not connected to this service."
         },
+        "coin:ss:coin:ss:aansluitovereenkomst_refused": {
+          "type": "string",
+          "format": "boolean",
+          "info": "Set to indicate the service in the dashboard for institutions is marked as to have disagreed to sign the aansluitovereenkomst."
+        },
         "coin:application_url": {
           "type": "string",
           "format": "url",
@@ -413,12 +418,12 @@
         },
         "coin:privacy:certification_valid_from": {
           "type": "string",
-          "format": "number",
+          "format": "date-time",
           "info": "The date from which the Third Party Memorandum (TPM) is valid."
         },
         "coin:privacy:certification_valid_to": {
           "type": "string",
-          "format": "number",
+          "format": "date-time",
           "info": "The date until the Third Party Memorandum (TPM) is valid."
         },
         "coin:privacy:surfmarket_dpa_agreement": {
