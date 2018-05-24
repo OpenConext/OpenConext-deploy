@@ -38,6 +38,9 @@
     "id": {
       "type": "number"
     },
+    "eid": {
+      "type": "number"
+    },
     "entityid": {
       "type": "string"
     },
@@ -382,6 +385,11 @@
         "coin:privacy:gdpr_is_in_wiki": {
           "type": "string",
           "format": "boolean"
+        },
+        "coin:ss:aansluitovereenkomst_refused": {
+          "type": "string",
+          "format": "boolean",
+          "info": "Set to indicate the service in the dashboard for institutions is marked as to have disagreed to sign the aansluitovereenkomst."
         },
         "coin:ss:license_status": {
           "type": "string",
