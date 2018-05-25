@@ -26,10 +26,6 @@
   stat: path={{ candidate_war }} checksum_algorithm=sha1
   register: candidate_app_stat
 
-- debug: var=current_app_stat
-
-- debug: var=candidate_app_stat
-
 - include: deploy.yml
   when: current_app_stat.stat.exists == false or candidate_app_stat.stat.checksum != current_app_stat.stat.checksum
   register: new_deployment

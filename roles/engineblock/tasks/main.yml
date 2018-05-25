@@ -91,8 +91,6 @@
   changed_when: False
   run_once: True
 
-- debug: var=eb_database_version
-
 - name: Create the database schema
   command: "app/console doctrine:schema:create -n --env={{ engine_apache_symfony_environment }}"
   args:

@@ -20,8 +20,6 @@
   copy: src=mongo_kernel_settings.sh dest=/usr/local/sbin/mongo_kernel_settings.sh mode=0700 owner=root group=root
   register: mongo_kernel_settings
 
-#- debug: var=mongo_kernel_settings
-
 - name: Set kernel parameters
   command: /usr/local/sbin/mongo_kernel_settings.sh
   when: mongo_kernel_settings.changed
