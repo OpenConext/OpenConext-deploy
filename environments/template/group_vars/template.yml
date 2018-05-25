@@ -31,8 +31,8 @@ manage_server_version: 2.0.9
 monitoring_tests_version: 6.0.5
 mujina_version: 5.0.7
 oidc_version: 1.2.8
-pdp_server_version: 1.2.19
-pdp_gui_version: 1.2.17
+pdp_server_version: 2.0.1
+pdp_gui_version: 2.0.1
 profile_version: "1.1.1"
 teams_gui_version: 7.1.1
 teams_server_version: 7.1.1
