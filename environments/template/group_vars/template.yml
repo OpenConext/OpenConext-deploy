@@ -383,19 +383,9 @@ manage:
   features: migration, validation, push_preview, push
   apiUsers:
     - {
-        name: "dashboard",
-        password: "{{ manage_dashboard_secret }}",
-        scopes: ["READ"]
-      }
-    - {
         name: "pdp",
         password: "{{ manage_pdp_secret }}",
         scopes: ["READ"]
-      }
-    - {
-        name: "sp-dashboard",
-        password: "{{ manage_sp_dashboard_secret }}",
-        scopes: ["READ", "WRITE", "PUSH"]
       }
 
 loadbalancing:
