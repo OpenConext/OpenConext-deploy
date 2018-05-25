@@ -68,7 +68,7 @@ email.idpDebugging.to.name    = "{{ engine_idp_debugging_to_name }}"
 email.idpDebugging.subject    = "{{ engine_idp_debugging_subject }}"
 {% if engine_keys is defined %}
 
-{% for key, value in engine_keys.iteritems() %}
+{% for key, value in engine_keys.items() %}
 encryption.keys.{{ key }}.privateFile = {{ value.privateFile }}
 encryption.keys.{{ key }}.publicFile = {{ value.publicFile }}
 {% endfor %}
