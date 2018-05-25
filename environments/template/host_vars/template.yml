@@ -5,7 +5,6 @@ apache_app_listen_address:
   profile: 127.0.0.1
   mujina_idp: 127.0.0.1
   mujina_sp: 127.0.0.1
-  serviceregistry: 127.0.0.1
   static: 127.0.0.1
   metadata: 127.0.0.1
   authzserver: 127.0.0.1
@@ -16,5 +15,6 @@ apache_app_listen_address:
   pdp: 127.0.0.1
   oidc: 127.0.0.1
   aa: 127.0.0.1
+  manage: 127.0.0.1
 
 mongo_primary: True

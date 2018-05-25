@@ -47,7 +47,7 @@
   become: true
   roles:
     - { role: mysql, tags: ['mysql'] }
-    - { role: vm_only_provision_eb_sr, tags: ['vm_only_provision_eb_sr'] }
+    - { role: mongo, tags: ['mongo'] }
 
 - hosts: php-apps
   become: true
@@ -57,12 +57,9 @@
   roles:
     - { role: php56fpm,          tags: ['php'     ] }
     - { role: static,            tags: ['static'  ] }
-    - { role: metadata,          tags: ['static'  ] }
     - { role: welcome,           tags: ['welcome' ] }
-    - { role: openconext-common, tags: ['eb','sr','profile'] }
+    - { role: openconext-common, tags: ['eb','profile'] }
     - { role: engineblock,       tags: ['eb'      ] }
-    - { role: profile,           tags: ['profile' ] }
-    - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
@@ -73,8 +70,8 @@
   vars:
     env_lang: java
   roles:
-    - { role: java,              tags: ['java'                     ], when: not minimal_install }
-    - { role: shibboleth,        tags: ['shib'                     ], when: not minimal_install }
+    - { role: java,              tags: ['java'                     ]  }
+    - { role: shibboleth,        tags: ['shib'                     ]  }
     - { role: teams-gui,         tags: ['teams', 'teams-gui'       ], when: not minimal_install }
     - { role: teams-server,      tags: ['teams', 'teams-server'    ], when: not minimal_install }
     - { role: mujina-idp,        tags: ['legacy','mujina'          ], when: not minimal_install }
@@ -85,8 +82,12 @@
     - { role: authz-playground,  tags: ['oauth', 'authz-playground'], when: not minimal_install }
     - { role: pdp-server,        tags: ['pdp', 'pdp-server'        ], when: not minimal_install  }
     - { role: pdp-gui,           tags: ['pdp', 'pdp-gui'           ], when: not minimal_install  }
-    - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
-    - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
+    - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'], when: not minimal_install }
+    - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] ,when: not minimal_install }
+    - { role: manage-gui,        tags: ['manage', 'manage-gui'] }
+    - { role: manage-server,     tags: ['manage', 'manage-server'] }
+    - { role: vm_only_provision_manage_eb, tags: ['vm_only_provision_manage_eb'] }
+
 
   handlers:
     - include: roles/httpd/handlers/main.yml
