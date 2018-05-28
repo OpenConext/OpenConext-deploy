@@ -249,28 +249,6 @@ authzadmin:
           - groups
         grantTypes:
           - client_credentials
-      - clientId: csa_client
-        secret: "{{ csa_authz_client_secret }}"
-        resourceIds:
-          - groups
-        scopes:
-          - groups
-        grantTypes:
-          - client_credentials
-      - clientId: dashboard
-        secret: "{{ dashboards_authz_client_secret }}"
-        resourceIds:
-          - groups
-        scopes:
-          - groups
-          - actions
-          - cross-idp-services
-          - stats
-          - pdp
-        grantTypes:
-          - authorization_code
-          - implicit
-          - client_credentials
       - clientId: pdp_client
         secret: "{{ pdp_client_secret }}"
         resourceIds:
@@ -294,8 +272,6 @@ authzadmin:
   defaultResourceServers:
     - clientId: vootservice
       secret: "{{ voot.authz_checkToken_secret }}"
-    - clientId: csa
-      secret: "{{ csa_resource_checking_secret }}"
     - clientId: pdp
       secret: "{{ voot.oidc_checkToken_secret }}"
     - clientId: "{{ aa.authz_resource_server_id }}"
