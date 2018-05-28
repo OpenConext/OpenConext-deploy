@@ -1,0 +1,18 @@
+parameters:
+    database_host: 127.0.0.1
+    database_port: 3306
+    database_name: {{ lifecycle_eb_logins_db }}
+    database_user: lifecyclerw
+    database_password: {{ mysql_passwords.lifecycle }}
+    secret: {{ lifecycle_symfony_secret }}
+    open_conext_user_lifecycle_clients:
+        teams:
+            url: 'https://teams.{{ base_domain }}/'
+            username: {{ teams_api_lifecycle_username }} 
+            password: secret
+            verify_ssl: true
+        authz-server:
+            url: 'https://authz.{{ base_domain}}/'
+            username: "{{ authz_server_api_lifecycle_username }}"
+            password: "{{ authz_server_api_lifecycle_password }}"
+            verify_ssl: true

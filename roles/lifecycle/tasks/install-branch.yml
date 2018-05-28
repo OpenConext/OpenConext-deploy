@@ -1,0 +1,62 @@
+- name: Create the shared and releases directory for the User Lifecycle app
+  file: path={{ lifecycle_data_dir }}/{{item}} state=directory owner=root group=root mode=775
+  with_items:
+    - releases
+    
+- name: Create shared and writeable directories for logs and data
+  file: path={{ lifecycle_data_dir }}/shared/{{item}} state=directory owner={{ lifecycle_user }} group=root mode=775
+  with_items:
+    - logs
+    - sessions
+    - cache
+
+- name: Copy makerelease.sh
+  template: src=makeRelease.sh.j2 dest={{lifecycle_branch_dir}}/makeRelease.sh mode=770
+
+- name: Make release
+  command: "./makeRelease.sh {{ lifecycle_branch }}"
+  environment:
+    HOME: "{{ openconext_builds_dir }}"
+  args:
+    chdir: "{{ lifecycle_branch_dir }}"
+
+- name: Unpack current version
+  unarchive: src="{{ openconext_builds_dir }}/Releases/OpenConext-user-lifecycle-{{ lifecycle_branch | replace('/', '_') }}.tar.gz" dest="{{ lifecycle_data_dir}}/releases" copy=no
+
+- name: Create current symlink
+  file: src="{{ lifecycle_data_dir}}/releases/OpenConext-user-lifecycle-{{ lifecycle_branch | replace('/', '_') }}" dest="{{ lifecycle_data_dir}}/current"  state=link
+
+- name: Delete config
+  file: path={{lifecycle_data_dir}}/current/app/{{ item }} state=absent
+  with_items: 
+     - config/parameters.yml
+
+- name: Delete cache, log and sessions
+  file: path={{lifecycle_data_dir}}/current/var/{{ item }} state=absent
+  with_items:
+     - logs
+     - sessions
+     - cache
+
+- name: Create symlink to logs,sessions and cache
+  file: src={{lifecycle_data_dir}}/shared/{{ item }} dest={{ lifecycle_data_dir}}/releases/OpenConext-user-lifecycle-{{ lifecycle_branch | replace('/', '_') }}/var/{{item}} owner=root group=root state=link
+  with_items: 
+     - logs
+     - sessions
+     - cache
+
+- name: Install config file
+  template: src=parameters.yml.j2 dest={{ lifecycle_data_dir}}/current/app/config/parameters.yml
+
+     #- name: Run database migrations
+     #command: bin/console doctrine:migrations:migrate
+     #args:
+     #chdir: "{{ lifecycle_data_dir }}/current/"
+
+     #- name: Clean the cache
+     #command: bin/console cache:clear --env=prod
+     #args:
+     #chdir: "{{ lifecycle_data_dir }}/current/"
+
+- name: Chown the cachedir recursively again
+  file: dest={{lifecycle_data_dir}}/shared/cache owner={{ lifecycle_user }} recurse=yes

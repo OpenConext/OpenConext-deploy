@@ -1,0 +1,8 @@
+---
+front_controller: app.php
+lifecycle_user: lifecycle
+lifecycle_data_dir: /opt/openconext/OpenConext-lifecycle
+lifecycle_branch: master
+lifecycle_branch_dir: /opt/openconext/builds/lifecycle
+lifecycle_symfony_env: prod
+lifecycle_eb_logins_db: eb_logins
