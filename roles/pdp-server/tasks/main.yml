@@ -43,3 +43,12 @@
   template: src=xacml.conext.properties.j2 dest={{ pdp_dir }}/xacml.conext.properties owner=pdp group=pdp mode=0740
   notify: restart pdp
 
+- name: start the pdp service
+  service: name=pdp state=started enabled=yes
+  ignore_errors: true
+
+- name: wait for pdp to start
+  wait_for: connect_timeout=30 port={{ springapp_tcpport }} state=started
+
+- name: ensure the service is started
+  service: name=pdp enabled=yes state=started
