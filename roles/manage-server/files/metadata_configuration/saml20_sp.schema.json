@@ -717,14 +717,5 @@
     "metaDataFields"
   ],
   "additionalProperties": false,
-  "indexes": [
-    {
-      "name": "field_entityid",
-      "type": "field",
-      "fields": [
-        "entityid"
-      ],
-      "unique": true
-    }
-  ]
+  "indexes": []
 }
