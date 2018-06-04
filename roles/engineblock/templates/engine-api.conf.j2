@@ -32,7 +32,7 @@ Listen {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.po
 
     RewriteEngine On
     # We support only GET/POST/HEAD
-    RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
+    RewriteCond %{REQUEST_METHOD} !^(POST|DELETE|GET|HEAD)$
     RewriteRule .* - [R=405,L]
 
     #Proxy the requests to FPM
