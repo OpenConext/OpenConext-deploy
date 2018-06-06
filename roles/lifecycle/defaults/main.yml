@@ -6,3 +6,5 @@ lifecycle_branch: master
 lifecycle_branch_dir: /opt/openconext/builds/lifecycle
 lifecycle_symfony_env: prod
 lifecycle_eb_logins_db: eb_logins
+lifecycle_user_quota: 1500
+lifecycle_inactivity_period: 37

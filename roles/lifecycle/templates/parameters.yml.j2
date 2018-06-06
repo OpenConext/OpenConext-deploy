@@ -16,3 +16,5 @@ parameters:
             username: "{{ authz_server_api_lifecycle_username }}"
             password: "{{ authz_server_api_lifecycle_password }}"
             verify_ssl: true
+    user_quota: {{ lifecycle_user_quota }}
+    inactivity_period: {{ lifecycle_inactivity_period }}

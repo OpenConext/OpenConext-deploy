@@ -48,15 +48,10 @@
 - name: Install config file
   template: src=parameters.yml.j2 dest={{ lifecycle_data_dir}}/current/app/config/parameters.yml
 
-     #- name: Run database migrations
-     #command: bin/console doctrine:migrations:migrate
-     #args:
-     #chdir: "{{ lifecycle_data_dir }}/current/"
-
-     #- name: Clean the cache
-     #command: bin/console cache:clear --env=prod
-     #args:
-     #chdir: "{{ lifecycle_data_dir }}/current/"
+- name: Clean the cache
+  command: bin/console cache:clear --env=prod
+  args:
+    chdir: "{{ lifecycle_data_dir }}/current/"
 
 - name: Chown the cachedir recursively again
   file: dest={{lifecycle_data_dir}}/shared/cache owner={{ lifecycle_user }} recurse=yes
