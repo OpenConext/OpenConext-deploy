@@ -48,14 +48,26 @@
   with_items: "{{ haproxy_applications }}"
   when: not item.hidden
 
-- name: create haproxy instance config file
-  template: src=haproxy.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.cfg
+- name: create haproxy instance global config file
+  template: src=haproxy_global.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_global_{{ item.name }}.cfg
+  with_items: "{{ haproxy_applications }}"
+  register: configs_changed
+  notify: restart haproxy instances with changed configs
+
+- name: create haproxy instance frontend config file
+  template: src=haproxy_frontend_multiple.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_frontend_{{ item.name }}.cfg
+  with_items: "{{ haproxy_applications }}"
+  register: configs_changed
+  notify: restart haproxy instances with changed configs
+
+- name: create haproxy instance backend config file
+  template: src=haproxy_backend_multiple.cfg.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_backend_{{ item.name }}.cfg
   with_items: "{{ haproxy_applications }}"
   register: configs_changed
   notify: restart haproxy instances with changed configs
 
 - name: copy systemd startup file
-  template: src=haproxy_systemd.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
+  template: src=haproxy_systemd_multiple.j2 dest=/etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
   with_items: "{{ haproxy_applications }}"
   register: systemd_changed
   notify: reload systemd

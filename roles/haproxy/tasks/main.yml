@@ -9,6 +9,9 @@
 - include: single-instance.yml
   when: haproxy_multi_instance is not defined
 
+- include: redirects-instance.yml
+  when: haproxy_redirects is defined
+
 - name: disable health checks for development envs
   command: 'echo "disable health {{item.name}}" | socat /var/lib/haproxy/stats stdio'
   with_items:

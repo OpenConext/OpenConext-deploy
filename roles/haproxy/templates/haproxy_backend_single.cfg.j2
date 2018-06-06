@@ -1,0 +1,26 @@
+#jinja2: lstrip_blocks: True
+{% for application in haproxy_applications %}
+#---------------------------------------------------------------------
+# {{ application.name }} backend
+#---------------------------------------------------------------------
+#
+  backend {{ application.name }}_be
+  option httpchk {{ application.ha_method }} {{ application.ha_url }} HTTP/1.0
+  option forwardfor # This sets X-Forwarded-For
+  {%if application.x_forwarded_port is defined %}
+  http-request set-header X-Forwarded-Port {{ application.x_forwarded_port }}
+  {% endif %}
+  rspdel ^Strict-Transport-Security:.* #Remove hsts header from backend applications
+  mode http
+  balance roundrobin
+  option httpclose
+
+  cookie HTTPSERVERID insert nocache indirect httponly secure maxidle {{ haproxy_cookie_max_idle }}
+
+  {% for server in application.servers %}
+  server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn 1024 {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}
+  {% endif %}
+  {% endfor %}
+
+{% endfor %}
+

@@ -1,0 +1,24 @@
+---
+- name: Create haproxy redirect config directory
+  file:  dest=/etc/haproxy/redirects state=directory owner=haproxy group=haproxy mode=0700
+
+- name: Create combined key and certificate file for HAproxy
+  copy: content="{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}" dest=/etc/haproxy/redirects/{{ item.name }}.pem mode=0600
+  with_items: "{{ haproxy_redirects }}"
+  notify: restart haproxy redirects instance
+
+- name: create haproxy redirects instance config file
+  template: src=haproxy_redirects.cfg.j2 dest=/etc/haproxy/redirects/haproxy_redirects.cfg
+  notify: restart haproxy redirects instance
+
+- name: Install haproxy systemd redirect systemd file
+  template: src=haproxy_systemd_redirects.j2 dest=/etc/haproxy/redirects/haproxy_redirects.service
+  notify: reload systemd
+
+- name: Enable systemd startup
+  command: systemctl enable /etc/haproxy/redirects/haproxy_redirects.service
+  register: haproxy_enable_service
+  changed_when: "'Created symlink' in haproxy_enable_service.stderr"
+
+- name: start services
+  service: name=haproxy_redirects enabled=yes state=started
