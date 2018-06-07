@@ -414,7 +414,7 @@ manage:
   backdoor_api_user: backdoor_api_user
   run_migrations: false
   push_after_migration: false
-  features: migration, validation, push_preview, push
+  features: push, validation, push_preview, migration, orphans
   apiUsers:
     - {
         name: "dashboard",
@@ -431,10 +431,11 @@ manage:
         password: "{{ manage_sp_dashboard_secret }}",
         scopes: ["READ", "WRITE", "PUSH"]
       }
-          
-
-
-
+    - {
+        name: "sysadmin",
+        password: "{{ manage_sysadmin_secret }}",
+        scopes: [READ, WRITE, PUSH, SYSTEM]
+      }
 
 loadbalancing:
   engine:
