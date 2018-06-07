@@ -117,6 +117,7 @@
             "enum": [
               "no_consent",
               "minimal_consent",
+              "default_consent",
               null
             ],
             "default": "no_consent"
