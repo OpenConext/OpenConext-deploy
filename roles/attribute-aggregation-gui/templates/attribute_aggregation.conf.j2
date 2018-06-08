@@ -55,6 +55,12 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
       satisfy any
     </Location>
 
+    # The Lifecycle endpoints are secured with basic auth
+    <Location ~ "/aa/api/deprovision/">
+      allow from all
+      satisfy any
+    </Location>
+
     <Location />
       AuthType shibboleth
       ShibUseHeaders On

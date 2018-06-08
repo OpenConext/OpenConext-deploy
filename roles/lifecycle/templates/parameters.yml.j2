@@ -16,5 +16,10 @@ parameters:
             username: "{{ authz_server_api_lifecycle_username }}"
             password: "{{ authz_server_api_lifecycle_password }}"
             verify_ssl: true
+        attribute-aggregation-server:
+            url: 'https://aa.{{ base_domain}}/aa/api/'
+            username: "{{ attribute_aggregator_api_lifecycle_username }}"
+            password: "{{ attribute_aggregator_api_lifecycle_password }}"
+            verify_ssl: true
     user_quota: {{ lifecycle_user_quota }}
     inactivity_period: {{ lifecycle_inactivity_period }}
