@@ -8,3 +8,4 @@ attribute_aggregation_random_source: 'file:///dev/urandom'
 attribute_aggregation_pseudo_mail_postfix: demo.openconext.org
 attribute_aggregation_pseudo_emails_retention_days_period: 90
 aa_cronjobmaster: true
+attribute_aggregator_api_lifecycle_username: attribute_aggregator_api_lifecycle_user
