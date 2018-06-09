@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+from __future__ import print_function
+import json
+import sys
+
+for filename in sys.argv[1:]:
+	print("Checking {}... ".format(filename), end='')
+
+	try:
+		with open(filename, encoding='utf-8') as y:
+			json.load(y)
+	except Exception as e:
+		print("failed: {}".format(e))
+		exit(1)
+
+	print("ok")
+
+sys.exit(0)
+
