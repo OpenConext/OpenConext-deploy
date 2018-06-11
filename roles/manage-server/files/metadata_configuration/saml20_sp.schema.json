@@ -483,7 +483,7 @@
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
           ],
           "default": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
-          "info": "Select the Secure Hash Algorithm (SHA) as used by the service provider."
+          "info": "Select the Secure Hash Algorithm (SHA) to use for assertions sent by Engineblock to this service provider."
         },
         "coin:ss:supports_strong_authentication": {
           "type": "string",
