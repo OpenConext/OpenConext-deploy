@@ -29,6 +29,9 @@ Listen {{ apache_app_listen_address.oidc }}:{{ loadbalancing.oidc.port }}
     Require env env_allow_1
     </Location>
 {% endif %}
+    <Location /authorize>
+    Header unset X-Frame-Options
+    </Location>
     {% if apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
