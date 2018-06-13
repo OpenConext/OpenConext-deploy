@@ -143,4 +143,10 @@ vrrp_instance backup {
         {% if haproxy_sni_ipv6 is defined %}
         {{ haproxy_sni_ipv6 }}
         {% endif %}
+        {% if haproxy_redirects_ip is defined %}
+        {{ haproxy_redirects_ip }}
+        {% endfor %}
+        {% if haproxy_redirects_ipv6 is defined %}
+        {{ haproxy_redirects_ipv6 }}
+        {% endfor %}
 }
