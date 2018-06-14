@@ -53,6 +53,7 @@ frontend redirects
     rspadd  Strict-Transport-Security:\ max-age=15768000
     capture request header User-agent len 100
     bind {{ haproxy_redirects_ip }}:80 transparent
+    bind {{ haproxy_redirects_ipv6 }}:80 transparent
 
     {% for application in haproxy_redirects %}
     acl valid_vhost hdr(host) -i {{ application.url }} 
