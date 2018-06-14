@@ -7,10 +7,12 @@
 frontend ssl_ip
 
     bind {{ haproxy_sni_ip }}:443 ssl crt /etc/pki/haproxy/star_haproxy.pem {% for application in haproxy_applications %} {% if application.full_vhost_name is defined %} crt /etc/pki/haproxy/{{ application.name }}_haproxy.pem {% endif %} {% endfor %}   no-sslv3 transparent
+    bind {{ haproxy_sni_ipv6 }}:443 ssl crt /etc/pki/haproxy/star_haproxy.pem {% for application in haproxy_applications %} {% if application.full_vhost_name is defined %} crt /etc/pki/haproxy/{{ application.name }}_haproxy.pem {% endif %} {% endfor %}   no-sslv3 transparent
     http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
     capture request header User-agent len 100 
     bind {{ haproxy_sni_ip }}:80 transparent
+    bind {{ haproxy_sni_ipv6 }}:80 transparent
 
     {% for application in haproxy_applications %}
     {%if application.restricted is not defined %}
@@ -40,10 +42,12 @@ frontend ssl_ip
 frontend ssl_restricted_ip
 
     bind {{ haproxy_sni_ip_restricted }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }} force-tlsv12 ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:!aNULL:!MD5:!DSS transparent
+    bind {{ haproxy_sni_ipv6_restricted }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }} force-tlsv12 ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:!aNULL:!MD5:!DSS transparent
     http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
     capture request header User-agent len 100 
     bind {{ haproxy_sni_ip_restricted }}:80 transparent
+    bind {{ haproxy_sni_ipv6_restricted }}:80 transparent
     redirect scheme https code 301 if !{ ssl_fc }
 
     {% for application in haproxy_applications %}

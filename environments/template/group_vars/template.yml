@@ -565,6 +565,7 @@ haproxy_applications:
 haproxy_backend_tls: False
 
 haproxy_sni_ip: 192.168.66.100 
+haproxy_sni_ipv6: "::1"
 
 php_servers:
    - { ip: "127.0.0.1", label: "php"}

@@ -683,6 +683,7 @@ haproxy_applications:
 haproxy_backend_tls: true
 
 haproxy_sni_ip: "*"
+haproxy_sni_ipv6: "::1"
 
 java_servers:
    - ip: 127.0.0.1
