@@ -1,3 +1,4 @@
+
 #jinja2: lstrip_blocks: True
 
 vrrp_instance master {
@@ -8,14 +9,16 @@ vrrp_instance master {
    advert_int 5
    virtual_ipaddress {
        {{ engine_ip }}
+       {{ bind_ip }}
+   
+   }
+   virtual_ipaddress_excluded {
        {% if engine_ipv6 is defined %}
        {{ engine_ipv6 }}
        {% endif %}
-       {{ bind_ip }}
        {% if bind_ipv6 is defined %}
        {{ bind_ipv6 }}
        {% endif %}
-   
    }
 }
 vrrp_instance backup {
@@ -26,127 +29,121 @@ vrrp_instance backup {
    advert_int 5
    virtual_ipaddress {
         {{ engine_api_ip }}
-        {% if engine_api_ipv6 is defined %}
-        {{ engine_api_ipv6 }}
-        {% endif %}
-}    
-   virtual_ipaddress_excluded {
         {{ profile_ip }}
-        {% if profile_ipv6 is defined %}
-        {{ profile_ipv6 }}
-        {% endif %}
         {{ serviceregistry_ip }}
-        {% if serviceregistry_ipv6 is defined %}
-        {{ serviceregistry_ipv6 }}
-        {% endif %}
         {{ teams_ip }}
-        {% if teams_ipv6 is defined %}
-        {{ teams_ipv6 }}
-        {% endif %}
         {{ authzserver_ip }}
-        {% if authzserver_ipv6 is defined %}
-        {{ authzserver_ipv6 }}
-        {% endif %}
         {{ authz_admin_ip }}
-        {% if authz_admin_ipv6 is defined %}
-        {{ authz_admin_ipv6 }}
-        {% endif %}
         {{ authz_playground_ip }}
-        {% if authz_playground_ipv6 is defined %}
-        {{ authz_playground_ipv6 }}
-        {% endif %}
         {{ voot_ip }}
-        {% if voot_ipv6 is defined %}
-        {{ voot_ipv6 }}
-        {% endif %}
         {{ pdp_ip }}
-        {% if pdp_ipv6 is defined %}
-        {{ pdp_ipv6 }}
-        {% endif %}
         {{ aa_ip }}
-        {% if aa_ipv6 is defined %}
-        {{ aa_ipv6 }}
-        {% endif %}
         {{ oidc_ip }}
-        {% if oidc_ipv6 is defined %}
-        {{ oidc_ipv6 }}
-        {% endif %}
         {{ static_ip }}
-        {% if static_ipv6 is defined %}
-        {{ static_ipv6 }}
-        {% endif %}
         {{ metadata_ip }}
-        {% if metadata_ipv6 is defined %}
-        {{ metadata_ipv6 }}
-        {% endif %}
         {{ manage_ip }}
-        {% if manage_ipv6 is defined %}
-        {{ manage_ipv6 }}
-        {% endif %}
         {% if sa_ip is defined %}
         {{ sa_ip }}
-        {% endif %}
-        {% if sa_ipv6 is defined %}
-        {{ sa_ipv6 }}
         {% endif %}
         {% if sa_tiqr_ip is defined %}
         {{ sa_tiqr_ip }}
         {% endif %}
-        {% if sa_tiqr_ipv6 is defined %}
-        {{ sa_tiqr_ipv6 }}
-        {% endif %}
-        {% if sa_ra_ip is defined %}
-        {{ sa_ra_ip }}
-        {% endif %}
-        {% if sa_ra_ipv6 is defined %}
-        {{ sa_ra_ipv6 }}
+        {% if sabng_ip is defined %}
+        {{ sabng_ip }}
         {% endif %}
         {% if sa_gw_ip is defined %}
         {{ sa_gw_ip }}
         {% endif %}
-        {% if sa_gw_ipv6 is defined %}
-        {{ sa_gw_ipv6 }}
-        {% endif %}
-        {% if sabng_ip is defined %}
-        {{ sabng_ip }}
-        {% endif %}
-        {% if sabng_ipv6 is defined %}
-        {{ sabng_ipv6 }}
-        {% endif %}
         {% if sab_enroll_ng_ip is defined %}
         {{ sab_enroll_ng_ip }}
-        {% endif %}
-        {% if sab_enroll_ng_ipv6 is defined %}
-        {{ sab_enroll_ng_ipv6 }}
         {% endif %}
         {% if sab_ip is defined %}
         {{ sab_ip }}
         {% endif %}
-        {% if sab_ipv6 is defined %}
-        {{ sab_ipv6 }}
-        {% endif %}
         {% if sab_enroll_ip is defined %}
         {{ sab_enroll_ip }}
-        {% endif %}
-        {% if sab_enroll_ipv6 is defined %}
-        {{ sab_enroll_ipv6 }}
         {% endif %}
         {% if haproxy_sni_ip is defined %}
         {% if link_ip is defined %}
         {{ link_ip }}
         {% endif %}
+        {{ haproxy_sni_ip }}
+        {% endif %}
+   }    
+   virtual_ipaddress_excluded {
+        {% if engine_api_ipv6 is defined %}
+        {{ engine_api_ipv6 }}
+        {% endif %}
+        {% if profile_ipv6 is defined %}
+        {{ profile_ipv6 }}
+        {% endif %}
+        {% if serviceregistry_ipv6 is defined %}
+        {{ serviceregistry_ipv6 }}
+        {% endif %}
+        {% if teams_ipv6 is defined %}
+        {{ teams_ipv6 }}
+        {% endif %}
+        {% if authzserver_ipv6 is defined %}
+        {{ authzserver_ipv6 }}
+        {% endif %}
+        {% if authz_admin_ipv6 is defined %}
+        {{ authz_admin_ipv6 }}
+        {% endif %}
+        {% if authz_playground_ipv6 is defined %}
+        {{ authz_playground_ipv6 }}
+        {% endif %}
+        {% if voot_ipv6 is defined %}
+        {{ voot_ipv6 }}
+        {% endif %}
+        {% if pdp_ipv6 is defined %}
+        {{ pdp_ipv6 }}
+        {% endif %}
+        {% if aa_ipv6 is defined %}
+        {{ aa_ipv6 }}
+        {% endif %}
+        {% if oidc_ipv6 is defined %}
+        {{ oidc_ipv6 }}
+        {% endif %}
+        {% if static_ipv6 is defined %}
+        {{ static_ipv6 }}
+        {% endif %}
+        {% if metadata_ipv6 is defined %}
+        {{ metadata_ipv6 }}
+        {% endif %}
+        {% if manage_ipv6 is defined %}
+        {{ manage_ipv6 }}
+        {% endif %}
+        {% if sa_ipv6 is defined %}
+        {{ sa_ipv6 }}
+        {% endif %}
+        {% if sa_tiqr_ipv6 is defined %}
+        {{ sa_tiqr_ipv6 }}
+        {% endif %}
+        {% if sa_ra_ipv6 is defined %}
+        {{ sa_ra_ipv6 }}
+        {% endif %}
+        {% if sa_gw_ipv6 is defined %}
+        {{ sa_gw_ipv6 }}
+        {% endif %}
+        {% if sabng_ipv6 is defined %}
+        {{ sabng_ipv6 }}
+        {% endif %}
+        {% if sab_enroll_ng_ipv6 is defined %}
+        {{ sab_enroll_ng_ipv6 }}
+        {% endif %}
+        {% if sab_ipv6 is defined %}
+        {{ sab_ipv6 }}
+        {% endif %}
+        {% if sab_enroll_ipv6 is defined %}
+        {{ sab_enroll_ipv6 }}
+        {% endif %}
+        {% if haproxy_sni_ip is defined %}
         {% if link_ipv6 is defined %}
         {{ link_ipv6 }}
         {% endif %}
-        {{ haproxy_sni_ip }}
         {% endif %}
         {% if haproxy_sni_ipv6 is defined %}
         {{ haproxy_sni_ipv6 }}
         {% endif %}
-        {% if haproxy_redirects_ip is defined %}
-        {{ haproxy_redirects_ip }}
-        {% endif %}
-        {% if haproxy_redirects_ipv6 is defined %}
-        {{ haproxy_redirects_ipv6 }}
-        {% endif %}
+   }
 }
