@@ -40,7 +40,6 @@ attributeAggregation.baseUrl = {{ engine_attribute_aggregation_baseurl }}
 attributeAggregation.username = {{engine_attribute_aggregation_username }}
 attributeAggregation.password = "{{engine_attribute_aggregation_password }}"
 
-engine.simplesamlphp.baseurlpath = "{{ engine_engine_idp_baseurlpath }}"
 
 cookie.lang.domain = .{{ base_domain }}
 
@@ -87,6 +86,8 @@ serviceRegistry.user_secret = "{{ engine_janus_secret }}"
 metadataRepository.{{ repository.type }}.type = {{ repository.value }}
 metadataRepositories[{{ repository.index }}] = {{ repository.type }}
 {% endfor %}
+
+engine.simplesamlphp.baseurlpath = "{{ engine_engine_idp_baseurlpath }}"
 {% endif %}
 
 phpSettings.display_errors = {{ php_display_errors }}
