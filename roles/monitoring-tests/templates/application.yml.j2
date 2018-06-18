@@ -34,8 +34,8 @@ voot:
   oidc:
     authorization_url: https://oidc.{{ base_domain }}/token
     voot_base_url: https://voot.{{ base_domain }}
-    client_id: {{ authzplayground.springapp_oidc_client_id }}
-    secret: {{ authzplayground_springapp_oidc_client_secret }}
+    client_id: https@//monitoring.{{ base_domain }}
+    secret: {{ monitoring_oidc_client_secret }}
     person_id: {{ monitoring_tests.person_id }}
 
 # We disable all endpoints except health for the actual monitoring and info for git information.

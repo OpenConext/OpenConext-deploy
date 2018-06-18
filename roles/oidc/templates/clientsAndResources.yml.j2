@@ -1,24 +1,29 @@
+#jinja2: lstrip_blocks: True
 clients:
-  - client_id: "{{ authzplayground.springapp_oidc_client_id }}"
-    secret: "{{ authzplayground.springapp_oidc_client_secret }}"
+  {% for client in oidcadmin.defaultClients %} 
+  - client_id: "{{ client.client_id }}"
+    secret: "{{ client.secret }}"
+    {% if client.redirectUris is defined %}
     redirectUris:
-      - "https://authz-playground.{{ base_domain }}/redirect"
+      {% for value in client.redirectUris %}
+      - "{{ value }}"
+      {% endfor %}
+    {% endif %}
     scopes:
-      - "openid"
-      - "groups"
-      - "attribute-aggregation"
+      {% for value in client.scopes %}
+      - "{{ value }}"
+      {% endfor %}
     grantTypes:
-      - "authorization_code"
-      - "implicit"
-      - "refresh_token"
+      {% for value in client.grantTypes %}
+      - "{{ value }}"
+      {% endfor %}
+  {% endfor %}
 resourceServers:
-  - client_id: "{{ authzplayground.springapp_oidc_client_id }}"
-    secret: "{{ authzplayground.springapp_oidc_client_secret }}"
+  {% for client in oidcadmin.defaultResourceServers %}
+  - client_id: "{{ client.client_id }}"
+    secret: "{{ client.secret }}"
     scopes:
-      - "openid"
-      - "groups"
-  - client_id: "https@//voot.{{ base_domain }}"
-    secret: "{{ voot_oidc_checkToken_secret }}"
-    scopes:
-      - "openid"
-      - "groups"
+      {% for value in client.scopes %}
+      - "{{ value }}"
+      {% endfor %}
+  {% endfor %}

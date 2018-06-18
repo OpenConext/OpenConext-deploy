@@ -6,3 +6,40 @@ oidc_local_war: ''
 deploy_name: oidc
 oidc_resource_cleaner_period: 15
 oidc_cronjobmaster: true
+oidcadmin:
+  defaultClients:
+      - client_id: "{{ authzplayground.springapp_oidc_client_id }}"
+        secret: "{{ authzplayground.springapp_oidc_client_secret }}"
+        scopes:
+          - openid
+          - groups
+          - attribute-aggregation
+        grantTypes:
+          - authorization_code
+          - implicit
+          - refresh_token
+        redirectUris:
+          - https://authz-playground.{{ base_domain }}/redirect
+      - client_id: "https@//monitoring.{{ base_domain }}"
+        secret: "{{ monitoring_oidc_client_secret }}"
+        scopes:
+          - openid
+          - groups
+        grantTypes:
+          - client_credentials
+  defaultResourceServers:
+      - client_id: "{{ authzplayground.springapp_oidc_client_id }}"
+        secret: "{{ authzplayground.springapp_oidc_client_secret }}"
+        scopes:
+          - "openid"
+          - "groups"
+      - client_id: "https@//voot.{{ base_domain }}"
+        secret: "{{ voot_oidc_checkToken_secret }}"
+        scopes:
+          - "openid"
+          - "groups"
+      - client_id: "https@//monitoring.{{ base_domain }}"
+        secret: "{{ monitoring_oidc_client_secret }}"
+        scopes:
+          - "openid"
+          - "groups"
