@@ -22,7 +22,6 @@
   - php-pecl-apcu
   - php-curl
   - php-mbstring
-  - php-mcrypt
   - php-mysql
   - php-pecl-memcache
   - php-soap
