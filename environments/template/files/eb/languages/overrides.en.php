@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'suite_name' => '{{ instance_name }}',
+    'suite_name' => 'OpenConext',
 ];
