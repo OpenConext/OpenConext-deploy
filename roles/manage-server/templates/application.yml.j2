@@ -16,21 +16,11 @@ server:
 
 features: {{ manage.features }}
 
-manage_cronjobmaster: {{ manage_cronjobmaster }}
-manage_cronjob_minutes: 10
-run_migrations: {{ manage.run_migrations }}
-push_after_migration: {{ manage.push_after_migration }}
-
 push:
   url: https://{{ engine_api_domain }}/api/connections
   user: {{ engine_api_janus_user }}
   password: {{ engine_api_janus_password }}
   name: {{ instance_name }} EngineBlock
-
-email:
-  base_url: https://manage.{{ base_domain }}
-  from: {{ noreply_email }}
-  to: {{ error_mail_to }}
 
 product:
   name: Manage
@@ -58,20 +48,6 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://{{ manage.db_host }}/{{ manage.db_name }}
-    username: {{ manage.db_user }}
-    password: {{ manage.db_password }}
-    tomcat:
-      test-on-borrow: true
-      validation-query: SELECT 1
-      remove-abandoned: true
-      test-while-idle: true
-  main:
-    banner-mode: "off"
-
-eb:
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mysql://{{ manage.eb_db_host }}/{{ manage.eb_db_name }}
     username: {{ manage.eb_db_user }}
     password: {{ manage.eb_db_password }}
@@ -80,6 +56,8 @@ eb:
       validation-query: SELECT 1
       remove-abandoned: true
       test-while-idle: true
+  main:
+    banner-mode: "off"
 
 management:
   health:
