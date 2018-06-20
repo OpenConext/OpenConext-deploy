@@ -23,7 +23,6 @@
   - php-curl
   - php-mbstring
   - php-mysql
-  - php-pecl-memcache
   - php-soap
   - php-xml
   - php-gd

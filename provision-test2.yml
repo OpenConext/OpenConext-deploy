@@ -58,11 +58,11 @@
   roles:
     - { role: php56fpm,          tags: ['php56fpm'] }
     - { role: static,            tags: ['static'  ] }
-    - { role: openconext-common, tags: ['eb','sr','profile'] }
+    - { role: openconext-common, tags: ['eb','profile'] }
     - { role: engineblock,       tags: ['eb'     ] }
-    - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
     - { role: lifecycle,         tags: ['lifecycle' ] }
+    - { role: remove-janus,      tags: ['remove-janus'] }
 #    - { role: '{{ inventory_dir }}/../roles/spform',            tags: ['spform' ] }
 
   handlers:

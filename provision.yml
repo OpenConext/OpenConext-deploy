@@ -72,10 +72,10 @@
     - { role: php56fpm,          tags: ['php'     ] }
     - { role: static,            tags: ['static'  ] }
     - { role: metadata,          tags: ['static'  ] }
-    - { role: openconext-common, tags: ['eb','sr','profile'] }
+    - { role: openconext-common, tags: ['eb','profile'] }
     - { role: engineblock,       tags: ['eb'      ] }
-    - { role: janus,             tags: ['sr'      ] }
     - { role: profile,           tags: ['profile' ] }
+    - { role: remove-janus,      tags: ['remove-janus'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
