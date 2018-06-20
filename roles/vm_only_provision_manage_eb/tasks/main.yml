@@ -1,5 +1,5 @@
 - name: copy json
-  template: src={{ item }} dest=/tmp/{{ item }}
+  template: src={{ item }}.j2 dest=/tmp/{{ item }}
   with_items:
     - saml20_idp.json
     - saml20_sp.json
