@@ -353,7 +353,7 @@ manage:
   backdoor_api_user: backdoor_api_user
   run_migrations: false
   push_after_migration: false
-  features: push, validation, push_preview, migration, orphans
+  features: push, validation, push_preview, orphans
   apiUsers:
     - {
         name: "dashboard",
