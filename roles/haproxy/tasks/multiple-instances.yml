@@ -94,14 +94,16 @@
   service: name=haproxy_{{ item.name }} state=stopped
   with_items: "{{ haproxy_removal_applications }}"
   failed_when: false
+  tags: haproxy_remove_apps
 
 - name: disable systemd startup file
   command: systemctl disable /etc/haproxy/{{ item.name }}/haproxy_{{ item.name }}.service
   with_items: "{{ haproxy_removal_applications }}"
   failed_when: false
+  tags: haproxy_remove_apps
 
 - name: remove haproxy config directories
   file: dest=/etc/haproxy/{{ item.name }} state=absent
   with_items: "{{ haproxy_removal_applications }}"
   failed_when: false
-
+  tags: haproxy_remove_apps
