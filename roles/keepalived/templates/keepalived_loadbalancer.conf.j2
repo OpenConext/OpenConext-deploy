@@ -1,4 +1,3 @@
-
 #jinja2: lstrip_blocks: True
 
 vrrp_instance master {
@@ -63,11 +62,14 @@ vrrp_instance backup {
         {% if sab_enroll_ip is defined %}
         {{ sab_enroll_ip }}
         {% endif %}
-        {% if haproxy_sni_ip is defined %}
         {% if link_ip is defined %}
         {{ link_ip }}
         {% endif %}
+        {% if haproxy_sni_ip is defined %}
         {{ haproxy_sni_ip }}
+        {% endif %}
+        {% if haproxy_redirects_ip is defined %}
+        {{ haproxy_redirects_ip }}
         {% endif %}
    }    
    virtual_ipaddress_excluded {
@@ -138,12 +140,16 @@ vrrp_instance backup {
         {{ sab_enroll_ipv6 }}
         {% endif %}
         {% if haproxy_sni_ip is defined %}
+        {% endif %}
         {% if link_ipv6 is defined %}
         {{ link_ipv6 }}
-        {% endif %}
         {% endif %}
         {% if haproxy_sni_ipv6 is defined %}
         {{ haproxy_sni_ipv6 }}
         {% endif %}
+        {% if haproxy_redirects_ipv6 is defined %}
+        {{ haproxy_redirects_ipv6 }}
+        {% endif %}
+   }
    }
 }
