@@ -30,3 +30,4 @@ engine_api_janus_user: serviceregistry
 # Some deprovision variables are shared between applications
 authz_server_api_lifecycle_username: authz_server_api_lifecycle_user
 teams_api_lifecycle_username: teams_api_lifecycle_user
+attribute_aggregator_api_lifecycle_username: attribute_aggregator_api_lifecycle_user
