@@ -8,8 +8,7 @@ vrrp_instance master {
    advert_int 5
    virtual_ipaddress {
        {{ engine_ip }}
-       {{ bind_ip }}
-   
+       {{ bind_ip }} 
    }
    virtual_ipaddress_excluded {
        {% if engine_ipv6 is defined %}
