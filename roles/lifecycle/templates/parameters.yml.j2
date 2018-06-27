@@ -8,8 +8,8 @@ parameters:
     open_conext_user_lifecycle_clients:
         teams:
             url: 'https://teams.{{ base_domain }}/'
-            username: {{ teams_api_lifecycle_username }} 
-            password: secret
+            username: "{{ teams_api_lifecycle_username }}"
+            password: "{{ teams_api_lifecycle_password }}"
             verify_ssl: true
         authz-server:
             url: 'https://authz.{{ base_domain}}/'
