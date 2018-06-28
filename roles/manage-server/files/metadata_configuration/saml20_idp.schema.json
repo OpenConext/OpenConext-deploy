@@ -335,14 +335,15 @@
           "type": "string",
           "info": "The URL to the Registration Policy of the Identity Provider."
         },
-        "^coin:entity_categories:([1-2]{1})$": {
+        "^coin:entity_categories:([1-4]{1})$": {
           "type": "string",
           "enum": [
             "http://refeds.org/category/research-and-scholarship",
             "http://refeds.org/category/hide-from-discovery",
-            "http://www.geant.net/uri/dataprotection-code-of-conduct/v1"
+            "http://www.geant.net/uri/dataprotection-code-of-conduct/v1",
+            "http://clarin.eu/category/clarin-member"
           ],
-          "multiplicity": 2,
+          "multiplicity": 4,
           "startIndex": 1,
           "info": "Select one of the entity categories applicable to this service. Entity Categories group federation entities that share common criteria."
         },
