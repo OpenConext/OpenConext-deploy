@@ -18,7 +18,9 @@
      option httpclose
      cookie HTTPSERVERID insert nocache indirect httponly secure maxidle {{ haproxy_cookie_max_idle }}
      {% for server in application.servers_fourthset %}
-     server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn 1024 {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }} {% endif %}
+     server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn 1024 {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}
+     {% endif %}
+
      {% endfor %}
     {% endfor %}
 {% else %}
@@ -39,12 +41,14 @@ backend {{ item.name }}_be
     option allbackups
     cookie HTTPSERVERID insert nocache indirect httponly secure maxidle {{ haproxy_cookie_max_idle }}
     {% for server in item.servers %}
-    server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn 1024  {% if item.sslbackend is defined %} ssl verify required verifyhost {{ item.backend_vhost_name }} ca-file {{ item.backend_ca_file }} {% endif %}
-
+    server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn 1024  {% if item.sslbackend is defined %} ssl verify required verifyhost {{ item.backend_vhost_name }} ca-file {{ item.backend_ca_file }} 
+    {% endif %}
     {% endfor %}
+
     {% if item.servers_backup is defined %}
     {% for server in item.servers_backup %}
-    server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn 1024 backup {% if item.sslbackend is defined%} ssl verify required verifyhost {{ item.backend_vhost_name }} ca-file {{ item.backend_ca_file }} {% endif %}
+    server {{ server.label }} {{ server.ip }}:{{ item.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn 1024 backup {% if item.sslbackend is defined%} ssl verify required verifyhost {{ item.backend_vhost_name }} ca-file {{ item.backend_ca_file }}
+    {% endif %}
 
     {% endfor %}
     {% endif %}
