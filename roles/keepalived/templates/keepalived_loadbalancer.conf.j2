@@ -43,6 +43,9 @@ vrrp_instance backup {
         {% if sa_ip is defined %}
         {{ sa_ip }}
         {% endif %}
+        {% if sa_ra_ip is defined %}
+        {{ sa_ra_ip }}
+        {% endif %}
         {% if sa_tiqr_ip is defined %}
         {{ sa_tiqr_ip }}
         {% endif %}
