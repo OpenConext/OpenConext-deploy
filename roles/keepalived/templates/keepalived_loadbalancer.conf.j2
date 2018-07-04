@@ -1,6 +1,6 @@
 #jinja2: lstrip_blocks: True
 
-vrrp_instance master {
+vrrp_instance ipv4_engine {
    interface {{ ansible_default_ipv4.interface }}               # interface to monitor
    state {{ keepalived.state_master }}
    virtual_router_id 51          # Assign one ID for this route
@@ -10,36 +10,53 @@ vrrp_instance master {
        {{ engine_ip }}
        {{ bind_ip }} 
    }
-   virtual_ipaddress_excluded {
-       {% if engine_ipv6 is defined %}
-       {{ engine_ipv6 }}
-       {% endif %}
-       {% if bind_ipv6 is defined %}
-       {{ bind_ipv6 }}
-       {% endif %}
-   }
 }
-vrrp_instance backup {
+vrrp_instance ipv4_apps {        # No more than 20 ip addresses in one instance
    interface {{ ansible_default_ipv4.interface }} 
    state {{ keepalived.state_backup }}
    virtual_router_id 52
    priority {{ keepalived.backupprio }}
    advert_int 5
    virtual_ipaddress {
+        {% if engine_api_ip is defined %}
         {{ engine_api_ip }}
+        {% endif %}
+        {% if profile_ip is defined %}
         {{ profile_ip }}
-        {{ serviceregistry_ip }}
+        {% endif %}
+        {% if teams_ip is defined %}
         {{ teams_ip }}
+        {% endif %}
+        {% if authzserver_ip is defined %}
         {{ authzserver_ip }}
+        {% endif %}
+        {% if authz_admin_ip is defined %}
         {{ authz_admin_ip }}
+        {% endif %}
+        {% if authz_playground_ip is defined %}
         {{ authz_playground_ip }}
+        {% endif %}
+        {% if voot_ip is defined %}
         {{ voot_ip }}
+        {% endif %}
+        {% if pdp_ip is defined %}
         {{ pdp_ip }}
+        {% endif %}
+        {% if aa_ip is defined %}
         {{ aa_ip }}
+        {% endif %}
+        {% if oidc_ip is defined %}
         {{ oidc_ip }}
+        {% endif %}
+        {% if static_ip is defined %}
         {{ static_ip }}
+        {% endif %}
+        {% if metadata_ip is defined %}
         {{ metadata_ip }}
+        {% endif %}
+        {% if manage_ip is defined %}
         {{ manage_ip }}
+        {% endif %}
         {% if sa_ip is defined %}
         {{ sa_ip }}
         {% endif %}
@@ -61,6 +78,8 @@ vrrp_instance backup {
         {% if sab_ip is defined %}
         {{ sab_ip }}
         {% endif %}
+   }    
+   virtual_ipaddress_excluded {
         {% if sab_enroll_ip is defined %}
         {{ sab_enroll_ip }}
         {% endif %}
@@ -73,16 +92,35 @@ vrrp_instance backup {
         {% if haproxy_redirects_ip is defined %}
         {{ haproxy_redirects_ip }}
         {% endif %}
-   }    
-   virtual_ipaddress_excluded {
+   }
+}
+vrrp_instance ipv6_engine {
+   interface {{ ansible_default_ipv4.interface }}               # interface to monitor
+   state {{ keepalived.state_master }}
+   virtual_router_id 53          # Assign one ID for this route
+   priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
+   advert_int 5
+   virtual_ipaddress {
+       {% if engine_ipv6 is defined %}
+       {{ engine_ipv6 }}
+       {% endif %}
+       {% if bind_ipv6 is defined %}
+       {{ bind_ipv6 }}
+       {% endif %}
+   }
+}
+vrrp_instance ipv6_apps {
+   interface {{ ansible_default_ipv4.interface }} 
+   state {{ keepalived.state_backup }}
+   virtual_router_id 54
+   priority {{ keepalived.backupprio }}
+   advert_int 5
+   virtual_ipaddress {
         {% if engine_api_ipv6 is defined %}
         {{ engine_api_ipv6 }}
         {% endif %}
         {% if profile_ipv6 is defined %}
         {{ profile_ipv6 }}
-        {% endif %}
-        {% if serviceregistry_ipv6 is defined %}
-        {{ serviceregistry_ipv6 }}
         {% endif %}
         {% if teams_ipv6 is defined %}
         {{ teams_ipv6 }}
@@ -138,6 +176,8 @@ vrrp_instance backup {
         {% if sab_ipv6 is defined %}
         {{ sab_ipv6 }}
         {% endif %}
+   }    
+   virtual_ipaddress_excluded {
         {% if sab_enroll_ipv6 is defined %}
         {{ sab_enroll_ipv6 }}
         {% endif %}
