@@ -6,6 +6,11 @@ parameters:
     database_password: {{ mysql_passwords.lifecycle }}
     secret: {{ lifecycle_symfony_secret }}
     open_conext_user_lifecycle_clients:
+        engine:
+            url: 'https://engine-api.{{ base_domain }}'
+            username: "{{ engine_api_deprovision_user }}"
+            password: "{{ engine_api_deprovision_password }}"
+            verify_ssl: true
         teams:
             url: 'https://teams.{{ base_domain }}/'
             username: "{{ teams_api_lifecycle_username }}"
