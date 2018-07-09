@@ -59,6 +59,9 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
       AuthType shibboleth
       ShibUseHeaders On
       ShibRequestSetting applicationId manage
+{% if manage_use_entityid %}
+      ShibRequestSetting entityID {{ manage_use_entityid }}
+{% endif %}
       ShibRequireSession On
       ShibRequestSetting REMOTE_ADDR X-Forwarded-For
       require valid-user
