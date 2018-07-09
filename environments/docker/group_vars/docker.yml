@@ -179,9 +179,6 @@ shibboleth_apps:
     entityID: "https://manage.{{ base_domain }}/shibboleth"
     baseurl: ""
 
-shib:
-  engine_domain: "{{ base_domain }}"
-
 ##
 # VM config for the teams app
 ##

@@ -74,12 +74,14 @@
                 globalLogout="globalLogout.html"
                 supportContact="{{ support_email }}"/>
 
+{% for key, value in shibboleth_metadata_sources.items() %}
         <MetadataProvider type="XML"
-                          uri="https://engine.{{ shib.engine_domain }}/authentication/idp/metadata"
-                          backingFilePath="metadata-engine.xml"
+                          uri="{{ value }}"
+                          backingFilePath="metadata-{{ key }}.xml"
                           reloadInterval="3600">
             <MetadataFilter type="RequireValidUntil" maxValidityInterval="172800"/>
         </MetadataProvider>
+{% endfor %}
 
         <!-- Map to extract attributes from SAML assertions. -->
         <AttributeExtractor type="XML" validate="true" path="attribute-map.xml"/>
@@ -95,7 +97,7 @@
         <!-- Simple file-based resolver for using a single keypair. -->
         <CredentialResolver type="File" key="sp-key.pem" certificate="sp-cert.pem"/>
 
-          {% for key, value in shibboleth_apps.items() %}
+{% for key, value in shibboleth_apps.items() %}
         <ApplicationOverride id="{{ key }}" entityID="{{ value.entityID }}">
             <Sessions lifetime="28800"
               timeout="3600"
@@ -108,8 +110,7 @@
               idpHistoryDays="7"
               cookieProps="; path={{ value.baseurl }}/; secure; HttpOnly"></Sessions>
         </ApplicationOverride>
-        {% endfor %}
-
+{% endfor %}
 
     </ApplicationDefaults>
 

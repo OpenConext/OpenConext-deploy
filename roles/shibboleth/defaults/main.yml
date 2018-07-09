@@ -1,0 +1,3 @@
+---
+shibboleth_metadata_sources:
+  engine: "https://engine.{{ base_domain }}/authentication/idp/metadata"

@@ -154,9 +154,6 @@ shibboleth_apps:
     entityID: "https://manage.{{ base_domain }}/shibboleth"
     baseurl: ""
 
-shib:
-  engine_domain: "{{ base_domain }}"
-
 teams:
   db_name: "teams"
   db_user: "teamsrw"
