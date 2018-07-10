@@ -59,7 +59,7 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
       AuthType shibboleth
       ShibUseHeaders On
       ShibRequestSetting applicationId manage
-{% if manage_use_entityid %}
+{% if manage_use_entityid is defined and manage_use_entityid %}
       ShibRequestSetting entityID {{ manage_use_entityid }}
 {% endif %}
       ShibRequireSession On
