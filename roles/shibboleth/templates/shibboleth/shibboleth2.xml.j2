@@ -43,7 +43,7 @@
             (Set discoveryProtocol to "WAYF" for legacy Shibboleth WAYF support.)
             You can also override entityID on /Login query string, or in RequestMap/htaccess.
             -->
-            <SSO entityID="https://engine.{{ shib.engine_domain }}/authentication/idp/metadata">SAML2</SSO>
+            <SSO entityID="https://engine.{{ base_domain }}/authentication/idp/metadata">SAML2</SSO>
 
             <!-- SAML and local-only logout. -->
             <Logout>SAML2 Local</Logout>
@@ -79,7 +79,6 @@
                           uri="{{ value }}"
                           backingFilePath="metadata-{{ key }}.xml"
                           reloadInterval="3600">
-            <MetadataFilter type="RequireValidUntil" maxValidityInterval="172800"/>
         </MetadataProvider>
 {% endfor %}
 
