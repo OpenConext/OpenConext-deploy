@@ -23,7 +23,7 @@ manage_gui_version: 3.0.0
 manage_server_version: 3.0.0
 monitoring_tests_version: 6.0.5
 mujina_version: 5.0.7
-oidc_version: "1.2.8"
+oidc_version: "1.2.9"
 pdp_gui_version: 2.0.1
 pdp_server_version: 2.0.1
 profile_version: "1.1.2"
