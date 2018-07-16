@@ -1,7 +1,7 @@
 issuer={{ oidc.issuer }}
 
 # Dadabase connection settings:
-jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.driverClassName=org.mariadb.jdbc.Driver
 jdbc.url=jdbc:mysql://{{ oidc.db_host }}/{{ oidc.db_name }}
 jdbc.username={{ oidc.db_user }}
 jdbc.password={{ oidc.db_password }}
