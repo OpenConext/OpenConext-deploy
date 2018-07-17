@@ -1,0 +1,28 @@
+filebeat.prospectors:
+
+- type: log
+  paths:
+    - /var/log/messages
+  include_lines: ["EBLOG"]
+  fields:
+    prog: EBLOG
+    env: {{ env }}
+  fields_under_root: true
+
+
+- type: log
+  paths: 
+    - /var/log/messages
+  include_lines: ['EBAUTH']
+  exclude_lines: ['influxd']
+  fields:
+    prog: EBAUTH
+    env: {{ env }}
+  fields_under_root: true
+
+
+output.logstash:
+  hosts: ["logstash.{{ base_domain }}:5044"]
+  {% if filebeat_tls %}
+  ssl.certificate_authorities: ["/etc/pki/filebeat/filebeat_ca.pem"]
+  {% endif %}
