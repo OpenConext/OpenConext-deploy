@@ -1,0 +1,11 @@
+input {
+  beats {
+    port => 5044
+    type => "log"
+    {% if logstash_tls %}
+    ssl => true
+    ssl_certificate => "/etc/pki/tls/certs/logstash.{{ base_domain}}.pem"
+    ssl_key => "/etc/pki/tls/private/logstash.{{ base_domain }}.key"
+    {% endif %}
+  }
+}

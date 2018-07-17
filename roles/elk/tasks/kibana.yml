@@ -1,0 +1,33 @@
+--- 
+- name: Install kibana
+  yum: name=kibana state=present
+
+- name: Install oidc packages
+  yum: name={{ item }} state=installed
+  with_items:
+    - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.0/cjose-0.5.1-1.el7.centos.x86_64.rpm
+    - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.2/mod_auth_openidc-2.3.2-1.el7.centos.x86_64.rpm
+  tags: tester
+
+- name: Install Kibana TLS key
+  copy: content="{{ kibana_tls_key }}" dest={{ kibana_tls_key_path }} mode=0600 owner=root
+  when: kibana_standalone
+
+- name: Copy Kibana TLS certificate
+  copy: src={{ inventory_dir }}/files/certs/kibana/{{ kibana_server_name }}.crt dest="{{ kibana_tls_cert_path }}"
+  when: kibana_standalone
+
+- name: Copy Kibana TLS chain file
+  copy: src={{ inventory_dir }}/files/certs/kibana/{{ kibana_server_name }}_chain.crt dest="{{ kibana_tls_chain_path }}"
+  when: kibana_standalone
+
+- name: Install Apache file
+  template: src=kibana.conf.j2 dest=/etc/httpd/conf.d/kibana.conf
+  notify: reload httpd
+
+- name: Install kibana config file
+  template: src=kibana.yml.j2 dest=/etc/kibana/kibana.yml
+  notify: restart kibana
+
+- name: Enable and start kibana service
+  service: name=kibana state=started enabled=yes

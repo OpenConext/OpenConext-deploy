@@ -1,0 +1,46 @@
+- name: Install logstash plugins
+  logstash_plugin: state=present name={{ item }}
+  with_items:
+    - logstash-filter-multiline 
+    - logstash-input-relp
+
+- name: Create patterns dir
+  file: path=/etc/logstash/patterns state=directory owner=root mode=0755
+
+- name: Install pattern files
+  copy: src="logstash/patterns/" dest="/etc/logstash/patterns/"
+
+- name: Copy core pipeline specific templates
+  template: src="logstash/core/{{ item }}.j2" dest="/etc/logstash/conf.d/core/{{ item }}"
+  with_items:
+    - 02-filebeat-input.conf
+    - 13-core-ebauth.conf
+
+- name: Copy core pipeline specific files
+  copy: src="logstash/core/{{ item }}" dest="/etc/logstash/conf.d/core/{{ item }}" 
+  with_items:
+    - 11-core-haproxy.conf
+    - 12-core-eblog.conf
+    - 14-core-pdp.conf
+    - 15-core-pdpstats.conf
+    - 29-core-remove-type.conf
+    - 31-core-elastic-search-output.conf
+    - 32-core-elastic-search-output.conf
+
+- name: Copy core mapping 
+  copy: src=logstash/mapping_core.json dest=/etc/logstash/conf.d/mapping_core.json
+
+- name: Copy SA pipeline specific files
+  template: src="logstash/sa/{{ item }}.j2" dest="/etc/logstash/conf.d/sa/{{ item }}"
+  with_items:
+    - 03-relp-input.conf
+
+- name: Copy SA pipeline specific files
+  copy: src="logstash/sa/{{ item }}" dest="/etc/logstash/conf.d/sa/{{ item }}"
+  with_items:
+    - 20-sa-mysqld.conf
+    - 20-sa-nginx.conf
+    - 20-sa-stepup-authentication.conf
+    - 20-sa-symfony.conf
+    - 30-sa-elastic-search-output.conf
+

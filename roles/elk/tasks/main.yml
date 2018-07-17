@@ -1,0 +1,28 @@
+- name: Add Elasticsearch GPG key.
+  rpm_key:
+    key: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add elasticsearch yum repo
+  copy:
+     src: elasticsearch.repo
+     dest: /etc/yum.repos.d/elasticsearch.repo
+     mode: 0644
+
+- name: Install java
+  yum: name=java state=present 
+
+- name: Create datadirectory
+  file: path=/data state=directory owner=root mode=775
+
+- name: Include logstash specific tasks
+  include: logstash.yml
+  when: "'logstash' in group_names"
+
+- name: Include elastic specific tasks
+  include: elastic.yml
+  when: "'elasticsearch' in group_names"
+
+- name: Include kibana specific tasks
+  include: kibana.yml
+  when: "'kibana' in group_names" 
