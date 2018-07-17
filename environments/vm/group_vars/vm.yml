@@ -430,6 +430,11 @@ manage:
         password: "{{ manage_sysadmin_secret }}",
         scopes: [READ, WRITE, PUSH, SYSTEM]
       }
+    - {
+        name: "stats",
+        password: "{{ manage_stats_api_password }}",
+        scopes: [READ]
+      }
 
 loadbalancing:
   engine:
@@ -485,6 +490,12 @@ loadbalancing:
 
   welcome:
     port: 609
+
+  kibana:
+    port: 701
+  
+  stats:
+    port: 702
 
 haproxy_applications:
 
@@ -638,6 +649,22 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/"
     port: "609"
+    servers: "{{php_servers}}"
+  
+  - name: kibana
+    vhost_name: "kibana"
+    ip: "192.168.66.98"
+    ha_method: "GET"
+    ha_url: "/"
+    port: "701"
+    servers: "{{php_servers}}"
+  
+  - name: stats
+    vhost_name: "stats"
+    ip: "192.168.66.98"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "702"
     servers: "{{php_servers}}"
 
 haproxy_backend_tls: False
