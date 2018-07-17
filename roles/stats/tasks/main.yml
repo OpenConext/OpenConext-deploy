@@ -57,5 +57,5 @@
 
 - name: Copy the build to the www directory
   command: cp -r {{ stats_src_dir }}/client/build {{ stats_api_env_dir }}/www
-
+  changed_when: false
 
