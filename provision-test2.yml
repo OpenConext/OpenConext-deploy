@@ -25,7 +25,7 @@
     - { role: haproxy, tags: ['lb'] }
     - { role: tls, tags: ['tls'] }
 
-- hosts: php-apps:java-apps
+- hosts: php-apps:java-apps:elk
   gather_facts: yes
   become: true
   roles:
@@ -97,5 +97,15 @@
     - { role: monitoring-tests,             tags: ['monitoring-tests'] }
     - { role: remove-grouper,               tags: ['remove-grouper'] }
     - { role: remove-metadata-exporter,     tags: ['remove-metadata-exporter'] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: elk
+  gather_facts: true
+  become: true
+  roles:
+    - { role: java,                         tags: ['java'] }
+    - { role: openconext-common, tags: ['eb','profile'] }
+    - { role: stats,                        tags: ['stats'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
