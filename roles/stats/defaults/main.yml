@@ -1,0 +1,5 @@
+stats_api_env_dir: "{{ openconext_releases_dir }}/statsapi"
+stats_frontend_env_dir: "{{ openconext_releases_dir }}/statsfrontend"
+stats_src_dir: "{{ openconext_builds_dir }}/stats"
+stats_wsgi_user: stats
+influx_ebauth_measurement: ebauth

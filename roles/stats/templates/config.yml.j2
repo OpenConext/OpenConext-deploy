@@ -1,0 +1,25 @@
+database:
+  name: {{ influx_stats_db }}
+  host: localhost
+  port: 8086
+  username: ""
+  password: ""
+
+log:
+  measurement: {{ influx_ebauth_measurement }} 
+  user_id: user_id
+  sp_id: sp_entity_id
+  idp_id: idp_entity_id
+
+secret_key: {{ stats_api_secret }}
+product: {{ instance_name }}
+
+api_users:
+  - name: "dashboard"
+    password: "{{ stats_dashboard_api_password }}"
+
+manage:
+  url: https://manage.{{ base_domain }}
+  user: stats
+  password: {{ manage_stats_api_password }} 
+
