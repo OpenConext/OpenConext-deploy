@@ -23,3 +23,8 @@
     - "oidc.vm.openconext.org"
     - "teams.vm.openconext.org"
     - "manage.vm.openconext.org"
+
+- name: Set logstash in hostsfile
+  lineinfile: dest=/etc/hosts line="192.168.66.99 {{ item }}" unsafe_writes=yes
+  with_items:
+    - "logstash.vm.openconext.org"
