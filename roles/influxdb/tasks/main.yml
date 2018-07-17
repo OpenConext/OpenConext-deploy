@@ -1,0 +1,19 @@
+---
+- name: Install influx yum repo file
+  copy: src=influx.repo dest=/etc/yum.repos.d/influx.repo mode=0644 owner=root
+
+- name: Install the necessary packages
+  yum: name={{ item }} state=installed 
+  with_items:
+    - python-requests
+    - influxdb
+    - python2-pip
+
+- name: Install python influx packacke
+  pip: name=influxdb state=present
+
+- name: Enable and start the influxdb service
+  service: name=influxdb.service enabled=yes state=started 
+
+- name: Create database
+  influxdb_database: database_name="{{ influx_stats_db }}" state=present
