@@ -23,6 +23,9 @@
   become: true
   roles:
     - { role: mysql,                   tags: ['mysql'] }
+    - { role: elk,                     tags: ['elk'] }
+    - { role: influxdb,                  tags: ['influxdb'] }
+    - { role: filebeat,                  tags: ['filebeat'] }
 
 - hosts: loadbalancer
   gather_facts: true
@@ -51,6 +54,7 @@
     - { role: openconext-common,                 tags: ['eb','profile'] }
     - { role: engineblock,                       tags: ['eb'     ] }
     - { role: profile,                           tags: ['profile'] }
+    - { role: stats,                  tags: ['stats'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
