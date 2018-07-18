@@ -378,6 +378,11 @@
           "format": "url",
           "info": "The URL of the service used to log on."
         },
+        "coin:supports_idp_init_login": {
+          "type": "string",
+          "format": "boolean",
+          "info": "The service provider supports IDP initiated login."
+        },
         "coin:transparant_issuer": {
           "type": "string",
           "format": "boolean",
