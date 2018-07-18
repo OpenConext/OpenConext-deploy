@@ -17,6 +17,10 @@ product: {{ instance_name }}
 api_users:
   - name: "dashboard"
     password: "{{ stats_dashboard_api_password }}"
+    scope: "read"
+  - name: "sysadmin"
+    password: "{{ stats_sysadmin_api_password }}"
+    scope: "read, write"
 
 manage:
   url: https://manage.{{ base_domain }}
