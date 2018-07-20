@@ -41,8 +41,8 @@ frontend ssl_ip
 ## -------------------------------------------------------------------
 frontend ssl_restricted_ip
 
-    bind {{ haproxy_sni_ip_restricted }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }} force-tlsv12 ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:!aNULL:!MD5:!DSS transparent
-    bind {{ haproxy_sni_ipv6_restricted }}:443 ssl crt /etc/pki/haproxy/{{ tls_star_cert_haproxy }} force-tlsv12 ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:!aNULL:!MD5:!DSS transparent
+    bind {{ haproxy_sni_ip_restricted }}:443 ssl crt /etc/pki/haproxy/star_haproxy.pem force-tlsv12 ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:!aNULL:!MD5:!DSS transparent
+    bind {{ haproxy_sni_ipv6_restricted }}:443 ssl crt /etc/pki/haproxy/star_haproxy.pem force-tlsv12 ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:!aNULL:!MD5:!DSS transparent
     http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
     capture request header User-agent len 100 
