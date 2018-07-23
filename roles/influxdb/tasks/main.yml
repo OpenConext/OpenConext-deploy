@@ -12,8 +12,9 @@
 - name: Install python influx packacke
   pip: name=influxdb state=present
 
-#- name: Place config
+#- name: Place custom influxdb config
 #  template: src=influxdb.conf.j2 dest=/etc/influxdb/influxdb.conf mode=0644 owner=root
+#  notify: restart influxdb
 
 - name: Enable and start the influxdb service
   service: name=influxdb.service enabled=yes state=started 
