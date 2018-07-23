@@ -41,9 +41,11 @@
 
 - name: Place wcgi for the server api
   template: src=stats-api.wsgi.j2 dest={{ stats_api_env_dir }}/stats-api.wsgi mode=0550 owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }}
+  notify: reload httpd
 
 - name: Install the api config file
   template: src=config.yml.j2 dest={{ stats_api_env_dir }}/server/config/config.yml
+  notify: reload httpd
 
 - name: Install Apache config file
   template: src=stats.conf.j2 dest=/etc/httpd/conf.d/stats.conf
