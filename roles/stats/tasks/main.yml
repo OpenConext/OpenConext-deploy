@@ -55,7 +55,13 @@
     chdir: "{{ stats_src_dir }}/client"
   when: git_stats.changed
 
+- name: Delete current www directory
+  command: rm -fr {{ stats_api_env_dir }}/www
+  changed_when: false
+  when: git_stats.changed
+
 - name: Copy the build to the www directory
   command: cp -r {{ stats_src_dir }}/client/build {{ stats_api_env_dir }}/www
   changed_when: false
+  when: git_stats.changed
 
