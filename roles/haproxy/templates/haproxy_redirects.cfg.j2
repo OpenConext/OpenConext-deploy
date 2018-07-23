@@ -64,5 +64,5 @@ frontend redirects
     redirect scheme https code 301 if !{ ssl_fc }
 
     {% for application in haproxy_redirects %}
-    http-request redirect prefix {{ application.redirecturl }} if {{ application.name }}
+    http-request redirect location {{ application.redirecturl }} if {{ application.name }}
     {% endfor %}
