@@ -413,6 +413,11 @@
           "format": "url",
           "info": "The provided URL to the metadata of the service."
         },
+        "coin:original_metadata_certData": {
+          "type": "string",
+          "format": "certificate",
+          "info": "The signing certificate of the metadata of the service. This must be a PEM encoded certificate. DER, CRT or CER are not supported."
+        },
         "coin:service_team_id": {
           "type": "string",
           "info": "Enter the team name as used in the SP Dashboard. e.g. urn:collab:group:example-teams.nl:nl:surfnet:services:spd_example. "
