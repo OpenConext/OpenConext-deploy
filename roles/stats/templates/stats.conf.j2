@@ -1,6 +1,6 @@
 {% if apache_app_listen_address.stats is defined %}
 Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
-<Virtualhost {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}> 
+<Virtualhost {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}>
 {% else %}
 <Virtualhost *:443 >
 {% endif %}
@@ -23,10 +23,11 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !api
     RewriteCond %{REQUEST_URI} !health
+    RewriteCond %{REQUEST_URI} !shibboleth
     RewriteCond %{REQUEST_URI} !fonts
     RewriteRule (.*) /index.html [L]
 
-    WSGIDaemonProcess server user={{ stats_wsgi_user }} group={{ stats_wsgi_user }} threads=5 python-home={{ stats_api_env_dir }}  
+    WSGIDaemonProcess server user={{ stats_wsgi_user }} group={{ stats_wsgi_user }} threads=5 python-home={{ stats_api_env_dir }}
     WSGIScriptAlias /health {{ stats_api_env_dir }}/stats-api.wsgi/health
     WSGIScriptAlias /api {{ stats_api_env_dir }}/stats-api.wsgi/api
     WSGIPassAuthorization On
