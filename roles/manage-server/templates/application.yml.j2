@@ -53,7 +53,7 @@ spring:
     password: {{ manage.eb_db_password }}
     tomcat:
       test-on-borrow: true
-      validation-query: SELECT 1
+      validation-query: SELECT count(*) FROM migration_versions
       remove-abandoned: true
       test-while-idle: true
   main:

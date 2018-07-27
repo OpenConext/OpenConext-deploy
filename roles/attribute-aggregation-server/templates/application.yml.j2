@@ -51,7 +51,7 @@ spring:
     password: {{ aa.db_password }}
     tomcat:
       test-on-borrow: true
-      validation-query: SELECT 1
+      validation-query: SELECT count(*) FROM schema_version
       remove-abandoned: true
   main:
     banner-mode: "off"
