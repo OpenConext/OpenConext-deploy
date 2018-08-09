@@ -18,8 +18,8 @@ features: {{ manage.features }}
 
 push:
   url: https://{{ engine_api_domain }}/api/connections
-  user: {{ engine_api_janus_user }}
-  password: {{ engine_api_janus_password }}
+  user: {{ engine_api_metadata_push_user }}
+  password: {{ engine_api_metadata_push_password }}
   name: {{ instance_name }} EngineBlock
 
 product:

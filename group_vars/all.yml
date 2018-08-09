@@ -25,7 +25,7 @@ tls_dh_param_keysize: 2048
 
 # Some engineblock variables are shared between applications
 engine_api_domain: engine-api.{{ base_domain }}
-engine_api_janus_user: serviceregistry
+engine_api_metadata_push_user: serviceregistry
 
 # Some deprovision variables are shared between applications
 authz_server_api_lifecycle_username: authz_server_api_lifecycle_user
