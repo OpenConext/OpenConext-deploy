@@ -28,8 +28,8 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
-    ProxyPass /pdp/api http://localhost:{{ springapp_tcpport }}/ retry=0
-    ProxyPassReverse /pdp/api http://localhost:{{ springapp_tcpport }}/
+    ProxyPass /pdp/api http://localhost:{{ springapp_tcpport }} retry=0
+    ProxyPassReverse /pdp/api http://localhost:{{ springapp_tcpport }}
 
     DocumentRoot /var/www/pdp/current
 
