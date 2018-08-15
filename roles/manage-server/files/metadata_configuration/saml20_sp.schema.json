@@ -283,12 +283,12 @@
             "urn:oasis:names:tc:SAML:2.0:bindings:URI"
           ],
           "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-          "info": "SingleLogoutService is not supported by the Engine Block. Selects the SingleLogoutService binding an SP claims support for. A binding specifies the protocol to access the service."
+          "info": "*** SingleLogoutService is not supported by the Engine Block. Import for future compatibility. *** Selects the SingleLogoutService binding an SP claims support for. A binding specifies the protocol to access the service."
         },
         "SingleLogoutService_Location": {
           "type": "string",
           "format": "url",
-          "info": "SingleLogoutService is not supported by the Engine Block. If the connected SP supports SAML 2.0 Single Logout, this will specify the endpoint element as a URL."
+          "info": "*** SingleLogoutService is not supported by the Engine Block. Import for future compatibility. *** If the connected SP supports SAML 2.0 Single Logout, this will specify the endpoint element as a URL."
         },
         "mdrpi:RegistrationInfo": {
           "type": "string",
@@ -312,7 +312,7 @@
         "redirect.sign": {
           "type": "string",
           "format": "boolean",
-          "info": "Whether authentication request, logout requests and logout responses should be signed. The default is FALSE. This is generally set for trusted proxies like OpenID Connect Gateway."
+          "info": "Whether authentication request, logout requests and logout responses should be signed. The default is FALSE. This is generally set for trusted proxies like OpenID Connect Gateway or Stepup authentication gateway."
         },
         "coin:publish_in_edugain": {
           "type": "string",
@@ -346,7 +346,7 @@
         },
         "coin:institution_id": {
           "type": "string",
-          "info": "The defined client code."
+          "info": "The defined client code. Generally an abbreviation of the name of the client."
         },
         "coin:institution_guid": {
           "type": "string",
@@ -564,7 +564,7 @@
         "^NameIDFormats:([0-2]{1})$": {
           "$ref": "#/definitions/NameIDFormat",
           "multiplicity": 3,
-          "info": "The format in which the service expects the response. This can be transient, transparant or unspecified."
+          "info": "The NameIDFormat(s) this service provider supports. This can be transient, transparant or unspecified."
         },
         "^contacts:([0-3]{1}):surName$": {
           "type": "string",
