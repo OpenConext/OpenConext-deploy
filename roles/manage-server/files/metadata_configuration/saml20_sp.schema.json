@@ -379,6 +379,11 @@
           "format": "boolean",
           "info": "Set to indicate the service in the dashboard for institutions is marked as to have disagreed to sign the aansluitovereenkomst."
         },
+        "coin:ss:hidden":{
+          "type": "string",
+          "format": "boolean",
+          "info": "Set to make invisible in the dashboard for identity providers."
+        },
         "coin:application_url": {
           "type": "string",
           "format": "url",
