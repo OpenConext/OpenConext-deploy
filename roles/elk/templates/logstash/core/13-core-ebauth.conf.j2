@@ -15,7 +15,6 @@ filter {
   de_dot {
 }   
   mutate {
-      remove_field => [ "timestamp" ]
       remove_field => [ "source" ]
       remove_field => [ "syslogbase" ]
       remove_field => [ "[ebauth][context][login_stamp]" ]
