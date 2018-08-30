@@ -23,7 +23,7 @@ api_users:
     scope: "read, write"
 
 manage:
-  url: https://manage.{{ base_domain }}
-  user: stats
+  url: {{ stats_manage_url }}
+  user: {{ stats_manage_api_user }}
   password: {{ manage_stats_api_password }} 
 

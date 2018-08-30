@@ -3,3 +3,6 @@ stats_frontend_env_dir: "{{ openconext_releases_dir }}/statsfrontend"
 stats_src_dir: "{{ openconext_builds_dir }}/stats"
 stats_wsgi_user: stats
 influx_ebauth_measurement: ebauth
+stats_apache_standalone: False
+stats_manage_url: https://manage.{{ base_domain }}
+stats_manage_api_user: stats
