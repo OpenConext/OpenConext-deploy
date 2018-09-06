@@ -331,6 +331,12 @@
           "default": false,
           "info": "This is automatically set for service providers imported from eduGAIN. Unset it to prevent re-import."
         },
+        "coin:push_enabled": {
+          "type": "string",
+          "format": "boolean",
+          "default": false,
+          "info": "Must be set for this Service Provider to be included in the EB push despite being imported from eduGAIN."
+        },
         "coin:interfed_source": {
           "type": "string",
           "enum": [
