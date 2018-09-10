@@ -234,7 +234,6 @@
         },
         "coin:institution_type": {
           "type": "string",
-          "format": "string",
           "info": "Client category this institution belongs to."
         },
         "coin:guest_qualifier": {
