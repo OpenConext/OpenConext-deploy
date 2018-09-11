@@ -30,6 +30,9 @@ engineblock.feature.encrypted_assertions_require_outer_signature = {{ engine_fea
 ; Whether or not all input and output filter should run prior to consent.
 engineblock.feature.run_all_manipulations_prior_to_consent = {{ engine_feature_run_all_manipulations_prior_to_consent }}
 
+;; Engineblock feature toggle to block users if attributes scope is invalid (off by default)
+engineblock.feature.block_user_on_violation = {{ engine_feature_block_user_on_violation }}
+
 pdp.baseUrl = {{ engine_pdp_baseurl }}{{ engine_pdp_path }}
 pdp.host = {{ engine_pdp_baseurl }}
 pdp.policy_decision_point_path = {{ engine_pdp_path }}
