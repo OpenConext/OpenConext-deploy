@@ -43,5 +43,21 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
     SSLCertificateChainFile {{ tls.cert_path_ca }}/stats.{{ base_domain }}.intermediate
     Include ssl_backend.conf
     {% endif %}
+    OIDCProviderMetadataURL {{ stats_oidc_metadata_url }} 
+    OIDCClientID {{ stats_oidc_client_id }}
+    OIDCClientSecret {{ stats_oidc_client_secret }} 
+    OIDCCryptoPassphrase {{ stats_oidc_crypto_pass }} 
+    OIDCRedirectURI /redirect
+    <Location />
+        OIDCUnAuthAction pass
+        AuthType openid-connect
+        Require valid-user
+    </Location>
+
+    <Location /login>
+      OIDCUnAuthAction auth
+      AuthType openid-connect
+      Require valid-user
+    </Location>
 
 </VirtualHost>
