@@ -45,6 +45,7 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
     SSLCertificateChainFile {{ tls.cert_path_ca }}/stats.{{ base_domain }}.intermediate
     Include ssl_backend.conf
     {% endif %}
+    OIDCClaimPrefix OIDC-CLAIM-
     OIDCProviderMetadataURL {{ stats_oidc_metadata_url }} 
     OIDCClientID {{ stats_oidc_client_id }}
     OIDCClientSecret {{ stats_oidc_client_secret }} 
