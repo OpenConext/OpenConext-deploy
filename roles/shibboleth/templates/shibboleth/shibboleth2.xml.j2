@@ -94,7 +94,7 @@
         <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
 
         <!-- Simple file-based resolver for using a single keypair. -->
-        <CredentialResolver type="File" key="sp-key.pem" certificate="sp-cert.pem"/>
+        <CredentialResolver type="File" key="shib-sp.key" certificate="shib-sp.crt"/>
 
 {% for key, value in shibboleth_apps.items() %}
         <ApplicationOverride id="{{ key }}" entityID="{{ value.entityID }}">

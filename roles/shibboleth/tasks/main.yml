@@ -21,6 +21,14 @@
     - 20_shib_apache24.conf
   notify: reload httpd
 
+- name: shibboleth SP certificate
+  copy: src={{ inventory_dir }}/files/certs/{{ item }} dest=/etc/shibboleth/{{ item }}
+  with_items:
+    - shib-sp.crt
+    - shib-sp.key
+  notify:
+    - restart shibd
+
 - name: Shibboleth config
   template: src=shibboleth/{{ item }}.j2 dest=/etc/shibboleth/{{ item }}
   with_items:
