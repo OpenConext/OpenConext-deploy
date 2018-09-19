@@ -22,10 +22,12 @@
   notify: reload httpd
 
 - name: shibboleth SP certificate
-  copy: src={{ inventory_dir }}/files/certs/{{ item }} dest=/etc/shibboleth/{{ item }}
-  with_items:
-    - shib-sp.crt
-    - shib-sp.key
+  copy: src={{ inventory_dir }}/files/certs/shib-sp.crt dest=/etc/shibboleth/shib-sp.crt
+  notify:
+    - restart shibd
+
+- name: shibboleth SP key
+  copy: content="{{ shibboleth_sp_key }}" dest=/etc/shibboleth/shib-sp.key owner=root group=shibd mode=640
   notify:
     - restart shibd
 
