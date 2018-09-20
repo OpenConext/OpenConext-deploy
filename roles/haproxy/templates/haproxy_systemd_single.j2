@@ -3,7 +3,7 @@ Description=HAProxy Load Balancer
 After=syslog.target network.target
 
 [Service]
-{% if  haproxy_version | version_compare('1.8.0', '<')  %}  
+{% if  haproxy_version is version_compare('1.8.0', '<')  %}  
 ExecStart=/usr/sbin/haproxy-systemd-wrapper -f etc/haproxy/haproxy_global.cfg -f /etc/haproxy/haproxy_frontend.cfg -f /etc/haproxy/haproxy_backend.cfg -p /var/run/haproxy.pid
 
 {% else %}

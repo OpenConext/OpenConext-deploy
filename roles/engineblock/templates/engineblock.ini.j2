@@ -80,7 +80,7 @@ encryption.keys.{{ key }}.publicFile = {{ value.publicFile }}
 
 {% endif %}
 
-{% if engine_branch is not defined and engine_version | version_compare('5.7.0', '<')  %}
+{% if engine_branch is not defined and engine_version is version_compare('5.7.0', '<')  %}
 serviceRegistry.caching.lifetime = {{ engine_janus_cache_lifetime }}
 serviceRegistry.location = {{ engine_janus_url }}
 serviceRegistry.user = "{{ engine_janus_user }}"
