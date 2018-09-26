@@ -3,7 +3,7 @@ Description=HAProxy Load Balancer Redirects instance
 After=syslog.target network.target
 
 [Service]
-{% if  haproxy_version | version_compare('1.8.0', '<')  %}  
+{% if  haproxy_version is version_compare('1.8.0', '<')  %}  
 ExecStart=/usr/sbin/haproxy-systemd-wrapper -f /etc/haproxy/redirects/haproxy_redirects.cfg -p /var/run/haproxy_redirects.pid
 
 {% else %}
