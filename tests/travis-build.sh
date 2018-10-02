@@ -92,7 +92,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-TMPOUT=$(tempfile)
+TMPOUT=$(mktemp)
 docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
 		-i $ANSIBLE_INVENTORY                                    \
