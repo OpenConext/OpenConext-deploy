@@ -1,16 +1,28 @@
 ---
 - name: create site dir
-  file: path=/var/www/welcome state=directory
+  file:
+    path: "/var/www/welcome"
+    state: directory
 
 - name: copy static site files
-  copy: src=site/ dest=/var/www/welcome # src ends with / so *only* the content of that folder is copied.
+  copy:
+    src: "site/"
+    dest: "/var/www/welcome"
+    # src ends with / so *only* the content of that folder is copied.
 
 - name: copy template site files
-  template: src=site/index.html dest=/var/www/welcome/index.html
+  template:
+    src: "site/index.html"
+    dest: "/var/www/welcome/index.html"
 
-- name: copy the openconext_ca certificate 
-  copy: src={{ inventory_dir }}/files/certs/{{ tls_ca }} dest=/var/www/welcome/openconext_ca.crt 
-  
+- name: copy the openconext_ca certificate
+  copy:
+    src: "{{ inventory_dir }}/files/certs/{{ tls_ca }}"
+    dest: "/var/www/welcome/openconext_ca.crt"
+
 - name: copy virtual host config
-  template: src=welcome-vm.conf.j2 dest=/etc/httpd/conf.d/welcome-vm.conf
-  notify: reload httpd
+  template:
+    src: "welcome-vm.conf.j2"
+    dest: "/etc/httpd/conf.d/welcome-vm.conf"
+  notify:
+    - "reload httpd"

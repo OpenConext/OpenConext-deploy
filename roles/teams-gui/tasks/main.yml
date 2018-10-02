@@ -1,11 +1,20 @@
 ---
 - name: create apache folder
-  file: path=/var/www/teams owner=apache group=apache mode=2755 state=directory
+  file:
+    path: "/var/www/teams"
+    owner: "apache"
+    group: "apache"
+    mode: 02755
+    state: directory
 
 - name: copy virtual host config
-  template: src=teams.conf.j2 dest=/etc/httpd/conf.d/teams.conf
-  notify: restart httpd
-  tags: deploy
+  template:
+    src: "teams.conf.j2"
+    dest: "/etc/httpd/conf.d/teams.conf"
+  notify:
+    - "restart httpd"
+  tags:
+    - deploy
 
 - name: download html archive
   maven_artifact:
@@ -14,20 +23,23 @@
     extension: zip
     version: "{{ teams_gui_version }}"
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in teams_gui_version else maven_repo }}"
-    dest: /var/www/teams
+    dest: "/var/www/teams"
   register: maven_result
-  tags: deploy
+  tags:
+    - deploy
 
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: /var/www/teams
+    dest: "/var/www/teams"
     copy: no
-    owner: root
-    group: apache
+    owner: "root"
+    group: "apache"
   register: unarchive_result
-  tags: deploy
-  when: maven_result.changed
+  tags:
+    - deploy
+  when:
+    - maven_result.changed
 
 - name: create symlink to downloaded version
   file:
@@ -35,5 +47,7 @@
     dest: "{{ teams_current }}"
     state: link
     force: yes
-  tags: deploy
-  when: unarchive_result.changed
+  tags:
+    - deploy
+  when:
+    - unarchive_result.changed
