@@ -1,6 +1,9 @@
 ---
 - name: systemctl daemon-reload
-  command: "systemctl daemon-reload"
+  systemd:
+      daemon_reload: yes
 
 - name: restart pdp
-  service: name=pdp state=restarted
+  service:
+    name: "pdp"
+    state: restarted

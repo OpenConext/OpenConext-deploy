@@ -44,15 +44,18 @@
     group: "voot"
     mode: 0755
 
-- include: ../../../tasks/springbootapp/install-release.yml
+- name: include install-release.yml
+  include: ../../../tasks/springbootapp/install-release.yml
   when:
     - "voot_snapshot_timestamp == '' and voot_local_jar == ''"
 
-- include: ../../../tasks/springbootapp/install-snapshot.yml
+- name: Include install-snapshot.yml
+  include: ../../../tasks/springbootapp/install-snapshot.yml
   when:
     - "voot_snapshot_timestamp != '' and voot_local_jar == ''"
 
-- include: ../../../tasks/springbootapp/install-local.yml
+- name: Include install-local.yml
+  include: ../../../tasks/springbootapp/install-local.yml
   when:
     - "voot_local_jar != ''"
 

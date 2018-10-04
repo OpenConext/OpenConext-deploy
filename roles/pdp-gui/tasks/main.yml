@@ -1,13 +1,25 @@
 ---
 - name: Create user
-  user: name=pdp system=yes home={{ pdp_dir }} shell=/sbin/nologin
+  user:
+    name: "pdp"
+    system: yes
+    home: "{{ pdp_dir }}"
+    shell: /sbin/nologin
 
 - name: create apache folder
-  file: path=/var/www/pdp owner=apache group=apache mode=2755 state=directory
+  file:
+    path: "/var/www/pdp"
+    owner: "apache"
+    group: "apache"
+    mode: 02755
+    state: directory
 
 - name: copy virtual host config
-  template: src=pdp.conf.j2 dest=/etc/httpd/conf.d/pdp.conf
-  notify: reload httpd
+  template:
+    src: "pdp.conf.j2"
+    dest: "/etc/httpd/conf.d/pdp.conf"
+  notify:
+    - "reload httpd"
 
 - name: download html archive
   maven_artifact:
@@ -18,18 +30,21 @@
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in pdp_gui_version else maven_repo }}"
     dest: /var/www/pdp
   register: maven_result
-  tags: deploy
+  tags:
+    - deploy
 
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: /var/www/pdp
+    dest: "/var/www/pdp"
     copy: no
-    owner: root
-    group: apache
+    owner: "root"
+    group: "apache"
   register: unarchive_result
-  tags: deploy
-  when: maven_result.changed
+  tags:
+    - deploy
+  when:
+    - maven_result.changed
 
 - name: create symlink to downloaded version
   file:
@@ -37,5 +52,7 @@
     dest: "{{ pdp_current }}"
     state: link
     force: yes
-  tags: deploy
-  when: unarchive_result.changed
+  tags:
+    - deploy
+  when:
+    - unarchive_result.changed

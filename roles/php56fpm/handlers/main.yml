@@ -1,6 +1,10 @@
 ---
 - name: restart php-fpm
-  service: name=php-fpm state=restarted
+  service:
+    name: "php-fpm"
+    state: restarted
 
 - name: restart httpd
-  service: name=httpd state=restarted
+  service:
+    name: "httpd"
+    state: restarted

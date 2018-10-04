@@ -7,7 +7,7 @@
 
 - name: Remove memcached
   yum:
-    name: memcached
+    name: "memcached"
     state: absent
 
 - name: Remove serviceregistry application
