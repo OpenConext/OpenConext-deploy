@@ -6,4 +6,10 @@
   command: dnssec-keygen -K /var/named/keys -3 -a RSASHA256 -b 1024 -r /dev/random -n ZONE ha.{{ base_domain }}
 
 - name: chown the keys
-  file: dest=/var/named/keys state=directory owner=named group=named mode=0700 recurse=yes
+  file:
+    dest: "/var/named/keys"
+    stat: directory
+    owner: named
+    group: named
+    mode: 0700
+    recurse: yes

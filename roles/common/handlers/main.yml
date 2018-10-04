@@ -1,16 +1,24 @@
 ---
 
 - name: restart iptables
-  service: name=iptables state=restarted
+  service:
+    name: iptables
+    state: restarted
 
 - name: restart ip6tables
-  service: name=ip6tables state=restarted
+  service:
+    name: ip6tables
+    state: restarted
 
 - name: restart journald
-  service: name=systemd-journald state=restarted
+  service:
+    name: systemd-journald
+    state: restarted
 
 - name: reload postfix
-  service: name=postfix state=reloaded
+  service:
+    name: postfix
+    state: reloaded
 
 - name: rebuild header_checks
   command: /usr/sbin/postmap header_checks

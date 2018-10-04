@@ -19,37 +19,43 @@
     group: root
     mode: 0770
 
-- include: install-release.yml
+- name: Include install-release.yml
+  include: install-release.yml
   when: profile_branch is not defined or profile_branch == ''
 
-- include: install-branch.yml
+- name: Include install-branch.yml
+  include: install-branch.yml
   when: profile_branch is defined and profile_branch != ''
 
 - name: Create the cache dir for Symfony
   file:
-    path={{ profile_symfony_cache_path }}
-    state=directory
-    owner={{ profile_fpm_user }}
-    group={{ profile_fpm_user }}
-    recurse=yes
+    path: "{{ profile_symfony_cache_path }}"
+    state: directory
+    owner: "{{ profile_fpm_user }}"
+    group: "{{ profile_fpm_user }}"
+    recurse: yes
 
 - name: Create the log dir for Symfony
   file:
-    path={{ profile_symfony_log_path }}
-    state=directory
-    owner={{ profile_fpm_user }}
-    group={{ profile_fpm_user }}
-    recurse=yes
+    path: "{{ profile_symfony_log_path }}"
+    state: directory
+    owner: "{{ profile_fpm_user }}"
+    group: '{{ profile_fpm_user }}'
+    recurse: yes
 
 - name: Place parameters.yml
-  template: src={{ item }}.j2 dest={{ profile_current_release_symlink }}/app/config/{{ item }} mode=0644
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ profile_current_release_symlink }}/app/config/{{ item }}"
+    mode: 0644
   with_items:
-  - parameters.yml
+    - parameters.yml
 
 - name: Instantiate global_view_parameters.yml.dist
-  command: creates="{{ profile_current_release_symlink }}/app/config/global_view_parameters.yml" mv global_view_parameters.yml.dist global_view_parameters.yml
+  command: mv global_view_parameters.yml.dist global_view_parameters.yml
   args:
     chdir: "{{ profile_current_release_symlink }}/app/config/"
+    creates: "{{ profile_current_release_symlink }}/app/config/global_view_parameters.yml"
 
 - name: Prepare Profile environment
   environment:
