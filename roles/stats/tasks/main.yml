@@ -39,7 +39,11 @@
 - name: Checkout OpenConext-statistics branch from Git
   git: repo=https://github.com/OpenConext/OpenConext-statistics.git dest="{{ stats_src_dir }}" force=yes 
   register: git_stats
-    
+
+- name: Add git info to server
+  shell: git --git-dir {{ stats_src_dir }}/.git log -1 > {{ stats_src_dir }}/server/api/git.info
+  when: git_stats.changed
+
 - name: Install the virtualenv and requirements
   pip: requirements={{ stats_src_dir }}/requirements/base.txt virtualenv={{ stats_api_env_dir }}  virtualenv_command="/bin/python3.6 -m venv" state=latest
 
