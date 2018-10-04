@@ -1,0 +1,13 @@
+springapp_artifact_id: dashboard-server
+springapp_artifact_type: jar
+springapp_artifact_group_dir: org.openconext
+springapp_version: "{{ dashboard_server_version }}"
+springapp_snapshot_timestamp: "{{ dashboard_server_snapshot_timestamp }}"
+springapp_dir: "{{ dashboard_dir }}"
+springapp_user: dashboard
+springapp_service_name: dashboard
+springapp_jar: "{{ dashboard_jar }}"
+springapp_tcpport: 9394
+springapp_local_jar: "{{ dashboard_local_jar }}"
+springapp_heapsize: "512m"
+springapp_random_source: "file:///dev/urandom"

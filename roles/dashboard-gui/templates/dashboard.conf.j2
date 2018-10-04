@@ -1,0 +1,85 @@
+{% if apache_app_listen_address.dashboard is defined %}
+Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port }}
+<Virtualhost {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port }}>
+{% else %}
+<Virtualhost *:443 >
+{% endif %}
+    # General setup for the virtual host, inherited from global configuration
+    ServerName https://dashboard.{{ base_domain }}
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-dashboard'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-dashboard'" combined
+
+    RewriteEngine on
+
+    RewriteCond %{REQUEST_URI} !\.html$
+    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.svg$
+    RewriteCond %{REQUEST_URI} !\.css$
+    RewriteCond %{REQUEST_URI} !\.png$
+    RewriteCond %{REQUEST_URI} !\.ico$
+    RewriteCond %{REQUEST_URI} !\.woff$
+    RewriteCond %{REQUEST_URI} !\.woff2$
+    RewriteCond %{REQUEST_URI} !\.ttf$
+    RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !dashboard
+    RewriteCond %{REQUEST_URI} !health
+    RewriteCond %{REQUEST_URI} !info
+    RewriteCond %{REQUEST_URI} !fonts
+    RewriteRule (.*) /index.html [L]
+
+    ProxyPreserveHost On
+    ProxyPass /Shibboleth.sso !
+    ProxyPass /dashboard/api http://localhost:{{ springapp_tcpport }}/dashboard/api retry=0
+    ProxyPassReverse /dashboard/api http://localhost:{{ springapp_tcpport }}/dashboard/api
+    ProxyPass /health http://localhost:{{ springapp_tcpport }}/health retry=0
+    ProxyPass /info http://localhost:{{ springapp_tcpport }}/info retry=0
+
+    DocumentRoot /var/www/dashboard/current
+
+    <Directory /var/www/dashboard/current>
+      Order       allow,deny
+      Allow       from all
+      Options     -Indexes
+    </Directory>
+
+    <Location ~ "/dashboard/api/home">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location ~ "/dashboard/api/css/application.min.css">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location ~ "/(health|info)">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location />
+      AuthType shibboleth
+      ShibUseHeaders On
+      ShibRequestSetting applicationId dashboard
+      ShibRequireSession On
+      ShibRequestSetting REMOTE_ADDR X-Forwarded-For
+      require valid-user
+    </Location>
+
+    {% if haproxy_backend_tls %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
+    
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
+    Include ssl_backend.conf
+    {% endif %}
+
+</VirtualHost>

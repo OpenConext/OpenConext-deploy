@@ -92,6 +92,8 @@
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
     - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
     - { role: manage-server,                tags: ['manage', 'manage-server'] }
+    - { role: dashboard-gui,                tags: ['dashboard', 'dashboard-gui'] }
+    - { role: dashboard-server,             tags: ['dashboard', 'dashboard-server'] }
     - { role: attribute-mapper,             tags: ['attribute-mapper'] }
     - { role: eduproxy,                     tags: ['eduproxy'] }
     - { role: monitoring-tests,             tags: ['monitoring-tests'] }
