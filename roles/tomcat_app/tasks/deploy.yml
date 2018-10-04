@@ -37,5 +37,5 @@
 - name: Deploying {{ app_name }} | set correct permissions
   file:
     path: "{{ tomcat_install_dir }}/wars/{{ deploy_name }}.war"
-    owner: "tomcat"
-    group: "tomcat"
+    owner: tomcat
+    group: tomcat

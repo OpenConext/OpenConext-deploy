@@ -33,15 +33,15 @@
 
 - name: enable pdp service
   service:
-    name: "pdp"
+    name: pdp
     enabled: yes
 
 - name: Create logging directory
   file:
     path: "/var/log/{{ springapp_service_name }}"
     state: directory
-    owner: "pdp"
-    group: "pdp"
+    owner: pdp
+    group: pdp
     mode: 0755
 
 - name: Include install-maven-release.yml
@@ -58,8 +58,8 @@
   template:
     src: "logback.xml.j2"
     dest: "{{ pdp_dir }}/logback.xml"
-    owner: "pdp"
-    group: "pdp"
+    owner: pdp
+    group: pdp
     mode: 0740
   notify:
     - "restart pdp"
@@ -78,15 +78,15 @@
   template:
     src: "xacml.conext.properties.j2"
     dest: "{{ pdp_dir }}/xacml.conext.properties"
-    owner: "pdp"
-    group: "pdp"
+    owner: pdp
+    group: pdp
     mode: 0740
   notify:
     - "restart pdp"
 
 - name: start the pdp service
   service:
-    name: "pdp"
+    name: pdp
     state: started
     enabled: yes
   ignore_errors: true
@@ -99,6 +99,6 @@
 
 - name: ensure the service is started
   service:
-    name: "pdp"
+    name: pdp
     enabled: yes
     state: started

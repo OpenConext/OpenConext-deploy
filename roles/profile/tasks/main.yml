@@ -16,7 +16,7 @@
     path: "{{ php_session_dir}}/profile"
     state: directory
     owner: "{{ profile_fpm_user }}"
-    group: "root"
+    group: root
     mode: 0770
 
 - name: Include install-release.yml

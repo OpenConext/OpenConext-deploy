@@ -41,8 +41,8 @@
   copy:
     content: "{{ shibboleth_sp_key }}"
     dest: "/etc/shibboleth/shib-sp.key"
-    owner: "root"
-    group: "shibd"
+    owner: root
+    group: shibd
     mode: 0640
   notify:
     - "restart shibd"

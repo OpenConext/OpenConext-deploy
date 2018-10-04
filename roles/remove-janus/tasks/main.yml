@@ -1,13 +1,13 @@
 ---
 - name: Stop memcached
   service:
-    name: "memcached"
+    name: memcached
     state: stopped
   ignore_errors: true
 
 - name: Remove memcached
   yum:
-    name: "memcached"
+    name: memcached
     state: absent
 
 - name: Remove serviceregistry application

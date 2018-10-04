@@ -39,7 +39,7 @@
 
 - name: enable php-fpm
   service:
-    name: "php-fpm"
+    name: php-fpm
     enabled: yes
 
 - name: Configure PHP APC

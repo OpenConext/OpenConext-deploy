@@ -2,8 +2,8 @@
 - name: Create directory for database backups
   file:
     path: "/opt/OCbackups"
-    owner: "root"
-    group: "root"
+    owner: root
+    group: root
     state: directory
 
 - name: Backup current database

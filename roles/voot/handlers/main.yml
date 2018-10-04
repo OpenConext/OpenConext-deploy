@@ -5,5 +5,5 @@
 
 - name: restart voot
   service:
-    name: "voot"
+    name: voot
     state: restarted

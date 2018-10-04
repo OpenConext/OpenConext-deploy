@@ -2,8 +2,8 @@
 - name: create apache folder
   file:
     path: "/var/www/teams"
-    owner: "apache"
-    group: "apache"
+    owner: apache
+    group: apache
     mode: 02755
     state: directory
 
@@ -33,8 +33,8 @@
     src: "{{ maven_result.dest }}"
     dest: "/var/www/teams"
     copy: no
-    owner: "root"
-    group: "apache"
+    owner: root
+    group: apache
   register: unarchive_result
   tags:
     - deploy

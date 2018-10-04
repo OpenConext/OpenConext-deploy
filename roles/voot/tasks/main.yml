@@ -1,7 +1,7 @@
 ---
 - name: Create user
   user:
-    name: "voot"
+    name: voot
     system: yes
     home: "{{ voot_dir }}"
     shell: /sbin/nologin
@@ -33,15 +33,15 @@
 
 - name: enable voot service
   service:
-    name: "voot"
+    name: voot
     enabled: yes
 
 - name: Create logging directory
   file:
     path: "/var/log/{{ springapp_service_name }}"
     state: directory
-    owner: "voot"
-    group: "voot"
+    owner: voot
+    group: voot
     mode: 0755
 
 - name: include install-release.yml
@@ -63,8 +63,8 @@
   template:
     src: "logback.xml.j2"
     dest: "{{ voot_dir }}/logback.xml"
-    owner: "voot"
-    group: "voot"
+    owner: voot
+    group: voot
     mode: 0740
   notify:
     - "restart voot"
@@ -73,8 +73,8 @@
   template:
     src: "application.properties.j2"
     dest: "{{ voot_dir }}/application.properties"
-    owner: "voot"
-    group: "voot"
+    owner: voot
+    group: voot
     mode: 0740
   notify:
     - "restart voot"
@@ -83,8 +83,8 @@
   template:
     src: "externalProviders.yml.j2"
     dest: "{{ voot_dir }}/externalProviders.yml"
-    owner: "voot"
-    group: "voot"
+    owner: voot
+    group: voot
     mode: 0740
   notify:
     - "restart voot"
@@ -101,7 +101,7 @@
 # though, and seems like to correct way to handle this.
 - name: start the voot service
   service:
-    name: "voot"
+    name: voot
     state: started
     enabled: yes
   ignore_errors: true
@@ -114,6 +114,6 @@
 
 - name: ensure the service is started
   service:
-    name: "voot"
+    name: voot
     enabled: yes
     state: started

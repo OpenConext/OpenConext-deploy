@@ -1,7 +1,7 @@
 ---
 - name: Create user
   user:
-    name: "pdp"
+    name: pdp
     system: yes
     home: "{{ pdp_dir }}"
     shell: /sbin/nologin
@@ -9,8 +9,8 @@
 - name: create apache folder
   file:
     path: "/var/www/pdp"
-    owner: "apache"
-    group: "apache"
+    owner: apache
+    group: apache
     mode: 02755
     state: directory
 
@@ -38,8 +38,8 @@
     src: "{{ maven_result.dest }}"
     dest: "/var/www/pdp"
     copy: no
-    owner: "root"
-    group: "apache"
+    owner: root
+    group: apache
   register: unarchive_result
   tags:
     - deploy

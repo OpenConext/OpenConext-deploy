@@ -1,7 +1,7 @@
 ---
 - name: Check if target dir exists
   stat:
-      path: "{{ profile_release_dir }}"
+    path: "{{ profile_release_dir }}"
   register: profile_dir
 
 - name: Checkout profile branch

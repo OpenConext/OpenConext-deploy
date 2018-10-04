@@ -1,76 +1,143 @@
 ---
 # Add MariaDB repo and key
 - name: Add MariaDB.org repository
-  template: src='mariadb.repo.j2' dest='/etc/yum.repos.d/mariadb.repo'
+  template:
+    src: "mariadb.repo.j2"
+    dest: "/etc/yum.repos.d/mariadb.repo"
 
 - name: Install mariadb server
-  yum: name={{ item }} state=present
+  yum:
+    name: "{{ item }}"
+    state: present
   with_items:
      - MariaDB-server
      - MariaDB-client
      - MySQL-python
-  tags: mysql
+  tags:
+    - mysql
 
 - name: Start and enable mariadb
-  service: name=mariadb state=started enabled=yes
-  tags: mysql
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+  tags:
+    - mysql
 
 - name: Set mysql root password for all root accounts
-  mysql_user: name=root password={{ mysql_root_password }} priv=*.*:ALL,GRANT
-  tags: mysql
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    priv: "*.*:ALL,GRANT"
+  tags:
+    - mysql
 
 - name: MySQL my.cnf
-  template: src=my.cnf.j2 dest=/root/.my.cnf mode=0600 owner=root group=root
-  tags: mysql
+  template:
+    src: "my.cnf.j2"
+    dest: "/root/.my.cnf"
+    mode: 0600
+    owner: root
+    group: root
+  tags:
+    - mysql
 
 - name: delete anonymous MySQL server user
-  mysql_user: user="" state="absent" login_user=root host={{ mysql_host }}  login_password={{ mysql_root_password }}
-  tags: mysql
+  mysql_user:
+    user: ""
+    state: absent
+    login_user: root
+    host: "{{ mysql_host }}"
+    login_password: "{{ mysql_root_password }}"
+  tags:
+    - mysql
 
 - name: delete anonymous MySQL server user for localhost
-  mysql_user: user="" state="absent" login_user=root host={{ mysql_host }} login_password={{ mysql_root_password }}
-  tags: mysql
+  mysql_user:
+    user: ""
+    state: absent
+    login_user: root
+    host: "{{ mysql_host }}"
+    login_password: "{{ mysql_root_password }}"
+  tags:
+    - mysql
 
 - name: delete test MySQL server user
-  mysql_user: user="{{ item }} " state="absent" login_user=root login_password={{ mysql_root_password }}
-  tags: mysql
+  mysql_user:
+    user: "{{ item }}"
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  tags:
+    - mysql
   with_items:
     - test
     - test_%
 
 - name: delete anonymous MySQL server user for localhost
-  mysql_user: user="" state="absent" login_user=root login_password={{ mysql_root_password }}
-  tags: mysql
+  mysql_user:
+    user: ""
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  tags:
+    - mysql
 
 - name: remove the MySQL test database
-  mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password }}
-  tags: mysql
+  mysql_db:
+    db: test
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  tags:
+    - mysql
 
 - name: Create database
-  mysql_db: name={{ item }} state=present
+  mysql_db:
+    name: "{{ item }}"
+    state: present
   with_items:
     - "{{ databases.names }}"
-  tags: mysql
+  tags:
+    - mysql
 
 - name: Create database user
-  mysql_user: name={{ item[0].name }} host={{ item[1] }} password={{ item[0].password }} priv={{ item[0].db_name }}.*:ALL state=present
+  mysql_user:
+    name: "{{ item[0].name }}"
+    host: "{{ item[1] }}"
+    password: "{{ item[0].password }}"
+    priv: "{{ item[0].db_name }}.*:ALL"
+    state: present
   with_nested:
     - "{{ databases.users }}"
     - "{{ database_clients }}"
-  tags: mysql
-
+  tags:
+    - mysql
 
 - name: Create development database user
-  mysql_user: name={{ item.name}} host=% password={{ item.password }} priv=*.*:ALL state=present
+  mysql_user:
+    name: "{{ item.name}}"
+    host: "%"
+    password: "{{ item.password }}"
+    priv: "*.*:ALL"
+    state: present
   with_items:
     - "{{ databases.development_user|default([]) }}"
-  when: develop
-  tags: mysql
+  when:
+    - develop
+  tags:
+    - mysql
 
 - name: Allow external connections when in development
-  lineinfile: "dest=/etc/my.cnf.d/server.cnf insertafter='\\[mysqld-5.5\\]' state=present line='bind-address=0.0.0.0'"
-  when: develop
-  tags: mysql
+  lineinfile:
+    dest: "/etc/my.cnf.d/server.cnf"
+    insertafter: '\\[mysqld-5.5\\]'
+    state: present
+    line: "bind-address=0.0.0.0"
+  when:
+    - develop
+  tags:
+    - mysql
 
 # Add backup user
 - name: add mariadb backup user
@@ -81,13 +148,24 @@
     login_password: "{{ mysql_root_password }}"
     priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
     state: present
-  when: backup_node
+  when:
+    - backup_node
 
 - name: Put mariadb_backup script
-  template: src='mariadb_backup.sh.j2' dest='/usr/local/sbin/mariadb_backup.sh' mode=700 owner=root
-  when: backup_node
+  template:
+    src: "mariadb_backup.sh.j2"
+    dest: "/usr/local/sbin/mariadb_backup.sh"
+    mode: 0700
+    owner: root
+  when:
+    - backup_node
 
 - name: Create cron symlink for backup script
-  file: src=/usr/local/sbin/mariadb_backup.sh dest=/etc/cron.daily/db_backup state=link mode=700 owner=root
-  when: backup_node
-
+  file:
+    src: /usr/local/sbin/mariadb_backup.sh
+    dest: /etc/cron.daily/db_backup
+    state: link
+    mode: 0700
+    owner: root
+  when:
+    - backup_node

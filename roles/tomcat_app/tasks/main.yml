@@ -3,15 +3,15 @@
   file:
     path: "{{ tomcat_install_dir }}/Catalina/{{ app_name }}.{{ base_domain }}"
     state: directory
-    owner: "tomcat"
-    group: "tomcat"
+    owner: tomcat
+    group: tomcat
 
 - name: Deploying {{ app_name }} | copy tomcat context config
   template:
     src: "tomcat_app.xml.j2"
     dest: "{{ tomcat_install_dir }}/Catalina/{{ app_name }}.{{ base_domain }}/{{ deploy_xml_name }}.xml"
-    owner: "tomcat"
-    group: "tomcat"
+    owner: tomcat
+    group: tomcat
   notify:
     - "restart {{ tomcat_handler_name }}"
 
@@ -19,8 +19,8 @@
   file:
     path: "{{ tomcat_lib_dir }}/{{ tomcat_app_base_dir_name }}-{{ app_name }}"
     state: directory
-    group: "tomcat"
-    owner: "tomcat"
+    group: tomcat
+    owner: tomcat
 
 - name: Deploying {{ app_name }} | Create directory where we download application packages (e.g. jar/war files)
   file:

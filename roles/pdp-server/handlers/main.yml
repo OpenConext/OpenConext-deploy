@@ -5,5 +5,5 @@
 
 - name: restart pdp
   service:
-    name: "pdp"
+    name: pdp
     state: restarted

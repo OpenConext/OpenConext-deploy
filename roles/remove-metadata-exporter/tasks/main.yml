@@ -1,7 +1,7 @@
 ---
 - name: ensure the service is stopped
   service:
-    name: "metadata-exporter"
+    name: metadata-exporter
     enabled: no
     state: stopped
   ignore_errors: true
@@ -20,5 +20,5 @@
 
 - name: Remove user
   user:
-    name: "metadata-exporter"
+    name: metadata-exporter
     state: absent
