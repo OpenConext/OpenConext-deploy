@@ -1,18 +1,31 @@
 ---
 - name: Create user
-  user: name="{{ springapp_user }}" system=yes home="{{ monitoring_tests_dir }}" shell=/sbin/nologin
+  user:
+    name: "{{ springapp_user }}"
+    system: yes
+    home: "{{ monitoring_tests_dir }}"
+    shell: /sbin/nologin
 
 - name: Copy systemd service file
-  template: src=../../templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  template:
+    src: "../../templates/spring-boot.service.j2"
+    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
   notify:
     - "systemctl daemon-reload"
-    - restart monitoring-tests
+    - "restart monitoring-tests"
 
 - name: enable monitoring-tests service
-  service: name={{ springapp_service_name }} enabled=yes
+  service:
+    name: "{{ springapp_service_name }}"
+    enabled: yes
 
 - name: Create logging directory
-  file: path=/var/log/{{ springapp_service_name }} state=directory owner={{ springapp_user }} group=monitoring-tests mode=0755
+  file:
+    path: "/var/log/{{ springapp_service_name }}"
+    state: directory
+    owner: "{{ springapp_user }}"
+    group: monitoring-tests
+    mode: 0755
 
 - include: ../../../tasks/springbootapp/install-release.yml
   when: "monitoring_tests_snapshot_timestamp == '' and monitoring_tests_local_jar == ''"

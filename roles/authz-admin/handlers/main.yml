@@ -1,6 +1,9 @@
 ---
 - name: systemctl daemon-reload
-  command: "systemctl daemon-reload"
+  systemd:
+    daemon_reload: yes
 
 - name: restart authz-admin
-  service: name=authz-admin state=restarted
+  service:
+    name: authz-admin
+    state: restarted
