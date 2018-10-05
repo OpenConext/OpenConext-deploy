@@ -18,7 +18,7 @@
     owner: "{{ serviceregistry_fpm_user }}"
     group: root
     mode: 0770
-  
+
 - name: Install memcached and required modules
   yum:
     name: memcached
@@ -42,8 +42,10 @@
     dest: "{{ janus_ssp_tar_location }}"
   register: janusSSP
 
-- include: simplesamlphp.yml
-  when: janusInstallationDir.changed or janusSSP.changed
+- name: Include simplesamlphp.yml
+  include: simplesamlphp.yml
+  when:
+    - janusInstallationDir.changed or janusSSP.changed
 
 - name: Install JANUS - Download archive
   get_url:
@@ -55,4 +57,5 @@
     path: "{{ janus_dir }}"
     state: directory
 
-- include: janus.yml
+- name: Include janus.yml
+  include: janus.yml

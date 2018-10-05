@@ -1,13 +1,24 @@
 - name: Ensure nonlocal ipv4 bind kernel parameter is set
-  sysctl: name=net.ipv4.ip_nonlocal_bind value=1 state=present ignoreerrors=yes
+  sysctl:
+    name: net.ipv4.ip_nonlocal_bind
+    value: 1
+    state: present
+    ignoreerrors: yes
 
 - name: Install keepalived
-  yum: name=keepalived state=present
+  yum:
+    name: keepalived
+    state: present
 
 - name: Copy config file
-  template: src=keepalived_{{ keepalived_config_name }}.conf.j2 dest=/etc/keepalived/keepalived.conf
-  notify: restart keepalived
+  template:
+    src: "keepalived_{{ keepalived_config_name }}.conf.j2"
+    dest: "/etc/keepalived/keepalived.conf"
+  notify:
+    - "restart keepalived"
 
 - name: Start keepalived
-  service: name=keepalived state=started enabled=yes
-
+  service:
+    name: keepalived
+    state: started
+    enabled: yes

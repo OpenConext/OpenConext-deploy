@@ -8,8 +8,8 @@
     owner: root
     group: root
   notify:
-    - restart httpd
-    - restart memcached
+    - "restart httpd"
+    - "restart memcached"
 
 - name: Configure Janus - Copy config and metadata
   template:
@@ -20,8 +20,8 @@
     - { src: "janus/config/config_janus_core.yml.j2", dest: "{{ janus_dir }}/app/config/config_janus_core.yml" }
     - { src: "janus/dictionaries/metadatafields.definition.json.j2", dest: "{{ janus_dir }}/dictionaries/metadatafields-custom.definition.json" }
   notify:
-    - restart httpd
-    - restart memcached
+    - "restart httpd"
+    - "restart memcached"
 
 - name: Activate installation
   file:
@@ -29,8 +29,8 @@
     dest: "{{ janus_installation_current_release_symlink }}"
     state: link
   notify:
-    - restart httpd
-    - restart memcached
+    - "restart httpd"
+    - "restart memcached"
 
 - name: Ensure cache is cleared
   file:
@@ -57,8 +57,8 @@
     owner: "{{ serviceregistry_fpm_user }}"
     group: "{{ serviceregistry_fpm_user }}"
   notify:
-        - restart httpd
-        - restart memcached
+    - "restart httpd"
+    - "restart memcached"
 
 # Note that this migration command probably has created cache directories and files
 # owned by root since it will be run via sudo
@@ -90,10 +90,10 @@
 
 - name: Apache config
   template:
-    src: serviceregistry.conf.j2
-    dest: /etc/httpd/conf.d/serviceregistry.conf
+    src: "serviceregistry.conf.j2"
+    dest: "/etc/httpd/conf.d/serviceregistry.conf"
   notify:
-    - reload httpd
+    - "reload httpd"
 
 - name: php-fpm config
   template:
@@ -102,5 +102,4 @@
   with_items:
     - serviceregistry-pool.conf
   notify:
-    - restart php-fpm
-
+    - "restart php-fpm"
