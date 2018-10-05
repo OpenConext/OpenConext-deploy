@@ -16,7 +16,7 @@
 - name: Add MariaDB.org repository
   template:
     src: "mariadb.repo.j2"
-    dest: ""/etc/yum.repos.d/mariadb.repo"
+    dest: "/etc/yum.repos.d/mariadb.repo"
 
 - name: Add Percona repository
   yum:
