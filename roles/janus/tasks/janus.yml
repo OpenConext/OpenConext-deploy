@@ -1,12 +1,20 @@
 ---
 - name: Install JANUS - Unarchive it
-  unarchive: src={{ janus_tar_location }} dest={{ janus_dir }} copy=no creates={{ janus_dir }}/app owner=root group=root
+  unarchive:
+    src: "{{ janus_tar_location }}"
+    dest: "{{ janus_dir }}"
+    copy: no
+    creates: "{{ janus_dir }}/app"
+    owner: root
+    group: root
   notify:
     - restart httpd
     - restart memcached
 
 - name: Configure Janus - Copy config and metadata
-  template: src={{ item.src }} dest={{ item.dest }}
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
   with_items:
     - { src: "janus/config/parameters.yml.j2", dest: "{{ janus_dir }}/app/config/parameters.yml" }
     - { src: "janus/config/config_janus_core.yml.j2", dest: "{{ janus_dir }}/app/config/config_janus_core.yml" }
@@ -16,21 +24,26 @@
     - restart memcached
 
 - name: Activate installation
-  file: src={{ janus_installation_dir }} dest={{ janus_installation_current_release_symlink }} state=link
+  file:
+    src: "{{ janus_installation_dir }}"
+    dest: "{{ janus_installation_current_release_symlink }}"
+    state: link
   notify:
     - restart httpd
     - restart memcached
 
 - name: Ensure cache is cleared
-  file: path={{ janus_cache_path }}/janus state=absent
+  file:
+    path: "{{ janus_cache_path }}/janus"
+    state: absent
   changed_when: False # never report change since it is about cache
 
 - name: Ensure cache base dir exists and is writable for the webserver
   file:
-    path={{ item }}
-    state=directory
-    owner={{ serviceregistry_fpm_user }}
-    group={{ serviceregistry_fpm_user }}
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ serviceregistry_fpm_user }}"
+    group: "{{ serviceregistry_fpm_user }}"
   with_items:
     - "{{ janus_cache_path }}"
     - "{{ janus_cache_path }}/janus"
@@ -39,10 +52,10 @@
 
 - name: Ensure log directory exists and is writable for the webserver
   file:
-    path=/var/log/janus-ssp/janus
-    state=directory
-    owner={{ serviceregistry_fpm_user }}
-    group={{ serviceregistry_fpm_user }}
+    path: "/var/log/janus-ssp/janus"
+    state: directory
+    owner: "{{ serviceregistry_fpm_user }}"
+    group: "{{ serviceregistry_fpm_user }}"
   notify:
         - restart httpd
         - restart memcached
@@ -58,15 +71,17 @@
 
 # Clear and create cache dir again after Janus installation
 - name: Ensure cache is cleared
-  file: path={{ janus_cache_path }}/janus state=absent
+  file:
+    path: "{{ janus_cache_path }}/janus"
+    state: absent
   changed_when: False # never report change since it is about cache
 
 - name: Ensure cache base dir exists and is writable for the webserver
   file:
-    path={{ item }}
-    state=directory
-    owner={{ serviceregistry_fpm_user }}
-    group={{ serviceregistry_fpm_user }}
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ serviceregistry_fpm_user }}"
+    group: "{{ serviceregistry_fpm_user }}"
   with_items:
     - "{{ janus_cache_path }}"
     - "{{ janus_cache_path }}/janus"
@@ -74,12 +89,16 @@
   changed_when: False # never report change because we remove the directories above...
 
 - name: Apache config
-  template: src=serviceregistry.conf.j2 dest=/etc/httpd/conf.d/serviceregistry.conf
+  template:
+    src: serviceregistry.conf.j2
+    dest: /etc/httpd/conf.d/serviceregistry.conf
   notify:
     - reload httpd
 
 - name: php-fpm config
-  template: src={{ item }}.j2 dest=/etc/php-fpm.d/{{ item }}
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/php-fpm.d/{{ item }}"
   with_items:
     - serviceregistry-pool.conf
   notify:

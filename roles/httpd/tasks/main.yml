@@ -1,49 +1,71 @@
 ---
 - name: Install httpd and required modules
-  yum: name={{ item }} state=present
+  yum:
+    name: "{{ item }}"
+    state: present
   with_items:
      - httpd
      - mod_ssl
 
 - name: Copy default config files
-  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/httpd/conf.d/{{ item }}"
   tags: httpd
   with_items:
     - 01_default.conf
-  notify: reload httpd
+  notify:
+    - "reload httpd"
 
 - name: Copy the main config file
-  template: src=httpd.conf_httpd24.j2 dest=/etc/httpd/conf/httpd.conf
-  notify: reload httpd
+  template:
+    src: httpd.conf_httpd24.j2
+    dest: /etc/httpd/conf/httpd.conf
+  notify:
+    - "reload httpd"
 
 - name: Copy include files
-  copy: src={{ item }} dest=/etc/httpd/{{ item }}
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/httpd/{{ item }}"
   with_items:
     - ssl_backend.conf
-  notify: reload httpd
+  notify:
+    - "reload httpd"
 
 - name: Create empty welcome.conf and userdir.conf
-  copy: content="" dest=/etc//httpd/conf.d/{{ item }}
+  copy:
+    content: ""
+    dest: "/etc/httpd/conf.d/{{ item }}"
   with_items:
     - welcome.conf
     - userdir.conf
     - autoindex.conf
-  notify: reload httpd
+  notify:
+    - "reload httpd"
 
 - name: Stop listening on port 443
-  lineinfile: dest=/etc/httpd/conf.d/ssl.conf state=absent regexp="Listen 443*"
+  lineinfile:
+    dest: /etc/httpd/conf.d/ssl.conf
+    state: absent
+    regexp: "Listen 443*"
 
 - name: Disable unused modules
-  copy: src={{ item }} dest=/etc/httpd/conf.modules.d/{{ item }}
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/httpd/conf.modules.d/{{ item }}"
   with_items:
     - 00-base.conf
     - 00-dav.conf
     - 00-lua.conf
     - 00-proxy.conf
-  notify: reload httpd
+  notify:
+    - "reload httpd"
 
 - name: Remove default /var/www folders
-  file: path=/var/www/{{ item }} state=absent
+  file:
+    path: "/var/www/{{ item }}"
+    state: absent
   with_items:
     - cgi-bin
     - error
@@ -51,14 +73,25 @@
     - icons
 
 - name: Create SSL key
-  copy: content="{{ backend_tls_key }}" dest={{ tls.cert_private_path }}/backend.{{ base_domain  }}.key mode=0600 owner=root
-  when: haproxy_backend_tls
+  copy:
+    content: "{{ backend_tls_key }}"
+    dest: "{{ tls.cert_private_path }}/backend.{{ base_domain  }}.key"
+    mode: 0600
+    owner: root
+  when:
+    - haproxy_backend_tls
 
 - name: Create SSL certificate
-  copy: src={{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem dest="{{ tls.cert_path }}/backend.{{ base_domain}}.pem"
-  when: haproxy_backend_tls
+  copy:
+    src: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
+    dest: "{{ tls.cert_path }}/backend.{{ base_domain}}.pem"
+  when:
+    - haproxy_backend_tls
 
 - name: enable httpd
-  service: name={{ item }} enabled=yes state=started
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
   with_items:
-       - httpd
+   - httpd

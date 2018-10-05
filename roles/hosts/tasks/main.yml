@@ -1,6 +1,9 @@
 ---
 - name: Set hosts
-  lineinfile: dest=/etc/hosts line="{{ hosts_ip_address }} {{ item }}" unsafe_writes=yes
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ hosts_ip_address }} {{ item }}"
+    unsafe_writes: yes
   with_items:
     - "static.vm.openconext.org"
     - "metadata.vm.openconext.org"
