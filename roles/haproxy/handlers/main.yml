@@ -1,28 +1,48 @@
 ---
 - name: restart haproxy
-  service: name=haproxy state=restarted
+  service:
+    name: haproxy
+    state: restarted
 
 - name: reload haproxy
-  service: name=haproxy state=reloaded
+  service:
+    name: haproxy
+    state: reloaded
 
 - name: restart rsyslog
-  service: name=rsyslog state=restarted
+  service:
+    name: rsyslog
+    state: restarted
 
 - name: restart haproxy instances with changed configs
-  service: name=haproxy_{{ item.item.name }} state=restarted
-  when: item.changed
-  with_items: "{{ configs_changed.results }}"
+  service:
+    name: haproxy_{{ item.item.name }}
+    state: restarted
+  when:
+    - item.changed
+  with_items:
+    - "{{ configs_changed.results }}"
 
 - name: restart haproxy redirects instance
-  service: name=haproxy_redirects state=restarted
+  service:
+    name: haproxy_redirects
+    state: restarted
 
 
 - name: restart haproxy instances with changed keys
-  service: name=haproxy_{{ item.item.name }} state=restarted
-  when: item.changed
-  with_items: "{{ keys_changed.results }}"
+  service:
+    name: haproxy_{{ item.item.name }}
+    state: restarted
+  when:
+    - item.changed
+  with_items:
+    - "{{ keys_changed.results }}"
 
 - name: reload systemd
-  systemd: name=haproxy_{{ item.item.name }} daemon_reload=yes
-  when: item.changed
-  with_items: "{{ systemd_changed.results }}"
+  systemd:
+    name: haproxy_{{ item.item.name }}
+    daemon_reload: yes
+  when:
+    - item.changed
+  with_items:
+    - "{{ systemd_changed.results }}"

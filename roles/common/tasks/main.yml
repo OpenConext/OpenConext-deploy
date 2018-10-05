@@ -1,6 +1,10 @@
 ---
 - name: set timezone
-  file: state=link src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime force=True
+  file:
+    state: link
+    src: "/usr/share/zoneinfo/{{ timezone }}"
+    dest: "/etc/localtime"
+    force: True
 
 - name: check that hostname and fqdn are set up correctly
   command: "/usr/bin/hostname --fqdn"
@@ -8,21 +12,28 @@
   changed_when: false
 
 - name: Add Epel repo
-  yum: name=epel-release.noarch state=present
+  yum:
+    name: epel-release.noarch
+    state: present
 
 - name: Install tools / clients
-  yum: name={{ item }} state=present
+  yum:
+    name: "{{ item }}"
+    state: present
   with_items:
-     - telnet
-     - sudo
-     - lynx
-     - ntp
-     - unzip
-     - libselinux-python
+    - telnet
+    - sudo
+    - lynx
+    - ntp
+    - unzip
+    - libselinux-python
 
 - name: Install git on development vm
-  yum: name=git state=present
-  when: develop
+  yum:
+    name: git
+    state: present
+  when:
+    - develop
 
 # TODO: proper SElinux support.  Would require at least to explicitly open up
 # all non-standard apache ports (9876, loadbalancing.engine.port, etc)
@@ -30,74 +41,101 @@
 # limited in how it handles systems without SELinux binaries or SELinux
 # support (like test)
 - name: check for presence of SELinux config file
-  stat: path=/etc/sysconfig/selinux
+  stat:
+    path: /etc/sysconfig/selinux
   register: selinux_config
 
 - name: check for presence of SELinux binaries
-  stat: path=/usr/sbin/setenforce
+  stat:
+    path: /usr/sbin/setenforce
   register: selinux_binaries
 
 - name: check if SELinux is enabled
   shell: "/usr/sbin/sestatus | awk -F': *' '$1~/SELinux status/ {print $2}'"
-  when: selinux_binaries.stat.exists
+  when:
+    - selinux_binaries.stat.exists
   register: selinux_enabled
   changed_when: false
 
 - name: check SELinux mode
   shell: "/usr/sbin/sestatus | awk -F': *' '$1~/Current mode/ {print $2}'"
-  when: selinux_binaries.stat.exists and selinux_enabled.stdout == 'enabled'
+  when:
+    - selinux_binaries.stat.exists and selinux_enabled.stdout == 'enabled'
   register: selinux_mode
   changed_when: false
 
 - name: set SELinux mode to permissive
-  lineinfile: dest=/etc/sysconfig/selinux state=present regexp='^SELINUX=' line='SELINUX=permissive'
-  when: selinux_config.stat.exists
+  lineinfile:
+    dest: "/etc/sysconfig/selinux"
+    state: present
+    regexp: "^SELINUX="
+    line: "SELINUX=permissive"
+  when:
+    - selinux_config.stat.exists
 
 - name: disable SELinux NOW
   command: /usr/sbin/setenforce 0
-  when: selinux_binaries.stat.exists and selinux_enabled.stdout == 'enabled' and selinux_mode.stdout != 'permissive'
+  when:
+    - selinux_binaries.stat.exists and selinux_enabled.stdout == 'enabled' and selinux_mode.stdout != 'permissive'
 
 - name: check SELinux status
   shell: "/usr/sbin/sestatus | awk -F': *' '$1~/Current mode|SELinux status/ {print $2; q}'|grep -qE 'disabled|permissive'"
-  when: selinux_binaries.stat.exists
+  when:
+    - selinux_binaries.stat.exists
   changed_when: false
 
 - name: Start ntpd
-  service: name=ntpd state=started enabled=yes
+  service:
+    name: ntpd
+    state: started
+    enabled: yes
 
 - name: Remove exim,sendmail when Postfix needs to be installed
-  yum: name={{ item }} state=absent
+  yum:
+    name: "{{ item }}"
+    state: absent
   with_items:
     - exim
     - sendmail
     - sendmail-cf
-  when: sendmail_smarthost is defined
+  when:
+    - sendmail_smarthost is defined
 
 - name: Install Postfix
-  yum: name={{ item }} state=present
+  yum:
+    name: "{{ item }}"
+    state: present
   with_items:
-     - postfix
-  when: sendmail_smarthost is defined
+    - postfix
+  when:
+    - sendmail_smarthost is defined
 
 - name: Copy Postfix main.cf template
-  template: src='main.cf.j2' dest='/etc/postfix/main.cf'
-  when: sendmail_smarthost is defined
-  notify: reload postfix
+  template:
+    src: "main.cf.j2"
+    dest: "/etc/postfix/main.cf"
+  when:
+    - sendmail_smarthost is defined
+  notify:
+    - "reload postfix"
 
 - name: Copy Postfix pseudo-email config
-  template: src='{{item}}.j2' dest='/etc/postfix/{{item}}'
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/postfix/{{ item }}"
   when: sendmail_smarthost is defined and handle_pseudo_email
-  with_items: 
+  with_items:
     - mysql-pseudo.cf
     - header_checks
-  notify: 
-    - reload postfix
-    - rebuild header_checks
+  notify:
+    - "reload postfix"
+    - "rebuild header_checks"
 
 # journald binary logs corrupt on specific engineblock messages.
 # disabling compression fixes that issue
 - name: Disable journald compression
-  copy: src=journald.conf dest='/etc/systemd/journald.conf'
-  notify: 
-    - restart journald
-
+  copy:
+    src: "journald.conf"
+    dest: "/etc/systemd/journald.conf"
+  notify:
+    - "restart journald"

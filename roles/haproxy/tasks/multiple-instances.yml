@@ -1,6 +1,11 @@
 ---
-- name: Install haproxy
-  yum: name=haproxy state=present
+- name: Install haproxy and other needed packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - haproxy
+    - socat
 
 - name: Get haproxy version
   command: bash -c "haproxy -v | grep version | awk '{ print $3 }'"
@@ -9,13 +14,13 @@
 
 - name: Set haproxy version fact
   set_fact:
-    haproxy_version: "{{ haproxy_version.stdout }}" 
-
-- name: Install socat
-  yum: name=socat state=present
+    haproxy_version: "{{ haproxy_version.stdout }}"
 
 - name: install OCSP update tool
-  copy: src=hapos-upd dest=/usr/local/sbin/ mode=0755
+  copy:
+    src: "hapos-upd"
+    dest: "/usr/local/sbin/"
+    mode: 0755
 
 - name: Create haproxy socket dir
   file: path=/var/lib/haproxy state=directory owner=haproxy group=haproxy mode=0755
@@ -38,7 +43,7 @@
 
 - name: Create directory to store backend CA file
   file: dest=/etc/pki/haproxy state=directory mode=0755 owner=root
-  
+
 - name: Copy backend CA certificate
   copy: content="{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}" dest="{{ tls_backend_ca }}" mode=0644 owner=root
   when: haproxy_backend_tls
@@ -78,7 +83,7 @@
   with_items: "{{ haproxy_applications }}"
   changed_when: "'Created symlink' in haproxy_enable_service.stderr"
 
-- name: start services 
+- name: start services
   service: name=haproxy_{{item.name }} enabled=yes state=started
   with_items: "{{ haproxy_applications }}"
 
