@@ -364,6 +364,7 @@ oidc:
   db_host: "{{ mysql_host }}"
   db_name: oidc-server
   sp_entity_id: https://oidc.{{ base_domain }}
+  api_user: manage
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
