@@ -1,0 +1,67 @@
+logging.config=file://{{ dashboard_dir }}/logback.xml
+server.port={{ springapp_tcpport }}
+
+# 8 hours
+server.session.timeout=28800
+
+# An empty value will be replaced with the default
+server.server-header=no
+server.session.cookie.secure=true
+
+# Team id that is used as definition of who is a 'dashboard_admin'.
+dashboard.admin={{ dashboard.admin_team }}
+# Team id that is used as definition of who is a 'dashboard.viewer'.
+dashboard.viewer={{ dashboard.view_team }}
+# Team id that is used as definition of who is a 'dashboard_super_user'.
+dashboard.super.user={{ dashboard.super_team }}
+
+# SAB connection details
+sab.endpoint={{ dashboard.sab_endpoint }}
+sab.username=cdk
+sab.password={{ dashboard_sab_password }}
+
+sab-rest.endpoint={{ dashboard.sab_rest_endpoint }}
+sab-rest.username=cdk
+sab-rest.password={{ dashboard_sab_rest_password }}
+
+# SAB roles
+admin.surfconext.idp.sabRole=SURFconextverantwoordelijke
+viewer.surfconext.idp.sabRole=SURFconextbeheerder
+
+endpoints.enabled=false
+endpoints.health.enabled=true
+endpoints.info.enabled=true
+
+server.tomcat.basedir={{ dashboard_dir }}/tomcat_work
+
+# SMTP server settings for notifications
+spring.mail.host=localhost
+spring.mail.port=25
+
+coin-administrative-email={{ dashboard.administrative_mail }}
+administration.email.enabled={{ dashboard.administration_email_enabled }}
+
+jiraBaseUrl=https://jira.surfnet.nl/rest/api/2
+jiraUsername={{ dashboard.jira_username }}
+jiraPassword={{ dashboard_jira_password }}
+jiraProjectKey={{ dashboard.jira_project_key }}
+
+manage.username={{ dashboard.manage_username }}
+manage.password={{ manage_dashboard_secret }}
+manage.manageBaseUrl={{ dashboard.manage_base_url }}
+
+statsUser={{ dashboard.stats_user }}
+statsPassword={{ stats_dashboard_api_password }}
+statsBaseUrl={{ dashboard.stats_url }}
+
+pdp.server={{ dashboard.pdp_server }}
+pdp.username={{ dashboard.pdp_username }}
+pdp.password={{ pdp_password }}
+
+dashboard.feature.shibboleth=true
+dashboard.feature.sab={{ dashboard.feature_sab }}
+dashboard.feature.manage=true
+dashboard.feature.jira={{ dashboard.feature_jira }}
+dashboard.feature.pdp=true
+dashboard.feature.statistics=true
+dashboard.feature.mail={{ dashboard.feature_mail }}
