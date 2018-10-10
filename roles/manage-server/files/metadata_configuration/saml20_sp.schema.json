@@ -327,6 +327,12 @@
           "default": false,
           "info": "Must be set for this Service Provider to be included in the EB push despite being imported from eduGAIN."
         },
+        "coin:exclude_from_push": {
+          "type": "string",
+          "format": "boolean",
+          "default": false,
+          "info": "Must be set for this Service Provider to be excluded in the EB push."
+        },
         "coin:interfed_source": {
           "type": "string",
           "enum": [

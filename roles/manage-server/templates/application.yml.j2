@@ -39,6 +39,11 @@ security:
   backdoor_password: {{ manage_backdoor_api_password }}
   api_users_config_path: file://{{ manage_dir }}/manage-api-users.yml
 
+oidc:
+  user: {{ oidc.api_user }}
+  password: {{ oidc_api_password }}
+  url: https://oidc.{{ base_domain }}/oidc/api/clients
+
 spring:
   profiles:
     active: test

@@ -273,6 +273,12 @@
           ],
           "default": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
           "info": "Select the Secure Hash Algorithm (SHA) to use for signed authentication requests sent by Engineblock to this identity provider."
+        },
+        "coin:exclude_from_push": {
+          "type": "string",
+          "format": "boolean",
+          "default": false,
+          "info": "Must be set for this Identity Provider to be excluded in the EB push."
         }
       },
       "patternProperties": {
