@@ -1,14 +1,21 @@
 - name: Add group {{ lifecycle_user }}
-  group: name={{ lifecycle_user }} state=present
+  group:
+    name: "{{ lifecycle_user }}"
+    state: present
 
 - name: Add user {{ lifecycle_user }}
-  user: name={{ lifecycle_user }} group={{ lifecycle_user }} createhome=no state=present
+  user:
+    name: "{{ lifecycle_user }}"
+    group: "{{ lifecycle_user }}"
+    createhome: no
+    state: present
 
 - name: Check if latest version is installed
-  stat: path="{{ lifecycle_data_dir}}/releases/sp-dashboard-{{ lifecycle_branch }}" 
+  stat:
+    path: "{{ lifecycle_data_dir}}/releases/sp-dashboard-{{ lifecycle_branch }}"
   register: branch_installed
 
-- include: install-branch.yml
-  when: 
+- name: Include install-branch.yml
+  include: install-branch.yml
+  when:
     - branch_installed.stat.exists == false
-

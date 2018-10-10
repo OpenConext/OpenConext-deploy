@@ -1,11 +1,13 @@
 - name: copy json
-  template: src={{ item }}.j2 dest=/tmp/{{ item }}
+  template:
+    src: "{{ item }}.j2"
+    dest: "/tmp/{{ item }}"
   with_items:
     - saml20_idp.json
     - saml20_sp.json
 
 - name: import metadata manage
-  shell: mongoimport --db {{ manage.mongo_database }} --username {{ manage.mongo_user }} --password {{ manage.mongo_password }} --collection {{ item.coll }}  --file /tmp/{{ item.coll }}.json
+  command: mongoimport --db {{ manage.mongo_database }} --username {{ manage.mongo_user }} --password {{ manage.mongo_password }} --collection {{ item.coll }}  --file /tmp/{{ item.coll }}.json
   with_items:
     - { coll:  "saml20_idp"}
     - { coll:  "saml20_sp"}

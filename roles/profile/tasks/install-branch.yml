@@ -1,14 +1,15 @@
 ---
 - name: Check if target dir exists
-  stat: path={{ profile_release_dir }}
+  stat:
+    path: "{{ profile_release_dir }}"
   register: profile_dir
 
 - name: Checkout profile branch
-  git: >
-    repo=https://github.com/OpenConext/OpenConext-profile.git
-    dest="{{ profile_branch_dir }}"
-    version={{ profile_branch }}
-    force=yes
+  git:
+    repo: https://github.com/OpenConext/OpenConext-profile.git
+    dest: "{{ profile_branch_dir }}"
+    version: "{{ profile_branch }}"
+    force: yes
   register: profile_gitclone
 
 - name: Make release
@@ -17,20 +18,22 @@
     HOME: "{{ openconext_builds_dir }}"
   args:
     chdir: "{{ profile_branch_dir }}"
-  when: profile_gitclone.changed or not profile_dir.stat.exists
+  when:
+    - profile_gitclone.changed or not profile_dir.stat.exists
 
 - name: Unpack current version
-  unarchive: >
-    src="{{ openconext_builds_dir }}/Releases/OpenConext-profile-{{ profile_branch | replace('/', '_') }}.tar.gz"
-    dest="{{ openconext_releases_dir }}"
-    copy=no
-  when: profile_gitclone.changed or not profile_dir.stat.exists
+  unarchive:
+    src: "{{ openconext_builds_dir }}/Releases/OpenConext-profile-{{ profile_branch | replace('/', '_') }}.tar.gz"
+    dest: "{{ openconext_releases_dir }}"
+    copy: no
+  when:
+    - profile_gitclone.changed or not profile_dir.stat.exists
 
 - name: Activate new Profile branch
-  file: >
-    src="{{ openconext_releases_dir }}/OpenConext-profile-{{ profile_branch | replace('/', '_') }}"
-    dest={{ profile_current_release_symlink }}
-    state=link
+  file:
+    src: "{{ openconext_releases_dir }}/OpenConext-profile-{{ profile_branch | replace('/', '_') }}"
+    dest: "{{ profile_current_release_symlink }}"
+    state: link
   notify:
-    - restart httpd
-    - restart php-fpm
+    - "restart httpd"
+    - "restart php-fpm"

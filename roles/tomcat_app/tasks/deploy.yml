@@ -1,25 +1,41 @@
 ---
 - name: Deploying {{ app_name }} | stop tomcat
-  service: name={{ tomcat_service_name }} state=stopped
+  service:
+    name: "{{ tomcat_service_name }}"
+    state: stopped
 
 - name: Deploying {{ app_name }} | remove current warfile
-  file: path={{ tomcat_lib_dir }}/{{ tomcat_app_base_dir_name }}-{{ app_name }}/{{ item }} state=absent
+  file:
+    path: "{{ tomcat_lib_dir }}/{{ tomcat_app_base_dir_name }}-{{ app_name }}/{{ item }}"
+    state: absent
   with_items:
     - ROOT
     - "{{ deploy_name }}"
 
-- name: Deploying {{ app_name }} | remove current warfile 
-  file: path={{ tomcat_install_dir }}/wars/{{ item }} state=absent
+- name: Deploying {{ app_name }} | remove current warfile
+  file:
+    path: "{{ tomcat_install_dir }}/wars/{{ item }}"
+    state: absent
   with_items:
     - ROOT.war
     - "{{ deploy_name }}.war"
 
 - name: Deploying {{ app_name }} | remove current workdir
-  file: path={{ tomcat_cache_dir }}/work/Catalina/{{ base_domain }} state=absent
+  file:
+    path: "{{ tomcat_cache_dir }}/work/Catalina/{{ base_domain }}"
+    state: absent
 
 - name: Deploying {{ app_name }} | put new warfile into place
-  shell: cp {{ candidate_war }} {{ tomcat_install_dir }}/wars/{{ deploy_name }}.war
-  notify: restart {{ tomcat_handler_name }}
+#  command: cp {{ candidate_war }} {{ tomcat_install_dir }}/wars/{{ deploy_name }}.war
+  copy:
+      src: "{{ candidate_war }}"
+      dest: "{{ tomcat_install_dir }}/wars/{{ deploy_name }}.war"
+      remote_src: yes
+  notify:
+    - "restart {{ tomcat_handler_name }}"
 
 - name: Deploying {{ app_name }} | set correct permissions
-  file: path={{ tomcat_install_dir }}/wars/{{ deploy_name }}.war owner=tomcat group=tomcat
+  file:
+    path: "{{ tomcat_install_dir }}/wars/{{ deploy_name }}.war"
+    owner: tomcat
+    group: tomcat

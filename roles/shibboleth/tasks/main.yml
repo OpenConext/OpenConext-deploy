@@ -1,51 +1,71 @@
 ---
 - name: Add Shibboleth repo
-  copy: src={{ item }} dest=/etc/yum.repos.d/{{ item }}
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/yum.repos.d/{{ item }}"
   with_items:
     - shibboleth-centos7.repo
     - shibboleth.repo.gpgkey
 
-- name: Install
-  yum: name={{ item }} state=present
+- name: Install Shibboleth
+  yum:
+    name: "{{ item }}"
+    state: present
   with_items:
     - shibboleth.x86_64
 
 - name: Remove default conf files apache
-  file: path=/etc/httpd/conf.d/{{ item }} state=absent
+  file:
+    path: "/etc/httpd/conf.d/{{ item }}"
+    state: absent
   with_items:
     - shib.conf
 
 - name: Copy default config files
-  copy: src={{ item }} dest=/etc/httpd/conf.d/20_shib.conf
+  copy:
+      src: "{{ item }}"
+      dest: "/etc/httpd/conf.d/20_shib.conf"
   with_items:
     - 20_shib_apache24.conf
-  notify: reload httpd
+  notify:
+    - "reload httpd"
 
 - name: shibboleth SP certificate
-  copy: src={{ inventory_dir }}/files/certs/shib-sp.crt dest=/etc/shibboleth/shib-sp.crt
+  copy:
+    src: "{{ inventory_dir }}/files/certs/shib-sp.crt"
+    dest: "/etc/shibboleth/shib-sp.crt"
   notify:
-    - restart shibd
+    - "restart shibd"
 
 - name: shibboleth SP key
-  copy: content="{{ shibboleth_sp_key }}" dest=/etc/shibboleth/shib-sp.key owner=root group=shibd mode=640
+  copy:
+    content: "{{ shibboleth_sp_key }}"
+    dest: "/etc/shibboleth/shib-sp.key"
+    owner: root
+    group: shibd
+    mode: 0640
   notify:
-    - restart shibd
+    - "restart shibd"
 
 - name: Shibboleth config
-  template: src=shibboleth/{{ item }}.j2 dest=/etc/shibboleth/{{ item }}
+  template:
+    src: "shibboleth/{{ item }}.j2"
+    dest: "/etc/shibboleth/{{ item }}"
   with_items:
     - attribute-map.xml
     - localLogout.html
     - shibboleth2.xml
     - attribute-policy.xml
   notify:
-    - restart shibd
-    - reload httpd
+    - "restart shibd"
+    - "reload httpd"
 
 - name: enable shibd
-  service: name={{ item }} enabled=yes
+  service:
+    name: "{{ item }}"
+    enabled: yes
   with_items:
     - shibd
   notify:
-    - restart shibd
-    - reload httpd
+    - "restart shibd"
+    - "reload httpd"

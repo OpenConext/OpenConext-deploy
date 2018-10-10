@@ -1,22 +1,29 @@
 ---
 - name: Add "engineblock" user
-  user: name=engineblock groups={{ apache_user}} append=yes state=present createhome=no
+  user:
+    name: engineblock
+    groups: "{{ apache_user}}"
+    append: yes
+    state: present
+    createhome: no
 
 - name: Create the cache dir for Symfony
   file:
-    path={{ engineblock_symfony_cache_path }}
-    state=directory
-    recurse=yes
+    path: "{{ engineblock_symfony_cache_path }}"
+    state: directory
+    recurse: yes
 
 - name: Create the log dir for Symfony
   file:
-    path={{ engineblock_symfony_log_path }}
-    state=directory
-    recurse=yes
+    path: "{{ engineblock_symfony_log_path }}"
+    state: directory
+    recurse: yes
 
 - name: Ensure setfacl support is present.
   become: true
-  package: name=acl state=present
+  package:
+    name: acl
+    state: present
 
 - name: Allow vagrant user complete access to all engineblock files
   become: true
@@ -34,4 +41,7 @@
     - [ "{{ engineblock_symfony_cache_path }}", "{{ engineblock_symfony_log_path }}", "/opt/openconext/OpenConext-engineblock/" ]
 
 - name: Copy app_dev.php to OpenConext web folder
-  copy: src=app_dev.php dest=/opt/openconext/OpenConext-engineblock/web/app_dev.php mode=0644
+  copy:
+    src: "app_dev.php"
+    dest: "/opt/openconext/OpenConext-engineblock/web/app_dev.php"
+    mode: 0644

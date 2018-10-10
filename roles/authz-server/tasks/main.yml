@@ -1,47 +1,87 @@
 ---
 - name: Create user
-  user: name=authz-server system=yes home={{ authz_server_dir }} shell=/sbin/nologin
+  user:
+    name: authz-server
+    system: yes
+    home: "{{ authz_server_dir }}"
+    shell: /sbin/nologin
 
 - name: Copy systemd service file
-  template: src=templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
+  template:
+    src: "templates/spring-boot.service.j2"
+    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
   notify:
     - "systemctl daemon-reload"
     - "restart authz-server"
 
 - name: Check presence of legacy init script
-  stat: path=/etc/init.d/{{ springapp_service_name }}
+  stat:
+    path: "/etc/init.d/{{ springapp_service_name }}"
   register: legacy_authz_server_present
 
 - name: Stop service when legacy init script is present
-  service: name={{ springapp_service_name }} state=stopped
-  when: legacy_authz_server_present.stat.exists
+  service:
+    name: "{{ springapp_service_name }}"
+    state: stopped
+  when:
+    - legacy_authz_server_present.stat.exists
 
 - name: Clean up legacy init script
-  file: path=/etc/init.d/{{ springapp_service_name }} state=absent
+  file:
+    path: "/etc/init.d/{{ springapp_service_name }}"
+    state: absent
 
 - name: enable authz-server service
-  service: name=authz-server enabled=yes
+  service:
+    name: authz-server
+    enabled: yes
 
 - name: Create logging directory
-  file: path=/var/log/{{ springapp_service_name }} state=directory owner=authz-server group=authz-server mode=0755
+  file:
+    path: "/var/log/{{ springapp_service_name }}"
+    state: directory
+    owner: authz-server
+    group: authz-server
+    mode: 0755
 
-- include: ../../../tasks/springbootapp/install-maven-release.yml
-  when: "authz_server_local_jar == ''"
+- name: Include install-maven-release.yml
+  include: ../../../tasks/springbootapp/install-maven-release.yml
+  when:
+    - "authz_server_local_jar == ''"
 
-- include: ../../../tasks/springbootapp/install-local.yml
+- name: Include install-local.yml
+  include: ../../../tasks/springbootapp/install-local.yml
   when: "authz_server_local_jar != ''"
 
 - name: Copy logging config
-  template: src=logback.xml.j2 dest={{ authz_server_dir }}/logback.xml owner=authz-server group=authz-server mode=0740
-  notify: restart authz-server
+  template:
+    src: "logback.xml.j2"
+    dest: "{{ authz_server_dir }}/logback.xml"
+    owner: authz-server
+    group: authz-server
+    mode: 0740
+  notify:
+    - "restart authz-server"
 
 - name: Copy application config
-  template: src=application.properties.j2 dest={{ authz_server_dir }}/application.properties owner=authz-server group=authz-server mode=0740
-  notify: restart authz-server
+  template:
+    src: "application.properties.j2"
+    dest: "{{ authz_server_dir }}/application.properties"
+    owner: authz-server
+    group: authz-server
+    mode: 0740
+  notify:
+    - "restart authz-server"
 
 - name: copy apache config
-  template: src=authz.conf.j2 dest=/etc/httpd/conf.d/authz.conf
-  notify: reload httpd
+  template:
+    src: "authz.conf.j2"
+    dest: "/etc/httpd/conf.d/authz.conf"
+  notify:
+    - "reload httpd"
 
 - name: ensure the service is started
-  service: name=authz-server enabled=yes state=started
+  service:
+    name: authz-server
+    enabled: yes
+    state: started

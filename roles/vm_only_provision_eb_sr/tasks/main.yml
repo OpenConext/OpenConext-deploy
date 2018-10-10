@@ -1,13 +1,19 @@
 ---
 - name: Create directory for database backups
-  file: state=directory path=/opt/OCbackups owner=root group=root
+  file:
+    path: "/opt/OCbackups"
+    owner: root
+    group: root
+    state: directory
 
 - name: Backup current database
   shell: "mysqldump -u root -p{{ mysql_root_password }} --force --comment --set-charset --default-character-set=utf8 --databases {{ janus_database_name }} {{ engine_database_name }} > /opt/OCbackups/sr+eb.$(date +%Y%m%d_%H%M%S).sql"
   changed_when: false
 
 - name: copy load sql
-  template: src={{ item }}.j2 dest=/tmp/{{ item }}
+  template:
+    src: "{{ item }}.j2"
+    dest: "/tmp/{{ item }}"
   with_items:
     - engineblock.sql
     - serviceregistry.sql
@@ -19,6 +25,5 @@
     - { db_user: "{{ janus_database_user }}", db_password: "{{ janus_database_password }}", db_name: "{{ janus_database_name }}", sql: serviceregistry.sql }
   register: eb_sr_sql
   run_once: true
-  args: 
+  args:
     creates: /var/lib/mysql/eb/migration_versions.frm
-

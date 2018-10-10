@@ -1,14 +1,15 @@
 ---
 - name: Check if target dir exists
-  stat: path={{ engine_release_dir }}
+  stat:
+    path: "{{ engine_release_dir }}"
   register: eb_dir
 
 - name: Checkout engine-block branch
-  git: >
-    repo=https://github.com/OpenConext/OpenConext-engineblock.git
-    dest="{{ engine_branch_dir }}"
-    version={{ engine_branch }}
-    force=yes
+  git:
+    repo: https://github.com/OpenConext/OpenConext-engineblock.git
+    dest: "{{ engine_branch_dir }}"
+    version: "{{ engine_branch }}"
+    force: yes
   register: eb_gitclone
 
 - name: Make release
@@ -17,20 +18,22 @@
     HOME: "{{ openconext_builds_dir }}"
   args:
     chdir: "{{ engine_branch_dir }}"
-  when: eb_gitclone.changed or not eb_dir.stat.exists
+  when:
+    - eb_gitclone.changed or not eb_dir.stat.exists
 
 - name: Unpack current version
-  unarchive: >
-    src="{{ openconext_builds_dir }}/Releases/OpenConext-engineblock-{{ engine_branch | replace('/', '_') }}.tar.gz"
-    dest="{{ openconext_releases_dir }}"
-    copy=no
-  when: eb_gitclone.changed or not eb_dir.stat.exists
+  unarchive:
+    src: "{{ openconext_builds_dir }}/Releases/OpenConext-engineblock-{{ engine_branch | replace('/', '_') }}.tar.gz"
+    dest: "{{ openconext_releases_dir }}"
+    copy: no
+  when:
+    - eb_gitclone.changed or not eb_dir.stat.exists
 
 - name: Activate new EngineBlock branch
-  file: >
-    src="{{ openconext_releases_dir }}/OpenConext-engineblock-{{ engine_branch | replace('/', '_') }}"
-    dest={{ engine_current_release_symlink }}
-    state=link
+  file:
+    src: "{{ openconext_releases_dir }}/OpenConext-engineblock-{{ engine_branch | replace('/', '_') }}"
+    dest: "{{ engine_current_release_symlink }}"
+    state: link
   notify:
-    - restart httpd
-    - restart php-fpm
+    - "restart httpd"
+    - "restart php-fpm"
