@@ -333,6 +333,12 @@
           "default": false,
           "info": "Must be set for this Service Provider to be excluded in the EB push."
         },
+        "coin:oidc_client": {
+          "type": "string",
+          "format": "boolean",
+          "default": false,
+          "info": "Set for those Service Providers that are OpenIDConnect clients."
+        },
         "coin:interfed_source": {
           "type": "string",
           "enum": [

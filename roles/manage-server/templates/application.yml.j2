@@ -43,6 +43,8 @@ oidc:
   user: {{ oidc.api_user }}
   password: {{ oidc_api_password }}
   url: https://oidc.{{ base_domain }}/oidc/api/clients
+  feature: true
+  acsLocation: https://oidc.{{ base_domain }}/saml/SSO
 
 spring:
   profiles:
