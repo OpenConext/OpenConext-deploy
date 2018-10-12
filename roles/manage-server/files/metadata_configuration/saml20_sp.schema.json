@@ -304,6 +304,12 @@
           "format": "boolean",
           "info": "Whether authentication request, logout requests and logout responses should be signed. The default is FALSE. This is generally set for trusted proxies like OpenID Connect Gateway or Stepup authentication gateway."
         },
+        "coin:sp_specific_metadata": {
+          "type": "string",
+          "format": "boolean",
+          "default": false,
+          "info": "Publish SP-specific metadata containing only whitelisted IdPs."
+        },
         "coin:publish_in_edugain": {
           "type": "string",
           "format": "boolean",
