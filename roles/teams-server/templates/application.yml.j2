@@ -68,7 +68,7 @@ spring:
     password: {{ teams.db_password }}
     tomcat:
       test-on-borrow: true
-      validation-query: SELECT 1
+      validation-query: SELECT count(*) FROM invitations
       remove-abandoned: true
   mail:
     host: {{ smtp_server }}

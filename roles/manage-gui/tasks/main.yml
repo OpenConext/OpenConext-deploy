@@ -1,16 +1,29 @@
 ---
 - name: create apache folder
-  file: path=/var/www/manage owner=apache group=apache mode=2755 state=directory
+  file:
+    path: "/var/www/manage"
+    owner: apache
+    group: apache
+    mode: 02755
+    state: directory
 
 - name: copy virtual host config
-  template: src=manage.conf.j2 dest=/etc/httpd/conf.d/manage.conf
-  notify: restart httpd
-  tags: deploy
+  template:
+    src: "manage.conf.j2"
+    dest: "/etc/httpd/conf.d/manage.conf"
+  notify:
+    - "restart httpd"
+  tags:
+    - deploy
 
 - name: copy virtual host backdoor config
-  template: src=manage.conf.backdoor.j2 dest=/etc/httpd/conf.d/manage.conf.backdoor
-  notify: restart httpd
-  tags: deploy
+  template:
+    src: "manage.conf.backdoor.j2"
+    dest: "/etc/httpd/conf.d/manage.conf.backdoor"
+  notify:
+    - "restart httpd"
+  tags:
+    - deploy
 
 - name: download html archive
   maven_artifact:
@@ -21,18 +34,21 @@
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in manage_gui_version else maven_repo }}"
     dest: /var/www/manage
   register: maven_result
-  tags: deploy
+  tags:
+    - deploy
 
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: /var/www/manage
+    dest: "/var/www/manage"
     copy: no
     owner: root
     group: apache
   register: unarchive_result
-  tags: deploy
-  when: maven_result.changed
+  tags:
+    - deploy
+  when:
+    - maven_result.changed
 
 - name: create symlink to downloaded version
   file:
@@ -40,5 +56,7 @@
     dest: "{{ manage_current }}"
     state: link
     force: yes
-  tags: deploy
-  when: unarchive_result.changed
+  tags:
+    - deploy
+  when:
+    - unarchive_result.changed

@@ -52,6 +52,7 @@ OC_BASEDOMAIN=$2
 SECRET_VARS_FILE="${ENV_DIR}/${OC_ENV}/secrets/${OC_ENV}.yml"
 CERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/star.${OC_BASEDOMAIN}"
 EBCERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/engineblock"
+SHIBCERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/shib-sp"
 CACERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/ca"
 
 echo "OC_ENV: $OC_ENV"
@@ -67,6 +68,7 @@ echo "SECRET_VARS_FILE: $SECRET_VARS_FILE"
 echo "CERT_CONF_TEMP: $CERT_CONF_TEMP"
 echo "CERT_FILES_BASE: $CERT_FILES_BASE"
 echo "EBCERT_FILES_BASE: $EBCERT_FILES_BASE"
+echo "SHIBCERT_FILES_BASE: $SHIBCERT_FILES_BASE"
 
 # Clear destination env dir while I'm testing this script, we might want to skip this eventually
 rm -rf "${ENV_DIR}/${OC_ENV}"
@@ -77,6 +79,7 @@ cp -a "${SKELETON_DIR}" "${ENV_DIR}/${OC_ENV}"
 # Generate new certificates
 #scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $CERT_FILES_BASE
 scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $EBCERT_FILES_BASE
+scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $SHIBCERT_FILES_BASE
 # Generate CA
 scripts/lib/create_ca.sh $CACERT_FILES_BASE "/CN=OpenConext Demo CA/O=OpenConext/C=NL"
 scripts/lib/gen_ssl_server_cert.sh  $CACERT_FILES_BASE ${ENV_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN" /CN=*.$OC_BASEDOMAIN/O=OpenConext/C=NL

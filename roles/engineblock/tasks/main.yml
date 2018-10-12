@@ -1,21 +1,38 @@
 ---
 - name: Add group {{ engine_fpm_user }}
-  group: name={{ engine_fpm_user }} state=present
+  group:
+    name: "{{ engine_fpm_user }}"
+    state: present
 
 - name: Add user {{ engine_fpm_user }}
-  user: name={{ engine_fpm_user }} group={{ engine_fpm_user }} createhome=no state=present
+  user:
+    name: "{{ engine_fpm_user }}"
+    group: "{{ engine_fpm_user }}"
+    createhome: no
+    state: present
 
 - name: Create directory for vhosts to store PHP sessions
-  file: path={{ php_session_dir}}/engine state=directory owner={{ engine_fpm_user }} group=root mode=770
+  file:
+    path: "{{ php_session_dir}}/engine"
+    state: directory
+    owner: "{{ engine_fpm_user }}"
+    group: root
+    mode: 0770
 
-- include: install-release.yml
-  when: "(engine_branch is not defined or engine_branch == '') and not develop"
+- name: Include install-release.yml
+  include: install-release.yml
+  when:
+    - "(engine_branch is not defined or engine_branch == '') and not develop"
 
-- include: install-branch.yml
-  when: "(engine_branch is defined and engine_branch != '') and not develop"
+- name: Include install-branch.yml
+  include: install-branch.yml
+  when:
+    - "(engine_branch is defined and engine_branch != '') and not develop"
 
-- include: develop.yml
-  when: develop
+- name: Include develop.yml
+  include: develop.yml
+  when:
+    - develop
 
 - name: Check presence of language specific overrides
   local_action: stat path="{{ inventory_dir }}/files/eb/languages/"
@@ -23,49 +40,73 @@
   become: false
 
 - name: Copy language specific overrides
-  copy: src="{{ inventory_dir }}/files/eb/languages/" dest="{{ openconext_releases_dir }}/OpenConext-engineblock/languages"
+  template:
+    src: "{{ item }}"
+    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/languages"
   when: overrides_present.stat.exists
+  with_fileglob:
+    - "{{ inventory_dir }}/files/eb/languages/*"
 
 - name: Install Apache vhost
-  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/httpd/conf.d/{{ item }}"
   with_items:
     - engine.conf
     - engine-api.conf
   notify:
-    - restart httpd
+    - "restart httpd"
 
 # Put fpm config
 - name: php-fpm config
-  template: src={{ item }}.j2 dest=/etc/php-fpm.d/{{ item }}
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/php-fpm.d/{{ item }}"
   with_items:
      - engine-pool.conf
   notify:
-    - restart php-fpm
+    - "restart php-fpm"
 
 - name: copy over the engineblock keys
-  copy: content="{{ engineblock_private_key }}" dest="{{ item.value.privateFile }}" owner={{ engine_fpm_user }} group=root mode=440
+  copy:
+    content: "{{ engineblock_private_key }}"
+    dest: "{{ item.value.privateFile }}"
+    owner: "{{ engine_fpm_user }}"
+    group: root
+    mode: 0440
   with_dict: "{{ engine_keys }}"
 
 - name: copy engineblock certificates to correct location
-  copy: src={{ inventory_dir }}/files/certs/{{ item.value.publicKey }} dest={{ item.value.publicFile }}
+  copy:
+    src: "{{ inventory_dir }}/files/certs/{{ item.value.publicKey }}"
+    dest: "{{ item.value.publicFile }}"
   with_dict: "{{ engine_keys }}"
-  when: not engine_crt_not_in_inventory
+  when:
+    - not engine_crt_not_in_inventory
 
 - name: copy engineblock certificates to correct location when not located in the inventory dir
-  copy: src=files/certs/{{ item.value.publicKey }} dest={{ item.value.publicFile }}
+  copy:
+    src: "files/certs/{{ item.value.publicKey }}"
+    dest: "{{ item.value.publicFile }}"
   with_dict: "{{ engine_keys }}"
-  when: engine_crt_not_in_inventory
+  when:
+    - engine_crt_not_in_inventory
 
 - name: Configure EngineBlock
-  template: src={{ item }}.j2 dest=/etc/openconext/{{ item }}
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/openconext/{{ item }}"
   with_items:
     - engineblock.ini
   notify:
-    - restart php-fpm
+    - "restart php-fpm"
 
 - name: Make the SYMFONY_ENV var available for scripts
   become: yes
-  lineinfile: dest=/etc/environment state=present line="SYMFONY_ENV={{ engine_apache_symfony_environment }}"
+  lineinfile:
+    dest: "/etc/environment"
+    state: present
+    line: "SYMFONY_ENV={{ engine_apache_symfony_environment }}"
 
 # This should always run before any scripts run, it ensures that the env specific
 # configuration is loaded correctly.
@@ -76,15 +117,24 @@
   changed_when: False
 
 - name: Create EngineBlock test database
-  mysql_db: name={{ engine_test_database_name }} state=present
-  when: develop
+  mysql_db:
+    name: "{{ engine_test_database_name }}"
+    state: present
+  when:
+    - develop
 
 - name: Create EngineBlock test database user
-  mysql_user: name={{ engine_test_database_user }} host={{ engine_test_database_host }} password={{ engine_test_database_password }} priv={{ engine_test_database_name }}.*:ALL state=present
-  when: develop
+  mysql_user:
+    name: "{{ engine_test_database_user }}"
+    host: "{{ engine_test_database_host }}"
+    password: "{{ engine_test_database_password }}"
+    priv: "{{ engine_test_database_name }}.*:ALL"
+    state: present
+  when:
+    - develop
 
 - name: Check existence of the eb database
-  shell: app/console doctrine:migrations:status --env={{ engine_apache_symfony_environment }} | grep  "Current Version"  | awk '{print $4 }'  
+  shell: app/console doctrine:migrations:status --env={{ engine_apache_symfony_environment }} | grep  "Current Version"  | awk '{print $4 }'
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   register: eb_database_version
@@ -95,14 +145,16 @@
   command: "app/console doctrine:schema:create -n --env={{ engine_apache_symfony_environment }}"
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  when: eb_database_version.stdout == '0'
+  when:
+    - eb_database_version.stdout == '0'
   run_once: True
 
 - name: Add migration versions to the database
   command: "app/console doctrine:migrations:version --add --all --env={{ engine_apache_symfony_environment }}"
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  when: eb_database_version.stdout == '0'
+  when:
+    - eb_database_version.stdout == '0'
   run_once: True
 
 - name: Run EngineBlock Doctrine migrations
@@ -112,16 +164,26 @@
   register: doctrine_migrations_output
   changed_when: "'No migrations to execute' not in doctrine_migrations_output.stdout"
   tags: enginemigrations
-  when: engine_skip_db_migration is undefined
+  when:
+    - engine_skip_db_migration is undefined
   run_once: true
 
 - name: Make sure cache dir has correct permissions
-  file: path={{engine_current_release_symlink}}/app/cache owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
-  when: not develop
+  file:
+    path: "{{engine_current_release_symlink}}/app/cache"
+    owner: "{{ engine_fpm_user }}"
+    group: "{{ engine_fpm_user }}"
+    recurse: yes
+  when:
+    - not develop
   changed_when: False
 
 - name: Make sure log dir has correct permissions
-  file: path={{engine_current_release_symlink}}/app/logs owner={{ engine_fpm_user }} group={{ engine_fpm_user }} recurse=yes
+  file:
+    path: "{{engine_current_release_symlink}}/app/logs"
+    owner: "{{ engine_fpm_user }}"
+    group: "{{ engine_fpm_user }}"
+    recurse: yes
   when: not develop
 
 # Remove all dirs, but keep the current version and from the rest the most recent one.

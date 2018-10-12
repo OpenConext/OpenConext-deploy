@@ -29,14 +29,14 @@ global
 {% if haproxy_multi_instance is not defined %}
   stats socket /var/lib/haproxy/stats{% if develop %} mode 600 level admin{% endif %}
 
-{% if  haproxy_version | version_compare('1.6.0', '>=') and haproxy_rolling_updates  %}
+{% if  haproxy_version is version_compare('1.6.0', '>=') and haproxy_rolling_updates  %}
   server-state-file /etc/haproxy/state
 {% endif %}
 {% endif %}
 {% if haproxy_multi_instance is defined  %}
   stats socket /var/lib/haproxy/{{ item.name }}.stats {% if haproxy_rolling_updates %} mode 660 level admin user root group lbops{%endif%}
 
-{% if  haproxy_version | version_compare('1.6.0', '>=') and haproxy_rolling_updates  %}
+{% if  haproxy_version is version_compare('1.6.0', '>=') and haproxy_rolling_updates  %}
   server-state-file /etc/haproxy/{{ item.name }}/state
 {% endif %}
 {% endif %}
@@ -64,6 +64,6 @@ defaults
     timeout http-keep-alive     10s
     timeout check               10s
     maxconn                     3000
-{% if  haproxy_version | version_compare('1.6.0', '>=') and haproxy_rolling_updates  %}
+{% if  haproxy_version is version_compare('1.6.0', '>=') and haproxy_rolling_updates  %}
     load-server-state-from-file global
 {% endif %}

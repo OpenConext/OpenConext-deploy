@@ -18,13 +18,16 @@ features: {{ manage.features }}
 
 push:
   url: https://{{ engine_api_domain }}/api/connections
-  user: {{ engine_api_janus_user }}
-  password: {{ engine_api_janus_password }}
+  user: {{ engine_api_metadata_push_user }}
+  password: {{ engine_api_metadata_push_password }}
   name: {{ instance_name }} EngineBlock
+  exclude_edugain_imports: {{ manage_exclude_edugain_imports_in_push }}
 
 product:
   name: Manage
-  organization: OpenConext
+  organization: {{ instance_name }}
+  service_provider_feed_url: {{ manage_service_provider_feed_url }}
+
 
 metadata_configuration_path: file://{{ manage_dir }}/metadata_configuration
 metadata_templates_path: file://{{ manage_dir }}/metadata_templates
@@ -35,6 +38,13 @@ security:
   backdoor_user_name: {{ manage.backdoor_api_user }}
   backdoor_password: {{ manage_backdoor_api_password }}
   api_users_config_path: file://{{ manage_dir }}/manage-api-users.yml
+
+oidc:
+  user: {{ oidc.api_user }}
+  password: {{ oidc_api_password }}
+  url: https://oidc.{{ base_domain }}/oidc/api/clients
+  feature: true
+  acsLocation: https://oidc.{{ base_domain }}/saml/SSO
 
 spring:
   profiles:
@@ -53,7 +63,7 @@ spring:
     password: {{ manage.eb_db_password }}
     tomcat:
       test-on-borrow: true
-      validation-query: SELECT 1
+      validation-query: SELECT count(*) FROM migration_versions
       remove-abandoned: true
       test-while-idle: true
   main:

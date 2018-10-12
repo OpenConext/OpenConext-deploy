@@ -51,7 +51,7 @@ frontend redirects
     bind {{ haproxy_redirects_ipv6 }}:443 ssl {% for application in haproxy_redirects %} crt /etc/haproxy/redirects/{{ application.name }}.pem {% endfor %}  no-sslv3 transparent
     http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
-    capture request header User-agent len 100
+    capture request header User-agent len 256
     bind {{ haproxy_redirects_ip }}:80 transparent
     bind {{ haproxy_redirects_ipv6 }}:80 transparent
 
@@ -64,5 +64,5 @@ frontend redirects
     redirect scheme https code 301 if !{ ssl_fc }
 
     {% for application in haproxy_redirects %}
-    http-request redirect prefix {{ application.redirecturl }} if {{ application.name }}
+    http-request redirect location {{ application.redirecturl }} if {{ application.name }}
     {% endfor %}

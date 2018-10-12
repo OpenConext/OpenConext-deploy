@@ -1,6 +1,10 @@
 ---
-- name: reload keepalived 
-  service: name=keepalived state=reloaded
+- name: reload keepalived
+  service:
+    name: keepalived
+    state: reloaded
 
-- name: restart keepalived 
-  service: name=keepalived state=restarted
+- name: restart keepalived
+  service:
+    name: keepalived
+    state: restarted

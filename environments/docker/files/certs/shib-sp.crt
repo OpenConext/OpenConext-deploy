@@ -1,0 +1,75 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            a1:91:66:dd:ee:13:98:e5
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C = NL, O = vm.openconext.org, CN = vm.openconext.org, emailAddress = info@vm.openconext.org
+        Validity
+            Not Before: Sep 19 15:19:21 2018 GMT
+            Not After : Sep 18 15:19:21 2028 GMT
+        Subject: C = NL, O = vm.openconext.org, CN = vm.openconext.org, emailAddress = info@vm.openconext.org
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:e4:90:e0:70:1c:fb:cc:52:d0:0d:d2:c2:e9:02:
+                    0a:0d:6d:81:3b:04:06:2b:d3:6a:9b:72:bb:e5:d5:
+                    e7:98:e5:c2:d6:43:99:c1:2f:48:f8:c8:a5:2f:7a:
+                    cc:17:86:01:64:f0:e3:00:7a:77:ae:43:7a:d2:b2:
+                    71:20:ea:8d:63:92:f8:51:52:3d:6b:72:0c:74:dc:
+                    c2:ac:b6:df:f2:94:3f:27:2b:a1:38:e6:55:c2:08:
+                    56:39:15:28:af:e1:d2:1a:c8:4a:02:3b:69:c1:75:
+                    c1:21:28:8f:47:93:37:56:3b:f5:ca:79:65:14:91:
+                    16:0d:97:e1:c2:47:61:27:1a:b7:b0:a5:46:48:38:
+                    a2:07:92:a6:85:63:6e:be:2f:10:27:84:1b:1b:0b:
+                    e9:f4:2d:e7:c3:30:ac:bf:d2:67:d9:e0:1a:78:3d:
+                    5a:3d:b8:cd:d4:e1:10:b2:98:11:7f:b6:dc:c7:1c:
+                    5f:a9:c8:c4:4a:10:f6:ac:09:2a:b1:5f:f0:3c:e9:
+                    8e:fe:4c:b8:69:8b:f1:75:97:fd:7a:7d:56:6a:cc:
+                    52:2d:49:96:92:12:a0:99:d1:14:eb:54:69:5f:fa:
+                    92:3e:06:38:9a:99:57:45:2e:4a:9f:7d:d7:32:c9:
+                    f7:b5:3e:33:00:e8:13:43:83:09:e9:13:52:45:f1:
+                    22:c9
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Alternative Name: 
+                DNS:vm.openconext.org, DNS:*.vm.openconext.org
+    Signature Algorithm: sha256WithRSAEncryption
+         27:5d:fb:93:b6:d5:69:a9:df:3a:d5:6f:30:24:3f:e9:15:60:
+         dd:ec:56:2d:02:9b:4e:ab:5a:58:f1:44:0b:21:da:a7:d5:d2:
+         5e:03:27:60:58:95:81:77:21:b7:5c:b6:23:47:f7:0d:5a:01:
+         dd:c2:a8:9d:8a:e6:3c:25:20:c3:c9:be:0d:83:82:17:7c:e2:
+         ba:79:63:fb:45:72:03:e6:28:c2:e7:c4:17:0e:eb:b3:5c:41:
+         da:d3:1f:bf:95:4e:97:7c:29:42:d9:21:fe:83:3a:05:65:94:
+         4a:51:92:29:da:54:3d:3a:ef:90:04:74:2e:4a:64:b2:99:fc:
+         f5:e0:63:e1:5e:0a:52:07:11:ef:49:79:96:af:bc:ba:7d:7a:
+         71:56:71:09:08:c7:2a:8b:36:80:c1:e2:2e:fe:5a:14:81:7b:
+         34:15:38:b0:f4:7c:38:43:dc:9c:16:b2:28:dd:52:bd:ba:de:
+         de:3f:a7:55:a0:57:eb:7a:7e:12:74:40:25:44:6b:7b:2d:69:
+         38:7b:c4:27:82:08:d3:73:60:32:02:01:3c:05:91:2c:a3:04:
+         1f:41:1c:2d:d2:be:61:fb:96:b2:8c:a1:50:1f:26:a1:70:6a:
+         94:97:0a:49:1b:8d:f6:68:ba:0a:35:91:36:c3:6d:0f:ce:6b:
+         9d:59:ee:fc
+-----BEGIN CERTIFICATE-----
+MIIDkDCCAnigAwIBAgIJAKGRZt3uE5jlMA0GCSqGSIb3DQEBCwUAMGwxCzAJBgNV
+BAYTAk5MMRowGAYDVQQKDBF2bS5vcGVuY29uZXh0Lm9yZzEaMBgGA1UEAwwRdm0u
+b3BlbmNvbmV4dC5vcmcxJTAjBgkqhkiG9w0BCQEWFmluZm9Adm0ub3BlbmNvbmV4
+dC5vcmcwHhcNMTgwOTE5MTUxOTIxWhcNMjgwOTE4MTUxOTIxWjBsMQswCQYDVQQG
+EwJOTDEaMBgGA1UECgwRdm0ub3BlbmNvbmV4dC5vcmcxGjAYBgNVBAMMEXZtLm9w
+ZW5jb25leHQub3JnMSUwIwYJKoZIhvcNAQkBFhZpbmZvQHZtLm9wZW5jb25leHQu
+b3JnMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5JDgcBz7zFLQDdLC
+6QIKDW2BOwQGK9Nqm3K75dXnmOXC1kOZwS9I+MilL3rMF4YBZPDjAHp3rkN60rJx
+IOqNY5L4UVI9a3IMdNzCrLbf8pQ/JyuhOOZVwghWORUor+HSGshKAjtpwXXBISiP
+R5M3Vjv1ynllFJEWDZfhwkdhJxq3sKVGSDiiB5KmhWNuvi8QJ4QbGwvp9C3nwzCs
+v9Jn2eAaeD1aPbjN1OEQspgRf7bcxxxfqcjEShD2rAkqsV/wPOmO/ky4aYvxdZf9
+en1WasxSLUmWkhKgmdEU61RpX/qSPgY4mplXRS5Kn33XMsn3tT4zAOgTQ4MJ6RNS
+RfEiyQIDAQABozUwMzAxBgNVHREEKjAoghF2bS5vcGVuY29uZXh0Lm9yZ4ITKi52
+bS5vcGVuY29uZXh0Lm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAJ137k7bVaanfOtVv
+MCQ/6RVg3exWLQKbTqtaWPFECyHap9XSXgMnYFiVgXcht1y2I0f3DVoB3cKonYrm
+PCUgw8m+DYOCF3ziunlj+0VyA+YowufEFw7rs1xB2tMfv5VOl3wpQtkh/oM6BWWU
+SlGSKdpUPTrvkAR0Lkpkspn89eBj4V4KUgcR70l5lq+8un16cVZxCQjHKos2gMHi
+Lv5aFIF7NBU4sPR8OEPcnBayKN1Svbre3j+nVaBX63p+EnRAJURrey1pOHvEJ4II
+03NgMgIBPAWRLKMEH0EcLdK+YfuWsoyhUB8moXBqlJcKSRuN9mi6CjWRNsNtD85r
+nVnu/A==
+-----END CERTIFICATE-----

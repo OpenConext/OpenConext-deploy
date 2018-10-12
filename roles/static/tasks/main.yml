@@ -1,29 +1,51 @@
 ---
 - name: create static sync user
-  user: name={{ static.sync_user }} createhome=no state=present
+  user:
+    name: "{{ static.sync_user }}"
+    createhome: no
+    state: present
 
 - name: create static dir
-  file: path={{ static_dir }} state=directory
+  file:
+    path: "{{ static_dir }}"
+    state: directory
 
 - name: create static idp image directory
-  file: path={{ static_dir }}/logos/idp state=directory owner={{ static.sync_user }}
- 
+  file:
+    path: "{{ static_dir }}/logos/idp"
+    state: directory
+    owner: "{{ static.sync_user }}"
+
 - name: create static sp image directory
-  file: path={{ static_dir }}/logos/sp state=directory owner={{ static.sync_user }}
+  file:
+    path: "{{ static_dir }}/logos/sp"
+    state: directory
+    owner: "{{ static.sync_user }}"
 
 - name: create static aa image directory
-  file: path={{ static_dir }}/logos/aa state=directory owner={{ static.sync_user }}
+  file:
+    path: "{{ static_dir }}/logos/aa"
+    state: directory
+    owner: "{{ static.sync_user }}"
 
 - name: copy media files
-  copy: src=media dest={{ static_dir }}
+  copy:
+    src: "media"
+    dest: "{{ static_dir }}"
 
 - name: symlink legacy idp and sp logo locations
-  file: src=../logos/{{ item }} dest={{ static_dir }}/media/{{ item }} state=link
+  file:
+    src: "../logos/{{ item }}"
+    dest: "{{ static_dir }}/media/{{ item }}"
+    state: link
   with_items:
-    - 'idp'
-    - 'sp'
-    - 'aa'
+    - "idp"
+    - "sp"
+    - "aa"
 
 - name: copy apache config
-  template: src=static.conf.j2 dest=/etc/httpd/conf.d/static.conf
-  notify: reload httpd
+  template:
+    src: "static.conf.j2"
+    dest: "/etc/httpd/conf.d/static.conf"
+  notify:
+    - "reload httpd"

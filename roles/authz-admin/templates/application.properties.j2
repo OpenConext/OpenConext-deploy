@@ -9,7 +9,7 @@ spring.datasource.url=jdbc:mysql://{{ authzserver.db_host }}/{{ authzserver.db_n
 spring.datasource.username={{ authzserver.db_user }}
 spring.datasource.password={{ authzserver.db_password }}
 spring.datasource.driverClassName=org.mariadb.jdbc.Driver
-spring.datasource.validationQuery=SELECT 1
+spring.datasource.validationQuery=SELECT count(*) FROM schema_version
 spring.datasource.testWhileIdle=true
 spring.datasource.testOnBorrow=true
 

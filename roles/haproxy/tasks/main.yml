@@ -1,19 +1,31 @@
 ---
 - name: Install haproxy 1.8 yum repo
-  copy: src=haproxy18.repo dest=/etc/yum.repos.d/ owner=root mode=0644
-  when: haproxy_18
+  copy:
+    src: haproxy18.repo
+    dest: /etc/yum.repos.d/
+    owner: root
+    mode: 0644
+  when:
+    - haproxy_18
 
-- include: multiple-instances.yml
-  when: haproxy_multi_instance is defined
+- name: Include multiple-instances.yml
+  include: multiple-instances.yml
+  when:
+    - haproxy_multi_instance is defined
 
-- include: single-instance.yml
-  when: haproxy_multi_instance is not defined
+- name: Include single-instance.yml
+  include: single-instance.yml
+  when:
+    - haproxy_multi_instance is not defined
 
-- include: redirects-instance.yml
-  when: haproxy_redirects is defined
+- name: Include redirects-instance.yml
+  include: redirects-instance.yml
+  when:
+    - haproxy_redirects is defined
 
 - name: disable health checks for development envs
   command: 'echo "disable health {{item.name}}" | socat /var/lib/haproxy/stats stdio'
   with_items:
     - "{{ haproxy_applications }}"
-  when: develop
+  when:
+    - develop

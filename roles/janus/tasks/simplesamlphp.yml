@@ -1,9 +1,15 @@
 ---
 - name: Install SSP - Unarchive it
-  unarchive: src="{{ janus_ssp_tar_location }}" dest="{{ janus_installation_dir }}" copy=no
+  unarchive:
+    src: "{{ janus_ssp_tar_location }}"
+    dest: "{{ janus_installation_dir }}"
+    copy: no
 
 - name: Install SSP - Link dir to standard location
-  file: path={{ janus_ssp_dir }} src={{ janus_ssp_unarchived_dir }} state=link
+  file:
+    path: "{{ janus_ssp_dir }}"
+    src: "{{ janus_ssp_unarchived_dir }}"
+    state: link
 
 # Note that there is a lineinfile module which can do this, however it did not seem possible to specify the line nr
 - name: Install SSP - Suffix title to differentiate between various environments
@@ -11,7 +17,9 @@
   command: sed -i "2i $this->data['header'] .= ' - {{ janus_ssp_title_suffix }}';" '{{ janus_ssp_dir }}/templates/includes/header.php'
 
 - name: Install SSP - Remove unused config files and modules
-  file: path="{{ item }}" state=absent
+  file:
+    path: "{{ item }}"
+    state: absent
   with_items:
     - "{{ janus_ssp_dir }}/config/acl.php"
     - "{{ janus_ssp_dir }}/config/authmemcookie.php"
@@ -80,14 +88,17 @@
     - "{{ janus_ssp_modules_dir }}/statistics"
     - "{{ janus_ssp_modules_dir }}/themefeidernd"
   notify:
-    - restart httpd
-    - restart memcached
+    - "restart httpd"
+    - "restart memcached"
 
 - name: Install SSP - Remove unused config files and modules(2)
-  file: path="{{ item }}" state=absent
+  file:
+    path: "{{ item }}"
+    state: absent
   with_items:
     - "{{ janus_ssp_modules_dir }}/exampleauth"
-  when: janus_no_federative_login is undefined or not janus_no_federative_login
+  when:
+    - janus_no_federative_login is undefined or not janus_no_federative_login
 
 - name: Install SSP - Copy config and metadata
   template: src={{ item.src }} dest={{ item.dest }}
@@ -96,9 +107,10 @@
     - { src: "simplesamlphp/config/config.php.j2", dest: "{{ janus_ssp_dir }}/config/config.php" }
     - { src: "simplesamlphp/metadata/saml20-idp-remote.php.j2", dest: "{{ janus_ssp_dir }}/metadata/saml20-idp-remote.php" }
   notify:
-    - restart httpd
-    - restart memcached
+    - "restart httpd"
+    - "restart memcached"
 
 - name: Install SSP - Copy config and metadata (2)
   file: path="{{ janus_ssp_modules_dir }}/exampleauth/enable" state=touch
-  when: janus_no_federative_login is defined
+  when:
+    - janus_no_federative_login is defined

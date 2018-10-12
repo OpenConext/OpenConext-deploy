@@ -1,6 +1,9 @@
 ---
 - name: systemctl daemon-reload
-  command: "systemctl daemon-reload"
+  systemd:
+    daemon_reload: yes
 
 - name: restart voot
-  service: name=voot state=restarted
+  service:
+    name: voot
+    state: restarted

@@ -1,6 +1,9 @@
 ---
 - name: systemctl daemon-reload
-  command: "systemctl daemon-reload"
+  systemd:
+    daemon_reload: yes
 
 - name: restart mujina-sp
-  service: name={{ springapp_service_name }} state=restarted
+  service:
+    name: "{{ springapp_service_name }}"
+    state: restarted

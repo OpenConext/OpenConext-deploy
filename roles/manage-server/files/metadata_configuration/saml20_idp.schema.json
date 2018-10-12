@@ -225,7 +225,7 @@
         },
         "coin:institution_id": {
           "type": "string",
-          "info": "The defined client code."
+          "info": "The defined client code. Generally an abbreviation of the name of the client."
         },
         "coin:institution_guid": {
           "type": "string",
@@ -234,7 +234,6 @@
         },
         "coin:institution_type": {
           "type": "string",
-          "format": "string",
           "info": "Client category this institution belongs to."
         },
         "coin:guest_qualifier": {
@@ -264,6 +263,22 @@
           "type": "string",
           "format": "boolean",
           "info": "Set to make the IdP hidden in the dashboard when the IdP is not connected to a service."
+        },
+        "coin:signature_method": {
+          "type": "string",
+          "format": "url",
+          "enum": [
+            "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
+            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+          ],
+          "default": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+          "info": "Select the Secure Hash Algorithm (SHA) to use for signed authentication requests sent by Engineblock to this identity provider."
+        },
+        "coin:exclude_from_push": {
+          "type": "string",
+          "format": "boolean",
+          "default": false,
+          "info": "Must be set for this Identity Provider to be excluded in the EB push."
         }
       },
       "patternProperties": {
@@ -293,7 +308,7 @@
         },
         "^contacts:([0-3]{1}):emailAddress$": {
           "type": "string",
-          "format": "email",
+          "format": "local-email",
           "multiplicity": 4,
           "sibblingIndependent": true,
           "info": "The e-mail address; syntax in accordance with RFC 5322. e.g. m.l.vermeegen@university.example.org."
@@ -340,15 +355,16 @@
           "type": "string",
           "info": "The URL to the Registration Policy of the Identity Provider."
         },
-        "^coin:entity_categories:([1-4]{1})$": {
+        "^coin:entity_categories:([1-5]{1})$": {
           "type": "string",
           "enum": [
             "http://refeds.org/category/research-and-scholarship",
             "http://refeds.org/category/hide-from-discovery",
             "http://www.geant.net/uri/dataprotection-code-of-conduct/v1",
-            "http://clarin.eu/category/clarin-member"
+            "http://clarin.eu/category/clarin-member",
+            "http://refeds.org/category/academic-institution"
           ],
-          "multiplicity": 4,
+          "multiplicity": 5,
           "startIndex": 1,
           "info": "Select one of the entity categories applicable to this service. Entity Categories group federation entities that share common criteria."
         },

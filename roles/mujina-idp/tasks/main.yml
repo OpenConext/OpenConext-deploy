@@ -15,7 +15,7 @@
 - name: Stop service when legacy init script is present
   service: name={{ springapp_service_name }} state=stopped
   when: legacy_am_present.stat.exists
-    
+
 - name: Clean up legacy init script
   file: path=/etc/init.d/{{ springapp_service_name }} state=absent
 
