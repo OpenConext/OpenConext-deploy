@@ -563,7 +563,7 @@ haproxy_applications:
     vhost_name: "oidc"
     ip: "192.168.66.98"
     ha_method: "GET"
-    ha_url: "/.well-known/openid-configuration"
+    ha_url: "/health"
     port: "614"
     servers: "{{java_servers}}"
 
