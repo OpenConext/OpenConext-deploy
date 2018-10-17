@@ -1,6 +1,9 @@
 ---
 - name: systemctl daemon-reload
-  command: "systemctl daemon-reload"
+  systemd:
+    daemon_reload: yes
 
 - name: restart dashboard
-  service: name=dashboard state=restarted
+  service:
+    name: dashboard
+    state: restarted

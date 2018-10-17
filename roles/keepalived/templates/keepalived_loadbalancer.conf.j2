@@ -92,6 +92,12 @@ vrrp_instance ipv4_apps {        # No more than 20 ip addresses in one instance
         {% if haproxy_redirects_ip is defined %}
         {{ haproxy_redirects_ip }}
         {% endif %}
+        {% if dashboard_ip is defined %}
+        {{ dashboard_ip }}
+        {% endif %}
+        {% if stats_ip is defined %}
+        {{ stats_ip }}
+        {% endif %}
    }
 }
 vrrp_instance ipv6_engine {
@@ -191,6 +197,12 @@ vrrp_instance ipv6_apps {
         {% endif %}
         {% if haproxy_redirects_ipv6 is defined %}
         {{ haproxy_redirects_ipv6 }}
+        {% endif %}
+        {% if dashboard_ipv6 is defined %}
+        {{ dashboard_ipv6 }}
+        {% endif %}
+        {% if stats_ipv6 is defined %}
+        {{ stats_ipv6 }}
         {% endif %}
    }
 }
