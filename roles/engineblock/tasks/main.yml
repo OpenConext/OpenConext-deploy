@@ -150,7 +150,7 @@
   run_once: True
 
 - name: Add migration versions to the database
-  command: "app/console doctrine:migrations:version --add --all --env={{ engine_apache_symfony_environment }}"
+  command: "app/console doctrine:migrations:version -n --add --all --env={{ engine_apache_symfony_environment }}"
   args:
     chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
   when:
