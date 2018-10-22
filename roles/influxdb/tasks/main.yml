@@ -12,11 +12,16 @@
 - name: Install python influx packacke
   pip: name=influxdb state=present
 
-#- name: Creates /etc/influxdb directory
-#  file: path=/etc/influxdb state=directory owner=root
-#
-#- name: Place custom influxdb config
-#  template: src=influxdb.conf.j2 dest=/etc/influxdb/influxdb.conf mode=0644 owner=root
+- name: Create the influxdb datadir
+  file: 
+    path: "{{ influx_data_dir}}"
+    owner: influxdb
+    group: influxdb
+    state: directory
+    mode: 0770
+
+- name: Place custom influxdb config
+  template: src=influxdb.conf.j2 dest=/etc/influxdb/influxdb.conf mode=0644 owner=root
 
 - name: Enable and start the influxdb service
   service: name=influxdb.service enabled=yes state=started 
