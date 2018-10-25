@@ -2,8 +2,8 @@ database:
   name: {{ influx_stats_db }}
   host: localhost
   port: 8086
-  username: ""
-  password: ""
+  username: {{ influxdb_stats_user }}
+  password: {{ influxdb_stats_password }}
 
 syslog:
   address: "/dev/log"

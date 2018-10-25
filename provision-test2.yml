@@ -107,7 +107,8 @@
   become: true
   roles:
     - { role: java,                         tags: ['java'] }
-    - { role: openconext-common, tags: ['eb','profile'] }
+    - { role: openconext-common,            tags: ['eb','profile'] }
     - { role: stats,                        tags: ['stats'] }
+    - { role: influxdb,                     tags: ['influxdb'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
