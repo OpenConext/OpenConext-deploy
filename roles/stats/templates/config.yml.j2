@@ -5,6 +5,12 @@ database:
   username: ""
   password: ""
 
+syslog:
+  address: "/dev/log"
+# Use localhost and port if syslog listens on UDP
+#  host: localhost
+#  port: 514
+
 log:
   measurement: {{ influx_ebauth_measurement }} 
   user_id: user_id

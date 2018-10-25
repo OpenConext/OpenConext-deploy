@@ -36,9 +36,9 @@
 
 - name: Create stats api wsgi user
   user: name={{ stats_wsgi_user }} shell="/bin/false" state=present
-  
+
 - name: Checkout OpenConext-statistics branch from Git
-  git: repo=https://github.com/OpenConext/OpenConext-statistics.git dest="{{ stats_src_dir }}" force=yes 
+  git: repo=https://github.com/OpenConext/OpenConext-statistics.git dest="{{ stats_src_dir }}" force=yes
   register: git_stats
 
 - name: Add git info to server
@@ -52,8 +52,8 @@
   command: cp -r {{ stats_src_dir }}/server {{ stats_api_env_dir }}/
   when: git_stats.changed
 
-- name: Create log directory 
-  file: path={{ stats_api_env_dir }}/log owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }} mode=0755 state=directory 
+- name: Create log directory
+  file: path={{ stats_api_env_dir }}/log owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }} mode=0755 state=directory
 
 - name: Create logfile
   copy: content="" dest={{ stats_api_env_dir }}/log/stats.log owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }} mode=0755 force=no
@@ -71,7 +71,7 @@
   notify: reload httpd
 
 - name: Create a gui build
-  shell: "yarn install && yarn build" 
+  shell: "yarn install && yarn build"
   args:
     chdir: "{{ stats_src_dir }}/client"
   when: git_stats.changed
