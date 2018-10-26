@@ -24,9 +24,11 @@
   template: src=influxdb.conf.j2 dest=/etc/influxdb/influxdb.conf mode=0644 owner=root
   vars:
     auth_enabled: "false"
+  changed_when: False
 
-- name: Enable and start the influxdb service
+- name: Enable and (re)start the influxdb service
   service: name=influxdb.service enabled=yes state=restarted
+  changed_when: False
 
 - name: Create admin user
   influxdb_user:
@@ -48,11 +50,14 @@
 
 - name: Grant stats user all rights on stats database
   command: 'influx -execute "GRANT ALL ON {{ influx_stats_db }} TO \"{{ influxdb_stats_user }}\""'
+  changed_when: False
 
 - name: Place custom influxdb config with authentication enabled
   template: src=influxdb.conf.j2 dest=/etc/influxdb/influxdb.conf mode=0644 owner=root
   vars:
     auth_enabled: "true"
+  changed_when: False
 
 - name: Restart the influxdb service after enabling authentication
   service: name=influxdb.service state=restarted
+  changed_when: False
