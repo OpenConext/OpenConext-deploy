@@ -110,5 +110,6 @@
     - { role: openconext-common,            tags: ['eb','profile'] }
     - { role: stats,                        tags: ['stats'] }
     - { role: influxdb,                     tags: ['influxdb'] }
+    - { role: elk,                     tags: ['elk'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
