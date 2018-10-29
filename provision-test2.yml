@@ -109,7 +109,8 @@
     - { role: java,                         tags: ['java'] }
     - { role: openconext-common,            tags: ['eb','profile'] }
     - { role: stats,                        tags: ['stats'] }
+    - { role: stats_backfill_cq,            tags: ['stats_backfill_cq'] }
     - { role: influxdb,                     tags: ['influxdb'] }
-    - { role: elk,                     tags: ['elk'] }
+    - { role: elk,                          tags: ['elk'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
