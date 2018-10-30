@@ -87,7 +87,7 @@ scripts/lib/gen_ssl_server_cert.sh  $CACERT_FILES_BASE ${ENV_DIR}/${OC_ENV}/file
 cp $CACERT_FILES_BASE/ca-cert.pem ${ENV_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN"_ca.pem
 
 # Generate Secret vars
-scripts/gen_secrets.sh $SECRET_VARS_TEMPLATE $CERT_FILES_BASE $EBCERT_FILES_BASE $SECRET_VARS_FILE
+scripts/gen_secrets.sh $SECRET_VARS_TEMPLATE $CERT_FILES_BASE $EBCERT_FILES_BASE $SHIBCERT_FILES_BASE $SECRET_VARS_FILE
 
 # Move group_vars skeleton.yml to OC_ENV.yml
 mv "${ENV_DIR}/${OC_ENV}/group_vars/template.yml" "${ENV_DIR}/${OC_ENV}/group_vars/${OC_ENV}.yml"

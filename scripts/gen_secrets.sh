@@ -9,16 +9,16 @@
 #
 
 # ----- Input handling
-if [ $# -lt 4 ]
+if [ $# -lt 5 ]
   then
-    echo "INFO: Not enough arguments supplied, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base secret_vars_output"
+    echo "INFO: Not enough arguments supplied, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base shibspcertfiles_base secret_vars_output"
     exit 1
 fi
 
 
-if [ $# -gt 4 ]
+if [ $# -gt 5 ]
   then
-    echo "ERROR: Only 4 arguments expected, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base secret_vars_output"
+    echo "ERROR: Only 5 arguments expected, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base shibspcertfiles_base secret_vars_output"
     exit 1
 fi
 # ----- End Input handing
@@ -26,8 +26,9 @@ fi
 SECRET_VARS_TEMPLATE=$1
 CERT_FILES_BASE=$2
 EBCERT_FILES_BASE=$3
-SECRET_VARS_FILE=$4
-OC_BASEDOMAIN=$5
+SHIBCERT_FILES_BASE="$4"
+SECRET_VARS_FILE=$5
+OC_BASEDOMAIN=$6
 
 tempfile() {
     tempprefix=$(basename "$0")
@@ -90,6 +91,13 @@ while IFS= read -r line; do
     line="$key: |"
     echo "$line" >> $SECRET_VARS_TEMP
     cat "${CERT_FILES_BASE}.key" | sed "s/^/  /g" >> "$SECRET_VARS_TEMP"
+    continue
+  fi
+
+  if [ "$value" == 'shibboleth_sp_key' ]; then
+    line="$key: |"
+    echo "$line" >> $SECRET_VARS_TEMP
+    cat "${SHIBCERT_FILES_BASE}.key" | sed "s/^/  /g" >> "$SECRET_VARS_TEMP"
     continue
   fi
 
