@@ -17,7 +17,6 @@ filter {
   mutate {
       remove_field => [ "source" ]
       remove_field => [ "syslogbase" ]
-      remove_field => [ "[ebauth][context][login_stamp]" ]
       add_field    =>  {"[month]" => "%{+MM}"}
       add_field    =>  {"[year]" => "%{+YYYY}"}
 }
