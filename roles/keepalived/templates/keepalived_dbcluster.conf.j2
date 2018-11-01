@@ -1,3 +1,6 @@
+global_defs {
+  vrrp_garp_master_refresh 60
+}
 vrrp_script chk_cluster {
         script "/usr/local/bin/clustercheck clustercheck {{ galera_clustercheck_password }} 0"
         interval 5
