@@ -16,7 +16,7 @@ $config = array(
 		'dsn' => 'mysql:host={{ diyidp.db_host}};port=3306;dbname={{ diyidp.db_name }}',
 		'username' => '{{ diyidp.db_user}}',
 		'password' => '{{ diyidp.db_password}}',
-		'query' => "SELECT uid,givenName,sn,cn, mail,displayName,schacHomeOrganization, CONCAT(uid, '@', schacHomeOrganization) as eduPersonPrincipalName,eduPersonEntitlement,eduPersonAffiliation,isMemberOf,schacPersonalUniqueCode,,eduPersonScopedAffiliation
+ 		'query' => "SELECT uid,givenName,sn,cn, mail,displayName,schacHomeOrganization, CONCAT(uid, '@', schacHomeOrganization) as eduPersonPrincipalName,eduPersonEntitlement,eduPersonAffiliation,isMemberOf,schacPersonalUniqueCode,eduPersonScopedAffiliation
                             FROM users WHERE username = :username AND password = :password",
 	),
 );

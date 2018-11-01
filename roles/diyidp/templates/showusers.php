@@ -1,9 +1,9 @@
 <?php
 
 // Db connection data
-$dbuser = "{{ diyidp.db_user }}";
-$dbpass = "{{ diyidp.db_password }}";
-$dbhost = "{{ diyidp.db_host }}";
+$dbuser = "diyidprw";
+$dbpass = "teip4Izaesee";
+$dbhost = "localhost";
 
 function doQuery($qryString, $dbuser, $dbpass, $dbhost) {
 
@@ -194,12 +194,12 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	imo.isMemberOf as 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1 (isMemberOf)',
         spuc.schacPersonalUniqueCode as 'urn:oid:1.3.6.1.4.1.25178.1.2.14 (schacPersonalUniqueCode)',
         epsa.eduPersonScopedAffiliation as 'urn:oid:1.3.6.1.4.1.5923.1.1.1.9 (eduPersonScopedAffiliation)'
-	
 
-	FROM {{ diyidp.db_name }}.users diy
+
+	FROM diyidp.users diy
 	LEFT JOIN
 	(	SELECT uid, GROUP_CONCAT(cn SEPARATOR ', ') as cn from 
-		( SELECT uid, cn FROM {{ diyidp.db_name }}.users
+		( SELECT uid, cn FROM diyidp.users
 		  GROUP BY uid, cn
 		  ORDER BY UID
 		) cn
@@ -209,7 +209,7 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 
 	LEFT JOIN
 	(	SELECT uid, GROUP_CONCAT(eduPersonEntitlement SEPARATOR ', ') as eduPersonEntitlement from 
-		( SELECT uid, eduPersonEntitlement FROM {{ diyidp.db_name }}.users
+		( SELECT uid, eduPersonEntitlement FROM diyidp.users
 		  WHERE length(eduPersonEntitlement) <> 0
 		  GROUP BY uid, eduPersonEntitlement
 		  ORDER BY UID
@@ -220,7 +220,7 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 
 	LEFT JOIN
 	(	SELECT uid, GROUP_CONCAT(displayName SEPARATOR ', ') as displayName from 
-		( SELECT uid, displayName FROM {{ diyidp.db_name }}.users
+		( SELECT uid, displayName FROM diyidp.users
 		  GROUP BY uid, displayName
 		  ORDER BY UID
 		) dn
@@ -230,7 +230,7 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 
 	LEFT JOIN
 	(	SELECT uid, GROUP_CONCAT(sn SEPARATOR ', ') as sn from 
-		( SELECT uid, sn FROM {{ diyidp.db_name }}.users
+		( SELECT uid, sn FROM diyidp.users
 		  GROUP BY uid, sn
 		  ORDER BY UID
 		) sn
@@ -240,7 +240,7 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 
 	LEFT JOIN
 	(	SELECT uid, GROUP_CONCAT(givenName SEPARATOR ', ') as givenName from 
-		( SELECT uid, givenName FROM {{ diyidp.db_name }}.users
+		( SELECT uid, givenName FROM diyidp.users
 		  GROUP BY uid, givenName
 		  ORDER BY UID
 		) givenName
@@ -250,7 +250,7 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 
 	LEFT JOIN
 	(	SELECT uid, GROUP_CONCAT(mail SEPARATOR ', ') as mail from 
-		( SELECT uid, mail FROM {{ diyidp.db_name }}.users
+		( SELECT uid, mail FROM diyidp.users
 		  GROUP BY uid, mail
 		  ORDER BY UID
 		) mail
@@ -260,7 +260,7 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 
 	LEFT JOIN
 	(	SELECT uid, GROUP_CONCAT(eduPersonAffiliation SEPARATOR ', ') as eduPersonAffiliation from 
-		( SELECT uid, eduPersonAffiliation FROM {{ diyidp.db_name }}.users
+		( SELECT uid, eduPersonAffiliation FROM diyidp.users
 		  GROUP BY uid, eduPersonAffiliation
 		  ORDER BY UID
 		) eduPersonAffiliation
@@ -270,7 +270,7 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 
 	LEFT JOIN
 	(	SELECT uid, GROUP_CONCAT(isMemberOf SEPARATOR ', ') as isMemberOf from 
-		( SELECT uid, isMemberOf FROM {{ diyidp.db_name }}.users
+		( SELECT uid, isMemberOf FROM diyidp.users
 		  GROUP BY uid, isMemberOf
 		  ORDER BY UID
 		) isMemberOf
@@ -278,27 +278,25 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	) AS imo
 	ON diy.uid = imo.uid
 
-        LEFT JOIN
-        (       SELECT uid, GROUP_CONCAT(schacPersonalUniqueCode SEPARATOR ', ') as schacPersonalUniqueCode from 
-                ( SELECT uid, schacPersonalUniqueCode FROM diyidp.users
-                  GROUP BY uid, schacPersonalUniqueCode
-                  ORDER BY UID
-                ) schacPersonalUniqueCode
-                GROUP BY uid
-        ) AS spuc
-        ON diy.uid = spuc.uid
-        
-        LEFT JOIN 
-        (       SELECT uid, GROUP_CONCAT(eduPersonScopedAffiliation SEPARATOR ', ') as eduPersonScopedAffiliation from 
-                ( SELECT uid, eduPersonScopedAffiliation FROM diyidp.users
-                  GROUP BY uid, eduPersonScopedAffiliation
-                  ORDER BY UID
-                ) eduPersonScopedAffiliation
-                GROUP BY uid
-        ) AS epsa
-        ON diy.uid = epsa.uid
-
-
+	LEFT JOIN
+	(	SELECT uid, GROUP_CONCAT(schacPersonalUniqueCode SEPARATOR ', ') as schacPersonalUniqueCode from 
+		( SELECT uid, schacPersonalUniqueCode FROM diyidp.users
+		  GROUP BY uid, schacPersonalUniqueCode
+		  ORDER BY UID
+		) schacPersonalUniqueCode
+		GROUP BY uid
+	) AS spuc
+	ON diy.uid = spuc.uid
+	
+	LEFT JOIN
+	(	SELECT uid, GROUP_CONCAT(eduPersonScopedAffiliation SEPARATOR ', ') as eduPersonScopedAffiliation from 
+		( SELECT uid, eduPersonScopedAffiliation FROM diyidp.users
+		  GROUP BY uid, eduPersonScopedAffiliation
+		  ORDER BY UID
+		) eduPersonScopedAffiliation
+		GROUP BY uid
+	) AS epsa
+	ON diy.uid = epsa.uid
 GROUP BY diy.uid
 ORDER BY LPAD(lower(username), 2,0), LPAD(lower(username), 10,0)";
 	
