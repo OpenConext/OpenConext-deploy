@@ -7,13 +7,13 @@
     tags:
       - always
 
-- hosts: loadbalancer:php-apps:java-apps:storage:oidc:dbcluster:elk
+- hosts: loadbalancer:php-apps:java-apps:storage:oidc:dbcluster
   gather_facts: yes
   become: true
   roles:
     - { role: common,   tags: ['common'] }
-    - { role: '../SURFconext-deploy-environments/roles/surfconext_common',   tags: ['surfconext_common'] }
-      #    - { role: '../SURFconext-deploy-environments/roles/sysadmin_common',   tags: ['sysadmin_common'] }
+    - { role: '{{ inventory_dir }}/../roles/surfconext_common',   tags: ['surfconext_common'] }
+    - { role: '{{ inventory_dir }}/../roles/sysadmin_common',   tags: ['sysadmin_common'] }
     - { role: iptables,      tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
   handlers:
@@ -27,7 +27,7 @@
     - { role: keepalived, tags: ['keepalived'] }
     - { role: haproxy, tags: ['lb'] }
     - { role: bind, tags: ['bind'] }
-      #    - { role: '{{ inventory_dir }}/../roles/metricbeat',   tags: ['metricbeat'] }
+    - { role: '{{ inventory_dir }}/../roles/metricbeat',   tags: ['metricbeat'] }
 
 - hosts: php-apps:java-apps:oidc
   gather_facts: no
@@ -62,13 +62,6 @@
   become: true
   roles:
     - { role: mongo, tags: ['mongo'] }
-
-- hosts: elk
-  gather_facts: no
-  become: true
-  roles:
-     - { role: influxdb, tags: ['influxdb'] }
-     - { role: elk,      tags: ['elk'] }
 
 - hosts: php-apps
   gather_facts: no
