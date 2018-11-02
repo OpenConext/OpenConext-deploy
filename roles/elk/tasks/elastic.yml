@@ -1,0 +1,20 @@
+- name: Install elasticsearch
+  yum: name={{ item }} state=present
+  with_items: 
+    - elasticsearch
+
+- name: Create datadirectory
+  file: path=/data/elasticsearch state=directory owner=elasticsearch mode=750
+
+- name: Make sure java 8 is used
+  lineinfile: dest=/etc/sysconfig/elasticsearch line='JAVA_HOME=/usr/lib/jvm/java-1.8.0' state=present
+
+- name: Install elasticsearch configuration file
+  template: src={{ item }}.j2 dest=/etc/elasticsearch/{{ item }}
+  with_items:
+    - elasticsearch.yml
+  notify: restart elasticsearch
+
+- name: Enable and start elasticsearch service
+  service: name=elasticsearch state=started enabled=yes
+

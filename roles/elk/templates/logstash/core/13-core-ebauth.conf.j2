@@ -1,0 +1,33 @@
+filter {
+  if [prog] == "EBAUTH" {
+    grok {
+      patterns_dir => "/etc/logstash/patterns"
+      match => { "message" => "%{SYSLOGBASE:syslogbase} %{GREEDYDATA:ebauth}" }
+    }
+}
+  json { 
+    source => "ebauth"
+    target => "ebauth"
+}
+  date {
+     match => [ "[ebauth][context][login_stamp]", "yyyy-MM-dd'T'HH:mm:ssZZ" ]
+}
+  de_dot {
+}   
+  mutate {
+      remove_field => [ "source" ]
+      remove_field => [ "syslogbase" ]
+      add_field    =>  {"[month]" => "%{+MM}"}
+      add_field    =>  {"[year]" => "%{+YYYY}"}
+}
+  fingerprint {
+      key => {{ logstash_ebauth_sha_secret }}
+      source => [ "[ebauth][context][user_id]" ]
+      method => SHA256
+      target => [ "[ebauth][context][user_id_hashed]" ]
+}
+  ruby {
+      code =>  'quarter = (event.get("month").to_i / 3.0).ceil;
+               event.set("quarter",quarter)'
+}
+}

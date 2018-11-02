@@ -1,0 +1,88 @@
+---
+- name: Install IUS repo
+  yum: name=http://dl.iuscommunity.org/pub/ius/stable/CentOS/{{ ansible_distribution_major_version }}/{{ ansible_userspace_architecture }}/ius-release-1.0-13.ius.centos{{ ansible_distribution_major_version }}.noarch.rpm
+
+- name: Import IUS Community Project GPG key
+  rpm_key: key=http://dl.iuscommunity.org/pub/ius/IUS-COMMUNITY-GPG-KEY state=present
+
+- name: Install yarn repo file
+  copy: src=yarn.repo dest=/etc/yum.repos.d/
+
+- name: Install some packages
+  yum: pkg={{ item }} state=present
+  with_items:
+    - yarn
+    - npm
+    - nodejs
+    - python36u
+    - python36u-pip
+    - python36u-mod_wsgi
+    - python-setuptools
+    - git
+    - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.0/cjose-0.5.1-1.el7.centos.x86_64.rpm
+    - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.8/mod_auth_openidc-2.3.8-1.el7.x86_64.rpm
+
+- name: Create stats Apache tls key
+  copy: content="{{ stats_tls_key }}" dest={{ tls.cert_private_path }}/stats.{{ base_domain }}.key mode=0600
+  when: stats_apache_standalone
+
+- name: Copy stats Apache certificate
+  copy: src={{ inventory_dir }}/files/certs/stats.{{ base_domain }}.crt dest={{ tls.cert_path }}/stats.{{ base_domain }}.cert owner=root mode=0644
+  when: stats_apache_standalone
+
+- name: Copy stats Apache intermediate
+  copy: src={{ inventory_dir }}/files/certs/stats.{{ base_domain }}.intermediate dest={{ tls.cert_path_ca }}/stats.{{ base_domain }}.intermediate owner=root mode=0644
+  when: stats_apache_standalone
+
+- name: Create stats api wsgi user
+  user: name={{ stats_wsgi_user }} shell="/bin/false" state=present
+
+- name: Checkout OpenConext-statistics branch from Git
+  git: repo=https://github.com/OpenConext/OpenConext-statistics.git dest="{{ stats_src_dir }}" force=yes
+  register: git_stats
+
+- name: Add git info to server
+  shell: git --git-dir {{ stats_src_dir }}/.git log -1 > {{ stats_src_dir }}/server/api/git.info
+  when: git_stats.changed
+
+- name: Install the virtualenv and requirements
+  pip: requirements={{ stats_src_dir }}/requirements/base.txt virtualenv={{ stats_api_env_dir }}  virtualenv_command="/bin/python3.6 -m venv" state=latest
+
+- name: Install stats server api from {{ stats_src_dir }} to {{ stats_api_env_dir }}
+  command: cp -r {{ stats_src_dir }}/server {{ stats_api_env_dir }}/
+  when: git_stats.changed
+
+- name: Create log directory
+  file: path={{ stats_api_env_dir }}/log owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }} mode=0755 state=directory
+
+- name: Create logfile
+  copy: content="" dest={{ stats_api_env_dir }}/log/stats.log owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }} mode=0755 force=no
+
+- name: Place wcgi for the server api
+  template: src=stats-api.wsgi.j2 dest={{ stats_api_env_dir }}/stats-api.wsgi mode=0550 owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }}
+  notify: reload httpd
+
+- name: Install the api config file
+  template: src=config.yml.j2 dest={{ stats_api_env_dir }}/server/config/config.yml
+  notify: reload httpd
+
+- name: Install Apache config file
+  template: src=stats.conf.j2 dest=/etc/httpd/conf.d/stats.conf
+  notify: reload httpd
+
+- name: Create a gui build
+  shell: "yarn install && yarn build"
+  args:
+    chdir: "{{ stats_src_dir }}/client"
+  when: git_stats.changed
+
+- name: Delete current www directory
+  command: rm -fr {{ stats_api_env_dir }}/www
+  changed_when: false
+  when: git_stats.changed
+
+- name: Copy the build to the www directory
+  command: cp -r {{ stats_src_dir }}/client/build {{ stats_api_env_dir }}/www
+  changed_when: false
+  when: git_stats.changed
+

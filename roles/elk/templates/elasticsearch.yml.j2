@@ -1,0 +1,10 @@
+cluster.name: {{ elastic_instance_name }}
+path.data: /data/elasticsearch
+path.logs: /var/log/elasticsearch
+{% if elastic_cluster %}
+node.name: {{ ansible_hostname }}
+node.data: {{ elastic_data_node }}
+discovery.zen.ping.unicast.hosts: [{% for host in groups['elasticsearch'] %}{{ hostvars[host]['backend_ipv4'] }}{% if not loop.last %},{% endif %}{% endfor %}]
+discovery.zen.minimum_master_nodes: {{ elastic_minimum_nodes }}
+network.host:  ["{{ backend_ipv4 }}","_local_"]
+{% endif %}

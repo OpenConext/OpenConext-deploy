@@ -1,0 +1,15 @@
+---
+elastic_cluster: false
+kibana_standalone: false
+elastic_data_node: true
+elastic_minumum_nodes: 1
+kibana_tls_cert_path: "/etc/pki/tls/certs/{{ kibana_server_name }}.crt"
+kibana_tls_key_path: "/etc/pki/tls/private/{{ kibana_server_name }}.key"
+kibana_tls_chain_path: "/etc/pki/tls/private/{{ kibana_server_name }}_chain.crt"
+kibana_oidc_url: "oidc.{{ base_domain }}"
+kibana_oidc_clientid: "https@//kibana.{{ base_domain }}"
+elastic_instance_name: surfconext
+logstash_elk: False
+logstash_stats: True
+logstash_tls: False
+kibana_server_name: kibana.{{ base_domain }}

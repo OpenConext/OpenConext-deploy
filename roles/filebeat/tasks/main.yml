@@ -1,0 +1,25 @@
+---
+- name: Add Elasticsearch GPG key.
+  rpm_key:
+    key: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add elasticsearch yum repo
+  copy:
+     src: elasticsearch.repo
+     dest: /etc/yum.repos.d/elasticsearch.repo
+     mode: 0644
+
+- name: Install Filebeat
+  yum: name=filebeat state=present
+
+  #- name: Install cacert certificate
+  #copy: src={{ inventory_dir }}/files/certs/elastic_ca.pem dest=/etc/pki/elastic/
+
+- name: Install filebeat.yml
+  template: src=filebeat.yml.j2 dest=/etc/filebeat/filebeat.yml
+  notify:
+    - restart filebeat
+
+- name: Enable and start filebeat
+  service: name=filebeat state=started enabled=yes

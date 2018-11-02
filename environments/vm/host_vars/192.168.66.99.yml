@@ -18,5 +18,7 @@ apache_app_listen_address:
   aa: 192.168.66.99
   metadata: 192.168.66.99
   manage: 192.168.66.99
+  kibana: 192.168.66.99
+  stats: 192.168.66.99
 
 mongo_primary: True

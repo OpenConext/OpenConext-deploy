@@ -1,0 +1,14 @@
+- name: Install logstash plugins
+  logstash_plugin: state=present name={{ item }}
+  with_items:
+    - logstash-filter-fingerprint
+    - logstash-output-influxdb
+
+- name: Copy stats specific files
+  template: src="logstash/stats/33-core-influxdb-output.conf" dest="/etc/logstash/conf.d/core/33-core-influxdb-output.conf"
+
+- name: Copy common specific files
+  template: src="logstash/core/{{ item }}.j2" dest="/etc/logstash/conf.d/core/{{ item }}"
+  with_items:
+    - 02-filebeat-input.conf
+    - 13-core-ebauth.conf

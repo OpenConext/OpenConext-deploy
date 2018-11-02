@@ -1,0 +1,3 @@
+---
+influx_data_dir: /data/influxdb
+

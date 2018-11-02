@@ -1,0 +1,41 @@
+input {
+  relp {
+    port => 5045
+    {% if logstash_tls %}
+    ssl_enable => false
+    ssl_cert => "/etc/pki/tls/certs/logstash.{{ base_domain }}.pem"
+    ssl_key => "/etc/pki/tls/private/logstash.{{ base_domain }}.key"
+    {% endif %}
+    add_field =>  { "origin" => "stepup" }
+
+  }
+}
+filter {
+
+  # For sending messages to logstash the rsyslog of stepup uses the template:
+  # $template Logstash_SyslogProtocol23Format,"<%PRI%>1 %TIMESTAMP:::date-rfc3339% %HOSTNAME% %APP-NAME% %PROCID% %MSGID% %msg%"
+  #
+  # This the same as the rsyslog pre-defined "$template RSYSLOG_SyslogProtocol23Format", minus the %STRUCTURED-DATA% field because 
+  # this field is difficult to parse in logstash. The %STRUCTURED-DATA% field would have been between %MSGID% and %msg%
+
+  if [origin] == "stepup" {
+    grok {
+      match => {
+        "message" => "<%{POSINT:syslog_pri}>1 %{TIMESTAMP_ISO8601:syslog_timestamp} %{HOSTNAME:hostname} %{PROG:prog} (%{POSINT:procid}|-) (%{WORD:msgid}|-) %{GREEDYDATA:message}"      
+      }
+      # Replace existing message with decoded message
+      overwrite => 'message'
+      remove_field => "host"
+      add_tag => "syslog_parsed"
+    }     
+
+    if "syslog_parsed" in [tags] {
+      syslog_pri {
+        syslog_pri_field_name => "syslog_pri"
+        remove_field => ["syslog_facility_code", "syslog_severity_code", "syslog_pri"]
+        add_field => [ "severity", "%{syslog_severity}" ]
+      }
+    }     
+  }
+
+}

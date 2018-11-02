@@ -1,0 +1,7 @@
+import sys
+
+if "{{stats_api_env_dir}}" not in sys.path:
+  sys.path.insert(0, "{{stats_api_env_dir}}")
+
+from server.__main__ import app as application
+

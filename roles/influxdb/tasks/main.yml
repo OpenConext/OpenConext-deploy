@@ -1,0 +1,63 @@
+---
+- name: Install influx yum repo file
+  copy: src=influx.repo dest=/etc/yum.repos.d/influx.repo mode=0644 owner=root
+
+- name: Install the necessary packages
+  yum: name={{ item }} state=installed 
+  with_items:
+    - python-requests
+    - influxdb
+    - python2-pip
+
+- name: Install python influx packacke
+  pip: name=influxdb state=present
+
+- name: Create the influxdb datadir
+  file: 
+    path: "{{ influx_data_dir}}"
+    owner: influxdb
+    group: influxdb
+    state: directory
+    mode: 0770
+
+- name: Place custom influxdb config without authentication enabled
+  template: src=influxdb.conf.j2 dest=/etc/influxdb/influxdb.conf mode=0644 owner=root
+  vars:
+    auth_enabled: "false"
+  changed_when: False
+
+- name: Enable and (re)start the influxdb service
+  service: name=influxdb.service enabled=yes state=restarted
+  changed_when: False
+
+- name: Create admin user
+  influxdb_user:
+    admin: True
+    user_name: "{{ influxdb_admin_user }}"
+    user_password: "{{ influxdb_admin_password }}"
+
+- name: Create stats user
+  influxdb_user:
+    user_name: "{{ influxdb_stats_user }}"
+    user_password: "{{ influxdb_stats_password }}"
+
+- name: Create database
+  influxdb_database:
+    username: "{{ influxdb_admin_user }}"
+    password: "{{ influxdb_admin_password }}"
+    database_name: "{{ influx_stats_db }}"
+    state: present
+
+- name: Grant stats user all rights on stats database
+  command: 'influx -execute "GRANT ALL ON {{ influx_stats_db }} TO \"{{ influxdb_stats_user }}\""'
+  changed_when: False
+
+- name: Place custom influxdb config with authentication enabled
+  template: src=influxdb.conf.j2 dest=/etc/influxdb/influxdb.conf mode=0644 owner=root
+  vars:
+    auth_enabled: "true"
+  changed_when: False
+
+- name: Restart the influxdb service after enabling authentication
+  service: name=influxdb.service state=restarted
+  changed_when: False

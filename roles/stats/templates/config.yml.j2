@@ -1,0 +1,35 @@
+database:
+  name: {{ influx_stats_db }}
+  host: localhost
+  port: 8086
+  username: {{ influxdb_stats_user }}
+  password: {{ influxdb_stats_password }}
+
+syslog:
+  address: "/dev/log"
+# Use localhost and port if syslog listens on UDP
+#  host: localhost
+#  port: 514
+
+log:
+  measurement: {{ influx_ebauth_measurement }} 
+  user_id: user_id
+  sp_id: sp_entity_id
+  idp_id: idp_entity_id
+
+secret_key: {{ stats_api_secret }}
+product: {{ instance_name }}
+
+api_users:
+  - name: "dashboard"
+    password: "{{ stats_dashboard_api_password }}"
+    scope: "read"
+  - name: "sysadmin"
+    password: "{{ stats_sysadmin_api_password }}"
+    scope: "read, write"
+
+manage:
+  url: {{ stats_manage_url }}
+  user: {{ stats_manage_api_user }}
+  password: {{ manage_stats_api_password }} 
+

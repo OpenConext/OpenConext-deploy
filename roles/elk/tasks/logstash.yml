@@ -1,0 +1,49 @@
+- name: Install logstash 
+  yum: name={{ item }} state=present
+  with_items: 
+    - logstash
+
+- name: Create data directory
+  file: path=/data/logstash state=directory owner=logstash mode=750
+
+- name: Install logstash certificate
+  copy: src='{{ inventory_dir }}/files/certs/logstash/logstash.{{ base_domain }}.crt' dest='/etc/pki/tls/certs/logstash.{{ base_domain }}.pem' owner=root 
+  when: logstash_tls
+
+- name: Install logstash TLS key
+  copy: content="{{ logstash_tls_key }}" dest=/etc/pki/tls/private/logstash.{{ base_domain }}.key
+  when: logstash_tls
+
+- name: Install logstash configuration file
+  template: src={{ item }}.j2 dest=/etc/logstash/{{ item }}
+  with_items:
+    - logstash.yml
+    - pipelines.yml
+  notify: restart logstash
+
+- name: Make sure java 8 is used
+  lineinfile: dest=/etc/default/logstash line='JAVA_HOME=/usr/lib/jvm/java-1.8.0' state=present
+
+
+- name: Create pipeline directories 
+  file: path=/etc/logstash/conf.d/{{ item }} state=directory owner=root mode=775
+  with_items: 
+     - core
+     - sa
+
+- name: Copy filebeat input file for both logstash elk and logstash stats
+  template: src="logstash/core/{{ item }}.j2" dest="/etc/logstash/conf.d/core/{{ item }}"
+  with_items:
+    - 02-filebeat-input.conf
+  notify: restart logstash
+
+
+- name: Include OpenConext-stats specific tasks
+  include: logstash_stats.yml
+
+- name: Include ELK stack specific tasks
+  include: logstash_elk.yml
+  when: logstash_elk
+
+- name: Enable and start logstash service
+  service: name=logstash state=started enabled=yes

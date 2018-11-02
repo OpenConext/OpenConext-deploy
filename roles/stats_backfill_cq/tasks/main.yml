@@ -1,0 +1,10 @@
+---
+- name: Create Continuous Queries and backfill the measurements
+  uri:
+    url: "https://stats.{{ base_domain }}/api/stats/admin/reinitialize_measurements_and_cq"
+    method: PUT
+    user: sysadmin
+    password: "{{ stats_sysadmin_api_password }}"
+    force_basic_auth: yes
+  changed_when: false
+
