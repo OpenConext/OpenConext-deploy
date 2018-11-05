@@ -1,3 +1,4 @@
 ---
 shibboleth_metadata_sources:
   engine: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+shibd_sp_crt_not_in_inventory: false

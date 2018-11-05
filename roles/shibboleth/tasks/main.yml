@@ -36,6 +36,15 @@
     dest: "/etc/shibboleth/shib-sp.crt"
   notify:
     - "restart shibd"
+  when: not shibd_sp_crt_not_in_inventory
+
+- name: shibboleth SP certificate when it is not located in the inventory_dir
+  copy:
+    src: "files/certs/shib-sp.crt"
+    dest: "/etc/shibboleth/shib-sp.crt"
+  notify:
+    - "restart shibd"
+  when: shibd_sp_crt_not_in_inventory
 
 - name: shibboleth SP key
   copy:
