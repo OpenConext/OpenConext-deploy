@@ -64,10 +64,10 @@ then
 fi
 
 # run vm
-#if [ "$env" = "vm" ]
-#then
-#	vagrant up
-#fi
+if [ "$env" = "vm" ]
+then
+  vagrant up
+fi
 
 # run ansible
 #echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret$FULL\" $@"
