@@ -5,7 +5,7 @@ instance_name: OpenConext
 base_domain: "vm.openconext.org"
 support_email: help@example.org
 noreply_email: no-reply@example.org
-replica_set_name: 
+replica_set_name:
 smtp_server: localhost
 error_mail_to: devnull@example.org
 
@@ -56,6 +56,7 @@ databases:
 mongo_port: 27017
 mongo_cluster: false
 mongo_tls: false
+mongo_hostname: 192.168.66.99
 
 mongo:
   manage_user: managerw
@@ -64,7 +65,7 @@ mongo:
 
 tls:
   cert_path: /etc/pki/tls/certs
-  cert_path_ca: /etc/pki/ca-trust/source/anchors/ 
+  cert_path_ca: /etc/pki/ca-trust/source/anchors/
   cert_private_path: /etc/pki/tls/private
 
 
@@ -468,7 +469,7 @@ loadbalancing:
 
   kibana:
     port: 701
-  
+
   stats:
     port: 702
 
@@ -521,7 +522,7 @@ haproxy_applications:
     ha_url: "/alive.txt"
     port: 409
     servers: "{{php_servers}}"
-  
+
   - name: teams
     vhost_name: "teams"
     ip: 192.168.66.98
@@ -585,7 +586,7 @@ haproxy_applications:
     ha_url: "/aa/api/health"
     port: 615
     servers: "{{java_servers}}"
-  
+
   - name: link
     vhost_name: "link"
     ip: 192.168.66.98
@@ -625,7 +626,7 @@ haproxy_applications:
     ha_url: "/"
     port: "609"
     servers: "{{php_servers}}"
-  
+
   - name: kibana
     vhost_name: "kibana"
     ip: "192.168.66.98"
@@ -633,7 +634,7 @@ haproxy_applications:
     ha_url: "/"
     port: "701"
     servers: "{{php_servers}}"
-  
+
   - name: stats
     vhost_name: "stats"
     ip: "192.168.66.98"
@@ -652,3 +653,4 @@ php_servers:
 java_servers:
    - { ip: "192.168.66.99", label: "javapps"}
 
+dashboard_install: false
