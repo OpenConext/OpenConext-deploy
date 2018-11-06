@@ -41,31 +41,22 @@ then
 	echo -e "$help"
 	exit 1
 else
-	# check environment
-	known_envs='vm acc prod  '
-	if ! listcontains "$env" ${known_envs}
-	then
-	  echo "The environment '$env' is unknown ";
-	  exit 1
-	fi
-
 	user=$1
 	secret=$2
 	shift; shift
 fi
 
-FULL=" minimal_install=0"
-if [ "$1" = "--minimal" ]
-then
-    FULL=" minimal_install=1"
-fi
-
 # find matching playbook
 playbook="provision.yml"
-listcontains "$env" "vm"            &&  playbook="provision-vm.yml"
+listcontains "$env" "vm" &&  playbook="provision-vm.yml"
 
 # find inventory
-inventory="environments/$env/inventory"
+if [ $env = "vm" ] || [ $env = "docker" ] || [ $env = "template" ]
+then
+	inventory="environments/$env/inventory"
+else
+	inventory="environments-external/$env/inventory"
+fi
 if ! [ -e $inventory ]
 then
 	echo "Inventory file '$inventory' for environment '$env' not found."
@@ -80,4 +71,4 @@ fi
 
 # run ansible
 #echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret$FULL\" $@"
-#exec ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret$FULL" $@
+ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret$FULL" $@
