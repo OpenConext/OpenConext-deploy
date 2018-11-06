@@ -42,7 +42,7 @@ then
 	exit 1
 else
 	# check environment
-	known_envs='vm  test test2 acc prod  diy-test diy'
+	known_envs='vm acc prod  '
 	if ! listcontains "$env" ${known_envs}
 	then
 	  echo "The environment '$env' is unknown ";
@@ -63,7 +63,6 @@ fi
 # find matching playbook
 playbook="provision.yml"
 listcontains "$env" "vm"            &&  playbook="provision-vm.yml"
-listcontains "$env" "diy diy-test"  &&  playbook="provision-diy.yml"
 
 # find inventory
 inventory="environments/$env/inventory"
@@ -74,11 +73,11 @@ then
 fi
 
 # run vm
-if [ "$env" = "vm" ]
-then
-	vagrant up
-fi
+#if [ "$env" = "vm" ]
+#then
+#	vagrant up
+#fi
 
 # run ansible
-echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret$FULL\" $@"
+#echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret$FULL\" $@"
 #exec ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret$FULL" $@
