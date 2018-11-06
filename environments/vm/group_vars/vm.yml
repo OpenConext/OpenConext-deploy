@@ -56,7 +56,6 @@ databases:
 mongo_port: 27017
 mongo_cluster: false
 mongo_tls: false
-mongo_hostname: 192.168.66.99
 
 mongo:
   manage_user: managerw
