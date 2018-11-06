@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # This script will generate new password, secrets and certificates for OpenConext environment
-# 
+#
 # It is to be used before any Ansible command.
 #
 # When a password must be sha-encoded, the clear-text password must be set before the sha-encoded
@@ -10,6 +10,7 @@
 
 # ----- configuration
 ENV_DIR="environments"
+ENVEXT_DIR="environments-external"
 SKELETON_DIR="${ENV_DIR}/template"
 SECRET_VARS_TEMPLATE="${SKELETON_DIR}/secrets/skeleton.yml"
 # ----- End configuration
@@ -39,7 +40,7 @@ if [ $# -eq 3 ]
     echo "INFO: Using file " $SECRET_VARS_FILE " for containing the secrets."
 fi
 
-trap 'rm -f $SV_FILE; echo "Error: Operation not completed, please restart command"' EXIT INT TERM 
+trap 'rm -f $SV_FILE; echo "Error: Operation not completed, please restart command"' EXIT INT TERM
 
 tempfile() {
     tempprefix=$(basename "$0")
@@ -49,11 +50,11 @@ tempfile() {
 OC_ENV=$1
 OC_BASEDOMAIN=$2
 
-SECRET_VARS_FILE="${ENV_DIR}/${OC_ENV}/secrets/${OC_ENV}.yml"
-CERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/star.${OC_BASEDOMAIN}"
-EBCERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/engineblock"
-SHIBCERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/shib-sp"
-CACERT_FILES_BASE="${ENV_DIR}/${OC_ENV}/files/certs/ca"
+SECRET_VARS_FILE="${ENVEXT_DIR}/${OC_ENV}/secrets/${OC_ENV}.yml"
+CERT_FILES_BASE="${ENVEXT_DIR}/${OC_ENV}/files/certs/star.${OC_BASEDOMAIN}"
+EBCERT_FILES_BASE="${ENVEXT_DIR}/${OC_ENV}/files/certs/engineblock"
+SHIBCERT_FILES_BASE="${ENVEXT_DIR}/${OC_ENV}/files/certs/shib-sp"
+CACERT_FILES_BASE="${ENVEXT_DIR}/${OC_ENV}/files/certs/ca"
 
 echo "OC_ENV: $OC_ENV"
 echo "OC_BASEDOMAIN: $OC_BASEDOMAIN"
@@ -74,7 +75,7 @@ echo "SHIBCERT_FILES_BASE: $SHIBCERT_FILES_BASE"
 rm -rf "${ENV_DIR}/${OC_ENV}"
 
 # Copy template to new OC_ENV
-cp -a "${SKELETON_DIR}" "${ENV_DIR}/${OC_ENV}"
+cp -a "${SKELETON_DIR}" "${ENVEXT_DIR}/${OC_ENV}"
 
 # Generate new certificates
 #scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $CERT_FILES_BASE
@@ -82,29 +83,29 @@ scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $EBCERT_FILES_BASE
 scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $SHIBCERT_FILES_BASE
 # Generate CA
 scripts/lib/create_ca.sh $CACERT_FILES_BASE "/CN=OpenConext Demo CA/O=OpenConext/C=NL"
-scripts/lib/gen_ssl_server_cert.sh  $CACERT_FILES_BASE ${ENV_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN" /CN=*.$OC_BASEDOMAIN/O=OpenConext/C=NL
+scripts/lib/gen_ssl_server_cert.sh  $CACERT_FILES_BASE ${ENVEXT_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN" /CN=*.$OC_BASEDOMAIN/O=OpenConext/C=NL
 # Copy ca to correct location
-cp $CACERT_FILES_BASE/ca-cert.pem ${ENV_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN"_ca.pem
+cp $CACERT_FILES_BASE/ca-cert.pem ${ENVEXT_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN"_ca.pem
 
 # Generate Secret vars
 scripts/gen_secrets.sh $SECRET_VARS_TEMPLATE $CERT_FILES_BASE $EBCERT_FILES_BASE $SHIBCERT_FILES_BASE $SECRET_VARS_FILE
 
 # Move group_vars skeleton.yml to OC_ENV.yml
-mv "${ENV_DIR}/${OC_ENV}/group_vars/template.yml" "${ENV_DIR}/${OC_ENV}/group_vars/${OC_ENV}.yml"
+mv "${ENVEXT_DIR}/${OC_ENV}/group_vars/template.yml" "${ENVEXT_DIR}/${OC_ENV}/group_vars/${OC_ENV}.yml"
 
 # Replace %env% and %base_domain% with OC_ENV
-sed -i "s/%env%/${OC_ENV}/g" ${ENV_DIR}/${OC_ENV}/*/${OC_ENV}.yml
-sed -i "s/%base_domain%/${OC_BASEDOMAIN}/g" ${ENV_DIR}/${OC_ENV}/*/${OC_ENV}.yml
+sed -i "s/%env%/${OC_ENV}/g" ${ENVEXT_DIR}/${OC_ENV}/*/${OC_ENV}.yml
+sed -i "s/%base_domain%/${OC_BASEDOMAIN}/g" ${ENVEXT_DIR}/${OC_ENV}/*/${OC_ENV}.yml
 
 # Remove skeleton secrets file from target
-rm -f "${ENV_DIR}/${OC_ENV}/secrets/skeleton.yml"
+rm -f "${ENVEXT_DIR}/${OC_ENV}/secrets/skeleton.yml"
 
 # Replace %env% with OC_ENV in inventory
-sed -i "s/%env%/${OC_ENV}/g" ${ENV_DIR}/${OC_ENV}/inventory
+sed -i "s/%env%/${OC_ENV}/g" ${ENVEXT_DIR}/${OC_ENV}/inventory
 
 
 echo -e "\n\n*** Please replace all following placeholders ***\n"
-grep -R '%*%' "${ENV_DIR}/${OC_ENV}"
+grep -R '%*%' "${ENVEXT_DIR}/${OC_ENV}"
 
 
 trap '' EXIT
