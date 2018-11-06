@@ -33,6 +33,12 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
 
+- hosts: loadbalancer-vm
+  gather_facts: true
+  become: true
+  roles:
+    - { role: haproxy, tags: ['lb'] }
+
 - hosts: loadbalancer
   gather_facts: true
   become: true
@@ -88,7 +94,6 @@
     - { role: openconext-common, tags: ['eb','profile'] }
     - { role: engineblock,       tags: ['eb'      ] }
     - { role: profile,           tags: ['profile' ] }
-    - { role: remove-janus,      tags: ['remove-janus'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
@@ -118,15 +123,12 @@
     - { role: pdp-gui,          tags: ['pdp', 'pdp-gui'] }
     - { role: pdp-server,       tags: ['pdp', 'pdp-server'] }
     - { role: remove-grouper,               tags: ['remove-grouper'] }
-    - { role: remove-metadata-exporter,     tags: ['remove-metadata-exporter'] }
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
     - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
     - { role: manage-server,                tags: ['manage', 'manage-server'] }
-    - { role: dashboard-gui,                tags: ['dashboard', 'dashboard-gui'] }
-    - { role: dashboard-server,             tags: ['dashboard', 'dashboard-server'] }
-
-
+    - { role: dashboard-gui,  when: dashboard_install,             tags: ['dashboard', 'dashboard-gui'] }
+    - { role: dashboard-server, when: dashboard_install,           tags: ['dashboard', 'dashboard-server'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
