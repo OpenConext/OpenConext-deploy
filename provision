@@ -22,7 +22,7 @@ if [ "$ANSVER1" -le 1 -a "$ANSVER2" -lt 9 ]; then
 fi
 
 # parse parameters
-help="Usage: $0 vm    [ANSIBLE_OPT]\n       $0 <ENV> <SSH_USERNAME> <SECRET_FILE> [ANSIBLE_OPT]"
+help="Usage: $0 vm    [ANSIBLE_OPT]\n       $0 <ENV> <SSH_USERNAME> <SECRET_FILE> <ENV PATH> [ANSIBLE_OPT]"
 if [ "$#" -eq 0 ]
 then
   echo -e "$help"
@@ -64,11 +64,11 @@ then
 fi
 
 # run vm
-if [ "$env" = "vm" ]
-then
-  vagrant up
-fi
+#if [ "$env" = "vm" ]
+#then
+#  vagrant up
+#fi
 
 # run ansible
-#echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret$FULL\" $@"
-ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret$FULL" $@
+echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$@\""
+#ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret environment_dir=$environment" $@
