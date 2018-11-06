@@ -10,7 +10,7 @@
   gather_facts: no
   name: Special environment role download section
   tasks:
-    - name: Check if test environment exists
+    - name: Check if environment exists
       stat:
         path: "{{ environment_dir }}/requirements.yml"
       register: envdir
