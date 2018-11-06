@@ -14,3 +14,7 @@ provision*.retry
 
 # ignore backup files
 *~
+
+# ignore the directories where external environment vars and external roles are put
+roles-external
+environments-external
