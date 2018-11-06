@@ -6,6 +6,7 @@
     include_vars: "{{ secrets_file }}"
     tags:
      - always
+
 - hosts: localhost
   gather_facts: no
   name: Special environment role download section
@@ -23,15 +24,21 @@
       tags:
         - always
 
-- hosts: loadbalancer:php-apps:java-apps:storage:oidc:dbcluster
+- hosts: loadbalancer:loadbalancer-vm:php-apps:java-apps:storage:oidc:dbcluster
   gather_facts: yes
   become: true
   roles:
-    - { role: common,   tags: ['common'] }
-    - { role: iptables,      tags: ['iptables'] }
+    - { role: common,       tags: ['common'] }
+    - { role: iptables,     tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
+
+- hosts: vm
+  become: true
+  roles:
+    - { role: hosts,   tags: ['hosts'] }
+    - { role: tls,      tags: ['tls'] }
 
 - hosts: loadbalancer-vm
   gather_facts: true
@@ -131,6 +138,17 @@
     - { role: dashboard-server, when: dashboard_install,           tags: ['dashboard', 'dashboard-server'] }
   handlers:
     - include: roles/httpd/handlers/main.yml
+
+- hosts: vm
+  roles:
+    - { role: vm_only_provision_manage_eb, tags: ['vm_only_provision_manage_eb'] }
+
+- hosts: java-apps-vm
+  gather_facts: true
+  become: true
+  roles:
+   - { role: mujina-idp,        tags: ['legacy' ] }
+   - { role: mujina-sp,         tags: ['legacy' ] }
 
 - hosts: oidc
   gather_facts: true
