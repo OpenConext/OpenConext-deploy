@@ -12,30 +12,12 @@
   tasks:
     - name: Check if test environment exists
       stat:
-        path: "environments-external/test/requirements.yml"
-      register: t
+        path: "{{ environment_dir }}/requirements.yml"
+      register: envdir
 
     - name: Import role for test environment if exists
-      command: "ansible-galaxy install -r environments-external/test/requirements.yml -p roles-external/"
-      when: t.stat.exists
-
-    - name: Check if accept environment exists
-      stat:
-        path: "environments-external/acc/requirements.yml"
-      register: a
-
-    - name: Import role for accept environment if exists
-      command: "ansible-galaxy install -r environments-external/acc/requirements.yml -p roles-external/"
-      when: a.stat.exists
-
-    - name: Check if production environment exists
-      stat:
-        path: "environments-external/prod/requirements.yml"
-      register: p
-
-    - name: Import role for production environment if exists
-      command: "ansible-galaxy install -r environments-external/prod/requirements.yml -p roles-external/"
-      when: p.stat.exists
+      command: "ansible-galaxy install -r {{ environment_dir }}/requirements.yml -p roles-external/"
+      when: envdir.stat.exists
 
 - hosts: loadbalancer:php-apps:java-apps:storage:oidc:dbcluster
   gather_facts: yes
@@ -120,7 +102,7 @@
     - { role: shibboleth,       tags: ['shib'   ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
-      
+
 - hosts: java-apps
   gather_facts: true
   become: true
