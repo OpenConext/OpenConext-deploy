@@ -14,18 +14,20 @@
       stat:
         path: "{{ environment_dir }}/requirements.yml"
       register: envdir
+      tags:
+        - always
 
     - name: Import role for test environment if exists
       command: "ansible-galaxy install -r {{ environment_dir }}/requirements.yml -p roles-external/"
       when: envdir.stat.exists
+      tags:
+        - always
 
 - hosts: loadbalancer:php-apps:java-apps:storage:oidc:dbcluster
   gather_facts: yes
   become: true
   roles:
     - { role: common,   tags: ['common'] }
-    - { role: '{{ inventory_dir }}/../roles/surfconext_common',   tags: ['surfconext_common'] }
-    - { role: '{{ inventory_dir }}/../roles/sysadmin_common',   tags: ['sysadmin_common'] }
     - { role: iptables,      tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
   handlers:
@@ -39,7 +41,6 @@
     - { role: keepalived, tags: ['keepalived'] }
     - { role: haproxy, tags: ['lb'] }
     - { role: bind, tags: ['bind'] }
-    - { role: '{{ inventory_dir }}/../roles/metricbeat',   tags: ['metricbeat'] }
 
 - hosts: php-apps:java-apps:oidc
   gather_facts: no
