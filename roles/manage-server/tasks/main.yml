@@ -38,7 +38,7 @@
     group: manage
     mode: 0755
 
-- name: Include install-maven-release.ymlrestart manage
+- name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
   when:
     - "manage_local_jar == ''"
