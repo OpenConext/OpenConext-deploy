@@ -40,6 +40,7 @@ spring.mail.port=25
 
 coin-administrative-email={{ dashboard.administrative_mail }}
 administration.email.enabled={{ dashboard.administration_email_enabled }}
+mailBaseUrl=https://dashboard.{{ base_domain }}
 
 jiraBaseUrl={{ dashboard.jira_base_url }}
 jiraUsername={{ dashboard.jira_username }}
@@ -66,3 +67,5 @@ dashboard.feature.consent={{ dashboard.feature_consent }}
 dashboard.feature.pdp=true
 dashboard.feature.statistics=true
 dashboard.feature.mail={{ dashboard.feature_mail }}
+
+management.health.mail.enabled=true
