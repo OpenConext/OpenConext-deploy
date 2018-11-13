@@ -23,10 +23,10 @@
   gather_facts: true
   become: true
   roles:
-    - { role: tls,      tags: ['tls'] }
-    - { role: keepalived, tags: ['keepalived'] }
-    - { role: haproxy, tags: ['lb'] }
-    - { role: bind, tags: ['bind'] }
+    - { role: tls,                                         tags: ['tls'] }
+    - { role: keepalived,                                  tags: ['keepalived'] }
+    - { role: haproxy,                                     tags: ['lb', 'haproxy'] }
+    - { role: bind,                                        tags: ['bind'] }
     - { role: '{{ inventory_dir }}/../roles/metricbeat',   tags: ['metricbeat'] }
 
 - hosts: php-apps:java-apps:oidc
