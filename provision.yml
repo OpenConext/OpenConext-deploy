@@ -178,7 +178,7 @@
     run_once: true
 
   - name: include playbook.yml
-    import_playbook: playbook.yml
+    include: playbook.yml
     when: playb.stat.exists
     delegate_to: localhost
     run_once: true
