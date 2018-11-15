@@ -7,22 +7,26 @@
     tags:
      - always
 
-- hosts: localhost
+- hosts: all
   gather_facts: no
   name: Special environment role download section
   tasks:
-    - name: Check if environment exists
-      stat:
-        path: "{{ environment_dir }}/requirements.yml"
-      register: envdir
-      tags:
-        - always
+  - name: Check if environment exists
+    stat:
+      path: "{{ environment_dir }}/requirements.yml"
+    register: envdir
+    delegate_to: localhost
+    run_once: true
+    tags:
+      - always
 
-    - name: Import role for test environment if exists
-      command: "ansible-galaxy install -r {{ environment_dir }}/requirements.yml -p roles-external/"
-      when: envdir.stat.exists
-      tags:
-        - always
+  - name: Import role for test environment if exists
+    command: "ansible-galaxy install -r {{ environment_dir }}/requirements.yml -p roles-external/"
+    delegate_to: localhost
+    run_once: true
+    when: envdir.stat.exists
+    tags:
+      - always
 
 - hosts: loadbalancer:loadbalancer-vm:php-apps:java-apps:storage:oidc:dbcluster
   gather_facts: yes
@@ -162,18 +166,19 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/tomcat/handlers/main.yml
 
-- hosts: localhost
+- hosts: all
   gather_facts: false
-  name: check if playbook.yml is available for extra includes
-  stat:
-    path: playbook.yml
-  register: playb
-  tags:
-    - always
+  name: Include extra playbook if available
+  tasks:
+  - name: check if playbook.yml is available for extra includes
+    stat:
+      path: playbook.yml
+    register: playb
+    delegate_to: localhost
+    run_once: true
 
-  name: include playbook.yml
-  include:
-    - playbook.yml
-  when: playb.stat.exists
-  tags:
-    - always
+  - name: include playbook.yml
+    include: playbook.yml
+    when: playb.stat.exists
+    delegate_to: localhost
+    run_once: true

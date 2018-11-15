@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+export ANSIBLE_ROLE_PATH="roles:roles-external"
+
 
 # helper function: check if a specified value is present in a space-separted list
 listcontains() {
