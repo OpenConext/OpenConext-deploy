@@ -140,6 +140,7 @@
     - { role: manage-server,                tags: ['manage', 'manage-server'] }
     - { role: dashboard-gui,  when: dashboard_install,             tags: ['dashboard', 'dashboard-gui'] }
     - { role: dashboard-server, when: dashboard_install,           tags: ['dashboard', 'dashboard-server'] }
+    
   handlers:
     - include: roles/httpd/handlers/main.yml
 
@@ -166,19 +167,4 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/tomcat/handlers/main.yml
 
-- hosts: all
-  gather_facts: false
-  name: Include extra playbook if available
-  tasks:
-  - name: check if playbook.yml is available for extra includes
-    stat:
-      path: playbook.yml
-    register: playb
-    delegate_to: localhost
-    run_once: true
-
-  - name: include playbook.yml
-    include: playbook.yml
-    when: playb.stat.exists
-    delegate_to: localhost
-    run_once: true
+- import_playbook: "{{ environment_dir }}/playbook.yml"
