@@ -161,3 +161,19 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/tomcat/handlers/main.yml
+
+- hosts: localhost
+  gather_facts: false
+  name: check if playbook.yml is available for extra includes
+  stat:
+    path: playbook.yml
+  register: playb
+  tags:
+    - always
+
+  name: include playbook.yml
+  include:
+    - playbook.yml
+  when: playb.stat.exists
+  tags:
+    - always
