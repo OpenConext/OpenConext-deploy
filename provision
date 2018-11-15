@@ -38,7 +38,7 @@ if [ "$env" = "vm" ]
 then
 	user="vagrant"
 	secret="environments/vm/secrets/vm.yml"
-	environment="environments/vm/"
+	environment_dir="environments/vm/"
 elif [ $# -lt 3 ]
 then
 	echo -e "$help"
@@ -46,6 +46,7 @@ then
 else
 	user=$1
 	secret=$2
+	environment_dir="environments-external/$env/"
 	shift; shift
 fi
 
@@ -74,4 +75,4 @@ fi
 
 # run ansible
 #echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$@\""
-ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret environment_dir=$environment" $@
+ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret -e environment_dir=$environment_dir" $@
