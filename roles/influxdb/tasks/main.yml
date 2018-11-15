@@ -30,6 +30,9 @@
   service: name=influxdb.service enabled=yes state=restarted
   changed_when: False
 
+- name: Wait 30 seconds
+  wait_for: timeout=300
+
 - name: Create admin user
   influxdb_user:
     admin: True
