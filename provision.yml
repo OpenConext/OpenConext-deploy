@@ -20,7 +20,7 @@
     tags:
       - always
 
-  - name: Import role for test environment if exists
+  - name: Import role for the environment if exists
     command: "ansible-galaxy install -r {{ environment_dir }}/requirements.yml -p roles-external/"
     delegate_to: localhost
     run_once: true
