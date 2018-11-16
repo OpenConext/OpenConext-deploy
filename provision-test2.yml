@@ -77,6 +77,8 @@
     - { role: tomcat,                       tags: ['tomcat'] }
     - { role: java,                         tags: ['java'] }
     - { role: shibboleth,                   tags: ['shib'   ] }
+    - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
+    - { role: manage-server,                tags: ['manage', 'manage-server'] }
     - { role: teams-gui,                    tags: ['teams', 'teams-gui'  ] }
     - { role: teams-server,                 tags: ['teams', 'teams-server'  ] }
     - { role: mujina-idp,                   tags: ['mujina','mujina-idp' ] }
@@ -90,8 +92,6 @@
     - { role: oidc,                         tags: ['oidc'] }
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
-    - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
-    - { role: manage-server,                tags: ['manage', 'manage-server'] }
     - { role: dashboard-gui,                tags: ['dashboard', 'dashboard-gui'] }
     - { role: dashboard-server,             tags: ['dashboard', 'dashboard-server'] }
     - { role: attribute-mapper,             tags: ['attribute-mapper'] }
