@@ -100,7 +100,8 @@
         <ApplicationOverride id="{{ key }}" entityID="{{ value.entityID }}">
             <Sessions lifetime="28800"
               timeout="3600"
-              checkAddress="true"
+              checkAddress="false"
+              consistentAddress="false"
               handlerURL="{{ value.baseurl }}/Shibboleth.sso"
               handlerSSL="false"
               relayState="ss:mem"
