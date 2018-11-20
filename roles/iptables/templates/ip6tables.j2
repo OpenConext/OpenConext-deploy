@@ -51,5 +51,15 @@
 {% endfor %}
 {% endif %}
 
+{% if 'loadbalancer' in group_names %}
+### Allow VRRP
+-A INPUT -d ff02::12 -p vrrp -j ACCEPT
+{% endif %}
+
+{% if 'dbcluster' in group_names %}
+### Allow VRRP
+-A INPUT -d ff02::12 -p vrrp -j ACCEPT
+{% endif %}
+
 COMMIT
 # A newline after COMMIT is required
