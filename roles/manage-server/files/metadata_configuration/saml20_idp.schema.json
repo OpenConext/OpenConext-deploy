@@ -264,6 +264,11 @@
           "format": "boolean",
           "info": "Set to make the IdP hidden in the dashboard when the IdP is not connected to a service."
         },
+        "coin:ss:allow_scb_admin_rights":{
+          "type": "string",
+          "format": "boolean",
+          "info": "Set to grant SAB SURFconext beheerders for this IdP the SURFconext verantwoordelijke rights."
+        },
         "coin:signature_method": {
           "type": "string",
           "format": "url",
