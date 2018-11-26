@@ -30,6 +30,13 @@
   service: name=influxdb.service enabled=yes state=restarted
   changed_when: False
 
+- name: Wait for influxdb to start
+  wait_for:
+    port: 8086
+    host: localhost
+    state: started
+    delay: 3
+
 - name: Create admin user
   influxdb_user:
     admin: True
