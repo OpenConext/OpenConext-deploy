@@ -26,7 +26,7 @@
 
 - name: push metadata eb
   uri:
-    url: "http://localhost:{{ springapp_tcpport }}/internal/push"
+    url: "http://127.0.0.1:{{ springapp_tcpport }}/internal/push"
     method: GET
     user: "{{ manage.apiUsers[2].name }}"
     password: "{{ manage.apiUsers[2].password }}"
