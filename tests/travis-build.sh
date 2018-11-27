@@ -38,6 +38,7 @@ docker run --detach                                         \
 	--add-host link.vm.openconext.org:127.0.0.1             \
 	--add-host oidc.vm.openconext.org:127.0.0.1             \
 	--add-host manage.vm.openconext.org:127.0.0.1           \
+	--add-host localhost:127.0.0.1                          \
 	--hostname test.openconext.org                          \
 	-e TERM=xterm                                           \
 	-e ANSIBLE_CONFIG=${ANSIBLE_CONFIG}                     \
