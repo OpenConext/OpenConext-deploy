@@ -67,6 +67,7 @@
     - { role: tomcat,            tags: ['tomcat'] }
     - { role: java,              tags: ['java'] }
     - { role: shibboleth,        tags: ['shib'   ] }
+    - { role: mongo,             tags: ['mongo'] }
     - { role: manage-gui,        tags: ['manage', 'manage-gui'] }
     - { role: manage-server,     tags: ['manage', 'manage-server'] }
     - { role: teams-gui,         tags: ['teams', 'teams-gui' ] }
@@ -83,7 +84,6 @@
     - { role: pdp-server,        tags: ['pdp', 'pdp-server'] }
     - { role: oidc,              tags: ['oidc'] }
     - { role: vm_only_oidc,      tags: ['oidc'] }
-    - { role: mongo,             tags: ['mongo'] }
     - { role: vm_only_provision_manage_eb, tags: ['vm_only_provision_manage_eb'] }
 
   handlers:
