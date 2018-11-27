@@ -542,11 +542,11 @@
         }
       },
       "patternProperties": {
-        "^name:(en|nl)$": {
+        "^name:(en|nl|pt)$": {
           "type": "string",
           "info": "Set the name of the service. Format: 'Service Name | Supplier'"
         },
-        "^displayName:(en|nl)$": {
+        "^displayName:(en|nl|fr)$": {
           "type": "string",
           "info": "Name as displayed in applications."
         },
