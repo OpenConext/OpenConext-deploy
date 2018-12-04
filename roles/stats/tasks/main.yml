@@ -58,7 +58,7 @@
 - name: Create logfile
   copy: content="" dest={{ stats_api_env_dir }}/log/stats.log owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }} mode=0755 force=no
 
-- name: Place wcgi for the server api
+- name: Place wsgi for the server api
   template: src=stats-api.wsgi.j2 dest={{ stats_api_env_dir }}/stats-api.wsgi mode=0550 owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }}
   notify: reload httpd
 
