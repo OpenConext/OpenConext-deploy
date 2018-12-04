@@ -1,0 +1,53 @@
+---
+- name: get new weight for haproxy hosts
+  lb_infra_ha_proxy:
+    java_blauwrood_servers: "{{ java_blauwrood_servers }}"
+    php_blauwrood_servers: "{{ php_blauwrood_servers }}"
+    weight: "{{ weight }}"
+    color: "{{ color }}"
+    app_name: "{{ app_name }}"
+    app_type: "{{ app_type }}"
+  when: weight is defined
+  register: haproxy_weights
+
+- name: get new state for haproxy hosts
+  lb_infra_ha_proxy:
+    java_blauwrood_servers: "{{ java_blauwrood_servers }}"
+    php_blauwrood_servers: "{{ php_blauwrood_servers }}"
+    state: "{{ state }}"
+    app_name: "{{ app_name }}"
+    app_type: "{{ app_type }}"
+  when: state is defined
+  register: haproxy_states
+
+- name: dump weight output
+  debug:
+    msg: '{{ haproxy_weights.haproxy_items }}'
+  when: inventory_hostname == "t07.ams.surfconext.nl" and weight is defined
+
+- name: dump state output
+  debug:
+    msg: '{{ haproxy_states.haproxy_items }}'
+  when: inventory_hostname == "t07.ams.surfconext.nl" and state is defined
+
+- name: set weights for haproxy hosts
+  haproxy:
+    state: enabled
+    host: "{{ item.host }}"
+    fail_on_not_found: no
+    socket: "{{ item.socket }}"
+    weight: "{{ item.weight }}"
+    backend: "{{ item.backend }}"
+  with_items: "{{ haproxy_weights.haproxy_items }}"
+  when: weight is defined
+
+- name: set state for haproxy hosts
+  haproxy:
+    state: "{{ item.state }}"
+    host: "{{ item.host }}"
+    fail_on_not_found: no
+    socket: "{{ item.socket }}"
+    backend: "{{ item.backend }}"
+  with_items: "{{ haproxy_states.haproxy_items }}"
+  when: state is defined
+

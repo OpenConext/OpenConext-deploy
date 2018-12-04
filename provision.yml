@@ -28,6 +28,7 @@
     - { role: haproxy,                                     tags: ['lb', 'haproxy'] }
     - { role: bind,                                        tags: ['bind'] }
     - { role: '{{ inventory_dir }}/../roles/metricbeat',   tags: ['metricbeat'] }
+    - { role: haproxy_mgnt,                                tags: ['haproxy_mgnt'] }
 
 - hosts: php-apps:java-apps:oidc
   gather_facts: no
