@@ -1,6 +1,6 @@
 ---
 - name: get new weight for haproxy hosts
-  lb_infra_ha_proxy:
+  haproxy_commands:
     java_blauwrood_servers: "{{ java_blauwrood_servers }}"
     php_blauwrood_servers: "{{ php_blauwrood_servers }}"
     weight: "{{ weight }}"
@@ -11,7 +11,7 @@
   register: haproxy_weights
 
 - name: get new state for haproxy hosts
-  lb_infra_ha_proxy:
+  haproxy_commands:
     java_blauwrood_servers: "{{ java_blauwrood_servers }}"
     php_blauwrood_servers: "{{ php_blauwrood_servers }}"
     state: "{{ state }}"
@@ -23,12 +23,12 @@
 - name: dump weight output
   debug:
     msg: '{{ haproxy_weights.haproxy_items }}'
-  when: inventory_hostname == "t07.ams.surfconext.nl" and weight is defined
+  when: weight is defined
 
 - name: dump state output
   debug:
     msg: '{{ haproxy_states.haproxy_items }}'
-  when: inventory_hostname == "t07.ams.surfconext.nl" and state is defined
+  when: state is defined
 
 - name: set weights for haproxy hosts
   haproxy:
