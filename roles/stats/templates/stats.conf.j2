@@ -51,7 +51,7 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
     OIDCClientID {{ stats_oidc_client_id }}
     OIDCClientSecret {{ stats_oidc_client_secret }} 
     OIDCCryptoPassphrase {{ stats_oidc_crypto_pass }} 
-    OIDCRedirectURI {{ stats_oidc_redirect_url }}
+    OIDCRedirectURI /redirect
     <Location />
         OIDCUnAuthAction pass
         AuthType openid-connect
