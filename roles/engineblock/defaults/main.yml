@@ -91,3 +91,7 @@ eb_edugain_policy_url: "https://example.org"
 eb_support_url: "https://example.org"
 eb_support_url_nameid: "https://example.org"
 eb_tos_url: "https://example.org"
+
+# Backwards compatibility with older secrets files
+engineblock_private_keys:
+  default: "{{ engineblock_private_key }}"

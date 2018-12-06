@@ -69,7 +69,7 @@
 
 - name: copy over the engineblock keys
   copy:
-    content: "{{ engineblock_private_key }}"
+    content: "{{ engineblock_private_keys[item.key] }}"
     dest: "{{ item.value.privateFile }}"
     owner: "{{ engine_fpm_user }}"
     group: root
