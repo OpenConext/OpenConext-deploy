@@ -19,7 +19,7 @@
   include_vars:
     file: ../../manage-server/vars/main.yml
 
-- name: wait for restart
+- name: wait untill manage is up after restart
   uri:
     url: "http://127.0.0.1:{{ springapp_tcpport }}/health"
     headers:
