@@ -37,3 +37,5 @@ influx_stats_db: log_logins
 influxdb_admin_user: admin
 influxdb_stats_user: stats
 
+# The supported_languages_codes is a comma-separated String with the language codes that need to be supported.
+supported_languages_codes: "en,nl"
