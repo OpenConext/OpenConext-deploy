@@ -19,6 +19,17 @@
   include_vars:
     file: ../../manage-server/vars/main.yml
 
+- name: wait for restart
+  uri:
+    url: "http://127.0.0.1:{{ springapp_tcpport }}/health"
+    headers:
+      Accept: "application/json"
+  register: health_result
+  until: health_result.status is defined and health_result.status == 200 and health_result.json.status == "UP"
+  retries: 1000
+  delay: 5
+  changed_when: false
+
 - name: push metadata eb
   uri:
     url: "http://127.0.0.1:{{ springapp_tcpport }}/internal/push"
