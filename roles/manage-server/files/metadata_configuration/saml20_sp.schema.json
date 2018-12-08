@@ -563,21 +563,21 @@
           "type": "string",
           "info": "The type of service used in the facet search in dashboard."
         },
-        "^AssertionConsumerService:([0-9]{1}):Binding$": {
+        "^AssertionConsumerService:([0-3]{0,1}[0-9]{1}):Binding$": {
           "$ref": "#/definitions/AssertionConsumerServiceBinding",
-          "multiplicity": 10,
+          "multiplicity": 30,
           "info": "An Assertion Consumer Service (or ACS) the location at a ServiceProvider that accepts <samlp:Response> messages. The type of binding for this location can be selected from the pull-down."
         },
-        "^AssertionConsumerService:([0-9]{1}):Location$": {
+        "^AssertionConsumerService:([0-3]{0,1}[0-9]{1}):Location$": {
           "type": "string",
           "format": "url",
-          "multiplicity": 10,
+          "multiplicity": 30,
           "info": "An Assertion Consumer Service (or ACS) is the location at a ServiceProvider that accepts <samlp:Response> messages. A typical ACS location for an SP might look like this: https://data.example-service.nl/saml/saml2_acs/"
         },
-        "^AssertionConsumerService:([0-9]{1}):index$": {
+        "^AssertionConsumerService:([0-3]{0,1}[0-9]{1}):index$": {
           "type": "string",
           "format": "number",
-          "multiplicity": 10,
+          "multiplicity": 30,
           "info": "An Assertion Consumer Service (or ACS) is the location at a ServiceProvider that accepts <samlp:Response> messages. With the index you can include additional <md:AssertionConsumerService> elements in the SAML 2.0 SP metadata with the same binding, each with its own unique index."
         },
         "^NameIDFormats:([0-2]{1})$": {
