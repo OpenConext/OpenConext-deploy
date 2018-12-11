@@ -2,6 +2,8 @@ logging.config=file://{{ dashboard_dir }}/logback.xml
 server.port={{ springapp_tcpport }}
 
 supported_language_codes={{ supported_language_codes }}
+# Currently supported organizations: SURFconext, OpenConext and RCTSaai
+organization={{ dashboard_organization }}
 
 # 8 hours
 server.session.timeout=28800
@@ -70,4 +72,6 @@ dashboard.feature.pdp=true
 dashboard.feature.statistics=true
 dashboard.feature.mail={{ dashboard.feature_mail }}
 
+# tabs that can be hidden are: statistics,apps,policies,tickets,my_idp and user_invite
+dashboard.hide_tabs={{ dashboard_hide_tabs }}
 management.health.mail.enabled=true

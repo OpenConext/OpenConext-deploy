@@ -4,3 +4,5 @@ dashboard_snapshot_timestamp: ''
 dashboard_local_jar: ''
 dashboard_jar: dashboard-current.jar
 dashboard_random_source: 'file:///dev/urandom'
+dashboard_hide_tabs: none
+dashboard_organization: SURFconext

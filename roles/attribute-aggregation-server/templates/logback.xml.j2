@@ -14,6 +14,22 @@
    </encoder>
  </appender>
 
+ <appender name="ANALYTICS-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+   <file>/var/log/attribute-aggregation/analytics.log</file>
+   <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+     <!-- daily rollover -->
+     <fileNamePattern>/var/log/attribute-aggregation/analytics-%d{yyyy-MM-dd}.log</fileNamePattern>
+     <maxHistory>30</maxHistory>
+   </rollingPolicy>
+   <encoder>
+     <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
+   </encoder>
+ </appender>
+
+  <logger name="analytics" level="DEBUG" additivity="false">
+    <appender-ref ref="ANALYTICS-FILE"/>
+  </logger>
+
  <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
    <syslogHost>{{ rsyslog_host }}</syslogHost>
    <facility>DAEMON</facility>
@@ -32,7 +48,8 @@
    </filter>
  </appender>
 
- <logger name="aa" level="DEBUG" />
+ <logger name="aa" level="INFO" />
+
  <root level="WARN">
    <appender-ref ref="FILE" />
    <appender-ref ref="EMAIL" />
