@@ -13,5 +13,5 @@ teams_tos_nl: https://example.org
 teams_main_link: https://www.openconext.org
 teams_organization: "{{ instance_name}}"
 teams_api_lifecycle_username: teams_api_lifecycle_user
-
+teams_cron_session_cleanup_expression: 0 * * * * *
 
