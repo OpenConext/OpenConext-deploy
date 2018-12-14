@@ -43,7 +43,7 @@ With the above commands you get the latest versions. There might be incompatibil
 
 Ansible is the configuration tool we use to describe our servers.
 Installation instruction can be found on the [Ansible website](http://docs.ansible.com/intro_installation.html).
-The minimum required version of Ansible is 1.9. Version 2.4 and higher are not yet supported. Please use 2.3 or lower. 
+The minimum required version of Ansible is 1.9. 
 To install for development with Homebrew:
 
     brew install python
@@ -62,7 +62,7 @@ To provision the VM please run:
 Clone the repository:
 git clone https://github.com/OpenConext/OpenConext-deploy.git
 cd OpenConext-deploy
-./provision-vagrant
+./provision vm
 ```
 
 When the script is done, wait a little while to let all services come up and initialize themselves. Then point your browser to [https://welcome.vm.openconext.org](https://welcome.vm.openconext.org)
@@ -71,10 +71,10 @@ These are the steps the above script performs:
 
 1. Setup a Vagrant VM and will make sure the HOSTS file is able to handle the defined base_domain
 2. Setup a MariaDB server.
-3. Inserts entities and metadata in Janus and initial load of engineblock to bootstrap.
+3. Inserts entities and metadata in Manage and initial load of engineblock to bootstrap.
 4. Install all Java apps for the openconext platform.
 5. Install all PHP apps for the openconext platform.
-6. Install Haproxy for loadbalacing and SSL termination
+6. Install Haproxy for loadbalacing and SSL termination on the loadbalancer machine
 7. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
 
 ## Add hostname entries to your own /etc/hosts file
@@ -135,7 +135,7 @@ CentOS-7.0 (virtualbox, 0)
 ```
 (set the environment variable `VAGRANT_LOG=debug` to increase verbosity of
 anything goes wrong.
-6. You should be set to run the `provision-vagrant script`.
+6. You should be set to run the `./provision vm` command.
 
 
 
@@ -144,11 +144,12 @@ anything goes wrong.
 To update single applications - e.g. release - use tags:
 
 ```
-ansible-playbook -i /path/to/environmentdir/$env/inventory -u $deploy_USERNAME -K  --extra-var="secrets_file=/path_to_acc_secrets/secrets.yml" provision.yml --tags eb
+./provision $env $remote_user path/to/your/secrets.yml --tags eb
 ```
-
-The secrets used by Ansible are externalized. For the VM the secrets are in this GitHub repo. For other environments (your installation) they can be located
-in a separate repository.
+Where:
+$env: Your environment. The vm is located in environments/vm. If you use your own repository you'll have to place it in environments_external
+$remote_user: The remote user with sudo permissions
+path/to/your/secrets.yml: The secrets used by Ansible are externalized. For the VM the secrets are in this GitHub repo. For other environments (your installation) they can be located in a separate repository. 
 
 # Making changes
 
