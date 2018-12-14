@@ -1,1 +1,2 @@
 filebeat_tls: False
+filebeat_eblog: False

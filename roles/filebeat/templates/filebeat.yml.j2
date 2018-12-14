@@ -1,5 +1,6 @@
 filebeat.prospectors:
 
+{% if filebeat_eblog %}
 - type: log
   paths:
     - /var/log/messages
@@ -8,7 +9,7 @@ filebeat.prospectors:
     prog: EBLOG
     env: {{ env }}
   fields_under_root: true
-
+{% endif %}
 
 - type: log
   paths: 
