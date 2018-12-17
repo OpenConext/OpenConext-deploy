@@ -577,3 +577,5 @@ php_servers:
 
 java_servers:
    - { ip: "127.0.0.1", label: "java"}
+
+iptables_enable: false

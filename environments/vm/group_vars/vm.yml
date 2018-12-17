@@ -56,6 +56,7 @@ databases:
 mongo_port: 27017
 mongo_cluster: false
 mongo_tls: false
+mongo_hostname: localhost
 
 mongo:
   manage_user: managerw
@@ -653,3 +654,4 @@ java_servers:
    - { ip: "192.168.66.99", label: "javapps"}
 
 dashboard_install: false
+iptables_enable: False
