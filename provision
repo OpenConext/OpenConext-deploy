@@ -61,6 +61,7 @@ then
 else
 	inventory="environments-external/$env/inventory"
 fi
+
 if ! [ -e $inventory ]
 then
 	echo "Inventory file '$inventory' for environment '$env' not found."
@@ -74,5 +75,12 @@ then
 fi
 
 # run ansible
-#echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$@\""
-ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret -e environment_dir=$environment_dir" $@
+if [ $env = "vm" ] || [ $env = "docker" ] || [ $env = "template" ]
+then
+        echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$environment_dir\"$@"
+        ansible-playbook -i "$inventory" -u "$user" "$playbook" --extra-vars="secrets_file=$secret -e environment_dir=$environment_dir" $@
+else
+	echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$environment_dir\"$@"
+        ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret -e environment_dir=$environment_dir" $@
+fi
+
