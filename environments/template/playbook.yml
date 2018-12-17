@@ -1,2 +1,5 @@
 ---
-- hosts: all
+- hosts: php-apps
+  roles:
+    - { role: vm_only_provision_manage_eb, tags: ['vm_only_provision_manage_eb'] }
+

@@ -33,10 +33,8 @@
   become: true
   roles:
     - { role: common,       tags: ['common'] }
-    - { role: iptables,     tags: ['iptables'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
-  handlers:
-    - include: roles/httpd/handlers/main.yml
+    - { role: iptables, when: iptables_enable,  tags: ['iptables'] }
 
 - hosts: vm
   become: true
@@ -144,13 +142,11 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: vm
-  roles:
-    - { role: vm_only_provision_manage_eb, tags: ['vm_only_provision_manage_eb'] }
-
 - hosts: java-apps-vm
   gather_facts: true
   become: true
+  vars:
+    env_lang: java
   roles:
    - { role: mujina-idp,        tags: ['legacy' ] }
    - { role: mujina-sp,         tags: ['legacy' ] }
