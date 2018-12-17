@@ -19,8 +19,12 @@ localhost
 [loadbalancer]
 localhost
 
+[mongo_servers]
+localhost
+
 [docker:children]
 storage
 java-apps
 php-apps
 loadbalancer
+mongo_servers
