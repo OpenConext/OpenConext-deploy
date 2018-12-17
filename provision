@@ -44,8 +44,8 @@ then
 	echo -e "$help"
 	exit 1
 else
-	user=$1
-	secret=$2
+	user=$2
+	secret=$3
 	environment_dir="environments-external/$env/"
 	shift; shift
 fi
