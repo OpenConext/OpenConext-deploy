@@ -6,13 +6,14 @@ set -e
 status=0
 
 ANSIBLE_CONFIG=/ansible/ansible.cfg
-ANSIBLE_PLAYBOOK=/ansible/provision-vm.yml
+ANSIBLE_PLAYBOOK=/ansible/provision.yml
 ANSIBLE_INVENTORY=/ansible/environments/docker/inventory
 ANSIBLE_SECRETS=/ansible/environments/vm/secrets/vm.yml
-
+ANSIBLE_PLAYBOOK_WRAPPER=/ansible/provision
+ANSIBLE_USER=vagrant
 
 # start docker container
-docker run --detach                                         \
+docker run --detach                                             \
 	-v "${PWD}":/ansible:rw                                 \
 	-v /sys/fs/cgroup:/sys/fs/cgroup:ro                     \
 	--privileged                                            \
@@ -64,12 +65,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -t ansible-test                                      \
-	ansible-playbook                                             \
-		-i $ANSIBLE_INVENTORY                                    \
-		-e secrets_file=$ANSIBLE_SECRETS                         \
-		$ANSIBLE_PLAYBOOK                                        \
-		--syntax-check
+docker exec -w /ansible -t ansible-test  /ansible/provision docker $ANSIBLE_USER $ANSIBLE_SECRETS --syntax-check
 
 echo
 echo "================================================================="
@@ -79,11 +75,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -t ansible-test                                      \
-	ansible-playbook                                             \
-		-i $ANSIBLE_INVENTORY                                    \
-		-e secrets_file=$ANSIBLE_SECRETS                         \
-		$ANSIBLE_PLAYBOOK
+docker exec -w /ansible -t ansible-test  /ansible/provision docker $ANSIBLE_USER $ANSIBLE_SECRETS	   
 
 echo
 echo "================================================================="
@@ -94,12 +86,7 @@ echo "================================================================="
 echo
 
 TMPOUT=$(mktemp)
-docker exec -t ansible-test                                      \
-	ansible-playbook                                             \
-		-i $ANSIBLE_INVENTORY                                    \
-		-e secrets_file=$ANSIBLE_SECRETS                         \
-		$ANSIBLE_PLAYBOOK                                        \
- | tee $TMPOUT
+docker exec -w /ansible -t ansible-test  /ansible/provision docker $ANSIBLE_USER $ANSIBLE_SECRETS  | tee $TMPOUT
 
 echo
 echo "================================================================="
