@@ -11,6 +11,11 @@ cache: pip
 services:
   - docker
 
+addons:
+  apt:
+    packages:
+      - docker-ce
+
 before_install:
   - sudo apt-get -y update
   - sudo apt-get -y install python3 python3-pip python3-yaml python3-dev
