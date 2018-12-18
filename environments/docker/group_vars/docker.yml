@@ -69,6 +69,7 @@ databases:
 mongo_port: 27017
 mongo_cluster: false
 mongo_tls: false
+mongo_hostname: localhost
 
 mongo:
   manage_user: managerw
@@ -662,3 +663,4 @@ php_servers:
      label: phpapps
 
 iptables_enable: False
+dashboard_install: False

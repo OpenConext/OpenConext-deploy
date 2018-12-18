@@ -39,13 +39,20 @@ then
 	user="vagrant"
 	secret="environments/vm/secrets/vm.yml"
 	environment_dir="environments/vm/"
+elif [ "$env" = "docker" ]
+then
+	user=$1
+	secret=$2
+	environment_dir="environments/$env/"
+	shift; shift
+	echo env=$env user=$user secret=$secret
 elif [ $# -lt 3 ]
 then
 	echo -e "$help"
 	exit 1
 else
-	user=$2
-	secret=$3
+	user=$1
+	secret=$2
 	environment_dir="environments-external/$env/"
 	shift; shift
 fi

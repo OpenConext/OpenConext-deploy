@@ -16,15 +16,23 @@ localhost
 [php-apps]
 localhost
 
-[loadbalancer]
+[loadbalancer-vm]
 localhost
 
 [mongo_servers]
+localhost
+
+[oidc]
+localhost
+
+[vm]
 localhost
 
 [docker:children]
 storage
 java-apps
 php-apps
-loadbalancer
+loadbalancer-vm
 mongo_servers
+vm
+oidc
