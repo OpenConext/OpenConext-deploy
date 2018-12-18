@@ -1,4 +1,0 @@
-#!/bin/bash
-set -e
-vagrant up
-./ansible-env vm provision-vm.yml --tags "$1"
