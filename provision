@@ -57,6 +57,16 @@ else
 	shift; shift
 fi
 
+# Download extra roles when requirements.yml is present
+if [ -f "$environment_dir"/requirements.yml ]
+then
+	echo "Downloading roles to roles-external"
+	ansible-galaxy install -r "$environment_dir"/requirements.yml -f -p .
+else
+	echo "No extra roles found to be downloaded"
+fi
+
+
 # find matching playbook
 playbook="provision.yml"
 #listcontains "$env" "vm" &&  playbook="provision-vm.yml"
@@ -85,9 +95,9 @@ fi
 if [ $env = "vm" ] || [ $env = "docker" ] || [ $env = "template" ]
 then
         echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$environment_dir\"$@"
-        ansible-playbook -i "$inventory" -u "$user" "$playbook" --extra-vars="secrets_file=$secret -e environment_dir=$environment_dir" $@
+        ansible-playbook -i "$inventory" -u "$user" "$playbook" --extra-vars="secrets_file=$secret" -e environment_dir="$environment_dir" $@
 else
-	echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\" -K  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$environment_dir\"$@"
-        ansible-playbook -i "$inventory" -u "$user" -K "$playbook" --extra-vars="secrets_file=$secret -e environment_dir=$environment_dir" $@
+	echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret\" environment_dir=\"$environment_dir\"$@"
+        ansible-playbook -i "$inventory" -u "$user"  "$playbook" --extra-vars=secrets_file="$secret" -e environment_dir=$environment_dir $@
 fi
 

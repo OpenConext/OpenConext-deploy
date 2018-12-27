@@ -7,27 +7,6 @@
     tags:
      - always
 
-- hosts: all
-  gather_facts: no
-  name: Special environment role download section
-  tasks:
-  - name: Check if environment exists
-    stat:
-      path: "{{ environment_dir }}/requirements.yml"
-    register: envdir
-    delegate_to: localhost
-    run_once: true
-    tags:
-      - always
-
-  - name: Import role for the environment if exists
-    command: "ansible-galaxy install -r {{ environment_dir }}/requirements.yml -f -p ."
-    delegate_to: localhost
-    run_once: true
-    when: envdir.stat.exists
-    tags:
-      - always
-
 - hosts: loadbalancer:loadbalancer-vm:php-apps:java-apps:storage:oidc:dbcluster
   gather_facts: yes
   become: true
