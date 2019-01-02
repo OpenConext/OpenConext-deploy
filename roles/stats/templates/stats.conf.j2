@@ -6,6 +6,8 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
 {% endif %}
 
     ServerName https://stats.{{ base_domain }}
+    ServerAdmin {{ apache_server_admin }}
+
     DocumentRoot {{ stats_api_env_dir }}/www/
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-STATS'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-STATS'" combined
