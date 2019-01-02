@@ -83,7 +83,7 @@ while IFS= read -r line; do
   if [ "$value" == 'engineblock_private_key' ]; then
     line="$key: |"
     echo "$line" >> $SECRET_VARS_TEMP
-    cat "${EBCERT_FILES_BASE}.key" | sed "s/^/  /g" >> "$SECRET_VARS_TEMP"
+    cat "${EBCERT_FILES_BASE}.key" | sed "s/^/    /g" >> "$SECRET_VARS_TEMP"
     continue
   fi
 
