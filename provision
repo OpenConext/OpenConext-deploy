@@ -24,7 +24,7 @@ if [ "$ANSVER1" -le 1 -a "$ANSVER2" -lt 9 ]; then
 fi
 
 # parse parameters
-help="Usage: $0 vm    [ANSIBLE_OPT]\n       $0 <ENV> <SSH_USERNAME> <SECRET_FILE> <ENV PATH> [ANSIBLE_OPT]"
+help="Usage: $0 vm    [ANSIBLE_OPT]\n       $0 <ENV> <SSH_USERNAME> <SECRET_FILE> [ANSIBLE_OPT]"
 if [ "$#" -eq 0 ]
 then
   echo -e "$help"
@@ -46,7 +46,7 @@ then
 	environment_dir="environments/$env/"
 	shift; shift
 	echo env=$env user=$user secret=$secret
-elif [ $# -lt 3 ]
+elif [ $# -lt 2 ]
 then
 	echo -e "$help"
 	exit 1
