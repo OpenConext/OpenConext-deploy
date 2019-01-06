@@ -9,9 +9,9 @@
 #
 
 # ----- configuration
-ENV_DIR="environments"
-ENVEXT_DIR="environments-external"
-SKELETON_DIR="${ENV_DIR}/template"
+	ENV_DIR="environments"
+	ENVEXT_DIR="environments-external"
+	SKELETON_DIR="${ENV_DIR}/template"
 SECRET_VARS_TEMPLATE="${SKELETON_DIR}/secrets/skeleton.yml"
 # ----- End configuration
 
@@ -72,7 +72,10 @@ echo "EBCERT_FILES_BASE: $EBCERT_FILES_BASE"
 echo "SHIBCERT_FILES_BASE: $SHIBCERT_FILES_BASE"
 
 # Clear destination env dir while I'm testing this script, we might want to skip this eventually
-rm -rf "${ENV_DIR}/${OC_ENV}"
+rm -rf "${ENVEXT_DIR}/${OC_ENV}"
+
+# Create environments_exteral dir
+mkdir -p "${ENVEXT_DIR}"
 
 # Copy template to new OC_ENV
 cp -a "${SKELETON_DIR}" "${ENVEXT_DIR}/${OC_ENV}"
