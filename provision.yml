@@ -22,6 +22,7 @@
 
 - hosts: selfsigned_certs
   become: true  
+  roles:
     - { role: tls,      tags: ['tls'] }
 
 - hosts: loadbalancer-vm
