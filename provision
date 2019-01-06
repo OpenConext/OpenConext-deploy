@@ -39,13 +39,6 @@ then
 	user="vagrant"
 	secret="environments/vm/secrets/vm.yml"
 	environment_dir="environments/vm/"
-elif [ "$env" = "docker" ]
-then
-	user=$1
-	secret=$2
-	environment_dir="environments/$env/"
-	shift; shift
-	echo env=$env user=$user secret=$secret
 elif [ $# -lt 2 ]
 then
 	echo -e "$help"
@@ -72,7 +65,7 @@ playbook="provision.yml"
 #listcontains "$env" "vm" &&  playbook="provision-vm.yml"
 
 # find inventory
-if [ $env = "vm" ] || [ $env = "docker" ] || [ $env = "template" ]
+if [ $env = "vm" ] || [ $env = "template" ]
 then
 	inventory="environments/$env/inventory"
 else
@@ -92,7 +85,7 @@ then
 fi
 
 # run ansible
-if [ $env = "vm" ] || [ $env = "docker" ] || [ $env = "template" ]
+if [ $env = "vm" ] || [ $env = "template" ]
 then
         echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$environment_dir\"$@"
         ansible-playbook -i "$inventory" -u "$user" "$playbook" --extra-vars="secrets_file=$secret" -e environment_dir="$environment_dir" $@
