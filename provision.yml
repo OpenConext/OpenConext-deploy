@@ -19,6 +19,9 @@
   become: true
   roles:
     - { role: hosts,   tags: ['hosts'] }
+
+- hosts: selfsigned_certs
+  become: true  
     - { role: tls,      tags: ['tls'] }
 
 - hosts: loadbalancer-vm
