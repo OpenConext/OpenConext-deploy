@@ -108,7 +108,18 @@
               exportACL="127.0.0.1"
               idpHistory="false"
               idpHistoryDays="7"
-              cookieProps="; path={{ value.baseurl }}/; secure; HttpOnly"></Sessions>
+              cookieProps="; path={{ value.baseurl }}/; secure; HttpOnly">
+{% if value.customIdP is defined %}
+                <SSO entityID="{{ value.customIdP }}">SAML2</SSO>
+            </Sessions>
+            <MetadataProvider type="XML"
+                          uri="{{ value.customIdP }}"
+                          backingFilePath="metadata-custom-{{ key }}.xml"
+                          reloadInterval="3600">
+            </MetadataProvider>
+{% else %}
+            </Sessions>
+{% endif %}
         </ApplicationOverride>
 {% endfor %}
 
