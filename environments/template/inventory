@@ -16,9 +16,13 @@
 [mongo_servers]
 %target_host%
 
+[selfsigned_certs]
+%target_host%
+
 [%env%:children]
 storage
 java-apps
 php-apps
 loadbalancer
 mongo_servers
+selfsigned_certs

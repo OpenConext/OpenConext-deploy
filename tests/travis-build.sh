@@ -7,8 +7,8 @@ status=0
 
 ANSIBLE_CONFIG=/ansible/ansible.cfg
 ANSIBLE_PLAYBOOK=/ansible/provision.yml
-ANSIBLE_INVENTORY=/ansible/environments/docker/inventory
-ANSIBLE_SECRETS=/ansible/environments/vm/secrets/vm.yml
+ANSIBLE_INVENTORY=/ansible/environments-external/travis/inventory
+ANSIBLE_SECRETS=/ansible/environments-external/travis/secrets/travis.yml
 ANSIBLE_PLAYBOOK_WRAPPER=/ansible/provision
 ANSIBLE_USER=vagrant
 
@@ -20,7 +20,6 @@ docker run --detach                                             \
 	--name ansible-test                                     \
 	--add-host static.vm.openconext.org:127.0.0.1           \
 	--add-host metadata.vm.openconext.org:127.0.0.1         \
-	--add-host serviceregistry.vm.openconext.org:127.0.0.1  \
 	--add-host engine.vm.openconext.org:127.0.0.1           \
 	--add-host profile.vm.openconext.org:127.0.0.1          \
 	--add-host mujina-sp.vm.openconext.org:127.0.0.1        \
@@ -57,6 +56,24 @@ EOF
 # and copy it into the container
 docker cp /tmp/ansible.cfg ansible-test:${ANSIBLE_CONFIG}
 
+# Prepare the environment
+./prep-env travis vm.openconext.org
+
+# Change the hostname in the inventory
+sed -i 's/%target_host%/localhost ansible_connection=local/g' environments-external/travis/inventory 
+
+# Change a group name in the inventory
+sed -i 's/loadbalancer/loadbalancer-vm/g' environments-external/travis/inventory
+
+# The docker image doesn't have ipv6: Disable it for postfix
+echo "postfix_interfaces: ipv4" >> environments-external/travis/group_vars/travis.yml
+
+# Do not install Dashboard
+echo "dashboard_install: False" >> environments-external/travis/group_vars/travis.yml
+
+# Create the proper host_vars file
+mv environments-external/travis/host_vars/template.yml environments-external/travis/host_vars/localhost.yml
+
 echo
 echo "================================================================="
 echo "================================================================="
@@ -65,7 +82,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -w /ansible -t ansible-test  /ansible/provision docker $ANSIBLE_USER $ANSIBLE_SECRETS --syntax-check
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS --syntax-check
 
 echo
 echo "================================================================="
@@ -75,7 +92,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -w /ansible -t ansible-test  /ansible/provision docker $ANSIBLE_USER $ANSIBLE_SECRETS	   
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS 
 
 echo
 echo "================================================================="
@@ -86,7 +103,7 @@ echo "================================================================="
 echo
 
 TMPOUT=$(mktemp)
-docker exec -w /ansible -t ansible-test  /ansible/provision docker $ANSIBLE_USER $ANSIBLE_SECRETS  | tee $TMPOUT
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS | tee $TMPOUT
 
 echo
 echo "================================================================="

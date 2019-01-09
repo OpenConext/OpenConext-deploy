@@ -1,1 +1,0 @@
-V	200202125923Z		00	unknown	/O=OpenConext/CN=*.vm.openconext.org
