@@ -11,6 +11,12 @@ Listen {{ apache_app_listen_address.metadata }}:{{ loadbalancing.metadata.port }
           Require all granted
     </Directory>
 
+    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "origin-when-cross-origin"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-METADATA'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-METADATA'" combined
     
