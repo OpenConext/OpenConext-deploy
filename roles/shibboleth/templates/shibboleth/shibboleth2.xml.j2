@@ -5,6 +5,22 @@
           xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
           clockSkew="180">
 
+    {% if shibboleth_database_backend %}
+    <OutOfProcess logger="shibd.logger">
+    <Extensions>
+        <Library path="odbc-store.so" fatal="true"/>
+    </Extensions>
+    </OutOfProcess>
+    <StorageService type="ODBC" id="db" cleanupInterval="900" isolationLevel="REPEATABLE_READ">
+      <ConnectionString>
+      DRIVER=MariaDB;SERVER={{ shib.db_host }};USER=shibrw;PASSWORD={{ mysql_passwords.shibboleth }};DATABASE=shibboleth
+      </ConnectionString>
+    </StorageService>
+    <SessionCache type="StorageService" StorageService="db" cacheAssertions="false"
+              cacheTimeout="3600" inprocTimeout="900" cleanupInterval="900"/>
+    <ReplayCache StorageService="db"/>
+    <ArtifactMap StorageService="db" artifactTTL="180"/>
+    {% endif %}
     <!--
     By default, in-memory StorageService, ReplayCache, ArtifactMap, and SessionCache
     are used. See example-shibboleth2.xml for samples of explicitly configuring them.
@@ -22,6 +38,9 @@
     <!-- The ApplicationDefaults element is where most of Shibboleth's SAML bits are defined. -->
     <ApplicationDefaults entityID="https://override-me" REMOTE_USER="name-id" signing="true" encryption="true"
 	signingAlg="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256">
+
+
+
 
         <!--
         Controls session lifetimes, address checks, cookie handling, and the protocol handlers.
@@ -104,7 +123,6 @@
               consistentAddress="false"
               handlerURL="{{ value.baseurl }}/Shibboleth.sso"
               handlerSSL="false"
-              relayState="ss:mem"
               exportACL="127.0.0.1"
               idpHistory="false"
               idpHistoryDays="7"

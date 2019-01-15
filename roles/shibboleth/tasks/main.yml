@@ -14,6 +14,10 @@
   with_items:
     - shibboleth.x86_64
 
+- name: Include tasks to save Shibboleth sessions to the database
+  include: shibboleth_database_backend.yml
+  when: shibboleth_database_backend 
+
 - name: Remove default conf files apache
   file:
     path: "/etc/httpd/conf.d/{{ item }}"
