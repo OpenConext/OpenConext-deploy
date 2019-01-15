@@ -46,6 +46,7 @@ databases:
     - pdp-server
     - oidc-server
     - aaserver
+    - shibboleth
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
@@ -53,6 +54,7 @@ databases:
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
+    - { name: shibrw, db_name: shibboleth, password: "{{ mysql_passwords.shibboleth }}" }
 
 mongo_port: 27017
 mongo_cluster: false
@@ -153,6 +155,10 @@ shibboleth_apps:
   "manage":
     entityID: "https://manage.{{ base_domain }}/shibboleth"
     baseurl: ""
+
+shib:
+  db_host: "127.0.0.1"
+shibboleth_database_backend: true
 
 teams:
   db_name: "teams"
