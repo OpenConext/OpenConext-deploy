@@ -22,6 +22,12 @@ parameters:
     engineblock_api_password: '{{ engine_api_profile_password }}'
     engineblock_api_verify_ssl: {{ engine_api_verify_ssl }}
 
+    user_lifecycle_enabled: false
+    user_lifecycle_api_base_url: 'https://userlifecycle.{{ base_domain }}/'
+    user_lifecycle_api_username: dummy
+    user_lifecycle_api_password: dummy
+    user_lifecycle_api_verify_ssl: true
+
     attribute_aggregation_api_base_url: 'https://aa.{{ base_domain }}/aa/api/internal/'
     attribute_aggregation_api_username: '{{ engine_attribute_aggregation_username }}'
     attribute_aggregation_api_password: '{{ engine_attribute_aggregation_password }}'
