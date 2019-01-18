@@ -10,9 +10,29 @@
     createhome: no
     state: present
 
+- name: Create php session dir for lifecycle
+  file:
+    path: "{{ php_session_dir }}/lifecycle"
+    state: directory
+    owner: "{{ lifecycle_user }}"
+    group: root
+    mode: 0770
+
+- name: Install Apache vhost
+  template:
+    src: lifecycle.conf.j2
+    dest: /etc/httpd/conf.d/lifecycle.conf
+  notify: "reload httpd"
+
+- name: Install php-fpm file
+  template:
+    src: lifecycle-pool.conf.j2
+    dest: /etc/php-fpm.d/lifecycle-pool.conf
+  notify: "restart php-fpm"
+
 - name: Check if latest version is installed
   stat:
-    path: "{{ lifecycle_data_dir}}/releases/sp-dashboard-{{ lifecycle_branch }}"
+    path: "{{ lifecycle_data_dir}}/releases/OpenConext-user-lifecycle-{{ lifecycle_branch }}"
   register: branch_installed
 
 - name: Include install-branch.yml
