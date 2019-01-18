@@ -85,6 +85,7 @@
     - { role: openconext-common, tags: ['eb','profile'] }
     - { role: engineblock,       tags: ['eb'      ] }
     - { role: profile,           tags: ['profile' ] }
+    - { role: lifecycle,         tags: ['lifecycle' ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
