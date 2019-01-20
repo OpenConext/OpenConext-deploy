@@ -20,6 +20,13 @@
     - sessions
     - cache
 
+- name: Create lifecycle build dir
+  file:
+    path: "{{ lifecycle_branch_dir }}"
+    state: directory
+    owner: root
+    mode: 0775
+
 - name: Copy makerelease.sh
   template:
     src: "makeRelease.sh.j2"
