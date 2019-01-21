@@ -41,6 +41,7 @@ databases:
     - oidc-server
     - aaserver
     - spdashboard
+    - shibboleth
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
@@ -50,6 +51,7 @@ databases:
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
     - { name: spdrw, db_name: spdashboard, password: "{{ mysql_passwords.spdashboard }}" }
+    - { name: shibrw, db_name: shibboleth, password: "{{ mysql_passwords.shibboleth }}" }
   development_user:
     - { name: development, password: development }
 
@@ -176,6 +178,11 @@ shibboleth_apps:
   "manage":
     entityID: "https://manage.{{ base_domain }}/shibboleth"
     baseurl: ""
+
+shib:
+  db_host: "127.0.0.1"
+shibboleth_database_backend: true
+
 
 ##
 # VM config for the teams app

@@ -1,0 +1,52 @@
+---
+- name: Create directory to contain the MariaDB ODBC driver
+  file:
+    dest: "/usr/local/lib/mariadb"
+    state: directory
+    owner: root
+    mode: 0755
+
+- name: Install mariadb odbc driver
+  unarchive:
+    src: "https://downloads.mariadb.com/Connectors/odbc/connector-odbc-{{ mariadb_odbc_version}}/mariadb-connector-odbc-{{ mariadb_odbc_version }}-ga-rhel7-x86_64.tar.gz"
+    dest: "/usr/local/lib/mariadb"
+    remote_src: yes
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Install ODBC ini file
+  copy:
+    src: mariadb.ini
+    dest: /etc/mariadb.ini
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Check presence of MariaDB driver in /etc/odbcinst.ini
+  shell: "odbcinst -q -d  | grep MariaDB || true"
+  register: odbcinst_mariadb
+  changed_when: false
+
+- name: Install MariaDB driver to /etc/odbcinst.ini
+  command: odbcinst -i -d -f /etc/mariadb.ini
+  when: odbcinst_mariadb.stdout == ""
+
+- name: Copy the Shibboleth database table definitions
+  copy:
+    src: shibboleth_database.sql
+    dest: /tmp/shibboleth_database.sql
+    owner: root
+    mode: 0744
+
+- name: Create tables for shibboleth
+  mysql_db:
+    name: shibboleth
+    login_user: shibrw
+    login_password: "{{ mysql_passwords.shibboleth }}"
+    login_host: "{{ shib.db_host }}"
+    state: import
+    target: /tmp/shibboleth_database.sql
+  changed_when: false
+  run_once: true
+
