@@ -1,32 +1,21 @@
-- name: Create the shared and releases directory for the User Lifecycle app
-  file:
-    path: "{{ lifecycle_data_dir }}/{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: 0775
-  with_items:
-    - releases
+---
+- name: Check if target dir exists
+  stat:
+    path: "{{ lifecycle_release_dir }}"
+  register: lifecycle_dir
 
-- name: Create shared and writeable directories for logs and data
-  file:
-    path: "{{ lifecycle_data_dir }}/shared/{{ item }}"
-    state: directory
-    owner: "{{ lifecycle_user }}"
-    group: root
-    mode: 0775
-  with_items:
-    - logs
-    - sessions
-    - cache
-
-- name: Create lifecycle build dir
+- name: Create build dir
   file:
     path: "{{ lifecycle_branch_dir }}"
     state: directory
-    owner: root
-    mode: 0775
 
+  #- name: Checkout lifecycle branch
+  #git:
+  #  repo: https://github.com/OpenConext/OpenConext-lifecycle-user.git
+  #  dest: "{{ lifecycle_branch_dir }}"
+  #  version: "{{ lifecycle_branch }}"
+  #  force: yes
+  #register: lifecycle_gitclone
 - name: Copy makerelease.sh
   template:
     src: "makeRelease.sh.j2"
@@ -43,55 +32,14 @@
 - name: Unpack current version
   unarchive:
     src: "{{ openconext_builds_dir }}/Releases/OpenConext-user-lifecycle-{{ lifecycle_branch | replace('/', '_') }}.tar.gz"
-    dest: "{{ lifecycle_data_dir }}/releases"
+    dest: "{{ openconext_releases_dir }}"
     copy: no
 
-- name: Create current symlink
+- name: Activate new lifecycle branch
   file:
-    src: "{{ lifecycle_data_dir }}/releases/OpenConext-user-lifecycle-{{ lifecycle_branch | replace('/', '_') }}"
-    dest: "{{ lifecycle_data_dir }}/current"
+    src: "{{ openconext_releases_dir }}/OpenConext-user-lifecycle-{{ lifecycle_branch | replace('/', '_') }}"
+    dest: "{{ lifecycle_current_release_symlink }}"
     state: link
-
-- name: Delete config
-  file:
-    path: "{{ lifecycle_data_dir }}/current/app/{{ item }}"
-    state: absent
-  with_items:
-    - config/parameters.yml
-
-- name: Delete cache, log and sessions
-  file:
-    path: "{{ lifecycle_data_dir }}/current/var/{{ item }}"
-    state: absent
-  with_items:
-    - logs
-    - sessions
-    - cache
-
-- name: Create symlink to logs,sessions and cache
-  file:
-    src: "{{ lifecycle_data_dir }}/shared/{{ item }}"
-    dest: "{{ lifecycle_data_dir }}/releases/OpenConext-user-lifecycle-{{ lifecycle_branch | replace('/', '_') }}/var/{{ item }}"
-    owner: root
-    group: root
-    state: link
-  with_items:
-    - logs
-    - sessions
-    - cache
-
-- name: Install config file
-  template:
-    src: "parameters.yml.j2"
-    dest: "{{ lifecycle_data_dir}}/current/app/config/parameters.yml"
-
-- name: Clean the cache
-  command: bin/console cache:clear --env=prod
-  args:
-    chdir: "{{ lifecycle_data_dir }}/current/"
-
-- name: Chown the cachedir recursively again
-  file:
-    dest: "{{lifecycle_data_dir}}/shared/cache"
-    owner: "{{ lifecycle_user }}"
-    recurse: yes
+  notify:
+    - "restart httpd"
+    - "restart php-fpm"
