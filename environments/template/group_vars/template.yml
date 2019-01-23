@@ -47,6 +47,7 @@ databases:
     - oidc-server
     - aaserver
     - shibboleth
+    - eb_logins 
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
@@ -55,6 +56,7 @@ databases:
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
     - { name: shibrw, db_name: shibboleth, password: "{{ mysql_passwords.shibboleth }}" }
+    - { name: lifecyclerw, db_name: eb_logins, password: "{{ mysql_passwords.lifecycle }}" }
 
 mongo_port: 27017
 mongo_cluster: false
