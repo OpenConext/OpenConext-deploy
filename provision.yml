@@ -146,4 +146,10 @@
     - include: roles/httpd/handlers/main.yml
     - include: roles/tomcat/handlers/main.yml
 
+- hosts: elk
+  gather_facts: true
+  become: true
+  roles:
+    - { role: elk,        tags: ['elk' ] }
+
 - import_playbook: "{{ environment_dir }}/playbook.yml"
