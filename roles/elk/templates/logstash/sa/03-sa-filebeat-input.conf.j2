@@ -1,0 +1,18 @@
+input {
+  relp {
+    port => {{ rsyslog_sa_logstash_port }}
+    {% if logstash_tls %}
+    ssl_enable => true
+    ssl_cert => "/etc/pki/tls/certs/logstash.{{ base_domain }}.pem"
+    ssl_key => "/etc/pki/tls/private/logstash.{{ base_domain }}.key"
+    {% endif %}
+    add_field =>  { "origin" => "stepup" }
+
+  }
+}
+filter {
+   grok {
+      match => { "message" =>  "%{SYSLOGBASE}?%{GREEDYDATA:message}" }
+      overwrite => [ "message" ]
+   }
+}
