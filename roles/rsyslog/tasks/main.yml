@@ -1,10 +1,10 @@
 - name: install rsyslog
   yum:
-    name: "{{ item }}"
+    name:
+      - rsyslog
+      - rsyslog-gnutls
+      - rsyslog-relp
     state: present
-  with_items:
-  - rsyslog
-  - rsyslog-gnutls
   notify:
   - "restart rsyslog"
 
@@ -15,9 +15,44 @@
   when:
     - remote_syslog_host is defined
 
+# We need a key and client certificate to when using RELP
+- name: put rsyslog client key
+  copy:
+    content: "{{ rsyslogclientkey }}"
+    dest: "/etc/pki/rsyslog/rsyslogclient.key"
+    mode: 0400
+    owner: root
+  when: 
+    - rsyslog_remote_server_relp is defined
+  no_log: true
+
+- name: put rsyslog client certificate
+  copy:
+    src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclient.crt"
+    dest: "/etc/pki/rsyslog/rsyslogclient.crt"
+    mode: 0744
+    owner: root
+    group: adm
+  when: 
+    - rsyslog_remote_server_relp is defined
+
+- name: put rsyslog CA file (new location) 
+  copy: 
+    src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclientca.crt"
+    dest: "/etc/pki/rsyslog/rsyslogclientca.crt"
+    mode: 0744
+    owner: root
+    group: adm
+  when: 
+    - rsyslog_remote_server_relp is defined
+
 - name: put ryslog config file
   template:
     src: "rsyslog.conf.j2"
     dest: "/etc/rsyslog.conf"
   notify:
     - "restart rsyslog"
+
+- name: include tasks for central syslog server
+  include: rsyslog_central.yml
+  when:  "'sysloghost' in group_names"

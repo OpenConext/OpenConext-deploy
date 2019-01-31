@@ -1,0 +1,34 @@
+$RuleSet {{ item.name }}
+:programname, isequal, "EBLOG" { action(type="omfile" DynaFile="eblog-{{ item.name }}") stop }
+:programname, isequal, "Apache-EB" { action(type="omfile" DynaFile="apache-eb-{{ item.name }}") stop }
+:programname, isequal, "EBAUTH" { action(type="omfile" DynaFile="ebauth-{{ item.name }}") stop }
+:programname, isequal, "haproxy" { action(type="omfile" DynaFile="haproxy-{{ item.name }}") stop }
+:programname, isequal, "AA" { action(type="omfile" DynaFile="aa-{{ item.name }}") stop }
+:programname, isequal, "Apache-AA" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}") stop }
+:programname, isequal, "Apache-Authz-Admin" { action(type="omfile" DynaFile="apache-authz-admin-{{ item.name }}") stop }
+:programname, isequal, "AUTHZADMINMAIN" { action(type="omfile" DynaFile="authz-admin-{{ item.name }}") stop }
+:programname, isequal, "Apache-Playground" { action(type="omfile" DynaFile="apache-authz-playground-{{ item.name }}") stop }
+:programname, isequal, "AUTHZPLAYMAIN" { action(type="omfile" DynaFile="authz-playground-{{ item.name }}") stop }
+:programname, isequal, "AUTHZSERVERMAIN" { action(type="omfile" DynaFile="authz-server-{{ item.name }}") stop }
+:programname, isequal, "Apache-Authz-Server" { action(type="omfile" DynaFile="apache-authz-server-{{ item.name }}") stop }
+:programname, isequal, "Apache-dashboard" { action(type="omfile" DynaFile="apache-dashboard-{{ item.name }}") stop }
+:programname, isequal, "dashboard" { action(type="omfile" DynaFile="dashboard-{{ item.name }}") stop }
+:programname, isequal, "Apache-EBAPI" { action(type="omfile" DynaFile="apache-eb-api-{{ item.name }}") stop }
+:programname, isequal, "manage" { action(type="omfile" DynaFile="manage-{{ item.name }}") stop }
+:programname, isequal, "Apache-Manage" { action(type="omfile" DynaFile="apache-manage-{{ item.name }}") stop }
+:programname, isequal, "server" { action(type="omfile" DynaFile="oidc-{{ item.name }}") stop }
+:programname, isequal, "Apache-oidc" { action(type="omfile" DynaFile="apache-oidc-{{ item.name }}") stop }
+:programname, isequal, "PDPMAIN" { action(type="omfile" DynaFile="pdp-{{ item.name }}") stop }
+:programname, isequal, "PDPANALYTICS" { action(type="omfile" DynaFile="pdpanalytics-{{ item.name }}") stop }
+:programname, isequal, "Apache-PDP" { action(type="omfile" DynaFile="apache-pdp-{{ item.name }}") stop }
+:programname, isequal, "openconext-profile" { action(type="omfile" DynaFile="profile-{{ item.name }}") stop }
+:programname, isequal, "Apache-PROFILE" { action(type="omfile" DynaFile="apache-profile-{{ item.name }}") stop }
+:programname, isequal, "teams" { action(type="omfile" DynaFile="teams-{{ item.name }}") stop }
+:programname, isequal, "Apache-teams" { action(type="omfile" DynaFile="apache-teams-{{ item.name }}") stop }
+:programname, isequal, "VOOTMAIN" { action(type="omfile" DynaFile="voot-{{ item.name }}") stop }
+:programname, isequal, "Apache-VOOT" { action(type="omfile" DynaFile="apache-voot-{{ item.name }}") stop }
+:programname, isequal, "mysqld" { action(type="omfile" DynaFile="galera-{{ item.name }}") stop }
+:programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="haproxy-{{ item.name }}") stop }
+:programname, isequal, "Keepalived_vrrp" { action(type="omfile" DynaFile="keepalived-{{ item.name }}") stop }
+:programname, isequal, "Apache-STATIC" { action(type="omfile" DynaFile="apache-static-{{ item.name }}") stop }
+*.* ?hostleft-{{ item.name }}
