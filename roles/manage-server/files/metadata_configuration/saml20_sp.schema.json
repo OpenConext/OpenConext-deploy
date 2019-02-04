@@ -314,12 +314,18 @@
           "type": "string",
           "format": "boolean",
           "default": false,
-          "info": "Set this for service providers published in eduGAIN."
+          "info": "Set this for service providers that we publish in eduGAIN. When set, this entity also needs to have a value for coin:publish_in_edugain_date."
         },
         "coin:publish_in_edugain_date": {
           "type": "string",
           "format": "date-time",
-          "info": "When to add metadata to the eduGAIN feed. Usually the current time."
+          "default": false,
+          "info": "When this entity first appeared in the eduGAIN feed. Usually the current time."
+        },
+        "coin:publish_in_edugain_allow_rns": {
+          "type": "string",
+          "format": "boolean",
+          "info": "Whether we have approved that this SP may use the Research & Scholarship entity category."
         },
         "coin:imported_from_edugain": {
           "type": "string",

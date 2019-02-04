@@ -211,12 +211,12 @@
         "coin:publish_in_edugain": {
           "type": "string",
           "format": "boolean",
-          "info": "Set this for Identity Providers published in eduGAIN."
+          "info": "Set this for Identity Providers that we publish in eduGAIN. When set, this entity also needs to have a value for coin:publish_in_edugain_date."
         },
         "coin:publish_in_edugain_date": {
           "type": "string",
           "format": "date-time",
-          "info": "When to add the metadata to the eduGAIN feed. Usually the current time."
+          "info": "When this entity first appeared in the eduGAIN feed. Usually the current time."
         },
         "coin:additional_logging": {
           "type": "string",
