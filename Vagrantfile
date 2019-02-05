@@ -40,14 +40,15 @@ Vagrant.configure("2") do |config|
     if development
       # run Ansible for loadbalancer only
       lb_centos7.vm.provision :ansible do |ansible|
-        ansible.limit = ["loadbalancer"]
+        ansible.limit = ["loadbalancer-vm"]
         ansible.inventory_path = "./environments/vm/inventory"
-        ansible.playbook = "provision-vm.yml"
+        ansible.playbook = "provision.yml"
         ansible.extra_vars = {
           user: "vagrant",
           env: "vm",
           secrets_file: "environments/vm/secrets/vm.yml",
-          develop: true
+          develop: true,
+	  environment_dir: "environments/vm/"
         }
       end
     end
@@ -69,13 +70,14 @@ Vagrant.configure("2") do |config|
       apps_centos7.vm.provision :ansible do |ansible|
         ansible.limit = ["php-apps", "java-apps", "storage"]
         ansible.inventory_path = "./environments/vm/inventory"
-        ansible.playbook = "provision-vm.yml"
+        ansible.playbook = "provision.yml"
         ansible.extra_vars = {
           user: "vagrant",
           env: "vm",
           secrets_file: "environments/vm/secrets/vm.yml",
           develop: true,
-          engine_apache_symfony_environment: "dev"
+          engine_apache_symfony_environment: "dev",
+	  environment_dir: "environments/vm/"
         }
       end
 
