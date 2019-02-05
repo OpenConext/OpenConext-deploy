@@ -131,7 +131,7 @@
 - name: Allow external connections when in development
   lineinfile:
     dest: "/etc/my.cnf.d/server.cnf"
-    insertafter: '\\[mysqld-5.5\\]'
+    insertafter: '\\[mysqld\\]'
     state: present
     line: "bind-address=0.0.0.0"
   when:
