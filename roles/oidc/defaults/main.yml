@@ -6,6 +6,9 @@ oidc_local_war: ''
 deploy_name: oidc
 oidc_resource_cleaner_period: 15
 oidc_cronjobmaster: true
+oidc_idp_metadata_url: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+oidc_idp_metadata_proxies_url: "https://engine.{{ base_domain }}/authentication/proxy/idps-metadata"
+
 oidcadmin:
   defaultClients:
       - client_id: "{{ authzplayground.springapp_oidc_client_id }}"
