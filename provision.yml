@@ -152,4 +152,11 @@
   roles:
     - { role: elk,        tags: ['elk' ] }
 
+- hosts: stats
+  gather_facts: true
+  become: true
+  roles:
+    - { role: stats,      tags: ['stats' ] }
+    - { role: influxdb,   tags: ['influxdb' ] }
+
 - import_playbook: "{{ environment_dir }}/playbook.yml"
