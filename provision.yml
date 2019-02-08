@@ -158,5 +158,7 @@
   roles:
     - { role: stats,      tags: ['stats' ] }
     - { role: influxdb,   tags: ['influxdb' ] }
+  handlers:
+    - include: roles/httpd/handlers/main.yml
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
