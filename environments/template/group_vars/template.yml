@@ -19,8 +19,8 @@ diy_technicalcontact_name: "Technical Contact"
 diy_technicalcontact_email: "{{ support_email }}"
 
 
-attribute_aggregation_gui_version: 2.0.8
-attribute_aggregation_server_version: 2.0.8
+attribute_aggregation_gui_version: 2.0.11
+attribute_aggregation_server_version: 2.0.11
 attribute_mapper_version: 0.0.1
 authz_admin_version: 2.0.12
 authz_playground_version: 1.7

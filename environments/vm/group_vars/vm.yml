@@ -11,8 +11,8 @@ error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
-attribute_aggregation_gui_version: 2.0.8
-attribute_aggregation_server_version: 2.0.8
+attribute_aggregation_gui_version: 2.0.11
+attribute_aggregation_server_version: 2.0.11
 authz_admin_version: 2.0.12
 authz_playground_version: 1.7
 authz_server_version: 1.3.10
