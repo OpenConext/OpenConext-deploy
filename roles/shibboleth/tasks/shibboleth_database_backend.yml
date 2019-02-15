@@ -1,4 +1,9 @@
 ---
+- name: Install mysql python
+  yum:
+    name: MySQL-python
+    state: present
+
 - name: Create directory to contain the MariaDB ODBC driver
   file:
     dest: "/usr/local/lib/mariadb"
