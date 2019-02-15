@@ -198,6 +198,8 @@
     login_password: "{{ mariadb_root_password }}"
   with_items:
     - "{{ databases.names }}"
+  run_once: true
+  tags: galera_create_db
 
 - name: Create database super users for provisioning users and databases
   mysql_user:
@@ -211,6 +213,8 @@
   with_subelements:
      - "{{ galera_root_users }}"
      - hosts
+  run_once: true
+  tags: galera_create_db
 
 - name: Put clustercheck script in place
   copy:
