@@ -326,6 +326,8 @@ aa:
   surfmarket_url: https://example.org
   surfmarket_username: example@example.org
   surfmarket_password: "{{ aa_surfmarket_password }}"
+  sbs_username: sbs_aa
+  sbs_password: "{{ aa_sbs_password }}"
   aggregate_cache: 0
 
 oidc:
