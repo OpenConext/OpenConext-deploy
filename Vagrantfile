@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
       apps_centos7.vm.synced_folder "../OpenConext-engineblock", "/opt/openconext/OpenConext-engineblock", :nfs => true
 
       apps_centos7.vm.provision :ansible do |ansible|
-        ansible.limit = ["php-apps", "java-apps", "storage"]
+        ansible.limit = ["php-apps", "java-apps", "storage", "oidc"]
         ansible.inventory_path = "./environments/vm/inventory"
         ansible.playbook = "provision.yml"
         ansible.extra_vars = {

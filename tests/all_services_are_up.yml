@@ -19,7 +19,7 @@
     - uri: url={{ item }}
 #      register: result
 #      until: "'UP' in result.content"
-      retries: 5
+      retries: 15
       delay: 10
       with_items: "{{ services_health_checks }}"
 

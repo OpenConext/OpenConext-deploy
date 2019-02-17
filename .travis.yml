@@ -45,6 +45,7 @@ after_failure:
   - sudo docker exec -t ansible-test cat /var/log/attribute-aggregation/attribute-aggregation.log
   - sudo docker exec -t ansible-test cat /var/log/pdp/pdp.log
   - sudo docker exec -t ansible-test env TERM=xterm tail -500 /var/log/messages
+  - sudo docker exec -t ansible-test cat /var/log/tomcat/oidc.log
 
 after_script:
   - sudo docker stop ansible-test
