@@ -14,7 +14,6 @@
       - https://authz-admin.vm.openconext.org/health
       - https://authz-playground.vm.openconext.org/health
       - https://manage.vm.openconext.org/manage/api/health
-      - https://oidc.vm.openconext.org/health
   tasks:
     - uri: url={{ item }}
 #      register: result
