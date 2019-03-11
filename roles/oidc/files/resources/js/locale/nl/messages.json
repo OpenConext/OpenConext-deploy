@@ -479,9 +479,9 @@
         },
         "footer": {
             "org": "SURFnet",
-            "org_link": "http://www.surfnet.nl/en",
+            "org_link": "https://www.surfnet.nl/",
             "service": "Algemene voorwaarden",
-            "service_link": "https://wiki.surfnet.nl/display/conextsupport/Terms of Service (EN)",
+            "service_link": "https://support.surfconext.nl/terms-nl",
             "mailto": "support@surfconext.nl",
             "mailto_link": "mailto: support@surfconext.nl",
             "git_link": "https://github.com/OpenConext/OpenConext-oidc"
