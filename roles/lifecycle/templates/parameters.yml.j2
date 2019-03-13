@@ -28,3 +28,8 @@ parameters:
             verify_ssl: true
     user_quota: {{ lifecycle_user_quota }}
     inactivity_period: {{ lifecycle_inactivity_period }}
+
+    # is the deprovision api enabled?
+    deprovision_api_settings_enabled: true
+    deprovision_api_settings_username: "{{ lifecycle_api_username }}"
+    deprovision_api_settings_password: "{{ lifecycle_api_password }}"
