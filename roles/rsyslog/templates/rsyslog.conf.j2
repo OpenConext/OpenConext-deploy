@@ -38,12 +38,14 @@ $ActionWriteAllMarkMessages on
 $MarkMessagePeriod 600
 
 $PreserveFQDN on
-
+# Order is important here: First the templates, then rules, then listerers, then forwarders 
+{% if 'sysloghost' in group_names %}
 # This directory contains templates for a central syslog host
-
 $IncludeConfig /etc/rsyslog.d/templates/*.conf
+{% endif %}
 
 #### RULES ####
+# The rules below make sure all local logging is also logged on local machines
 # Log all kernel messages to the console.
 # Logging much else clutters up the screen.
 #kern.*                                                 /dev/console
@@ -69,18 +71,20 @@ uucp,news.crit                                          /var/log/spooler
 # Save boot messages also to boot.log
 local7.*                                                /var/log/boot.log
 
+{% if 'sysloghost' in group_names %}
 # This directory contains all rulesets on the central syslog host
 $IncludeConfig /etc/rsyslog.d/rulesets/*.conf
+{% endif %}
 # Default listener for localhost
 module(load="imudp")
 input(type="imudp" port="514")
 
-# Now we include all the listeners
-{% if 'sysloghost' in group_names %}
-module(load="imrelp" )
-{% endif %}
-$IncludeConfig /etc/rsyslog.d/listeners/*.conf
 
+{% if 'sysloghost' in group_names %}
+# Now we include all the listeners
+module(load="imrelp" )
+$IncludeConfig /etc/rsyslog.d/listeners/*.conf
+{% endif %}
 
 # ### begin forwarding rule ###
 # The statement between the begin ... end define a SINGLE forwarding
