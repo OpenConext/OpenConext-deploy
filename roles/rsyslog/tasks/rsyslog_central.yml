@@ -12,9 +12,15 @@
   copy:
     src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogserver.crt"
     dest: "/etc/pki/rsyslog/rsyslogserver.crt"
-    mode: 0744
+    mode: 0644
     owner: root
     group: adm
+
+- name: place rsyslog CA file
+  copy:
+    src: "{{ inventory_dir }}/files/certs/rsyslog_ca.pem"
+    dest: "{{ rsyslog_ca }}" 
+    mode: 0644
 
 - name: Create directories to keep configuration file
   file:
