@@ -3,7 +3,7 @@ ruleset="{{ item.name }}"
 tls="on"
 tls.mycert="/etc/pki/rsyslog/rsyslogserver.crt"
 tls.myprivkey="/etc/pki/rsyslog/rsyslogserver.key"
-tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt"
+tls.caCert="{{ rsyslog_ca }}"
 tls.authmode="name"
 tls.permittedpeer="{{ item.permittedpeer }}")
 
