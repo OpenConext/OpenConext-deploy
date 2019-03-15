@@ -1,0 +1,20 @@
+$RuleSet {{ item.name }}
+:programname, isequal, "nginx_access_gateway"    { action(type="omfile" DynaFile="nginx_access_gateway-{{ item.name }}") stop }
+:programname, isequal, "nginx_error_gateway"     { action(type="omfile" DynaFile="nginx_error_gateway-{{ item.name }}") stop }
+:programname, isequal, "stepup-gateway"          { action(type="omfile" DynaFile="stepup_gateway-{{ item.name }}") stop }
+:programname, isequal, "nginx_access_middleware" { action(type="omfile" DynaFile="nginx_access_middleware-{{ item.name }}") stop }
+:programname, isequal, "nginx_error_middleware" { action(type="omfile" DynaFile="nginx_error_middleware-{{ item.name }}") stop }
+:programname, isequal, "nginx_access_keyserver" { action(type="omfile" DynaFile="nginx_access_keyserver-{{ item.name }}") stop }
+:programname, isequal, "nginx_error_keyserver" { action(type="omfile" DynaFile="nginx_error_keyserver-{{ item.name }}") stop }
+:programname, isequal, "nginx_access_tiqr" { action(type="omfile" DynaFile="nginx_access_tiqr-{{ item.name }}") stop }
+:programname, isequal, "nginx_error_tiqr" { action(type="omfile" DynaFile="nginx_error_tiqr-{{ item.name }}") stop }
+:programname, isequal, "nginx_access_ra" { action(type="omfile" DynaFile="nginx_access_ra-{{ item.name }}") stop }
+:programname, isequal, "nginx_error_ra" { action(type="omfile" DynaFile="nginx_error_ra-{{ item.name }}") stop }
+:programname, isequal, "nginx_access_selfservice" { action(type="omfile" DynaFile="nginx_access_selfservice-{{ item.name }}") stop }
+:programname, isequal, "nginx_error_selfservice" { action(type="omfile" DynaFile="nginx_error_selfservice-{{ item.name }}") stop }
+:programname, isequal, "stepup-selfservice" { action(type="omfile" DynaFile="stepup-selfservice-{{ item.name }}") stop }
+:programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
+:programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="garb-{{ item.name }}") stop }
+:programname, isequal, "mysqld" { action(type="omfile" DynaFile="galera-{{ item.name }}") stop }
+*.* ?hostleft-{{ item.name }}
+

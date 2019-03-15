@@ -5,25 +5,15 @@
 
 #### MODULES ####
 $MaxMessageSize 32k
-# The imjournal module bellow is now used as a message source instead of imuxsock.
+# The imjournal module below is now used as a message source instead of imuxsock.
 $ModLoad imuxsock # provides support for local system logging (e.g. via logger command)
 $ModLoad imjournal # provides access to the systemd journal
 #$ModLoad imklog # reads kernel messages (the same are read from journald)
 $ModLoad immark  # provides --MARK-- message capability
 
-# Provides UDP syslog reception
-$ModLoad imudp
-$UDPServerRun 514
-$UDPServerAddress 127.0.0.1
-
-# Provides TCP syslog reception
-#$ModLoad imtcp
-#$InputTCPServerRun 514
-
 ## Adjust Ratelimit
 $imjournalRatelimitInterval 30
 $imjournalRatelimitBurst 4000
-
 
 #### GLOBAL DIRECTIVES ####
 
@@ -37,22 +27,25 @@ $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
 # not useful and an extreme performance hit
 #$ActionFileEnableSync on
 
-# Include all config files in /etc/rsyslog.d/
-$IncludeConfig /etc/rsyslog.d/*.conf
-
 # Turn off message reception via local log socket;
 # local messages are retrieved through imjournal now.
 $OmitLocalLogging on
 
 # File to store the position in the journal
 $IMJournalStateFile imjournal.state
-
 # MARK messages
 $ActionWriteAllMarkMessages on
 $MarkMessagePeriod 600
 
-#### RULES ####
+$PreserveFQDN on
+# Order is important here: First the templates, then rules, then listerers, then forwarders 
+{% if 'sysloghost' in group_names %}
+# This directory contains templates for a central syslog host
+$IncludeConfig /etc/rsyslog.d/templates/*.conf
+{% endif %}
 
+#### RULES ####
+# The rules below make sure all local logging is also logged on local machines
 # Log all kernel messages to the console.
 # Logging much else clutters up the screen.
 #kern.*                                                 /dev/console
@@ -78,20 +71,28 @@ uucp,news.crit                                          /var/log/spooler
 # Save boot messages also to boot.log
 local7.*                                                /var/log/boot.log
 
+{% if 'sysloghost' in group_names %}
+# This directory contains all rulesets on the central syslog host
+$IncludeConfig /etc/rsyslog.d/rulesets/*.conf
+{% endif %}
+# Default listener for localhost
+module(load="imudp")
+input(type="imudp" port="514")
+
+
+{% if 'sysloghost' in group_names %}
+# Now we include all the listeners
+module(load="imrelp" )
+$IncludeConfig /etc/rsyslog.d/listeners/*.conf
+{% endif %}
+
 # ### begin forwarding rule ###
 # The statement between the begin ... end define a SINGLE forwarding
 # rule. They belong together, do NOT split them. If you create multiple
 # forwarding rules, duplicate the whole block!
 # Remote Logging (we use TCP for reliable delivery)
 #
-# An on-disk queue is created for this action. If the remote host is
-# down, messages are spooled to disk and sent when it is up again.
-#$ActionQueueFileName fwdRule1 # unique name prefix for spool files
-#$ActionQueueMaxDiskSpace 1g   # 1gb space limit (use as much as possible)
-#$ActionQueueSaveOnShutdown on # save messages to disk on shutdown
-#$ActionQueueType LinkedList   # run asynchronously
-#$ActionResumeRetryCount -1    # infinite retries if host is down
-# remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
+# This is the forwarding rule without relp
 {% if remote_syslog_host is defined %}
 $ActionQueueType LinkedList
 $ActionQueueMaxDiskSpace 1g
@@ -104,7 +105,26 @@ $ActionSendStreamDriverAuthMode x509/name
 $ActionSendStreamDriverPermittedPeer {{ loghost_fqdn }}
 $ActionSendStreamDriverMode 1 
 *.* @@{{ remote_syslog_host }}:5143
-$PreserveFQDN on
 {% endif %}
-# ### end of the forwarding rule ###
+
+{% if rsyslog_remote_server_relp is defined and 'sysloghost' not in group_names %}
+# Forward all logs to the central logging server using relp
+$ActionQueueType LinkedList
+$ActionQueueMaxDiskSpace 1g
+$ActionQueueFileName syslog_fwd
+$ActionResumeRetryCount -1
+$ActionQueueSaveOnShutdown on
+module(load="omrelp")
+action(type="omrelp" 
+target="{{ rsyslog_remote_server_relp }}" 
+port="{{ rsyslog_remote_relp_port }}" 
+tls="on" 
+tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt" 
+tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
+tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
+tls.authmode="name" 
+tls.permittedpeer=["{{ rsyslog_remote_server_relp }}"])
+{% endif %}
+
+
 

@@ -7,7 +7,7 @@
     tags:
      - always
 
-- hosts: loadbalancer:loadbalancer-vm:php-apps:java-apps:storage:oidc:dbcluster
+- hosts: loadbalancer:loadbalancer-vm:php-apps:java-apps:storage:oidc:dbcluster:sysloghost
   gather_facts: yes
   become: true
   roles:

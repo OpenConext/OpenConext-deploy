@@ -10,10 +10,16 @@
      mode: 0644
 
 - name: Install java
-  yum: name=java state=present 
+  yum: 
+    name: java 
+    state: present 
 
 - name: Create datadirectory
-  file: path=/data state=directory owner=root mode=775
+  file: 
+    path: /data 
+    state: directory 
+    owner: root 
+    mode: 775
 
 - name: Include logstash specific tasks
   include: logstash.yml
