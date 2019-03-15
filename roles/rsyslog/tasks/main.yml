@@ -14,6 +14,8 @@
     dest: "{{ rsyslog_ca }}"
   when:
     - remote_syslog_host is defined
+  notify:
+    - "restart rsyslog"
 
 # We need a key and client certificate to when using RELP
 - name: put rsyslog client key
@@ -25,6 +27,8 @@
   when: 
     - rsyslog_remote_server_relp is defined
   no_log: true
+  notify:
+    - "restart rsyslog"
 
 - name: put rsyslog client certificate
   copy:
@@ -35,6 +39,8 @@
     group: adm
   when: 
     - rsyslog_remote_server_relp is defined
+  notify:
+    - "restart rsyslog"
 
 - name: put rsyslog CA file (new location) 
   copy: 
