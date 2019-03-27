@@ -1,0 +1,11 @@
+[Unit]
+Description=Selenium test framework
+After=syslog.target network.target
+
+[Service]
+ExecStart=/usr/bin/java -jar {{ engineblock_selenium_install_dir }}/selenium/selenium-server-standalone-{{ engineblock_selenium_version }}.jar -Dwebdriver.chrome.driver={{ engineblock_selenium_install_dir }}/selenium/chromedriver &
+Restart=on-failure
+RestartSec=20s
+
+[Install]
+WantedBy=multi-user.target
