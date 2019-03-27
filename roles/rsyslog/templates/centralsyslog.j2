@@ -1,0 +1,17 @@
+{{ rsyslog_dir }}/hosts/*/*/*
+{{ rsyslog_dir }}/apps/*/*/*
+{
+    missingok
+    daily
+    rotate 90
+    sharedscripts
+    olddir archive
+    createolddir 0750 root {{ rsyslog_read_group }}
+    dateext
+    dateyesterday
+    compress
+    postrotate
+        systemctl kill -s HUP rsyslog.service
+    endscript
+}
+

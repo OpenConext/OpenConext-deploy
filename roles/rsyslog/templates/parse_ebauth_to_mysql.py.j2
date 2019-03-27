@@ -1,0 +1,65 @@
+#!/usr/bin/python2
+# This script parses the files produced by engineblock and inserts them into a mySQL table where the SURFconext stats module will analyse the data further
+# This script is intended to be used during logrotate
+# It picks up all files starting with ebauth- (all rotated files) and parses them
+
+import os
+import sys
+import shutil
+import json
+import MySQLdb
+from dateutil.parser import parse
+
+mysql_host="{{ item.db_host }}"
+mysql_user="{{ item.db_user }}"
+mysql_password="{{ item.db_password }}"
+mysql_db="{{ item.db_name }}"
+workdir="{{ rsyslog_dir }}/log_logins/{{ item.name}}/"
+
+db = MySQLdb.connect(mysql_host,mysql_user,mysql_password,mysql_db )
+cursor = db.cursor()
+def load_in_mysql(a,b,c,d,e,f,g,h):
+    sql = """insert into log_logins(idpentityid,spentityid,loginstamp,userid,keyid,sessionid,requestid,trustedproxyentityid) values(%s,%s,%s,%s,%s,%s,%s,%s)"""
+    try:
+      cursor.execute(sql, (a,b,c,d,e,f,g,h))
+      db.commit()
+    except:
+      db.rollback()
+      print(sql, (a,b,c,d,e,f,g,h))
+
+
+def parse_lines(a):
+  input_file = open((a), 'r')
+  for line in input_file:
+     try:
+        jsonline = line.split(']:',2)[1]
+        data = json.loads(jsonline)
+     except:
+        continue
+     idp = data["context"]["idp_entity_id"]
+     sp = data["context"]["sp_entity_id"]
+     timestamp = data["context"]["login_stamp"]
+     user_id = data["context"]["user_id"]
+     key_id = data["context"]["key_id"]
+     session_id = data["extra"]["session_id"]
+     request_id = data["extra"]["request_id"]
+     proxied_sp_entity_ids_list = data["context"]["proxied_sp_entity_ids"]
+     proxied_sp_entity_ids = ''.join(proxied_sp_entity_ids_list)
+     loginstamp=parse(timestamp).strftime("%Y-%m-%d %H:%M:%S")
+     null = 'NULL'
+     if proxied_sp_entity_ids:
+        load_in_mysql(idp,proxied_sp_entity_ids,loginstamp,user_id,key_id,session_id,request_id,sp)
+     else:
+        load_in_mysql(idp,sp,loginstamp,user_id,key_id,session_id,request_id,null)
+
+## Loop over the files and parse them one by one
+for filename in os.listdir(workdir):
+  if os.path.isfile(workdir+filename):
+      filetoparse=(os.path.join(workdir, filename))
+      parse_lines(filetoparse)
+  else:
+      continue
+
+cursor.close()
+db.close()
+

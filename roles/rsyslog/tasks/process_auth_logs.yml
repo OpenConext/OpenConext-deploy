@@ -1,0 +1,72 @@
+---
+- name: Install PHP
+  yum:
+    name:
+      - php
+      - php-pdo
+      - php-mysql
+    state: present
+
+- name: Copy the log_logins database table definitions
+  copy:
+    src: log_logins.sql
+    dest: /tmp/log_logins.sql
+    owner: root
+    mode: 0744
+
+- name: Create tables for each log_login environment
+  mysql_db:
+    name: "{{ item.db_name }}"
+    login_user: "{{ item.db_user }}"
+    login_password: "{{ item.db_password }}"
+    login_host: "{{ item.db_host }}"
+    state: import
+    target: /tmp/log_logins.sql
+  changed_when: false
+  with_items: "{{ rsyslog_environments.sc }}"
+
+- name: Create a python script that parses log_logins per environment
+  template: 
+    src: parse_ebauth_to_mysql.py.j2
+    dest: /usr/local/sbin/parse_ebauth_to_mysql_{{ item.name }}.py
+    mode: 0740
+    owner: root
+    group: root
+  with_items: "{{ rsyslog_environments.sc }}"
+
+- name: Create last_login PHP script
+  template:
+    src: process_lastseen.php.j2
+    dest: /usr/local/sbin/process_lastseen_{{ item.name }}.php
+    mode: 0740
+    owner: root
+    group: root
+  with_items: "{{ rsyslog_environments.sc }}"
+
+- name: Create logdir for lastseen cronjob output
+  file:
+    path: "{{ rsyslog_dir }}/apps/{{ item.name }}/lastseen"
+    state: directory
+    owner: root
+    group: "{{ rsyslog_read_group }}"
+    mode: 0750 
+  with_items: "{{ rsyslog_environments.sc }}"
+
+- name: Create cronjobs for proecessing lastseen script
+  template: 
+    src: cron_update_lastseen.j2
+    dest: /etc/cron.daily/update_lastseen_{{ item.name }}
+    owner: root
+    group: root
+    mode: 0774
+  with_items: "{{ rsyslog_environments.sc }}" 
+
+- name: Put log_logins logrotate scripts
+  template:
+    src: logrotate_ebauth.j2
+    dest: /etc/logrotate.d/logrotate_ebauth_{{ item.name }}
+    mode: 0644
+    owner: root
+    group: root
+  with_items: "{{ rsyslog_environments.sc }}"
+

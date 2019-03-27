@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+LOG={{ rsyslog_dir }}/apps/{{ item.name }}/lastseen/lastseen.log
+# all future STDOUT and STDERR to the log file
+# but also show stderr in cron output
+exec 1>> $LOG
+exec 2> >(tee -a $LOG >&2)
+
+echo '--------------------------------------------'
+echo "-- Starting run (`date -R`)"
+echo '--------------------------------------------'
+
+/usr/local/sbin/process_lastseen_{{ item.name }}.php
+
+echo '--------------------------------------------'
+echo "-- Done (`date -R`)"
+echo '--------------------------------------------'
+exit 0
+

@@ -1,12 +1,12 @@
 ---
 # The server uses a different set of keys as the client
-- name: put rsyslog server key
-  copy:
-    content: "{{ rsyslogserverkey }}" 
-    dest: "/etc/pki/rsyslog/rsyslogserver.key"
-    mode: 0400
-    owner: root
-  no_log: true
+#- name: put rsyslog server key
+#  copy:
+#    content: "{{ rsyslogserverkey }}" 
+#    dest: "/etc/pki/rsyslog/rsyslogserver.key"
+#    mode: 0400
+#    owner: root
+#  no_log: true
 
 - name: put rsyslog client certificate
   copy:
@@ -68,3 +68,9 @@
     src: listener.conf.j2
     dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
   with_items: "{{ rsyslog_environments.sa }}"
+
+- name: Create logrotate file for apps and host logs
+  template:
+    src: centralsyslog.j2
+    dest: /etc/logrotate.d/centralsyslog
+

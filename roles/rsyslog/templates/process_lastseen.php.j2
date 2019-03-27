@@ -1,0 +1,108 @@
+#!/usr/bin/env php
+<?php
+$CONFIG = array(
+	'EB' => array(
+		'dsn'      => 'mysql:host={{ item.db_host }};dbname={{ item.db_name }}',
+		'user'     => '{{ item.db_user }}',
+		'password' => '{{ item.db_password }}',
+	),
+);
+
+
+date_default_timezone_set('Europe/Amsterdam');
+
+
+function OpenDatabases($db)
+{
+	# open new database connection
+	$dbh = new PDO( $db['dsn'], $db['user'], $db['password']);
+
+	# throw exceptions is queries fail
+	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+	# set session settings correctly
+	$dbh->query("SET NAMES 'utf8';");
+	$dbh->query("SET time_zone = 'Europe/Amsterdam';");
+	$dbh->query("SET storage_engine=InnoDB;");
+	$dbh->query("SET sql_mode='NO_AUTO_VALUE_ON_ZERO';");
+
+	return $dbh;
+}
+
+function GetLatestDate($dbh)
+{
+	$sql = "SELECT MAX(`lastseen`) as 'date' FROM `last_login`";
+
+	# always return only 1 row, but iteration makes this easy to write
+	foreach ( $dbh->query($sql) as $row )
+	{
+		$date = $row['date'];
+	}
+
+	$dt = new DateTime($date);
+	$dt->setTime(12,00);
+
+	print("Database was updated until $date\n");
+
+	return $dt;
+
+}
+
+function FillLastseen($dbh,$date)
+{
+	print("Processing $date...");
+
+	$starttime = gettimeofday(TRUE);
+
+	# find last login for a specific day
+	$stm = $dbh->prepare("
+		INSERT INTO `last_login`
+			SELECT 
+				`userid`, DATE(MAX(`loginstamp`)) as `lastseen`
+			FROM `log_logins`
+			WHERE `loginstamp` > :date AND `loginstamp` < ADDDATE(:date,INTERVAL 1 DAY)
+			GROUP BY `userid`
+		ON DUPLICATE KEY 
+			UPDATE `lastseen` = IF(VALUES(`lastseen`)>`lastseen`,VALUES(`lastseen`),`lastseen`)
+	");
+
+	# insert entry
+	$stm->execute(array(
+		':date'   => $date,
+	));
+
+	$duration = sprintf("%.2f",gettimeofday(TRUE) - $starttime);
+
+	$numrows = sprintf("%6u",$stm->rowCount());
+	print " $numrows updated, took ${duration} seconds\n";
+}
+
+### main
+function main()
+{
+	global $CONFIG;
+
+	$dbh = OpenDatabases( $CONFIG['EB'] );
+
+	$dt_start = GetLatestDate($dbh);
+	$dt_start->sub(new DateInterval('P1D'));
+
+	$dt_stop  = new DateTime(); # now
+	$date_stop = $dt_stop->format('Y-m-d'); # today
+
+	$start = $dt_start;
+	do
+	{
+		$date = $start->format('Y-m-d');
+		FillLastseen($dbh,$date);
+		$start->add(new DateInterval('P1D'));
+	} 
+	while ($date !== $date_stop);
+
+}
+
+main();
+
+
+?>
+
