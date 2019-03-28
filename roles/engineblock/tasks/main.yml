@@ -50,6 +50,7 @@
 - name: Check if we have a custom logo
   local_action: stat path="{{ inventory_dir }}/files/logo.png"
   register: customlogo
+  become: false
 
 - name: Install environment specific logo
   copy:
