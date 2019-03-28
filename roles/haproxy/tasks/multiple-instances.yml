@@ -34,9 +34,9 @@
   file:
     dest: "/etc/haproxy/{{ item.name }}"
     state: directory
-    owner: haproxy
-    group: haproxy
-    mode: 0700
+    owner: root
+    group: lbops
+    mode: 1775
   with_items: "{{ haproxy_applications }}"
 
 - name: Create combined key and certificate file for HAproxy
@@ -44,6 +44,8 @@
     content: "{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
     dest: "/etc/haproxy/{{ item.name }}/{{ item.name }}.pem"
     mode: 0600
+    owner: root
+    group: root
   with_items:
     - "{{ haproxy_applications }}"
   when:
@@ -51,15 +53,6 @@
   register: keys_changed
   notify:
     - "restart haproxy instances with changed keys"
-
-- name: Chown SSL certificates
-  file:
-    path: "/etc/haproxy/{{ item.name }}/{{ item.name }}.pem"
-    mode: 0600
-  with_items:
-    - "{{ haproxy_applications }}"
-  when:
-    - not item.hidden
 
 - name: Create directory to store backend CA file
   file:
