@@ -95,3 +95,9 @@ eb_tos_url: "https://example.org"
 # Backwards compatibility with older secrets files
 engineblock_private_keys:
   default: "{{ engineblock_private_key }}"
+
+
+# Webdriver test settings
+engineblock_selenium_version: 2.53.1
+engineblock_chromedriver_version: 2.46
+engineblock_selenium_install_dir: /opt

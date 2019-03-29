@@ -34,6 +34,11 @@
   when:
     - develop
 
+- name: Include test.yml
+  include: test.yml
+  when:
+    - develop
+
 - name: Check presence of language specific overrides
   local_action: stat path="{{ inventory_dir }}/files/eb/languages/"
   register: overrides_present
