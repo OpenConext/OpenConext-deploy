@@ -18,3 +18,4 @@ provision*.retry
 # ignore the directories where external environment vars and external roles are put
 roles-external
 environments-external
+TODO.txt
