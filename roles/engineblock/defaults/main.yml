@@ -76,7 +76,7 @@ engineblock_symfony_log_path: "/tmp/engineblock/log"
 
 engine_fpm_user: engine
 engine_fpm_port: 801
-
+engine_fpm__memory: 128M
 # When using vagrant for provisioning, it's not possible to put something in the inventory dir
 engine_crt_not_in_inventory: false
 
