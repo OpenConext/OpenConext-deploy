@@ -8,6 +8,7 @@
       "enum": [
         "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
         "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign",
         "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
         "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
         "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
@@ -171,6 +172,7 @@
           "enum": [
             "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
             "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign",
             "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
             "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
             "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
