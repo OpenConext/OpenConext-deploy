@@ -80,6 +80,9 @@ engine_fpm_memory: 128M
 # When using vagrant for provisioning, it's not possible to put something in the inventory dir
 engine_crt_not_in_inventory: false
 
+# The memory limit used for the metadata push
+engine_metadata_push_memory_limit: 256M
+
 engine_idp_debugging_from_name: "{{ instance_name }} EngineBlock"
 engine_idp_debugging_from_address: "{{ noreply_email }}"
 engine_idp_debugging_to_name: "{{ instance_name }} Admin"
