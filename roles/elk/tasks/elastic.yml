@@ -13,7 +13,7 @@
 - name: Make sure java 8 is used
   lineinfile: 
     dest: /etc/sysconfig/elasticsearch 
-    line: 'JAVA_HOME=/usr/lib/jvm/java-1.8.0' 
+    line: 'JAVA_HOME=/usr/lib/jvm/jre-1.8.0/'
     state: present
 
 - name: Install elasticsearch configuration file
