@@ -1,6 +1,6 @@
 input {
-  relp {
-    port => {{ rsyslog_sa_logstash_port }}
+  beats {
+    port => 5055
     {% if logstash_tls %}
     ssl_enable => true
     ssl_cert => "/etc/pki/tls/certs/logstash.{{ base_domain }}.pem"
@@ -14,5 +14,8 @@ filter {
    grok {
       match => { "message" =>  "%{SYSLOGBASE}?%{GREEDYDATA:message}" }
       overwrite => [ "message" ]
+   }
+   mutate {
+       remove_field => "agent" # Agent is added by filebeat, and clashes with the nginx agent field
    }
 }

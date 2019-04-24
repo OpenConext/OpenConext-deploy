@@ -3,7 +3,6 @@
     state: present 
     name:
       - logstash-filter-multiline 
-      - logstash-input-relp
 
 - name: Create patterns dir
   file: 
@@ -48,7 +47,7 @@
     src: "logstash/sa/{{ item }}.j2" 
     dest: "/etc/logstash/conf.d/sa/{{ item }}"
   with_items:
-    - 03-relp-input.conf
+    - 02-sa-filebeat-input.conf
 
 - name: Copy SA pipeline specific files
   copy: 
