@@ -26,14 +26,13 @@
 
 - name: Copy core pipeline specific files
   copy: 
-    src:"logstash/core/{{ item }}" 
-    dest:"/etc/logstash/conf.d/core/{{ item }}" 
+    src: "logstash/core/{{ item }}" 
+    dest: "/etc/logstash/conf.d/core/{{ item }}" 
   with_items:
     - 11-core-haproxy.conf
     - 12-core-eblog.conf
     - 14-core-pdp.conf
     - 15-core-pdpstats.conf
-    - 29-core-remove-type.conf
     - 31-core-elastic-search-output.conf
     - 32-core-elastic-search-output.conf
 
