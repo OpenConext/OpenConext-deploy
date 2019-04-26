@@ -12,7 +12,6 @@ maven_repo: https://build.openconext.org/repository/public/releases
 maven_snapshot_repo: https://build.openconext.org/repository/public/snapshots
 
 ssl_key_dir: /etc/httpd/keys
-env_name: "{{ env_lang }}-{{ env }}"
 
 apache_user: apache
 
