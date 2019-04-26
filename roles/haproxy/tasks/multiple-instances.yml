@@ -146,7 +146,7 @@
 - cron:
     name: "update ocsp info"
     special_time: hourly
-    job: /usr/local/sbin/update_ocsp
+    job: /usr/local/sbin/update_ocsp {{ ocsp_log_redirect | default('') }}
 
 - name: stop haproxy instance
   service:
