@@ -62,9 +62,6 @@ docker cp /tmp/ansible.cfg ansible-test:${ANSIBLE_CONFIG}
 # Change the hostname in the inventory
 sed -i 's/%target_host%/localhost ansible_connection=local/g' environments-external/travis/inventory 
 
-# Change a group name in the inventory
-sed -i 's/loadbalancer/loadbalancer-vm/g' environments-external/travis/inventory
-
 # The docker image doesn't have ipv6: Disable it for postfix
 echo "postfix_interfaces: ipv4" >> environments-external/travis/group_vars/travis.yml
 
