@@ -18,7 +18,8 @@
 - hosts: vm
   become: true
   roles:
-    - { role: hosts,   tags: ['hosts'] }
+    - { role: hosts,     tags: ['hosts'] }
+    - { role: welcome,   tags: ['welcome'] }
 
 - hosts: selfsigned_certs
   become: true  
