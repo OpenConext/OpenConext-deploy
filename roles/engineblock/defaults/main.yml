@@ -83,6 +83,9 @@ engine_crt_not_in_inventory: false
 # The memory limit used for the metadata push
 engine_metadata_push_memory_limit: 256M
 
+# The active EB theme
+engine_active_theme: openconext
+
 engine_idp_debugging_from_name: "{{ instance_name }} EngineBlock"
 engine_idp_debugging_from_address: "{{ noreply_email }}"
 engine_idp_debugging_to_name: "{{ instance_name }} Admin"
