@@ -4,13 +4,16 @@
 [java-apps]
 %target_host%
 
+[java-apps-vm]
+%target_host%
+
 [java-apps-common]
 %target_host%
 
 [php-apps]
 %target_host%
 
-[loadbalancer]
+[loadbalancer-vm]
 %target_host%
 
 [mongo_servers]
@@ -22,7 +25,8 @@
 [%env%:children]
 storage
 java-apps
+java-apps-vm
 php-apps
-loadbalancer
+loadbalancer-vm
 mongo_servers
 selfsigned_certs
