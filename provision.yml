@@ -18,7 +18,8 @@
 - hosts: vm
   become: true
   roles:
-    - { role: hosts,   tags: ['hosts'] }
+    - { role: hosts,     tags: ['hosts'] }
+    - { role: welcome,   tags: ['welcome'] }
 
 - hosts: selfsigned_certs
   become: true  
@@ -77,8 +78,6 @@
 - hosts: php-apps
   gather_facts: no
   become: true
-  vars:
-    env_lang: php
   roles:
     - { role: php56fpm,          tags: ['php'     ] }
     - { role: static,            tags: ['static'  ] }
@@ -92,8 +91,6 @@
 - hosts: java-apps-common
   gather_facts: true
   become: true
-  vars:
-    env_lang: java
   roles:
     - { role: java,             tags: ['java' ] }
     - { role: shibboleth,       tags: ['shib'   ] }
@@ -103,8 +100,6 @@
 - hosts: java-apps
   gather_facts: true
   become: true
-  vars:
-    env_lang: java
   roles:
     - { role: teams-gui,        tags: ['teams', 'teams-gui'       ] }
     - { role: teams-server,     tags: ['teams', 'teams-server'    ] }
@@ -128,8 +123,6 @@
 - hosts: java-apps-vm
   gather_facts: true
   become: true
-  vars:
-    env_lang: java
   roles:
    - { role: mujina-idp,        tags: ['legacy' ] }
    - { role: mujina-sp,         tags: ['legacy' ] }
@@ -137,8 +130,6 @@
 - hosts: oidc
   gather_facts: true
   become: true
-  vars:
-    env_lang: java
   roles:
     - { role: tomcat,           tags: ['tomcat' ] }
     - { role: oidc,            tags: ['oidc' ] }
