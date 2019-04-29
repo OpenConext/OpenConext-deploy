@@ -16,5 +16,6 @@ $RuleSet {{ item.name }}
 :programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
 :programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="garb-{{ item.name }}") stop }
 :programname, isequal, "mysqld" { action(type="omfile" DynaFile="galera-{{ item.name }}") stop }
+:msg, contains, "-- MARK --" { action(type="omfile" DynaFile="MARK-{{ item.name }}") stop }
 *.* ?hostleft-{{ item.name }}
 

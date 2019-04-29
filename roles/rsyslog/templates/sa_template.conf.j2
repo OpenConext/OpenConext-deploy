@@ -16,3 +16,4 @@ $template galera-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/galera
 $template garb-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/galera/galera_garb.log"
 $template hostleft-{{ item.name }}, "{{ rsyslog_dir }}/hosts/{{ item.name }}/%HOSTNAME%/%SYSLOGFACILITY-TEXT%"
 $template stepup-authentication-{{ item.name }}, "{{ rsyslog_dir }}/log_logins/{{ item.name }}/stepup-authentication.log"
+$template MARK-{{ item.name }}, "{{ rsyslog_dir }}/monitoring/%HOSTNAME%"

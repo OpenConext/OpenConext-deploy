@@ -32,4 +32,5 @@ $RuleSet {{ item.name }}
 :programname, isequal, "Keepalived_vrrp" { action(type="omfile" DynaFile="keepalived-{{ item.name }}") stop }
 :programname, isequal, "Apache-STATIC" { action(type="omfile" DynaFile="apache-static-{{ item.name }}") stop }
 :programname, isequal, "Apache-METADATA" { action(type="omfile" DynaFile="apache-metadata-{{ item.name }}") stop }
+:msg, contains, "-- MARK --" { action(type="omfile" DynaFile="MARK-{{ item.name }}") stop }
 *.* ?hostleft-{{ item.name }}
