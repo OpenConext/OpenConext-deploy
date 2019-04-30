@@ -64,6 +64,30 @@
   when:
     customlogo.stat.exists
 
+- name: Check if we have a custom background back image for the feedback page
+  local_action: stat path="{{ inventory_dir }}/files/eb/background-back.svg"
+  register: eb_customfeedbackbackground
+  become: false
+
+- name: Install environment specific background back image
+  copy:
+    src: "{{ inventory_dir }}/files/eb/background-back.svg"
+    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/web/images/"
+  when:
+    eb_customfeedbackbackground.stat.exists
+
+- name: Check if we have a custom background front image for the feedback page
+  local_action: stat path="{{ inventory_dir }}/files/eb/background-front.svg"
+  register: eb_customfeedbackforeground
+  become: false
+
+- name: Install environment specific background front image
+  copy:
+    src: "{{ inventory_dir }}/files/eb/background-front.svg"
+    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/web/images/"
+  when:
+    eb_customfeedbackforeground.stat.exists
+
 - name: Install Apache vhost
   template:
     src: "{{ item }}.j2"
