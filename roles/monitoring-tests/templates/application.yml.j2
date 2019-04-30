@@ -12,7 +12,8 @@ server:
   server-header: no
 
 eb:
-  metadata_base_url: https://engine.{{ base_domain }}
+  metadata_sp_url: {{ monitoring_tests.metadata_sp_url }}
+  metadata_idp_url: {{ monitoring_tests.metadata_idp_url }}
   mujina_sp_base_url: {{ monitoring_tests.mujina_sp_base_url }}
   mujina_idp_entity_id: {{ monitoring_tests.mujina_idp_entity_id }}
   mujina_username: monitor-user
