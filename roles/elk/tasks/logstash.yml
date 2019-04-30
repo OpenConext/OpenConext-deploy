@@ -60,6 +60,7 @@
 
 - name: Include OpenConext-stats specific tasks
   include: logstash_stats.yml
+  when: logstash_stats
 
 - name: Include ELK stack specific tasks
   include: logstash_elk.yml

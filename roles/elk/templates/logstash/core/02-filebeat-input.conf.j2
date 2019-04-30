@@ -9,3 +9,11 @@ input {
     {% endif %}
   }
 }
+
+filter {
+   grok {
+      match => { "message" =>  "%{SYSLOGBASE}?%{GREEDYDATA:message}" }
+      overwrite => [ "message" ]
+   }
+}
+

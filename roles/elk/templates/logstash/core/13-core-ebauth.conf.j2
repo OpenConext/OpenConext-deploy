@@ -1,8 +1,8 @@
 filter {
-  if [prog] == "EBAUTH" {
+  if [program] == "EBAUTH" {
     grok {
       patterns_dir => "/etc/logstash/patterns"
-      match => { "message" => "%{SYSLOGBASE:syslogbase} %{GREEDYDATA:ebauth}" }
+      match => { "message" => "%{GREEDYDATA:ebauth}" }
     }
 }
   json { 
@@ -17,6 +17,9 @@ filter {
   mutate {
       remove_field => [ "source" ]
       remove_field => [ "syslogbase" ]
+}
+{% if logstash_stats %}
+  mutate {
       add_field    =>  {"[month]" => "%{+MM}"}
       add_field    =>  {"[year]" => "%{+YYYY}"}
 }
@@ -30,4 +33,5 @@ filter {
       code =>  'quarter = (event.get("month").to_i / 3.0).ceil;
                event.set("quarter",quarter)'
 }
+{% endif %}
 }
