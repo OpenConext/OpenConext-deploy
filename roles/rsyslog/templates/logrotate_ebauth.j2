@@ -10,5 +10,6 @@
     delaycompress
     postrotate
       /usr/local/sbin/parse_ebauth_to_mysql_{{ item.name }}.py > /dev/null
+      systemctl kill -s HUP rsyslog.service
     endscript
 }
