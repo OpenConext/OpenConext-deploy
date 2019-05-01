@@ -54,7 +54,7 @@ def parse_lines(a):
 
 ## Loop over the files and parse them one by one
 for filename in os.listdir(workdir):
-  if os.path.isfile(workdir+filename):
+  if os.path.isfile(workdir+filename) and filename.startswith("eb-authentication.log-") and not filename.endswith(".gz"):
       filetoparse=(os.path.join(workdir, filename))
       parse_lines(filetoparse)
   else:
