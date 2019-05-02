@@ -1,5 +1,9 @@
-Listen 127.0.0.1:420
-<VirtualHost localhost:420>
+{% if apache_app_listen_address.lifecycle is defined %}
+Listen {{ apache_app_listen_address.lifecycle }}:{{ loadbalancing.lifecycle.port }}
+<Virtualhost {{ apache_app_listen_address.lifecycle }}:{{ loadbalancing.lifecycle.port }}>
+{% else %}
+<Virtualhost *:443 >
+{% endif %}
     ServerAdmin {{ apache_server_admin}}
     DocumentRoot "{{ lifecycle_current_release_symlink }}/web"
     SetEnv SYMFONY_ENV prod
@@ -14,4 +18,19 @@ Listen 127.0.0.1:420
     ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/lifecycle-pool.sock|fcgi://localhost{{ lifecycle_current_release_symlink }}/web/$1
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-LIFECYCLE'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-LIFECYCLE'" combined
+    
+    {% if haproxy_backend_tls %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
+
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
+    Include ssl_backend.conf
+    {% endif %}
 </VirtualHost>
