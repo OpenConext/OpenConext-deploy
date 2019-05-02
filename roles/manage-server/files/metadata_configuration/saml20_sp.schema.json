@@ -527,6 +527,11 @@
           "default": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
           "info": "Select the Secure Hash Algorithm (SHA) to use for assertions sent by Engineblock to this service provider."
         },
+        "coin:sign_response": {
+          "type": "string",
+          "format": "boolean",
+          "info": "Set to also directly sign the SAML Response element, in addition to the Assertion element that will always be signed."
+        },
         "coin:ss:supports_strong_authentication": {
           "type": "string",
           "format": "boolean",
