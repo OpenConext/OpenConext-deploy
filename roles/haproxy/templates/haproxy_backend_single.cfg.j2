@@ -5,8 +5,8 @@
 #---------------------------------------------------------------------
 #
   backend {{ application.name }}_be
-  option httpchk {{ application.ha_method }} {{ application.ha_url }} "HTTP/1.0\r\nHost: {% if application.full_vhost_name is defined %} {{ application.full_vhost_name }} {% else %} {{ application.vhost_name }}.{{ base_domain }}" 
-  {% endif %}
+  option httpchk {{ application.ha_method }} {{ application.ha_url }} "HTTP/1.0\r\nHost: {% if application.full_vhost_name is defined %} {{ application.full_vhost_name }}"{% else %} {{ application.vhost_name }}.{{ base_domain }}" {% endif %}
+
   option forwardfor # This sets X-Forwarded-For
   {%if application.x_forwarded_port is defined %}
   http-request set-header X-Forwarded-Port {{ application.x_forwarded_port }}
