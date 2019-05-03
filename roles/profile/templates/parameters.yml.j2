@@ -24,10 +24,10 @@ parameters:
     engineblock_api_verify_ssl: {{ engine_api_verify_ssl }}
 
     user_lifecycle_enabled: {{ profile_lifecycle_enabled }}
-    user_lifecycle_api_base_url: 'http://localhost:420/'
-    user_lifecycle_api_username: lifecycle
-    user_lifecycle_api_password: {{ lifecycle_api_password }}
-    user_lifecycle_api_verify_ssl: false
+    user_lifecycle_api_base_url: '{{ lifecycle_url }}'
+    user_lifecycle_api_username: '{{ lifecycle_api_username }}'
+    user_lifecycle_api_password: '{{ lifecycle_api_password }}'
+    user_lifecycle_api_verify_ssl: true
 
     attribute_aggregation_api_base_url: 'https://aa.{{ base_domain }}/aa/api/internal/'
     attribute_aggregation_api_username: '{{ engine_attribute_aggregation_username }}'
