@@ -15,8 +15,10 @@ lifecycle_data_dir: /opt/openconext/OpenConext-lifecycle
 lifecycle_symfony_env: prod
 lifecycle_apache_symfony_environment: prod
 lifecycle_eb_logins_db: eb_logins
+lifecycle_db_host: localhost
 lifecycle_user_quota: 1500
 lifecycle_inactivity_period: 37
 lifecycle_api_enabled: true
 lifecycle_api_password: secret
+lifecycle_api_username: lifecycle
 
