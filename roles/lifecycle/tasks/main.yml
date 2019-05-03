@@ -64,8 +64,8 @@
 
 - name: Make sure log dir has correct permissions
   file:
-    path: "{{ lifecycle_current_release_symlink }}/var/logs 
-    owner={{ lifecycle_user }}"
+    path: "{{ lifecycle_current_release_symlink }}/var/logs" 
+    owner: "{{ lifecycle_user }}"
     group: "{{ lifecycle_user }}"
     recurse: yes
   changed_when: false
