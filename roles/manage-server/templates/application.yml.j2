@@ -24,10 +24,11 @@ push:
     name: {{ instance_name }} EngineBlock
     exclude_edugain_imports: {{ manage_exclude_edugain_imports_in_push }}
   oidc:
-    url: https://oidcng.{{ base_dommain }}/manage/connections
+    url: https://oidcng.{{ base_domain }}/manage/connections
     user: manage
     name: {{ manage.oidcng_name }}
     password: {{ oidcng_api_metadata_push_password }}
+    enabled: {{ manage.oidc_push_enabled }}
 
 product:
   name: Manage
