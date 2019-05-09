@@ -1,0 +1,7 @@
+---
+oidcng_dir: /opt/oidcng
+oidcng_version: ''
+oidcng_snapshot_timestamp: ''
+oidcng_jar: oidcng-current.jar
+oidcng_random_source: 'file:///dev/urandom'
+oidcng_cronjobmaster: true

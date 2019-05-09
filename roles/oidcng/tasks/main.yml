@@ -1,0 +1,80 @@
+---
+- name: create user
+  user:
+    name: oidcng
+    system: yes
+    home: "{{ oidcng_dir }}"
+    shell: /sbin/nologin
+
+- name: Copy systemd service file
+  template:
+    src: "../../templates/spring-boot.service.j2"
+    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
+  notify:
+    - "systemctl daemon-reload"
+    - "restart oidcng"
+
+- name: enable service
+  service:
+    name: oidcng
+    enabled: yes
+
+- name: Create logging directory
+  file:
+    path: "/var/log/{{ springapp_service_name }}"
+    state: directory
+    owner: oidcng
+    group: oidcng
+    mode: 0755
+
+- include: ../../../tasks/springbootapp/install-maven-release.yml
+
+- name: copy logging config
+  template:
+    src: "logback.xml.j2"
+    dest: "{{ oidcng_dir }}/logback.xml"
+    owner: oidcng
+    group: oidcng
+    mode: 0740
+  notify:
+    - "restart oidcng"
+
+- name: copy application config
+  template:
+    src: "application.yml.j2"
+    dest: "{{ oidcng_dir }}/application.yml"
+    owner: "oidcng"
+    group: "oidcng"
+    mode: 0740
+  notify:
+    - "restart oidcng"
+
+- name: copy oidc jwks keystore configuration
+  template:
+    src: "oidc.keystore.jwks.json.j2"
+    dest: "{{ tomcat.install_dir }}/{{ tomcat.properties_dir }}/oidc.keystore.jwks.json"
+  notify:
+    - "restart oidcng"
+
+- name: start the oidcng service
+  service:
+    name: oidcng
+    state: started
+    enabled: yes
+  ignore_errors: true
+
+- name: wait for oidcng to start
+  wait_for:
+    connect_timeout: 30
+    port: "{{ springapp_tcpport }}"
+    state: started
+
+- name: ensure the service is started
+  service:
+    name: oidcng
+    enabled: yes
+    state: started
+
+- name: cleanup old jars
+  shell: find . ! -name $(basename $(readlink oidcng-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ oidcng_dir }}
+  when: maven_result.changed

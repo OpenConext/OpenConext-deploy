@@ -26,7 +26,7 @@ mongo_cache_size: 1
 
 # Add a database
 mongo:
-  manage_user: managerw
-  manage_password: "{{ mongo_passwords.manage }}"
-  manage_database: manage
+  users:
+    - { name: managerw, db_name: metadata, password: "{{ mongo_passwords.manage }}" }
+    - { name: oidcsrw, db_name: oidc, password: "{{ mongo_passwords.oidcng }}" }
 

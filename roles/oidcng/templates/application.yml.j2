@@ -1,0 +1,75 @@
+# The logging configuration.
+logging:
+  config: file://{{ oidcng_dir }}/logback.xml
+  level:
+    org.springframework: INFO
+
+server:
+  # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
+  port: {{ springapp_tcpport }}
+  # We serve from the root. Do not change this
+  contextPath:
+  session:
+    timeout: 28800
+    cookie:
+      secure: true
+  server-header: no
+
+# Is this node in a load-balanced topology responsible for cleaning up resources (See ExpiredInvitationsRemover)
+cron:
+  node-cron-job-responsible: {{ oidcng_cronjobmaster }}
+  expression: "0 0/15 * * * ?"
+
+mongodb_db: oidc
+secure_secret: {{ oidcng_secure_secret }}
+jwks_key_store_path: file://{{ oidcng_dir }}/oidc.keystore.jwks.json
+
+spring:
+  data:
+    mongodb:
+      uri: "mongodb://{{ oidcng.mongo_user }}:{{ oidcng.mongo_password }}@{% if not mongo_cluster %}{{ mongo_hostname }}{% else %}{% for host in groups['mongo_servers'] %}{{ hostvars[host]['mongo_hostname'] }}:{{ oidcng.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}/{{ oidcng.mongo_database }}{% if mongo_tls %}?ssl=true{% endif %}"
+
+  thymeleaf:
+    cache: false
+  security:
+    saml2:
+      network:
+        read-timeout: 10000
+        connect-timeout: 5000
+      service-provider:
+        entity-id: https://oidcng.{{ base_domain }}
+        prefix: oidc
+        alias: oidc-proxy
+        base-path: https://oidcng.{{ base_domain }}
+        sign-metadata: true
+        sign-requests: true
+        want-assertions-signed: false
+        single-logout-enabled: false
+        name-ids:
+          - urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified
+          - urn:oasis:names:tc:SAML:2.0:nameid-format:persistent
+          - urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+        keys:
+          active:
+            name: sp-signing-key-1
+            private-key: |
+              {{ oidcng_private_key | indent( width=14, indentfirst=False) }}
+            passphrase: {{ oidcng_passphrase }}
+            certificate: |
+              {{ oidcng_certificate | indent( width=14, indentfirst=False) }}
+        providers:
+          - alias: engine-{{ env }}
+            metadata: https://engine.{{ base_domain }}/authentication/idp/metadata
+            link-text: EngineBlock {{ env }}
+            name-id: https://engine.{{ base_domain }}/authentication/idp/metadata
+            assertion-consumer-service-index: 0
+
+manage:
+  user: manage
+  password: {{ oidcng_api_metadata_push_password }}
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"

@@ -61,9 +61,9 @@ mongo_tls: false
 mongo_hostname: localhost
 
 mongo:
-  manage_user: managerw
-  manage_password: "{{ mongo_passwords.manage }}"
-  manage_database: manage
+  users:
+    - { name: managerw, db_name: metadata, password: "{{ mongo_passwords.manage }}" }
+    - { name: oidcsrw, db_name: oidc, password: "{{ mongo_passwords.oidcng }}" }
 
 tls:
   cert_path: /etc/pki/tls/certs

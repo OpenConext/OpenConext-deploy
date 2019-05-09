@@ -165,26 +165,27 @@
 - name: Create mongo database users
   mongodb_user:
     login_database: admin
-    database: "{{ mongo.manage_database }}"
+    database: "{{ item.db_name }}"
     login_user: admin
     login_password: "{{ mongo_admin_pass }}"
-    name: "{{ mongo.manage_user }}"
-    password: "{{ mongo.manage_password }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
     roles: readWrite
     replica_set: "{{ replica_set_name }}"
   when:
     - mongo_primary
     - not mongo_tls
+  with_items: "{{ mongo.users }}"
   changed_when: False
 
 - name: Create mongo database users, tls enabled
   mongodb_user:
     login_database: admin
-    database: "{{ mongo.manage_database }}"
+    database: "{{ item.db_name }}"
     login_user: admin
     login_password: "{{ mongo_admin_pass }}"
-    name: "{{ mongo.manage_user }}"
-    password: "{{ mongo.manage_password }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
     roles: readWrite
     ssl: True
     ssl_cert_reqs: CERT_NONE
@@ -192,4 +193,5 @@
   when:
     - mongo_primary
     - mongo_tls
+  with_items: "{{ mongo.users }}"
   changed_when: False

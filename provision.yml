@@ -101,21 +101,22 @@
   gather_facts: true
   become: true
   roles:
-    - { role: teams-gui,        tags: ['teams', 'teams-gui'       ] }
-    - { role: teams-server,     tags: ['teams', 'teams-server'    ] }
-    - { role: authz-server,     tags: ['oauth', 'authz-server'    ] }
-    - { role: authz-admin,      tags: ['oauth', 'authz-admin'     ] }
-    - { role: voot,             tags: ['oauth', 'voot'            ] }
-    - { role: authz-playground, tags: ['oauth', 'authz-playground'] }
-    - { role: pdp-gui,          tags: ['pdp', 'pdp-gui'] }
-    - { role: pdp-server,       tags: ['pdp', 'pdp-server'] }
+    - { role: teams-gui,                    tags: ['teams', 'teams-gui'       ] }
+    - { role: teams-server,                 tags: ['teams', 'teams-server'    ] }
+    - { role: authz-server,                 tags: ['oauth', 'authz-server'    ] }
+    - { role: authz-admin,                  tags: ['oauth', 'authz-admin'     ] }
+    - { role: voot,                         tags: ['oauth', 'voot'            ] }
+    - { role: authz-playground,             tags: ['oauth', 'authz-playground'] }
+    - { role: pdp-gui,                      tags: ['pdp', 'pdp-gui'] }
+    - { role: pdp-server,                   tags: ['pdp', 'pdp-server'] }
     - { role: remove-grouper,               tags: ['remove-grouper'] }
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
     - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
     - { role: manage-server,                tags: ['manage', 'manage-server'] }
-    - { role: dashboard-gui,  when: dashboard_install,             tags: ['dashboard', 'dashboard-gui'] }
-    - { role: dashboard-server, when: dashboard_install,           tags: ['dashboard', 'dashboard-server'] }
+    - { role: oidcng,                       tags: ['oidcng'] }
+    - { role: dashboard-gui,                tags: ['dashboard', 'dashboard-gui'] , when: dashboard_install }
+    - { role: dashboard-server,             tags: ['dashboard', 'dashboard-server'], when: dashboard_install }
     
   handlers:
     - include: roles/httpd/handlers/main.yml
