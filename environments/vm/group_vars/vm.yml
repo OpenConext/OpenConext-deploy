@@ -393,6 +393,7 @@ manage:
   mongo_password: "{{ mongo.manage_password }}"
   mongo_database: "manage"
   backdoor_api_user: backdoor_api_user
+  oidcng_name: "OpenConext OIDC-NG"
   features: push, validation, push_preview, orphans
   apiUsers:
     - {
