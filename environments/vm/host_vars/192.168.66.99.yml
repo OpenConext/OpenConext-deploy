@@ -15,6 +15,7 @@ apache_app_listen_address:
   pdp: 192.168.66.99
   welcome: 192.168.66.99
   oidc: 192.168.66.99
+  oidcng: 192.168.66.99
   aa: 192.168.66.99
   metadata: 192.168.66.99
   manage: 192.168.66.99
