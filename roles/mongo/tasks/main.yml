@@ -170,7 +170,7 @@
     login_password: "{{ mongo_admin_pass }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    roles: dbAdmin,readWrite
+    roles: readWrite
     replica_set: "{{ replica_set_name }}"
   when:
     - mongo_primary
@@ -185,7 +185,7 @@
     login_password: "{{ mongo_admin_pass }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    roles: dbAdmin,readWrite
+    roles: readWrite
     ssl: True
     ssl_cert_reqs: CERT_NONE
     replica_set: "{{ replica_set_name }}"
