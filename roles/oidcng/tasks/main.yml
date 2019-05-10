@@ -56,6 +56,13 @@
   notify:
     - "restart oidcng"
 
+- name: copy apache config
+  template:
+    src: "oidcng.conf.j2"
+    dest: "/etc/httpd/conf.d/oidcng.conf"
+  notify:
+    - "reload httpd"
+
 - name: start the oidcng service
   service:
     name: oidcng
