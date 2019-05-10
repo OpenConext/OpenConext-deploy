@@ -389,8 +389,8 @@ manage:
   eb_db_name: "{{ engine_database_name }}"
   eb_db_host: "{{ mysql_host }}"
   mongo_port: "{{ mongo_port }}"
-  mongo_user: "{{ mongo.manage_user }}"
-  mongo_password: "{{ mongo.manage_password }}"
+  mongo_user: managerw
+  mongo_password: "{{ mongo_passwords.manage }}"
   mongo_database: "manage"
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
