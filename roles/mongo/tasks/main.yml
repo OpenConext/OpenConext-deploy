@@ -170,13 +170,12 @@
     login_password: "{{ mongo_admin_pass }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    roles: readWrite
+    roles: dbAdmin,readWrite
     replica_set: "{{ replica_set_name }}"
   when:
     - mongo_primary
     - not mongo_tls
   with_items: "{{ mongo.users }}"
-  changed_when: False
 
 - name: Create mongo database users, tls enabled
   mongodb_user:
@@ -186,7 +185,7 @@
     login_password: "{{ mongo_admin_pass }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    roles: readWrite
+    roles: dbAdmin,readWrite
     ssl: True
     ssl_cert_reqs: CERT_NONE
     replica_set: "{{ replica_set_name }}"
@@ -194,4 +193,3 @@
     - mongo_primary
     - mongo_tls
   with_items: "{{ mongo.users }}"
-  changed_when: False

@@ -20,7 +20,7 @@ cron:
   node-cron-job-responsible: {{ oidcng_cronjobmaster }}
   expression: "0 0/15 * * * ?"
 
-mongodb_db: oidc
+mongodb_db: {{ oidcng.mongo_database }}
 secure_secret: {{ oidcng_secure_secret }}
 jwks_key_store_path: file://{{ oidcng_dir }}/oidc.keystore.jwks.json
 
