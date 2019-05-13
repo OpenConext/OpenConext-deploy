@@ -63,7 +63,7 @@ mongo_hostname: localhost
 mongo:
   users:
     - { name: managerw, db_name: metadata, password: "{{ mongo_passwords.manage }}" }
-    - { name: oidcsrw, db_name: oidc, password: "{{ mongo_passwords.oidcng }}" }
+    - { name: oidcngrw, db_name: oidcng, password: "{{ mongo_passwords.oidcng }}" }
 
 tls:
   cert_path: /etc/pki/tls/certs
@@ -391,7 +391,7 @@ manage:
   mongo_port: "{{ mongo_port }}"
   mongo_user: managerw
   mongo_password: "{{ mongo_passwords.manage }}"
-  mongo_database: "manage"
+  mongo_database: metadata
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
   oidc_push_enabled: false
