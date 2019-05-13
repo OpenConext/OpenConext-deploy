@@ -10,7 +10,7 @@
     "name:en": "",
     "secret": "",
     "redirectUrls": [],
-    "scopes": ["oidc"],
+    "scopes": ["openid"],
     "grants": ["authorization_code"]
   },
   "allowedEntities": []

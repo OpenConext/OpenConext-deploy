@@ -408,7 +408,7 @@
           "items": {
             "type": "string",
             "enum": [
-              "oidc",
+              "openid",
               "members",
               "groups",
               "actions",
