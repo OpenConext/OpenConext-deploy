@@ -24,6 +24,7 @@ manage_server_version: 3.2.13
 monitoring_tests_version: 6.0.5
 mujina_version: 7.0.7
 oidc_version: "1.3.4"
+oidcng_version: 0.0.1
 pdp_gui_version: 2.0.5
 pdp_server_version: 2.0.5
 profile_version: "1.2.1"
@@ -376,6 +377,16 @@ oidc:
   sp_entity_id: https://oidc.{{ base_domain }}
   api_user: manage
 
+oidcng:
+  issuer: https://oidc.{{ base_domain }}/
+  mongo_host: "{{ mongo_host }}"
+  mongo_port: "{{ mongo_port }}"
+  mongo_user: oidcngrw
+  mongo_password: "{{ mongo_passwords.oidcng }}"
+  mongo_database: oidcng
+  sp_entity_id: https://oidcng.{{ base_domain }}
+  api_user: manage
+
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
   mujina_sp_base_url: https://mujina-sp.{{ base_domain }}
@@ -468,6 +479,9 @@ loadbalancing:
 
   manage:
     port: 617
+
+  oidcng:
+    port: 620
 
   mujina_sp:
     port: 607
@@ -611,6 +625,14 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/manage/api/health"
+    port: 617
+    servers: "{{java_servers}}"
+
+  - name: oidcng
+    vhost_name: "oidcng"
+    ip: 192.168.66.98
+    ha_method: "GET"
+    ha_url: "/actuator/health"
     port: 617
     servers: "{{java_servers}}"
 
