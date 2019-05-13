@@ -355,7 +355,7 @@ manage:
   mongo_port: "{{ mongo_port }}"
   mongo_user: managerw
   mongo_password: "{{ mongo_passwords.manage }}"
-  mongo_database: "manage"
+  mongo_database: metadata
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
   oidc_push_enabled: false
