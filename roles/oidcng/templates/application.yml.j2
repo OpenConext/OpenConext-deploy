@@ -23,6 +23,8 @@ cron:
 mongodb_db: {{ oidcng.mongo_database }}
 secure_secret: {{ oidcng_secure_secret }}
 jwks_key_store_path: file://{{ oidcng_dir }}/oidc.keystore.jwks.json
+private_key_path: file://{{ oidcng_dir }}/id_rsa
+certificate_path: file://{{ oidcng_dir }}/id_rsa.pub
 
 spring:
   data:
@@ -49,14 +51,6 @@ spring:
           - urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified
           - urn:oasis:names:tc:SAML:2.0:nameid-format:persistent
           - urn:oasis:names:tc:SAML:2.0:nameid-format:transient
-        keys:
-          active:
-            name: sp-signing-key-1
-            private-key: |
-              {{ oidcng_private_key | indent( width=14, indentfirst=False) }}
-            passphrase: {{ oidcng_passphrase }}
-            certificate: |
-              {{ oidcng_certificate | indent( width=14, indentfirst=False) }}
         providers:
           - alias: engine-{{ env }}
             metadata: https://engine.{{ base_domain }}/authentication/idp/metadata

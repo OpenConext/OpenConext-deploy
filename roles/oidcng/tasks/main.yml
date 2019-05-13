@@ -56,6 +56,26 @@
   notify:
     - "restart oidcng"
 
+- name: copy / create private key
+  copy:
+    content: "{{ oidcng_private_key }}"
+    dest: "{{ oidcng_dir }}/id_rsa"
+    owner: "oidcng"
+    group: "oidcng"
+    mode: 0740
+  notify:
+    - "restart oidcng"
+
+- name: copy / create certificate
+  copy:
+    content: "{{ oidcng_certificate }}"
+    dest: "{{ oidcng_dir }}/id_rsa.pub"
+    owner: "oidcng"
+    group: "oidcng"
+    mode: 0740
+  notify:
+    - "restart oidcng"
+
 - name: copy apache config
   template:
     src: "oidcng.conf.j2"
