@@ -56,20 +56,15 @@
         "testaccepted"
       ]
     },
+    "discoveryurl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "url"
+    },
     "allowedall": {
       "type": "boolean"
-    },
-    "manipulation": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "manipulationNotes": {
-      "type": [
-        "string",
-        "null"
-      ]
     },
     "user": {
       "type": "string"
@@ -570,7 +565,6 @@
       "required": [
         "name:en",
         "secret",
-        "redirectUrls",
         "scopes",
         "grants"
       ],

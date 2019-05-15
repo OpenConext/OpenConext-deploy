@@ -49,10 +49,17 @@
   notify:
     - "restart oidcng"
 
-- name: copy oidc jwks keystore configuration
+- name: copy oidcng jwks keystore configuration
   template:
     src: "oidc.keystore.jwks.json.j2"
     dest: "{{ oidcng_dir }}/oidc.keystore.jwks.json"
+  notify:
+    - "restart oidcng"
+
+- name: copy oidcng secret keyset configuration
+  template:
+    src: "secret_keyset.json.j2"
+    dest: "{{ oidcng_dir }}/secret_keyset.json"
   notify:
     - "restart oidcng"
 
