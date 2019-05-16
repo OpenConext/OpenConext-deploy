@@ -18,7 +18,7 @@ server:
 # Is this node in a load-balanced topology responsible for cleaning up resources (See ExpiredInvitationsRemover)
 cron:
   node-cron-job-responsible: {{ oidcng_cronjobmaster }}
-  expression: "0 0/15 * * * ?"
+  expression: "0 0/15 * * * *"
 
 mongodb_db: {{ oidcng.mongo_database }}
 jwks_key_store_path: file://{{ oidcng_dir }}/oidc.keystore.jwks.json
