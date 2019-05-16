@@ -633,7 +633,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/actuator/health"
-    port: 617
+    port: 620
     servers: "{{java_servers}}"
 
   - name: mujina-sp

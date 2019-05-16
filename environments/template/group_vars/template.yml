@@ -430,6 +430,9 @@ loadbalancing:
 
   welcome:
     port: 609
+  
+  oidcng:
+    port: 620
 
 haproxy_applications:
 
@@ -576,6 +579,14 @@ haproxy_applications:
     ha_url: "/"
     port: "609"
     servers: "{{php_servers}}"
+
+  - name: welcome
+    vhost_name: "welcome"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/actuator/health"
+    port: "620"
+    servers: "{{java_servers}}"
 
 haproxy_backend_tls: False
 
