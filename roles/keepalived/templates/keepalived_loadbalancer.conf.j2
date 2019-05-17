@@ -100,6 +100,9 @@ vrrp_instance ipv4_apps {        # No more than 20 ip addresses in one instance
         {% if stats_ip is defined %}
         {{ stats_ip }}
         {% endif %}
+        {% if lifecycle_ip is defined %}
+        {{ lifecycle_ip }}
+        {% endif %}
    }
 }
 vrrp_instance ipv6_engine {
@@ -205,6 +208,9 @@ vrrp_instance ipv6_apps {
         {% endif %}
         {% if stats_ipv6 is defined %}
         {{ stats_ipv6 }}
+        {% endif %}
+        {% if lifecycle_ipv6 is defined %}
+        {{ lifecycle_ipv6 }}
         {% endif %}
    }
 }
