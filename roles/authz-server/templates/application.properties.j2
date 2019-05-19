@@ -7,7 +7,7 @@ oauthServer.refreshTokenValiditySeconds = 31104000
 # approval must last as long as the refresh token (12 months)
 oauthServer.approvalExpirySeconds = 31104000
 
-cron.node-cron-job-responsible={{ authz_server_cronjobmaster}}
+cron.node-cron-job-responsible={{ authz_server_cronjobmaster }}
 cron.expression: 0 0/15 * * * ?
 
 api.lifecycle.username={{ authz_server_api_lifecycle_username }}
