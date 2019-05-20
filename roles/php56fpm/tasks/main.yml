@@ -7,7 +7,7 @@
 
 - name: Install REMI repo
   yum:
-    name: "http://rpms.famillecollet.com/enterprise/remi-release-7.rpm"
+    name: "https://rpms.remirepo.net/enterprise/remi-release-7.rpm"
     state: present
   when:
     - remi_config.stat.exists == False
@@ -35,12 +35,12 @@
   - php-gd
   - composer
 
-- name: enable php-fpm
+- name: Enable php-fpm
   service:
     name: php-fpm
     enabled: yes
 
-- name: Configure PHP APC
+- name: Install custom PHP configuration
   template:
     src: "{{ item }}.j2"
     dest: "/etc/php.d/{{ item }}"
@@ -48,7 +48,7 @@
     - 40-apcu.ini
     - openconext.ini
 
-- name: Install PHP with extensions
+- name: Install PHP debug extensions
   yum:
     name: "{{ item }}"
     state: present
@@ -64,14 +64,14 @@
   when:
     - develop
   notify:
-      - "restart php-fpm"
+    - "restart php-fpm"
 
 - name: Put /etc/php-fpm.conf
   copy:
     src: "php-fpm.conf"
     dest: "/etc/php-fpm.conf"
   notify:
-      - "restart php-fpm"
+    - "restart php-fpm"
 
 # Set mode to a+x so components can access their subdirectories under session/
 - name: Create directory for vhosts to store PHP sessions
