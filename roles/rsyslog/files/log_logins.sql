@@ -16,11 +16,3 @@ CREATE TABLE  IF NOT EXISTS  `log_logins` (
   KEY `keyid_index` (`keyid`,`loginstamp`,`spentityid`(255)),
   KEY `userid_idp_index` (`userid`(128),`idpentityid`(64))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
- CREATE TABLE IF NOT EXISTS `last_login` (
-  `userid` varchar(255) NOT NULL,
-  `lastseen` date DEFAULT NULL,
-  PRIMARY KEY (`userid`),
-  UNIQUE KEY `idx_user` (`userid`),
-  KEY `idx_lastseen` (`lastseen`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
