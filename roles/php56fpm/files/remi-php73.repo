@@ -1,0 +1,34 @@
+# This repository only provides PHP 7.3 and its extensions
+# NOTICE: common dependencies are in "remi-safe"
+
+[remi-php73]
+name=Remi's PHP 7.3 RPM repository for Enterprise Linux 7 - $basearch
+#baseurl=http://rpms.remirepo.net/enterprise/7/php73/$basearch/
+#mirrorlist=https://rpms.remirepo.net/enterprise/7/php73/httpsmirror
+mirrorlist=http://cdn.remirepo.net/enterprise/7/php73/mirror
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
+
+[remi-php73-debuginfo]
+name=Remi's PHP 7.3 RPM repository for Enterprise Linux 7 - $basearch - debuginfo
+baseurl=http://rpms.remirepo.net/enterprise/7/debug-php73/$basearch/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
+
+[remi-php73-test]
+name=Remi's PHP 7.3 test RPM repository for Enterprise Linux 7 - $basearch
+#baseurl=http://rpms.remirepo.net/enterprise/7/test73/$basearch/
+#mirrorlist=https://rpms.remirepo.net/enterprise/7/test73/httpsmirror
+mirrorlist=http://cdn.remirepo.net/enterprise/7/test73/mirror
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
+
+[remi-php73-test-debuginfo]
+name=Remi's PHP 7.3 test RPM repository for Enterprise Linux 7 - $basearch - debuginfo
+baseurl=http://rpms.remirepo.net/enterprise/7/debug-test73/$basearch/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
