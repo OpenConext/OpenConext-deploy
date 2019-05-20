@@ -590,8 +590,8 @@ haproxy_applications:
     port: "609"
     servers: "{{php_servers}}"
 
-  - name: welcome
-    vhost_name: "welcome"
+  - name: oidcng
+    vhost_name: "oidcng"
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/actuator/health"
