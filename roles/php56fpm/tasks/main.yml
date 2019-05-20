@@ -19,13 +19,11 @@
   when:
     - remi_config.stat.exists == False
 
-- name: Install httpd, php-(cli,fpm), smtpd, mysql client libs, bzip2, composer
+- name: Install php-(cli,fpm), composer
   yum:
     name: "{{ item }}"
     state: present
   with_items:
-  - mysql
-  - bzip2
   - php-fpm
   - php-cli
   - php-pecl-apcu
