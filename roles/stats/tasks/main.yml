@@ -1,6 +1,6 @@
 ---
 - name: Install IUS repo
-  yum: name=http://dl.iuscommunity.org/pub/ius/stable/CentOS/{{ ansible_distribution_major_version }}/{{ ansible_userspace_architecture }}/ius-release-1.0-13.ius.centos{{ ansible_distribution_major_version }}.noarch.rpm
+  yum: name=http://dl.iuscommunity.org/pub/ius/stable/CentOS/{{ ansible_distribution_major_version }}/{{ ansible_userspace_architecture }}/ius-release-1.0-15.ius.centos{{ ansible_distribution_major_version }}.noarch.rpm
 
 - name: Import IUS Community Project GPG key
   rpm_key: key=http://dl.iuscommunity.org/pub/ius/IUS-COMMUNITY-GPG-KEY state=present
