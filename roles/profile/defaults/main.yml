@@ -51,3 +51,6 @@ profile_fpm_user: profile
 profile_fpm_port: 802
 
 profile_info_request_email: "{{ support_email }}"
+
+profile_lifecycle_enabled: false
+lifecycle_url: https://lifecycle.{{ base_domain }}/

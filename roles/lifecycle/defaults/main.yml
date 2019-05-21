@@ -1,10 +1,24 @@
 ---
+#
+lifecycle_version: ''
+# Lifecycle installer specific variables
+lifecycle_version_dir: "{{ lifecycle_version | replace('/', '-') }}" 
+lifecycle_branch_dir: "{{ openconext_builds_dir }}/OpenConext-user-lifecycle-{{ lifecycle_branch | replace('/', '-') }}"
+lifecycle_release_dir: "{{ openconext_releases_dir }}/OpenConext-user-lifecycle-{{ lifecycle_version_dir }}" 
+lifecycle_build_path: "{{ openconext_builds_dir }}/OpenConext-user-lifecycle-{{ lifecycle_version_dir }}.tar.gz"
+lifecycle_download_url: "https://github.com/OpenConext/OpenConext-user-lifecycle/releases/download/{{ lifecycle_version }}/OpenConext-user-lifecycle-{{ lifecycle_version_dir }}.tar.gz"
+lifecycle_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-user-lifecycle"
+ 
 front_controller: app.php
 lifecycle_user: lifecycle
 lifecycle_data_dir: /opt/openconext/OpenConext-lifecycle
-lifecycle_branch: master
-lifecycle_branch_dir: /opt/openconext/builds/lifecycle
 lifecycle_symfony_env: prod
+lifecycle_apache_symfony_environment: prod
 lifecycle_eb_logins_db: eb_logins
+lifecycle_db_host: localhost
 lifecycle_user_quota: 1500
 lifecycle_inactivity_period: 37
+lifecycle_api_enabled: true
+lifecycle_api_password: secret
+lifecycle_api_username: lifecycle
+

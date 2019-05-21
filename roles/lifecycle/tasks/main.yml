@@ -10,12 +10,75 @@
     createhome: no
     state: present
 
-- name: Check if latest version is installed
-  stat:
-    path: "{{ lifecycle_data_dir}}/releases/sp-dashboard-{{ lifecycle_branch }}"
-  register: branch_installed
+- name: Create php session dir for lifecycle
+  file:
+    path: "{{ php_session_dir }}/lifecycle"
+    state: directory
+    owner: "{{ lifecycle_user }}"
+    group: root
+    mode: 0770
+
+- name: Install Apache vhost
+  template:
+    src: lifecycle.conf.j2
+    dest: /etc/httpd/conf.d/lifecycle.conf
+  notify: "reload httpd"
+
+- name: Install php-fpm file
+  template:
+    src: lifecycle-pool.conf.j2
+    dest: /etc/php-fpm.d/lifecycle-pool.conf
+  notify: "restart php-fpm"
 
 - name: Include install-branch.yml
   include: install-branch.yml
+  when: lifecycle_branch is defined and lifecycle_branch != ''
+
+- name: Include install-release.yml
+  include: install-release.yml
+  when: lifecycle_branch is not defined or lifecycle_branch == ''
+
+- name: Place parameters.yml
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ lifecycle_current_release_symlink }}/app/config/{{ item }}"
+    mode: 0644
+  with_items:
+    - parameters.yml
+
+- name: Create the symfony cache
+  command: bin/console cache:clear --env={{ lifecycle_apache_symfony_environment }} --no-debug
+  args:
+    chdir: "{{ lifecycle_current_release_symlink }}/"
   when:
-    - branch_installed.stat.exists == false
+    - not develop
+  changed_when: false
+
+- name: Make sure cache dir has correct permissions
+  file:
+    path: "{{ lifecycle_current_release_symlink }}/var/cache"
+    owner: "{{ lifecycle_user }}"
+    group: "{{ lifecycle_user }}"
+    recurse: yes
+  changed_when: false
+
+- name: Make sure log dir has correct permissions
+  file:
+    path: "{{ lifecycle_current_release_symlink }}/var/logs" 
+    owner: "{{ lifecycle_user }}"
+    group: "{{ lifecycle_user }}"
+    recurse: yes
+  changed_when: false
+
+  # Remove all dirs, but keep the current version and from the rest the most recent one.
+- name: Clean up old releases
+  shell: ls -td {{ openconext_releases_dir }}/OpenConext-user-lifecycle-* | grep -v $(readlink {{ lifecycle_current_release_symlink }}) | tail -n +2 | xargs --no-run-if-empty rm -rv
+  register: clean_releases
+  changed_when: '"removed" in clean_releases.stdout'
+
+# Remove all tarballs, but keep the current version and from the rest the most recent one.
+- name: Clean up old builds
+  shell: ls -td {{ openconext_builds_dir }}/OpenConext-user-lifecycle-* {{ openconext_builds_dir }}/Releases/ | grep -v {{ lifecycle_build_path }} | tail -n +2 | xargs --no-run-if-empty rm -rv
+  register: clean_builds
+  changed_when: '"removed" in clean_builds.stdout'
+

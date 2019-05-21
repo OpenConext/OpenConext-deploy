@@ -1,5 +1,5 @@
 parameters:
-    database_host: 127.0.0.1
+    database_host: {{ lifecycle_db_host }}
     database_port: 3306
     database_name: {{ lifecycle_eb_logins_db }}
     database_user: lifecyclerw
@@ -28,8 +28,7 @@ parameters:
             verify_ssl: true
     user_quota: {{ lifecycle_user_quota }}
     inactivity_period: {{ lifecycle_inactivity_period }}
-
     # is the deprovision api enabled?
-    deprovision_api_settings_enabled: true
+    deprovision_api_settings_enabled: {{ lifecycle_api_enabled }}
     deprovision_api_settings_username: "{{ lifecycle_api_username }}"
     deprovision_api_settings_password: "{{ lifecycle_api_password }}"

@@ -1,0 +1,32 @@
+---
+- name: Check if target dir exists
+  stat:
+    path: "{{ lifecycle_current_release_symlink }}" 
+    follow: no
+  register: lifecycle_dir
+
+- name: Download current version
+  get_url:
+    url: "{{ lifecycle_download_url }}" 
+    dest: "{{ lifecycle_build_path }}" 
+  register: lifecycle_download
+
+- name: Unpack current version
+  unarchive:
+    src: "{{ lifecycle_build_path }}" 
+    dest: "{{ openconext_releases_dir }}" 
+    copy: no
+  when:
+    - lifecycle_download.changed or lifecycle_dir.stat.lnk_source != lifecycle_release_dir
+
+- name: Activate new Lifecycle release
+  file:
+    src: "{{ lifecycle_release_dir }}" 
+    dest: "{{ lifecycle_current_release_symlink }}" 
+    state: link
+  notify:
+    - "restart httpd"
+    - "restart php-fpm"
+  when:
+    - lifecycle_download.changed or lifecycle_dir.stat.lnk_source != lifecycle_release_dir
+

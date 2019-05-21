@@ -7,7 +7,7 @@
     tags:
      - always
 
-- hosts: loadbalancer:loadbalancer-vm:php-apps:java-apps:storage:oidc:dbcluster:sysloghost:elk
+- hosts: loadbalancer:loadbalancer-vm:php-apps:java-apps:storage:oidc:dbcluster:sysloghost:elk:lifecycle
   gather_facts: yes
   become: true
   roles:
@@ -41,7 +41,7 @@
     - { role: haproxy, tags: ['lb'] }
     - { role: bind, tags: ['bind'] }
 
-- hosts: php-apps:java-apps:oidc
+- hosts: php-apps:java-apps:oidc:lifecycle
   gather_facts: no
   become: true
   roles:
@@ -87,6 +87,14 @@
     - { role: profile,           tags: ['profile' ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
+
+- hosts: lifecycle
+  gather_facts: no
+  become: true
+  roles:
+    - { role: php56fpm,          tags: ['php'     ] }
+    - { role: lifecycle,         tags: ['lifecycle' ] }
+  handlers:
 
 - hosts: java-apps-common
   gather_facts: true
