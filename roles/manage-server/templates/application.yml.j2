@@ -23,6 +23,7 @@ push:
     password: {{ engine_api_metadata_push_password }}
     name: {{ instance_name }} EngineBlock
     exclude_edugain_imports: {{ manage_exclude_edugain_imports_in_push }}
+    exclude_oidc_rp: {{ manage_exclude_oidc_rp_imports_in_push }}
   oidc:
     url: https://oidcng.{{ base_domain }}/manage/connections
     user: manage
@@ -35,6 +36,7 @@ product:
   organization: {{ instance_name }}
   service_provider_feed_url: {{ manage_service_provider_feed_url }}
   supported_languages: {{ supported_language_codes }}
+  show_oidc_rp: {{ mange_show_oidc_rp_tab }}
 
 metadata_configuration_path: file://{{ manage_dir }}/metadata_configuration
 metadata_templates_path: file://{{ manage_dir }}/metadata_templates
