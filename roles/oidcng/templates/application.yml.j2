@@ -21,6 +21,7 @@ cron:
   expression: "0 0/15 * * * *"
 
 mongodb_db: {{ oidcng.mongo_database }}
+openid_configuration_path: file://{{ oidcng_dir }}/openid-configuration.json
 jwks_key_store_path: file://{{ oidcng_dir }}/oidc.keystore.jwks.json
 secret_key_set_path: file://{{ oidcng_dir }}/secret_keyset.json
 associated_data: {{ oidcng_associated_data }}

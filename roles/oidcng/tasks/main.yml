@@ -63,6 +63,13 @@
   notify:
     - "restart oidcng"
 
+- name: copy oidcng well-known discovery configuration
+  template:
+    src: "openid-configuration.json.j2"
+    dest: "{{ oidcng_dir }}/openid-configuration.json"
+  notify:
+    - "restart oidcng"
+
 - name: copy / create private key
   copy:
     content: "{{ oidcng_private_key }}"
