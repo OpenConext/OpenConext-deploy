@@ -1,5 +1,5 @@
 {
-  "issuer": "https://org.openconext.oidc.ng",
+  "issuer": "https://oidcng.{{ base_domain }}",
   "authorization_endpoint": "https://oidcng.{{ base_domain }}/oidc/authorize",
   "token_endpoint": "https://oidcng.{{ base_domain }}/oidc/token",
   "userinfo_endpoint": "https://oidcng.{{ base_domain }}/oidc/userinfo",
@@ -75,11 +75,9 @@
   ],
   "claims_parameter_supported": true,
   "acr_values_supported": [
-    "http://{{ env }}.surfconext.nl/assurance/loa1",
-    "http://{{ env }}.surfconext.nl/assurance/loa2",
-    "http://{{ env }}.surfconext.nl/assurance/loa3",
-    "http://{{ env }}.surfconext.nl/assurance/sfo-level2",
-    "http://{{ env }}.surfconext.nl/assurance/sfo-level3"
+     {% for loa in oidcng.acr_values_supported %}
+        "http://{{ env }}.surfconext.nl/assurance/{{ loa }}"{{ "," if not loop.last }}
+     {% endfor %}
   ],
   "code_challenge_methods_supported": [
     "plain",

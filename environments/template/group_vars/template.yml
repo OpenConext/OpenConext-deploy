@@ -352,6 +352,10 @@ oidcng:
   mongo_database: oidcng
   sp_entity_id: https://oidcng.{{ base_domain }}
   api_user: manage
+  acr_values_supported:
+    - loa1
+    - loa2
+    - loa3
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
