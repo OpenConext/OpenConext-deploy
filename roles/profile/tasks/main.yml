@@ -106,6 +106,15 @@
   notify:
     - "restart php-fpm"
 
+- name: php-fpm 73 config
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/opt/remi/php73/php-fpm.d/{{ item }}"
+  with_items:
+     - profile-pool-73.conf
+  notify:
+    - "restart php73-fpm"
+
 - name: Configure Profile
   template:
     src: "{{ item }}.j2"

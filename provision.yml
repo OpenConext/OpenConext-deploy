@@ -79,7 +79,7 @@
   gather_facts: no
   become: true
   roles:
-    - { role: php56fpm,          tags: ['php'     ] }
+    - { role: php,               tags: ['php'     ] }
     - { role: static,            tags: ['static'  ] }
     - { role: metadata,          tags: ['static'  ] }
     - { role: openconext-common, tags: ['eb','profile'] }
@@ -92,7 +92,7 @@
   gather_facts: no
   become: true
   roles:
-    - { role: php56fpm,          tags: ['php'     ] }
+    - { role: php,               tags: ['php'     ] }
     - { role: openconext-common, tags: ['lifecycle' ] }
     - { role: lifecycle,         tags: ['lifecycle' ] }
   handlers:

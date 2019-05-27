@@ -3,3 +3,8 @@
   service:
     name: php-fpm
     state: restarted
+
+- name: restart php73-fpm
+  service:
+    name: php73-php-fpm
+    state: restarted

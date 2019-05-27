@@ -1,0 +1,161 @@
+# Install the "REMI" repo which contain newer php packages that override the default
+# that come with the distro (CentOS7: 5.4; CentOS6: 5.3)
+- name: check for presence of the remi repository file
+  stat:
+    path: "/etc/yum.repos.d/remi.repo"
+  register: remi_config
+
+- name: Install REMI repo
+  yum:
+    name: "https://rpms.remirepo.net/enterprise/remi-release-7.rpm"
+    state: present
+  when:
+    - remi_config.stat.exists == False
+
+- name: Enable REMI repo
+  copy:
+      src: remi.repo
+      dest: /etc/yum.repos.d/remi.repo
+  when:
+    - remi_config.stat.exists == False
+
+- name: Install php-(cli,fpm), composer
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - php-fpm
+  - php-cli
+  - php-pecl-apcu
+  - php-curl
+  - php-mbstring
+  - php-mysql
+  - php-soap
+  - php-xml
+  - php-gd
+  - composer
+
+- name: check for presence of the remi 73 repository file
+  stat:
+    path: "/etc/yum.repos.d/remi-php73.repo"
+  register: remi_php73_config
+
+- name: Enable REMI 73 repo
+  copy:
+      src: remi-php73.repo
+      dest: /etc/yum.repos.d/remi-php73.repo
+  when:
+    - remi_php73_config.stat.exists == False
+
+- name: Install php-(cli,fpm) 7.3
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - php73-php-fpm
+  - php73-php-cli
+  - php73-php-pecl-apcu
+  - php73-php-curl
+  - php73-php-mbstring
+  - php73-php-mysql
+  - php73-php-soap
+  - php73-php-xml
+  - php73-php-gd
+
+- name: Enable php-fpm
+  service:
+    name: php-fpm
+    enabled: yes
+
+- name: Install custom PHP configuration
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/php.d/{{ item }}"
+  with_items:
+    - 40-apcu.ini
+    - openconext.ini
+  notify:
+    - "restart php-fpm"
+
+- name: Install custom PHP configuration for 7.3
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/opt/remi/php73/php.d/{{ item }}"
+  with_items:
+    - 40-apcu.ini
+    - openconext.ini
+  notify:
+    - "restart php73-fpm"
+
+- name: Install PHP debug extensions
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - php-pecl-xdebug
+    - php73-php-pecl-xdebug
+  when:
+    - develop
+
+- name: Configure PHP Xdebug
+  template:
+    src: "xdebug.ini.j2"
+    dest: "/etc/php.d/15-xdebug.ini"
+  when:
+    - develop
+  notify:
+    - "restart php-fpm"
+
+- name: Configure PHP Xdebug for 7.3
+  template:
+    src: "xdebug.ini.j2"
+    dest: "/etc/opt/remi/php73/php.d/15-xdebug.ini"
+  when:
+    - develop
+  notify:
+    - "restart php73-fpm"
+
+- name: Put /etc/php-fpm.conf
+  copy:
+    src: "php-fpm.conf"
+    dest: "/etc/php-fpm.conf"
+  notify:
+    - "restart php-fpm"
+
+- name: Put 7.3 php-fpm.conf
+  copy:
+    src: "php73-fpm.conf"
+    dest: "/etc/opt/remi/php73/php-fpm.conf"
+  notify:
+    - "restart php73-fpm"
+
+- name: Enable php-fpm
+  service:
+    name: php-fpm
+    enabled: yes
+
+- name: Enable php73-php-fpm
+  service:
+    name: php73-php-fpm
+    enabled: yes
+
+- name: Remove default www pool
+  file:
+    path: /etc/php-fpm.d/www.conf
+    state: absent
+  notify:
+    - "restart php-fpm"
+
+- name: Remove default www pool
+  file:
+    path: /etc/opt/remi/php73/php-fpm.d/www.conf
+    state: absent
+  notify:
+    - "restart php73-fpm"
+
+# Set mode to a+x so components can access their subdirectories under session/
+- name: Create directory for vhosts to store PHP sessions
+  file:
+    path: "{{ php_session_dir }}"
+    state: directory
+    mode: 0771

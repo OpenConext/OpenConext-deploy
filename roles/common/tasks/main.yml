@@ -26,6 +26,8 @@
     - lynx
     - ntp
     - unzip
+    - mysql
+    - bzip2
     - libselinux-python
 
 - name: Install git on development vm
