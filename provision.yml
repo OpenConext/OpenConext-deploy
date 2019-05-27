@@ -96,6 +96,7 @@
     - { role: openconext-common, tags: ['lifecycle' ] }
     - { role: lifecycle,         tags: ['lifecycle' ] }
   handlers:
+    - include: roles/httpd/handlers/main.yml
 
 - hosts: java-apps-common
   gather_facts: true
