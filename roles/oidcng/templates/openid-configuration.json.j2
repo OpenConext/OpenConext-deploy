@@ -76,7 +76,7 @@
   "claims_parameter_supported": true,
   "acr_values_supported": [
      {% for loa in oidcng.acr_values_supported %}
-        "http://{{ env }}.surfconext.nl/assurance/{{ loa }}"{{ "," if not loop.last else ""}}
+        "{{ loa }}"{{ "," if not loop.last else ""}}
      {% endfor %}
   ],
   "code_challenge_methods_supported": [
