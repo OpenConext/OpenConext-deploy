@@ -24,7 +24,7 @@ manage_server_version: 4.0.2
 monitoring_tests_version: 6.0.5
 mujina_version: 7.0.7
 oidc_version: "1.3.4"
-oidcng_version: 0.0.1
+oidcng_version: 0.0.2
 pdp_gui_version: 2.0.5
 pdp_server_version: 2.0.5
 profile_version: "1.2.1"
@@ -386,6 +386,11 @@ oidcng:
   mongo_database: oidcng
   sp_entity_id: https://oidcng.{{ base_domain }}
   api_user: manage
+  key_rollover_cron_expression: "0 0 0 * * *"
+  acr_values_supported:
+    - loa1
+    - loa2
+    - loa3
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp

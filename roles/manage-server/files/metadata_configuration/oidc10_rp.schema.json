@@ -89,6 +89,17 @@
         }
       }
     },
+    "allowedResourceServers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "arp": {
       "type": "object",
       "sources": [
