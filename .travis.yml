@@ -40,6 +40,7 @@ after_failure:
   - sudo docker exec -t ansible-test tail -500 /var/log/messages
   - sudo docker exec -t ansible-test cat /var/log/teams/teams.log
   - sudo docker exec -t ansible-test cat /var/log/manage/manage.log
+  - sudo docker exec -t ansible-test cat /var/log/oidcng/oidcng.log
   - sudo docker exec -t ansible-test cat /opt/manage/application.yml
   - sudo docker exec -t ansible-test ls -ltr /var/log
   - sudo docker exec -t ansible-test cat /var/log/voot/voot.log
