@@ -354,9 +354,9 @@ oidcng:
   api_user: manage
   key_rollover_cron_expression: "0 0 0 * * *"
   acr_values_supported:
-    - loa1
-    - loa2
-    - loa3
+    - http://{{ base_domain }}/assurance/loa1
+    - http://{{ base_domain }}/assurance/loa2
+    - http://{{ base_domain }}/assurance/loa3
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
