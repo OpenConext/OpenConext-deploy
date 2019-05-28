@@ -232,6 +232,16 @@
           "type": "string",
           "info": "The name of the authority that can register a service provider or identity provider."
         },
+        "oidc:signingCertificateUrl": {
+          "type": "string",
+          "format": "url",
+          "info": "Enter the URL that provides to the public key to verify the signature of the client JWT."
+        },
+        "oidc:signingCertificate": {
+          "type": "string",
+          "format": "certificate",
+          "info": "The public JWT signing certificate of the service. This must be a PEM encoded certificate. DER, CRT or CER are not supported."
+        },
         "logo:0:url": {
           "type": "string",
           "format": "url",
