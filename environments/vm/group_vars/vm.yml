@@ -386,6 +386,11 @@ oidcng:
   mongo_database: oidcng
   sp_entity_id: https://oidcng.{{ base_domain }}
   api_user: manage
+  key_rollover_cron_expression: "0 0 0 * * *"
+  acr_values_supported:
+    - loa1
+    - loa2
+    - loa3
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp

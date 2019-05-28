@@ -15,12 +15,16 @@ server:
       secure: true
   server-header: no
 
-# Is this node in a load-balanced topology responsible for cleaning up resources (See ExpiredInvitationsRemover)
+# Is this node in a load-balanced topology responsible for cleaning up resources
 cron:
   node-cron-job-responsible: {{ oidcng_cronjobmaster }}
-  expression: "0 0/15 * * * *"
+  # Every 15 minutes
+  token-cleaner-expression: "0 0/15 * * * *"
+  # Differs per env: see https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
+  key-rollover-expression: {{ oidcng.key_rollover_cron_expression }}
 
 mongodb_db: {{ oidcng.mongo_database }}
+openid_configuration_path: file://{{ oidcng_dir }}/openid-configuration.json
 jwks_key_store_path: file://{{ oidcng_dir }}/oidc.keystore.jwks.json
 secret_key_set_path: file://{{ oidcng_dir }}/secret_keyset.json
 associated_data: {{ oidcng_associated_data }}
