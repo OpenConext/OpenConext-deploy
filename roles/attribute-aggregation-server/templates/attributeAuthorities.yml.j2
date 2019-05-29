@@ -112,25 +112,3 @@ authorities:
       ],
       validationRegExp: "^urn:mace:surfnet.nl:surfmarket.nl:.*$"
     }
-  - {
-    id: "sbs",
-    description: "Collaboration Management System collaboration and authorisation group memberships",
-    endpoint: "https://sbs.test.scz.lab.surf.nl/api/users/attribute_aggregation",
-    user: "{{ aa.sbs_username }}",
-    password: "{{ aa.sbs_password }}",
-    timeOut: 1500,
-    attributes: [
-    {
-      name: "urn:mace:dir:attribute-def:isMemberOf",
-      description: "Lists the collaborations / authorisation groups the user is a member of",
-      type: "string",
-      example: "auth_researchers"
-    }
-    ],
-    requiredInputAttributes: [
-    {
-      name: "urn:mace:dir:attribute-def:eduPersonPrincipalName",
-    }
-    ],
-    validationRegExp: "^.*$"
-  }
