@@ -292,6 +292,15 @@ authzplayground:
   springapp_oidc_client_id: https@//authz-playground.{{ base_domain }}
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
+oidc_playground:
+  discovery_endpoint: "https://oidcng.{{ base_domain }}/oidc/.well-known/openid-configuration"
+  client_id: playground_client
+  secret: "{{ oidc_playground_secret }}"
+  redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"
+  gui_disclaimer:
+    background_color: red
+    content: "{{ env }}"
+
 pdp:
   username: "pdp_admin"
   password: "{{ pdp_password }}"
