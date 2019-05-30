@@ -43,7 +43,7 @@
 
 - name: create symlink to downloaded version
   file:
-    src: "{{ unarchive_result.dest }}/oidc-playground-{{ oidc_playground_client_version }}"
+    src: "{{ unarchive_result.dest }}/oidc-playground-client-{{ oidc_playground_client_version }}"
     dest: "{{ oidc_playground_current }}"
     state: link
     force: yes

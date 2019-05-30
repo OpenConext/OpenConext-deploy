@@ -6,13 +6,10 @@ logging:
 server:
   # The port to where this Spring Boot application listens to.
   port: {{ springapp_tcpport }}
-  # Do not change this.
-  contextPath: /oidc/api
-  session:
-    timeout: 28800
-    cookie:
-      secure: true
-  server-header: no
+  server-header:
+  servlet:
+    # We serve from the root. Do not change this
+    context-path:
 
 oidc:
   discovery_endpoint: "{{ oidc_playground.discovery_endpoint }}"
