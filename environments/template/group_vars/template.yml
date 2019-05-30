@@ -436,6 +436,9 @@ loadbalancing:
   authz_playground:
     port: 604
 
+  oidc_playground:
+    port: 619
+
   voot:
     port: 605
 
