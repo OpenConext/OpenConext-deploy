@@ -1,0 +1,26 @@
+logging:
+  config: file://{{ oidc_playground_dir }}/logback.xml
+  level:
+    org.springframework.data.mongodb: INFO
+
+server:
+  # The port to where this Spring Boot application listens to.
+  port: {{ springapp_tcpport }}
+  # Do not change this.
+  contextPath: /oidc/api
+  session:
+    timeout: 28800
+    cookie:
+      secure: true
+  server-header: no
+
+oidc:
+  discovery_endpoint: "{{ oidc_playground.discovery_endpoint }}"
+  client_id: "{{ oidc_playground.client_id }}"
+  secret: "{{ oidc_playground.secret }}"
+  redirect_uri: "{{ oidc_playground.redirect_uri }}"
+
+gui:
+  disclaimer:
+    background-color: "{{ oidc_playground.gui_disclaimer.background_color }}"
+    content: "{{ oidc_playground.gui_disclaimer.content }}"
