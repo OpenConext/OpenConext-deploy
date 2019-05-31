@@ -1,6 +1,6 @@
 ---
 - name: create apache folder
-  file: path=/var/www/dashboard owner=apache group=apache mode=2755 state=directory
+  file: path=/var/www/dashboard owner=root group=root mode=2755 state=directory
 
 - name: copy virtual host config
   template: src=dashboard.conf.j2 dest=/etc/httpd/conf.d/dashboard.conf

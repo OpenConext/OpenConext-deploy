@@ -9,8 +9,8 @@
 - name: create apache folder
   file:
     path: "/var/www/pdp"
-    owner: apache
-    group: apache
+    owner: root
+    group: root
     mode: 02755
     state: directory
 
