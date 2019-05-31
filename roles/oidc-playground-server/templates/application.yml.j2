@@ -15,7 +15,9 @@ oidc:
   discovery_endpoint: "{{ oidc_playground.discovery_endpoint }}"
   client_id: "{{ oidc_playground.client_id }}"
   secret: "{{ oidc_playground.secret }}"
-  redirect_uri: "{{ oidc_playground.redirect_uri }}"
+  redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"
+  redirect_uri_form_post: "https://oidc-playground.{{ base_domain }}/oidc/api/redirect
+  client_redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"
 
 gui:
   disclaimer:
