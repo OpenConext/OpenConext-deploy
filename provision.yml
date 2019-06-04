@@ -117,6 +117,8 @@
     - { role: authz-admin,                  tags: ['oauth', 'authz-admin'     ] }
     - { role: voot,                         tags: ['oauth', 'voot'            ] }
     - { role: authz-playground,             tags: ['oauth', 'authz-playground'] }
+    - { role: oidc-playground-client,       tags: ['oidc-playground', 'oidc-playground-client'] }
+    - { role: oidc-playground-server,       tags: ['oidc-playground', 'oidc-playground-server'] }
     - { role: pdp-gui,                      tags: ['pdp', 'pdp-gui'] }
     - { role: pdp-server,                   tags: ['pdp', 'pdp-server'] }
     - { role: remove-grouper,               tags: ['remove-grouper'] }

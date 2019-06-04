@@ -1,0 +1,25 @@
+logging:
+  config: file://{{ oidc_playground_dir }}/logback.xml
+  level:
+    org.springframework.data.mongodb: INFO
+
+server:
+  # The port to where this Spring Boot application listens to.
+  port: {{ springapp_tcpport }}
+  server-header:
+  servlet:
+    # We serve from the root. Do not change this
+    context-path:
+
+oidc:
+  discovery_endpoint: "{{ oidc_playground.discovery_endpoint }}"
+  client_id: "{{ oidc_playground.client_id }}"
+  secret: "{{ oidc_playground.secret }}"
+  redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"
+  redirect_uri_form_post: "https://oidc-playground.{{ base_domain }}/oidc/api/redirect"
+  client_redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"
+
+gui:
+  disclaimer:
+    background-color: "{{ oidc_playground.gui_disclaimer.background_color }}"
+    content: "{{ oidc_playground.gui_disclaimer.content }}"

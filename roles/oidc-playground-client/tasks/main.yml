@@ -1,14 +1,7 @@
 ---
-- name: Create user
-  user:
-    name: pdp
-    system: yes
-    home: "{{ pdp_dir }}"
-    shell: /sbin/nologin
-
 - name: create apache folder
   file:
-    path: "/var/www/pdp"
+    path: "/var/www/oidc-playground"
     owner: root
     group: root
     mode: 02755
@@ -16,19 +9,21 @@
 
 - name: copy virtual host config
   template:
-    src: "pdp.conf.j2"
-    dest: "/etc/httpd/conf.d/pdp.conf"
+    src: "oidc-playground.conf.j2"
+    dest: "/etc/httpd/conf.d/oidc-playground.conf"
   notify:
-    - "reload httpd"
+    - "restart httpd"
+  tags:
+    - deploy
 
 - name: download html archive
   maven_artifact:
     group_id: org.openconext
-    artifact_id: pdp-gui
+    artifact_id: oidc-playground-client
     extension: zip
-    version: "{{ pdp_gui_version }}"
-    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in pdp_gui_version else maven_repo }}"
-    dest: /var/www/pdp
+    version: "{{ oidc_playground_client_version }}"
+    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in oidc_playground_client_version else maven_repo }}"
+    dest: /var/www/oidc-playground
   register: maven_result
   tags:
     - deploy
@@ -36,7 +31,7 @@
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: "/var/www/pdp"
+    dest: "/var/www/oidc-playground"
     copy: no
     owner: root
     group: apache
@@ -48,8 +43,8 @@
 
 - name: create symlink to downloaded version
   file:
-    src: "{{ unarchive_result.dest }}/pdp-gui-{{ pdp_gui_version }}"
-    dest: "{{ pdp_current }}"
+    src: "{{ unarchive_result.dest }}/oidc-playground-client-{{ oidc_playground_client_version }}"
+    dest: "{{ oidc_playground_current }}"
     state: link
     force: yes
   tags:
