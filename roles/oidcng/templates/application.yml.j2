@@ -23,6 +23,11 @@ cron:
   # Differs per env: see https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
   key-rollover-expression: {{ oidcng.key_rollover_cron_expression }}
 
+server:
+  max-http-header-size: 10000000
+  tomcat:
+    max-http-post-size: 10000000
+
 mongodb_db: {{ oidcng.mongo_database }}
 openid_configuration_path: file://{{ oidcng_dir }}/openid-configuration.json
 jwks_key_store_path: file://{{ oidcng_dir }}/oidc.keystore.jwks.json
