@@ -10,6 +10,9 @@ server:
   servlet:
     # We serve from the root. Do not change this
     context-path:
+  max-http-header-size: 10000000
+  tomcat:
+    max-http-post-size: 10000000
 
 oidc:
   discovery_endpoint: "{{ oidc_playground.discovery_endpoint }}"

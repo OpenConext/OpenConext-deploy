@@ -14,6 +14,9 @@ server:
     cookie:
       secure: true
   server-header: no
+  max-http-header-size: 10000000
+  tomcat:
+    max-http-post-size: 10000000
 
 # Is this node in a load-balanced topology responsible for cleaning up resources
 cron:
@@ -22,11 +25,6 @@ cron:
   token-cleaner-expression: "0 0/15 * * * *"
   # Differs per env: see https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
   key-rollover-expression: {{ oidcng.key_rollover_cron_expression }}
-
-server:
-  max-http-header-size: 10000000
-  tomcat:
-    max-http-post-size: 10000000
 
 mongodb_db: {{ oidcng.mongo_database }}
 openid_configuration_path: file://{{ oidcng_dir }}/openid-configuration.json
