@@ -1,6 +1,5 @@
 # -*- ruby -*-
 
-development = false
 if ENV['ENV'] == 'dev'
   development = true
 end
@@ -37,7 +36,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--cpus", "1"]
     end
 
-    if development
+    if development == true
       # run Ansible for loadbalancer only
       lb_centos7.vm.provision :ansible do |ansible|
         ansible.limit = ["loadbalancer-vm"]
