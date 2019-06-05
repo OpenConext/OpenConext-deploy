@@ -391,7 +391,7 @@ oidc:
 
 oidcng:
   issuer: https://oidc.{{ base_domain }}/
-  mongo_host: "{{ mongo_host }}"
+  mongo_host: "{{ mongo_hostname }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: oidcngrw
   mongo_password: "{{ mongo_passwords.oidcng }}"

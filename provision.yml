@@ -20,6 +20,8 @@
   roles:
     - { role: hosts,     tags: ['hosts'] }
     - { role: welcome,   tags: ['welcome'] }
+  roles:
+    - { role: httpd,     tags: ['httpd'] }
 
 - hosts: selfsigned_certs
   become: true  
