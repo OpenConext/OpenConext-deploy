@@ -10,11 +10,16 @@ server:
   servlet:
     # We serve from the root. Do not change this
     context-path:
+  max-http-header-size: 10000000
+  tomcat:
+    max-http-post-size: 10000000
 
 oidc:
   discovery_endpoint: "{{ oidc_playground.discovery_endpoint }}"
   client_id: "{{ oidc_playground.client_id }}"
   secret: "{{ oidc_playground.secret }}"
+  resource_server_id: "{{ oidc_playground.resource_server_id }}"
+  resource_server_secret: "{{ oidc_playground.resource_server_secret }}"
   redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"
   redirect_uri_form_post: "https://oidc-playground.{{ base_domain }}/oidc/api/redirect"
   client_redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"

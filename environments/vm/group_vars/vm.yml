@@ -331,6 +331,8 @@ oidc_playground:
   discovery_endpoint: "https://oidcng.{{ base_domain }}/oidc/.well-known/openid-configuration"
   client_id: playground_client
   secret: "{{ oidc_playground_secret }}"
+  resource_server_id: resource-server-playground-client
+  resource_server_secret: "{{ oidc_playground_resource_server_secret }}"
   gui_disclaimer:
     background_color: red
     content: "{{ env }}"
