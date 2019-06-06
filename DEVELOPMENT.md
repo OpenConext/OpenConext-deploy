@@ -53,6 +53,21 @@ such as provisioning specifically for development, all vagrant commands must be 
 In order to start using the development environment, navigate to the OpenConext-deploy project and run 
 `ENV=dev vagrant up` to start the VMs and start the provisioning.
 
+## Provisioning
+
+The OpenConext suite is changing constantly, and updating your development evnironment with all the latest changes 
+should be done regularly. The best way to do this is using Ansible, we provided an utility for this. Some examples:
+
+```
+# Run all playbooks:
+$ ./provision vm -e develop=true
+
+
+# Run a single tag, engineblock in this example. See ./playbook.yml for tagnames associated with specific roles
+./provision vm --tags eb -e develop=true
+
+```
+
 [1]: https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc
 [2]: https://addons.mozilla.org/en-us/firefox/addon/the-easiest-xdebug/
 [3]: https://getcomposer.org/

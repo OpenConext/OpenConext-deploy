@@ -1,5 +1,5 @@
 ---
 - hosts: php-apps
   roles:
-    - { role: '../roles/vm_only_provision_manage_eb', tags: ['vm_only_provision_manage_eb'] }
+    - { role: '../../roles/vm_only_provision_manage_eb', tags: ['vm_only_provision_manage_eb'] }
 
