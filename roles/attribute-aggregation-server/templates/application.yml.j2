@@ -38,6 +38,9 @@ api:
 pseudo:
   mail_postfix: {{ attribute_aggregation_pseudo_mail_postfix }}
 
+flyway:
+  table: {{ aa_flyway_schema_version_table_name }}
+
 spring:
   jpa:
     properties:
