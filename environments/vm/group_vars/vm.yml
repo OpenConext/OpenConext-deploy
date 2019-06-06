@@ -11,8 +11,8 @@ error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
-attribute_aggregation_gui_version: 2.0.11
-attribute_aggregation_server_version: 2.0.11
+attribute_aggregation_gui_version: 2.0.12
+attribute_aggregation_server_version: 2.0.12
 authz_admin_version: 2.0.12
 authz_playground_version: 1.7
 oidc_playground_client_version: 0.0.1
@@ -30,8 +30,8 @@ oidcng_version: 0.0.2
 pdp_gui_version: 2.0.5
 pdp_server_version: 2.0.5
 profile_version: "1.2.1"
-teams_gui_version: 8.0.1
-teams_server_version: 8.0.1
+teams_gui_version: 8.0.3
+teams_server_version: 8.0.3
 voot_version: 3.0.6
 
 databases:
