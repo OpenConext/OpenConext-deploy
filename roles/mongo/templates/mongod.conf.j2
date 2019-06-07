@@ -25,7 +25,7 @@ storage:
     engineConfig:
       cacheSizeGB: {{ mongo_cache_size }}
   journal:
-    enabled: {% if 'mongod_arbiters' in group_names %}false{% else %}true{% endif %}  
+    enabled: true
 {% if 'mongod_arbiters' in group_names %}
   mmapv1:
     smallFiles: true
