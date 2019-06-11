@@ -83,7 +83,8 @@
 
 - name: Make sure log dir has correct permissions
   file:
-    path: "{{ profile_current_release_symlink }}/app/logs owner={{ profile_fpm_user }}"
+    path: "{{ profile_current_release_symlink }}/app/logs 
+    owner: {{ profile_fpm_user }}"
     group: "{{ profile_fpm_user }}"
     recurse: yes
   changed_when: false
