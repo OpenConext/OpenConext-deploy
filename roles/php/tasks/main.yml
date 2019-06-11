@@ -85,7 +85,7 @@
     - 40-apcu.ini
     - openconext.ini
   notify:
-    - "restart php73-fpm"
+    - "restart php73-php-fpm"
 
 - name: Install PHP debug extensions
   yum:
@@ -113,7 +113,7 @@
   when:
     - develop
   notify:
-    - "restart php73-fpm"
+    - "restart php73-php-fpm"
 
 - name: Put /etc/php-fpm.conf
   copy:
@@ -127,7 +127,7 @@
     src: "php73-fpm.conf"
     dest: "/etc/opt/remi/php73/php-fpm.conf"
   notify:
-    - "restart php73-fpm"
+    - "restart php73-php-fpm"
 
 - name: Enable php-fpm
   service:
@@ -151,7 +151,7 @@
     path: /etc/opt/remi/php73/php-fpm.d/www.conf
     state: absent
   notify:
-    - "restart php73-fpm"
+    - "restart php73-php-fpm"
 
 # Set mode to a+x so components can access their subdirectories under session/
 - name: Create directory for vhosts to store PHP sessions
