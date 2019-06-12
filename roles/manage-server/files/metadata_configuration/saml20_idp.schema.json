@@ -280,6 +280,10 @@
           "type": "boolean",
           "default": false,
           "info": "Must be set for this Identity Provider to be excluded in the EB push."
+        },
+        "coin:allow_maintainers_to_manage_authz_rules": {
+          "type": "boolean",
+          "info": "Set this to allow maintainers of this Identity Provider to maintain authorization rules. Used in Dashboard."
         }
       },
       "patternProperties": {
