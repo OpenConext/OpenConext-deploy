@@ -54,6 +54,7 @@ SECRET_VARS_FILE="${ENVEXT_DIR}/${OC_ENV}/secrets/${OC_ENV}.yml"
 CERT_FILES_BASE="${ENVEXT_DIR}/${OC_ENV}/files/certs/star.${OC_BASEDOMAIN}"
 EBCERT_FILES_BASE="${ENVEXT_DIR}/${OC_ENV}/files/certs/engineblock"
 SHIBCERT_FILES_BASE="${ENVEXT_DIR}/${OC_ENV}/files/certs/shib-sp"
+OIDCCERT_FILES_BASE="${ENVEXT_DIR}/${OC_ENV}/files/certs/oidc"
 CACERT_FILES_BASE="${ENVEXT_DIR}/${OC_ENV}/files/certs/ca"
 
 echo "OC_ENV: $OC_ENV"
@@ -70,11 +71,12 @@ echo "CERT_CONF_TEMP: $CERT_CONF_TEMP"
 echo "CERT_FILES_BASE: $CERT_FILES_BASE"
 echo "EBCERT_FILES_BASE: $EBCERT_FILES_BASE"
 echo "SHIBCERT_FILES_BASE: $SHIBCERT_FILES_BASE"
+echo "OIDCCERT_FILES_BASE: $OIDCCERT_FILES_BASE"
 
 # Clear destination env dir while I'm testing this script, we might want to skip this eventually
 rm -rf "${ENVEXT_DIR}/${OC_ENV}"
 
-# Create environments_exteral dir
+# Create environments_external dir
 mkdir -p "${ENVEXT_DIR}"
 
 # Copy template to new OC_ENV
@@ -84,6 +86,7 @@ cp -a "${SKELETON_DIR}" "${ENVEXT_DIR}/${OC_ENV}"
 #scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $CERT_FILES_BASE
 scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $EBCERT_FILES_BASE
 scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $SHIBCERT_FILES_BASE
+scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $OIDCCERT_FILES_BASE
 # Generate CA
 scripts/lib/create_ca.sh $CACERT_FILES_BASE "/CN=OpenConext Demo CA/O=OpenConext/C=NL"
 scripts/lib/gen_ssl_server_cert.sh  $CACERT_FILES_BASE ${ENVEXT_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN" /CN=*.$OC_BASEDOMAIN/O=OpenConext/C=NL
@@ -91,7 +94,11 @@ scripts/lib/gen_ssl_server_cert.sh  $CACERT_FILES_BASE ${ENVEXT_DIR}/${OC_ENV}/f
 cp $CACERT_FILES_BASE/ca-cert.pem ${ENVEXT_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN"_ca.pem
 
 # Generate Secret vars
-scripts/gen_secrets.sh $SECRET_VARS_TEMPLATE $CERT_FILES_BASE $EBCERT_FILES_BASE $SHIBCERT_FILES_BASE $SECRET_VARS_FILE
+scripts/gen_secrets.sh $SECRET_VARS_TEMPLATE $CERT_FILES_BASE $EBCERT_FILES_BASE $SHIBCERT_FILES_BASE $OIDCCERT_FILES_BASE $SECRET_VARS_FILE
+
+# Move the generated OIDC cert to its own directory
+mkdir "${ENVEXT_DIR}/${OC_ENV}/files/certs/oidc/"
+mv "$OIDCCERT_FILES_BASE.crt" "${ENVEXT_DIR}/${OC_ENV}/files/certs/oidc/oidcsaml.crt" 
 
 # Move group_vars skeleton.yml to OC_ENV.yml
 mv "${ENVEXT_DIR}/${OC_ENV}/group_vars/template.yml" "${ENVEXT_DIR}/${OC_ENV}/group_vars/${OC_ENV}.yml"
@@ -109,6 +116,8 @@ sed -i "s/%env%/${OC_ENV}/g" ${ENVEXT_DIR}/${OC_ENV}/inventory
 
 echo -e "\n\n*** Please replace all following placeholders ***\n"
 grep -R '%*%' "${ENVEXT_DIR}/${OC_ENV}"
+
+echo -e "\nPlease rename the file "${ENVEXT_DIR}/${OC_ENV}"/host_vars/template.yml to the hostname of your target VM ("${ENVEXT_DIR}/${OC_ENV}"/host_vars/yourhostname.yml)\n"
 
 
 trap '' EXIT
