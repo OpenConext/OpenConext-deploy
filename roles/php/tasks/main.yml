@@ -35,10 +35,22 @@
   - php-gd
   - composer
 
+- name: check for presence of the remi 72 repository file
+  stat:
+    path: "/etc/yum.repos.d/remi-php72.repo"
+  register: remi_php72_config
+
 - name: check for presence of the remi 73 repository file
   stat:
     path: "/etc/yum.repos.d/remi-php73.repo"
   register: remi_php73_config
+
+- name: Enable REMI 72 repo
+  copy:
+    src: remi-php72.repo
+    dest: /etc/yum.repos.d/remi-php72.repo
+  when:
+    - remi_php72_config.stat.exists == False
 
 - name: Enable REMI 73 repo
   copy:
@@ -46,6 +58,22 @@
       dest: /etc/yum.repos.d/remi-php73.repo
   when:
     - remi_php73_config.stat.exists == False
+
+- name: Install php-(cli,fpm) 7.2
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - php72-php-fpm
+    - php72-php-cli
+    - php72-php-pecl-apcu
+    - php72-php-curl
+    - php72-php-mbstring
+    - php72-php-mysql
+    - php72-php-soap
+    - php72-php-xml
+    - php72-php-gd
+    - php72-php-pecl-apcu-bc
 
 - name: Install php-(cli,fpm) 7.3
   yum:
@@ -77,6 +105,16 @@
   notify:
     - "restart php-fpm"
 
+- name: Install custom PHP configuration for 7.2
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/opt/remi/php72/php.d/{{ item }}"
+  with_items:
+    - 40-apcu.ini
+    - openconext.ini
+  notify:
+    - "restart php72-fpm"
+
 - name: Install custom PHP configuration for 7.3
   template:
     src: "{{ item }}.j2"
@@ -93,6 +131,7 @@
     state: present
   with_items:
     - php-pecl-xdebug
+    - php72-php-pecl-xdebug
     - php73-php-pecl-xdebug
   when:
     - develop
@@ -105,6 +144,15 @@
     - develop
   notify:
     - "restart php-fpm"
+
+- name: Configure PHP Xdebug for 7.2
+  template:
+    src: "xdebug.ini.j2"
+    dest: "/etc/opt/remi/php72/php.d/15-xdebug.ini"
+  when:
+    - develop
+  notify:
+    - "restart php72-fpm"
 
 - name: Configure PHP Xdebug for 7.3
   template:
@@ -122,6 +170,13 @@
   notify:
     - "restart php-fpm"
 
+- name: Put 7.2 php-fpm.conf
+  copy:
+    src: "php72-fpm.conf"
+    dest: "/etc/opt/remi/php72/php-fpm.conf"
+  notify:
+    - "restart php72-fpm"
+
 - name: Put 7.3 php-fpm.conf
   copy:
     src: "php73-fpm.conf"
@@ -132,6 +187,11 @@
 - name: Enable php-fpm
   service:
     name: php-fpm
+    enabled: yes
+
+- name: Enable php72-php-fpm
+  service:
+    name: php72-php-fpm
     enabled: yes
 
 - name: Enable php73-php-fpm
@@ -146,7 +206,14 @@
   notify:
     - "restart php-fpm"
 
-- name: Remove default www pool
+- name: Remove default www pool 7.2
+  file:
+    path: /etc/opt/remi/php72/php-fpm.d/www.conf
+    state: absent
+  notify:
+    - "restart php72-fpm"
+
+- name: Remove default www pool 7.3
   file:
     path: /etc/opt/remi/php73/php-fpm.d/www.conf
     state: absent
