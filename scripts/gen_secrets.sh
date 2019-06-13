@@ -9,16 +9,16 @@
 #
 
 # ----- Input handling
-if [ $# -lt 5 ]
+if [ $# -lt 6 ]
   then
-    echo "INFO: Not enough arguments supplied, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base shibspcertfiles_base secret_vars_output"
+    echo "INFO: Not enough arguments supplied, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base shibspcertfiles_base oidcspcertfiles_base secret_vars_output"
     exit 1
 fi
 
 
-if [ $# -gt 5 ]
+if [ $# -gt 6 ]
   then
-    echo "ERROR: Only 5 arguments expected, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base shibspcertfiles_base secret_vars_output"
+    echo "ERROR: Only 6 arguments expected, syntax: $BASENAME secret_vars_template certfiles_base ebcertfiles_base shibspcertfiles_base oidcspcertfiles_base secret_vars_output"
     exit 1
 fi
 # ----- End Input handing
@@ -27,8 +27,9 @@ SECRET_VARS_TEMPLATE=$1
 CERT_FILES_BASE=$2
 EBCERT_FILES_BASE=$3
 SHIBCERT_FILES_BASE="$4"
-SECRET_VARS_FILE=$5
-OC_BASEDOMAIN=$6
+OIDCCERT_FILES_BASE="$5"
+SECRET_VARS_FILE=$6
+OC_BASEDOMAIN=$7
 
 tempfile() {
     tempprefix=$(basename "$0")
@@ -101,9 +102,26 @@ while IFS= read -r line; do
     continue
   fi
 
+  if [ "$value" == 'oidcng_private_key' ]; then
+    line="$key: |"
+    echo "$line" >> $SECRET_VARS_TEMP
+    cat "${OIDCCERT_FILES_BASE}.key" | sed "s/^/  /g" >> "$SECRET_VARS_TEMP"
+    continue
+  fi
+
   echo "$line" >> $SECRET_VARS_TEMP
 done < $SECRET_VARS_TEMPLATE
 
 
 # Move temp file to SECRET_VARS_FILE
 mv -f $SECRET_VARS_TEMP $SECRET_VARS_FILE
+
+# Delete the keys that are now part of the secrets YAML file
+rm "${EBCERT_FILES_BASE}.key"
+rm "${CERT_FILES_BASE}.key"
+rm "${SHIBCERT_FILES_BASE}.key"
+rm "${OIDCCERT_FILES_BASE}.key"
+# Delete the csrs as well
+rm "${EBCERT_FILES_BASE}.csr"
+rm "${SHIBCERT_FILES_BASE}.csr"
+rm "${OIDCCERT_FILES_BASE}.csr"
