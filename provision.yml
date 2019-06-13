@@ -15,12 +15,12 @@
     - { role: rsyslog,      tags: ['rsyslog'] }
     - { role: iptables, when: iptables_enable,  tags: ['iptables'] }
 
-- hosts: vm
+- hosts: php-apps-vm
   become: true
   roles:
     - { role: hosts,     tags: ['hosts'] }
-    - { role: welcome,   tags: ['welcome'] }
     - { role: httpd,     tags: ['httpd'] }
+    - { role: welcome,   tags: ['welcome'] }
 
 - hosts: selfsigned_certs
   become: true  
