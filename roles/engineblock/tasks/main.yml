@@ -131,7 +131,7 @@
     dest: "{{ item.value.publicFile }}"
   with_dict: "{{ engine_keys }}"
   when:
-    - engine_crt_not_in_inventory
+    - engine_crt_not_in_inventory | bool
 
 - name: Configure EngineBlock
   template:
