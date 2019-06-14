@@ -1,7 +1,6 @@
 ---
 - name: install dependencies for lxml
   yum:
-    name: "{{ item }}"
+    name:
+      - python-lxml
     state: present
-  with_items:
-    - python-lxml

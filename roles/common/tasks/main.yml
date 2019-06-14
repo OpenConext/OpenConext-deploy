@@ -18,17 +18,16 @@
 
 - name: Install tools / clients
   yum:
-    name: "{{ item }}"
+    name: 
+      - telnet
+      - sudo
+      - lynx
+      - ntp
+      - unzip
+      - mysql
+      - bzip2
+      - libselinux-python
     state: present
-  with_items:
-    - telnet
-    - sudo
-    - lynx
-    - ntp
-    - unzip
-    - mysql
-    - bzip2
-    - libselinux-python
 
 - name: Install git on development vm
   yum:
@@ -94,21 +93,19 @@
 
 - name: Remove exim,sendmail when Postfix needs to be installed
   yum:
-    name: "{{ item }}"
+    name:
+      - exim
+      - sendmail
+      - sendmail-cf
     state: absent
-  with_items:
-    - exim
-    - sendmail
-    - sendmail-cf
   when:
     - sendmail_smarthost is defined
 
 - name: Install Postfix
   yum:
-    name: "{{ item }}"
+    name:
+      - postfix
     state: present
-  with_items:
-    - postfix
   when:
     - sendmail_smarthost is defined
 

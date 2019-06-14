@@ -1,11 +1,10 @@
 ---
 - name: Install httpd and required modules
   yum:
-    name: "{{ item }}"
-    state: present
-  with_items:
+    name:
      - httpd
      - mod_ssl
+    state: present
 
 - name: Copy default config files
   template:

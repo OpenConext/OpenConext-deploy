@@ -13,12 +13,11 @@
 
 - name: Install MariaDB, Galera, rsync, MySQL-python
   yum:
-    name: "{{  item  }}"
+    name:
+      - galera
+      - rsync         # For galera sync
+      - MySQL-python  # Required for using the Ansible mysql_* modules
     state: installed
-  with_items:
-    - galera
-    - rsync         # For galera sync
-    - MySQL-python  # Required for using the Ansible mysql_* modules
 
 - name: Create directory to keep Galera key material
   file:

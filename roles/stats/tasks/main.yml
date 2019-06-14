@@ -9,18 +9,19 @@
   copy: src=yarn.repo dest=/etc/yum.repos.d/
 
 - name: Install some packages
-  yum: pkg={{ item }} state=present
-  with_items:
-    - yarn
-    - npm
-    - nodejs
-    - python36u
-    - python36u-pip
-    - python36u-mod_wsgi
-    - python-setuptools
-    - git
-    - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.0/cjose-0.5.1-1.el7.centos.x86_64.rpm
-    - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.8/mod_auth_openidc-2.3.8-1.el7.x86_64.rpm
+  yum:
+    name:
+      - yarn
+      - npm
+      - nodejs
+      - python36u
+      - python36u-pip
+      - python36u-mod_wsgi
+      - python-setuptools
+      - git
+      - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.0/cjose-0.5.1-1.el7.centos.x86_64.rpm
+      - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.8/mod_auth_openidc-2.3.8-1.el7.x86_64.rpm
+    state: present
 
 - name: Create stats Apache tls key
   copy: content="{{ stats_tls_key }}" dest={{ tls.cert_private_path }}/stats.{{ base_domain }}.key mode=0600

@@ -3,11 +3,12 @@
   copy: src=influx.repo dest=/etc/yum.repos.d/influx.repo mode=0644 owner=root
 
 - name: Install the necessary packages
-  yum: name={{ item }} state=installed 
-  with_items:
-    - python-requests
-    - influxdb
-    - python2-pip
+  yum:
+    name:
+      - python-requests
+      - influxdb
+      - python2-pip
+    state: installed 
 
 - name: Install python influx packacke
   pip: name=influxdb state=present
