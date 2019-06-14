@@ -39,7 +39,7 @@
     name: memcached
     state: present
   when:
-    - memcached_cluster
+    - memcached_cluster | bool
 
 - name: Start and enable memcached
   service:
@@ -47,7 +47,7 @@
     enabled: yes
     state: started
   when:
-    - memcached_cluster
+    - memcached_cluster | bool
 
 - name: Create mysqltmp directory
   file:
@@ -65,7 +65,7 @@
     group: root
     mode: 0775
   when:
-    - galera_ssl
+    - galera_ssl | bool
 
 - name: copy ca certificate
   copy:
@@ -74,7 +74,7 @@
   with_items:
     - "{{ galera_tls_ca }}"
   when:
-    - galera_ssl
+    - galera_ssl | bool
 
 - name: copy certificates to correct location
   copy:
@@ -85,7 +85,7 @@
   with_items:
      - "{{ galera_tls }}"
   when:
-    - galera_ssl
+    - galera_ssl | bool
 
 - name: copy private keys to correct location
   copy:
@@ -96,12 +96,12 @@
   with_items:
      - "{{ galera_tls }}"
   when:
-    - galera_ssl
+    - galera_ssl | bool
 
 - name: Create state transfer key
   shell: cat /etc/pki/mysql/{{galera_server_key_name }} /etc/pki/mysql/{{galera_server_crt_name }} > /etc/pki/mysql/{{ galera_sst_crt_name }}
   when:
-    - galera_ssl
+    - galera_ssl | bool
   changed_when: false
 
 - name: chmod and chown state transfer key

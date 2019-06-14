@@ -25,15 +25,15 @@
 
 - name: Create stats Apache tls key
   copy: content="{{ stats_tls_key }}" dest={{ tls.cert_private_path }}/stats.{{ base_domain }}.key mode=0600
-  when: stats_apache_standalone
+  when: stats_apache_standalone | bool
 
 - name: Copy stats Apache certificate
   copy: src={{ inventory_dir }}/files/certs/stats.{{ base_domain }}.crt dest={{ tls.cert_path }}/stats.{{ base_domain }}.cert owner=root mode=0644
-  when: stats_apache_standalone
+  when: stats_apache_standalone | bool
 
 - name: Copy stats Apache intermediate
   copy: src={{ inventory_dir }}/files/certs/stats.{{ base_domain }}.intermediate dest={{ tls.cert_path_ca }}/stats.{{ base_domain }}.intermediate owner=root mode=0644
-  when: stats_apache_standalone
+  when: stats_apache_standalone | bool
 
 - name: Create stats api wsgi user
   user: name={{ stats_wsgi_user }} shell="/bin/false" state=present

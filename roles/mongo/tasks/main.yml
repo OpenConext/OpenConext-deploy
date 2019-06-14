@@ -3,7 +3,7 @@
   stat:
     path: "/var/lib/mongo"
   register: mongo_present
-  when: mongo_primary
+  when: mongo_primary | bool
 
 - name: Create the repository for mongodb
   copy:
@@ -55,14 +55,14 @@
     group: root
     mode: 775
   when:
-    - mongo_tls
+    - mongo_tls | bool
 
 - name: copy ca certificate
   copy:
     src: "{{ inventory_dir }}/files/certs/mongo/{{ mongo_tls_ca }}"
     dest: "/etc/pki/mongo/{{ mongo_tls_ca }}"
   when:
-    - mongo_tls
+    - mongo_tls | bool
 
 - name: Create combined key and certificate file for mongo
   copy:
@@ -71,7 +71,7 @@
     mode: 0600
     owner: mongod
   when:
-    - mongo_tls
+    - mongo_tls | bool
 
 - name: Install the backup script
   template:
@@ -80,7 +80,7 @@
     mode: 0700
     owner: root
   when:
-    - mongo_cluster
+    - mongo_cluster | bool
 
 - name: Create cron symlink for backup script
   file:
@@ -90,14 +90,14 @@
     mode: 0700
     owner: root
   when:
-    - mongo_cluster
+    - mongo_cluster | bool
 
 - name: Install mongod.conf file without configuration on the primary host
   template:
     src: "mongod_standalone.conf.j2"
     dest: "/etc/mongod.conf"
   when:
-     - mongo_primary
+     - mongo_primary | bool
      - mongo_present.stat.exists == False
 
 - name: Enable and start mongod on the primary host
@@ -106,7 +106,7 @@
     enabled: yes
     state: started
   when:
-    - mongo_primary
+    - mongo_primary | bool
 
 - name: Add the admin user
   mongodb_user:
@@ -117,7 +117,7 @@
     roles: root
     state: present
   when:
-     - mongo_primary
+     - mongo_primary | bool
      - mongo_present.stat.exists == False
 
 - name: Install mongodb.conf file  with authorisation enabled
@@ -144,22 +144,22 @@
     src: "repset_init.j2"
     dest: "/tmp/repset_init.js"
   when:
-    - mongo_primary
-    - mongo_cluster
+    - mongo_primary | bool
+    - mongo_cluster | bool
 
 - name: Initialize the replication set on the primary, tls enabled
   shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem --authenticationDatabase admin /tmp/repset_init.js --host "{{mongo_hostname }}"
   when:
-    - mongo_primary
-    - mongo_cluster
-    - mongo_tls
+    - mongo_primary | bool
+    - mongo_cluster | bool
+    - mongo_tls | bool
 
 - name: Initialize the replication set on the primary
   shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/repset_init.js --host 127.0.0.1
   when:
-    - mongo_primary
-    - mongo_cluster
-    - not mongo_tls
+    - mongo_primary | bool
+    - mongo_cluster | bool
+    - not mongo_tls | bool
 
 - name: Create mongo database users
   mongodb_user:
@@ -172,8 +172,8 @@
     roles: readWrite
     replica_set: "{{ replica_set_name }}"
   when:
-    - mongo_primary
-    - not mongo_tls
+    - mongo_primary | bool
+    - not mongo_tls | bool
   with_items: "{{ mongo.users }}"
   changed_when: False
 
@@ -190,7 +190,7 @@
     ssl_cert_reqs: CERT_NONE
     replica_set: "{{ replica_set_name }}"
   when:
-    - mongo_primary
-    - mongo_tls
+    - mongo_primary | bool
+    - mongo_tls | bool
   with_items: "{{ mongo.users }}"
   changed_when: False

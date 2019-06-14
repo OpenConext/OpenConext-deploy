@@ -15,7 +15,7 @@
 
 - name: Include tasks to save Shibboleth sessions to the database
   include: shibboleth_database_backend.yml
-  when: shibboleth_database_backend 
+  when: shibboleth_database_backend | bool
 
 - name: Remove default conf files apache
   file:
@@ -47,7 +47,7 @@
     dest: "/etc/shibboleth/shib-sp.crt"
   notify:
     - "restart shibd"
-  when: shibd_sp_crt_not_in_inventory
+  when: shibd_sp_crt_not_in_inventory | bool
 
 - name: shibboleth SP key
   copy:

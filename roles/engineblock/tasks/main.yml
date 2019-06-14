@@ -32,12 +32,12 @@
 - name: Include develop.yml
   include: develop.yml
   when:
-    - develop
+    - develop | bool
 
 - name: Include test.yml
   include: test.yml
   when:
-    - develop
+    - develop | bool
 
 - name: Check presence of language specific overrides
   local_action: stat path="{{ inventory_dir }}/files/eb/languages/"
@@ -162,7 +162,7 @@
     name: "{{ engine_test_database_name }}"
     state: present
   when:
-    - develop
+    - develop | bool
 
 - name: Create EngineBlock test database user
   mysql_user:
@@ -172,7 +172,7 @@
     priv: "{{ engine_test_database_name }}.*:ALL"
     state: present
   when:
-    - develop
+    - develop | bool
 
 - name: Check existence of the eb database
   shell: app/console doctrine:migrations:status --env={{ engine_apache_symfony_environment }} | grep  "Current Version"  | awk '{print $4 }'
