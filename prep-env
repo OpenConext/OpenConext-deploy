@@ -92,9 +92,13 @@ scripts/lib/create_ca.sh $CACERT_FILES_BASE "/CN=OpenConext Demo CA/O=OpenConext
 scripts/lib/gen_ssl_server_cert.sh  $CACERT_FILES_BASE ${ENVEXT_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN" /CN=*.$OC_BASEDOMAIN/O=OpenConext/C=NL
 # Copy ca to correct location
 cp $CACERT_FILES_BASE/ca-cert.pem ${ENVEXT_DIR}/${OC_ENV}/files/certs/star."$OC_BASEDOMAIN"_ca.pem
+# Create a Tink key set
+scripts/gen_tink_keyset_oidc.sh  $OIDCCERT_FILES_BASE.keyset
 
 # Generate Secret vars
 scripts/gen_secrets.sh $SECRET_VARS_TEMPLATE $CERT_FILES_BASE $EBCERT_FILES_BASE $SHIBCERT_FILES_BASE $OIDCCERT_FILES_BASE $SECRET_VARS_FILE
+
+
 
 # Move the generated OIDC cert to its own directory
 mkdir "${ENVEXT_DIR}/${OC_ENV}/files/certs/oidc/"

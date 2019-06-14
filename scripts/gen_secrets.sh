@@ -108,6 +108,13 @@ while IFS= read -r line; do
     cat "${OIDCCERT_FILES_BASE}.key" | sed "s/^/  /g" >> "$SECRET_VARS_TEMP"
     continue
   fi
+  if [ "$value" == 'oidcng_secret_keyset' ]; then
+    line="$key: |"
+    echo "$line" >> $SECRET_VARS_TEMP
+    cat "${OIDCCERT_FILES_BASE}.keyset" | sed "s/^/  /g" >> "$SECRET_VARS_TEMP"
+    continue
+  fi
+   
 
   echo "$line" >> $SECRET_VARS_TEMP
 done < $SECRET_VARS_TEMPLATE
