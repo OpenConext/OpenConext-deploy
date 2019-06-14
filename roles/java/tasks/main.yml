@@ -9,11 +9,10 @@
 
 - name: Install java
   yum:
-    name: "{{ item }}"
+    name:
+      - java-1.8.0-openjdk-devel.x86_64
+      - java-1.7.0-openjdk-devel
     state: present
-  with_items:
-    - java-1.8.0-openjdk-devel.x86_64
-    - java-1.7.0-openjdk-devel
   tags:
     - java
 

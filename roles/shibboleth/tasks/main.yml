@@ -9,10 +9,9 @@
 
 - name: Install Shibboleth
   yum:
-    name: "{{ item }}"
+    name:
+      - shibboleth.x86_64
     state: present
-  with_items:
-    - shibboleth.x86_64
 
 - name: Include tasks to save Shibboleth sessions to the database
   include: shibboleth_database_backend.yml

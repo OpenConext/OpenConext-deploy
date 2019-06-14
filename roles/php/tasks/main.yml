@@ -21,19 +21,18 @@
 
 - name: Install php-(cli,fpm), composer
   yum:
-    name: "{{ item }}"
+    name:
+      - php-fpm
+      - php-cli
+      - php-pecl-apcu
+      - php-curl
+      - php-mbstring
+      - php-mysql
+      - php-soap
+      - php-xml
+      - php-gd
+      - composer
     state: present
-  with_items:
-  - php-fpm
-  - php-cli
-  - php-pecl-apcu
-  - php-curl
-  - php-mbstring
-  - php-mysql
-  - php-soap
-  - php-xml
-  - php-gd
-  - composer
 
 - name: check for presence of the remi 73 repository file
   stat:
@@ -49,18 +48,17 @@
 
 - name: Install php-(cli,fpm) 7.3
   yum:
-    name: "{{ item }}"
+    name:
+      - php73-php-fpm
+      - php73-php-cli
+      - php73-php-pecl-apcu
+      - php73-php-curl
+      - php73-php-mbstring
+      - php73-php-mysql
+      - php73-php-soap
+      - php73-php-xml
+      - php73-php-gd
     state: present
-  with_items:
-  - php73-php-fpm
-  - php73-php-cli
-  - php73-php-pecl-apcu
-  - php73-php-curl
-  - php73-php-mbstring
-  - php73-php-mysql
-  - php73-php-soap
-  - php73-php-xml
-  - php73-php-gd
 
 - name: Enable php-fpm
   service:
@@ -89,11 +87,10 @@
 
 - name: Install PHP debug extensions
   yum:
-    name: "{{ item }}"
+    name:
+      - php-pecl-xdebug
+      - php73-php-pecl-xdebug
     state: present
-  with_items:
-    - php-pecl-xdebug
-    - php73-php-pecl-xdebug
   when:
     - develop
 

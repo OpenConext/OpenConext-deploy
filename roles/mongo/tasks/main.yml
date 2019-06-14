@@ -12,11 +12,10 @@
 
 - name: Install the mongodb package
   yum:
-    name: "{{ item }}"
+    name:
+      - mongodb-org
+      - python2-pip
     state: present
-  with_items:
-    - mongodb-org
-    - python2-pip
 
 - name: Install pymongo
   pip:

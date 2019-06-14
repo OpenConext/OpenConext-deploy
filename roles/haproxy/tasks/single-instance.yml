@@ -1,11 +1,10 @@
 ---
 - name: Install haproxy and socat
   yum:
-    name: "{{ item }}"
-    state: present
-  with_items:
+    name:
      - socat
      - haproxy
+    state: present
 
 - name: Get haproxy version
   command: bash -c "haproxy -v | grep version | awk '{ print $3 }'"
