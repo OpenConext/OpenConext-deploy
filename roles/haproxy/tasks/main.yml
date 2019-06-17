@@ -6,15 +6,10 @@
     owner: root
     mode: 0644
 
-- name: Include multiple-instances.yml
-  include: multiple-instances.yml
-  when:
-    - haproxy_multi_instance is defined
-
-- name: Include single-instance.yml
-  include: single-instance.yml
-  when:
-    - haproxy_multi_instance is not defined
+- name: Create lbops group
+  group:
+    name: lbops
+    state: present
 
 - name: Include redirects-instance.yml
   include: redirects-instance.yml
@@ -27,3 +22,86 @@
     - "{{ haproxy_applications }}"
   when:
     - develop | bool
+
+- name: Install haproxy and socat
+  yum:
+    name:
+     - socat
+     - haproxy
+    state: present
+
+- name: Get haproxy version
+  command: bash -c "haproxy -v | grep version | awk '{ print $3 }'"
+  register: haproxy_version
+  changed_when: False
+
+- name: Set haproxy version fact
+  set_fact:
+    haproxy_version: "{{ haproxy_version.stdout }}"
+
+- name: Create haproxy socket dir
+  file:
+    path: /var/lib/haproxy
+    state: directory
+    owner: haproxy
+    group: haproxy
+    mode: 0755
+
+- name: Install haproxy systemd single instance file
+  template:
+    src: haproxy_systemd_single.j2
+    dest: /etc/systemd/system/haproxy.service
+
+- name: Enable haproxy
+  service:
+    name: haproxy
+    enabled: yes
+  notify:
+    - "restart haproxy"
+
+- name: Create haproxy SSL key directory
+  file:
+    dest: "/etc/pki/haproxy/"
+    state: directory
+    owner: haproxy
+    group: haproxy
+    mode: 0700
+
+- name: Create combined key and certificate file for HAproxy
+  copy:
+    content: "{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
+    dest: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
+    mode: 0600
+  with_items: "{{ haproxy_sni_ip.certs }}"
+  notify:
+    - "reload haproxy"
+
+- name: Copy backend CA certificate
+  copy:
+    content: "{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}"
+    dest: "{{ tls_backend_ca }}"
+    mode: 0644
+    owner: root
+  when:
+    - haproxy_backend_tls | bool
+
+- name: Copy global haproxy config
+  template:
+    src: "haproxy_global.cfg.j2"
+    dest: "/etc/haproxy/haproxy_global.cfg"
+  notify:
+    - "reload haproxy"
+
+- name: Copy frontend haproxy config
+  template:
+    src: "haproxy_frontend.cfg.j2"
+    dest: "/etc/haproxy/haproxy_frontend.cfg"
+  notify:
+    - "reload haproxy"
+
+- name: Copy backend haproxy config
+  template:
+    src: "haproxy_backend.cfg.j2"
+    dest: "/etc/haproxy/haproxy_backend.cfg"
+  notify:
+    - "reload haproxy"

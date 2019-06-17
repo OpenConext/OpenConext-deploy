@@ -1,0 +1,16 @@
+[Unit]
+Description=HAProxy Load Balancer Redirects instance
+After=network.target
+
+[Service]
+Environment="CONFIG=/etc/haproxy/redirects/haproxy_redirects.cfg" "PIDFILE=/run/rh-haproxy18-haproxy-redirects.pid"
+ExecStartPre=/opt/rh/rh-haproxy18/root/usr/sbin/haproxy -f $CONFIG -c 
+ExecStart=/opt/rh/rh-haproxy18/root/usr/sbin/haproxy -Ws -f $CONFIG -p $PIDFILE $OPTIONS
+ExecReload=/opt/rh/rh-haproxy18/root/usr/sbin/haproxy -f $CONFIG -c 
+ExecReload=/bin/kill -USR2 $MAINPID
+KillMode=mixed
+Type=notify
+
+[Install]
+WantedBy=multi-user.target
+
