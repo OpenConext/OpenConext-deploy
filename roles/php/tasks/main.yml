@@ -92,14 +92,14 @@
       - php73-php-pecl-xdebug
     state: present
   when:
-    - develop
+    - develop | bool
 
 - name: Configure PHP Xdebug
   template:
     src: "xdebug.ini.j2"
     dest: "/etc/php.d/15-xdebug.ini"
   when:
-    - develop
+    - develop | bool
   notify:
     - "restart php-fpm"
 
@@ -108,7 +108,7 @@
     src: "xdebug.ini.j2"
     dest: "/etc/opt/remi/php73/php.d/15-xdebug.ini"
   when:
-    - develop
+    - develop | bool
   notify:
     - "restart php73-php-fpm"
 

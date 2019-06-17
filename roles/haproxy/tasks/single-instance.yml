@@ -59,7 +59,7 @@
     mode: 0644
     owner: root
   when:
-    - haproxy_backend_tls
+    - haproxy_backend_tls | bool
 
 - name: Copy global haproxy config
   template:

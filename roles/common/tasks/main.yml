@@ -34,7 +34,7 @@
     name: git
     state: present
   when:
-    - develop
+    - develop | bool
 
 # TODO: proper SElinux support.  Would require at least to explicitly open up
 # all non-standard apache ports (9876, loadbalancing.engine.port, etc)
