@@ -54,7 +54,7 @@ openssl genrsa -out "${CERT_FILES_BASE}.key" 2048
 echo "Generating csr"
 openssl req -new -key "${CERT_FILES_BASE}.key" -config "${CERT_CONF_TEMP}" -out "${CERT_FILES_BASE}.csr"
 echo "Generating 3 yr crt"
-openssl x509 -req -sha256 -days 1095 -in "${CERT_FILES_BASE}.csr" -signkey "${CERT_FILES_BASE}.key" -text -extfile "${CERT_CONF_TEMP}" -out "${CERT_FILES_BASE}.crt"
+openssl x509 -req -sha256 -days 1095 -in "${CERT_FILES_BASE}.csr" -signkey "${CERT_FILES_BASE}.key" -extfile "${CERT_CONF_TEMP}" -out "${CERT_FILES_BASE}.crt"
 
 # Remove CERT_CONF_TEMP
 rm $CERT_CONF_TEMP

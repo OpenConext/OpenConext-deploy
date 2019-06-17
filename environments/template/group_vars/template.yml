@@ -541,6 +541,14 @@ haproxy_applications:
     port: "604"
     servers: "{{java_servers}}"
 
+  - name: oidc_playground
+    vhost_name: "oidc-playground"
+    ip: "{{ ansible_default_ipv4 }}"
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "619"
+    servers: "{{java_servers}}"
+  
   - name: voot
     vhost_name: "voot"
     ip: "{{ ansible_default_ipv4 }}"

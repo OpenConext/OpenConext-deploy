@@ -600,6 +600,14 @@ haproxy_applications:
     port: "604"
     servers: "{{java_servers}}"
 
+  - name: oidc_playground
+    vhost_name: "oidc-playground"
+    ip: "192.168.66.98"
+    ha_method: "GET"
+    ha_url: "/oidc/api/actuator/health"
+    port: "619"
+    servers: "{{java_servers}}"
+  
   - name: voot
     vhost_name: "voot"
     ip: 192.168.66.98
