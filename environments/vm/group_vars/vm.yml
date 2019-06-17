@@ -521,7 +521,7 @@ loadbalancing:
 haproxy_applications:
 
   - name: engine
-    vhost_name: "engine"
+    vhost_name: engine.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
@@ -529,7 +529,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: profile
-    vhost_name: "profile"
+    vhost_name: profile.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "HEAD"
     ha_url: "/health"
@@ -537,23 +537,15 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: static
-    vhost_name: "static"
+    vhost_name: static.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
     port: 403
     servers: "{{php_servers}}"
 
-  - name: serviceregistry
-    vhost_name: "serviceregistry"
-    ip: 192.168.66.98
-    ha_method: "HEAD"
-    ha_url: "/"
-    port: 404
-    servers: "{{php_servers}}"
-
   - name: engine_api
-    vhost_name: "engine-api"
+    vhost_name: engine-api.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/"
@@ -561,7 +553,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: metadata
-    vhost_name: "metadata"
+    vhost_name: metadata.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "HEAD"
     ha_url: "/alive.txt"
@@ -569,7 +561,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: teams
-    vhost_name: "teams"
+    vhost_name: teams.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: GET
     ha_url: "/api/teams/health"
@@ -577,7 +569,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: authzserver
-    vhost_name: "authz"
+    vhost_name: authz.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
@@ -585,7 +577,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: authz_admin
-    vhost_name: "authz-admin"
+    vhost_name: authz-admin.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
@@ -593,7 +585,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: authz_playground
-    vhost_name: "authz-playground"
+    vhost_name: authz-playground.{{ base_domain }}
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/health"
@@ -601,7 +593,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: voot
-    vhost_name: "voot"
+    vhost_name: voot.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
@@ -609,7 +601,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: pdp
-    vhost_name: "pdp"
+    vhost_name: pdp.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/pdp/api/health"
@@ -617,7 +609,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: oidc
-    vhost_name: "oidc"
+    vhost_name: oidc.{{ base_domain }}
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/health"
@@ -625,7 +617,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: aa
-    vhost_name: "aa"
+    vhost_name: aa.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/aa/api/health"
@@ -633,7 +625,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: link
-    vhost_name: "link"
+    vhost_name: link.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/aa/api/health"
@@ -641,7 +633,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: manage
-    vhost_name: "manage"
+    vhost_name: manage.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/manage/api/health"
@@ -649,7 +641,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: oidcng
-    vhost_name: "oidcng"
+    vhost_name: oidcng.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/actuator/health"
@@ -657,7 +649,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: mujina-sp
-    vhost_name: "mujina-sp"
+    vhost_name: mujina-sp.{{ base_domain }}
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/"
@@ -665,7 +657,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: mujina-idp
-    vhost_name: "mujina-idp"
+    vhost_name: mujina-idp.{{ base_domain }}
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/"
@@ -673,7 +665,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: welcome
-    vhost_name: "welcome"
+    vhost_name: welcome.{{ base_domain }}
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/"
@@ -681,7 +673,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: kibana
-    vhost_name: "kibana"
+    vhost_name: kibana.{{ base_domain }}
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/"
@@ -689,16 +681,22 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: stats
-    vhost_name: "stats"
+    vhost_name: stats.{{ base_domain }}
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/health"
     port: "702"
     servers: "{{php_servers}}"
 
+haproxy_sni_ip:
+  ipv4: 192.168.66.98
+  ipv6:  "::1"
+  certs: 
+     - name: star
+       key_content: "{{ https_star_private_key }}"
+       crt_name: star.{{ base_domain }}.pem
+
 haproxy_backend_tls: False
-haproxy_sni_ip: 192.168.66.98
-haproxy_sni_ipv6: "::1"
 
 php_servers:
    - { ip: "192.168.66.99", label: "phpapps"}

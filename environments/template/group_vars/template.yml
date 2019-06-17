@@ -470,7 +470,7 @@ loadbalancing:
 haproxy_applications:
 
   - name: engine
-    vhost_name: "engine"
+    vhost_name: engine.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
@@ -478,7 +478,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: profile
-    vhost_name: "profile"
+    vhost_name: profile.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "HEAD"
     ha_url: "/health"
@@ -486,7 +486,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: static
-    vhost_name: "static"
+    vhost_name: static.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
@@ -494,7 +494,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: metadata
-    vhost_name: "metadata"
+    vhost_name: metadata.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "HEAD"
     ha_url: "/alive.txt"
@@ -502,7 +502,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: engine_api
-    vhost_name: "engine-api"
+    vhost_name: engine-api.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/"
@@ -510,7 +510,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: teams
-    vhost_name: "teams"
+    vhost_name: teams.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/api/teams/health"
@@ -518,7 +518,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: authzserver
-    vhost_name: "authz"
+    vhost_name: authz.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
@@ -526,7 +526,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: authz_admin
-    vhost_name: "authz-admin"
+    vhost_name: authz-admin.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
@@ -534,7 +534,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: authz_playground
-    vhost_name: "authz-playground"
+    vhost_name: authz-playground.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
@@ -542,7 +542,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: voot
-    vhost_name: "voot"
+    vhost_name: voot.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
@@ -550,7 +550,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: pdp
-    vhost_name: "pdp"
+    vhost_name: pdp.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/pdp/api/health"
@@ -558,7 +558,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: oidc
-    vhost_name: "oidc"
+    vhost_name: oidc.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
@@ -566,7 +566,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: aa
-    vhost_name: "aa"
+    vhost_name: aa.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/aa/api/health"
@@ -574,7 +574,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
   
   - name: link
-    vhost_name: "link"
+    vhost_name: link.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/aa/api/health"
@@ -582,7 +582,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: manage
-    vhost_name: "manage"
+    vhost_name: manage.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/manage/api/health"
@@ -590,7 +590,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: mujina-sp
-    vhost_name: "mujina-sp"
+    vhost_name: mujina-sp.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/"
@@ -598,7 +598,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: mujina-idp
-    vhost_name: "mujina-idp"
+    vhost_name: mujina-idp.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/"
@@ -606,7 +606,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: welcome
-    vhost_name: "welcome"
+    vhost_name: welcome.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/"
@@ -614,7 +614,7 @@ haproxy_applications:
     servers: "{{php_servers}}"
 
   - name: oidcng
-    vhost_name: "oidcng"
+    vhost_name: oidcng.{{ base_domain }}
     ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/actuator/health"
@@ -623,8 +623,13 @@ haproxy_applications:
 
 haproxy_backend_tls: False
 
-haproxy_sni_ip: "*"
-haproxy_sni_ipv6: "::1"
+haproxy_sni_ip:
+  ipv4: "*"
+  ipv6:  "::1"
+  certs: 
+     - name: star
+       key_content: "{{ https_star_private_key }}" 
+       crt_name: star.{{ base_domain }}.pem
 
 php_servers:
    - { ip: "127.0.0.1", label: "php"}
