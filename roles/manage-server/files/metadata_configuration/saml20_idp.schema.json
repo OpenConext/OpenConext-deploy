@@ -284,133 +284,134 @@
         "coin:allow_maintainers_to_manage_authz_rules": {
           "type": "boolean",
           "info": "Set this to allow maintainers of this Identity Provider to maintain authorization rules. Used in Dashboard."
+        }
+      },
+      "patternProperties": {
+        "^name:(en|nl)$": {
+          "type": "string",
+          "info": "The name of the Identity Provider."
         },
-        "patternProperties": {
-          "^name:(en|nl)$": {
-            "type": "string",
-            "info": "The name of the Identity Provider."
-          },
-          "^displayName:(en|nl)$": {
-            "type": "string",
-            "info": "The name of the Identity Provider as displayed in applications."
-          },
-          "^description:(en|nl)$": {
-            "type": "string",
-            "info": "The description of the Identity Provider."
-          },
-          "^contacts:([0-3]{1}):surName$": {
-            "type": "string",
-            "multiplicity": 4,
-            "sibblingIndependent": true,
-            "info": "The surname of the contact. e.g. for 'John Doe', 'Doe' is the surname."
-          },
-          "^contacts:([0-3]{1}):givenName$": {
-            "type": "string",
-            "multiplicity": 4,
-            "sibblingIndependent": true,
-            "info": "The given name of the contact. e.g. for 'John Doe', 'John' is the givenName."
-          },
-          "^contacts:([0-3]{1}):emailAddress$": {
-            "type": "string",
-            "format": "local-email",
-            "multiplicity": 4,
-            "sibblingIndependent": true,
-            "info": "The e-mail address; syntax in accordance with RFC 5322. e.g. m.l.vermeegen@university.example.org."
-          },
-          "^contacts:([0-3]{1}):telephoneNumber$": {
-            "type": "string",
-            "multiplicity": 4,
-            "sibblingIndependent": true,
-            "info": "The telephoneNumber of the contact."
-          },
-          "^contacts:([0-3]{1}):isSirtfiSecurityContact$": {
-            "type": "boolean",
-            "multiplicity": 4,
-            "sibblingIndependent": true,
-            "info": "Set if the contact for this Identity Provider is responsible for security."
-          },
-          "^contacts:([0-3]{1}):contactType$": {
-            "type": "string",
-            "enum": [
-              "technical",
-              "support",
-              "administrative",
-              "billing",
-              "other"
-            ],
-            "multiplicity": 4,
-            "sibblingIndependent": true,
-            "info": "From the pull down, select the type of contact."
-          },
-          "^OrganizationName:(en|nl)$": {
-            "type": "string"
-          },
-          "^OrganizationDisplayName:(en|nl)$": {
-            "type": "string",
-            "info": "The friendly name of the organization. e.g. University of Harderwijk."
-          },
-          "^OrganizationURL:(en|nl)$": {
-            "type": "string",
-            "format": "url",
-            "info": "The URL to the website of the service e.g. http://www.example-institution.nl/en/."
-          },
-          "^mdrpi:RegistrationPolicy:(en|nl)$": {
-            "type": "string",
-            "info": "The URL to the Registration Policy of the Identity Provider."
-          },
-          "^coin:entity_categories:([1-5]{1})$": {
-            "type": "string",
-            "enum": [
-              "http://refeds.org/category/research-and-scholarship",
-              "http://refeds.org/category/hide-from-discovery",
-              "http://www.geant.net/uri/dataprotection-code-of-conduct/v1",
-              "http://clarin.eu/category/clarin-member",
-              "http://refeds.org/category/academic-institution"
-            ],
-            "multiplicity": 5,
-            "startIndex": 1,
-            "info": "Select one of the entity categories applicable to this service. Entity Categories group federation entities that share common criteria."
-          },
-          "^SingleSignOnService:([0-9]{1}):Binding$": {
-            "$ref": "#/definitions/SingleSignOnService_Binding",
-            "multiplicity": 10,
-            "info": "Select the binding the IdP claims support for. A binding specifies the technical method of a connection."
-          },
-          "^SingleSignOnService:([0-9]{1}):Location$": {
-            "type": "string",
-            "format": "url",
-            "multiplicity": 10,
-            "info": "The URL to the a SAML protocol endpoint at an IdP that a client can contact to obtain a SAML authentication assertion for use at an SP. e.g. https://idp.example.org/idp/profile/SAML2/Redirect/SSO"
-          },
-          "^keywords:(en|nl)$": {
-            "type": "string",
-            "info": "This field defines searchable words in the WAYF dialogue for this Identity Provider."
-          },
-          "^shibmd:scope:([0-9]{1}):allowed$": {
-            "type": "string",
-            "multiplicity": 10,
-            "info": "Select the allowed permissible attribute scope for the role. The scope is an attribute-specific concept used in Shibboleth to enhance the functionality of the attribute acceptance policy features."
-          },
-          "^shibmd:scope:([0-9]{1}):regexp$": {
-            "type": "boolean",
-            "multiplicity": 10,
-            "info": "If not set or absent, the text content of the shibmd:Scope is interpreted as the literal scope value.  If not set the scope component of each scoped attribute value processed by the service provider MUST exactly match the value of <shibmd:Scope> element. If set, the text content of the shibmd:Scope is interpreted as specifying a regular expression.  If set, the scope component of each scoped attribute value processed by the service provider MUST match the regular expression."
-          }
+        "^displayName:(en|nl)$": {
+          "type": "string",
+          "info": "The name of the Identity Provider as displayed in applications."
         },
-        "required": [
-          "name:en",
-          "SingleSignOnService:0:Binding",
-          "SingleSignOnService:0:Location"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "required": [
-      "entityid",
-      "state",
-      "allowedall",
-      "metaDataFields"
-    ],
-    "additionalProperties": false,
-    "indexes": []
-  }
+        "^description:(en|nl)$": {
+          "type": "string",
+          "info": "The description of the Identity Provider."
+        },
+        "^contacts:([0-3]{1}):surName$": {
+          "type": "string",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "The surname of the contact. e.g. for 'John Doe', 'Doe' is the surname."
+        },
+        "^contacts:([0-3]{1}):givenName$": {
+          "type": "string",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "The given name of the contact. e.g. for 'John Doe', 'John' is the givenName."
+        },
+        "^contacts:([0-3]{1}):emailAddress$": {
+          "type": "string",
+          "format": "local-email",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "The e-mail address; syntax in accordance with RFC 5322. e.g. m.l.vermeegen@university.example.org."
+        },
+        "^contacts:([0-3]{1}):telephoneNumber$": {
+          "type": "string",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "The telephoneNumber of the contact."
+        },
+        "^contacts:([0-3]{1}):isSirtfiSecurityContact$": {
+          "type": "boolean",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "Set if the contact for this Identity Provider is responsible for security."
+        },
+        "^contacts:([0-3]{1}):contactType$": {
+          "type": "string",
+          "enum": [
+            "technical",
+            "support",
+            "administrative",
+            "billing",
+            "other"
+          ],
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "From the pull down, select the type of contact."
+        },
+        "^OrganizationName:(en|nl)$": {
+          "type": "string"
+        },
+        "^OrganizationDisplayName:(en|nl)$": {
+          "type": "string",
+          "info": "The friendly name of the organization. e.g. University of Harderwijk."
+        },
+        "^OrganizationURL:(en|nl)$": {
+          "type": "string",
+          "format": "url",
+          "info": "The URL to the website of the service e.g. http://www.example-institution.nl/en/."
+        },
+        "^mdrpi:RegistrationPolicy:(en|nl)$": {
+          "type": "string",
+          "info": "The URL to the Registration Policy of the Identity Provider."
+        },
+        "^coin:entity_categories:([1-5]{1})$": {
+          "type": "string",
+          "enum": [
+            "http://refeds.org/category/research-and-scholarship",
+            "http://refeds.org/category/hide-from-discovery",
+            "http://www.geant.net/uri/dataprotection-code-of-conduct/v1",
+            "http://clarin.eu/category/clarin-member",
+            "http://refeds.org/category/academic-institution"
+          ],
+          "multiplicity": 5,
+          "startIndex": 1,
+          "info": "Select one of the entity categories applicable to this service. Entity Categories group federation entities that share common criteria."
+        },
+        "^SingleSignOnService:([0-9]{1}):Binding$": {
+          "$ref": "#/definitions/SingleSignOnService_Binding",
+          "multiplicity": 10,
+          "info": "Select the binding the IdP claims support for. A binding specifies the technical method of a connection."
+        },
+        "^SingleSignOnService:([0-9]{1}):Location$": {
+          "type": "string",
+          "format": "url",
+          "multiplicity": 10,
+          "info": "The URL to the a SAML protocol endpoint at an IdP that a client can contact to obtain a SAML authentication assertion for use at an SP. e.g. https://idp.example.org/idp/profile/SAML2/Redirect/SSO"
+        },
+        "^keywords:(en|nl)$": {
+          "type": "string",
+          "info": "This field defines searchable words in the WAYF dialogue for this Identity Provider."
+        },
+        "^shibmd:scope:([0-9]{1}):allowed$": {
+          "type": "string",
+          "multiplicity": 10,
+          "info": "Select the allowed permissible attribute scope for the role. The scope is an attribute-specific concept used in Shibboleth to enhance the functionality of the attribute acceptance policy features."
+        },
+        "^shibmd:scope:([0-9]{1}):regexp$": {
+          "type": "boolean",
+          "multiplicity": 10,
+          "info": "If not set or absent, the text content of the shibmd:Scope is interpreted as the literal scope value.  If not set the scope component of each scoped attribute value processed by the service provider MUST exactly match the value of <shibmd:Scope> element. If set, the text content of the shibmd:Scope is interpreted as specifying a regular expression.  If set, the scope component of each scoped attribute value processed by the service provider MUST match the regular expression."
+        }
+      },
+      "required": [
+        "name:en",
+        "SingleSignOnService:0:Binding",
+        "SingleSignOnService:0:Location"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "entityid",
+    "state",
+    "allowedall",
+    "metaDataFields"
+  ],
+  "additionalProperties": false,
+  "indexes": []
+}
