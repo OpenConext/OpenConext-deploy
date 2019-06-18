@@ -2,215 +2,31 @@
 global_defs {
   vrrp_garp_master_refresh 60
 }
-vrrp_instance ipv4_engine {
-   interface {{ ansible_default_ipv4.interface }}               # interface to monitor
+vrrp_instance ipv4 {
+   interface {{ ansible_default_ipv4.interface }}       # interface to monitor
    state {{ keepalived.state_master }}
-   virtual_router_id 51          # Assign one ID for this route
+   virtual_router_id 55                                 # Assign one ID for this route
    priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
    advert_int 5
    virtual_ipaddress {
-       {{ engine_ip }}
-       {{ bind_ip }} 
-   }
-}
-vrrp_instance ipv4_apps {        # No more than 20 ip addresses in one instance
-   interface {{ ansible_default_ipv4.interface }} 
-   state {{ keepalived.state_backup }}
-   virtual_router_id 52
-   priority {{ keepalived.backupprio }}
-   advert_int 5
-   virtual_ipaddress {
-        {% if engine_api_ip is defined %}
-        {{ engine_api_ip }}
-        {% endif %}
-        {% if profile_ip is defined %}
-        {{ profile_ip }}
-        {% endif %}
-        {% if teams_ip is defined %}
-        {{ teams_ip }}
-        {% endif %}
-        {% if authzserver_ip is defined %}
-        {{ authzserver_ip }}
-        {% endif %}
-        {% if authz_admin_ip is defined %}
-        {{ authz_admin_ip }}
-        {% endif %}
-        {% if authz_playground_ip is defined %}
-        {{ authz_playground_ip }}
-        {% endif %}
-        {% if voot_ip is defined %}
-        {{ voot_ip }}
-        {% endif %}
-        {% if pdp_ip is defined %}
-        {{ pdp_ip }}
-        {% endif %}
-        {% if aa_ip is defined %}
-        {{ aa_ip }}
-        {% endif %}
-        {% if oidc_ip is defined %}
-        {{ oidc_ip }}
-        {% endif %}
-        {% if static_ip is defined %}
-        {{ static_ip }}
-        {% endif %}
-        {% if metadata_ip is defined %}
-        {{ metadata_ip }}
-        {% endif %}
-        {% if manage_ip is defined %}
-        {{ manage_ip }}
-        {% endif %}
-        {% if sa_ip is defined %}
-        {{ sa_ip }}
-        {% endif %}
-        {% if sa_ra_ip is defined %}
-        {{ sa_ra_ip }}
-        {% endif %}
-        {% if sa_tiqr_ip is defined %}
-        {{ sa_tiqr_ip }}
-        {% endif %}
-        {% if sabng_ip is defined %}
-        {{ sabng_ip }}
-        {% endif %}
-        {% if sa_gw_ip is defined %}
-        {{ sa_gw_ip }}
-        {% endif %}
-        {% if sab_enroll_ng_ip is defined %}
-        {{ sab_enroll_ng_ip }}
-        {% endif %}
-        {% if sab_ip is defined %}
-        {{ sab_ip }}
-        {% endif %}
-   }    
-   virtual_ipaddress_excluded {
-        {% if sab_enroll_ip is defined %}
-        {{ sab_enroll_ip }}
-        {% endif %}
-        {% if link_ip is defined %}
-        {{ link_ip }}
-        {% endif %}
-        {% if haproxy_sni_ip is defined %}
-        {{ haproxy_sni_ip }}
-        {% endif %}
-        {% if haproxy_redirects_ip is defined %}
-        {{ haproxy_redirects_ip }}
-        {% endif %}
-        {% if dashboard_ip is defined %}
-        {{ dashboard_ip }}
-        {% endif %}
-        {% if stats_ip is defined %}
-        {{ stats_ip }}
-        {% endif %}
-        {% if lifecycle_ip is defined %}
-        {{ lifecycle_ip }}
-        {% endif %}
-   }
-}
-vrrp_instance ipv6_engine {
-   interface {{ ansible_default_ipv4.interface }}               # interface to monitor
-   state {{ keepalived.state_master }}
-   virtual_router_id 53          # Assign one ID for this route
-   priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
-   advert_int 5
-   virtual_ipaddress {
-       {% if engine_ipv6 is defined %}
-       {{ engine_ipv6 }}
-       {% endif %}
-       {% if bind_ipv6 is defined %}
-       {{ bind_ipv6 }}
+       {{ haproxy_sni_ip.ipv4 }}
+       {% if haproxy_sni_ip_restricted.ipv4 is defined %}
+       {{ haproxy_sni_ip_restricted.ipv4 }}
        {% endif %}
    }
 }
-vrrp_instance ipv6_apps {
+vrrp_instance ipv6 {        
    interface {{ ansible_default_ipv4.interface }} 
    state {{ keepalived.state_backup }}
-   virtual_router_id 54
+   virtual_router_id 56
    priority {{ keepalived.backupprio }}
    advert_int 5
    virtual_ipaddress {
-        {% if engine_api_ipv6 is defined %}
-        {{ engine_api_ipv6 }}
+        {% if haproxy_sni_ip.ipv6 is defined %}
+        {{ haproxy_sni_ip.ipv6 }}
         {% endif %}
-        {% if profile_ipv6 is defined %}
-        {{ profile_ipv6 }}
-        {% endif %}
-        {% if teams_ipv6 is defined %}
-        {{ teams_ipv6 }}
-        {% endif %}
-        {% if authzserver_ipv6 is defined %}
-        {{ authzserver_ipv6 }}
-        {% endif %}
-        {% if authz_admin_ipv6 is defined %}
-        {{ authz_admin_ipv6 }}
-        {% endif %}
-        {% if authz_playground_ipv6 is defined %}
-        {{ authz_playground_ipv6 }}
-        {% endif %}
-        {% if voot_ipv6 is defined %}
-        {{ voot_ipv6 }}
-        {% endif %}
-        {% if pdp_ipv6 is defined %}
-        {{ pdp_ipv6 }}
-        {% endif %}
-        {% if aa_ipv6 is defined %}
-        {{ aa_ipv6 }}
-        {% endif %}
-        {% if oidc_ipv6 is defined %}
-        {{ oidc_ipv6 }}
-        {% endif %}
-        {% if static_ipv6 is defined %}
-        {{ static_ipv6 }}
-        {% endif %}
-        {% if metadata_ipv6 is defined %}
-        {{ metadata_ipv6 }}
-        {% endif %}
-        {% if manage_ipv6 is defined %}
-        {{ manage_ipv6 }}
-        {% endif %}
-        {% if sa_ipv6 is defined %}
-        {{ sa_ipv6 }}
-        {% endif %}
-        {% if sa_tiqr_ipv6 is defined %}
-        {{ sa_tiqr_ipv6 }}
-        {% endif %}
-        {% if sa_ra_ipv6 is defined %}
-        {{ sa_ra_ipv6 }}
-        {% endif %}
-        {% if sa_gw_ipv6 is defined %}
-        {{ sa_gw_ipv6 }}
-        {% endif %}
-        {% if sabng_ipv6 is defined %}
-        {{ sabng_ipv6 }}
-        {% endif %}
-        {% if sab_enroll_ng_ipv6 is defined %}
-        {{ sab_enroll_ng_ipv6 }}
-        {% endif %}
-        {% if sab_ipv6 is defined %}
-        {{ sab_ipv6 }}
-        {% endif %}
-   }    
-   virtual_ipaddress_excluded {
-        {% if sab_enroll_ipv6 is defined %}
-        {{ sab_enroll_ipv6 }}
-        {% endif %}
-        {% if haproxy_sni_ip is defined %}
-        {% endif %}
-        {% if link_ipv6 is defined %}
-        {{ link_ipv6 }}
-        {% endif %}
-        {% if haproxy_sni_ipv6 is defined %}
-        {{ haproxy_sni_ipv6 }}
-        {% endif %}
-        {% if haproxy_redirects_ipv6 is defined %}
-        {{ haproxy_redirects_ipv6 }}
-        {% endif %}
-        {% if dashboard_ipv6 is defined %}
-        {{ dashboard_ipv6 }}
-        {% endif %}
-        {% if stats_ipv6 is defined %}
-        {{ stats_ipv6 }}
-        {% endif %}
-        {% if lifecycle_ipv6 is defined %}
-        {{ lifecycle_ipv6 }}
+        {% if haproxy_sni_ip_restricted.ipv6 is defined %}
+        {{ haproxy_sni_ip_restricted.ipv6 }}
         {% endif %}
    }
 }
