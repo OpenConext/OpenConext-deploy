@@ -62,8 +62,8 @@
     path: "{{ rsyslog_dir }}/apps/{{ item.name }}/lastseen"
     state: directory
     owner: root
-    group: "{{ rsyslog_read_group }}"
-    mode: 0750 
+    group: root
+    mode: 0775
   with_items: "{{ rsyslog_environments.sc }}"
 
 - name: Create cronjobs for proecessing lastseen script
