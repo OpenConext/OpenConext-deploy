@@ -1,20 +1,61 @@
 ---
-- name: Install haproxy 1.8 yum repo
-  copy:
-    src: haproxy18.repo
-    dest: /etc/yum.repos.d/
-    owner: root
-    mode: 0644
+- name: Remove haproxy18 custom repo
+  file:
+    path: /etc/yum.repos.d/haproxy18.repo
+    state: absent
+  register: haproxy_removed
+
+- name: Clean up the yum repos
+  command: yum clean metadata
+  when: 
+    - haproxy_removed.changed | bool
+
+- name: Stop haproxy when upgrading
+  service:
+    name: haproxy
+    state: stopped
+    enabled: no
+  when: 
+    - haproxy_removed.changed | bool
+
+- name: Remove custom haproxy systemd file
+  file: 
+    path: /etc/systemd/system/haproxy.service
+    state: absent
+  when: 
+    - haproxy_removed.changed | bool
+
+- name: Remove haproxy 1.5 or 1.7
+  yum: 
+    name: 
+      - haproxy
+    state: absent
+  when: 
+    - haproxy_removed.changed | bool
 
 - name: Create lbops group
   group:
     name: lbops
     state: present
 
-- name: Include redirects-instance.yml
-  include: redirects-instance.yml
-  when:
-    - haproxy_redirects is defined
+- name: Enable software collections
+  yum:
+    name: 
+      - centos-release-scl
+    state: present
+
+- name: Install haproxy from software collections
+  yum:
+    name: 
+      - rh-haproxy18-haproxy
+      - rh-haproxy18-haproxy-syspaths
+      - rh-haproxy18-runtime
+    state: present
+
+- name: Copy haproxy sysconfig file
+  copy:
+    src: rh-haproxy18-haproxy
+    dest: /etc/sysconfig/rh-haproxy18-haproxy
 
 - name: disable health checks for development envs
   command: 'echo "disable health {{item.name}}" | socat /var/lib/haproxy/stats stdio'
@@ -23,22 +64,6 @@
   when:
     - develop | bool
 
-- name: Install haproxy and socat
-  yum:
-    name:
-     - socat
-     - haproxy
-    state: present
-
-- name: Get haproxy version
-  command: bash -c "haproxy -v | grep version | awk '{ print $3 }'"
-  register: haproxy_version
-  changed_when: False
-
-- name: Set haproxy version fact
-  set_fact:
-    haproxy_version: "{{ haproxy_version.stdout }}"
-
 - name: Create haproxy socket dir
   file:
     path: /var/lib/haproxy
@@ -46,11 +71,6 @@
     owner: haproxy
     group: haproxy
     mode: 0755
-
-- name: Install haproxy systemd single instance file
-  template:
-    src: haproxy_systemd_single.j2
-    dest: /etc/systemd/system/haproxy.service
 
 - name: Enable haproxy
   service:
@@ -85,6 +105,11 @@
   when:
     - haproxy_backend_tls | bool
 
+- name: Create an empty default haproxy.cfg
+  copy:
+    content: ""
+    dest: /etc/opt/rh/rh-haproxy18/haproxy/haproxy.cfg
+    
 - name: Copy global haproxy config
   template:
     src: "haproxy_global.cfg.j2"
@@ -105,3 +130,8 @@
     dest: "/etc/haproxy/haproxy_backend.cfg"
   notify:
     - "reload haproxy"
+
+- name: Include redirects-instance.yml
+  include: redirects-instance.yml
+  when:
+    - haproxy_redirects is defined

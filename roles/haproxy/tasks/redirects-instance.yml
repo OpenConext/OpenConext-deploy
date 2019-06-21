@@ -25,8 +25,8 @@
     - "restart haproxy redirects instance"
 
 - name: Install haproxy systemd redirect systemd file
-  template:
-    src: "haproxy_systemd_redirects.j2"
+  copy:
+    src: "haproxy_systemd_redirects"
     dest: "/etc/haproxy/redirects/haproxy_redirects.service"
   notify:
     - "reload systemd"

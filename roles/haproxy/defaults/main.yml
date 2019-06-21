@@ -1,6 +1,4 @@
 tls_backend_ca: /etc/pki/haproxy/backend.{{ base_domain }}.pem
 haproxy_removal_applications: []
 haproxy_cookie_max_idle: 3600
-haproxy_rolling_updates: False
-haproxy_18: False
 haproxy_metricbeat: False
