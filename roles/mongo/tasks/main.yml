@@ -145,21 +145,20 @@
     dest: "/tmp/repset_init.js"
   when:
     - mongo_primary | bool
-    - mongo_cluster | bool
 
 - name: Initialize the replication set on the primary, tls enabled
   shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem --authenticationDatabase admin /tmp/repset_init.js --host "{{mongo_hostname }}"
   when:
     - mongo_primary | bool
-    - mongo_cluster | bool
     - mongo_tls | bool
+  changed_when: false
 
 - name: Initialize the replication set on the primary
   shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/repset_init.js --host 127.0.0.1
   when:
     - mongo_primary | bool
-    - mongo_cluster | bool
     - not mongo_tls | bool
+  changed_when: false
 
 - name: Create mongo database users
   mongodb_user:

@@ -19,6 +19,9 @@
 [mongo_servers]
 %target_host%
 
+[mongod_primary]
+%target_host%
+
 [selfsigned_certs]
 %target_host%
 
@@ -30,3 +33,4 @@ php-apps
 loadbalancer-vm
 mongo_servers
 selfsigned_certs
+mongod_primary
