@@ -35,7 +35,7 @@
     state: enabled
     host: "{{ item.host }}"
     fail_on_not_found: no
-    socket: "{{ item.socket }}"
+    socket: /var/lib/haproxy/haproxy.stats
     weight: "{{ item.weight }}"
     backend: "{{ item.backend }}"
   with_items: "{{ haproxy_weights.haproxy_items }}"
@@ -46,8 +46,10 @@
     state: "{{ item.state }}"
     host: "{{ item.host }}"
     fail_on_not_found: no
-    socket: "{{ item.socket }}"
+    socket: /var/lib/haproxy/haproxy.stats
     backend: "{{ item.backend }}"
   with_items: "{{ haproxy_states.haproxy_items }}"
   when: state is defined
 
+- name: Write the state to the correct state file
+  shell: echo "show servers state" | socat /var/lib/haproxy/{{ app_name }}.stats - > /tmp/haproxy/{{ app_name }}/state
