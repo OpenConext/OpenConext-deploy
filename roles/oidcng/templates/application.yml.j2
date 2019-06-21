@@ -32,6 +32,7 @@ secret_key_set_path: file://{{ oidcng_dir }}/secret_keyset.json
 associated_data: {{ oidcng_associated_data }}
 private_key_path: file://{{ oidcng_dir }}/oidcsaml.key
 certificate_path: file://{{ oidcng_dir }}/oidcsaml.crt
+default_acr_value: {{ oidcng.default_acr_value }}
 
 spring:
   data:
