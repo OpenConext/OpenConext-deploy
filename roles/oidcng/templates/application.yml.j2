@@ -47,10 +47,10 @@ spring:
         read-timeout: 10000
         connect-timeout: 5000
       service-provider:
-        entity-id: https://oidcng.{{ base_domain }}
+        entity-id: {{ oidcng_saml_sp_entityid }}
         prefix: oidc
         alias: oidc-proxy
-        base-path: https://oidcng.{{ base_domain }}
+        base-path: https://{{ oidcng_base_hostname }}
         sign-metadata: true
         sign-requests: true
         want-assertions-signed: false
@@ -61,7 +61,7 @@ spring:
           - urn:oasis:names:tc:SAML:2.0:nameid-format:transient
         providers:
           - alias: engine-{{ env }}
-            metadata: https://engine.{{ base_domain }}/authentication/idp/metadata
+            metadata: {{ oidcng_idp_metadata_url }}
             link-text: EngineBlock {{ env }}
             name-id: https://engine.{{ base_domain }}/authentication/idp/metadata
             assertion-consumer-service-index: 0
