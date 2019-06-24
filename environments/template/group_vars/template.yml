@@ -508,6 +508,7 @@ haproxy_applications:
     ha_url: "/"
     port: "405"
     servers: "{{php_servers}}"
+    restricted: yes
 
   - name: teams
     vhost_name: teams.{{ base_domain }}
@@ -532,6 +533,7 @@ haproxy_applications:
     ha_url: "/health"
     port: "603"
     servers: "{{java_servers}}"
+    restricted: yes
 
   - name: authz_playground
     vhost_name: authz-playground.{{ base_domain }}
@@ -556,6 +558,7 @@ haproxy_applications:
     ha_url: "/pdp/api/health"
     port: "613"
     servers: "{{java_servers}}"
+    restricted: yes
 
   - name: oidc
     vhost_name: oidc.{{ base_domain }}
@@ -572,6 +575,7 @@ haproxy_applications:
     ha_url: "/aa/api/health"
     port: "615"
     servers: "{{java_servers}}"
+    restricted: yes
   
   - name: link
     vhost_name: link.{{ base_domain }}
@@ -588,6 +592,7 @@ haproxy_applications:
     ha_url: "/manage/api/health"
     port: "617"
     servers: "{{java_servers}}"
+    restricted: yes
 
   - name: mujina-sp
     vhost_name: mujina-sp.{{ base_domain }}
@@ -624,12 +629,22 @@ haproxy_applications:
 haproxy_backend_tls: False
 
 haproxy_sni_ip:
-  ipv4: "*"
+  ipv4: 127.0.0.1
   ipv6:  "::1"
   certs: 
      - name: star
        key_content: "{{ https_star_private_key }}" 
        crt_name: star.{{ base_domain }}.pem
+
+haproxy_sni_ip_restricted:
+  ipv4: 127.0.0.2
+  ipv6: "::1"
+  certs:
+     - name: star
+       key_content: "{{ https_star_private_key }}"  
+       crt_name: star.{{ base_domain }}.pem
+
+
 
 php_servers:
    - { ip: "127.0.0.1", label: "php"}
