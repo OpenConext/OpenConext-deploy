@@ -5,7 +5,7 @@ Listen {{ apache_app_listen_address.oidcng }}:{{ loadbalancing.oidcng.port }}
 <Virtualhost *:443 >
 {% endif %}
 
-    ServerName https://oidcng.{{ base_domain }}
+    ServerName https://{{ oidcng_base_hostname }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-oidcng'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-oidcng'" combined

@@ -30,8 +30,8 @@ oidcng_version: 0.0.2
 pdp_gui_version: 2.0.5
 pdp_server_version: 2.0.5
 profile_version: "1.2.1"
-teams_gui_version: 8.0.3
-teams_server_version: 8.0.3
+teams_gui_version: 8.0.5
+teams_server_version: 8.0.5
 voot_version: 3.0.6
 
 databases:
@@ -403,6 +403,7 @@ oidcng:
     - http://{{ base_domain }}/assurance/loa1
     - http://{{ base_domain }}/assurance/loa2
     - http://{{ base_domain }}/assurance/loa3
+  default_acr_value: http://{{ base_domain }}/assurance/loa1
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
@@ -600,6 +601,14 @@ haproxy_applications:
     port: "604"
     servers: "{{java_servers}}"
 
+  - name: oidc_playground
+    vhost_name: "oidc-playground"
+    ip: "192.168.66.98"
+    ha_method: "GET"
+    ha_url: "/oidc/api/actuator/health"
+    port: "619"
+    servers: "{{java_servers}}"
+  
   - name: voot
     vhost_name: "voot"
     ip: 192.168.66.98

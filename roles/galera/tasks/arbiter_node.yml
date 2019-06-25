@@ -13,12 +13,11 @@
 
 - name: Install MariaDB, Galera, rsync, MySQL-python
   yum:
-    name: "{{  item  }}"
+    name:
+      - galera
+      - rsync         # For galera sync
+      - MySQL-python  # Required for using the Ansible mysql_* modules
     state: installed
-  with_items:
-    - galera
-    - rsync         # For galera sync
-    - MySQL-python  # Required for using the Ansible mysql_* modules
 
 - name: Create directory to keep Galera key material
   file:
@@ -27,7 +26,7 @@
     owner: root
     group: root
     mode: 0775
-  when: galera_ssl
+  when: galera_ssl | bool
 
 - name: copy ca certificate
   copy:
@@ -36,7 +35,7 @@
   with_items:
     - "{{ galera_tls_ca }}"
   when:
-    - galera_ssl
+    - galera_ssl | bool
 
 - name: copy certificates to correct location
   copy:
@@ -46,7 +45,7 @@
   with_items:
     - "{{ galera_tls }}"
   when:
-    - galera_ssl
+    - galera_ssl | bool
 
 - name: copy private keys to correct location
   copy:
@@ -55,7 +54,7 @@
     mode: 0600
     owner: nobody
   when:
-    - galera_ssl
+    - galera_ssl | bool
 
 - name: Put garb config file
   template:

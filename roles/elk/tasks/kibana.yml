@@ -17,19 +17,19 @@
     dest: "{{ kibana_tls_key_path }}" 
     mode: 0600 
     owner: root
-  when: kibana_standalone
+  when: kibana_standalone | bool
 
 - name: Copy Kibana TLS certificate
   copy: 
     src: "{{ inventory_dir }}/files/certs/kibana/{{ kibana_server_name }}.crt" 
     dest: "{{ kibana_tls_cert_path }}"
-  when: kibana_standalone
+  when: kibana_standalone | bool
 
 - name: Copy Kibana TLS chain file
   copy: 
     src: "{{ inventory_dir }}/files/certs/kibana/{{ kibana_server_name }}_chain.crt" 
     dest: "{{ kibana_tls_chain_path }}"
-  when: kibana_standalone
+  when: kibana_standalone | bool
 
 - name: Install Apache file
   template: 

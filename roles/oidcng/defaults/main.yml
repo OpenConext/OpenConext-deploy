@@ -5,3 +5,6 @@ oidcng_snapshot_timestamp: ''
 oidcng_jar: oidcng-current.jar
 oidcng_random_source: 'file:///dev/urandom'
 oidcng_cronjobmaster: true
+oidcng_saml_sp_entityid: https://oidcng.{{ base_domain }}
+oidcng_idp_metadata_url: https://engine.{{ base_domain }}/authentication/idp/metadata
+oidcng_base_hostname: oidcng.{{ base_domain }}

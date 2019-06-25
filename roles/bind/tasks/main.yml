@@ -1,10 +1,9 @@
 ---
 - name: install bind packages
   yum:
-    name: "{{ item }}"
+    name:
+      - bind
     state: present
-  with_items:
-    - bind
 
 - name: create bind directories
   file:

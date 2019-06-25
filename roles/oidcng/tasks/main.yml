@@ -33,7 +33,7 @@
   template:
     src: "logback.xml.j2"
     dest: "{{ oidcng_dir }}/logback.xml"
-    owner: oidcng
+    owner: root
     group: oidcng
     mode: 0740
   notify:
@@ -43,7 +43,7 @@
   template:
     src: "application.yml.j2"
     dest: "{{ oidcng_dir }}/application.yml"
-    owner: "oidcng"
+    owner: "root"
     group: "oidcng"
     mode: 0740
   notify:
@@ -66,8 +66,8 @@
 - name: copy / create private key
   copy:
     content: "{{ oidcng_private_key }}"
-    dest: "{{ oidcng_dir }}/id_rsa"
-    owner: "oidcng"
+    dest: "{{ oidcng_dir }}/oidcsaml.key"
+    owner: "root"
     group: "oidcng"
     mode: 0740
   notify:
@@ -75,9 +75,9 @@
 
 - name: copy / create certificate
   copy:
-    content: "{{ oidcng_certificate }}"
-    dest: "{{ oidcng_dir }}/id_rsa.pub"
-    owner: "oidcng"
+    src: "{{ inventory_dir }}/files/certs/oidc/oidcsaml.crt"
+    dest: "{{ oidcng_dir }}/oidcsaml.crt"
+    owner: "root"
     group: "oidcng"
     mode: 0740
   notify:

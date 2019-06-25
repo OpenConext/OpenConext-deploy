@@ -1,11 +1,10 @@
 ---
 - name: Install httpd and required modules
   yum:
-    name: "{{ item }}"
-    state: present
-  with_items:
+    name:
      - httpd
      - mod_ssl
+    state: present
 
 - name: Copy default config files
   template:
@@ -79,14 +78,14 @@
     mode: 0600
     owner: root
   when:
-    - haproxy_backend_tls
+    - haproxy_backend_tls | bool
 
 - name: Create SSL certificate
   copy:
     src: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
     dest: "{{ tls.cert_path }}/backend.{{ base_domain}}.pem"
   when:
-    - haproxy_backend_tls
+    - haproxy_backend_tls | bool
 
 - name: enable httpd
   service:

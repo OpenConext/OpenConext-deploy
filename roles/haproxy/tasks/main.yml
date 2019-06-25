@@ -26,4 +26,4 @@
   with_items:
     - "{{ haproxy_applications }}"
   when:
-    - develop
+    - develop | bool

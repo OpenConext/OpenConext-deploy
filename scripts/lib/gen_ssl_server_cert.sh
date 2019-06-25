@@ -130,3 +130,5 @@ ${OPENSSL} x509 -in ${tmpdir}/certificate.pem -out ${CERT_BASENAME}.pem
 if [ $? -ne "0" -o ! -e ${CERT_BASENAME}.pem ]; then
     error_exit "Error copying certificate"
 fi
+# Delete the tempdir
+rm -rf $tmpdir

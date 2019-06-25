@@ -13,15 +13,14 @@
   roles:
     - { role: common,       tags: ['common'] }
     - { role: rsyslog,      tags: ['rsyslog'] }
-    - { role: iptables, when: iptables_enable,  tags: ['iptables'] }
+    - { role: iptables, when: iptables_enable | bool,  tags: ['iptables'] }
 
-- hosts: vm
+- hosts: php-apps-vm
   become: true
   roles:
     - { role: hosts,     tags: ['hosts'] }
-    - { role: welcome,   tags: ['welcome'] }
-  roles:
     - { role: httpd,     tags: ['httpd'] }
+    - { role: welcome,   tags: ['welcome'] }
 
 - hosts: selfsigned_certs
   become: true  
@@ -129,8 +128,8 @@
     - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
     - { role: manage-server,                tags: ['manage', 'manage-server'] }
     - { role: oidcng,                       tags: ['oidcng'] }
-    - { role: dashboard-gui,                tags: ['dashboard', 'dashboard-gui'] , when: dashboard_install }
-    - { role: dashboard-server,             tags: ['dashboard', 'dashboard-server'], when: dashboard_install }
+    - { role: dashboard-gui,                tags: ['dashboard', 'dashboard-gui'] , when: dashboard_install | bool }
+    - { role: dashboard-server,             tags: ['dashboard', 'dashboard-server'], when: dashboard_install | bool }
     
   handlers:
     - include: roles/httpd/handlers/main.yml

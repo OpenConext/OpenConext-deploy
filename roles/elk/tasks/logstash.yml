@@ -15,13 +15,13 @@
     src: '{{ inventory_dir }}/files/certs/logstash/logstash.{{ base_domain }}.crt' 
     dest: '/etc/pki/tls/certs/logstash.{{ base_domain }}.pem' 
     owner: root 
-  when: logstash_tls
+  when: logstash_tls | bool
 
 - name: Install logstash TLS key
   copy: 
     content: "{{ logstash_tls_key }}" 
     dest: /etc/pki/tls/private/logstash.{{ base_domain }}.key
-  when: logstash_tls
+  when: logstash_tls | bool
 
 - name: Install logstash configuration file
   template: 
@@ -60,11 +60,11 @@
 
 - name: Include OpenConext-stats specific tasks
   include: logstash_stats.yml
-  when: logstash_stats
+  when: logstash_stats | bool
 
 - name: Include ELK stack specific tasks
   include: logstash_elk.yml
-  when: logstash_elk
+  when: logstash_elk | bool
 
 - name: Enable and start logstash service
   service: 

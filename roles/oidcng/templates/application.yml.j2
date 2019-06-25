@@ -30,8 +30,9 @@ mongodb_db: {{ oidcng.mongo_database }}
 openid_configuration_path: file://{{ oidcng_dir }}/openid-configuration.json
 secret_key_set_path: file://{{ oidcng_dir }}/secret_keyset.json
 associated_data: {{ oidcng_associated_data }}
-private_key_path: file://{{ oidcng_dir }}/id_rsa
-certificate_path: file://{{ oidcng_dir }}/id_rsa.pub
+private_key_path: file://{{ oidcng_dir }}/oidcsaml.key
+certificate_path: file://{{ oidcng_dir }}/oidcsaml.crt
+default_acr_value: {{ oidcng.default_acr_value }}
 
 spring:
   data:
@@ -46,10 +47,10 @@ spring:
         read-timeout: 10000
         connect-timeout: 5000
       service-provider:
-        entity-id: https://oidcng.{{ base_domain }}
+        entity-id: {{ oidcng_saml_sp_entityid }}
         prefix: oidc
         alias: oidc-proxy
-        base-path: https://oidcng.{{ base_domain }}
+        base-path: https://{{ oidcng_base_hostname }}
         sign-metadata: true
         sign-requests: true
         want-assertions-signed: false
@@ -60,7 +61,7 @@ spring:
           - urn:oasis:names:tc:SAML:2.0:nameid-format:transient
         providers:
           - alias: engine-{{ env }}
-            metadata: https://engine.{{ base_domain }}/authentication/idp/metadata
+            metadata: {{ oidcng_idp_metadata_url }}
             link-text: EngineBlock {{ env }}
             name-id: https://engine.{{ base_domain }}/authentication/idp/metadata
             assertion-consumer-service-index: 0
