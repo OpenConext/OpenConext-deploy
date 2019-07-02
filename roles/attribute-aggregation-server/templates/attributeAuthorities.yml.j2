@@ -107,7 +107,13 @@ authorities:
       ],
       requiredInputAttributes: [
         {
-        name: "urn:mace:dir:attribute-def:eduPersonPrincipalName",
+          name: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
+        },
+        {
+          name: "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+        },
+        {
+          name: "urn:mace:dir:attribute-def:uid"
         }
       ],
       validationRegExp: "^urn:mace:surfnet.nl:surfmarket.nl:.*$"
