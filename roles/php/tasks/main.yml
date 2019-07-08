@@ -126,6 +126,13 @@
   notify:
     - "restart php72-php-fpm"
 
+- name: Put 7.2 php-fpm www pool conf
+  copy:
+    src: "www.conf"
+    dest: "/etc/opt/remi/php72/php-fpm.d/www.conf"
+  notify:
+    - "restart php72-php-fpm"
+
 - name: Enable php-fpm
   service:
     name: php-fpm
