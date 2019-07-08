@@ -57,16 +57,14 @@
     chdir: "{{ profile_current_release_symlink }}/app/config/"
     creates: "{{ profile_current_release_symlink }}/app/config/global_view_parameters.yml"
 
-- name: Prepare Profile environment
-  environment:
-   - SYMFONY_ENV: "{{ profile_apache_symfony_environment }}"
-  command: composer prepare-env
-  args:
-      chdir: "{{ profile_current_release_symlink }}/"
-  changed_when: false
+- name: Run commands with PHP 7.2
+  lineinfile:
+    path: "{{ profile_current_release_symlink }}/bin/console"
+    regexp: '^#!/usr/bin/env php'
+    line: '#!/usr/bin/env php72'
 
 - name: Create the symfony cache
-  command: app/console cache:clear --env={{ profile_apache_symfony_environment }} --no-debug
+  command: bin/console cache:clear --env={{ profile_apache_symfony_environment }} --no-debug
   args:
     chdir: "{{ profile_current_release_symlink }}/"
   when:
@@ -107,14 +105,14 @@
   notify:
     - "restart php-fpm"
 
-- name: php-fpm 73 config
+- name: php-fpm 72 config
   template:
     src: "{{ item }}.j2"
-    dest: "/etc/opt/remi/php73/php-fpm.d/{{ item }}"
+    dest: "/etc/opt/remi/php72/php-fpm.d/{{ item }}"
   with_items:
-     - profile-pool-73.conf
+     - profile-pool-72.conf
   notify:
-    - "restart php73-fpm"
+    - "restart php72-fpm"
 
 - name: Configure Profile
   template:
