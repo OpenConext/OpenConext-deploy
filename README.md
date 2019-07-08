@@ -49,7 +49,6 @@ To install for development with Homebrew:
     brew install python
     pip install --upgrade setuptools
     pip install --upgrade pip
-    brew linkapps
     brew install ansible
 
 ## Run playbooks
