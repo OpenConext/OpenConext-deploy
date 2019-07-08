@@ -136,20 +136,6 @@
     name: php72-php-fpm
     enabled: yes
 
-- name: Remove default www pool
-  file:
-    path: /etc/php-fpm.d/www.conf
-    state: absent
-  notify:
-    - "restart php-fpm"
-
-- name: Remove default www pool
-  file:
-    path: /etc/opt/remi/php72/php-fpm.d/www.conf
-    state: absent
-  notify:
-    - "restart php72-php-fpm"
-
 # Set mode to a+x so components can access their subdirectories under session/
 - name: Create directory for vhosts to store PHP sessions
   file:
