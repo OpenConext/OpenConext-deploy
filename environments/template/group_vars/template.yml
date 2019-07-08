@@ -36,7 +36,7 @@ mujina_version: 7.0.7
 oidc_version: 1.3.4
 pdp_server_version: 2.0.5
 pdp_gui_version: 2.0.5
-profile_version: "1.2.1"
+profile_version: "2.0.0"
 teams_gui_version: 8.0.5
 teams_server_version: 8.0.5
 voot_version: 3.0.6
