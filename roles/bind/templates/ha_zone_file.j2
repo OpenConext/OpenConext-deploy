@@ -9,7 +9,7 @@ $ORIGIN ha.{{ base_domain }}.
                             )
             IN      NS      ns1ha.{{ base_domain }}.
             IN      NS      ns2ha.{{ base_domain }}.
-restricted.{{ base_domain }} 300 IN A  {{haproxy_sni_ip_restricted.ipv4 }} 
-restricted.{{ base_domain }} 300 IN AAAA  {{haproxy_sni_ip_restricted.ipv6 }} 
-unrestricted.{{ base_domain }} 300 IN A  {{haproxy_sni_ip.ipv4 }} 
-unrestricted.{{ base_domain }} 300 IN AAAA  {{haproxy_sni_ip.ipv6 }} 
+restricted 300 IN A  {{haproxy_sni_ip_restricted.ipv4 }} 
+restricted 300 IN AAAA  {{haproxy_sni_ip_restricted.ipv6 }} 
+unrestricted 300 IN A  {{haproxy_sni_ip.ipv4 }} 
+unrestricted 300 IN AAAA  {{haproxy_sni_ip.ipv6 }} 
