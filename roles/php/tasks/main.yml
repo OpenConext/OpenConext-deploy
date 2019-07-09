@@ -34,17 +34,10 @@
       - composer
     state: present
 
-- name: check for presence of the remi 72 repository file
-  stat:
-    path: "/etc/yum.repos.d/remi-php72.repo"
-  register: remi_php72_config
-
 - name: Enable REMI 72 repo
   copy:
       src: remi-php72.repo
       dest: /etc/yum.repos.d/remi-php72.repo
-  when:
-    - remi_php72_config.stat.exists == False
 
 - name: Install php-(cli,fpm) 7.2
   yum:
