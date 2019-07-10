@@ -535,6 +535,7 @@
             "http://test.surfconext.nl/assurance/loa2",
             "http://test.surfconext.nl/assurance/loa3"
           ],
+          "default": "http://test.surfconext.nl/assurance/loa2",
           "info": "Set to require Stepup Authentication for this SP with the specified minimum Level of Assurance."
         },
         "coin:stepup:allow_no_token": {
