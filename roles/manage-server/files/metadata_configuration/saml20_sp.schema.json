@@ -527,6 +527,20 @@
           ],
           "default": "license_required_by_service_provider",
           "info": "Set the applicable license for this service as provisioned by the SP Dashboard."
+        },
+        "coin:stepup:requireloa": {
+          "type": "string",
+          "format": "url",
+          "enum": [
+            "http://test.surfconext.nl/assurance/loa1",
+            "http://test.surfconext.nl/assurance/loa2",
+            "http://test.surfconext.nl/assurance/loa3"
+          ],
+          "info": "Set to require Stepup Authentication for this SP with the specified minimum Level of Assurance."
+        },
+        "coin:stepup:allow_no_token": {
+          "type": "boolean",
+          "info": "When Stepup Authentication is required for this SP, allow users without a registered token to log in regardless."
         }
       },
       "patternProperties": {
