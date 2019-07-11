@@ -413,9 +413,11 @@
           "type": "string",
           "format": "url",
           "enum": [
-            "http://test.surfconext.nl/assurance/loa2",
-            "http://test.surfconext.nl/assurance/loa3"
+            {% for loa in manage.loa_values_supported %}
+            "{{ loa }}"{{ "," if not loop.last else ""}}
+            {% endfor %}
           ],
+          "default": "{{ manage.loa_values_supported[0] }}",
           "info": "Set to require Stepup Authentication for this SP with the specified minimum Level of Assurance."
         },
         "coin:stepup:allow_no_token": {
