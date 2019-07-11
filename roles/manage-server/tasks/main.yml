@@ -89,11 +89,11 @@
 - name: copy and template metadata configuration
   template:
     src: "{{ item }}"
-    dest: "{{ manage_dir }}/metadata_configuration/"
+    dest: '{{ manage_dir }}/metadata_configuration/{{ item | basename | regex_replace("\.j2","") }}'
     owner: manage
     group: manage
     mode: 0640
-  with_fileglob: "metadata_configuration/*.json"
+  with_fileglob: "metadata_configuration/*.j2"
   tags: deploy
   notify:
     - "restart manage"

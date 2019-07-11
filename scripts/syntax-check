@@ -5,6 +5,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 find . -name '*.j2'   -print0 | xargs -0 ${DIR}/syntax-jinja
 find . -name '*.yml'  -print0 | xargs -0 ${DIR}/syntax-yml
-find . -name '*.json' ! -path "./roles/manage-server/files/metadata_configuration/*" -print0 | xargs -0 ${DIR}/syntax-json
+find . -name '*.json' -print0 | xargs -0 ${DIR}/syntax-json
 
 exit 0
