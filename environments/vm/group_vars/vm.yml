@@ -451,6 +451,9 @@ manage:
         password: "{{ manage_stats_api_password }}",
         scopes: ["READ"]
       }
+  loa_values_supported:
+    - http://{{ base_domain }}/assurance/loa2
+    - http://{{ base_domain }}/assurance/loa3
 
 loadbalancing:
   engine:

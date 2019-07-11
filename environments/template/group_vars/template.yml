@@ -409,6 +409,9 @@ manage:
         password: "{{ manage_sysadmin_secret }}",
         scopes: [READ, WRITE, PUSH, SYSTEM]
       }
+  loa_values_supported:
+    - http://{{ base_domain }}/assurance/loa2
+    - http://{{ base_domain }}/assurance/loa3
 
 loadbalancing:
   engine:

@@ -115,6 +115,33 @@
         }
       }
     },
+    "stepupEntities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "level": {
+            "type": [
+              "string"
+            ],
+            "enum": [
+              {% for loa in manage.loa_values_supported %}
+              "{{ loa }}"{{ "," if not loop.last else ""}}
+              {% endfor %}
+            ],
+            "default": "{{ manage.loa_values_supported[0] }}"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "level"
+      ],
+      "additionalProperties": false
+    },
     "disableConsent": {
       "type": "array",
       "items": {

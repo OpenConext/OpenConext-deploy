@@ -1,9 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "saml20_sp",
-  "order": 1,
+  "title": "single_tenant_template",
+  "order": 4,
   "definitions": {
-    "AssertionConsumerService_Binding": {
+    "AssertionConsumerServiceBinding": {
       "type": "string",
       "enum": [
         "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
@@ -16,20 +16,6 @@
       ],
       "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
       "info": "Select the binding the SP claims support for. A binding specifies the technical method of a connection."
-    },
-    "SingleLogoutService_Binding": {
-      "type": "string",
-      "enum": [
-        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
-        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign",
-        "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
-        "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
-        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
-        "urn:oasis:names:tc:SAML:2.0:bindings:URI"
-      ],
-      "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-      "info": "*** SingleLogoutService is not supported by the Engine Block. Import for future compatibility. *** Selects the SingleLogoutService binding an SP claims support for. A binding specifies the protocol to access the service."
     },
     "NameIDFormat": {
       "type": "string",
@@ -70,7 +56,7 @@
     "type": {
       "type": "string",
       "enum": [
-        "saml20-sp"
+        "single-tenant-template"
       ]
     },
     "revisionid": {
@@ -91,18 +77,6 @@
     },
     "allowedall": {
       "type": "boolean"
-    },
-    "manipulation": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "manipulationNotes": {
-      "type": [
-        "string",
-        "null"
-      ]
     },
     "user": {
       "type": "string"
@@ -262,29 +236,24 @@
         "NameIDFormat": {
           "$ref": "#/definitions/NameIDFormat"
         },
-        "certData": {
-          "type": "string",
-          "format": "certificate",
-          "info": "The supplied public certificate of the service. This must be a PEM encoded certificate. DER, CRT or CER are not supported."
-        },
-        "certData2": {
-          "type": "string",
-          "format": "certificate",
-          "info": "Up to three certificates per service can be defined. This is the second field for certificates you can enter. This must be a PEM encoded certificate. DER, CRT or CER are not supported."
-        },
-        "certData3": {
-          "type": "string",
-          "format": "certificate",
-          "info": "Up to three certificates per service can be defined. This is the third and last field for certificates you can enter. This must be a PEM encoded certificate. DER, CRT or CER are not supported."
-        },
         "SingleLogoutService_Binding": {
-          "$ref": "#/definitions/SingleLogoutService_Binding",
-          "info": "*** SingleLogoutService is not supported by the Engine Block. Import for future compatibility. *** Selects the SingleLogoutService binding an SP claims support for. A binding specifies the protocol to access the service."
+          "type": "string",
+          "enum": [
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign",
+            "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
+            "urn:oasis:names:tc:SAML:2.0:bindings:PAOS",
+            "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+            "urn:oasis:names:tc:SAML:2.0:bindings:URI"
+          ],
+          "default": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+          "info": "SingleLogoutService is not supported by the Engine Block. Selects the SingleLogoutService binding an SP claims support for. A binding specifies the protocol to access the service."
         },
         "SingleLogoutService_Location": {
           "type": "string",
           "format": "url",
-          "info": "*** SingleLogoutService is not supported by the Engine Block. Import for future compatibility. *** If the connected SP supports SAML 2.0 Single Logout, this will specify the endpoint element as a URL."
+          "info": "SingleLogoutService is not supported by the Engine Block. If the connected SP supports SAML 2.0 Single Logout, this will specify the endpoint element as a URL."
         },
         "mdrpi:RegistrationInfo": {
           "type": "string",
@@ -305,46 +274,17 @@
         },
         "redirect.sign": {
           "type": "boolean",
-          "info": "Whether authentication request, logout requests and logout responses should be signed. The default is FALSE. This is generally set for trusted proxies like OpenID Connect Gateway or Stepup authentication gateway."
-        },
-        "coin:sp_specific_metadata": {
-          "type": "boolean",
-          "default": false,
-          "info": "Publish SP-specific metadata containing only whitelisted IdPs."
+          "info": "Whether authentication request, logout requests and logout responses should be signed. The default is FALSE. This is generally set for trusted proxies like OpenID Connect Gateway."
         },
         "coin:publish_in_edugain": {
           "type": "boolean",
           "default": false,
-          "info": "Set this for service providers that we publish in eduGAIN. When set, this entity also needs to have a value for coin:publish_in_edugain_date."
+          "info": "Set this for service providers published in eduGAIN."
         },
         "coin:publish_in_edugain_date": {
           "type": "string",
           "format": "date-time",
-          "info": "When this entity first appeared in the eduGAIN feed. Usually the current time."
-        },
-        "coin:publish_in_edugain_allow_rns": {
-          "type": "boolean",
-          "info": "Whether we have approved that this SP may use the Research & Scholarship entity category."
-        },
-        "coin:imported_from_edugain": {
-          "type": "boolean",
-          "default": false,
-          "info": "This is automatically set for service providers imported from eduGAIN. Unset it to prevent re-import."
-        },
-        "coin:push_enabled": {
-          "type": "boolean",
-          "default": false,
-          "info": "Must be set for this Service Provider to be included in the EB push despite being imported from eduGAIN."
-        },
-        "coin:exclude_from_push": {
-          "type": "boolean",
-          "default": false,
-          "info": "Must be set for this Service Provider to be excluded in the EB push."
-        },
-        "coin:oidc_client": {
-          "type": "boolean",
-          "default": false,
-          "info": "Set for those Service Providers that are OpenIDConnect clients."
+          "info": "When to add metadata to the eduGAIN feed. Usually the current time."
         },
         "coin:interfed_source": {
           "type": "string",
@@ -360,7 +300,7 @@
         },
         "coin:institution_id": {
           "type": "string",
-          "info": "The defined client code. Generally an abbreviation of the name of the client."
+          "info": "The defined client code."
         },
         "coin:institution_guid": {
           "type": "string",
@@ -374,8 +314,7 @@
         },
         "coin:no_consent_required": {
           "type": "boolean",
-          "info": "Select this option to skip the consent for a user.",
-          "default": true
+          "info": "Select this option to skip the consent for a user."
         },
         "coin:eula": {
           "type": "string",
@@ -390,18 +329,10 @@
           "type": "boolean",
           "info": "Set to indicate the service in the dashboard for institutions is marked as to have disagreed to sign the aansluitovereenkomst."
         },
-        "coin:ss:hidden": {
-          "type": "boolean",
-          "info": "Set to make invisible in the dashboard for identity providers."
-        },
         "coin:application_url": {
           "type": "string",
           "format": "url",
           "info": "The URL of the service used to log on."
-        },
-        "coin:supports_idp_init_login": {
-          "type": "boolean",
-          "info": "The service provider supports IDP initiated login."
         },
         "coin:transparant_issuer": {
           "type": "boolean",
@@ -409,7 +340,7 @@
         },
         "coin:do_not_add_attribute_aliases": {
           "type": "boolean",
-          "info": "Only send the SAML 2.0 name scheme."
+          "info": "Only send the SAML 2.0 name scheme. "
         },
         "coin:display_unconnected_idps_wayf": {
           "type": "boolean",
@@ -427,11 +358,6 @@
           "type": "string",
           "format": "url",
           "info": "The provided URL to the metadata of the service."
-        },
-        "coin:original_metadata_certData": {
-          "type": "string",
-          "format": "certificate",
-          "info": "The signing certificate of the metadata of the service. This must be a PEM encoded certificate. DER, CRT or CER are not supported."
         },
         "coin:service_team_id": {
           "type": "string",
@@ -473,11 +399,11 @@
         },
         "coin:privacy:surfmarket_dpa_agreement": {
           "type": "boolean",
-          "info": "Has the service provider agreed a Data Processing Agreement (DPA) with SURFmarket?"
+          "info": "Is the SURFmarket model Data Processing Agreement (DPA) signed by the service provider?"
         },
         "coin:privacy:surfnet_dpa_agreement": {
           "type": "boolean",
-          "info": "Is the service provider willing to sign the SURF model Data Processing Agreement (DPA)?"
+          "info": "Is the SURFnet model Data Processing Agreement (DPA) signed by the service provider?"
         },
         "coin:privacy:sn_dpa_why_not": {
           "type": "string",
@@ -504,11 +430,7 @@
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
           ],
           "default": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
-          "info": "Select the Secure Hash Algorithm (SHA) to use for assertions sent by Engineblock to this service provider."
-        },
-        "coin:sign_response": {
-          "type": "boolean",
-          "info": "Set to also directly sign the SAML Response element, in addition to the Assertion element that will always be signed."
+          "info": "Select the Secure Hash Algorithm (SHA) as used by the service provider."
         },
         "coin:ss:supports_strong_authentication": {
           "type": "boolean",
@@ -532,10 +454,11 @@
           "type": "string",
           "format": "url",
           "enum": [
-            "http://test.surfconext.nl/assurance/loa2",
-            "http://test.surfconext.nl/assurance/loa3"
+            {% for loa in manage.loa_values_supported %}
+            "{{ loa }}"{{ "," if not loop.last else ""}}
+            {% endfor %}
           ],
-          "default": "http://test.surfconext.nl/assurance/loa2",
+          "default": "{{ manage.loa_values_supported[0] }}",
           "info": "Set to require Stepup Authentication for this SP with the specified minimum Level of Assurance."
         },
         "coin:stepup:allow_no_token": {
@@ -544,11 +467,11 @@
         }
       },
       "patternProperties": {
-        "^name:(en|nl|pt)$": {
+        "^name:(en|nl)$": {
           "type": "string",
           "info": "Set the name of the service. Format: 'Service Name | Supplier'"
         },
-        "^displayName:(en|nl|pt)$": {
+        "^displayName:(en|nl)$": {
           "type": "string",
           "info": "Name as displayed in applications."
         },
@@ -565,26 +488,26 @@
           "type": "string",
           "info": "The type of service used in the facet search in dashboard."
         },
-        "^AssertionConsumerService:([0-3]{0,1}[0-9]{1}):Binding$": {
-          "$ref": "#/definitions/AssertionConsumerService_Binding",
-          "multiplicity": 30,
+        "^AssertionConsumerService:([0-9]{1}):Binding$": {
+          "$ref": "#/definitions/AssertionConsumerServiceBinding",
+          "multiplicity": 10,
           "info": "An Assertion Consumer Service (or ACS) the location at a ServiceProvider that accepts <samlp:Response> messages. The type of binding for this location can be selected from the pull-down."
         },
-        "^AssertionConsumerService:([0-3]{0,1}[0-9]{1}):Location$": {
+        "^AssertionConsumerService:([0-9]{1}):Location$": {
           "type": "string",
           "format": "url",
-          "multiplicity": 30,
+          "multiplicity": 10,
           "info": "An Assertion Consumer Service (or ACS) is the location at a ServiceProvider that accepts <samlp:Response> messages. A typical ACS location for an SP might look like this: https://data.example-service.nl/saml/saml2_acs/"
         },
-        "^AssertionConsumerService:([0-3]{0,1}[0-9]{1}):index$": {
+        "^AssertionConsumerService:([0-9]{1}):index$": {
           "type": "number",
-          "multiplicity": 30,
+          "multiplicity": 10,
           "info": "An Assertion Consumer Service (or ACS) is the location at a ServiceProvider that accepts <samlp:Response> messages. With the index you can include additional <md:AssertionConsumerService> elements in the SAML 2.0 SP metadata with the same binding, each with its own unique index."
         },
         "^NameIDFormats:([0-2]{1})$": {
           "$ref": "#/definitions/NameIDFormat",
           "multiplicity": 3,
-          "info": "The NameIDFormat(s) this service provider supports. This can be transient, transparant or unspecified."
+          "info": "The format in which the service expects the response. This can be transient, transparant or unspecified."
         },
         "^contacts:([0-3]{1}):surName$": {
           "type": "string",
@@ -671,19 +594,24 @@
         }
       },
       "required": [
-        "name:en",
-        "AssertionConsumerService:0:Binding",
-        "AssertionConsumerService:0:Location"
+        "name:en"
       ],
       "additionalProperties": false
     }
   },
   "required": [
-    "entityid",
     "state",
-    "allowedall",
     "metaDataFields"
   ],
   "additionalProperties": false,
-  "indexes": []
+  "indexes": [
+    {
+      "name": "field_entityid",
+      "type": "field",
+      "fields": [
+        "entityid"
+      ],
+      "unique": false
+    }
+  ]
 }
