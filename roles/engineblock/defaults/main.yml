@@ -64,6 +64,10 @@ engine_minimum_execution_time_on_invalid_received_response: 5000
 engine_time_frame_for_authentication_loop_in_seconds: 60
 engine_maximum_authentication_procedures_allowed: 5
 
+# Regex used to blacklist AuthnContextClassRef attributes from IDP's
+engine_sfo_authn_context_class_ref_blacklist_regex: ''
+
+
 ## The priority of messages that should be logged to syslog
 ## 7 = debug
 ## 6 = notices
