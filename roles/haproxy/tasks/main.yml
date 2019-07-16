@@ -96,6 +96,14 @@
   notify:
     - "reload haproxy"
 
+- name: Create combined key and certificate file for HAproxy restricted
+  copy:
+    content: "{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
+    dest: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
+    mode: 0600
+  with_items: "{{ haproxy_sni_ip_restricted.certs }}"
+  notify:
+
 - name: Copy backend CA certificate
   copy:
     content: "{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}"
