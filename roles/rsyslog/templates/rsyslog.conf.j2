@@ -72,6 +72,14 @@ uucp,news.crit                                          /var/log/spooler
 local7.*                                                /var/log/boot.log
 
 {% if 'sysloghost' in group_names %}
+# Make the logs readable
+$DirCreateMode 0775
+$FileCreateMode 0640
+$FileOwner root
+$FileGroup {{ rsyslog_read_group }}
+$DirOwner root
+$DirGroup root
+
 # This directory contains all rulesets on the central syslog host
 $IncludeConfig /etc/rsyslog.d/rulesets/*.conf
 {% endif %}

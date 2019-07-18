@@ -8,6 +8,13 @@
 #    owner: root
 #  no_log: true
 
+- name: Create directory to save the logs
+  file:
+    path: "{{rsyslog_dir }}"
+    owner: root
+    group: "{{ rsyslog_read_group }}"
+    mode: 0750
+
 - name: put rsyslog client certificate
   copy:
     src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogserver.crt"
@@ -73,4 +80,3 @@
   template:
     src: centralsyslog.j2
     dest: /etc/logrotate.d/centralsyslog
-
