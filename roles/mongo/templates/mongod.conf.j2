@@ -32,10 +32,8 @@ storage:
     smallFiles: true
 {% endif %}
 
-{% if mongo_tls %}
 replication:
   replSetName: {{ replica_set_name }}
-{% endif %}
 
 security: 
     authorization: enabled
