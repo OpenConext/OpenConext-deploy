@@ -44,18 +44,25 @@
       - centos-release-scl
     state: present
 
-- name: Install haproxy from software collections
+- name: Install haproxy and socat
   yum:
     name: 
       - rh-haproxy18-haproxy
       - rh-haproxy18-haproxy-syspaths
       - rh-haproxy18-runtime
+      - socat
     state: present
 
 - name: Copy haproxy sysconfig file
   copy:
     src: rh-haproxy18-haproxy
     dest: /etc/sysconfig/rh-haproxy18-haproxy
+
+- name: install OCSP update tool
+  copy:
+    src: "hapos-upd"
+    dest: "/usr/local/sbin/"
+    mode: 0755
 
 - name: disable health checks for development envs
   command: 'echo "disable health {{item.name}}" | socat /var/lib/haproxy/stats stdio'
@@ -139,7 +146,22 @@
   notify:
     - "reload haproxy"
 
-- name: Include redirects-instance.yml
-  include: redirects-instance.yml
-  when:
-    - haproxy_redirects is defined
+- name: Run hapos-upd for initial OCSP responses
+  shell: /usr/local/sbin/hapos-upd --partial-chain --good-only --socket /var/lib/haproxy/haproxy.stats --VAfile /etc/pki/haproxy/{{ item.name }}_haproxy.pem --cert /etc/pki/haproxy/{{ item.name }}_haproxy.pem
+  with_items:
+    - "{{ haproxy_sni_ip.certs }}"
+    - "{{ haproxy_sni_ip_restricted.certs }}"
+  when:  "'selfsigned_certs' not in group_names"
+
+- name: install OCSP periodic update script
+  template:
+    src: "update_ocsp.j2"
+    dest: "/usr/local/sbin/update_ocsp"
+    mode: 0755
+  when:  "'selfsigned_certs' not in group_names"
+
+- cron:
+    name: "update ocsp info"
+    special_time: hourly
+    job: /usr/local/sbin/update_ocsp {{ ocsp_log_redirect | default('') }}
+  when:  "'selfsigned_certs' not in group_names"

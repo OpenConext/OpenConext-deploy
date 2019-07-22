@@ -7,11 +7,14 @@
 
 set -o nounset
 
-VERSION="0.4.0"
+VERSION="0.4.1-pre1"
 
 PROGNAME="hapos-upd"
 
-OPENSSL_BIN="openssl"
+if [ -z ${OPENSSL_BIN+x} ]; then
+    OPENSSL_BIN="openssl"
+fi
+
 SOCAT_BIN="socat"
 
 CERT=""
@@ -27,6 +30,7 @@ OCSP_HOST=""
 VERIFY=1
 TMP=""
 SKIP_UPDATE=0
+PARTIAL_CHAIN=""
 
 function Quit() {
     if [ $KEEP_TEMP -eq 0 ]; then
@@ -137,6 +141,10 @@ Options:
                          'Host:' header; use this instead of the one
                          extracted from the OCSP server URL.
 
+     --partial-chain   : Allow partial certificate chain if at least one certificate 
+                         is in trusted store. Useful when validating an intermediate
+                         certificate without the root CA.
+                         
  -s, --socket file     : haproxy admin socket. If omitted,
                          $HAPROXY_ADMIN_SOCKET_DEFAULT is used by default.
                          This script is distributed with only one 
@@ -191,6 +199,10 @@ do
 
         --noverify)
             VERIFY=0
+            ;;
+
+        --partial-chain)
+            PARTIAL_CHAIN="-partial_chain"
             ;;
 
         -l|--syslog)
@@ -420,8 +432,7 @@ else
 fi
 
 # check if the EE certificate validates against the chain
-# THKI: disabled because our chain doesn't contain the self-signed CA, so fails
-true || $OPENSSL_BIN verify -CAfile $TMP/chain.pem $TMP/ee.pem &>>$TMP/log
+$OPENSSL_BIN verify $PARTIAL_CHAIN -CAfile $TMP/chain.pem $TMP/ee.pem &>>$TMP/log
 
 if [ $? -ne 0 ]; then
     if [ -e $CERT.issuer ]; then
@@ -435,9 +446,26 @@ fi
 # ----------------------------------
 
 # query the OCSP server and save its response
-$OPENSSL_BIN ocsp -issuer $TMP/chain.pem -cert $TMP/ee.pem \
-    -respout $TMP/ocsp.der -noverify \
-    -no_nonce -url $OCSP_URL -header "Host" "$OCSP_HOST" &>>$TMP/log
+
+OPENSSL_VERSION=`$OPENSSL_BIN version | sed -rn 's/^OpenSSL\s([0-9]\.[0-9]).*/\1/p'`
+
+case $OPENSSL_VERSION in
+        '0.9')
+                $OPENSSL_BIN ocsp $PARTIAL_CHAIN -issuer $TMP/chain.pem -cert $TMP/ee.pem \
+                        -respout $TMP/ocsp.der -noverify \
+                        -no_nonce -url $OCSP_URL -header "Host=$OCSP_HOST" &>>$TMP/log
+                ;;
+        '1.0')
+                $OPENSSL_BIN ocsp $PARTIAL_CHAIN -issuer $TMP/chain.pem -cert $TMP/ee.pem \
+                        -respout $TMP/ocsp.der -noverify \
+                        -no_nonce -url $OCSP_URL -header "Host" "$OCSP_HOST" &>>$TMP/log
+                ;;
+        *)
+                $OPENSSL_BIN ocsp $PARTIAL_CHAIN -issuer $TMP/chain.pem -cert $TMP/ee.pem \
+                        -respout $TMP/ocsp.der -noverify \
+                        -no_nonce -url $OCSP_URL &>>$TMP/log
+                ;;
+esac
 
 if [ $? -ne 0 ]; then
     Error 1 "can't receive the OCSP server response"
@@ -449,11 +477,11 @@ if [ $VERIFY -eq 0 ]; then
     VERIFYOPT="-noverify"
 fi
 if [ -z "$VAFILE" ]; then
-    $OPENSSL_BIN ocsp $VERIFYOPT -issuer $TMP/chain.pem -cert $TMP/ee.pem \
+    $OPENSSL_BIN ocsp $PARTIAL_CHAIN $VERIFYOPT -issuer $TMP/chain.pem -cert $TMP/ee.pem \
         -respin $TMP/ocsp.der -no_nonce -CAfile $TMP/chain.pem \
         -out $TMP/ocsp.txt &>>$TMP/ocsp-verify.txt
 else
-    $OPENSSL_BIN ocsp $VERIFYOPT -issuer $TMP/chain.pem -cert $TMP/ee.pem \
+    $OPENSSL_BIN ocsp $PARTIAL_CHAIN $VERIFYOPT -issuer $TMP/chain.pem -cert $TMP/ee.pem \
         -respin $TMP/ocsp.der -no_nonce -CAfile $TMP/chain.pem \
         -VAfile $VAFILE \
         -out $TMP/ocsp.txt &>>$TMP/ocsp-verify.txt
@@ -545,6 +573,6 @@ else
 fi
 
 # remove temporary files and quit with success
-Quit 0
+#Quit 0
 
 # vim: set tabstop=4 shiftwidth=4 expandtab:
