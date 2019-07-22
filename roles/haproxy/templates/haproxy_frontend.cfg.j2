@@ -6,8 +6,8 @@
 # -------------------------------------------------------------------
 frontend ssl_ip
 
-    bind {{ haproxy_sni_ip.ipv4 }}:443 ssl {% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %}   no-sslv3 transparent
-    bind {{ haproxy_sni_ip.ipv6 }}:443 ssl {% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %}   no-sslv3 transparent
+    bind {{ haproxy_sni_ip.ipv4 }}:443 ssl {% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip.ipv6 }}:443 ssl {% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 alpn h2,http/1.1 transparent 
     http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
     capture request header User-agent len 256
@@ -37,8 +37,8 @@ frontend ssl_ip
 ## -------------------------------------------------------------------
 frontend ssl_restricted_ip
 
-    bind {{ haproxy_sni_ip_restricted.ipv4 }}:443 ssl {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 transparent
-    bind {{ haproxy_sni_ip_restricted.ipv6 }}:443 ssl  {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 transparent
+    bind {{ haproxy_sni_ip_restricted.ipv4 }}:443 ssl {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip_restricted.ipv6 }}:443 ssl  {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
     http-request del-header Proxy
     rspadd  Strict-Transport-Security:\ max-age=15768000
     capture request header User-agent len 256 
