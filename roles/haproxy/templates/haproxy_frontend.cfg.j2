@@ -20,6 +20,12 @@ frontend ssl_ip
     acl {{ application.name }} hdr(host) -i {{ application.vhost_name }}
     {% endif %}
     {% endfor %}
+    {%if haproxy_redirects is defined %}
+    {% for application in haproxy_redirects %}    
+    acl valid_vhost hdr(host) -i {{ application.url }}
+    acl {{ application.name }} hdr(host) -i {{ application.url }}
+    {% endfor %}
+    {% endif %}
 
     http-request deny if ! valid_vhost
     http-request redirect scheme https code 301 if !{ ssl_fc }
@@ -29,7 +35,11 @@ frontend ssl_ip
     use_backend {{ application.name }}_be if {{ application.name }}
     {% endif %}
     {% endfor %}
-
+    {%if haproxy_redirects is defined %}
+    {% for application in haproxy_redirects %}
+    http-request redirect location {{ application.redirecturl }} if {{ application.name }}
+    {% endfor %}
+    {% endif %}
 
 {% if haproxy_sni_ip_restricted is defined %}
 #--------------------------------------------------------------------
