@@ -3,7 +3,7 @@ set -e
 export ANSIBLE_ROLES_PATH="roles:roles-external"
 
 
-# helper function: check if a specified value is present in a space-separted list
+# helper function: check if a specified value is present in a space-separated list
 listcontains() {
 	match=$1
 	shift
@@ -87,10 +87,10 @@ fi
 # run ansible
 if [ $env = "vm" ] || [ $env = "template" ]
 then
-        echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$environment_dir\"$@"
+        echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$environment_dir\" $@"
         ansible-playbook -i "$inventory" -u "$user" "$playbook" --extra-vars="secrets_file=$secret" -e environment_dir="$environment_dir" $@
 else
-	echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret\" environment_dir=\"$environment_dir\"$@"
-        ansible-playbook -i "$inventory" -u "$user"  "$playbook" --extra-vars=secrets_file="$secret" -e environment_dir=$environment_dir $@
+	echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret\" environment_dir=\"$environment_dir\" $@"
+        ansible-playbook -i "$inventory" -u "$user"  "$playbook" --extra-vars=secrets_file="$secret" -e environment_dir="$environment_dir" $@
 fi
 
