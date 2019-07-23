@@ -81,10 +81,10 @@ OPENSSL_CONF=${BASEDIR}/opensslca.conf
 cd ${CA_DIR}
 mkdir -p certs
 
-echo "01" > serial
+printf %x $(date '+%s01') > serial
 touch index.txt
 
-${OPENSSL} req -x509 -newkey rsa:${CA_RSA_MODULUS_SIZE_BITS} -out ${CA_DIR}/ca-cert.pem -outform PEM -nodes -config ${OPENSSL_CONF} -keyout ${CA_DIR}/ca-key.pem -sha256 -extensions v3_ca -set_serial 0 -days ${CA_VALIDITY_DAYS} -subj "${CA_DN}"
+${OPENSSL} req -x509 -newkey rsa:${CA_RSA_MODULUS_SIZE_BITS} -out ${CA_DIR}/ca-cert.pem -outform PEM -nodes -config ${OPENSSL_CONF} -keyout ${CA_DIR}/ca-key.pem -sha256 -extensions v3_ca -set_serial $(date +%s)00 -days ${CA_VALIDITY_DAYS} -subj "${CA_DN}"
 if [ $? -ne "0" ]; then
     error_exit "Error generating CA root certificate and key"
 fi
