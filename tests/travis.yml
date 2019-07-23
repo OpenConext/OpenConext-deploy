@@ -1,0 +1,4 @@
+haproxy_redirects:
+  - name: "redirecttest"
+    url: "redirect.vm.openconext.org"
+    redirecturl: "https://engine.vm.openconext.org"

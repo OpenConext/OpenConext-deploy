@@ -39,6 +39,7 @@ docker run --detach                                             \
 	--add-host oidc.vm.openconext.org:127.0.0.1             \
 	--add-host oidcng.vm.openconext.org:127.0.0.1           \
 	--add-host manage.vm.openconext.org:127.0.0.2           \
+	--add-host redirect.vm.openconext.org:127.0.0.1         \
 	--add-host localhost:127.0.0.1                          \
 	--hostname test.openconext.org                          \
 	-e TERM=xterm                                           \
@@ -85,7 +86,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS --syntax-check
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS --syntax-check -e @/ansible/tests/travis.yml
 
 echo
 echo "================================================================="
@@ -95,7 +96,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS 
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml
 
 echo
 echo "================================================================="
@@ -106,7 +107,7 @@ echo "================================================================="
 echo
 
 TMPOUT=$(mktemp)
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS | tee $TMPOUT
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml | tee $TMPOUT
 
 echo
 echo "================================================================="

@@ -16,15 +16,10 @@
       - https://manage.vm.openconext.org/manage/api/health
   tasks:
     - uri: url={{ item }}
-#      register: result
-#      until: "'UP' in result.content"
       retries: 15
       delay: 10
       with_items: "{{ services_health_checks }}"
-
-#    - uri: url={{ item }} return_content=yes
-#      register: result
-#      until: "'UP' in result.content"
-#      retries: 5
-#      delay: 10
-#      with_items: "{{ services_health_checks }}"
+    - uri: 
+        url: https://redirect.vm.openconext.org
+      register: redirect_test
+      failed_when: redirect_test.redirected == False
