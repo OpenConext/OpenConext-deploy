@@ -28,7 +28,7 @@
   when: stats_apache_standalone | bool
 
 - name: Copy stats Apache certificate
-  copy: src={{ inventory_dir }}/files/certs/stats.{{ base_domain }}.crt dest={{ tls.cert_path }}/stats.{{ base_domain }}.cert owner=root mode=0644
+  copy: src={{ inventory_dir }}/files/certs/stats.{{ base_domain }}.crt dest={{ tls.cert_path }}/stats.{{ base_domain }}.crt owner=root mode=0644
   when: stats_apache_standalone | bool
 
 - name: Copy stats Apache intermediate
