@@ -34,32 +34,6 @@
       - composer
     state: present
 
-- name: check for presence of the remi 73 repository file
-  stat:
-    path: "/etc/yum.repos.d/remi-php73.repo"
-  register: remi_php73_config
-
-- name: Enable REMI 73 repo
-  copy:
-      src: remi-php73.repo
-      dest: /etc/yum.repos.d/remi-php73.repo
-  when:
-    - remi_php73_config.stat.exists == False
-
-- name: Install php-(cli,fpm) 7.3
-  yum:
-    name:
-      - php73-php-fpm
-      - php73-php-cli
-      - php73-php-pecl-apcu
-      - php73-php-curl
-      - php73-php-mbstring
-      - php73-php-mysql
-      - php73-php-soap
-      - php73-php-xml
-      - php73-php-gd
-    state: present
-
 - name: Enable php-fpm
   service:
     name: php-fpm
@@ -75,21 +49,10 @@
   notify:
     - "restart php-fpm"
 
-- name: Install custom PHP configuration for 7.3
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/opt/remi/php73/php.d/{{ item }}"
-  with_items:
-    - 40-apcu.ini
-    - openconext.ini
-  notify:
-    - "restart php73-php-fpm"
-
 - name: Install PHP debug extensions
   yum:
     name:
       - php-pecl-xdebug
-      - php73-php-pecl-xdebug
     state: present
   when:
     - develop | bool
@@ -103,15 +66,6 @@
   notify:
     - "restart php-fpm"
 
-- name: Configure PHP Xdebug for 7.3
-  template:
-    src: "xdebug.ini.j2"
-    dest: "/etc/opt/remi/php73/php.d/15-xdebug.ini"
-  when:
-    - develop | bool
-  notify:
-    - "restart php73-php-fpm"
-
 - name: Put /etc/php-fpm.conf
   copy:
     src: "php-fpm.conf"
@@ -119,21 +73,9 @@
   notify:
     - "restart php-fpm"
 
-- name: Put 7.3 php-fpm.conf
-  copy:
-    src: "php73-fpm.conf"
-    dest: "/etc/opt/remi/php73/php-fpm.conf"
-  notify:
-    - "restart php73-php-fpm"
-
 - name: Enable php-fpm
   service:
     name: php-fpm
-    enabled: yes
-
-- name: Enable php73-php-fpm
-  service:
-    name: php73-php-fpm
     enabled: yes
 
 - name: Remove default www pool
@@ -142,13 +84,6 @@
     state: absent
   notify:
     - "restart php-fpm"
-
-- name: Remove default www pool
-  file:
-    path: /etc/opt/remi/php73/php-fpm.d/www.conf
-    state: absent
-  notify:
-    - "restart php73-php-fpm"
 
 # Set mode to a+x so components can access their subdirectories under session/
 - name: Create directory for vhosts to store PHP sessions
