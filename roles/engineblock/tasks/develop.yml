@@ -40,8 +40,9 @@
     - [ "no", "yes" ]
     - [ "{{ engineblock_symfony_cache_path }}", "{{ engineblock_symfony_log_path }}", "/opt/openconext/OpenConext-engineblock/" ]
 
-- name: Copy app_dev.php to OpenConext web folder
+- name: Copy app_dev.php.dist to OpenConext web folder
   copy:
-    src: "app_dev.php"
+    src: "/opt/openconext/OpenConext-engineblock/app_dev.php.dist"
     dest: "/opt/openconext/OpenConext-engineblock/web/app_dev.php"
+    remote_src: yes
     mode: 0644
