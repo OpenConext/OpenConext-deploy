@@ -38,6 +38,10 @@ engine_debug: false
 
 engine_profile_baseurl: "https://profile.{{ base_domain }}"
 
+# Required for Stepup authentication
+engine_stepup_base_domain: "stepup.{{ base_domain }}"
+engine_stepup_gateway_domain: "gateway.{{ engine_stepup_base_domain }}"
+
 ## PDP endpoint
 engine_pdp_baseurl: https://pdp.{{ base_domain }}
 engine_pdp_path: /pdp/api/decide/policy
@@ -64,9 +68,21 @@ engine_minimum_execution_time_on_invalid_received_response: 5000
 engine_time_frame_for_authentication_loop_in_seconds: 60
 engine_maximum_authentication_procedures_allowed: 5
 
-# Regex used to blacklist AuthnContextClassRef attributes from IDP's
-engine_sfo_authn_context_class_ref_blacklist_regex: ''
-
+# This PCRE regex is used to blacklist incoming AuthnContextClassRef attributes on. If an empty string is used
+# the validation is skipped. The validator will throw an exception if the used regex is invalid.
+engine_stepup_authn_context_class_ref_blacklist_regex: '/http:\/\/{{ engine_stepup_base_domain | regex_escape }}\/assurance\/loa[1-3]/'
+# The loa mapping from the internal used LoA's to the Stepup Gateway LOA's
+engine_stepup_engineblock_loa1: "http://{{ base_domain }}/assurance/loa1"
+engine_stepup_engineblock_loa2: "http://{{ base_domain }}/assurance/loa2"
+engine_stepup_engineblock_loa3: "http://{{ base_domain }}/assurance/loa3"
+engine_stepup_gateway_loa2: "http://{{ engine_stepup_base_domain }}/assurance/loa2"
+engine_stepup_gateway_loa3: "http://{{ engine_stepup_base_domain }}/assurance/loa3"
+# The EntityId (metadata URL) used in the callout to the SFO endpoint of the configured Stepup Gateway
+engine_stepup_gateway_sfo_entity_id: "https://{{ engine_stepup_gateway_domain }}/second-factor-only/metadata"
+# The single sign-on endpoint used for Stepup Gateway SFO callouts
+engine_stepup_gateway_sfo_sso_location: "https://{{ engine_stepup_gateway_domain }}/second-factor-only/single-sign-on"
+# The public key from the Stepup Gateway IdP
+engine_stepup_gateway_sfo_public_key_file: "{{ engine_keys.default.publicFile }}"
 
 ## The priority of messages that should be logged to syslog
 ## 7 = debug
