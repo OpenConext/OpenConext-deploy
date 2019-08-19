@@ -5,23 +5,29 @@
     state: directory
     recurse: yes
 
+- name: Install latest Chrome
+  yum:
+    name: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+    state: present
+
 - name: Install Selenium standalone
   get_url:
     url: "http://selenium-release.storage.googleapis.com/{{ engineblock_selenium_version | regex_replace('\\.[0-9]+$', '') }}/selenium-server-standalone-{{ engineblock_selenium_version }}.jar"
     dest: "{{ engineblock_selenium_install_dir }}/selenium/selenium-server-standalone-{{ engineblock_selenium_version }}.jar"
     mode: 0755
 
-- name: Install ChromeDriver
+- name: Get the latest release for chromedriver
+  uri:
+    url: https://chromedriver.storage.googleapis.com/LATEST_RELEASE
+    return_content: yes
+  register: chromedriver_latest
+
+- name: Install chromedriver
   unarchive:
-    src: "https://chromedriver.storage.googleapis.com/{{ engineblock_chromedriver_version }}/chromedriver_linux64.zip"
+    src: "https://chromedriver.storage.googleapis.com/{{ chromedriver_latest.content | trim }}/chromedriver_linux64.zip"
     dest: "{{ engineblock_selenium_install_dir }}/selenium"
     mode: 0755
     copy: no
-
-- name: Install Chrome
-  yum:
-    name: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-    state: present
 
 - name: Install systemd unit file
   template:
