@@ -88,6 +88,18 @@
   when:
     eb_customfeedbackforeground.stat.exists
 
+- name: Check if we have a Stepup GW certificate
+  local_action: stat path="{{ inventory_dir }}/files/certs/stepup_gateway.pem"
+  register: eb_stepupgwcert
+  become: false
+
+- name: Install Stepup GW certificate
+  copy:
+    src: "{{ inventory_dir }}/files/certs/stepup_gateway.pem"
+    dest: "{{ engine_stepup_gateway_sfo_public_key_file }}"
+  when:
+    eb_stepupgwcert.stat.exists
+
 - name: Install Apache vhost
   template:
     src: "{{ item }}.j2"
