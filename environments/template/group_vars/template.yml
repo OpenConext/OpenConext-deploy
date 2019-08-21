@@ -471,7 +471,6 @@ haproxy_applications:
 
   - name: engine
     vhost_name: engine.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.engine.port }}"
@@ -479,7 +478,6 @@ haproxy_applications:
 
   - name: profile
     vhost_name: profile.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "HEAD"
     ha_url: "/health"
     port: "{{ loadbalancing.profile.port }}"
@@ -487,7 +485,6 @@ haproxy_applications:
 
   - name: static
     vhost_name: static.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
     port: "{{ loadbalancing.static.port }}"
@@ -495,7 +492,6 @@ haproxy_applications:
 
   - name: metadata
     vhost_name: metadata.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "HEAD"
     ha_url: "/alive.txt"
     port: "{{ loadbalancing.metadata.port }}"
@@ -503,7 +499,6 @@ haproxy_applications:
 
   - name: engine_api
     vhost_name: engine-api.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.engine_api.port }}"
@@ -512,7 +507,6 @@ haproxy_applications:
 
   - name: teams
     vhost_name: teams.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/api/teams/health"
     port: "{{ loadbalancing.teams.port }}"
@@ -520,7 +514,6 @@ haproxy_applications:
 
   - name: authzserver
     vhost_name: authz.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.authzserver.port }}"
@@ -528,7 +521,6 @@ haproxy_applications:
 
   - name: authz_admin
     vhost_name: authz-admin.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.authz_admin.port }}"
@@ -537,7 +529,6 @@ haproxy_applications:
 
   - name: authz_playground
     vhost_name: authz-playground.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.authz_playground.port }}"
@@ -545,7 +536,6 @@ haproxy_applications:
 
   - name: voot
     vhost_name: voot.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.voot.port }}"
@@ -553,7 +543,6 @@ haproxy_applications:
 
   - name: pdp
     vhost_name: pdp.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/pdp/api/health"
     port: "{{ loadbalancing.pdp.port }}"
@@ -562,7 +551,6 @@ haproxy_applications:
 
   - name: oidc
     vhost_name: oidc.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.oidc.port }}"
@@ -570,7 +558,6 @@ haproxy_applications:
 
   - name: aa
     vhost_name: aa.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/aa/api/health"
     port: "{{ loadbalancing.aa.port }}"
@@ -579,7 +566,6 @@ haproxy_applications:
   
   - name: link
     vhost_name: link.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/aa/api/health"
     port: "{{ loadbalancing.aa.port }}"
@@ -587,7 +573,6 @@ haproxy_applications:
 
   - name: manage
     vhost_name: manage.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/manage/api/health"
     port: "{{ loadbalancing.manage.port }}"
@@ -596,7 +581,6 @@ haproxy_applications:
 
   - name: mujina-sp
     vhost_name: mujina-sp.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.mujina_sp.port }}"
@@ -604,7 +588,6 @@ haproxy_applications:
 
   - name: mujina-idp
     vhost_name: mujina-idp.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.mujina_idp.port }}"
@@ -612,7 +595,6 @@ haproxy_applications:
 
   - name: welcome
     vhost_name: welcome.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.welcome.port }}"
@@ -620,7 +602,6 @@ haproxy_applications:
 
   - name: oidcng
     vhost_name: oidcng.{{ base_domain }}
-    ip: "{{ ansible_default_ipv4 }}"
     ha_method: "GET"
     ha_url: "/actuator/health"
     port: "{{ loadbalancing.oidcng.port }}"
