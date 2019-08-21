@@ -12,6 +12,7 @@ $template nginx_error_ra-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }
 $template nginx_access_selfservice-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/selfservice/selfservice_nginx_access.log"
 $template nginx_error_selfservice-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/selfservice/selfservice_nginx_error.log"
 $template stepup-selfservice-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/selfservice/selfservice.log"
+$template stepup-tiqr-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/tiqr/tiqr.log"
 $template galera-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/galera/galera.log"
 $template garb-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/galera/galera_garb.log"
 $template hostleft-{{ item.name }}, "{{ rsyslog_dir }}/hosts/{{ item.name }}/%HOSTNAME%/%SYSLOGFACILITY-TEXT%"
