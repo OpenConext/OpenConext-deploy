@@ -525,7 +525,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
-    port: 401
+    port: {{ loadbalancing.engine.port }}"
     servers: "{{php_servers}}"
 
   - name: profile
@@ -533,7 +533,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "HEAD"
     ha_url: "/health"
-    port: 402
+    port: {{ loadbalancing.profile.port }}"
     servers: "{{php_servers}}"
 
   - name: static
@@ -541,7 +541,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
-    port: 403
+    port: {{ loadbalancing.static.port }}"
     servers: "{{php_servers}}"
 
   - name: engine_api
@@ -549,7 +549,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/"
-    port: 405
+    port: "{{ loadbalancing.engine_api.port }}"
     servers: "{{php_servers}}"
 
   - name: metadata
@@ -557,7 +557,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "HEAD"
     ha_url: "/alive.txt"
-    port: 409
+    port: "{{ loadbalancing.metadata.port }}"
     servers: "{{php_servers}}"
 
   - name: teams
@@ -565,7 +565,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: GET
     ha_url: "/api/teams/health"
-    port: 601
+    port: "{{ loadbalancing.teams.port }}"
     servers: "{{java_servers}}"
 
   - name: authzserver
@@ -573,7 +573,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
-    port: 602
+    port: "{{ loadbalancing.authzserver.port }}"
     servers: "{{java_servers}}"
 
   - name: authz_admin
@@ -581,7 +581,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
-    port: "603"
+    port: "{{ loadbalancing.authz_admin.port }}"
     servers: "{{java_servers}}"
 
   - name: authz_playground
@@ -589,7 +589,7 @@ haproxy_applications:
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/health"
-    port: "604"
+    port: "{{ loadbalancing.authz_playground.port }}"
     servers: "{{java_servers}}"
 
   - name: voot
@@ -597,7 +597,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/health"
-    port: 605
+    port: "{{ loadbalancing.voot.port }}"
     servers: "{{java_servers}}"
 
   - name: pdp
@@ -605,7 +605,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/pdp/api/health"
-    port: 613
+    port: "{{ loadbalancing.pdp.port }}"
     servers: "{{java_servers}}"
 
   - name: oidc
@@ -613,7 +613,7 @@ haproxy_applications:
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/health"
-    port: "614"
+    port: "{{ loadbalancing.oidc.port }}"
     servers: "{{java_servers}}"
 
   - name: aa
@@ -621,7 +621,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/aa/api/health"
-    port: 615
+    port: "{{ loadbalancing.aa.port }}"
     servers: "{{java_servers}}"
 
   - name: link
@@ -629,7 +629,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/aa/api/health"
-    port: 615
+    port: "{{ loadbalancing.aa.port }}"
     servers: "{{java_servers}}"
 
   - name: manage
@@ -637,7 +637,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/manage/api/health"
-    port: 617
+    port: "{{ loadbalancing.manage.port }}"
     servers: "{{java_servers}}"
 
   - name: oidcng
@@ -645,7 +645,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/actuator/health"
-    port: 620
+    port: "{{ loadbalancing.oidcng.port }}"
     servers: "{{java_servers}}"
 
   - name: mujina-sp
@@ -653,7 +653,7 @@ haproxy_applications:
     ip: 192.168.66.98
     ha_method: "GET"
     ha_url: "/"
-    port: 607
+    port: "{{ loadbalancing.mujina_sp.port }}"
     servers: "{{java_servers}}"
 
   - name: mujina-idp
@@ -661,7 +661,7 @@ haproxy_applications:
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/"
-    port: "608"
+    port: "{{ loadbalancing.mujina_idp.port }}"
     servers: "{{java_servers}}"
 
   - name: welcome
@@ -669,7 +669,7 @@ haproxy_applications:
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/"
-    port: "609"
+    port: "{{ loadbalancing.welcome.port }}"
     servers: "{{php_servers}}"
 
   - name: kibana
@@ -677,7 +677,7 @@ haproxy_applications:
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/"
-    port: "701"
+    port: "{{ loadbalancing.kibana.port }}"
     servers: "{{php_servers}}"
 
   - name: stats
@@ -685,7 +685,7 @@ haproxy_applications:
     ip: "192.168.66.98"
     ha_method: "GET"
     ha_url: "/health"
-    port: "702"
+    port: "{{ loadbalancing.stats.port }}"
     servers: "{{php_servers}}"
 
 haproxy_sni_ip:
