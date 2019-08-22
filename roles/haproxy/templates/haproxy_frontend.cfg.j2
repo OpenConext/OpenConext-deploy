@@ -1,0 +1,72 @@
+#jinja2: lstrip_blocks: True
+## Frontend configuration
+
+#--------------------------------------------------------------------
+#  frontend 
+# -------------------------------------------------------------------
+frontend ssl_ip
+
+    bind {{ haproxy_sni_ip.ipv4 }}:443 ssl {% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip.ipv6 }}:443 ssl {% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 alpn h2,http/1.1 transparent 
+    http-request del-header Proxy
+    rspadd  Strict-Transport-Security:\ max-age=15768000
+    capture request header User-agent len 256
+    bind {{ haproxy_sni_ip.ipv4 }}:80 transparent
+    bind {{ haproxy_sni_ip.ipv6 }}:80 transparent
+
+    {% for application in haproxy_applications %}
+    {%if application.restricted is not defined %}
+    acl valid_vhost hdr(host) -i {{ application.vhost_name }}
+    acl {{ application.name }} hdr(host) -i {{ application.vhost_name }}
+    {% endif %}
+    {% endfor %}
+    {%if haproxy_redirects is defined %}
+    {% for application in haproxy_redirects %}    
+    acl valid_vhost hdr(host) -i {{ application.url }}
+    acl {{ application.name }} hdr(host) -i {{ application.url }}
+    {% endfor %}
+    {% endif %}
+
+    http-request deny if ! valid_vhost
+    http-request redirect scheme https code 301 if !{ ssl_fc }
+
+    {% for application in haproxy_applications %}
+    {%if application.restricted is not defined %}
+    use_backend {{ application.name }}_be if {{ application.name }}
+    {% endif %}
+    {% endfor %}
+    {%if haproxy_redirects is defined %}
+    {% for application in haproxy_redirects %}
+    http-request redirect location {{ application.redirecturl }} if {{ application.name }}
+    {% endfor %}
+    {% endif %}
+
+{% if haproxy_sni_ip_restricted is defined %}
+#--------------------------------------------------------------------
+##  frontend restricted applications
+## -------------------------------------------------------------------
+frontend ssl_restricted_ip
+
+    bind {{ haproxy_sni_ip_restricted.ipv4 }}:443 ssl {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip_restricted.ipv6 }}:443 ssl  {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
+    http-request del-header Proxy
+    rspadd  Strict-Transport-Security:\ max-age=15768000
+    capture request header User-agent len 256 
+    bind {{ haproxy_sni_ip_restricted.ipv4 }}:80 transparent
+    bind {{ haproxy_sni_ip_restricted.ipv6 }}:80 transparent
+
+    {% for application in haproxy_applications %}
+    {%if application.restricted is defined %}
+    acl valid_vhost hdr(host) -i {{ application.vhost_name }}
+    acl {{ application.name }} hdr(host) -i {{ application.vhost_name }}
+    {% endif %}
+    {% endfor %}
+    http-request deny if ! valid_vhost
+    http-request redirect scheme https code 301 if !{ ssl_fc }
+
+    {% for application in haproxy_applications %}
+    {%if application.restricted is defined %}
+    use_backend {{ application.name }}_be if {{ application.name }}
+    {% endif %}
+    {% endfor %}
+{% endif %}

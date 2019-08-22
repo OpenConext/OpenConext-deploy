@@ -474,75 +474,68 @@ loadbalancing:
 haproxy_applications:
 
   - name: engine
-    vhost_name: "engine"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: engine.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
-    port: "401"
+    port: "{{ loadbalancing.engine.port }}"
     servers: "{{php_servers}}"
 
   - name: profile
-    vhost_name: "profile"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: profile.{{ base_domain }}
     ha_method: "HEAD"
     ha_url: "/health"
-    port: "402"
+    port: "{{ loadbalancing.profile.port }}"
     servers: "{{php_servers}}"
 
   - name: static
-    vhost_name: "static"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: static.{{ base_domain }}
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
-    port: "403"
+    port: "{{ loadbalancing.static.port }}"
     servers: "{{php_servers}}"
 
   - name: metadata
-    vhost_name: "metadata"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: metadata.{{ base_domain }}
     ha_method: "HEAD"
     ha_url: "/alive.txt"
-    port: "409"
+    port: "{{ loadbalancing.metadata.port }}"
     servers: "{{php_servers}}"
 
   - name: engine_api
-    vhost_name: "engine-api"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: engine-api.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
-    port: "405"
+    port: "{{ loadbalancing.engine_api.port }}"
     servers: "{{php_servers}}"
+    restricted: yes
 
   - name: teams
-    vhost_name: "teams"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: teams.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/api/teams/health"
-    port: "601"
+    port: "{{ loadbalancing.teams.port }}"
     servers: "{{java_servers}}"
 
   - name: authzserver
-    vhost_name: "authz"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: authz.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
-    port: "602"
+    port: "{{ loadbalancing.authzserver.port }}"
     servers: "{{java_servers}}"
 
   - name: authz_admin
-    vhost_name: "authz-admin"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: authz-admin.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
-    port: "603"
+    port: "{{ loadbalancing.authz_admin.port }}"
     servers: "{{java_servers}}"
+    restricted: yes
 
   - name: authz_playground
-    vhost_name: "authz-playground"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: authz-playground.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
-    port: "604"
+    port: "{{ loadbalancing.authz_playground.port }}"
     servers: "{{java_servers}}"
 
   - name: oidc_playground
@@ -554,89 +547,97 @@ haproxy_applications:
     servers: "{{java_servers}}"
   
   - name: voot
-    vhost_name: "voot"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: voot.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
-    port: "605"
+    port: "{{ loadbalancing.voot.port }}"
     servers: "{{java_servers}}"
 
   - name: pdp
-    vhost_name: "pdp"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: pdp.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/pdp/api/health"
-    port: "613"
+    port: "{{ loadbalancing.pdp.port }}"
     servers: "{{java_servers}}"
+    restricted: yes
 
   - name: oidc
-    vhost_name: "oidc"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: oidc.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
-    port: "614"
+    port: "{{ loadbalancing.oidc.port }}"
     servers: "{{java_servers}}"
 
   - name: aa
-    vhost_name: "aa"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: aa.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/aa/api/health"
-    port: "615"
+    port: "{{ loadbalancing.aa.port }}"
     servers: "{{java_servers}}"
+    restricted: yes
   
   - name: link
-    vhost_name: "link"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: link.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/aa/api/health"
-    port: "615"
+    port: "{{ loadbalancing.aa.port }}"
     servers: "{{java_servers}}"
 
   - name: manage
-    vhost_name: "manage"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: manage.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/manage/api/health"
-    port: "617"
+    port: "{{ loadbalancing.manage.port }}"
     servers: "{{java_servers}}"
+    restricted: yes
 
   - name: mujina-sp
-    vhost_name: "mujina-sp"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: mujina-sp.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
-    port: "607"
+    port: "{{ loadbalancing.mujina_sp.port }}"
     servers: "{{java_servers}}"
 
   - name: mujina-idp
-    vhost_name: "mujina-idp"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: mujina-idp.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
-    port: "608"
+    port: "{{ loadbalancing.mujina_idp.port }}"
     servers: "{{java_servers}}"
 
   - name: welcome
-    vhost_name: "welcome"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: welcome.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
-    port: "609"
+    port: "{{ loadbalancing.welcome.port }}"
     servers: "{{php_servers}}"
 
   - name: oidcng
-    vhost_name: "oidcng"
-    ip: "{{ ansible_default_ipv4 }}"
+    vhost_name: oidcng.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/actuator/health"
-    port: "620"
+    port: "{{ loadbalancing.oidcng.port }}"
     servers: "{{java_servers}}"
 
 haproxy_backend_tls: False
 
-haproxy_sni_ip: "*"
-haproxy_sni_ipv6: "::1"
+haproxy_sni_ip:
+  ipv4: 127.0.0.1
+  ipv6:  "::1"
+  certs: 
+     - name: star
+       key_content: "{{ https_star_private_key }}" 
+       crt_name: star.{{ base_domain }}.pem
+
+haproxy_sni_ip_restricted:
+  ipv4: 127.0.0.2
+  ipv6: "::1"
+  certs:
+     - name: star
+       key_content: "{{ https_star_private_key }}"  
+       crt_name: star.{{ base_domain }}.pem
+
+
 
 php_servers:
    - { ip: "127.0.0.1", label: "php"}

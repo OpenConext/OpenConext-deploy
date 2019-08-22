@@ -1,25 +1,68 @@
 ---
-- name: Install haproxy 1.8 yum repo
+- name: Remove haproxy18 custom repo
+  file:
+    path: /etc/yum.repos.d/haproxy18.repo
+    state: absent
+  register: haproxy_removed
+
+- name: Clean up the yum repos
+  command: yum clean metadata
+  when: 
+    - haproxy_removed.changed | bool
+
+- name: Stop haproxy when upgrading
+  service:
+    name: haproxy
+    state: stopped
+    enabled: no
+  when: 
+    - haproxy_removed.changed | bool
+
+- name: Remove custom haproxy systemd file
+  file: 
+    path: /etc/systemd/system/haproxy.service
+    state: absent
+  when: 
+    - haproxy_removed.changed | bool
+
+- name: Remove haproxy 1.5 or 1.7
+  yum: 
+    name: 
+      - haproxy
+    state: absent
+  when: 
+    - haproxy_removed.changed | bool
+
+- name: Create lbops group
+  group:
+    name: lbops
+    state: present
+
+- name: Enable software collections
+  yum:
+    name: 
+      - centos-release-scl
+    state: present
+
+- name: Install haproxy and socat
+  yum:
+    name: 
+      - rh-haproxy18-haproxy
+      - rh-haproxy18-haproxy-syspaths
+      - rh-haproxy18-runtime
+      - socat
+    state: present
+
+- name: Copy haproxy sysconfig file
   copy:
-    src: haproxy18.repo
-    dest: /etc/yum.repos.d/
-    owner: root
-    mode: 0644
+    src: rh-haproxy18-haproxy
+    dest: /etc/sysconfig/rh-haproxy18-haproxy
 
-- name: Include multiple-instances.yml
-  include: multiple-instances.yml
-  when:
-    - haproxy_multi_instance is defined
-
-- name: Include single-instance.yml
-  include: single-instance.yml
-  when:
-    - haproxy_multi_instance is not defined
-
-- name: Include redirects-instance.yml
-  include: redirects-instance.yml
-  when:
-    - haproxy_redirects is defined
+- name: install OCSP update tool
+  copy:
+    src: "hapos-upd"
+    dest: "/usr/local/sbin/"
+    mode: 0755
 
 - name: disable health checks for development envs
   command: 'echo "disable health {{item.name}}" | socat /var/lib/haproxy/stats stdio'
@@ -27,3 +70,98 @@
     - "{{ haproxy_applications }}"
   when:
     - develop | bool
+
+- name: Create haproxy socket dir
+  file:
+    path: /var/lib/haproxy
+    state: directory
+    owner: haproxy
+    group: haproxy
+    mode: 0755
+
+- name: Enable haproxy
+  service:
+    name: haproxy
+    enabled: yes
+  notify:
+    - "restart haproxy"
+
+- name: Create haproxy SSL key directory
+  file:
+    dest: "/etc/pki/haproxy/"
+    state: directory
+    owner: haproxy
+    group: haproxy
+    mode: 0700
+
+- name: Create combined key and certificate file for HAproxy
+  copy:
+    content: "{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
+    dest: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
+    mode: 0600
+  with_items: "{{ haproxy_sni_ip.certs }}"
+  notify:
+    - "reload haproxy"
+
+- name: Create combined key and certificate file for HAproxy restricted
+  copy:
+    content: "{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
+    dest: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
+    mode: 0600
+  with_items: "{{ haproxy_sni_ip_restricted.certs }}"
+  notify:
+
+- name: Copy backend CA certificate
+  copy:
+    content: "{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}"
+    dest: "{{ tls_backend_ca }}"
+    mode: 0644
+    owner: root
+  when:
+    - haproxy_backend_tls | bool
+
+- name: Create an empty default haproxy.cfg
+  copy:
+    content: ""
+    dest: /etc/opt/rh/rh-haproxy18/haproxy/haproxy.cfg
+    
+- name: Copy global haproxy config
+  template:
+    src: "haproxy_global.cfg.j2"
+    dest: "/etc/haproxy/haproxy_global.cfg"
+  notify:
+    - "reload haproxy"
+
+- name: Copy frontend haproxy config
+  template:
+    src: "haproxy_frontend.cfg.j2"
+    dest: "/etc/haproxy/haproxy_frontend.cfg"
+  notify:
+    - "reload haproxy"
+
+- name: Copy backend haproxy config
+  template:
+    src: "haproxy_backend.cfg.j2"
+    dest: "/etc/haproxy/haproxy_backend.cfg"
+  notify:
+    - "reload haproxy"
+
+- name: Run hapos-upd for initial OCSP responses
+  shell: /usr/local/sbin/hapos-upd --partial-chain --good-only --socket /var/lib/haproxy/haproxy.stats --VAfile /etc/pki/haproxy/{{ item.name }}_haproxy.pem --cert /etc/pki/haproxy/{{ item.name }}_haproxy.pem
+  with_items:
+    - "{{ haproxy_sni_ip.certs }}"
+    - "{{ haproxy_sni_ip_restricted.certs }}"
+  when:  "'selfsigned_certs' not in group_names"
+
+- name: install OCSP periodic update script
+  template:
+    src: "update_ocsp.j2"
+    dest: "/usr/local/sbin/update_ocsp"
+    mode: 0755
+  when:  "'selfsigned_certs' not in group_names"
+
+- cron:
+    name: "update ocsp info"
+    special_time: hourly
+    job: /usr/local/sbin/update_ocsp {{ ocsp_log_redirect | default('') }}
+  when:  "'selfsigned_certs' not in group_names"

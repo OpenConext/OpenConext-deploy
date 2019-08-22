@@ -26,19 +26,20 @@ docker run --detach                                             \
 	--add-host mujina-idp.vm.openconext.org:127.0.0.1       \
 	--add-host teams.vm.openconext.org:127.0.0.1            \
 	--add-host authz.vm.openconext.org:127.0.0.1            \
-	--add-host authz-admin.vm.openconext.org:127.0.0.1      \
+	--add-host authz-admin.vm.openconext.org:127.0.0.2      \
 	--add-host authz-playground.vm.openconext.org:127.0.0.1 \
 	--add-host voot.vm.openconext.org:127.0.0.1             \
 	--add-host lb.vm.openconext.org:127.0.0.1               \
 	--add-host apps.vm.openconext.org:127.0.0.1             \
 	--add-host db.vm.openconext.org:127.0.0.1               \
-	--add-host pdp.vm.openconext.org:127.0.0.1              \
-	--add-host engine-api.vm.openconext.org:127.0.0.1       \
-	--add-host aa.vm.openconext.org:127.0.0.1               \
+	--add-host pdp.vm.openconext.org:127.0.0.2              \
+	--add-host engine-api.vm.openconext.org:127.0.0.2       \
+	--add-host aa.vm.openconext.org:127.0.0.2               \
 	--add-host link.vm.openconext.org:127.0.0.1             \
 	--add-host oidc.vm.openconext.org:127.0.0.1             \
-	--add-host oidcng.vm.openconext.org:127.0.0.1             \
-	--add-host manage.vm.openconext.org:127.0.0.1           \
+	--add-host oidcng.vm.openconext.org:127.0.0.1           \
+	--add-host manage.vm.openconext.org:127.0.0.2           \
+	--add-host redirect.vm.openconext.org:127.0.0.1         \
 	--add-host localhost:127.0.0.1                          \
 	--hostname test.openconext.org                          \
 	-e TERM=xterm                                           \
@@ -85,7 +86,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS --syntax-check
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS --syntax-check -e @/ansible/tests/travis.yml
 
 echo
 echo "================================================================="
@@ -95,7 +96,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS 
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml
 
 echo
 echo "================================================================="
@@ -106,7 +107,7 @@ echo "================================================================="
 echo
 
 TMPOUT=$(mktemp)
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS | tee $TMPOUT
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml | tee $TMPOUT
 
 echo
 echo "================================================================="

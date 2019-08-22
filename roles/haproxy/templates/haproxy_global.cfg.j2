@@ -15,31 +15,15 @@ global
   ulimit-n    9000
   daemon
   tune.ssl.default-dh-param 2048
-  ssl-default-bind-options no-sslv3
-  ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
-  ssl-default-server-options no-sslv3
-  ssl-default-server-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+  ssl-default-bind-options no-sslv3 no-tls-tickets
+  ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS
+  ssl-default-server-options no-sslv3 no-tls-tickets
+  ssl-default-server-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS
 {% if haproxy_metricbeat %}
-{% if haproxy_multi_instance is not defined %}
   stats socket 127.0.0.1:14567
-{% else %}
-  stats socket 127.0.0.1:{{ item.metricbeatport }}
 {% endif %}
-{% endif %}
-{% if haproxy_multi_instance is not defined %}
-  stats socket /var/lib/haproxy/stats{% if develop %} mode 600 level admin{% endif %}
-
-{% if  haproxy_version is version_compare('1.6.0', '>=') and haproxy_rolling_updates  %}
-  server-state-file /etc/haproxy/state
-{% endif %}
-{% endif %}
-{% if haproxy_multi_instance is defined  %}
-  stats socket /var/lib/haproxy/{{ item.name }}.stats {% if haproxy_rolling_updates %} mode 660 level admin user root group lbops{%endif%}
-
-{% if  haproxy_version is version_compare('1.6.0', '>=') and haproxy_rolling_updates  %}
-  server-state-file /etc/haproxy/{{ item.name }}/state
-{% endif %}
-{% endif %}
+  stats socket /var/lib/haproxy/haproxy.stats mode 660 level admin user root group lbops
+  server-state-file /var/lib/haproxy/state
 
 #---------------------------------------------------------------------
 # common defaults that all the 'listen' and 'backend' sections will
@@ -50,7 +34,6 @@ defaults
     mode                        http
     log                         global
     option                      httplog
-#   option                      dontlognull
     option                      http-ignore-probes
     option                      http-server-close
     option                      forwardfor       except 127.0.0.0/8
@@ -64,6 +47,4 @@ defaults
     timeout http-keep-alive     10s
     timeout check               10s
     maxconn                     3000
-{% if  haproxy_version is version_compare('1.6.0', '>=') and haproxy_rolling_updates  %}
     load-server-state-from-file global
-{% endif %}

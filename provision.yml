@@ -37,7 +37,6 @@
   gather_facts: true
   become: true
   roles:
-    - { role: tls,      tags: ['tls'] }
     - { role: keepalived, tags: ['keepalived'] }
     - { role: haproxy, tags: ['lb'] }
     - { role: bind, tags: ['bind'] }
