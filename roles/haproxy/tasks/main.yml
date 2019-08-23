@@ -76,8 +76,8 @@
     path: /var/lib/haproxy
     state: directory
     owner: haproxy
-    group: haproxy
-    mode: 0755
+    group: lbops
+    mode: 0775
 
 - name: Enable haproxy
   service:
