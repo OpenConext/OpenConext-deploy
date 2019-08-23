@@ -52,4 +52,4 @@
   when: state is defined
 
 - name: Write the state to the correct state file
-  shell: echo "show servers state" | socat /var/lib/haproxy/{{ app_name }}.stats - > /tmp/haproxy/{{ app_name }}/state
+  shell: echo "show servers state" | socat /var/lib/haproxy/haproxy.stats - > /var/lib/haproxy/state
