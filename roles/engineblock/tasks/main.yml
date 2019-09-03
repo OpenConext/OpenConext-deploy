@@ -39,6 +39,14 @@
   when:
     - develop | bool
 
+- name: Place parameters.yml
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ engine_current_release_symlink }}/app/config/{{ item }}"
+    mode: 0644
+  with_items:
+    - parameters.yml
+
 - name: Check presence of language specific overrides
   local_action: stat path="{{ inventory_dir }}/files/eb/languages/"
   register: overrides_present
