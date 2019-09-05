@@ -588,11 +588,10 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: oidc_playground
-    vhost_name: "oidc-playground"
-    ip: "192.168.66.98"
+    vhost_name: "oidc-playground.{{base_domain }}"
     ha_method: "GET"
     ha_url: "/oidc/api/actuator/health"
-    port: "619"
+    port: "{{ loadbalancing.oidc_playground.port }}"
     servers: "{{java_servers}}"
   
   - name: voot
