@@ -25,7 +25,7 @@ Listen {{ apache_app_listen_address.oidc }}:{{ loadbalancing.oidc.port }}
     </Location>
 {% if oidc_admin_interface_allowed_ips is defined %}
     <Location /manage>
-    SetEnvIf X-Forwarded-For {{ oidc_admin_interface_allowed_ips }} env_allow_1
+    SetEnvIfNoCase X-Forwarded-For {{ oidc_admin_interface_allowed_ips }} env_allow_1
     Require env env_allow_1
     </Location>
 {% endif %}
