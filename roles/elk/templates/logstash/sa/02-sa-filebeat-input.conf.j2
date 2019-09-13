@@ -1,9 +1,10 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
 input {
   beats {
     port => 5055
     {% if logstash_tls %}
-    ssl_enable => true
-    ssl_cert => "/etc/pki/tls/certs/logstash.{{ base_domain }}.pem"
+    ssl => true
+    ssl_certificate => "/etc/pki/tls/certs/logstash.{{ base_domain }}.pem"
     ssl_key => "/etc/pki/tls/private/logstash.{{ base_domain }}.key"
     {% endif %}
     add_field =>  { "origin" => "stepup" }

@@ -8,7 +8,7 @@
     path: /data/elasticsearch 
     state: directory 
     owner: elasticsearch 
-    mode: 770
+    mode: 0775
 
 - name: Make sure java 8 is used
   lineinfile: 
