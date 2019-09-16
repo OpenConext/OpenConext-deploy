@@ -24,7 +24,6 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !api
-    RewriteCond %{REQUEST_URI} !static
     RewriteCond %{REQUEST_URI} !health
     RewriteCond %{REQUEST_URI} !info
     RewriteCond %{REQUEST_URI} !fonts
@@ -36,7 +35,6 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
     WSGIScriptAlias /health {{ stats_api_env_dir }}/stats-api.wsgi/health
     WSGIScriptAlias /info {{ stats_api_env_dir }}/stats-api.wsgi/info
     WSGIScriptAlias /api {{ stats_api_env_dir }}/stats-api.wsgi/api
-    WSGIScriptAlias /static {{ stats_api_env_dir }}/stats-api.wsgi/static
     WSGIPassAuthorization On
     <Directory {{ stats_api_env_dir }}>
         WSGIProcessGroup server
