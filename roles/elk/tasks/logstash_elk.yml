@@ -1,8 +1,7 @@
 - name: Install logstash plugins
   logstash_plugin: 
     state: present 
-    name:
-      - logstash-filter-multiline 
+    name: "logstash-filter-multiline" 
 
 - name: Create patterns dir
   file: 
@@ -57,5 +56,6 @@
     - 20-sa-nginx.conf
     - 20-sa-stepup-authentication.conf
     - 20-sa-symfony.conf
+    - 20-sa-sendmail.conf
     - 30-sa-elastic-search-output.conf
 
