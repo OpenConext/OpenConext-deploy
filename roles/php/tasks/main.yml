@@ -45,6 +45,7 @@
       - php72-php-fpm
       - php72-php-cli
       - php72-php-pecl-apcu
+      - php72-php-pecl-apcu-bc
       - php72-php-curl
       - php72-php-mbstring
       - php72-php-mysql
