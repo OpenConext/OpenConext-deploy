@@ -4,7 +4,7 @@
     name: php-fpm
     state: restarted
 
-- name: restart php73-php-fpm
+- name: restart php72-php-fpm
   service:
-    name: php73-php-fpm
+    name: php72-php-fpm
     state: restarted
