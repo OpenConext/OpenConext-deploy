@@ -99,7 +99,7 @@
 
 - name: Configure PHP Xdebug for 7.2
   template:
-    src: "xdebug.ini.j2"
+    src: "xdebug-php72.ini.j2"
     dest: "/etc/opt/remi/php72/php.d/15-xdebug.ini"
   when:
     - develop | bool
