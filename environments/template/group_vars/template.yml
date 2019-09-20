@@ -411,7 +411,7 @@ manage:
   loa_values_supported:
     - http://{{ base_domain }}/assurance/loa2
     - http://{{ base_domain }}/assurance/loa3
-  oidc_rp_redirect_url_format: "uri"
+  oidc_rp_redirect_url_format: "url"
 
 loadbalancing:
   engine:
