@@ -117,11 +117,6 @@ $ActionSendStreamDriverMode 1
 
 {% if rsyslog_remote_server_relp is defined and 'sysloghost' not in group_names %}
 # Forward all logs to the central logging server using relp
-$ActionQueueType LinkedList
-$ActionQueueMaxDiskSpace 1g
-$ActionQueueFileName syslog_fwd
-$ActionResumeRetryCount -1
-$ActionQueueSaveOnShutdown on
 module(load="omrelp")
 action(type="omrelp" 
 target="{{ rsyslog_remote_server_relp }}" 
@@ -131,7 +126,13 @@ tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt"
 tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
 tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
 tls.authmode="name" 
-tls.permittedpeer=["{{ rsyslog_remote_server_relp }}"])
+tls.permittedpeer=["{{ rsyslog_remote_server_relp }}"]
+queue.type="LinkedList" 
+queue.filename="rsyslog_relp_q"
+queue.maxdiskspace="1G"
+queue.saveonshutdown="on" 
+action.resumeRetryCount="-1"
+action.resumeInterval="5")
 {% endif %}
 
 
