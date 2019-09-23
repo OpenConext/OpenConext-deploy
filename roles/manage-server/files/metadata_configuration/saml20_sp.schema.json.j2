@@ -510,10 +510,6 @@
           "type": "boolean",
           "info": "Set to also directly sign the SAML Response element, in addition to the Assertion element that will always be signed."
         },
-        "coin:ss:supports_strong_authentication": {
-          "type": "boolean",
-          "info": "Set if StepUp is supported."
-        },
         "coin:privacy:gdpr_is_in_wiki": {
           "type": "boolean",
           "info": "Set if the 'General Data Protection Regulation' (GDPR) is available on the SURF wiki. In Dutch known as 'Algemene Verordening Gegevensbescherming' (AVG). "
@@ -542,6 +538,18 @@
         "coin:stepup:allow_no_token": {
           "type": "boolean",
           "info": "When Stepup Authentication is required for this SP, allow users without a registered token to log in regardless."
+        },
+        "coin:contractual_base": {
+          "type": "string",
+          "enum": [
+            "AO",
+            "IX",
+            "R&S+CoCo",
+            "Entree",
+            "Clarin"
+          ],
+          "default": "AO",
+          "info": "Set the contractual base that underlies a production SP / RP entity."
         }
       },
       "patternProperties": {
