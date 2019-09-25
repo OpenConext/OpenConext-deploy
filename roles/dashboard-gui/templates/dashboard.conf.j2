@@ -25,6 +25,8 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     RewriteCond %{REQUEST_URI} !dashboard
     RewriteCond %{REQUEST_URI} !health
     RewriteCond %{REQUEST_URI} !info
+    RewriteCond %{REQUEST_URI} !login
+    RewriteCond %{REQUEST_URI} !startSSO
     RewriteCond %{REQUEST_URI} !fonts
     RewriteRule (.*) /index.html [L]
 
@@ -34,6 +36,8 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     ProxyPassReverse /dashboard/api http://localhost:{{ springapp_tcpport }}/dashboard/api
     ProxyPass /health http://localhost:{{ springapp_tcpport }}/health retry=0
     ProxyPass /info http://localhost:{{ springapp_tcpport }}/info retry=0
+    ProxyPass /login http://localhost:{{ springapp_tcpport }}/login retry=0
+    ProxyPass /startSSO http://localhost:{{ springapp_tcpport }}/startSSO retry=0
 
     DocumentRoot /var/www/dashboard/current
 
@@ -43,17 +47,7 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
       Options     -Indexes
     </Directory>
 
-    <Location ~ "/dashboard/api/home">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "/dashboard/api/css/application.min.css">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "/(health|info)">
+    <Location ~ "^/(?!startSSO)">
       allow from all
       satisfy any
     </Location>
