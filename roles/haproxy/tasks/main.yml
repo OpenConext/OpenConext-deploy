@@ -64,13 +64,6 @@
     dest: "/usr/local/sbin/"
     mode: 0755
 
-- name: disable health checks for development envs
-  command: 'echo "disable health {{item.name}}" | socat /var/lib/haproxy/stats stdio'
-  with_items:
-    - "{{ haproxy_applications }}"
-  when:
-    - develop | bool
-
 - name: Create haproxy socket dir
   file:
     path: /var/lib/haproxy
@@ -83,8 +76,6 @@
   service:
     name: haproxy
     enabled: yes
-  notify:
-    - "restart haproxy"
 
 - name: Create haproxy SSL key directory
   file:
@@ -167,3 +158,21 @@
     special_time: hourly
     job: /usr/local/sbin/update_ocsp {{ ocsp_log_redirect | default('') }}
   when:  "'selfsigned_certs' not in group_names"
+
+- name: Start haproxy
+  service:  
+    name: haproxy
+    state: started
+
+- name: disable health checks for development envs
+  shell: 'echo "disable health {{ item }}" | socat /var/lib/haproxy/haproxy.stats stdio'
+  with_items:
+    - profile_be/phpapps
+    - engine_be/phpapps
+  when:
+    - develop | bool
+
+- name: Save the disabled health check state to the state file for development envs
+  shell: echo "show servers state" | socat /var/lib/haproxy/haproxy.stats - > /var/lib/haproxy/state
+  when:
+    - develop | bool
