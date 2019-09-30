@@ -112,3 +112,5 @@
 - name: cleanup old jars
   shell: find . ! -name $(basename $(readlink oidcng-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ oidcng_dir }}
   when: maven_result.changed
+
+- meta: flush_handlers
