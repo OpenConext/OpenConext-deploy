@@ -4,7 +4,7 @@
     path: "/var/www/oidc-playground"
     owner: root
     group: root
-    mode: 02755
+    mode: 0755
     state: directory
 
 - name: copy virtual host config
