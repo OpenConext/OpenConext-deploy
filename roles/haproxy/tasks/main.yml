@@ -110,6 +110,8 @@
     mode: 0600
   with_items: "{{ haproxy_sni_ip_restricted.certs }}"
   notify:
+    - "reload haproxy"
+  when: haproxy_sni_ip_restricted is defined
 
 - name: Copy backend CA certificate
   copy:
