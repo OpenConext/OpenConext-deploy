@@ -120,15 +120,15 @@
     - { role: pdp-gui,                      tags: ['pdp', 'pdp-gui'] }
     - { role: pdp-server,                   tags: ['pdp', 'pdp-server'] }
     - { role: remove-grouper,               tags: ['remove-grouper'] }
-    - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
-    - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
     - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
     - { role: manage-server,                tags: ['manage', 'manage-server'] }
     - { role: oidcng,                       tags: ['oidcng'] }
-    - { role: oidc-playground-client,       tags: ['oidc-playground', 'oidc-playground-client'] }
-    - { role: oidc-playground-server,       tags: ['oidc-playground', 'oidc-playground-server'] }
+    - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
+    - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
     - { role: dashboard-gui,                tags: ['dashboard', 'dashboard-gui'] , when: dashboard_install | bool }
     - { role: dashboard-server,             tags: ['dashboard', 'dashboard-server'], when: dashboard_install | bool }
+    - { role: oidc-playground-client,       tags: ['oidc-playground', 'oidc-playground-client'] }
+    - { role: oidc-playground-server,       tags: ['oidc-playground', 'oidc-playground-server'] }
     
   handlers:
     - include: roles/httpd/handlers/main.yml
