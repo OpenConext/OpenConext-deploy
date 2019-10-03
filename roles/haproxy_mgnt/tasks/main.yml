@@ -34,7 +34,7 @@
   haproxy:
     state: enabled
     host: "{{ item.host }}"
-    fail_on_not_found: no
+    fail_on_not_found: yes
     socket: /var/lib/haproxy/haproxy.stats
     weight: "{{ item.weight }}"
     backend: "{{ item.backend }}"
@@ -45,7 +45,7 @@
   haproxy:
     state: "{{ item.state }}"
     host: "{{ item.host }}"
-    fail_on_not_found: no
+    fail_on_not_found: yes
     socket: /var/lib/haproxy/haproxy.stats
     backend: "{{ item.backend }}"
   with_items: "{{ haproxy_states.haproxy_items }}"
