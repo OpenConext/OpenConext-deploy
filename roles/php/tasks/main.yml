@@ -16,8 +16,6 @@
   copy:
       src: remi.repo
       dest: /etc/yum.repos.d/remi.repo
-  when:
-    - remi_config.stat.exists == False
 
 - name: Install php-(cli,fpm), composer
   yum:
@@ -33,11 +31,6 @@
       - php-gd
       - composer
     state: present
-
-- name: Enable REMI 72 repo
-  copy:
-      src: remi-php72.repo
-      dest: /etc/yum.repos.d/remi-php72.repo
 
 - name: Install php-(cli,fpm) 7.2
   yum:
