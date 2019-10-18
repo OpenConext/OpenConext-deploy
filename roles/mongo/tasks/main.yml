@@ -175,6 +175,7 @@
     - not mongo_tls | bool
   with_items: "{{ mongo.users }}"
   changed_when: False
+  tags: mongo_users
 
 - name: Create mongo database users, tls enabled
   mongodb_user:
@@ -193,3 +194,4 @@
     - mongo_tls | bool
   with_items: "{{ mongo.users }}"
   changed_when: False
+  tags: mongo_users
