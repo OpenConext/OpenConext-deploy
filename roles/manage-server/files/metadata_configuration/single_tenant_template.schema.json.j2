@@ -108,13 +108,13 @@
       "type": "object",
       "sources": [
         "idp",
+        "ala",
         "orcid",
         "sab",
         "voot",
         "pseudo_email",
         "sbs",
-        "surfmarket_entitlements",
-        "ala"
+        "surfmarket_entitlements"
       ],
       "properties": {
         "enabled": {
@@ -188,7 +188,8 @@
               "$ref": "#/definitions/ArpAttribute"
             },
             "urn:mace:eduid.nl:1.1": {
-              "$ref": "#/definitions/ArpAttribute"
+              "$ref": "#/definitions/ArpAttribute",
+              "display": "eduid"
             },
             "urn:mace:dir:attribute-def:isMemberOf": {
               "$ref": "#/definitions/ArpAttribute",
