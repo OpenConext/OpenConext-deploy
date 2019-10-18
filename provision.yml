@@ -33,13 +33,18 @@
   roles:
     - { role: haproxy, tags: ['lb'] }
 
-- hosts: loadbalancer
+- hosts: loadbalancer_ha
   gather_facts: true
   become: true
   roles:
     - { role: keepalived, tags: ['keepalived'] }
-    - { role: haproxy, tags: ['lb'] }
     - { role: bind, tags: ['bind'] }
+
+- hosts: loadbalancer
+  gather_facts: true
+  become: true
+  roles:
+    - { role: haproxy, tags: ['lb'] }
 
 - hosts: php-apps:java-apps:oidc:lifecycle
   gather_facts: no
