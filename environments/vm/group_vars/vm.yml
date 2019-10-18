@@ -327,7 +327,7 @@ authzplayground:
   springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
 oidc_playground:
-  discovery_endpoint: "https://oidcng.{{ base_domain }}/oidc/.well-known/openid-configuration"
+  discovery_endpoint: "https://connect.{{ base_domain }}/oidc/.well-known/openid-configuration"
   client_id: playground_client
   secret: "{{ oidc_playground_secret }}"
   resource_server_id: resource-server-playground-client
@@ -395,7 +395,7 @@ oidcng:
   mongo_user: oidcngrw
   mongo_password: "{{ mongo_passwords.oidcng }}"
   mongo_database: oidcng
-  sp_entity_id: https://oidcng.{{ base_domain }}
+  sp_entity_id: https://connect.{{ base_domain }}
   api_user: manage
   key_rollover_cron_expression: "0 0 0 * * *"
   acr_values_supported:
@@ -637,7 +637,7 @@ haproxy_applications:
     servers: "{{java_servers}}"
 
   - name: oidcng
-    vhost_name: oidcng.{{ base_domain }}
+    vhost_name: connect.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/actuator/health"
     port: "{{ loadbalancing.oidcng.port }}"

@@ -37,7 +37,7 @@ docker run --detach                                             \
 	--add-host aa.vm.openconext.org:127.0.0.2               \
 	--add-host link.vm.openconext.org:127.0.0.1             \
 	--add-host oidc.vm.openconext.org:127.0.0.1             \
-	--add-host oidcng.vm.openconext.org:127.0.0.1           \
+	--add-host connect.vm.openconext.org:127.0.0.1           \
 	--add-host manage.vm.openconext.org:127.0.0.2           \
 	--add-host redirect.vm.openconext.org:127.0.0.1         \
 	--add-host localhost:127.0.0.1                          \

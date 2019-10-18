@@ -25,7 +25,7 @@ push:
     exclude_edugain_imports: {{ manage_exclude_edugain_imports_in_push }}
     exclude_oidc_rp: {{ manage_exclude_oidc_rp_imports_in_push }}
   oidc:
-    url: https://oidcng.{{ base_domain }}/manage/connections
+    url: https://connect.{{ base_domain }}/manage/connections
     user: manage
     name: {{ manage.oidcng_name }}
     password: {{ oidcng_api_metadata_push_password }}
