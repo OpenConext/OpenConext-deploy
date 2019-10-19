@@ -50,7 +50,7 @@ databases:
     - oidc-server
     - aaserver
     - shibboleth
-    - eb_logins 
+    - eb_logins
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
@@ -343,6 +343,9 @@ aa:
   surfmarket_password: "{{ aa_surfmarket_password }}"
   sbs_username: sbs_aa
   sbs_password: "{{ aa_sbs_password }}"
+  ala_url: https://ala.demo.eduid.nl/attribute_aggregation
+  ala_username: admin
+  ala_password: "{{ aa_ala_password }}"
   aggregate_cache: 0
 
 oidc:
@@ -356,11 +359,11 @@ oidc:
   api_user: manage
 
 oidcng:
-  issuer: https://oidc.{{ base_domain }}/ 
-  mongo_host: "{{ mongo_hostname }}" 
-  mongo_port: "{{ mongo_port }}" 
+  issuer: https://oidc.{{ base_domain }}/
+  mongo_host: "{{ mongo_hostname }}"
+  mongo_port: "{{ mongo_port }}"
   mongo_user: oidcngrw
-  mongo_password: "{{ mongo_passwords.oidcng }}" 
+  mongo_password: "{{ mongo_passwords.oidcng }}"
   mongo_database: oidcng
   sp_entity_id: https://connect.{{ base_domain }}
   api_user: manage
@@ -468,7 +471,7 @@ loadbalancing:
 
   welcome:
     port: 609
-  
+
   oidcng:
     port: 620
 
@@ -545,7 +548,7 @@ haproxy_applications:
     ha_url: "/health"
     port: "{{ loadbalancing.oidc_playground.port }}"
     servers: "{{java_servers}}"
-  
+
   - name: voot
     vhost_name: voot.{{ base_domain }}
     ha_method: "GET"
@@ -575,7 +578,7 @@ haproxy_applications:
     port: "{{ loadbalancing.aa.port }}"
     servers: "{{java_servers}}"
     restricted: yes
-  
+
   - name: link
     vhost_name: link.{{ base_domain }}
     ha_method: "GET"
@@ -624,9 +627,9 @@ haproxy_backend_tls: False
 haproxy_sni_ip:
   ipv4: 127.0.0.1
   ipv6:  "::1"
-  certs: 
+  certs:
      - name: star
-       key_content: "{{ https_star_private_key }}" 
+       key_content: "{{ https_star_private_key }}"
        crt_name: star.{{ base_domain }}.pem
 
 haproxy_sni_ip_restricted:
@@ -634,7 +637,7 @@ haproxy_sni_ip_restricted:
   ipv6: "::1"
   certs:
      - name: star
-       key_content: "{{ https_star_private_key }}"  
+       key_content: "{{ https_star_private_key }}"
        crt_name: star.{{ base_domain }}.pem
 
 
