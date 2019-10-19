@@ -118,3 +118,46 @@ authorities:
       ],
       validationRegExp: "^urn:mace:surfnet.nl:surfmarket.nl:.*$"
     }
+  - {
+      id: "ala",
+      description: "Account Linking App",
+      endpoint: "{{ aa.ala_url }}",
+      user: "{{ aa.ala_username }}",
+      password: "{{ aa.ala_password }}",
+      timeOut: 3000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:eduPersonPrincipalName",
+          description: "The EPPN of the user.",
+          type: "string",
+          example: "j.doe@example.co"
+        },
+        {
+          name: "urn:mace:eduid.nl:1.1",
+          description: "SP scoped unique eduID.",
+          type: "string",
+          example: "b04f6998-81e3-4d40-9cee-d96a9fe570df"
+        },
+        {
+          name: "urn:mace:dir:attribute-def:givenName",
+          description: "The given name of the user.",
+          type: "string",
+          example: "John"
+        },
+        {
+          name: "urn:mace:dir:attribute-def:sn",
+          description: "The family name of the user.",
+          type: "string",
+          example: "Doe"
+        }
+      ],
+      requiredInputAttributes: [
+        {
+          name: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
+        },
+        {
+          name: "SPentityID"
+        }
+      ],
+      validationRegExp: "^.*$"
+    }
