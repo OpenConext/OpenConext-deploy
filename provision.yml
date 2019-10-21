@@ -124,7 +124,6 @@
     - { role: authz-playground,             tags: ['oauth', 'authz-playground'] }
     - { role: pdp-gui,                      tags: ['pdp', 'pdp-gui'] }
     - { role: pdp-server,                   tags: ['pdp', 'pdp-server'] }
-    - { role: remove-grouper,               tags: ['remove-grouper'] }
     - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
     - { role: manage-server,                tags: ['manage', 'manage-server'] }
     - { role: oidcng,                       tags: ['oidcng'] }

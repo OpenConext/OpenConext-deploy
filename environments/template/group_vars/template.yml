@@ -10,10 +10,6 @@ error_mail_to: "{{ support_email }}"
 
 php_display_errors: 1
 apache_server_admin: "{{ support_email }}"
-janus_ssp_technicalcontact_name: "Technical Contact"
-janus_ssp_technicalcontact_email: "{{ support_email }}"
-janus_ssp_managingcontact_name: "Managing Contact"
-janus_ssp_managingcontact_email: "{{ support_email }}"
 diy_technicalcontact_name: "Technical Contact"
 diy_technicalcontact_email: "{{ support_email }}"
 
@@ -94,8 +90,6 @@ tls_https:
 # Value for the isMemberOf attribute for users from IdPs that are marked as 'guest'.
 guest_qualifier: "urn:collab:org:{{ base_domain }}"
 
-engine_janus_user: engineblock
-
 engine_database_name: eb
 engine_database_host: "{{ mysql_host }}"
 engine_database_port: 3306
@@ -104,13 +98,6 @@ engine_database_password: "{{ mysql_passwords.eb }}"
 
 engine_apache_environment: test
 engine_apache_symfony_environment: prod
-
-janus_teams_oauth_key: https://teams.{{ base_domain }}/teams/teams.xml
-
-janus_attribute_sources:
- - voot
-
-engine_janus_cache_lifetime: 0
 
 engine_trusted_proxy_ips:
   - 192.168.1.1
@@ -121,14 +108,6 @@ engine_keys:
     privateFile: /etc/openconext/engineblock.pem
     publicKey: engineblock.crt
     publicFile: /etc/openconext/engineblock.crt
-
-engine_block:
-  metadataRepositories:
-    - {
-        index: 0,
-        type: "database",
-        value: "Doctrine"
-      }
 
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:

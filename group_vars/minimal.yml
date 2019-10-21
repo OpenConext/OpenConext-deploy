@@ -1,5 +1,3 @@
 # Default settings to support the minimal installation setup
-janus_no_federative_login: 1
-janus_default_sp: "example-auth"
 apache_app_listen_address:
     all: 0.0.0.0

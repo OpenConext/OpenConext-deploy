@@ -9,7 +9,6 @@ apache_app_listen_address:
   oidc_playground: 192.168.66.99
   mujina_idp: 192.168.66.99
   mujina_sp: 192.168.66.99
-  serviceregistry: 192.168.66.99
   static: 192.168.66.99
   teams: 192.168.66.99
   voot: 192.168.66.99
