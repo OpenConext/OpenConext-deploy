@@ -10,8 +10,8 @@ error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
-attribute_aggregation_gui_version: 2.0.14
-attribute_aggregation_server_version: 2.0.14
+attribute_aggregation_gui_version: 2.0.15
+attribute_aggregation_server_version: 2.0.15
 authz_admin_version: 2.0.14
 authz_playground_version: 1.7
 oidc_playground_client_version: 1.0.1-SNAPSHOT
