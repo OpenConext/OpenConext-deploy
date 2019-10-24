@@ -32,5 +32,9 @@ $RuleSet {{ item.name }}
 :programname, isequal, "Keepalived_vrrp" { action(type="omfile" DynaFile="keepalived-{{ item.name }}") stop }
 :programname, isequal, "Apache-STATIC" { action(type="omfile" DynaFile="apache-static-{{ item.name }}") stop }
 :programname, isequal, "Apache-METADATA" { action(type="omfile" DynaFile="apache-metadata-{{ item.name }}") stop }
+:programname, isequal, "oidcng" { action(type="omfile" DynaFile="oidcng-{{ item.name }}") stop }
+:programname, isequal, "Apache-oidcng" { action(type="omfile" DynaFile="apache-oidcng-{{ item.name }}") stop }
+:programname, isequal, "oidc-playground" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}") stop }
+:programname, isequal, "Apache-Oidc-Playground" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}") stop }
 :msg, contains, "-- MARK --" { action(type="omfile" DynaFile="MARK-{{ item.name }}") stop }
 *.* ?hostleft-{{ item.name }}
