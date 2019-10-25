@@ -8,15 +8,6 @@
   notify:
   - "restart rsyslog"
 
-- name: place rsyslog CA file
-  copy:
-    src: "{{ inventory_dir }}/files/certs/rsyslog_ca.pem"
-    dest: "{{ rsyslog_ca }}"
-  when:
-    - remote_syslog_host is defined
-  notify:
-    - "restart rsyslog"
-
 # We need a key and client certificate to when using RELP
 - name: put rsyslog client key
   copy:

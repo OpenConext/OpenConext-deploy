@@ -100,20 +100,6 @@ $IncludeConfig /etc/rsyslog.d/listeners/*.conf
 # forwarding rules, duplicate the whole block!
 # Remote Logging (we use TCP for reliable delivery)
 #
-# This is the forwarding rule without relp
-{% if remote_syslog_host is defined %}
-$ActionQueueType LinkedList
-$ActionQueueMaxDiskSpace 1g
-$ActionQueueFileName syslog_fwd
-$ActionResumeRetryCount -1
-$ActionQueueSaveOnShutdown on
-$DefaultNetstreamDriver gtls
-$DefaultNetstreamDriverCAFile {{ rsyslog_ca }}
-$ActionSendStreamDriverAuthMode x509/name
-$ActionSendStreamDriverPermittedPeer {{ loghost_fqdn }}
-$ActionSendStreamDriverMode 1 
-*.* @@{{ remote_syslog_host }}:5143
-{% endif %}
 
 {% if rsyslog_remote_server_relp is defined and 'sysloghost' not in group_names %}
 # Forward all logs to the central logging server using relp
