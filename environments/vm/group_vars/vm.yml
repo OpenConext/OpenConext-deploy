@@ -379,6 +379,9 @@ aa:
   ala_url: https://ala.demo.eduid.nl/attribute_aggregation
   ala_username: admin
   ala_password: "{{ aa_ala_password }}"
+  manage_url: https://manage.test.surfconext.nl
+  manage_username: attribute-aggregation
+  manage_password: "{{ aa_manage_password }}"
   aggregate_cache: 0
 
 oidc:
@@ -451,6 +454,11 @@ manage:
     - {
         name: "stats",
         password: "{{ manage_stats_api_password }}",
+        scopes: ["READ"]
+      }
+    - {
+        name: "attribute-aggregation",
+        password: "{{ manage_attribute_aggregation_secret }}",
         scopes: ["READ"]
       }
   loa_values_supported:

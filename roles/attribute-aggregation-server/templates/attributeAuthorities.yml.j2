@@ -167,3 +167,25 @@ authorities:
       ],
       validationRegExp: "^.*$"
     }
+  - {
+      id: "manage",
+      description: "Manage - SURF CRM",
+      endpoint: "{{ aa.manage_url }}",
+      user: "{{ aa.manage_username }}",
+      password: "{{ aa.manage_password }}",
+      timeOut: 3000,
+      attributes: [
+        {
+          name: "urn:mace:surf.nl:attribute-def:surf-crm-id",
+          description: "The SURF CRM value in Manage of the IdP attribute 'coin:institution_guid'.",
+          type: "guid",
+          example: "ad93daef-0911-e511-80d0-005056956c1a"
+        }
+      ],
+      requiredInputAttributes: [
+        {
+          name: "IDPentityID"
+        }
+      ],
+      validationRegExp: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    }
