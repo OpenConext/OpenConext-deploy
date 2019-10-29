@@ -90,19 +90,6 @@ encryption.keys.{{ key }}.publicFile = {{ value.publicFile }}
 
 {% endif %}
 
-{% if engine_branch is not defined and engine_version is version_compare('5.7.0', '<')  %}
-serviceRegistry.caching.lifetime = {{ engine_janus_cache_lifetime }}
-serviceRegistry.location = {{ engine_janus_url }}
-serviceRegistry.user = "{{ engine_janus_user }}"
-serviceRegistry.user_secret = "{{ engine_janus_secret }}"
-{% for repository in engine_block.metadataRepositories %}
-metadataRepository.{{ repository.type }}.type = {{ repository.value }}
-metadataRepositories[{{ repository.index }}] = {{ repository.type }}
-{% endfor %}
-
-engine.simplesamlphp.baseurlpath = "{{ engine_engine_idp_baseurlpath }}"
-{% endif %}
-
 phpSettings.display_errors = {{ php_display_errors }}
 phpSettings.date.timezone = {{ timezone }}
 
