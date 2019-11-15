@@ -37,4 +37,4 @@
   notify:
     - "restart httpd"
     - "restart php-fpm"
-    - "restart php-fpm72"
+    - "restart php72-fpm"
