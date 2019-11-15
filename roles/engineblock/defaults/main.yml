@@ -69,6 +69,7 @@ engine_stepup_authn_context_class_ref_blacklist_regex: '/http:\/\/{{ base_domain
 engine_stepup_engineblock_loa1: "http://{{ base_domain }}/assurance/loa1"
 engine_stepup_engineblock_loa2: "http://{{ base_domain }}/assurance/loa2"
 engine_stepup_engineblock_loa3: "http://{{ base_domain }}/assurance/loa3"
+engine_stepup_gateway_loa1: "http://{{ engine_stepup_base_domain }}/assurance/loa1"
 engine_stepup_gateway_loa2: "http://{{ engine_stepup_base_domain }}/assurance/loa2"
 engine_stepup_gateway_loa3: "http://{{ engine_stepup_base_domain }}/assurance/loa3"
 # The EntityId (metadata URL) used in the callout to the SFO endpoint of the configured Stepup Gateway
