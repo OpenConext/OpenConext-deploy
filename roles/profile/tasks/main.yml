@@ -57,14 +57,8 @@
     chdir: "{{ profile_current_release_symlink }}/app/config/"
     creates: "{{ profile_current_release_symlink }}/app/config/global_view_parameters.yml"
 
-- name: Run commands with PHP 7.2
-  lineinfile:
-    path: "{{ profile_current_release_symlink }}/bin/console"
-    regexp: '^#!/usr/bin/env php'
-    line: '#!/usr/bin/env php72'
-
 - name: Create the symfony cache
-  command: bin/console cache:clear --env={{ profile_apache_symfony_environment }} --no-debug
+  command: php72 bin/console cache:clear --env={{ profile_apache_symfony_environment }} --no-debug
   args:
     chdir: "{{ profile_current_release_symlink }}/"
   when:
