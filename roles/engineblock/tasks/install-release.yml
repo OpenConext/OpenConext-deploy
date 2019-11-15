@@ -27,5 +27,6 @@
   notify:
     - "restart httpd"
     - "restart php-fpm"
+    - "restart php72-fpm"
   when:
     - eb_download.changed or  eb_dir.stat.lnk_source != engine_release_dir
