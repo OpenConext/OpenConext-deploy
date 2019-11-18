@@ -2,18 +2,40 @@
 ## Frontend configuration
 
 #--------------------------------------------------------------------
-#  frontend 
+#  frontend public ips
 # -------------------------------------------------------------------
-frontend ssl_ip
+frontend internet_ip
 
     bind {{ haproxy_sni_ip.ipv4 }}:443 ssl {% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 alpn h2,http/1.1 transparent 
     bind {{ haproxy_sni_ip.ipv6 }}:443 ssl {% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 alpn h2,http/1.1 transparent 
-    http-request del-header Proxy
-    rspadd  Strict-Transport-Security:\ max-age=15768000
-    capture request header User-agent len 256
     bind {{ haproxy_sni_ip.ipv4 }}:80 transparent
     bind {{ haproxy_sni_ip.ipv6 }}:80 transparent
+    # Rewrite requests
+    # First we strip any Proxy headers
+    http-request del-header Proxy
+    # We redirect all port 80 to port 443
+    http-request redirect scheme https code 301 if !{ ssl_fc }
+    # Log the user agent in the httplogs
+    capture request header User-agent len 256
+    # Store the user agent for use in the dummy backend 
+    declare capture request len 256
+    http-request capture req.hdr(User-Agent) id 0
+    # Rewrite responses
+    # Set HSTS on all outgoing responses
+    http-response set-header Strict-Transport-Security max-age=15768000
+    # Add samesite=none to all outgoing cookies except for Safari, which is broken currently
+    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !{ req.hdr(agent_internal) -i -m sub safari }
+    # Remove the agent_interal header again
+    http-response del-header agent_internal 
+    # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
+    use_backend dummy_backend
 
+#--------------------------------------------------------------------
+#  frontend public ips localhost
+#  traffic coming back from the dummy backend ends up here
+# -------------------------------------------------------------------
+frontend local_ip
+    bind 127.0.0.1:80
     {% for application in haproxy_applications %}
     {%if application.restricted is not defined %}
     acl valid_vhost hdr(host) -i {{ application.vhost_name }}
@@ -28,7 +50,6 @@ frontend ssl_ip
     {% endif %}
 
     http-request deny if ! valid_vhost
-    http-request redirect scheme https code 301 if !{ ssl_fc }
 
     {% for application in haproxy_applications %}
     {%if application.restricted is not defined %}
@@ -45,16 +66,40 @@ frontend ssl_ip
 #--------------------------------------------------------------------
 ##  frontend restricted applications
 ## -------------------------------------------------------------------
-frontend ssl_restricted_ip
+frontend internet_restricted_ip
 
     bind {{ haproxy_sni_ip_restricted.ipv4 }}:443 ssl {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
     bind {{ haproxy_sni_ip_restricted.ipv6 }}:443 ssl  {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
-    http-request del-header Proxy
-    rspadd  Strict-Transport-Security:\ max-age=15768000
-    capture request header User-agent len 256 
     bind {{ haproxy_sni_ip_restricted.ipv4 }}:80 transparent
     bind {{ haproxy_sni_ip_restricted.ipv6 }}:80 transparent
-
+    # Rewrite requests
+    # First we strip any Proxy headers
+    http-request del-header Proxy
+    # We redirect all port 80 to port 443
+    http-request redirect scheme https code 301 if !{ ssl_fc }
+    # Log the user agent in the httplogs
+    capture request header User-agent len 256 
+    # Store the user agent for use in the dummy backend 
+    declare capture request len 256 
+    http-request capture req.hdr(User-Agent) id 0
+    # ACL
+    # Safari doesn't support samesite=none, we need an ACL to fix that
+    acl safariout hdr(agent_internal) -m sub -i safari
+    # Rewrite responses
+    # Set HSTS on all outgoing responses
+    http-response set-header Strict-Transport-Security max-age=15768000
+    # Add samesite=none to all outgoing cookies
+    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None
+    # Remove the agent_interal header again
+    http-response del-header agent_internal 
+    # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
+    use_backend dummy_backend_restricted
+#--------------------------------------------------------------------
+#  frontend restricted ip addresses localhost
+#  traffic coming back from the dummy backend ends up here
+# -------------------------------------------------------------------
+frontend localhost_restricted    
+    bind 127.0.0.1:81
     {% for application in haproxy_applications %}
     {%if application.restricted is defined %}
     acl valid_vhost hdr(host) -i {{ application.vhost_name }}
@@ -62,7 +107,6 @@ frontend ssl_restricted_ip
     {% endif %}
     {% endfor %}
     http-request deny if ! valid_vhost
-    http-request redirect scheme https code 301 if !{ ssl_fc }
 
     {% for application in haproxy_applications %}
     {%if application.restricted is defined %}

@@ -1,4 +1,24 @@
 #jinja2: lstrip_blocks: True
+#---------------------------------------------------------------------
+# public ip dummy backend
+#---------------------------------------------------------------------
+  backend dummy_backend
+  mode http
+  option httpclose
+  # We add the header agent_interal so we can build an ACL
+  http-response set-header agent_internal %[capture.req.hdr(0)] 
+  server localhost 127.0.0.1:80
+
+#---------------------------------------------------------------------
+# restricted ip dummy backend
+#---------------------------------------------------------------------
+  backend dummy_backend_restricted
+  mode http
+  option httpclose
+  # We add the header agent_interal so we can build an ACL
+  http-response set-header agent_internal %[capture.req.hdr(0)] 
+  server localhost 127.0.0.1:81
+
 {% for application in haproxy_applications %}
 #---------------------------------------------------------------------
 # {{ application.name }} backend
