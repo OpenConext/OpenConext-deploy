@@ -4,3 +4,6 @@ monitoring_tests_version: ''
 monitoring_tests_snapshot_timestamp: ''
 monitoring_tests_local_jar: ''
 monitoring_tests_jar: monitoring-tests-current.jar
+monitoring_tests_metadata_sp_url: https://engine.{{ base_domain }}/sp-metadata.xml
+monitoring_tests_metadata_idp_url: https://engine.{{ base_domain }}/idp-metadata.xml
+
