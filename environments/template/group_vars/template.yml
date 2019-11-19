@@ -357,6 +357,8 @@ oidcng:
   default_acr_value: http://{{ base_domain }}/assurance/loa1
 
 monitoring_tests:
+  metadata_sp_url: "{{ monitoring_tests_metadata_sp_url }}"
+  metadata_idp_url: "{{ monitoring_tests_metadata_idp_url }}"
   mujina_idp_entity_id: http://mock-idp
   mujina_sp_base_url: https://mujina-sp.{{ base_domain }}
   person_id: "{{ monitoring_tests_person_id }}"

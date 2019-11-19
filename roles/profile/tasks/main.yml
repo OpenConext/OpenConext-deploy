@@ -67,7 +67,7 @@
 
 - name: Make sure cache dir has correct permissions
   file:
-    path: "{{ profile_current_release_symlink }}/app/cache"
+    path: "{{ profile_current_release_symlink }}/var/cache"
     owner: "{{ profile_fpm_user }}"
     group: "{{ profile_fpm_user }}"
     recurse: yes
@@ -75,7 +75,7 @@
 
 - name: Make sure log dir has correct permissions
   file:
-    path: "{{ profile_current_release_symlink }}/app/logs"
+    path: "{{ profile_current_release_symlink }}/var/logs"
     owner: "{{ profile_fpm_user }}"
     group: "{{ profile_fpm_user }}"
     recurse: yes
