@@ -27,5 +27,6 @@
   notify:
     - "restart httpd"
     - "restart php-fpm"
+    - "restart php72-fpm"
   when:
     - profile_download.changed or profile_dir.stat.lnk_source != profile_release_dir

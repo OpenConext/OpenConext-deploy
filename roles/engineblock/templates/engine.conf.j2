@@ -29,7 +29,7 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
     RewriteRule .* - [R=405,L]
 
     #Proxy the requests to FPM
-    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/engine-pool.sock|fcgi://localhost/{{ engine_current_release_symlink }}/web/$1
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/engine-pool-72.sock|fcgi://localhost/{{ engine_current_release_symlink }}/web/$1
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-EB'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-EB'" combined

@@ -45,8 +45,14 @@ attributeAggregation.password = "{{engine_attribute_aggregation_password }}"
 
 ;; The stepup authentication settings
 stepup.authn_context_class_ref_blacklist_regex = "{{ engine_stepup_authn_context_class_ref_blacklist_regex }}"
-stepup.loa.mapping[{{ engine_stepup_engineblock_loa2 }}] = "{{ engine_stepup_gateway_loa2 }}"
-stepup.loa.mapping[{{ engine_stepup_engineblock_loa3 }}] = "{{ engine_stepup_gateway_loa3 }}"
+
+stepup.loa.mapping.1.engineblock = "{{ engine_stepup_engineblock_loa1 }}"
+stepup.loa.mapping.1.gateway = "{{ engine_stepup_gateway_loa1 }}"
+stepup.loa.mapping.2.engineblock = "{{ engine_stepup_engineblock_loa2 }}"
+stepup.loa.mapping.2.gateway = "{{ engine_stepup_gateway_loa2 }}"
+stepup.loa.mapping.3.engineblock = "{{ engine_stepup_engineblock_loa3 }}"
+stepup.loa.mapping.3.gateway = "{{ engine_stepup_gateway_loa3 }}"
+
 stepup.loa.loa1 = "{{ engine_stepup_engineblock_loa1 }}"
 stepup.gateway.sfo.entityId = {{ engine_stepup_gateway_sfo_entity_id }}
 stepup.gateway.sfo.ssoLocation =  {{ engine_stepup_gateway_sfo_sso_location }}
