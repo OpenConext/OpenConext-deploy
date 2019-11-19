@@ -254,6 +254,9 @@ shibboleth_apps:
   "myconext":
     entityID: "https://my.{{ base_domain }}/shibboleth"
     baseurl: ""
+  "dashboard":
+    entityID: "https://dashboard.{{ base_domain }}/shibboleth"
+    baseurl: ""
 
 shib:
   db_host: "127.0.0.1"
@@ -513,6 +516,9 @@ loadbalancing:
   welcome:
     port: 609
 
+  dashboard:
+    port: 610
+
   oidcng:
     port: 620
 
@@ -524,6 +530,7 @@ loadbalancing:
 
   eduid:
     port: 10622
+
 
 haproxy_applications:
 
@@ -659,6 +666,13 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/actuator/health"
     port: "{{ loadbalancing.eduid.port }}"
+    servers: "{{java_servers}}"
+
+  - name: dashboard
+    vhost_name: dashboard.{{ base_domain }}
+    ha_method: "GET"
+    ha_url: "/health"
+    port: "{{ loadbalancing.dashboard.port }}"
     servers: "{{java_servers}}"
 
 haproxy_backend_tls: False
