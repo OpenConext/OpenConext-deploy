@@ -148,6 +148,9 @@ shibboleth_apps:
   "manage":
     entityID: "https://manage.{{ base_domain }}/shibboleth"
     baseurl: ""
+  "dashboard":
+    entityID: "https://dashboard.{{ base_domain }}/shibboleth"
+    baseurl: ""
 
 shib:
   db_host: "127.0.0.1"
@@ -498,6 +501,9 @@ loadbalancing:
   stats:
     port: 702
 
+  dashboard:
+    port: 610
+
 haproxy_applications:
 
   - name: engine
@@ -653,6 +659,13 @@ haproxy_applications:
     ha_url: "/health"
     port: "{{ loadbalancing.stats.port }}"
     servers: "{{php_servers}}"
+
+  - name: dashboard
+    vhost_name: dashboard.{{ base_domain }}
+    ha_method: "GET"
+    ha_url: "/"
+    port: "{{ loadbalancing.dashboard.port }}"
+    servers: "{{java_servers}}"
 
 haproxy_sni_ip:
   ipv4: 192.168.66.98
