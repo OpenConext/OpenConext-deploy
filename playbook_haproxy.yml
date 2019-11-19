@@ -1,5 +1,5 @@
 ---
-- hosts: loadbalancer
+- hosts: loadbalancer_ha
   become: false
   gather_facts: no
   roles:
