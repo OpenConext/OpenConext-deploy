@@ -18,5 +18,7 @@ apache_app_listen_address:
   oidcng: 127.0.0.1
   aa: 127.0.0.1
   manage: 127.0.0.1
+  myconext: 127.0.0.1
+  account: 127.0.0.1
 
 mongo_primary: True

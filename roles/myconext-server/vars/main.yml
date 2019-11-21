@@ -1,0 +1,13 @@
+springapp_artifact_id: myconext-server
+springapp_artifact_type: jar
+springapp_artifact_group_dir: org.openconext
+springapp_version: "{{ myconext_server_version }}"
+springapp_snapshot_timestamp: "{{ myconext_server_snapshot_timestamp }}"
+springapp_dir: "{{ myconext_dir }}"
+springapp_user: myconext
+springapp_service_name: myconext
+springapp_jar: "{{ myconext_jar }}"
+springapp_tcpport: 9189
+springapp_local_jar: "{{ myconext_local_jar }}"
+springapp_heapsize: "512m"
+springapp_random_source: "file:///dev/urandom"

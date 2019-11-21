@@ -1,0 +1,3 @@
+---
+myconext_current: /var/www/myconext/current
+springapp_tcpport: 9189

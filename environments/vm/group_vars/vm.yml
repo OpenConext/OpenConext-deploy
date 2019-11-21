@@ -30,6 +30,9 @@ profile_version: "2.0.3"
 teams_gui_version: 8.3.0
 teams_server_version: 8.3.0
 voot_version: 3.0.7
+myconext_server_version: 1.0.0
+myconext_gui_version: 1.0.0
+account_gui_version: 1.0.0
 
 databases:
   names:
@@ -147,6 +150,9 @@ shibboleth_apps:
     baseurl: ""
   "manage":
     entityID: "https://manage.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  "myconext":
+    entityID: "https://my.{{ base_domain }}/shibboleth"
     baseurl: ""
 
 shib:
