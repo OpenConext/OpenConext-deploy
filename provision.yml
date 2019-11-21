@@ -133,9 +133,9 @@
     - { role: dashboard-server,             tags: ['dashboard', 'dashboard-server'], when: dashboard_install | bool }
     - { role: oidc-playground-client,       tags: ['oidc-playground', 'oidc-playground-client'] }
     - { role: oidc-playground-server,       tags: ['oidc-playground', 'oidc-playground-server'] }
-    - { role: myconext-client,              tags: ['myconext', 'myconext-client'] }
-    - { role: myconext-server,              tags: ['myconext', 'myconext-server'] }
-    - { role: account-client,               tags: ['myconext', 'account-client'] }
+    - { role: myconext-gui,                 tags: ['myconext-gui', 'myconext'] }
+    - { role: myconext-server,              tags: ['myconext-server', 'myconext'] }
+    - { role: account-gui,                  tags: ['account-gui', 'myconext'] }
 
   handlers:
     - include: roles/httpd/handlers/main.yml
