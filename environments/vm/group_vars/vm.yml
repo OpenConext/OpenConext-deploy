@@ -489,6 +489,12 @@ loadbalancing:
   oidcng:
     port: 620
 
+  account:
+    port: 621
+
+  myconext:
+    port: 622
+
   mujina_sp:
     port: 607
 
@@ -623,6 +629,20 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/actuator/health"
     port: "{{ loadbalancing.oidcng.port }}"
+    servers: "{{java_servers}}"
+
+  - name: myconext
+    vhost_name: my.{{ base_domain }}
+    ha_method: "GET"
+    ha_url: "/actuator/health"
+    port: "{{ loadbalancing.myconext.port }}"
+    servers: "{{java_servers}}"
+
+  - name: account
+    vhost_name: account.{{ base_domain }}
+    ha_method: "GET"
+    ha_url: "/actuator/health"
+    port: "{{ loadbalancing.account.port }}"
     servers: "{{java_servers}}"
 
   - name: mujina-sp
