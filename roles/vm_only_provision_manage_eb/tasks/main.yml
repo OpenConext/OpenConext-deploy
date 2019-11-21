@@ -37,6 +37,6 @@
     user: "{{ manage.apiUsers[2].name }}"
     password: "{{ manage.apiUsers[2].password }}"
     force_basic_auth: yes
-    run_once: true
     status_code: 200
+  run_once: true
   changed_when: false
