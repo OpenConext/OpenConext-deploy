@@ -15,6 +15,8 @@ $RuleSet {{ item.name }}
 :programname, isequal, "stepup-selfservice" { action(type="omfile" DynaFile="stepup-selfservice-{{ item.name }}") stop }
 :programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
 :programname, isequal, "stepup-tiqr" { action(type="omfile" DynaFile="stepup-tiqr-{{ item.name }}") stop }
+:programname, isequal, "stepup-ra" { action(type="omfile" DynaFile="stepup-ra-{{ item.name }}") stop }
+:programname, isequal, "stepup-middleware" { action(type="omfile" DynaFile="stepup-middleware-{{ item.name }}") stop }
 :programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="garb-{{ item.name }}") stop }
 :programname, isequal, "mysqld" { action(type="omfile" DynaFile="galera-{{ item.name }}") stop }
 :programname, isequal, "sendmail" { action(type="omfile" DynaFile="sendmail-{{ item.name }}") stop }
