@@ -63,6 +63,7 @@ databases:
 mongo_port: 27017
 mongo_cluster: false
 mongo_hostname: localhost
+mongo_host: "{{ mongo_hostname }}"
 mongo_tls: false
 
 mongo:
