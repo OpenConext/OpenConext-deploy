@@ -69,6 +69,7 @@ mongo:
   users:
     - { name: managerw, db_name: metadata, password: "{{ mongo_passwords.manage }}" }
     - { name: oidcngrw, db_name: oidcng, password: "{{ mongo_passwords.oidcng }}" }
+    - { name: myconextrw, db_name: myconext, password: "{{ mongo_passwords.myconext }}" }
 
 tls:
   cert_path: /etc/pki/tls/certs
@@ -362,6 +363,13 @@ oidcng:
     - http://{{ base_domain }}/assurance/loa3
   default_acr_value: http://{{ base_domain }}/assurance/loa1
 
+myconext:
+  mongo_host: "{{ mongo_host }}"
+  mongo_port: "{{ mongo_port }}"
+  mongo_user: myconextrw
+  mongo_database: myconext
+  mongo_password: "{{ mongo_passwords.myconext }}"
+
 monitoring_tests:
   metadata_sp_url: "{{ monitoring_tests_metadata_sp_url }}"
   metadata_idp_url: "{{ monitoring_tests_metadata_idp_url }}"
@@ -469,6 +477,12 @@ loadbalancing:
 
   oidcng:
     port: 620
+
+  account:
+    port: 621
+
+  myconext:
+    port: 622
 
 haproxy_applications:
 
@@ -615,6 +629,20 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/actuator/health"
     port: "{{ loadbalancing.oidcng.port }}"
+    servers: "{{java_servers}}"
+
+  - name: myconext
+    vhost_name: my.{{ base_domain }}
+    ha_method: "GET"
+    ha_url: "/actuator/health"
+    port: "{{ loadbalancing.myconext.port }}"
+    servers: "{{java_servers}}"
+
+  - name: account
+    vhost_name: account.{{ base_domain }}
+    ha_method: "GET"
+    ha_url: "/actuator/health"
+    port: "{{ loadbalancing.account.port }}"
     servers: "{{java_servers}}"
 
 haproxy_backend_tls: False
