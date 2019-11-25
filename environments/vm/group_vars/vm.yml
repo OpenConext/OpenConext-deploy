@@ -65,6 +65,7 @@ mongo:
   users:
     - { name: managerw, db_name: metadata, password: "{{ mongo_passwords.manage }}" }
     - { name: oidcngrw, db_name: oidcng, password: "{{ mongo_passwords.oidcng }}" }
+    - { name: myconextrw, db_name: myconext, password: "{{ mongo_passwords.myconext }}" }
 
 tls:
   cert_path: /etc/pki/tls/certs
@@ -383,6 +384,13 @@ oidcng:
     - http://{{ base_domain }}/assurance/loa2
     - http://{{ base_domain }}/assurance/loa3
   default_acr_value: http://{{ base_domain }}/assurance/loa1
+
+myconext:
+  mongo_host: "{{ mongo_host }}"
+  mongo_port: "{{ mongo_port }}"
+  mongo_user: myconextrw
+  mongo_database: myconext
+  mongo_password: "{{ mongo_passwords.myconext }}"
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
