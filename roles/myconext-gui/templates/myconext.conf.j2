@@ -1,0 +1,79 @@
+{% if apache_app_listen_address.myconext is defined %}
+Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }}
+<Virtualhost {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }}>
+{% else %}
+<Virtualhost *:443 >
+{% endif %}
+    # General setup for the virtual host, inherited from global configuration
+    ServerName https://my.{{ base_domain }}
+
+    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-myconext'"
+    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-myconext'" combined
+
+    RewriteEngine on
+
+    RewriteCond %{REQUEST_URI} !\.html$
+    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.svg$
+    RewriteCond %{REQUEST_URI} !\.css$
+    RewriteCond %{REQUEST_URI} !\.png$
+    RewriteCond %{REQUEST_URI} !\.ico$
+    RewriteCond %{REQUEST_URI} !\.woff$
+    RewriteCond %{REQUEST_URI} !\.woff2$
+    RewriteCond %{REQUEST_URI} !\.ttf$
+    RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !myconext
+    RewriteCond %{REQUEST_URI} !actuator
+    RewriteCond %{REQUEST_URI} !config
+    RewriteCond %{REQUEST_URI} !login
+    RewriteCond %{REQUEST_URI} !startSSO
+    RewriteCond %{REQUEST_URI} !fonts
+    RewriteRule (.*) /index.html [L]
+
+    ProxyPreserveHost On
+    ProxyPass /Shibboleth.sso !
+    ProxyPass /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api retry=0
+    ProxyPassReverse /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api
+    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/actuator retry=0
+    ProxyPass /login http://localhost:{{ springapp_tcpport }}/login retry=0
+    ProxyPass /startSSO http://localhost:{{ springapp_tcpport }}/startSSO retry=0
+    ProxyPass /config http://localhost:{{ springapp_tcpport }}/config retry=0
+
+    DocumentRoot /var/www/myconext/current
+
+    <Directory /var/www/myconext/current>
+      Order       allow,deny
+      Allow       from all
+      Options     -Indexes
+    </Directory>
+
+    <Location ~ "^/(?!startSSO)">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location />
+      AuthType shibboleth
+      ShibUseHeaders On
+      ShibRequestSetting applicationId myconext
+      ShibRequireSession On
+      ShibRequestSetting REMOTE_ADDR X-Forwarded-For
+      require valid-user
+    </Location>
+
+    {% if haproxy_backend_tls %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
+
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
+    Include ssl_backend.conf
+    {% endif %}
+
+</VirtualHost>

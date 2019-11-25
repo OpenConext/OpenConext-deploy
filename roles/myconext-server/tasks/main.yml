@@ -1,0 +1,103 @@
+---
+- name: create user myconext
+  user:
+    name: myconext
+    system: yes
+    home: "{{ myconext_dir }}"
+    shell: /sbin/nologin
+
+- name: Copy systemd service file
+  template:
+    src: "../../templates/spring-boot.service.j2"
+    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
+  notify:
+    - "systemctl daemon-reload"
+    - "restart myconext"
+
+- name: enable service
+  service:
+    name: myconext
+    enabled: yes
+
+- name: Create logging directory
+  file:
+    path: /var/log/{{ springapp_service_name }}
+    state: directory
+    owner: myconext
+    group: myconext
+    mode: 0755
+
+- name: Include install-maven-release.yml
+  include: ../../../tasks/springbootapp/install-maven-release.yml
+  when:
+    - "myconext_local_jar == ''"
+
+- name: Include install-local.yml
+  include: ../../../tasks/springbootapp/install-local.yml
+  when:
+    - "myconext_local_jar != ''"
+
+- name: copy logging config
+  template:
+    src: logback.xml.j2
+    dest: "{{ myconext_dir }}/logback.xml"
+    owner: myconext
+    group: myconext
+    mode: 0740
+  notify:
+    - "restart myconext"
+
+- name: copy application config
+  template:
+    src: "application.yml.j2"
+    dest: "{{ myconext_dir }}/application.yml"
+    owner: myconext
+    group: myconext
+    mode: 0740
+  notify:
+    - "restart myconext"
+
+- name: copy / create private key
+  copy:
+    content: "{{ myconext_private_key }}"
+    dest: "{{ myconext_dir }}/myconext_saml.key"
+    owner: "root"
+    group: "myconext"
+    mode: 0740
+  notify:
+    - "restart myconext"
+
+- name: copy / create certificate
+  copy:
+    src: "{{ inventory_dir }}/files/certs/myconext/myconext_saml.crt"
+    dest: "{{ myconext_dir }}/myconext_saml.crt"
+    owner: "root"
+    group: "myconext"
+    mode: 0740
+  notify:
+    - "restart myconext"
+
+- name: start the myconext service
+  service:
+    name: myconext
+    state: started
+    enabled: yes
+  ignore_errors: true
+
+- name: wait for myconext to start
+  wait_for:
+    connect_timeout: 30
+    port: "{{ springapp_tcpport }}"
+    state: started
+
+- name: ensure the service is started
+  service:
+    name: myconext
+    enabled: yes
+    state: started
+
+- name: cleanup old jars
+  shell: find . ! -name $(basename $(readlink myconext-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ myconext_dir }}
+  when: maven_result.changed
+
+- meta: flush_handlers

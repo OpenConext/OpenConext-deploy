@@ -30,6 +30,9 @@ profile_version: "2.0.3"
 teams_gui_version: 8.3.0
 teams_server_version: 8.3.0
 voot_version: 3.0.7
+myconext_server_version: 1.0.0
+myconext_gui_version: 1.0.0
+account_gui_version: 1.0.0
 
 databases:
   names:
@@ -147,6 +150,9 @@ shibboleth_apps:
     baseurl: ""
   "manage":
     entityID: "https://manage.{{ base_domain }}/shibboleth"
+    baseurl: ""
+  "myconext":
+    entityID: "https://my.{{ base_domain }}/shibboleth"
     baseurl: ""
 
 shib:
@@ -483,6 +489,12 @@ loadbalancing:
   oidcng:
     port: 620
 
+  account:
+    port: 621
+
+  myconext:
+    port: 622
+
   mujina_sp:
     port: 607
 
@@ -617,6 +629,20 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/actuator/health"
     port: "{{ loadbalancing.oidcng.port }}"
+    servers: "{{java_servers}}"
+
+  - name: myconext
+    vhost_name: my.{{ base_domain }}
+    ha_method: "GET"
+    ha_url: "/actuator/health"
+    port: "{{ loadbalancing.myconext.port }}"
+    servers: "{{java_servers}}"
+
+  - name: account
+    vhost_name: account.{{ base_domain }}
+    ha_method: "GET"
+    ha_url: "/actuator/health"
+    port: "{{ loadbalancing.account.port }}"
     servers: "{{java_servers}}"
 
   - name: mujina-sp

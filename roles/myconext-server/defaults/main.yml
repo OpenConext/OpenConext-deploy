@@ -1,0 +1,7 @@
+---
+myconext_dir: /opt/myconext
+myconext_snapshot_timestamp: ''
+myconext_local_jar: ''
+myconext_jar: myconext-current.jar
+myconext_random_source: 'file:///dev/urandom'
+myconext_install: true

@@ -1,0 +1,61 @@
+logging:
+  config: file://{{ myconext_dir }}/logback.xml
+  level:
+    org.springframework.data.mongodb: INFO
+
+server:
+  # The port to where this Spring Boot application listens to.
+  port: {{ springapp_tcpport }}
+  # We serve from the root. Do not change this
+  contextPath:
+  session:
+    timeout: 28800
+    cookie:
+      secure: true
+  server-header: no
+
+email:
+  from: {{ instance_name }} MyConext <{{ noreply_email }}>
+  magic-link-url: https://account.{{ base_domain }}/saml/guest-idp/magic
+  my-surfconext-url: https://my.{{ base_domain }}
+
+cron:
+  node-cron-job-responsible: {{ myconext_cronjobmaster }}
+  token-cleaner-expression: "0 0/15 * * * *"
+
+base_path: https://my.{{ base_domain }}
+idp_redirect_url: https://account.{{ base_domain }}
+sp_redirect_url: https://my.{{ base_domain }}
+sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
+sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
+
+secure_cookie: true
+idp_entity_id: https://account.{{ base_domain }}
+private_key_path: file://{{ myconext_dir }}/myconext_saml.key
+certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
+
+remember_me_max_age_seconds: 15_768_000
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% if not mongo_cluster %}{{ mongo_hostname }}{% else %}{% for host in groups['mongo_servers'] %}{{ hostvars[host]['mongo_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}/{{ myconext.mongo_database }}{% if mongo_tls %}?ssl=true{% endif %}
+
+  mail:
+    host: localhost
+    port: 25
+  main:
+    banner-mode: "off"
+
+management:
+  health:
+    mail:
+      enabled: true
+
+# We disable all endpoints except health for the load-balancer and info for git information.
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+  info:
+    enabled: true

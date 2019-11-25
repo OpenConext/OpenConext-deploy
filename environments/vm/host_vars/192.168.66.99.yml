@@ -21,5 +21,7 @@ apache_app_listen_address:
   manage: 192.168.66.99
   kibana: 192.168.66.99
   stats: 192.168.66.99
+  myconext: 192.168.66.99
+  account: 192.168.66.99
 
 mongo_primary: True
