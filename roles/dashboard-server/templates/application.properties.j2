@@ -80,3 +80,6 @@ guestidp.entityid={{ dashboard.guestidp_entityid }}
 # tabs that can be hidden are: statistics,apps,policies,tickets,my_idp and user_invite
 dashboard.hide_tabs={{ dashboard_hide_tabs }}
 management.health.mail.enabled=true
+
+default_loa_level={{ manage.loa_values_supported[0] }}
+loa_values_supported={% for loa in manage.loa_values_supported %} "{{ loa }}" {{ "," if not loop.last else ""}} {% endfor %}
