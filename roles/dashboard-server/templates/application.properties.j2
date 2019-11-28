@@ -82,4 +82,4 @@ dashboard.hide_tabs={{ dashboard_hide_tabs }}
 management.health.mail.enabled=true
 
 default_loa_level={{ manage.loa_values_supported[0] }}
-loa_values_supported={% for loa in manage.loa_values_supported %} "{{ loa }}" {{ "," if not loop.last else ""}} {% endfor %}
+loa_values_supported={% for loa in manage.loa_values_supported %}{{ loa }}{{ "," if not loop.last else ""}} {% endfor %}
