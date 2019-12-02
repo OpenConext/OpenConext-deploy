@@ -3,7 +3,7 @@ $RuleSet {{ item.name }}
 :programname, isequal, "Apache-EB" { action(type="omfile" DynaFile="apache-eb-{{ item.name }}") stop }
 :programname, isequal, "EBAUTH" { action(type="omfile" DynaFile="ebauth-{{ item.name }}") stop }
 :programname, isequal, "haproxy" { action(type="omfile" DynaFile="haproxy-{{ item.name }}") stop }
-:programname, isequal, "AA" { action(type="omfile" DynaFile="aa-{{ item.name }}") stop }
+:programname, isequal, "aa" { action(type="omfile" DynaFile="aa-{{ item.name }}") stop }
 :programname, isequal, "Apache-AA" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}") stop }
 :programname, isequal, "Apache-Authz-Admin" { action(type="omfile" DynaFile="apache-authz-admin-{{ item.name }}") stop }
 :programname, isequal, "AUTHZADMINMAIN" { action(type="omfile" DynaFile="authz-admin-{{ item.name }}") stop }
