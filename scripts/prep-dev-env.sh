@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Restarting php-fpm, httpd and tomcat"
-sudo service php-fpm restart
+sudo service php72-php-fpm restart
 sudo service httpd restart
 sudo service tomcat restart
 

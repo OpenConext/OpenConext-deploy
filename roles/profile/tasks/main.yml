@@ -90,14 +90,10 @@
   notify:
     - "restart httpd"
 
-- name: php-fpm config
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/php-fpm.d/{{ item }}"
-  with_items:
-     - profile-pool.conf
-  notify:
-    - "restart php-fpm"
+- name: clean up old php-fpm 5.6 config
+  file:
+    path: "/etc/php-fpm.d/profile-pool.conf"
+    state: absent
 
 - name: php-fpm 72 config
   template:
@@ -115,7 +111,7 @@
   with_items:
     - profile.yml
   notify:
-    - "restart php-fpm"
+    - "restart php72-fpm"
 
 # Remove all dirs, but keep the current version and from the rest the most recent one.
 - name: Clean up old releases

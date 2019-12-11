@@ -17,22 +17,22 @@
       src: remi.repo
       dest: /etc/yum.repos.d/remi.repo
 
-- name: Install php-(cli,fpm), composer
+- name: Remove any leftover 5.6 php-(cli,fpm)
   yum:
     name:
       - php-fpm
       - php-cli
       - php-pecl-apcu
+      - php-pecl-xdebug
       - php-curl
       - php-mbstring
       - php-mysql
       - php-soap
       - php-xml
       - php-gd
-      - composer
-    state: present
+    state: absent
 
-- name: Install php-(cli,fpm) 7.2
+- name: Install php-(cli,fpm) 7.2, composer
   yum:
     name:
       - php72-php-fpm
@@ -45,22 +45,8 @@
       - php72-php-soap
       - php72-php-xml
       - php72-php-gd
+      - composer
     state: present
-
-- name: Enable php-fpm
-  service:
-    name: php-fpm
-    enabled: yes
-
-- name: Install custom PHP configuration
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/php.d/{{ item }}"
-  with_items:
-    - 40-apcu.ini
-    - openconext.ini
-  notify:
-    - "restart php-fpm"
 
 - name: Install custom PHP configuration for 7.2
   template:
@@ -75,20 +61,20 @@
 - name: Install PHP debug extensions
   yum:
     name:
-      - php-pecl-xdebug
       - php72-php-pecl-xdebug
     state: present
   when:
     - develop | bool
 
-- name: Configure PHP Xdebug
-  template:
-    src: "xdebug.ini.j2"
-    dest: "/etc/php.d/15-xdebug.ini"
-  when:
-    - develop | bool
-  notify:
-    - "restart php-fpm"
+- name: Clean up old php-fpm 5.6 config
+  file:
+    path: "{{ item }}"
+    state: absent
+  with-items:
+    - "/etc/php.d/15-xdebug.ini"
+    - "/etc/php.d/40-apcu.ini"
+    - "/etc/php.d/openconext.ini"
+    - "/etc/php-fpm.conf"
 
 - name: Configure PHP Xdebug for 7.2
   template:
@@ -98,13 +84,6 @@
     - develop | bool
   notify:
     - "restart php72-php-fpm"
-
-- name: Put /etc/php-fpm.conf
-  copy:
-    src: "php-fpm.conf"
-    dest: "/etc/php-fpm.conf"
-  notify:
-    - "restart php-fpm"
 
 - name: Put 7.2 php-fpm.conf
   copy:
@@ -119,11 +98,6 @@
     dest: "/etc/opt/remi/php72/php-fpm.d/www.conf"
   notify:
     - "restart php72-php-fpm"
-
-- name: Enable php-fpm
-  service:
-    name: php-fpm
-    enabled: yes
 
 - name: Enable php72-php-fpm
   service:
