@@ -86,19 +86,15 @@
     state: directory
     mode: 0771
 
-- name: Remove any leftover 5.6 php-(cli,fpm)
+# FIXME: we still need php-cli for composer package we install above.
+- name: Remove any leftover 5.6 php-fpm
   yum:
     name:
       - php-fpm
-      - php-cli
       - php-pecl-apcu
       - php-pecl-xdebug
-      - php-curl
-      - php-mbstring
       - php-mysql
       - php-soap
-      - php-xml
-      - php-gd
     state: absent
 
 - name: Clean up old php-fpm 5.6 config
