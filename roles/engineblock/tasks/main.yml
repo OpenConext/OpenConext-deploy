@@ -118,15 +118,10 @@
   notify:
     - "restart httpd"
 
-# Put fpm config
-- name: php-fpm config
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/php-fpm.d/{{ item }}"
-  with_items:
-     - engine-pool.conf
-  notify:
-    - "restart php-fpm"
+- name: clean up old php-fpm 5.6 config
+  file:
+    path: "/etc/php-fpm.d/engine-pool.conf"
+    state: absent
 
 - name: php-fpm 72 config
   template:
@@ -169,7 +164,6 @@
   with_items:
     - engineblock.ini
   notify:
-    - "restart php-fpm"
     - "restart php72-fpm"
 
 - name: Make the SYMFONY_ENV var available for scripts

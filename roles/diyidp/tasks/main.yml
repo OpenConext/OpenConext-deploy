@@ -35,14 +35,19 @@
   notify:
     - "restart httpd"
 
-- name: php-fpm config
+- name: Clean up old php-fpm 5.6 config
+  file:
+    path: "/etc/php-fpm.d/diyidp-pool.conf"
+    state: absent
+
+- name: php-fpm 72 config
   template:
     src: "{{ item }}.j2"
-    dest: "/etc/php-fpm.d/{{ item }}"
+    dest: "/etc/opt/remi/php72/php-fpm.d/{{ item }}"
   with_items:
-     - diyidp-pool.conf
+     - diyidp-pool-72.conf
   notify:
-    - "restart php-fpm"
+    - "restart php72-fpm"
 
 - name: Activate new DIY IDP release
   file:

@@ -36,5 +36,4 @@
     state: link
   notify:
     - "restart httpd"
-    - "restart php-fpm"
     - "restart php72-fpm"

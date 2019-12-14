@@ -15,7 +15,7 @@ Listen {{ apache_app_listen_address.lifecycle }}:{{ loadbalancing.lifecycle.port
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^(.*)$ app.php [QSA,L]
     </Directory>
-    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/lifecycle-pool.sock|fcgi://localhost{{ lifecycle_current_release_symlink }}/web/$1
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/lifecycle-pool-72.sock|fcgi://localhost{{ lifecycle_current_release_symlink }}/web/$1
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-LIFECYCLE'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-LIFECYCLE'" combined
     
