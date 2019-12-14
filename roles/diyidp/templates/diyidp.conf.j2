@@ -18,6 +18,12 @@ Listen {{ apache_app_listen_address.diyidp }}:{{ loadbalancing.diyidp.port }}
 
     # Proxy the requests to FPM
     ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/diyidp-pool-72.sock|fcgi://localhost/{{ diyidp_current_release_symlink }}/www/$1
+    {% if haproxy_backend_tls %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-DIYIDP'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-DIYIDP'" combined
