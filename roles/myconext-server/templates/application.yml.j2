@@ -26,7 +26,7 @@ cron:
   node-cron-job-responsible: {{ myconext_cronjobmaster }}
   token-cleaner-expression: "0 0/15 * * * *"
 
-metadata_sp_url: https://metadata.surfconext.nl/sp-names.json
+metadata_sp_url: https://metadata.{{ base_domain }}/sp-names.json
 
 base_path: https://my.{{ base_domain }}
 idp_redirect_url: https://account.{{ base_domain }}
