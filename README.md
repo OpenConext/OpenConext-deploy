@@ -29,14 +29,12 @@ You will need at least Vagrant 1.7. Do not use Vagrant 1.8.5, which contains a b
 
 To install both with Homebrew:
 
-    brew tap caskroom/cask
-    brew install brew-cask
     brew cask install vagrant
     brew cask install virtualbox
 
 With the above commands you get the latest versions. There might be incompatibilities. Vagrant will tell you and if you need a different version install cask versions and install the correct version of virtualbox and / or vagrant:
 
-    brew tap caskroom/versions
+    brew tap homebrew/cask-versions
     brew cask install virtualbox4330101610
 
 ## Install Ansible
