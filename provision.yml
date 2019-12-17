@@ -136,16 +136,11 @@
     - { role: myconext-gui,                 tags: ['myconext-gui', 'myconext'] }
     - { role: myconext-server,              tags: ['myconext-server', 'myconext'] }
     - { role: account-gui,                  tags: ['account-gui', 'myconext'] }
+    - { role: mujina-sp,                    tags: ['mujina-sp', 'mujina'] }
+    - { role: mujina-idp,                   tags: ['mujina-idp', 'mujina'] }
 
   handlers:
     - include: roles/httpd/handlers/main.yml
-
-- hosts: java-apps-vm
-  gather_facts: true
-  become: true
-  roles:
-   - { role: mujina-idp,        tags: ['legacy' ] }
-   - { role: mujina-sp,         tags: ['legacy' ] }
 
 - hosts: oidc
   gather_facts: true
