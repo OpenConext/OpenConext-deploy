@@ -440,7 +440,7 @@ manage:
       }
     - {
         name: "attribute-aggregation",
-        password: "{{ manage_attribute_aggregation_secret }}",
+        password: "{{ aa_manage_password }}",
         scopes: ["READ"]
       }
   loa_values_supported:
