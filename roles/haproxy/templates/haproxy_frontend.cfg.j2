@@ -23,8 +23,14 @@ frontend internet_ip
     # Rewrite responses
     # Set HSTS on all outgoing responses
     http-response set-header Strict-Transport-Security max-age=15768000
+    # Create ACLs to make samesite=origin execeptions for unsupported browsers
+    # See https://www.chromium.org/updates/same-site/incompatible-clients
+    acl safari hdr(agent_internal) -m reg "Version\/.* Safari\/"
+    acl chrome51to66 hdr(agent_internal) -m reg "Chrom(e|ium)\/(5[1-9]|6[0-6])"
+    acl ucbrowser hdr(agent_internal) -m sub UCBrowser
+
     # Add samesite=none to all outgoing cookies except for Safari, which is broken currently
-    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !{ req.hdr(agent_internal) -i -m sub safari }
+    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !chrome51to66 !safari !ucbrowser
     # Remove the agent_interal header again
     http-response del-header agent_internal 
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
@@ -82,14 +88,16 @@ frontend internet_restricted_ip
     # Store the user agent for use in the dummy backend 
     declare capture request len 256 
     http-request capture req.hdr(User-Agent) id 0
-    # ACL
-    # Safari doesn't support samesite=none, we need an ACL to fix that
-    acl safariout hdr(agent_internal) -m sub -i safari
     # Rewrite responses
     # Set HSTS on all outgoing responses
     http-response set-header Strict-Transport-Security max-age=15768000
-    # Add samesite=none to all outgoing cookies
-    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None
+    # Create ACLs to make samesite=origin execeptions for unsupported browsers
+    # See https://www.chromium.org/updates/same-site/incompatible-clients
+    acl safari hdr(agent_internal) -m reg "Version\/.* Safari\/"
+    acl chrome51to66 hdr(agent_internal) -m reg "Chrom(e|ium)\/(5[1-9]|6[0-6])"
+    acl ucbrowser hdr(agent_internal) -m sub UCBrowser
+    # Add samesite=none to all outgoing cookies except for Safari, which is broken currently
+    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !chrome51to66 !safari !ucbrowser
     # Remove the agent_interal header again
     http-response del-header agent_internal 
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
