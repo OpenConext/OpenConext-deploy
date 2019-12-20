@@ -6,6 +6,3 @@
 - name: Include cluster node installation
   include: cluster_nodes.yml
   when: arbiter_node is not defined
-
-- name: Include start timeout configuration
-  include: start_timeout.yml
