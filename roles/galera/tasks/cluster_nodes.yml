@@ -233,7 +233,7 @@
 - name: "Place conf file to increase MariaDB service TimeoutStartSec to 600 seconds"
   template:
     src: "timeoutstartsec.conf.j2"
-    dest: "/etc/systemd/system/mariadb.service/timeoutstartsec.conf"
+    dest: "/etc/systemd/system/mariadb.service.d/timeoutstartsec.conf"
     owner: root
     group: root
     mode: '0644'
