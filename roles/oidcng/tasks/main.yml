@@ -63,6 +63,16 @@
   notify:
     - "restart oidcng"
 
+- name: copy application config
+  copy:
+    src: oidc_saml_mapping.json
+    dest: "{{ oidcng_dir }}"
+    owner: "root"
+    group: "oidcng"
+    mode: 0740
+  notify:
+    - "restart oidcng"
+
 - name: copy / create private key
   copy:
     content: "{{ oidcng_private_key }}"

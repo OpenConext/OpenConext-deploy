@@ -1,0 +1,103 @@
+[
+  {
+    "saml": "urn:mace:dir:attribute-def:eduPersonTargetedID",
+    "oidc": "sub",
+    "multiValue": false,
+    "customMapping": true
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:cn",
+    "oidc": "name",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:displayName",
+    "oidc": "preferred_username",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:displayName",
+    "oidc": "nickname",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:givenName",
+    "oidc": "given_name",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:sn",
+    "oidc": "family_name",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:mail",
+    "oidc": "email",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:terena.org:attribute-def:schacHomeOrganization",
+    "oidc": "schac_home_organization",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:terena.org:attribute-def:schacHomeOrganizationType",
+    "oidc": "schac_home_organization_type",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+    "oidc": "eduperson_affiliation",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
+    "oidc": "eduperson_scoped_affiliation",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:isMemberOf",
+    "oidc": "edumember_is_member_of",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:eduPersonEntitlement",
+    "oidc": "eduperson_entitlement",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:schac:attribute-def:schacPersonalUniqueCode",
+    "oidc": "schac_personal_unique_code",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
+    "oidc": "eduperson_principal_name",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:eduid.nl:1.1",
+    "oidc": "eduid",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:uid",
+    "oidc": "uids",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:eduPersonOrcid",
+    "oidc": "eduperson_orcid",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:surf.nl:attribute-def:eckid",
+    "oidc": "eckid",
+    "multiValue": false
+  },
+  {
+    "saml": "urn:mace:surf.nl:attribute-def:surf-crm-id",
+    "oidc": "surf-crm-id",
+    "multiValue": false
+  }
+]
