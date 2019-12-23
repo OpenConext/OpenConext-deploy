@@ -25,12 +25,9 @@ frontend internet_ip
     http-response set-header Strict-Transport-Security max-age=15768000
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
-    acl safari hdr(agent_internal) -m reg "Version\/.* Safari\/"
-    acl chrome51to66 hdr(agent_internal) -m reg "Chrom(e|ium)\/(5[1-9]|6[0-6])"
-    acl ucbrowser hdr(agent_internal) -m sub UCBrowser
-
+    acl no_same_site_uas hdr(agent_internal) -m reg -f /etc/haproxy/nosamesitebrowsers.lst
     # Add samesite=none to all outgoing cookies except for Safari, which is broken currently
-    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !chrome51to66 !safari !ucbrowser
+    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !no_same_site_uas
     # Remove the agent_interal header again
     http-response del-header agent_internal 
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
@@ -93,11 +90,9 @@ frontend internet_restricted_ip
     http-response set-header Strict-Transport-Security max-age=15768000
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
-    acl safari hdr(agent_internal) -m reg "Version\/.* Safari\/"
-    acl chrome51to66 hdr(agent_internal) -m reg "Chrom(e|ium)\/(5[1-9]|6[0-6])"
-    acl ucbrowser hdr(agent_internal) -m sub UCBrowser
+    acl no_same_site_uas hdr(agent_internal) -m reg -f /etc/haproxy/nosamesitebrowsers.lst
     # Add samesite=none to all outgoing cookies except for Safari, which is broken currently
-    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !chrome51to66 !safari !ucbrowser
+    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !no_same_site_uas
     # Remove the agent_interal header again
     http-response del-header agent_internal 
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
