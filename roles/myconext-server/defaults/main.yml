@@ -6,3 +6,4 @@ myconext_jar: myconext-current.jar
 myconext_random_source: 'file:///dev/urandom'
 myconext_install: true
 myconext_cronjobmaster: true
+myconext_onegini_entity_id: "https://www.onegini.me"

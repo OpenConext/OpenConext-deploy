@@ -22,6 +22,8 @@ email:
 # Can be anything, but the logo is default OpenConext unless the branding is SURFconext
 branding: SURFconext
 
+schac_home_organization: surfguest.nl
+
 cron:
   node-cron-job-responsible: {{ myconext_cronjobmaster }}
   token-cleaner-expression: "0 0/15 * * * *"
@@ -33,6 +35,8 @@ idp_redirect_url: https://account.{{ base_domain }}
 sp_redirect_url: https://my.{{ base_domain }}
 sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
 sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
+onegini_entity_id: {{ myconext_onegini_entity_id }}
+my_conext_url: https://my.{{ base_domain }}
 
 secure_cookie: true
 idp_entity_id: https://account.{{ base_domain }}
