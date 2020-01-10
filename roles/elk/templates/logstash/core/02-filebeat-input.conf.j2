@@ -16,5 +16,9 @@ filter {
       match => { "message" =>  "%{SYSLOGBASE}?%{GREEDYDATA:message}" }
       overwrite => [ "message" ]
    }
+# We overwrite the @timestamp with the syslogtimestamp in stead of the timestamp when the log message arrives at Logstash 
+   date {
+      match => [ "timestamp" , "MMM d HH:mm:ss" ] 
+   }
 }
 
