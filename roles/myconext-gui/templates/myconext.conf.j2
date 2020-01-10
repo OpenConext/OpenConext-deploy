@@ -61,7 +61,7 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
       require valid-user
     </Location>
 
-    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' static.surfconext.nl static.{{ base_domain }} data:;"
+    Header set Content-Security-Policy "script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data:;"
     Header set X-Frame-Options "DENY"
     Header set Referrer-Policy "same-origin"
     Header set X-Content-Type-Options "nosniff"
