@@ -1,31 +1,32 @@
 options
 {
-	directory               "/var/named";           // "Working" directory
-        dump-file               "data/cache_dump.db";
-        statistics-file         "data/named_stats.txt";
-        memstatistics-file      "data/named_mem_stats.txt";
-	listen-on port 53       { any; };
-        listen-on-v6 port 53    { any; };
-	allow-query             { any; };
-        recursion		no;
-        dnssec-enable 		yes;
-        pid-file "/run/named/named.pid";
-        session-keyfile "/run/named/session.key";
-        key-directory "keys";
-        version "{{ instance_name }} DNS server";
+	directory	"/var/named";  // "Working" directory
+	dump-file	"data/cache_dump.db";
+	statistics-file "data/named_stats.txt";
+	memstatistics-file "data/named_mem_stats.txt";
+	listen-on	port 53 { any; };
+	listen-on-v6	port 53 { any; };
+	allow-query	{ any; };
+	allow-transfer	{ none; };
+	recursion	no;
+	dnssec-enable	yes;
+	pid-file	"/run/named/named.pid";
+	session-keyfile	"/run/named/session.key";
+	key-directory	"keys";
+	version		"{{ instance_name }} DNS server";
 };
 
 logging
 {
- 	channel default_debug {
-        file "data/named.run";
-        severity dynamic;
-        };      
+	channel default_debug {
+		file "data/named.run";
+		severity dynamic;
+	};
 };
 
 zone "ha.{{ base_domain }}" {
-                type master;
-                file "master/ha.{{ base_domain }}.db";
-                auto-dnssec maintain;
-                inline-signing yes;
-        };
+	type master;
+	file "master/ha.{{ base_domain }}.db";
+	auto-dnssec maintain;
+	inline-signing yes;
+};
