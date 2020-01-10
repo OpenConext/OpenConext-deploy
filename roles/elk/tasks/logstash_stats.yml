@@ -1,9 +1,7 @@
 - name: Install logstash plugins
   logstash_plugin: 
     state: present 
-    name: 
-      - logstash-filter-fingerprint
-      - logstash-output-influxdb
+    name: "logstash-filter-fingerprint logstash-output-influxdb"
 
 - name: Copy stats specific files
   template: 
