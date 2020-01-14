@@ -442,14 +442,15 @@
           "default": "AO",
           "info": "Set the contractual base that underlies a production SP / RP entity."
         },
-        "coin:connect_without_interaction": {
-          "type": "boolean",
-          "info": "Any IdP can connect to this SP without any interaction"
-        },
-        "coin:connect_with_admin_email": {
-          "type": "boolean",
-          "info": "Any IdP can connect to this SP without any interaction, but an email must be sent to the admin of the service"
-        },
+        "coin:dashboard_connect_option": {
+          "type": "string",
+          "enum": [
+            "connect_with_interaction",
+            "connect_without_interaction_with_email",
+            "connect_without_interaction_without_email",
+          ],
+          "info": "Whether the IdP can connect to this SP without any interaction, and, if so, whether an email must be sent to the admin of the service"
+        }
         "secret": {
           "type": "string",
           "format": "password",
