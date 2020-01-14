@@ -10,7 +10,7 @@ filter {
     target => "ebauth"
 }
   date {
-     match => [ "[ebauth][context][login_stamp]", "yyyy-MM-dd'T'HH:mm:ssZZ" ]
+     match => [ "[ebauth][context][login_stamp]", "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZ" ]
 }
   de_dot {
 }   
