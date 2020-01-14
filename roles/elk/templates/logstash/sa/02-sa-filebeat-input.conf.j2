@@ -16,7 +16,12 @@ filter {
       match => { "message" =>  "%{SYSLOGBASE}?%{GREEDYDATA:message}" }
       overwrite => [ "message" ]
    }
+   date {
+       match => [ "timestamp" , "MMM d HH:mm:ss" ]
+   }
    mutate {
        remove_field => "agent" # Agent is added by filebeat, and clashes with the nginx agent field
+       remove_field => "timestamp" 
    }
+   
 }
