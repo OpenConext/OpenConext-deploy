@@ -139,6 +139,14 @@
   notify:
     - "reload haproxy"
 
+- name: Place file with list of browsers that do not accept samesite=none cookies
+  copy:
+    src: nosamesitebrowsers.lst
+    dest: /etc/haproxy/nosamesitebrowsers.lst
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Run hapos-upd for initial OCSP responses
   shell: /usr/local/sbin/hapos-upd --partial-chain --good-only --socket /var/lib/haproxy/haproxy.stats --VAfile /etc/pki/haproxy/{{ item.name }}_haproxy.pem --cert /etc/pki/haproxy/{{ item.name }}_haproxy.pem
   with_items:
