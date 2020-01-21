@@ -28,8 +28,8 @@ manage_server_version: 4.0.13
 lifecycle_version: "0.0.5"
 monitoring_tests_version: 6.0.5
 mujina_version: 7.2.0
-oidc_version: 1.3.9
-oidcng_version: 1.0.5
+oidc_version: 1.3.12
+oidcng_version: 1.0.6
 pdp_server_version: 2.0.5
 pdp_gui_version: 2.0.5
 profile_version: "2.0.3"
