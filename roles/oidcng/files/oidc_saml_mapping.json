@@ -51,6 +51,11 @@
     "multiValue": true
   },
   {
+    "saml": "urn:mace:dir:attribute-def:eduPersonAssurance",
+    "oidc": "eduperson_assurance",
+    "multiValue": true
+  },
+  {
     "saml": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
     "oidc": "eduperson_scoped_affiliation",
     "multiValue": true
