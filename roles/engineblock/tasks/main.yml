@@ -47,6 +47,11 @@
   with_items:
     - parameters.yml
 
+- name: Override attribute schema
+  copy:
+    src: "attributes-v2.2.0.json"
+    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/application/configs/"
+
 - name: Check presence of language specific overrides
   local_action: stat path="{{ inventory_dir }}/files/eb/languages/"
   register: overrides_present
