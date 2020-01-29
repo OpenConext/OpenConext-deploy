@@ -347,6 +347,9 @@
                 "min": "1",
                 "max": "1",
                 "type": "HostName"
+            },
+            "warning": {
+                "regex": "#^[a-z0-9.-]+\\.[a-z]{2,4}#"
             }
         }
     },
