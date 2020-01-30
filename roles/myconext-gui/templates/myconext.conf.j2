@@ -47,11 +47,6 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
       Options     -Indexes
     </Directory>
 
-    <Location ~ "^/(?!startSSO)">
-      allow from all
-      satisfy any
-    </Location>
-
     <Location />
       AuthType shibboleth
       ShibUseHeaders On
@@ -59,6 +54,13 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
       ShibRequireSession On
       ShibRequestSetting REMOTE_ADDR X-Forwarded-For
       require valid-user
+    </Location>
+
+    <Location ~ "^/(?!startSSO)">
+      AuthType Shibboleth
+      ShibRequestSetting requireSession false
+      ShibRequireSession off
+      Require shibboleth
     </Location>
 
     Header set Content-Security-Policy "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
