@@ -10,8 +10,8 @@ frontend internet_ip
     bind {{ haproxy_sni_ip.ipv6 }}:443 ssl {% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 alpn h2,http/1.1 transparent 
     bind {{ haproxy_sni_ip.ipv4 }}:80 transparent
     bind {{ haproxy_sni_ip.ipv6 }}:80 transparent
-    # Logging is done in the local_ip backend, otherwise all requests are logged twice
-    no log
+    # This is httplog format + tls version + used ciphers
+    log-format "%ci:%cp [%tr] %ft %b/%s %TR/%Tw/%Tc/%Tr/%Ta %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r %sslv %sslc"
     # Rewrite requests
     # First we strip any Proxy headers
     http-request del-header Proxy
