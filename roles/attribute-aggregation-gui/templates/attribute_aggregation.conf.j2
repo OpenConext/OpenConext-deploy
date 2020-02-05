@@ -69,6 +69,11 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
       require valid-user
     </Location>
 
+    Header set Content-Security-Policy "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "same-origin"
+    Header set X-Content-Type-Options "nosniff"
+
     {% if haproxy_backend_tls %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
@@ -137,6 +142,11 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
       ShibRequireSession On
       require valid-user
     </Location>
+
+    Header set Content-Security-Policy "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "same-origin"
+    Header set X-Content-Type-Options "nosniff"
 
     {% if haproxy_backend_tls %}
     SSLEngine on

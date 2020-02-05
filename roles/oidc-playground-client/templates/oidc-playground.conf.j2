@@ -37,13 +37,18 @@ Listen {{ apache_app_listen_address.oidc_playground }}:{{ loadbalancing.oidc_pla
       Options     -Indexes
     </Directory>
 
+    Header set Content-Security-Policy "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "same-origin"
+    Header set X-Content-Type-Options "nosniff"
+
     {% if haproxy_backend_tls %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
     SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
     Include ssl_backend.conf
     {% endif %}
-    
+
     {% if apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
