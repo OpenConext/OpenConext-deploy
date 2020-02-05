@@ -10,3 +10,4 @@ stats_manage_api_user: stats
 stats_base_domain: stats.{{ base_domain }}
 stats_oidc_metadata_url: "https://oidc.{{ base_domain }}/.well-known/openid-configuration"
 stats_oidc_client_id: "https@//stats.{{ base_domain }}"
+statistics_version: master

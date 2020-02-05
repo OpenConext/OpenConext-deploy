@@ -40,6 +40,8 @@ myconext_server_version: 0.0.1
 myconext_gui_version: 0.0.1
 account_gui_version: 0.0.1
 
+statistics_version: 1.1.2
+
 databases:
   names:
     - teams

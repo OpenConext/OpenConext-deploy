@@ -39,11 +39,21 @@
   user: name={{ stats_wsgi_user }} shell="/bin/false" state=present
 
 - name: Checkout OpenConext-statistics branch from Git
-  git: repo=https://github.com/OpenConext/OpenConext-statistics.git dest="{{ stats_src_dir }}" force=yes
+  git:
+    repo: https://github.com/OpenConext/OpenConext-statistics.git
+    dest: "{{ stats_src_dir }}"
+    force: yes
+    version: "{{ statistics_version }}"
   register: git_stats
+
+- debug: var=git_stats
 
 - name: Add git info to server
   shell: git --git-dir {{ stats_src_dir }}/.git log -1 > {{ stats_src_dir }}/server/api/git.info
+  when: git_stats.changed
+
+- name: Add version info to server
+  shell: echo ". version - {{ statistics_version }}" >> {{ stats_src_dir }}/server/api/git.info
   when: git_stats.changed
 
 - name: Install the virtualenv and requirements
