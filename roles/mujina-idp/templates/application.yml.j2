@@ -12,9 +12,9 @@ server:
   session:
     # 8 hours before we time-out
     timeout: 28800
-    cookie:
-      secure: {{ mujina_idp.cookie_secure }}
   server-header: no
+
+secure_cookie: {{ mujina_idp.cookie_secure }}
 
 # Identity Provider
 idp:
