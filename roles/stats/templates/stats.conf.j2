@@ -49,10 +49,10 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
     Include ssl_backend.conf
     {% endif %}
     OIDCClaimPrefix OIDC-CLAIM-
-    OIDCProviderMetadataURL {{ stats_oidc_metadata_url }} 
+    OIDCProviderMetadataURL {{ stats_oidc_metadata_url }}
     OIDCClientID {{ stats_oidc_client_id }}
-    OIDCClientSecret {{ stats_oidc_client_secret }} 
-    OIDCCryptoPassphrase {{ stats_oidc_crypto_pass }} 
+    OIDCClientSecret {{ stats_oidc_client_secret }}
+    OIDCCryptoPassphrase {{ stats_oidc_crypto_pass }}
     OIDCRedirectURI https://{{ stats_base_domain }}/redirect
     <Location />
         OIDCUnAuthAction pass
@@ -65,5 +65,10 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
       AuthType openid-connect
       Require valid-user
     </Location>
+
+    Header set Content-Security-Policy "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "same-origin"
+    Header set X-Content-Type-Options "nosniff"
 
 </VirtualHost>
