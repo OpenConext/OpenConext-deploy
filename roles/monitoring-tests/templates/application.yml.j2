@@ -39,6 +39,13 @@ voot:
     secret: {{ monitoring_oidc_client_secret }}
     person_id: {{ monitoring_tests.person_id }}
 
+oidcng:
+  base_url: https://connect.{{ base_domain }}/oidc
+  client_id: {{ monitoring_tests.oidcng_client_id }}
+  secret: {{ monitoring_tests_oidcng_client_secret }}secret
+  resource_server_id: {{ monitoring_tests.oidcng_resource_server_id }}
+  resource_server_secret: {{ monitoring_tests_oidcng_resource_server_secret }}
+
 # We disable all endpoints except health for the actual monitoring and info for git information.
 endpoints:
   enabled: false

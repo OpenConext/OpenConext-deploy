@@ -398,6 +398,8 @@ monitoring_tests:
   person_id: "{{ monitoring_tests_person_id }}"
   user: monitor
   password: "{{ monitoring_tests_password }}"
+  oidcng_client_id: playground_client
+  oidcng_resource_server_id: resource-server-playground-client
 
 manage:
   eb_db_user: "{{ engine_database_user }}"
