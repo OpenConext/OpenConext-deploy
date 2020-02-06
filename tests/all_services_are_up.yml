@@ -16,10 +16,10 @@
       - https://manage.vm.openconext.org/manage/api/health
   tasks:
     - uri: url={{ item }}
-      retries: 15
+      retries: 100
       delay: 10
       with_items: "{{ services_health_checks }}"
-    - uri: 
+    - uri:
         url: https://redirect.vm.openconext.org
       register: redirect_test
       failed_when: redirect_test.redirected == False
