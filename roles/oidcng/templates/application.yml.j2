@@ -36,6 +36,12 @@ certificate_path: file://{{ oidcng_dir }}/oidcsaml.crt
 default_acr_value: {{ oidcng.default_acr_value }}
 secure_cookie: true
 
+idp:
+  alias: engine-{{ env }}
+  metadata_url: {{ oidcng_idp_metadata_url }}
+  name_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+  certificate_url: https://engine.{{ base_domain }}/authentication/idp/certificate
+
 spring:
   data:
     mongodb:
@@ -61,12 +67,6 @@ spring:
           - urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified
           - urn:oasis:names:tc:SAML:2.0:nameid-format:persistent
           - urn:oasis:names:tc:SAML:2.0:nameid-format:transient
-        providers:
-          - alias: engine-{{ env }}
-            metadata: {{ oidcng_idp_metadata_url }}
-            link-text: EngineBlock {{ env }}
-            name-id: https://engine.{{ base_domain }}/authentication/idp/metadata
-            assertion-consumer-service-index: 0
 
 manage:
   user: manage
