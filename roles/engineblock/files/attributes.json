@@ -116,7 +116,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
-                "type": "URN"
+                "type": "URI"
             }
         }
     },
