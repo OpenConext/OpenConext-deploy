@@ -49,7 +49,7 @@
 
 - name: Override attribute schema
   copy:
-    src: "attributes-v2.2.0.json"
+    src: "attributes.json"
     dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/application/configs/"
 
 - name: Check presence of language specific overrides
