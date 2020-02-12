@@ -13,6 +13,8 @@ frontend internet_ip
     # Logging is done in the local_ip backend, otherwise all requests are logged twice
     no log
     # Rewrite requests
+    # We want to log the tls cipher, tls protocol and the http version
+    http-request add-header X-TLS-Client %[ssl_fc_cipher],%[ssl_fc_protocol],%[ssl_fc_alpn]
     # First we strip any Proxy headers
     http-request del-header Proxy
     # We redirect all port 80 to port 443
@@ -55,6 +57,7 @@ frontend local_ip
     option forwardfor
     capture request header User-agent len 256
     capture request header X-Forwarded-For len 128
+    capture request header X-TLS-Client len 256
     http-request deny if ! valid_vhost
 
     {% for application in haproxy_applications %}
@@ -82,6 +85,8 @@ frontend internet_restricted_ip
     no log
  
     # Rewrite requests
+    # We want to log the tls cipher, tls protocol and the http version
+    http-request add-header X-TLS-Client %[ssl_fc_cipher],%[ssl_fc_protocol],%[ssl_fc_alpn]
     # First we strip any Proxy headers
     http-request del-header Proxy
     # We redirect all port 80 to port 443
@@ -119,7 +124,7 @@ frontend localhost_restricted
     option forwardfor
     capture request header User-agent len 256
     capture request header X-Forwarded-For len 128
-
+    capture request header X-TLS-Client len 256
     http-request deny if ! valid_vhost
 
     {% for application in haproxy_applications %}

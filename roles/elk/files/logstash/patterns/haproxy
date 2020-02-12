@@ -1,1 +1,1 @@
-HAPROXYCAPTUREDREQUESTHEADERS %{DATA:request_header_user_agent}\|%{DATA:request_header_forwarded_for}
+HAPROXYCAPTUREDREQUESTHEADERS %{DATA:request_header_user_agent}\|%{DATA:request_header_forwarded_for}\|%{DATA:request_header_tls_cipher},%{DATA:request_header_tls_version},%{DATA:request_header_http_version}
