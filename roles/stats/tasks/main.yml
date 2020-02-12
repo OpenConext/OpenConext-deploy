@@ -53,7 +53,7 @@
   when: git_stats.changed
 
 - name: Add version info to server
-  shell: echo ". version - {{ statistics_version }}" >> {{ stats_src_dir }}/server/api/git.info
+  shell: echo "{{ statistics_version }}" > {{ stats_src_dir }}/server/api/version.info
   when: git_stats.changed
 
 - name: Install the virtualenv and requirements
