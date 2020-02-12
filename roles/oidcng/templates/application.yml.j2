@@ -38,7 +38,8 @@ secure_cookie: true
 
 idp:
   alias: engine-{{ env }}
-  metadata_url: {{ oidcng_idp_metadata_url }}
+  # comma separated string of metadata url's
+  metadata_urls: {{ oidcng_idp_metadata_url }}
   name_id: https://engine.{{ base_domain }}/authentication/idp/metadata
   certificate_url: https://engine.{{ base_domain }}/authentication/idp/certificate
 
