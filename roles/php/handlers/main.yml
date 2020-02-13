@@ -1,5 +1,6 @@
 ---
 - name: restart php72-php-fpm
-  service:
+  systemd:
     name: php72-php-fpm
+    daemon_reload: yes
     state: restarted
