@@ -41,7 +41,7 @@ idp:
   # comma separated string of metadata url's
   metadata_urls: {{ oidcng_idp_metadata_url }}
   name_id: https://engine.{{ base_domain }}/authentication/idp/metadata
-  certificate_url: https://engine.{{ base_domain }}/authentication/idp/certificate
+  metadata_signing_certificate_path: file://{{ oidcng_dir }}/SURFconext-metadata-signer.pem
 
 spring:
   data:
@@ -62,7 +62,7 @@ spring:
         base-path: https://{{ oidcng_base_hostname }}
         sign-metadata: true
         sign-requests: true
-        want-assertions-signed: false
+        want-assertions-signed: true
         single-logout-enabled: false
         name-ids:
           - urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified

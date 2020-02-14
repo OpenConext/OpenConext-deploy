@@ -15,6 +15,10 @@ ssl_key_dir: /etc/httpd/keys
 
 apache_user: apache
 
+httpd_scp:
+  lenient: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:;
+  strict: default-src; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:;
+
 error_subject_prefix: "[{{ ansible_hostname }}] "
 
 # DH-params

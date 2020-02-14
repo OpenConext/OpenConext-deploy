@@ -93,6 +93,16 @@
   notify:
     - "restart oidcng"
 
+- name: copy / create metatdata signing certificate
+  copy:
+    src: "{{ inventory_dir }}/files/certs/oidcng/SURFconext-metadata-signer.pem"
+    dest: "{{ oidcng_dir }}/SURFconext-metadata-signer.pem"
+    owner: "root"
+    group: "oidcng"
+    mode: 0740
+  notify:
+    - "restart oidcng"
+
 - name: copy apache config
   template:
     src: "oidcng.conf.j2"
