@@ -74,6 +74,13 @@
   notify:
     - "restart php72-php-fpm"
 
+- name: Put 72 php-fpm systemd override file to create the socket dir
+  copy:
+    src: "createrundir.conf"
+    dest: "/etc/systemd/system/php72-php-fpm.service.d/createrundir.conf"
+  notify:
+    - "restart php72-php-fpm"
+
 - name: Enable php72-php-fpm
   service:
     name: php72-php-fpm
@@ -96,13 +103,6 @@
       - php-mysql
       - php-soap
     state: absent
-
-# Could move sockets to a different place but that's a bit more cumbersome
-- name: Do keep php-fpm directory because sockets still live there.
-  file:
-    path: "/var/run/php-fpm/"
-    state: directory
-    mode: 0755
 
 - name: Clean up old php-fpm 5.6 config
   file:
