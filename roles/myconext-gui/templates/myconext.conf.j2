@@ -63,7 +63,7 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
       Require shibboleth
     </Location>
 
-    Header set Content-Security-Policy "{{ httpd_scp.strict }}"
+    Header set Content-Security-Policy "{{ httpd_scp.lenient }}"
     Header set X-Frame-Options "DENY"
     Header set Referrer-Policy "same-origin"
     Header set X-Content-Type-Options "nosniff"

@@ -50,7 +50,7 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
       satisfy any
     </Location>
 
-    Header set Content-Security-Policy "{{ httpd_scp.strict }}"
+    Header set Content-Security-Policy "{{ httpd_scp.lenient }}"
     Header set X-Frame-Options "DENY"
     Header set Referrer-Policy "same-origin"
     Header set X-Content-Type-Options "nosniff"
