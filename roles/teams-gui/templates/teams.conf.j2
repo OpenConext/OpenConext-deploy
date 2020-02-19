@@ -79,7 +79,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 
     Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' static.surfconext.nl static.{{ base_domain }} data:;"
     Header set X-Frame-Options "DENY"
-    Header set Referrer-Policy "same-origin"
+    Header set Referrer-Policy "origin-when-cross-origin"
     Header set X-Content-Type-Options "nosniff"
 
     {% if haproxy_backend_tls %}

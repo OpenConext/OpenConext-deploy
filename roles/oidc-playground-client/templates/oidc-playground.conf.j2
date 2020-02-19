@@ -39,7 +39,7 @@ Listen {{ apache_app_listen_address.oidc_playground }}:{{ loadbalancing.oidc_pla
 
     Header set Content-Security-Policy "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
     Header set X-Frame-Options "DENY"
-    Header set Referrer-Policy "same-origin"
+    Header set Referrer-Policy "unsafe-url"
     Header set X-Content-Type-Options "nosniff"
 
     {% if haproxy_backend_tls %}
