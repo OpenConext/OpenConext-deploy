@@ -33,13 +33,6 @@
       - php72-php-gd
     state: present
 
-- name: Remove all php56 packages and composer
-  yum: 
-    name:
-      - "php-*"
-      - "composer"
-    state: absent
-
 - name: Install custom PHP configuration for 7.2
   template:
     src: "{{ item }}.j2"
@@ -99,6 +92,13 @@
     path: "{{ php_session_dir }}"
     state: directory
     mode: 0771
+
+- name: Remove all php56 packages and composer
+  yum: 
+    name:
+      - "php-*"
+      - "composer"
+    state: absent
 
 - name: Clean up old php-fpm 5.6 config
   file:
