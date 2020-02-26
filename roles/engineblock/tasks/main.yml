@@ -238,6 +238,14 @@
     - engine_skip_db_migration is undefined
   run_once: true
 
+- name: Clear the symfony cache
+  command: "php72 app/console cache:clear --env={{ engine_apache_symfony_environment }} --no-debug"
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  when:
+    - not develop
+  changed_when: false
+
 - name: Make sure cache dir has correct permissions
   file:
     path: "{{engine_current_release_symlink}}/app/cache"
