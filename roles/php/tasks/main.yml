@@ -1,23 +1,24 @@
-# Install the "REMI" repo which contain newer php packages that override the default
-# that come with the distro (CentOS7: 5.4; CentOS6: 5.3)
-- name: check for presence of the remi repository file
-  stat:
-    path: "/etc/yum.repos.d/remi.repo"
-  register: remi_config
-
-- name: Install REMI repo
+# Some cleanup from the situation where REMI was installed from an rpm
+- name: Remove the REMI RPM if installed 
   yum:
-    name: "https://rpms.remirepo.net/enterprise/remi-release-7.rpm"
-    state: present
-  when:
-    - remi_config.stat.exists == False
+    name: remi-release
+    state: absent
 
-- name: Enable REMI repo
+- name: Install the remi-safe yum repo file
   copy:
-      src: remi.repo
-      dest: /etc/yum.repos.d/remi.repo
+    src: "remi-safe.repo"
+    dest: "/etc/yum.repos.d/remi-safe.repo"
+    owner: root
+    mode: 0644
 
-- name: Install php-(cli,fpm) 7.2, composer
+- name: Install the remi RPM GPG key
+  copy: 
+    src:  "RPM-GPG-KEY-remi"
+    dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-remi"
+    owner: root
+    mode: 0644
+
+- name: Install php-(cli,fpm) 7.2
   yum:
     name:
       - php72-php-fpm
@@ -30,7 +31,6 @@
       - php72-php-soap
       - php72-php-xml
       - php72-php-gd
-      - composer
     state: present
 
 - name: Install custom PHP configuration for 7.2
@@ -93,15 +93,11 @@
     state: directory
     mode: 0771
 
-# FIXME: we still need php-cli for composer package we install above.
-- name: Remove any leftover 5.6 php-fpm
-  yum:
+- name: Remove all php56 packages and composer
+  yum: 
     name:
-      - php-fpm
-      - php-pecl-apcu
-      - php-pecl-xdebug
-      - php-mysql
-      - php-soap
+      - "php-*"
+      - "composer"
     state: absent
 
 - name: Clean up old php-fpm 5.6 config
