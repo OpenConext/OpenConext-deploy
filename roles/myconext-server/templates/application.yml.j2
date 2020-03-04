@@ -15,9 +15,9 @@ server:
   server-header: no
 
 email:
-  from: {{ instance_name }} MyConext <{{ noreply_email }}>
-  magic-link-url: https://account.{{ base_domain }}/saml/guest-idp/magic
-  my-surfconext-url: https://my.{{ base_domain }}
+  from: EduID {{ instance_name }} noreply@<{{ myconext_base_domain }}>
+  magic-link-url: https://login.{{ base_domain }}/saml/guest-idp/magic
+  my-surfconext-url: https://mijn.{{ myconext_base_domain }}
 
 # Can be anything, but the logo is default OpenConext unless the branding is SURFconext
 branding: SURFconext
@@ -30,16 +30,16 @@ cron:
 
 metadata_sp_url: https://metadata.{{ base_domain }}/sp-names.json
 
-base_domain: {{ base_domain }}
-base_path: https://my.{{ base_domain }}
-idp_redirect_url: https://account.{{ base_domain }}
-sp_redirect_url: https://my.{{ base_domain }}
+base_domain: {{ myconext_base_domain }}
+base_path: https://mijn.{{ myconext_base_domain }}
+idp_redirect_url: https://login.{{ myconext_base_domain }}
+sp_redirect_url: https://mijn.{{ myconext_base_domain }}
 sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
 sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
 onegini_entity_id: {{ myconext_onegini_entity_id }}
-guest_idp_entity_id: https://account.{{ base_domain }}
-my_conext_url: https://my.{{ base_domain }}
-migration_landing_page_url: https://account.{{ base_domain }}/migration
+guest_idp_entity_id: https://login.{{ myconext_base_domain }}
+my_conext_url: https://mijn.{{ myconext_base_domain }}
+migration_landing_page_url: https://login.{{ myconext_base_domain }}/migration
 
 secure_cookie: true
 idp_entity_id: https://account.{{ base_domain }}
