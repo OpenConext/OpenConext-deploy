@@ -3,6 +3,8 @@ env: template
 
 instance_name: OpenConext
 base_domain: "%base_domain%"
+myconext_base_domain: "%base_domain%"
+
 support_email: help@{{ base_domain }}
 noreply_email: no-reply@{{ base_domain }}
 smtp_server: localhost
