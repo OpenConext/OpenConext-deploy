@@ -5,7 +5,7 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
 <Virtualhost *:443 >
 {% endif %}
     # General setup for the virtual host, inherited from global configuration
-    ServerName https://account.{{ base_domain }}
+    ServerName https://login.{{ myconext_base_domain }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-account'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-account'" combined

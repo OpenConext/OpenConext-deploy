@@ -5,7 +5,7 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
 <Virtualhost *:443 >
 {% endif %}
     # General setup for the virtual host, inherited from global configuration
-    ServerName https://my.{{ base_domain }}
+    ServerName https://mijn.{{ myconext_base_domain }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-myconext'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-myconext'" combined
