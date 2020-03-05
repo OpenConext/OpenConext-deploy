@@ -90,3 +90,11 @@
   register: clean_builds
   changed_when: '"removed" in clean_builds.stdout'
 
+- name: Create daily cronjob
+  cron:
+    name: lifecycle run
+    minute: "8"
+    hour: "01"
+    user: "{{ lifecycle_user }}"
+    job: "SYMFONY_ENV=prod /usr/bin/php72 {{ lifecycle_current_release_symlink }}/userlifecycle deprovision"
+    cron_file: user_lifecycle
