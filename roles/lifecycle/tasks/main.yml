@@ -36,7 +36,7 @@
   with_items:
      - lifecycle-pool-72.conf
   notify:
-    - "restart php72-fpm"
+    - "restart php72-php-fpm"
 
 - name: Include install-branch.yml
   include: install-branch.yml
@@ -55,7 +55,7 @@
     - parameters.yml
 
 - name: Create the symfony cache
-  command: bin/console cache:clear --env={{ lifecycle_apache_symfony_environment }} --no-debug
+  command: "/usr/bin/php72 bin/console cache:clear --env={{ lifecycle_apache_symfony_environment }} --no-debug"
   args:
     chdir: "{{ lifecycle_current_release_symlink }}/"
   when:
