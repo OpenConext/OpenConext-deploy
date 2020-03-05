@@ -21,5 +21,6 @@ apache_app_listen_address:
   manage: 127.0.0.1
   myconext: 127.0.0.1
   account: 127.0.0.1
+  eduid: 127.0.0.1
 
 mongo_primary: True

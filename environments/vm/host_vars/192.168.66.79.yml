@@ -20,4 +20,4 @@ apache_app_listen_address:
   attribute_mapper: 192.168.66.79
   myconext: 192.168.66.79
   account: 192.168.66.79
-
+  eduid: 192.168.66.79
