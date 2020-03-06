@@ -53,12 +53,6 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
       satisfy any
     </Location>
 
-    # IdP endpoints are allowed without authentication
-    <Location ~ "/idp/">
-      allow from all
-      satisfy any
-    </Location>
-
     # The Spring Boot endpoints
     <Location ~ "/actuator/">
       allow from all
