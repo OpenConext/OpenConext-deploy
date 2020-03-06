@@ -136,6 +136,7 @@
     - { role: myconext-gui,                 tags: ['myconext-gui', 'myconext'] }
     - { role: myconext-server,              tags: ['myconext-server', 'myconext'] }
     - { role: account-gui,                  tags: ['account-gui', 'myconext'] }
+    - { role: eduid-gui,                    tags: ['eduid-gui', 'myconext'] }
     - { role: mujina-sp,                    tags: ['mujina-sp', 'mujina'] }
     - { role: mujina-idp,                   tags: ['mujina-idp', 'mujina'] }
 
