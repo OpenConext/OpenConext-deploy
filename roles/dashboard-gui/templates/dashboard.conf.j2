@@ -23,6 +23,7 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !dashboard
+    RewriteCond %{REQUEST_URI} !spDashboard
     RewriteCond %{REQUEST_URI} !health
     RewriteCond %{REQUEST_URI} !info
     RewriteCond %{REQUEST_URI} !login
@@ -34,6 +35,8 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     ProxyPass /Shibboleth.sso !
     ProxyPass /dashboard/api http://localhost:{{ springapp_tcpport }}/dashboard/api retry=0
     ProxyPassReverse /dashboard/api http://localhost:{{ springapp_tcpport }}/dashboard/api
+    ProxyPass /spDashboard/api http://localhost:9394/spDashboard/api retry=0
+    ProxyPassReverse /spDashboard/api http://localhost:9394/spDashboard/api
     ProxyPass /health http://localhost:{{ springapp_tcpport }}/health retry=0
     ProxyPass /info http://localhost:{{ springapp_tcpport }}/info retry=0
     ProxyPass /login http://localhost:{{ springapp_tcpport }}/login retry=0
