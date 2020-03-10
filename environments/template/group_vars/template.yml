@@ -375,6 +375,12 @@ myconext:
   mongo_user: myconextrw
   mongo_database: myconext
   mongo_password: "{{ mongo_passwords.myconext }}"
+  links:
+    - { name: "help" , url: "https://wiki.surfnet.nl/x/EYzaAQ" }
+    - { name: "help_en" , url: "https://wiki.surfnet.nl/x/FYzaAQ" }
+    - { name: "privacyverklaring" , url: "https://wiki.surfnet.nl/x/G4zaAQ" }
+    - { name: "privacy_policy" , url: "https://wiki.surfnet.nl/x/MIzaAQ" }
+    - { name: "terms_of_service" , url: "https://wiki.surfnet.nl/x/LozaAQ"}
 
 monitoring_tests:
   metadata_sp_url: "{{ monitoring_tests_metadata_sp_url }}"
