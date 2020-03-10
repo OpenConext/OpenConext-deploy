@@ -1,0 +1,26 @@
+#!/bin/bash
+# Script to clean up the log_logins from mySQL
+LOGFILE="{{ rsyslog_dir }}/apps/{{ item.name }}/loglogins_cleanup/loglogins_cleanup.log"
+echo `date '+%h %d %H:%M:%S'` Starting cleanup of log_logins | tee -a $LOGFILE
+LOGINSTAMP=$(date -d "-{{ loglogins_max_age }} months" +%Y-%m-%d)
+OLDESTTIMESTAMP=$(mysql -u {{ item.db_loglogins_user }} -p{{ item.db_loglogins_password }} -h {{ item.db_loglogins_host }} {{ item.db_loglogins_name }} -se "select (DATE_FORMAT(loginstamp,'%Y-%m-%d')) from log_logins order by loginstamp asc limit 1")
+if [ -z "$OLDESTTIMESTAMP" ]
+        then echo "No logins found in log_logins" | tee -a $LOGFILE
+        exit
+fi
+
+# If we are going to delete more than 5 days, something is wrong
+LOGINSTAMPUNIX=$(date -d $LOGINSTAMP +%s)
+OLDESTTIMESTAMPUNIX=$(date -d $OLDESTTIMESTAMP +%s)
+TIMESTAMPDIFF=$(( ($LOGINSTAMPUNIX-$OLDESTTIMESTAMPUNIX)/3600/24   ))
+echo `date '+%h %d %H:%M:%S'` We will delete $TIMESTAMPDIFF days of log_logins data | tee -a $LOGFILE
+if [ "$TIMESTAMPDIFF" -gt 5 ]
+	then
+	echo `date '+%h %d %H:%M:%S'` Something is up, you need to delete more than 5 days worth of logindata | tee -a $LOGFILE
+
+        echo "The log_login cleanup script wants to delete more than 5 days of logins on the {{ ansible_hostname }}. Please investigate" | mail -r "{{ noreply_email }}" -s "log_login script on {{ ansible_hostname }} needs attention" "{{ error_mail_to }}"	
+	exit
+else
+	DELETEDROWS=$(mysql -u {{ item.db_loglogins_user }} -p{{ item.db_loglogins_password }} -h {{ item.db_loglogins_host }} -sNe "delete from log_logins where loginstamp < '$LOGINSTAMP'; select row_count();" {{ item.db_loglogins_name }})
+	echo `date '+%h %d %H:%M:%S'` We have deleted $DELETEDROWS rows.  | tee -a $LOGFILE
+fi

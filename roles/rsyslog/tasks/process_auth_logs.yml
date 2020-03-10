@@ -84,3 +84,30 @@
     group: root
   with_items: "{{ rsyslog_environments.sc }}"
 
+- name: Create logdirectory for log_logins cleanup script
+  file: 
+    path: "{{ rsyslog_dir }}/apps/{{ item.name }}/loglogins_cleanup/"
+    state: directory
+    owner: root
+    group: "{{ rsyslog_read_group }}"
+    mode: 0750
+  with_items: "{{ rsyslog_environments.sc }}"
+
+- name: Put log_logins cleanup script
+  template: 
+    src: clean_loglogins.j2
+    dest: /usr/local/sbin/clean_loglogins_{{ item.name }}
+    owner: root
+    group: root
+    mode: 0700
+  with_items: "{{ rsyslog_environments.sc }}"
+
+- name: Create cronjobs to run the log_logins script
+  cron: 
+    name: Delete old {{ item.name }} log_login data
+    user: root
+    minute: "20"
+    hour: "02"
+    job: "/usr/local/sbin/clean_loglogins_{{ item.name }}"
+    cron_file: loglogins_cleanup_{{ item.name }}
+  with_items: "{{ rsyslog_environments.sc }}"
