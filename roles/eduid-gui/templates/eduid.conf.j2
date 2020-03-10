@@ -5,7 +5,7 @@ Listen {{ apache_app_listen_address.eduid }}:{{ loadbalancing.eduid.port }}
 <Virtualhost *:443 >
 {% endif %}
     # General setup for the virtual host, inherited from global configuration
-    ServerName https://eduid.{{ myconext_base_domain }}
+    ServerName https://{{ myconext_base_domain }}
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-eduid'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-eduid'" combined
