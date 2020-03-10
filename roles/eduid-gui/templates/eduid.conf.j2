@@ -12,6 +12,12 @@ Listen {{ apache_app_listen_address.eduid }}:{{ loadbalancing.eduid.port }}
 
     RewriteEngine on
 
+    RewriteRule   "^/help/"			"https://wiki.surfnet.nl/x/EYzaAQ"  [R,L]
+    RewriteRule   "^/help_en/"		"https://wiki.surfnet.nl/x/FYzaAQ"  [R,L]
+    RewriteRule   "^/privacyverklaring/"	"https://wiki.surfnet.nl/x/G4zaAQ"  [R,L]
+    RewriteRule   "^/privacy_policy/"	"https://wiki.surfnet.nl/x/MIzaAQ"  [R,L]
+    RewriteRule   "^/terms_of_service/"	"https://wiki.surfnet.nl/x/LozaAQ"  [R,L]
+
     RewriteCond %{REQUEST_URI} !\.html$
     RewriteCond %{REQUEST_URI} !\.js$
     RewriteCond %{REQUEST_URI} !\.svg$
