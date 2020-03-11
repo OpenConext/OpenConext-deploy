@@ -7,7 +7,7 @@
   user:
     name: "{{ lifecycle_user }}"
     group: "{{ lifecycle_user }}"
-    createhome: no
+    createhome: yes
     state: present
 
 - name: Create php session dir for lifecycle
