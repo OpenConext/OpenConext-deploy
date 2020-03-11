@@ -73,6 +73,9 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
       AuthType shibboleth
       ShibUseHeaders On
       ShibRequestSetting applicationId myconext
+      {% if myconext_skip_wayf is defined and myconext_skip_wayf %}
+      ShibRequestSetting entityID https://login.{{ myconext_base_domain }}
+      {% endif %}
       ShibRequireSession On
       require valid-user
     </Location>
