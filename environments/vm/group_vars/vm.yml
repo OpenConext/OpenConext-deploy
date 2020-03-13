@@ -14,26 +14,26 @@ attribute_aggregation_gui_version: 2.0.17
 attribute_aggregation_server_version: 2.0.17
 authz_admin_version: 2.0.14
 authz_playground_version: 1.7
-oidc_playground_client_version: 1.0.2
-oidc_playground_server_version: 1.0.2
+oidc_playground_client_version: 1.0.4
+oidc_playground_server_version: 1.0.4
 authz_server_version: 1.3.16
 engine_version: "6.1.3"
-manage_gui_version: 4.0.18
-manage_server_version: 4.0.18
+manage_gui_version: 4.0.20
+manage_server_version: 4.0.20
 monitoring_tests_version: 6.0.5
 mujina_version: 7.4.1
 oidc_version: "1.3.12"
-oidcng_version: 1.0.8
-pdp_gui_version: 2.0.5
-pdp_server_version: 2.0.5
+oidcng_version: 1.0.10
+pdp_gui_version: 2.1.0
+pdp_server_version: 2.1.0
 profile_version: "2.0.3"
-teams_gui_version: 8.3.5
-teams_server_version: 8.3.5
+teams_gui_version: 8.3.7
+teams_server_version: 8.3.7
 voot_version: 3.0.7
-myconext_server_version: 0.0.1
-myconext_gui_version: 0.0.1
-account_gui_version: 0.0.1
-eduid_gui_version: 0.0.1
+myconext_server_version: 2.0.1
+myconext_gui_version: 2.0.1
+account_gui_version: 2.0.1
+eduid_gui_version: 2.0.1
 
 databases:
   names:
