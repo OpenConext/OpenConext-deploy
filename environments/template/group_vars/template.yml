@@ -381,7 +381,7 @@ myconext:
     - { name: "privacyverklaring" , url: "https://wiki.surfnet.nl/x/G4zaAQ" }
     - { name: "privacy_policy" , url: "https://wiki.surfnet.nl/x/MIzaAQ" }
     - { name: "terms_of_service" , url: "https://wiki.surfnet.nl/x/LozaAQ"}
-    - { name: "voorwaarden" , url: "https://wiki.surfnet.nl/x/LozaAQ"}
+    - { name: "voorwaarden" , url: "https://wiki.surfnet.nl/x/HYzaAQ"}
 myconext_onegini_entity_id: http://mock-idp
 
 monitoring_tests:
