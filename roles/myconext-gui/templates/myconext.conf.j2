@@ -52,7 +52,13 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
     </Directory>
 
     # Public endpoints
-    <Location ~ "/(config|register|landing)">
+    <Location ~ "/(config|register|404)">
+      allow from all
+      satisfy any
+    </Location>
+
+    # After logout / delete
+      <Location ~ "/landing(.*)">
       allow from all
       satisfy any
     </Location>
