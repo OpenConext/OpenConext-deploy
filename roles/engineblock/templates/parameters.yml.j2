@@ -1,4 +1,115 @@
 parameters:
+    domain: {{ base_domain }}
+    hostname: engine.{{ engine_base_domain }}
+    trusted_proxies:
+{% for engine_trusted_proxy_ip in engine_trusted_proxy_ips %}
+        - {{ engine_trusted_proxy_ip }}
+{% endfor %}
+    encryption_keys:
+{% for key, value in engine_keys.items() %}
+        {{ key }}:
+            publicFile: {{ value.publicFile }}
+            privateFile: {{ value.privateFile }}
+{% endfor %}
+    forbidden_signature_methods: {  }
+    allowed_acs_location_schemes:
+        - http
+        - https
+    php_settings:
+        memory_limit: 128M
+        display_errors: '{{ php_display_errors }}'
+        error_reporting: '6135'
+        date.timezone: {{ timezone }}
+        sendmail_from: 'OpenConext EngineBlock <openconext-engineblock@openconext.org>'
+    api.users.metadataPush.username: {{ engine_api_metadata_push_user }}
+    api.users.metadataPush.password: {{ engine_api_metadata_push_password | replace("%","%%") }}
+    api.users.profile.username: {{ engine_api_profile_user }}
+    api.users.profile.password: {{ engine_api_profile_password | replace("%","%%") }}
+    api.users.deprovision.username: {{ engine_api_deprovision_user }}
+    api.users.deprovision.password: {{ engine_api_deprovision_password | replace("%","%%") }}
+    pdp.host: '{{ engine_pdp_baseurl }}'
+    pdp.policy_decision_point_path: {{ engine_pdp_path }}
+    pdp.username: {{ pdp.username }}
+    pdp.password: {{ pdp.password | replace("%","%%") }}
+    pdp.client_id: EngineBlock
+    attribute_aggregation.base_url: '{{ engine_attribute_aggregation_baseurl }}'
+    attribute_aggregation.username: {{ engine_attribute_aggregation_username }}
+    attribute_aggregation.password: {{ engine_attribute_aggregation_password | replace("%","%%") }}
+    engineblock.metadata_push_memory_limit: {{ engine_metadata_push_memory_limit }}
+    logger.channel: engineblock
+    logger.fingers_crossed.passthru_level: NOTICE
+    logger.fingers_crossed.action_level: ERROR
+    logger.syslog.ident: EBLOG
+    logger.line_format: '{{ '[%datetime%] %channel%.%level_name%: %message% %extra% %context%' | replace("%","%%") }}'
+    database.host: {{ engine_database_host }}
+    database.port: '{{ engine_database_port }}'
+    database.user: {{ engine_database_user }}
+    database.password: {{ engine_database_password | replace("%","%%") }}
+    database.dbname: {{ engine_database_name }}
+{% if develop %}
+    database.test.host: {{ engine_test_database_host }}
+    database.test.port: '{{ engine_test_database_port }}'
+    database.test.user: {{ engine_test_database_user }}
+    database.test.password: {{ engine_test_database_password | replace("%","%%") }}
+    database.test.dbname: {{ engine_test_database_name }}
+{% endif %}
+    cookie.path: {{ cookie_path | default('/') }}
+    cookie.secure: true
+    cookie.locale.domain: .{{ base_domain }}
+    cookie.locale.expiry: 5184000
+    cookie.locale.http_only: false
+    cookie.locale.secure: true
+    feature_eb_encrypted_assertions: {{ engine_feature_encrypted_assertions | bool | to_json }}
+    feature_eb_encrypted_assertions_require_outer_signature: {{ engine_feature_encrypted_assertions_require_outer_signature | bool | to_json }}
+    feature_api_metadata_push: {{ engine_api_feature_metadata_push | bool | to_json }}
+    feature_api_consent_listing: {{ engine_api_feature_consent_listing | bool | to_json }}
+    feature_api_metadata_api: {{ engine_api_feature_metadata_api | bool | to_json }}
+    feature_api_deprovision: {{ engine_api_feature_deprovision | bool | to_json }}
+    feature_run_all_manipulations_prior_to_consent: {{ engine_feature_run_all_manipulations_prior_to_consent | bool | to_json }}
+    feature_block_user_on_violation: {{ engine_feature_block_user_on_violation | bool | to_json }}
+    minimum_execution_time_on_invalid_received_response: {{ engine_minimum_execution_time_on_invalid_received_response | int }}
+    wayf.cutoff_point_for_showing_unfiltered_idps: {{ engine_wayf_cutoff_point_for_showing_unfiltered_idps | int }}
+    wayf.remember_choice: false
+    time_frame_for_authentication_loop_in_seconds: {{ engine_time_frame_for_authentication_loop_in_seconds | int }}
+    maximum_authentication_procedures_allowed: {{ engine_maximum_authentication_procedures_allowed | int }}
+    view_default_title: {{ instance_name }}
+    view_default_header: {{ instance_name }}
+    view_default_logo: /images/logo.png
+    view_default_logo_width: 96
+    view_default_logo_height: 96
+    ui_return_to_sp_link: false
+    consent_store_values: true
+    addgueststatus_guestqualifier: '{{ guest_qualifier | default('') }}'
+    openconext_support_url: '{{ eb_support_url | replace("%","%%") }}'
+    openconext_terms_of_use_url: '{{ eb_tos_url | replace("%","%%") }}'
+    openconext_support_name_id_url: '{{ eb_support_url_nameid | replace("%","%%") }}'
+    email_request_access_address: {{ support_email }}
+    email_idp_debugging:
+        from:
+            name: '{{ engine_idp_debugging_from_name }}'
+            address: {{ engine_idp_debugging_from_address }}
+        to:
+            address: {{ engine_idp_debugging_email_address }}
+            name: '{{ engine_idp_debugging_to_name }}'
+        subject: '{{ engine_idp_debugging_subject | replace("%","%%") }}'
+    profile_base_url: '{{ engine_profile_baseurl | default('') }}'
+    attribute_definition_file_path: {{ openconext_releases_dir }}/OpenConext-engineblock/application/configs/attributes.json
+    monitor_database_health_check_query: 'SELECT uuid FROM user LIMIT 1;'
+    stepup.authn_context_class_ref_blacklist_regex: '{{ engine_stepup_authn_context_class_ref_blacklist_regex | replace("%","%%") }}'
+    stepup.loa.mapping:
+        1:
+            engineblock: '{{ engine_stepup_engineblock_loa1 | replace("%","%%") }}'
+            gateway: '{{ engine_stepup_gateway_loa1 | replace("%","%%") }}'
+        2:
+            engineblock: '{{ engine_stepup_engineblock_loa2 | replace("%","%%") }}'
+            gateway: '{{ engine_stepup_gateway_loa2 | replace("%","%%") }}'
+        3:
+            engineblock: '{{ engine_stepup_engineblock_loa3 | replace("%","%%") }}'
+            gateway: '{{ engine_stepup_gateway_loa3 | replace("%","%%") }}'
+    stepup.loa.loa1: '{{ engine_stepup_engineblock_loa1 | replace("%","%%") }}'
+    stepup.gateway.sfo.entity_id: '{{ engine_stepup_gateway_sfo_entity_id | replace("%","%%") }}'
+    stepup.gateway.sfo.sso_location: '{{ engine_stepup_gateway_sfo_sso_location | replace("%","%%") }}'
+    stepup.gateway.sfo.key_file: {{ engine_stepup_gateway_sfo_public_key_file | replace("%","%%") }}
     secret: {{ engine_parameters_secret }}
     error_feedback_wiki_links:
         fallback:

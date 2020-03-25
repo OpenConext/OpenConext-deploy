@@ -162,29 +162,12 @@
   when:
     - engine_crt_not_in_inventory | bool
 
-- name: Configure EngineBlock
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/openconext/{{ item }}"
-  with_items:
-    - engineblock.ini
-  notify:
-    - "restart php72-fpm"
-
 - name: Make the SYMFONY_ENV var available for scripts
   become: yes
   lineinfile:
     dest: "/etc/environment"
     state: present
     line: "SYMFONY_ENV={{ engine_apache_symfony_environment }}"
-
-# This should always run before any scripts run, it ensures that the env specific
-# configuration is loaded correctly.
-- name: Prepare EngineBlock environment
-  shell: php72 bin/composer/dump-required-ini-params.sh
-  args:
-      chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  changed_when: False
 
 - name: Create EngineBlock test database
   mysql_db:
