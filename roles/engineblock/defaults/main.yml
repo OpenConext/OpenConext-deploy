@@ -1,6 +1,7 @@
 #---
 ## Version of EngineBlock that is installable by this role
 engine_version: ''
+# Be aware that if you enable this option that NPM, Node.js and Composer are installed
 #engine_branch: "develop"
 # Feature toggles
 engine_feature_encrypted_assertions: 1
@@ -114,7 +115,9 @@ eb_tos_url: "https://example.org"
 engineblock_private_keys:
   default: "{{ engineblock_private_key }}"
 
-
 # Webdriver test settings
 engineblock_selenium_version: 2.53.1
 engineblock_selenium_install_dir: /opt
+
+# Composer
+composer_path: /usr/local/bin/composer
