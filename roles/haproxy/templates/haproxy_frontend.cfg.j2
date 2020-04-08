@@ -27,7 +27,7 @@ frontend internet_ip
     http-response set-header Strict-Transport-Security max-age=15768000
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
-    acl no_same_site_uas hdr(agent_internal) -m reg -f /etc/haproxy/nosamesitebrowsers.lst
+    acl no_same_site_uas req.fhdr(agent_internal) -m reg -f /etc/haproxy/nosamesitebrowsers.lst
     # Add samesite=none to all outgoing cookies except for Safari, which is broken currently
     http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !no_same_site_uas
     # Remove the agent_interal header again
@@ -101,7 +101,7 @@ frontend internet_restricted_ip
     http-response set-header Strict-Transport-Security max-age=15768000
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
-    acl no_same_site_uas hdr(agent_internal) -m reg -f /etc/haproxy/nosamesitebrowsers.lst
+    acl no_same_site_uas req.fhdr(agent_internal) -m reg -f /etc/haproxy/nosamesitebrowsers.lst
     # Add samesite=none to all outgoing cookies except for Safari, which is broken currently
     http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !no_same_site_uas
     # Remove the agent_interal header again
