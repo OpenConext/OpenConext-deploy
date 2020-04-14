@@ -27,7 +27,6 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "https://build.openconext.org/vagrant_boxes/virtualbox-centos7.box"
 
   config.vm.define "lb_centos7" do |lb_centos7|
-    lb_centos7.vm.synced_folder ".", "/vagrant", :nfs => true
     lb_centos7.vm.network :private_network, ip: "192.168.66.98"
     lb_centos7.vm.hostname = "lb.vm.openconext.org"
     lb_centos7.vm.provider :virtualbox do |vb|
