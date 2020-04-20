@@ -1,62 +1,46 @@
 ---
-- name: Remove haproxy18 custom repo
-  file:
-    path: /etc/yum.repos.d/haproxy18.repo
-    state: absent
-  register: haproxy_removed
+- name: Remove CentOS SCLO repo
+  yum:
+    name: centos-release-scl-rh
+    state: absent 
+  register: scl_removed
 
 - name: Clean up the yum repos
   command: yum clean metadata
   when: 
-    - haproxy_removed.changed | bool
+    - scl_removed.changed | bool
 
-- name: Stop haproxy when upgrading
-  service:
-    name: haproxy
-    state: stopped
-    enabled: no
-  when: 
-    - haproxy_removed.changed | bool
-
-- name: Remove custom haproxy systemd file
-  file: 
-    path: /etc/systemd/system/haproxy.service
-    state: absent
-  when: 
-    - haproxy_removed.changed | bool
-
-- name: Remove haproxy 1.5 or 1.7
+- name: Remove haproxy 1.8
   yum: 
     name: 
-      - haproxy
+      - rh-haproxy18-runtime
+      - rh-haproxy18-haproxy-syspaths
+      - rh-haproxy18-haproxy
     state: absent
   when: 
-    - haproxy_removed.changed | bool
+    - scl_removed.changed | bool
 
 - name: Create lbops group
   group:
     name: lbops
     state: present
 
-- name: Enable software collections
+- name: Enable ius repo
   yum:
-    name: 
-      - centos-release-scl
+    name: "https://repo.ius.io/ius-release-el7.rpm"
     state: present
 
 - name: Install haproxy and socat
   yum:
     name: 
-      - rh-haproxy18-haproxy
-      - rh-haproxy18-haproxy-syspaths
-      - rh-haproxy18-runtime
+      - haproxy20.x86_64
       - socat
     state: present
 
 - name: Copy haproxy sysconfig file
   copy:
-    src: rh-haproxy18-haproxy
-    dest: /etc/sysconfig/rh-haproxy18-haproxy
+    src: sysconfig_haproxy 
+    dest: /etc/sysconfig/haproxy
 
 - name: install OCSP update tool
   copy:
@@ -113,11 +97,6 @@
   when:
     - haproxy_backend_tls | bool
 
-- name: Create an empty default haproxy.cfg
-  copy:
-    content: ""
-    dest: /etc/opt/rh/rh-haproxy18/haproxy/haproxy.cfg
-    
 - name: Copy global haproxy config
   template:
     src: "haproxy_global.cfg.j2"
@@ -149,6 +128,11 @@
   notify: 
     - "reload haproxy" 
 
+- name: Start haproxy
+  service:  
+    name: haproxy
+    state: started
+
 - name: Run hapos-upd for initial OCSP responses
   shell: /usr/local/sbin/hapos-upd --partial-chain --good-only --socket /var/lib/haproxy/haproxy.stats --VAfile /etc/pki/haproxy/{{ item.name }}_haproxy.pem --cert /etc/pki/haproxy/{{ item.name }}_haproxy.pem
   with_items:
@@ -169,10 +153,6 @@
     job: /usr/local/sbin/update_ocsp {{ ocsp_log_redirect | default('') }}
   when:  "'selfsigned_certs' not in group_names"
 
-- name: Start haproxy
-  service:  
-    name: haproxy
-    state: started
 
 - name: disable health checks for development envs
   shell: 'echo "disable health {{ item }}" | socat /var/lib/haproxy/haproxy.stats stdio'
