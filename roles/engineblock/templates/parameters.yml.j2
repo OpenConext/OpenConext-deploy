@@ -20,7 +20,7 @@ parameters:
         display_errors: '{{ php_display_errors }}'
         error_reporting: '6135'
         date.timezone: {{ timezone }}
-        sendmail_from: 'OpenConext EngineBlock <openconext-engineblock@openconext.org>'
+        sendmail_from: '{{ instance_name }} <{{ support_email }}>'
     api.users.metadataPush.username: {{ engine_api_metadata_push_user }}
     api.users.metadataPush.password: {{ engine_api_metadata_push_password | replace("%","%%") }}
     api.users.profile.username: {{ engine_api_profile_user }}
