@@ -44,20 +44,7 @@
     group: voot
     mode: 0755
 
-- name: include install-release.yml
-  include: ../../../tasks/springbootapp/install-release.yml
-  when:
-    - "voot_snapshot_timestamp == '' and voot_local_jar == ''"
-
-- name: Include install-snapshot.yml
-  include: ../../../tasks/springbootapp/install-snapshot.yml
-  when:
-    - "voot_snapshot_timestamp != '' and voot_local_jar == ''"
-
-- name: Include install-local.yml
-  include: ../../../tasks/springbootapp/install-local.yml
-  when:
-    - "voot_local_jar != ''"
+- include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: Copy logging config
   template:
@@ -96,9 +83,6 @@
   notify:
     - "reload httpd"
 
-# no idea why this is necessary, as the init script returns an ok status also
-# if voot is still initializing.  Waiting for the port to open works well
-# though, and seems like to correct way to handle this.
 - name: start the voot service
   service:
     name: voot
@@ -117,3 +101,9 @@
     name: voot
     enabled: yes
     state: started
+
+- name: cleanup old jars
+  shell: find . ! -name $(basename $(readlink voot-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ voot_dir }}
+  when: maven_result.changed
+
+- meta: flush_handlers

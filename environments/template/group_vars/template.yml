@@ -202,6 +202,9 @@ voot:
   oidc_checkToken_endpoint_url: "https://oidc.{{ base_domain }}/introspect"
   oidc_checkToken_clientId: "https@//oidc.test.surfconext.nl"
   oidc_checkToken_secret: "{{ voot_oidc_checkToken_secret }}"
+  oidcng_checkToken_endpoint_url: "https://connect.{{ base_domain }}/oidc/introspect"
+  oidcng_checkToken_clientId: "voot.{{ base_domain }}"
+  oidcng_checkToken_secret: "{{ voot_oidcng_checkToken_secret }}"
   loggers:
     - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
