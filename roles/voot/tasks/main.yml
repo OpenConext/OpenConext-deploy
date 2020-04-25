@@ -102,8 +102,4 @@
     enabled: yes
     state: started
 
-- name: cleanup old jars
-  shell: find . ! -name $(basename $(readlink voot-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ voot_dir }}
-  when: maven_result.changed
-
 - meta: flush_handlers
