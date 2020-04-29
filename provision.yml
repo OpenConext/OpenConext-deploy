@@ -7,6 +7,7 @@
     tags:
      - always
 
+
 - hosts: loadbalancer:loadbalancer-vm:php-apps:java-apps:storage:oidc:dbcluster:sysloghost:elk:lifecycle
   gather_facts: yes
   become: true
@@ -15,17 +16,18 @@
     - { role: rsyslog,      tags: ['rsyslog'] }
     - { role: iptables, when: iptables_enable | bool,  tags: ['iptables'] }
 
+- hosts: selfsigned_certs
+  gather_facts: no
+  become: true
+  roles:
+    - { role: selfsigned_certs, tags: ['selfsigned_certs'] } 
+
 - hosts: php-apps-vm
   become: true
   roles:
     - { role: hosts,     tags: ['hosts'] }
     - { role: httpd,     tags: ['httpd'] }
     - { role: welcome,   tags: ['welcome'] }
-
-- hosts: selfsigned_certs
-  become: true
-  roles:
-    - { role: tls,      tags: ['tls'] }
 
 - hosts: loadbalancer-vm
   gather_facts: true
