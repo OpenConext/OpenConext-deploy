@@ -23,8 +23,8 @@ if development
 end
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "CentOS-7.0"
-  config.vm.box_url = "https://build.openconext.org/vagrant_boxes/virtualbox-centos7.box"
+  config.vm.box = "OpenConext-CentOS-7.0"
+  config.vm.box_url = "https://build.openconext.org/vagrant_boxes/openconext.json"
 
   config.vm.define "lb_centos7" do |lb_centos7|
     lb_centos7.vm.network :private_network, ip: "192.168.66.98"
