@@ -82,20 +82,9 @@ tls:
   cert_path_ca: /etc/pki/ca-trust/source/anchors/
   cert_private_path: /etc/pki/tls/private
 
-
-tls_ca: star.{{ base_domain }}_ca.pem
-
-tls_star_cert_haproxy: star.{{ base_domain }}_haproxy.pem
-tls_star_cert_bundle_name: star.{{ base_domain }}_ca_bundle.pem
 tls_star_cert: star.{{ base_domain }}.pem
 tls_star_cert_key: star.{{ base_domain }}.key
-
-tls_https:
-  - name: star
-    key_name: "star.{{ base_domain }}.key"
-    crt_name: "star.{{ base_domain }}.pem"
-    bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
-    key_content: "{{ https_star_private_key }}"
+tls_ca: star.{{ base_domain }}_ca.pem
 
 # Value for the isMemberOf attribute for users from IdPs that are marked as 'guest'.
 guest_qualifier: "urn:collab:org:{{ base_domain }}"
