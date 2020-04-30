@@ -681,8 +681,6 @@ haproxy_sni_ip_restricted:
        key_content: "{{ https_star_private_key }}"
        crt_name: star.{{ base_domain }}.pem
 
-
-
 php_servers:
    - { ip: "127.0.0.1", label: "php"}
 
@@ -691,3 +689,10 @@ java_servers:
 
 iptables_enable: false
 dashboard_install: false
+
+tls_https:
+  - name: star
+    key_name: "star.{{ base_domain }}.key"
+    crt_name: "star.{{ base_domain }}.pem"
+    bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
+    key_content: "{{ https_star_private_key }}"

@@ -1,0 +1,19 @@
+- name: copy certificates to correct location
+  copy:
+    src: "{{ inventory_dir }}/files/certs/{{ item.crt_name }}" 
+    dest: "{{ tls.cert_path }}/{{ item.crt_name }}" 
+  with_items:
+    - "{{ tls_https }}" 
+
+- name: copy private keys to correct location
+  copy:
+    content: "{{ item.key_content }}" 
+    dest: "{{ tls.cert_private_path }}/{{ item.key_name }}" 
+    mode: 0600
+  with_items: "{{ tls_https }}" 
+
+- name: Copy the intermediate certificate
+  copy: 
+    src: "{{ inventory_dir }}/files/certs/{{ item.intermediate_name }}" 
+    dest: "{{ tls.cert_path_ca }}/{{ tls_ca }}"
+  with_items: "{{ tls_https }}"
