@@ -35,6 +35,7 @@ private_key_path: file://{{ oidcng_dir }}/oidcsaml.key
 certificate_path: file://{{ oidcng_dir }}/oidcsaml.crt
 default_acr_value: {{ oidcng.default_acr_value }}
 secure_cookie: true
+oidc_token_endpoint: https://connect.{{ base_domain }}/oidc/token
 
 idp:
   alias: engine-{{ env }}
