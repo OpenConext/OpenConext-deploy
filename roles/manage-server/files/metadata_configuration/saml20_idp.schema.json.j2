@@ -142,6 +142,31 @@
       ],
       "additionalProperties": false
     },
+    "mfaEntities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "level": {
+            "type": [
+              "string"
+            ],
+            "enum": [
+              "http://schemas.microsoft.com/claims/multipleauthn"
+            ],
+            "default": "http://test.surfconext.nl/assurance/loa2"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "level"
+      ],
+      "additionalProperties": false
+    },
     "disableConsent": {
       "type": "array",
       "items": {
