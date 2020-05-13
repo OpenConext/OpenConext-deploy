@@ -6,4 +6,4 @@ sudo service httpd restart
 sudo service tomcat restart
 
 echo "Preparing dev env"
-(cd /opt/openconext/OpenConext-engineblock && composer prepare-env)
+(cd /opt/openconext/OpenConext-engineblock && php72 $(which composer) prepare-env)
