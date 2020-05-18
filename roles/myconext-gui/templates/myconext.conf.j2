@@ -14,6 +14,7 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
 
     {% for links in myconext.links %}
     RewriteRule   "^/{{ links.name }}/"			"{{ links.url }}"  [R,L]
+    RewriteRule   "^/{{ links.name }}"			"{{ links.url }}"  [R,L]
     {% endfor %}
 
     RewriteCond %{REQUEST_URI} !\.html$
