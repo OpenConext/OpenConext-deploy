@@ -69,12 +69,29 @@
     group: haproxy
     mode: 0700
 
+- name: Create combined key and certificate file for HAproxy when using selfsigned certificates
+  shell:
+    cat {{tls.cert_path }}/{{ tls_star_cert }} {{ tls.cert_private_path }}/{{ tls_star_cert_key }} > "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
+  when: "'selfsigned_certs' in group_names"
+  with_items: "{{ haproxy_sni_ip.certs }}"
+  notify:
+    - "reload haproxy"
+  changed_when: false
+
+- name:  chmod 600 to the haproxy combined key and certificate file
+  file:
+    path: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
+    mode: 0600 
+  when: "'selfsigned_certs' in group_names"
+  with_items: "{{ haproxy_sni_ip.certs }}"
+
 - name: Create combined key and certificate file for HAproxy
   copy:
     content: "{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
     dest: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
     mode: 0600
   with_items: "{{ haproxy_sni_ip.certs }}"
+  when: "'selfsigned_certs' not in group_names"
   notify:
     - "reload haproxy"
 
@@ -86,7 +103,7 @@
   with_items: "{{ haproxy_sni_ip_restricted.certs }}"
   notify:
     - "reload haproxy"
-  when: haproxy_sni_ip_restricted is defined
+  when: "haproxy_sni_ip_restricted is defined and 'selfsigned_certs' not in group_names"
 
 - name: Copy backend CA certificate
   copy:

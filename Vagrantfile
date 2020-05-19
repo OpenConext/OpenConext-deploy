@@ -35,21 +35,6 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--cpus", "1"]
     end
 
-    if development == true
-      # run Ansible for loadbalancer only
-      lb_centos7.vm.provision :ansible do |ansible|
-        ansible.limit = ["loadbalancer-vm"]
-        ansible.inventory_path = "./environments/vm/inventory"
-        ansible.playbook = "provision.yml"
-        ansible.extra_vars = {
-          user: "vagrant",
-          env: "vm",
-          secrets_file: "environments/vm/secrets/vm.yml",
-          develop: true,
-	  environment_dir: "environments/vm/"
-        }
-      end
-    end
   end
 
   config.vm.define "apps_centos7", primary: true do |apps_centos7|
@@ -62,24 +47,8 @@ Vagrant.configure("2") do |config|
     end
 
     if development
-      apps_centos7.vm.synced_folder ".", "/vagrant", :nfs => true
       apps_centos7.vm.synced_folder "../OpenConext-engineblock", "/opt/openconext/OpenConext-engineblock", :nfs => true
-
-      apps_centos7.vm.provision :ansible do |ansible|
-        ansible.limit = ["php-apps", "java-apps", "storage", "oidc"]
-        ansible.inventory_path = "./environments/vm/inventory"
-        ansible.playbook = "provision.yml"
-        ansible.extra_vars = {
-          user: "vagrant",
-          env: "vm",
-          secrets_file: "environments/vm/secrets/vm.yml",
-          develop: true,
-          engine_apache_symfony_environment: "dev",
-	  environment_dir: "environments/vm/"
-        }
-      end
-
-      apps_centos7.vm.provision :shell, privileged: false, run: "always", path: "scripts/prep-dev-env.sh"
+      apps_centos7.vm.synced_folder ".", "/vagrant", :nfs => true
     end
 
   end
