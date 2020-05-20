@@ -34,7 +34,7 @@ fi
 env=$1
 shift
 
-if [ "$env" = "vm" ]
+if [ "$env" = "vm" ] || [ $env = "devvm" ]
 then
 	user="vagrant"
 	secret="environments/vm/secrets/vm.yml"
@@ -68,6 +68,9 @@ playbook="provision.yml"
 if [ $env = "vm" ] || [ $env = "template" ]
 then
 	inventory="environments/$env/inventory"
+elif [ $env = "devvm" ]
+then
+	inventory="environments/vm/inventory"
 else
 	inventory="environments-external/$env/inventory"
 fi
@@ -83,12 +86,21 @@ if [ "$env" = "vm" ]
 then
   vagrant up
 fi
+if [ "$env" = "devvm" ]
+then
+  env=DEV vagrant up
+fi
+
 
 # run ansible
 if [ $env = "vm" ] || [ $env = "template" ]
 then
         echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$environment_dir\" $@"
         ansible-playbook -i "$inventory" -u "$user" "$playbook" --extra-vars="secrets_file=$secret" -e environment_dir="$environment_dir" $@
+elif [ $env = "devvm" ]
+then
+	echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=\$environment_dir @environments/vm/group_vars/dev.yml\" $@"
+        ansible-playbook -i "$inventory" -u "$user" "$playbook" --extra-vars="secrets_file=$secret" -e environment_dir="$environment_dir" -e "@environments/vm/group_vars/dev.yml" $@
 else
 	echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret\" environment_dir=\"$environment_dir\" $@"
         ansible-playbook -i "$inventory" -u "$user"  "$playbook" --extra-vars=secrets_file="$secret" -e environment_dir="$environment_dir" $@

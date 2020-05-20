@@ -52,7 +52,7 @@ The development environment can be created using [Vagrant][5]. In order to be us
 such as provisioning specifically for development, all vagrant commands must be prefixed with `ENV=dev`.
 In order to start using the development environment, navigate to the OpenConext-deploy project and run 
 `ENV=dev vagrant up` to start the VMs and start the provisioning.
-
+You can also use the provision wrapper script: By issueing ./provision devvm both Vagrant and Ansible are executed
 ## Provisioning
 
 The OpenConext suite is changing constantly, and updating your development evnironment with all the latest changes 
@@ -60,11 +60,11 @@ should be done regularly. The best way to do this is using Ansible, we provided 
 
 ```
 # Run all playbooks:
-$ ./provision vm -e develop=true
+$ ./provision devvm 
 
 
 # Run a single tag, engineblock in this example. See ./playbook.yml for tagnames associated with specific roles
-./provision vm --tags eb -e develop=true
+./provision devvm --tags eb 
 
 ```
 
