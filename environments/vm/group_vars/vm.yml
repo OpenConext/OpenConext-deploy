@@ -387,6 +387,8 @@ myconext:
   mongo_user: myconextrw
   mongo_database: myconext
   mongo_password: "{{ mongo_passwords.myconext }}"
+  sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
+  sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
   links:
     - { name: "help" , url: "https://wiki.surfnet.nl/x/EYzaAQ" }
     - { name: "help_en" , url: "https://wiki.surfnet.nl/x/FYzaAQ" }
@@ -394,6 +396,8 @@ myconext:
     - { name: "privacy_policy" , url: "https://wiki.surfnet.nl/x/MIzaAQ" }
     - { name: "terms_of_service" , url: "https://wiki.surfnet.nl/x/LozaAQ"}
     - { name: "voorwaarden" , url: "https://wiki.surfnet.nl/x/HYzaAQ"}
+myconext_onegini_entity_id: http://mock-idp
+
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
