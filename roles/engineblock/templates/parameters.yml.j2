@@ -184,13 +184,6 @@ parameters:
     ## given again.
     consent_store_values: true
 
-    ## terms of use openconext
-    openconext_support_url: '{{ eb_support_url | replace("%","%%") }}'
-    openconext_terms_of_use_url: '{{ eb_tos_url | replace("%","%%") }}'
-
-    ## Consent view related settings
-    openconext_support_name_id_url: '{{ eb_support_url_nameid | replace("%","%%") }}'
-
     ## Email configuration
     email_idp_debugging:
         from:
