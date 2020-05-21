@@ -22,6 +22,12 @@
         {{#Logo}}
         <mdui:Logo width="{{metaDataFields.logo:0:width}}" height="{{metaDataFields.logo:0:height}}" xml:lang="en">{{metaDataFields.logo:0:url}}</mdui:Logo>
         {{/Logo}}
+        {{#metaDataFields.mdui:PrivacyStatementURL:en}}
+        <mdui:PrivacyStatementURL xml:lang="en">{{metaDataFields.mdui:PrivacyStatementURL:en}}</mdui:PrivacyStatementURL>
+        {{/metaDataFields.mdui:PrivacyStatementURL:en}}
+        {{#metaDataFields.mdui:PrivacyStatementURL:nl}}
+        <mdui:PrivacyStatementURL xml:lang="nl">{{metaDataFields.mdui:PrivacyStatementURL:nl}}</mdui:PrivacyStatementURL>
+        {{/metaDataFields.mdui:PrivacyStatementURL:nl}}
       </mdui:UIInfo>
     </md:Extensions>
     {{/UIInfoExtension}}
