@@ -88,7 +88,7 @@ then
 fi
 if [ "$env" = "devvm" ]
 then
-  env=DEV vagrant up
+  ENV=dev vagrant up
 fi
 
 
