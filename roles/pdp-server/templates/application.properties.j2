@@ -18,6 +18,7 @@ spring.profiles.active={{ pdp.spring_profiles_active }}
 server.session-timeout=28800
 
 # PDP database settings
+spring.datasource.driverClassName=org.mariadb.jdbc.Driver
 spring.datasource.url=jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}
 spring.datasource.username={{ pdp.db_user }}
 spring.datasource.password={{ pdp.db_password }}
