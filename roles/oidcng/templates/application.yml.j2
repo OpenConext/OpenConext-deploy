@@ -27,7 +27,7 @@ cron:
   key-rollover-expression: {{ oidcng.key_rollover_cron_expression }}
 
 mongodb_db: {{ oidcng.mongo_database }}
-oidc_saml_mapping__path: file://{{ oidcng_dir }}/oidc_saml_mapping.json
+oidc_saml_mapping_path: file://{{ oidcng_dir }}/oidc_saml_mapping.json
 openid_configuration_path: file://{{ oidcng_dir }}/openid-configuration.json
 secret_key_set_path: file://{{ oidcng_dir }}/secret_keyset.json
 associated_data: {{ oidcng_associated_data }}
