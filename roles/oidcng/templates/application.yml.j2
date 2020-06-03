@@ -73,3 +73,8 @@ spring:
 manage:
   user: manage
   password: {{ oidcng_api_metadata_push_password }}
+
+eduid:
+  user: oidcng
+  password: {{ myconext_api_attribute_manipulation_password }}
+  uri: https://eduid.{{ base_domain }}/myconext/api/attribute-manipulation

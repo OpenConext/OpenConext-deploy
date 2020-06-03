@@ -419,6 +419,16 @@
           "default": "license_required_by_service_provider",
           "info": "Set the applicable license for this service as provisioned by the SP Dashboard."
         },
+        "coin:dashboard_connect_option": {
+          "type": "string",
+          "enum": [
+            "connect_with_interaction",
+            "connect_without_interaction_with_email",
+            "connect_without_interaction_without_email"
+          ],
+          "default": "connect_with_interaction",
+          "info": "Whether the IdP can connect to this RP without any interaction, and, if so, whether an email must be sent to the admin of the service"
+        },
         "coin:stepup:requireloa": {
           "type": "string",
           "format": "url",
@@ -446,16 +456,6 @@
           "default": "AO",
           "info": "Set the contractual base that underlies a production SP / RP entity."
         },
-        "coin:dashboard_connect_option": {
-          "type": "string",
-          "enum": [
-            "connect_with_interaction",
-            "connect_without_interaction_with_email",
-            "connect_without_interaction_without_email"
-          ],
-          "default": "connect_with_interaction",
-          "info": "Whether the IdP can connect to this SP without any interaction, and, if so, whether an email must be sent to the admin of the service"
-        },
         "secret": {
           "type": "string",
           "format": "password",
@@ -479,20 +479,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [
-              "openid",
-              "members",
-              "groups",
-              "all-groups",
-              "actions",
-              "cross-idp-services",
-              "stats",
-              "attribute-aggregation",
-              "pdp",
-              "test",
-              "email",
-              "profile"
-            ]
+            "fetch": "scopes"
           },
           "info": "The allowed scopes for this Relying Party."
         },

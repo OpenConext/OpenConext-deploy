@@ -369,6 +369,16 @@
           ],
           "info": "Must be set if the federation source is either eduGAIN or Entree."
         },
+        "coin:dashboard_connect_option": {
+          "type": "string",
+          "enum": [
+            "connect_with_interaction",
+            "connect_without_interaction_with_email",
+            "connect_without_interaction_without_email"
+          ],
+          "default": "connect_with_interaction",
+          "info": "Whether the IdP can connect to this SP without any interaction, and, if so, whether an email must be sent to the admin of the service"
+        },
         "coin:additional_logging": {
           "type": "boolean",
           "info": "Set to get an extended form of logging."
@@ -565,16 +575,6 @@
           ],
           "default": "AO",
           "info": "Set the contractual base that underlies a production SP / RP entity."
-        },
-        "coin:dashboard_connect_option": {
-          "type": "string",
-          "enum": [
-            "connect_with_interaction",
-            "connect_without_interaction_with_email",
-            "connect_without_interaction_without_email"
-          ],
-          "default": "connect_with_interaction",
-          "info": "Whether the IdP can connect to this SP without any interaction, and, if so, whether an email must be sent to the admin of the service"
         }
       },
       "patternProperties": {

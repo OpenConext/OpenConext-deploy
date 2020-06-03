@@ -50,6 +50,20 @@ certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
 remember_me_max_age_seconds: 15_768_000
 email_guessing_sleep_millis: 500
 
+attribute_aggregation:
+  user: aa
+  password:  {{ myconext_api_attribute_aggregation_password }}
+
+attribute_manipulation:
+  user: oidcng
+  password:  {{ myconext_api_attribute_manipulation_password }}
+
+oidc:
+  client-id: {{ myconext.rp_client_id }}
+  secret: {{ myconext_client_secret }}
+  redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
+  base-url: https://connect.{{ base_domain }}
+
 spring:
   data:
     mongodb:
