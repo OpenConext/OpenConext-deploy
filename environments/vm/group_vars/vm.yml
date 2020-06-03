@@ -414,9 +414,9 @@ manage:
   eb_db_name: "{{ engine_database_name }}"
   eb_db_host: "{{ mysql_host }}"
   mongo_port: "{{ mongo_port }}"
-  mongo_user: managerw
+  mongo_user: "{{ manage_mongo_user }}"
   mongo_password: "{{ mongo_passwords.manage }}"
-  mongo_database: metadata
+  mongo_database: "{{ manage_mongo_db }}"
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
   oidc_push_enabled: false
@@ -456,6 +456,9 @@ manage:
     - http://{{ base_domain }}/assurance/loa2
     - http://{{ base_domain }}/assurance/loa3
   oidc_rp_redirect_url_format: "url"
+
+manage_mongo_db: metadata
+manage_mongo_user: managerw
 
 loadbalancing:
   engine:
