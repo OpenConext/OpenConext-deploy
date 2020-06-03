@@ -1,3 +1,5 @@
 sendmail_smarthost: localhost
+sendmail_smarthost_port: 25
 handle_pseudo_email: false
 postfix_interfaces: all
+
