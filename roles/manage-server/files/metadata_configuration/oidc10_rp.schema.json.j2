@@ -259,6 +259,11 @@
           "format": "certificate",
           "info": "The public JWT signing certificate of the service. This must be a PEM encoded certificate. DER, CRT or CER are not supported."
         },
+        "oidc:consentRequired": {
+          "type": "boolean",
+          "info": "Select this option to force OIDC consent for a user for this RP.",
+          "default": false
+        },
         "logo:0:url": {
           "type": "string",
           "format": "url",

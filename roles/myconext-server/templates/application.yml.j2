@@ -19,9 +19,6 @@ email:
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
 
-# Can be anything, but the logo is default OpenConext unless the branding is SURFconext
-branding: SURFconext
-
 schac_home_organization: eduid.nl
 
 cron:
@@ -31,8 +28,11 @@ cron:
 metadata_sp_url: https://metadata.{{ base_domain }}/sp-names.json
 
 base_domain: {{ myconext_base_domain }}
+saml_metadata_base_path: https://login.{{ myconext_base_domain }}
 base_path: https://mijn.{{ myconext_base_domain }}
 idp_redirect_url: https://login.{{ myconext_base_domain }}
+rp_id: login.{{ myconext_base_domain }}
+rp_origin: https://login.{{ myconext_base_domain }}
 sp_redirect_url: https://mijn.{{ myconext_base_domain }}
 sp_entity_id: {{ myconext.sp_entity_id }}
 sp_entity_metadata_url: {{ myconext.sp_entity_metadata_url }}
@@ -41,6 +41,10 @@ guest_idp_entity_id: https://login.{{ myconext_base_domain }}
 my_conext_url: https://mijn.{{ myconext_base_domain }}
 migration_landing_page_url: https://login.{{ myconext_base_domain }}/migration
 domain: {{ myconext_base_domain }}
+account_linking_context_class_ref: https://eduid.nl/trust/linked-institution
+
+feature:
+  webauthn: False
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
@@ -61,8 +65,10 @@ attribute_manipulation:
 oidc:
   client-id: {{ myconext.rp_client_id }}
   secret: {{ myconext_client_secret }}
-  redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
+  idp-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
+  sp-flow-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
   base-url: https://connect.{{ base_domain }}
+  expiry-duration-days: 90
 
 spring:
   data:
