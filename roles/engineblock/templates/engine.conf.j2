@@ -24,8 +24,8 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
     SetEnv HTTPS on
 
     RewriteEngine On
-    # We support only GET/POST/HEAD
-    RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
+    # We support only GET/POST
+    RewriteCond %{REQUEST_METHOD} !^(POST|GET)$
     RewriteRule .* - [R=405,L]
 
     #Proxy the requests to FPM
