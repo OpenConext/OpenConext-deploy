@@ -41,7 +41,10 @@ guest_idp_entity_id: https://login.{{ myconext_base_domain }}
 my_conext_url: https://mijn.{{ myconext_base_domain }}
 migration_landing_page_url: https://login.{{ myconext_base_domain }}/migration
 domain: {{ myconext_base_domain }}
-account_linking_context_class_ref: https://eduid.nl/trust/linked-institution
+
+account_linking_context_class_ref:
+  linked_institution: https://eduid.nl/trust/linked-institution
+  validate_names: https://eduid.nl/trust/validate-names
 
 feature:
   webauthn: False

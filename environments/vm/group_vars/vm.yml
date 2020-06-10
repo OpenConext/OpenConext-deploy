@@ -379,7 +379,10 @@ oidcng:
     - http://{{ base_domain }}/assurance/loa1
     - http://{{ base_domain }}/assurance/loa2
     - http://{{ base_domain }}/assurance/loa3
+    - https://eduid.nl/trust/validate-names
+    - https://eduid.nl/trust/linked-institution
   default_acr_value: http://{{ base_domain }}/assurance/loa1
+  eduid_attribute_manipulation_enabled: false
 
 myconext:
   mongo_host: "{{ mongo_host }}"
