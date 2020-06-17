@@ -392,6 +392,7 @@ myconext:
   mongo_database: myconext
   mongo_password: "{{ mongo_passwords.myconext }}"
   rp_client_id: myconext.ala.eduid
+  feature_webauthn: false
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
   sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
   links:

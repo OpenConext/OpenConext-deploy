@@ -27,10 +27,9 @@
    <subject>{{ error_subject_prefix }}Unexpected error myconext</subject>
    <layout class="ch.qos.logback.classic.html.HTMLLayout"/>
 
-    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-    <!--filter class="filter.CustomThresholdFilter">
+    <filter class="filter.CustomThresholdFilter">
         <clazz>myconext.exceptions.ExpiredAuthenticationException</clazz>
-        <clazz>myconext.exceptions.MigrationDuplicateUserEmailException</clazz-->
+        <clazz>myconext.exceptions.MigrationDuplicateUserEmailException</clazz>
         <level>ERROR</level>
     </filter>
  </appender>
