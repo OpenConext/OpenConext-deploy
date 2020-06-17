@@ -189,3 +189,28 @@ authorities:
       ],
       validationRegExp: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
     }
+  - {
+    id: "eduid",
+    description: "eduID Attribute Aggregator",
+    endpoint: "{{ aa.eduid_url }}",
+    user: "{{ aa.eduid_username }}",
+    password: "{{ aa.eduid_password }}",
+    timeOut: 3000,
+    attributes: [
+    {
+      name: "urn:mace:eduid.nl:1.1",
+      description: "SP scoped unique eduID.",
+      type: "string",
+      example: "b04f6998-81e3-4d40-9cee-d96a9fe570df"
+    }
+    ],
+    requiredInputAttributes: [
+    {
+      name: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
+    },
+    {
+      name: "SPentityID"
+    }
+    ],
+    validationRegExp: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+  }

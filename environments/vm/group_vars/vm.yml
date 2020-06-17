@@ -353,6 +353,9 @@ aa:
   manage_url: https://manage.test.surfconext.nl
   manage_username: attribute-aggregation
   manage_password: "{{ aa_manage_password }}"
+  eduid_url: "https://login.{{ myconext_base_domain }}/myconext/api/attribute-aggregation"
+  eduid_username: aa
+  eduid_password: "{{ myconext_api_attribute_aggregation_password }}"
   aggregate_cache: 0
 
 oidc:
