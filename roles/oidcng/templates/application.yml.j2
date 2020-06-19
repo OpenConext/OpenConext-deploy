@@ -31,6 +31,7 @@ oidc_saml_mapping_path: file://{{ oidcng_dir }}/oidc_saml_mapping.json
 openid_configuration_path: file://{{ oidcng_dir }}/openid-configuration.json
 secret_key_set_path: file://{{ oidcng_dir }}/secret_keyset.json
 associated_data: {{ oidcng_associated_data }}
+access_token_one_way_hash_salt: {{ oidcng_access_token_one_way_hash_salt }}
 private_key_path: file://{{ oidcng_dir }}/oidcsaml.key
 certificate_path: file://{{ oidcng_dir }}/oidcsaml.crt
 default_acr_value: {{ oidcng.default_acr_value }}
@@ -73,6 +74,14 @@ spring:
 manage:
   user: manage
   password: {{ oidcng_api_metadata_push_password }}
+
+token-api:
+  enabled: {{ oidc.token_api_enabled }}
+  users:
+    - user: eduid
+      password: {{ oidcng_api_tokens_eduid_password }}
+    - user: profile
+      password: {{ oidcng_api_tokens_profile_password }}
 
 eduid:
   user: oidcng
