@@ -76,7 +76,7 @@ manage:
   password: {{ oidcng_api_metadata_push_password }}
 
 token-api:
-  enabled: {{ oidc.token_api_enabled }}
+  enabled: {{ oidcng.token_api_enabled }}
   users:
     - user: eduid
       password: {{ oidcng_api_tokens_eduid_password }}
