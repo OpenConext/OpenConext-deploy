@@ -69,8 +69,10 @@ attribute_manipulation:
   password:  {{ myconext_api_attribute_manipulation_password }}
 
 oidc-token-api:
+  token-url: https://connect.{{ base_domain }}/tokens
   user: eduid
   password: {{ oidcng_api_tokens_eduid_password }}
+  enabled: {{ oidcng.token_api_enabled }}
 
 oidc:
   client-id: {{ myconext.rp_client_id }}
