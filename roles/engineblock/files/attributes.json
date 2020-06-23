@@ -151,8 +151,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
-                "max": "1",
-                "regex": "#^https://ketenid\\.nl#"
+                "max": "1"
             }
         }
     },
