@@ -111,7 +111,7 @@
     dest: /etc/pki/haproxy/ffdhe3072.pem
     owner: root
     group: root
-    mode: 0600
+    mode: 0644
   notify:
     - "reload haproxy"
 
