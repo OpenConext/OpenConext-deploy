@@ -51,8 +51,15 @@ and running `composer install`.
 The development environment can be created using [Vagrant][5]. In order to be use the additional functionality
 such as provisioning specifically for development, all vagrant commands must be prefixed with `ENV=dev`.
 In order to start using the development environment, navigate to the OpenConext-deploy project and run 
-`ENV=dev vagrant up` to start the VMs and start the provisioning.
-You can also use the provision wrapper script: By issueing ./provision devvm both Vagrant and Ansible are executed
+`$ ./provision devvm ` to start the VMs and start the provisioning.
+
+Alternatively you can start/restart, and perform other `vagrant` actions on the virtual machines as such:
+
+```
+$ ENV=dev vagrant reload
+$ ENV=dev vagrant suspend lb_centos7
+```
+
 ## Provisioning
 
 The OpenConext suite is changing constantly, and updating your development evnironment with all the latest changes 
