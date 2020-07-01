@@ -370,6 +370,8 @@ oidcng:
   eduid_attribute_manipulation_enabled: false
   token_api_enabled: false
 
+oidcng_logback_email: false
+
 myconext:
   mongo_host: "{{ mongo_host }}"
   mongo_port: "{{ mongo_port }}"

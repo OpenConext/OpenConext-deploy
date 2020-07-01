@@ -388,6 +388,7 @@ oidcng:
   default_acr_value: http://{{ base_domain }}/assurance/loa1
   eduid_attribute_manipulation_enabled: false
   token_api_enabled: false
+oidcng_logback_email: false
 
 myconext:
   mongo_host: "{{ mongo_host }}"
