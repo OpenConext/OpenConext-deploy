@@ -11,7 +11,6 @@
     src: "templates/spring-boot.service.j2"
     dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
   notify:
-    - "systemctl daemon-reload"
     - "restart authz-playground"
 
 - name: Check presence of legacy init script

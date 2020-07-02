@@ -5,7 +5,6 @@
 - name: Copy systemd service file
   template: src=../../templates/spring-boot.service.j2 dest=/etc/systemd/system/{{ springapp_service_name }}.service
   notify:
-    - "systemctl daemon-reload"
     - "restart mujina-idp"
 
 - name: Check presence of legacy init script

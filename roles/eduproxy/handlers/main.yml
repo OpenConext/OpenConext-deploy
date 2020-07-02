@@ -1,9 +1,6 @@
 ---
-- name: systemctl daemon-reload
-  systemd:
-    daemon_reload: yes
-
 - name: restart eduproxy
-  service:
+  systemd:
     name: eduproxy
     state: restarted
+    daemon_reload: yes

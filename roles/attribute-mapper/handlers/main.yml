@@ -1,9 +1,6 @@
 ---
-- name: systemctl daemon-reload
-  systemd:
-    daemon_reload: yes
-
 - name: restart attribute-mapper
-  service:
+  systemd:
     name: attribute-mapper
     state: restarted
+    daemon_reload: yes
