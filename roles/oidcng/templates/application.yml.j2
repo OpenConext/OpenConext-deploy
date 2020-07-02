@@ -17,8 +17,8 @@ server:
   max-http-header-size: 10000000
   tomcat:
     max-http-post-size: 10000000
-    max-connections: 20
-
+    max-http-form-post-size: 10000000
+    max-swallow-size: 10000000
 
 # Is this node in a load-balanced topology responsible for cleaning up resources
 cron:
@@ -39,6 +39,13 @@ certificate_path: file://{{ oidcng_dir }}/oidcsaml.crt
 default_acr_value: {{ oidcng.default_acr_value }}
 secure_cookie: true
 oidc_token_endpoint: https://connect.{{ base_domain }}/oidc/token
+
+features:
+  # Do we enforce that the RS - if eduID pseudonymisation is required - belongs to the SURF IdP linked to the eduID user account?
+  # We link RS's and SURF IdP's using the coin:institution-guid
+  enforce-eduid-resource-server-linked-account: false
+  # Do we enforce that the scopes granted to an access_token are configured with the RS?
+  enforce-scope-resource-server: false
 
 idp:
   alias: engine-{{ env }}

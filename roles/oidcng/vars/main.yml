@@ -9,5 +9,6 @@ springapp_service_name: oidcng
 springapp_jar: "{{ oidcng_jar }}"
 springapp_tcpport: 9195
 springapp_local_jar: "{{ oidcng_local_jar }}"
-springapp_heapsize: "756m"
+springapp_min_heapsize: "512m"
+springapp_max_heapsize: "5120m"
 springapp_random_source: "file:///dev/urandom"
