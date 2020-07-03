@@ -31,8 +31,8 @@ profile_version: "2.0.3"
 teams_gui_version: 8.3.7
 teams_server_version: 8.3.7
 voot_version: 3.1.0
-myconext_server_version: 2.0.13
-myconext_gui_version: 2.0.13
+myconext_server_version: 3.0.5
+myconext_gui_version: 3.0.5
 account_gui_version: 2.0.13
 eduid_gui_version: 2.0.13
 
