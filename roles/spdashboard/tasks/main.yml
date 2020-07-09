@@ -1,0 +1,47 @@
+---
+- name: Log into GitHub
+  docker_login:
+    username: '{{ github_username }}'
+    password: '{{ github_package_access_token }}'
+    registry: docker.pkg.github.com
+
+- name: Create directory to keep configfile
+  file:
+    dest: "/opt/openconext/spdashboard"
+    state: directory
+    owner: root
+    group: root
+    mode: 0770
+
+- name: Place the configfile
+  template:
+    src: parameters.yml.j2
+    dest: /opt/openconext/spdashboard/parameters.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create the spdashboard container network
+  docker_network:
+    name: "spdashboard"
+
+- name: Create the web container
+  docker_container:
+    name: spdashboard_web
+    image: docker.pkg.github.com/surfnet/sp-dashboard/spdashboard_web:{{ spd_docker_web_version }}
+    published_ports: 0.0.0.0:80:80
+    pull: true
+    networks:
+      - name: "spdashboard"
+ 
+- name: Create the php-fpm container
+  docker_container:
+    name: spdashboard_php-fpm
+    image: docker.pkg.github.com/surfnet/sp-dashboard/spdashboard_php-fpm:{{ spd_docker_phpfpm_version }}
+    pull: true
+    mounts:
+      - source: /opt/openconext/spdashboard/parameters.yml
+        target: /var/www/html/app/config/parameters.yml
+        type: bind
+    networks:
+      - name: "spdashboard"
