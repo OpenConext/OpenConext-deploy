@@ -33,10 +33,12 @@ $RuleSet {{ item.name }}
 :programname, isequal, "Apache-STATIC" { action(type="omfile" DynaFile="apache-static-{{ item.name }}") stop }
 :programname, isequal, "Apache-METADATA" { action(type="omfile" DynaFile="apache-metadata-{{ item.name }}") stop }
 :programname, isequal, "oidcng" { action(type="omfile" DynaFile="oidcng-{{ item.name }}") stop }
+:programname, isequal, "oidcngjson" { action(type="omfile" DynaFile="oidcngjson-{{ item.name }}") stop }
 :programname, isequal, "Apache-oidcng" { action(type="omfile" DynaFile="apache-oidcng-{{ item.name }}") stop }
 :programname, isequal, "oidc-playground" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}") stop }
 :programname, isequal, "Apache-Oidc-Playground" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}") stop }
 :programname, isequal, "myconext" { action(type="omfile" DynaFile="myconext-{{ item.name }}") stop }
+:programname, isequal, "myconextjson" { action(type="omfile" DynaFile="myconextjson-{{ item.name }}") stop }
 :programname, isequal, "Apache-myconext" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}") stop }
 :programname, isequal, "Apache-account" { action(type="omfile" DynaFile="apache-account-{{item.name }}") stop }
 :programname, isequal, "Apache-eduid" { action(type="omfile" DynaFile="apache-eduid-{{item.name }}") stop }

@@ -20,6 +20,20 @@
    <suffixPattern>oidcng: [%thread] %logger %msg</suffixPattern>
  </appender>
 
+ <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashSocketAppender">
+    <host>{{ ansible_fqdn }}</host>
+    <port>514</port>
+      <customFields>{"app":"oidcng"}</customFields>
+        <fieldNames>
+            <thread>[ignore]</thread>
+            <version>[ignore]</version>
+            <levelValue>[ignore]</levelValue>
+       </fieldNames>
+             <prefix class="ch.qos.logback.classic.PatternLayout">
+        <pattern>oidcngjson:</pattern>
+      </prefix>
+  </appender>
+
 {%if oidcng_logback_email | bool %}
  <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
    <smtpHost>{{ smtp_server }}</smtpHost>
@@ -47,6 +61,7 @@
    <appender-ref ref="EMAIL" />
 {%endif%}
    <appender-ref ref="SYSLOG" />
+   <appender-ref ref="JSON_SYSLOG" />
  </root>
 
 </configuration>
