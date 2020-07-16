@@ -14,23 +14,19 @@
    </encoder>
  </appender>
 
- <appender name="JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>/var/log/myconext/myconext.json</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <!-- daily rollover -->
-      <fileNamePattern>/var/log/myconext/myconext-%d{yyyy-MM-dd}.json</fileNamePattern>
-      <maxHistory>30</maxHistory>
-    </rollingPolicy>
-    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-        <shortenedLoggerNameLength>36</shortenedLoggerNameLength>
-        <customFields>{"app":"eduID"}</customFields>
+ <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashSocketAppender">
+    <host>{{ ansible_fqdn }}</host>
+    <port>514</port>
+      <customFields>{"app":"oidcng"}</customFields>
         <fieldNames>
             <thread>[ignore]</thread>
             <version>[ignore]</version>
             <levelValue>[ignore]</levelValue>
-        </fieldNames>
-    </encoder>
- </appender>
+       </fieldNames>
+             <prefix class="ch.qos.logback.classic.PatternLayout">
+        <pattern>myconextjson:</pattern>
+      </prefix>
+  </appender>
 
  <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
    <syslogHost>{{ rsyslog_host }}</syslogHost>
@@ -56,7 +52,7 @@
 
  <root level="WARN">
    <appender-ref ref="FILE" />
-   <appender-ref ref="JSON" />
+   <appender-ref ref="JSON_SYSLOG" />
    <appender-ref ref="EMAIL" />
    <appender-ref ref="SYSLOG" />
  </root>
