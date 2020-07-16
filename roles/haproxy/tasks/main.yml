@@ -105,6 +105,16 @@
     - "reload haproxy"
   when: "haproxy_sni_ip_restricted is defined and 'selfsigned_certs' not in group_names"
 
+- name: Install ffdhe3072 DH parameters
+  copy: 
+    src: ffdhe3072.pem
+    dest: /etc/pki/haproxy/ffdhe3072.pem
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - "reload haproxy"
+
 - name: Copy backend CA certificate
   copy:
     content: "{{ lookup('file', '{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem') }}"
