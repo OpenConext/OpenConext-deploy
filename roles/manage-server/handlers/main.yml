@@ -1,12 +1,9 @@
 ---
-- name: systemctl daemon-reload
-  systemd:
-    daemon_reload: yes
-
 - name: restart manage
-  service:
+  systemd:
     name: manage
     state: restarted
+    daemon_reload: yes
 
 - name: update_ca_trust
   command: update-ca-trust

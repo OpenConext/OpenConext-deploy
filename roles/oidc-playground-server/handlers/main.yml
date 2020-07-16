@@ -1,9 +1,6 @@
 ---
-- name: systemctl daemon-reload
-  systemd:
-    daemon_reload: yes
-
 - name: restart oidc-playground
-  service:
+  systemd:
     name: oidc-playground
     state: restarted
+    daemon_reload: yes

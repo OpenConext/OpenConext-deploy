@@ -1,9 +1,7 @@
 ---
-- name: systemctl daemon-reload
+- name: "restart oidcng"
   systemd:
-    daemon-reload: yes
-
-- name: restart oidcng
-  service:
     name: oidcng
     state: restarted
+    daemon-reload: yes
+

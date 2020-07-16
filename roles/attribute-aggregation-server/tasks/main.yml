@@ -21,7 +21,6 @@
     src: "../../templates/spring-boot.service.j2"
     dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
   notify:
-    - "systemctl daemon-reload"
     - "restart attribute-aggregation"
 
 - name: enable service
