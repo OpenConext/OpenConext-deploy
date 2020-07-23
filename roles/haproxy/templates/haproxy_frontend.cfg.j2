@@ -39,7 +39,7 @@ frontend internet_ip
 #  traffic coming back from the dummy backend ends up here
 # -------------------------------------------------------------------
 frontend local_ip
-    bind 127.0.0.1:80
+    bind 127.0.0.1:81
     {% for application in haproxy_applications %}
     {%if application.restricted is not defined %}
     acl valid_vhost hdr(host) -i {{ application.vhost_name }}
@@ -109,7 +109,7 @@ frontend internet_restricted_ip
 #  traffic coming back from the dummy backend ends up here
 # -------------------------------------------------------------------
 frontend localhost_restricted    
-    bind 127.0.0.1:81
+    bind 127.0.0.1:82
     {% for application in haproxy_applications %}
     {%if application.restricted is defined %}
     acl valid_vhost hdr(host) -i {{ application.vhost_name }}
