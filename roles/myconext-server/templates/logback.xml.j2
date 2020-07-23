@@ -17,7 +17,7 @@
  <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashSocketAppender">
     <host>{{ ansible_fqdn }}</host>
     <port>514</port>
-      <customFields>{"app":"oidcng"}</customFields>
+      <customFields>{"app":"myconext"}</customFields>
         <fieldNames>
             <thread>[ignore]</thread>
             <version>[ignore]</version>
