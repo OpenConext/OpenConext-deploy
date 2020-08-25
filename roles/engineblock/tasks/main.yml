@@ -19,6 +19,11 @@
     group: root
     mode: 0770
 
+- name: Install build tools (npm, composer)
+  include: build.yml
+  when:
+    - "(engine_branch is defined and engine_branch != '') or develop"
+
 - name: Include install-release.yml
   include: install-release.yml
   when:
