@@ -88,7 +88,7 @@ engine_syslog_priority: 7
 #engine_initial_sql: ''
 
 engineblock_symfony_cache_path: "/tmp/engineblock/cache"
-engineblock_symfony_log_path: "/tmp/engineblock/log"
+engineblock_symfony_log_path: "{{ engine_current_release_symlink }}/var/logs"
 
 engine_fpm_user: engine
 engine_fpm_port: 801
