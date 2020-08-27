@@ -18,7 +18,7 @@ filter {
    }
 # We overwrite the @timestamp with the syslogtimestamp in stead of the timestamp when the log message arrives at Logstash 
    date {
-      match => [ "timestamp" , "MMM d HH:mm:ss" ] 
+      match => [ "timestamp" , "MMM  d HH:mm:ss" , "MMM dd HH:mm:ss" ] 
    }
 }
 
