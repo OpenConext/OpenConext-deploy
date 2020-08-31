@@ -1,6 +1,6 @@
 ---
 - name: create apache folder
-  file: path=/var/www/myconext owner=root group=root mode=2755 state=directory
+  file: path={{ myconext_html_dir }} owner=root group=root mode=2755 state=directory
 
 - name: copy virtual host config
   template: src=myconext.conf.j2 dest=/etc/httpd/conf.d/myconext.conf
@@ -14,14 +14,14 @@
     extension: zip
     version: "{{ myconext_gui_version }}"
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in myconext_gui_version else maven_repo }}"
-    dest: /var/www/myconext
+    dest: "{{ myconext_html_dir }}"
   register: maven_result
   tags: deploy
 
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: /var/www/myconext
+    dest: "{{ myconext_html_dir }}"
     copy: no
     owner: root
     group: apache
@@ -37,3 +37,18 @@
     force: yes
   tags: deploy
   when: unarchive_result.changed
+
+- name: Remove old zipfiles
+  shell: 'ls -t *.zip | tail -n +3|  xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ myconext_html_dir }}" 
+  register: clean_myconext_zips
+  changed_when: '"removed" in clean_myconext_zips'
+
+- name: Remove old www directories
+  shell: 'find . ! -name $(basename $(readlink current)) -name "myconext-gui*" -type d  -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -vr'
+  args:
+    chdir: "{{ myconext_html_dir }}" 
+  register: clean_myconext_wwwdirs
+  changed_when: '"removed" in clean_myconext_wwwdirs'
+

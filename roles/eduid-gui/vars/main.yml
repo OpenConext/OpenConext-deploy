@@ -1,3 +1,4 @@
 ---
 eduid_current: /var/www/eduid/current
 springapp_tcpport: 9189
+eduid_html_dir: /var/www/eduid/

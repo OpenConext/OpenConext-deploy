@@ -1,7 +1,7 @@
 ---
 - name: create apache folder
   file:
-    path: "/var/www/oidc-playground"
+    path: "{{ oidc_playground_html_dir }}"
     owner: root
     group: root
     mode: 0755
@@ -23,7 +23,7 @@
     extension: zip
     version: "{{ oidc_playground_client_version }}"
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in oidc_playground_client_version else maven_repo }}"
-    dest: /var/www/oidc-playground
+    dest: "{{ oidc_playground_html_dir }}"
   register: maven_result
   tags:
     - deploy
@@ -31,7 +31,7 @@
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: "/var/www/oidc-playground"
+    dest: "{{ oidc_playground_html_dir }}"
     copy: no
     owner: root
     group: apache
@@ -51,3 +51,18 @@
     - deploy
   when:
     - unarchive_result.changed
+
+- name: Remove old zipfiles
+  shell: 'ls -t *.zip | tail -n +3|  xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ oidc_playground_html_dir }}" 
+  register: clean_oidc_playground_zips
+  changed_when: '"removed" in clean_oidc_playground_zips'
+
+- name: Remove old www directories
+  shell: 'find . ! -name $(basename $(readlink current)) -name "oidc-playground-gui*" -type d  -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -vr'
+  args:
+    chdir: "{{ oidc_playground_html_dir }}" 
+  register: clean_oidc_playground_wwwdirs
+  changed_when: '"removed" in clean_oidc_playground_wwwdirs'
+

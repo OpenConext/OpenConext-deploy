@@ -2,3 +2,4 @@
 oidc_playground_current: /var/www/oidc-playground/current
 #TODO - make this into a variable, see also oidc-playground-server/var/main.yml
 springapp_tcpport: 9399
+oidc_playground_html_dir: /var/www/oidc-playground/

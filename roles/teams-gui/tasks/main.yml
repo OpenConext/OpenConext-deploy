@@ -1,7 +1,7 @@
 ---
 - name: create apache folder
   file:
-    path: "/var/www/teams"
+    path: "{{ teams_html_dir }}"
     owner: root
     group: root
     mode: 02755
@@ -23,7 +23,7 @@
     extension: zip
     version: "{{ teams_gui_version }}"
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in teams_gui_version else maven_repo }}"
-    dest: "/var/www/teams"
+    dest: "{{ teams_html_dir }}"
   register: maven_result
   tags:
     - deploy
@@ -31,7 +31,7 @@
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: "/var/www/teams"
+    dest: "{{ teams_html_dir }}"
     copy: no
     owner: root
     group: apache
@@ -51,3 +51,18 @@
     - deploy
   when:
     - unarchive_result.changed
+
+- name: Remove old zipfiles
+  shell: 'ls -t *.zip | tail -n +3|  xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ teams_html_dir }}" 
+  register: clean_teams_zips
+  changed_when: '"removed" in clean_teams_zips'
+
+- name: Remove old www directories
+  shell: 'find . ! -name $(basename $(readlink current)) -name "teams-gui*" -type d  -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -vr'
+  args:
+    chdir: "{{ teams_html_dir }}" 
+  register: clean_teams_wwwdirs
+  changed_when: '"removed" in clean_teams_wwwdirs'
+

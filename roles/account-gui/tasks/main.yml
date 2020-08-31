@@ -1,6 +1,6 @@
 ---
 - name: create apache folder
-  file: path=/var/www/account owner=root group=root mode=2755 state=directory
+  file: path={{ account_html_dir }} owner=root group=root mode=2755 state=directory
 
 - name: copy virtual host config
   template: src=account.conf.j2 dest=/etc/httpd/conf.d/account.conf
@@ -14,14 +14,14 @@
     extension: zip
     version: "{{ account_gui_version }}"
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in account_gui_version else maven_repo }}"
-    dest: /var/www/account
+    dest: "{{ account_html_dir }}"
   register: maven_result
   tags: deploy
 
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: /var/www/account
+    dest: "{{ account_html_dir }}"
     copy: no
     owner: root
     group: apache
@@ -37,3 +37,17 @@
     force: yes
   tags: deploy
   when: unarchive_result.changed
+
+- name: Remove old zipfiles
+  shell: 'ls -t *.zip | tail -n +3|  xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ account_html_dir }}" 
+  register: clean_account_zips
+  changed_when: '"removed" in clean_account_zips'
+
+- name: Remove old www directories
+  shell: 'find . ! -name $(basename $(readlink current)) -name "account-gui*" -type d  -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -vr'
+  args:
+    chdir: "{{ account_html_dir }}" 
+  register: clean_account_wwwdirs
+  changed_when: '"removed" in clean_account_wwwdirs'

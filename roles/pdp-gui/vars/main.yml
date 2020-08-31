@@ -1,3 +1,4 @@
 ---
 pdp_current: /var/www/pdp/current
 springapp_tcpport: 9196
+pdp_html_dir: "/var/www/pdp/"

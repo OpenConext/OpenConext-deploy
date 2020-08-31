@@ -2,3 +2,4 @@
 teams_current: /var/www/teams/current
 #TODO - make this into a variable, see also teams-server/var/main.yml
 springapp_tcpport: 9197
+teams_html_dir: /var/www/teams/

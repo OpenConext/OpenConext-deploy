@@ -6,7 +6,7 @@
 
 - name: create apache folder
   file:
-    path: "/var/www/attribute-aggregation"
+    path: "{{ attribute_aggregation_html_dir }}"
     owner: root
     group: root
     mode: 02755
@@ -33,14 +33,14 @@
     extension: zip
     version: "{{ attribute_aggregation_gui_version }}"
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in attribute_aggregation_gui_version else maven_repo }}"
-    dest: /var/www/attribute-aggregation
+    dest: "{{ attribute_aggregation_html_dir }}"
   register: maven_result
   tags: deploy
 
 - name: extract html archive
   unarchive:
     src: "{{ maven_result.dest }}"
-    dest: "/var/www/attribute-aggregation"
+    dest: "{{ attribute_aggregation_html_dir }}"
     copy: no
     owner: root
     group: apache
@@ -60,3 +60,18 @@
     - deploy
   when:
     - unarchive_result.changed
+
+- name: Remove old zipfiles
+  shell: 'ls -t *.zip | tail -n +3|  xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ attribute_aggregation_html_dir }}"
+  register: clean_attribute_aggregation_zips
+  changed_when: '"removed" in clean_attribute_aggregation_zips'
+
+- name: Remove old www directories
+  shell: 'find . ! -name $(basename $(readlink current)) -name "attribute-aggregation-gui*" -type d  -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -vr'
+  args:
+    chdir: "{{ attribute_aggregation_html_dir }}"
+  register: clean_attribute_aggregation_wwwdirs
+  changed_when: '"removed" in clean_attribute_aggregation_wwwdirs'
+
