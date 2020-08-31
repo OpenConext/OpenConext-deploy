@@ -98,6 +98,10 @@
     enabled: yes
     state: started
 
-#- name: cleanup old jars
-#  shell: find . ! -name $(basename $(readlink attribute-aggregation-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ attribute_aggregation_dir }}
-#  when: maven_result.changed
+- name: cleanup old jars
+  shell: 'find . ! -name $(basename $(readlink attribute-aggregation-current.jar)) -name "*.jar" -type f -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ attribute_aggregation_dir }}"
+  register: clean_attribute_aggregation_jars
+  changed_when: '"removed" in clean_attribute_aggregation_jars'
+

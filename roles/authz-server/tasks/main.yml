@@ -84,3 +84,12 @@
     name: authz-server
     enabled: yes
     state: started
+
+- name: cleanup old jars
+  shell: 'find . ! -name $(basename $(readlink authz-server-current.jar)) -name "*.jar" -type f -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ authz_server_dir }}"
+  register: clean_authz_server_jars
+  changed_when: '"removed" in clean_authz_server_jars'
+
+

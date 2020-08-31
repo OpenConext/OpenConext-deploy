@@ -101,4 +101,11 @@
     enabled: yes
     state: started
 
+- name: cleanup old jars
+  shell: 'find . ! -name $(basename $(readlink voot-current.jar)) -name "*.jar" -type f -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ voot_dir }}" 
+  register: clean_voot_jars
+  changed_when: '"removed" in clean_voot_jars'
+
 - meta: flush_handlers

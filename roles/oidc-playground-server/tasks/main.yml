@@ -76,5 +76,8 @@
     state: started
 
 - name: cleanup old jars
-  shell: find . ! -name $(basename $(readlink oidc-playground-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ oidc_playground_dir }}
-  when: maven_result.changed
+  shell: 'find . ! -name $(basename $(readlink oidc-playground-current.jar)) -name "*.jar" -type f -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ oidc_playground_dir }}" 
+  register: clean_oidc_playground_jars
+  changed_when: '"removed" in clean_oidc_playground_jars'

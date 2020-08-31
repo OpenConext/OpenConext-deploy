@@ -50,3 +50,10 @@
 
 - name: ensure the service is started
   service: name={{ springapp_service_name }} enabled=yes state=started
+
+- name: cleanup old jars
+  shell: 'find . ! -name $(basename $(readlink mujina-idp-current.jar)) -name "*.jar" -type f -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ mujina_idp_dir }}" 
+  register: clean_mujina_idp_jars
+  changed_when: '"removed" in clean_mujina_idp_jars'
