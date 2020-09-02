@@ -32,6 +32,8 @@
     - 12-core-eblog.conf
     - 14-core-pdp.conf
     - 15-core-pdpstats.conf
+    - 16-core-myconext.conf
+    - 17-core-oidcng.conf
     - 31-core-elastic-search-output.conf
     - 32-core-elastic-search-output.conf
 
