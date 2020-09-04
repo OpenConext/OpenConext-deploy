@@ -7,7 +7,7 @@
    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
      <!-- daily rollover -->
      <fileNamePattern>/var/log/teams/teams-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
-     <maxHistory>30</maxHistory>
+     <maxHistory>"{{ logback_max_history }}"</maxHistory>
    </rollingPolicy>
    <encoder>
      <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
