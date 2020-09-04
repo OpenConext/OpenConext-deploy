@@ -6,7 +6,7 @@
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- daily rollover -->
       <fileNamePattern>/var/log/authz-playground/authz-playground.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
-      <maxHistory>30</maxHistory>
+      <maxHistory>"{{ logback_max_history }}"</maxHistory>
     </rollingPolicy>
 
     <encoder>
