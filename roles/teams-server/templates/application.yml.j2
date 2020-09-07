@@ -51,7 +51,7 @@ teams:
   group-name-context: "{{ teams.group_name_context }}"
   product-name: "{{ teams.product_name }}"
   non-guest-member-of: "{{ guest_qualifier }}"
-  super_admins_team_urn: "{{ super_admins_team_urn }}"
+  super_admins_team_urn: "{{ teams.super_admins_team_urn }}"
 
 voot:
   serviceUrl: https://voot.{{ base_domain }}
@@ -76,7 +76,7 @@ spring:
         dialect: org.hibernate.dialect.MariaDB53Dialect
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}
+    url: jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}?useMysqlMetadata=true
     username: {{ teams.db_user }}
     password: {{ teams.db_password }}
     tomcat:
