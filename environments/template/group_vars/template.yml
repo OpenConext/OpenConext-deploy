@@ -43,7 +43,7 @@ myconext_gui_version: 3.0.8
 account_gui_version: 3.0.8
 eduid_gui_version: 3.0.8
 
-statistics_version: 1.1.5
+statistics_version: 1.1.6
 
 databases:
   names:
