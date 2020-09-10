@@ -26,9 +26,8 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     RewriteCond %{REQUEST_URI} !fonts
     RewriteRule (.*) /index.html [L]
 
-    RewriteRule    "^/manage/api/health$"  "/manage/api/actuator/health" [PT]
-
     ProxyPass /Shibboleth.sso !
+    ProxyPass /manage/api/health http://localhost:{{ springapp_tcpport }}/actuator/health retry=0
     ProxyPass /manage/api http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}/
 
@@ -39,12 +38,6 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
       Allow       from all
       Options     -Indexes
     </Directory>
-
-    # Enable new health
-    <Location ~ "/manage/api/actuator/">
-      allow from all
-      satisfy any
-    </Location>
 
     # Enable shibboleth for all other URLs, but the health check and info endpoint
     <Location ~ "/manage/api/(health|info)">
