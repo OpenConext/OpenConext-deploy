@@ -2,19 +2,23 @@ logging:
   config: file://{{ manage_dir }}/logback.xml
   level:
     org.springframework.data.mongodb: INFO
+
 secure_cookie: true
 base_domain: {{ base_domain }}
 
 server:
   # The port to where this Spring Boot application listens to.
   port: {{ springapp_tcpport }}
-  # We serve from the root. Do not change this
-  contextPath:
-  session:
-    timeout: 28800
-    cookie:
-      secure: true
-  server-header: no
+  error:
+    path: "/error"
+  server-header:
+  servlet:
+    # We serve from the root. Do not change this
+    context-path:
+    session:
+      timeout: 28800
+      cookie:
+        secure: true
 
 features: {{ manage.features }}
 
@@ -77,20 +81,16 @@ spring:
   main:
     banner-mode: "off"
 
-management:
-  health:
-    mail:
-      enabled: true
-
 gui:
   disclaimer:
     background-color: {{ manage_disclaimer_background_color }}
     content: {{ manage_disclaimer_content }}
 
 # We disable all endpoints except health for the load-balancer and info for git information.
-endpoints:
-  enabled: false
+management:
   health:
-    enabled: true
+    mail:
+      enabled: true
   info:
-    enabled: true
+    git:
+      mode: full
