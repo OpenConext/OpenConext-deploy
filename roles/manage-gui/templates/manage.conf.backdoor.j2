@@ -27,6 +27,7 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     RewriteRule (.*) /index.html [L]
 
     ProxyPass /manage/api/health http://localhost:{{ springapp_tcpport }}/actuator/health retry=0
+    ProxyPass /manage/api/info http://localhost:{{ springapp_tcpport }}/actuator/info retry=0
     ProxyPass /manage/api http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}/
 
