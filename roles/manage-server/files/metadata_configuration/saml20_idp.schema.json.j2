@@ -201,6 +201,12 @@
               "string",
               "null"
             ]
+          },
+          "explanation:pt": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -351,15 +357,15 @@
         }
       },
       "patternProperties": {
-        "^name:(en|nl)$": {
+        "^name:(en|nl|pt)$": {
           "type": "string",
           "info": "The name of the Identity Provider."
         },
-        "^displayName:(en|nl)$": {
+        "^displayName:(en|nl|pt)$": {
           "type": "string",
           "info": "The name of the Identity Provider as displayed in applications."
         },
-        "^description:(en|nl)$": {
+        "^description:(en|nl|pt)$": {
           "type": "string",
           "info": "The description of the Identity Provider."
         },
@@ -407,19 +413,19 @@
           "sibblingIndependent": true,
           "info": "From the pull down, select the type of contact."
         },
-        "^OrganizationName:(en|nl)$": {
+        "^OrganizationName:(en|nl|pt)$": {
           "type": "string"
         },
-        "^OrganizationDisplayName:(en|nl)$": {
+        "^OrganizationDisplayName:(en|nl|pt)$": {
           "type": "string",
           "info": "The friendly name of the organization. e.g. University of Harderwijk."
         },
-        "^OrganizationURL:(en|nl)$": {
+        "^OrganizationURL:(en|nl|pt)$": {
           "type": "string",
           "format": "url",
           "info": "The URL to the website of the service e.g. http://www.example-institution.nl/en/."
         },
-        "^mdrpi:RegistrationPolicy:(en|nl)$": {
+        "^mdrpi:RegistrationPolicy:(en|nl|pt)$": {
           "type": "string",
           "info": "The URL to the Registration Policy of the Identity Provider."
         },
@@ -447,7 +453,7 @@
           "multiplicity": 10,
           "info": "The URL to the a SAML protocol endpoint at an IdP that a client can contact to obtain a SAML authentication assertion for use at an SP. e.g. https://idp.example.org/idp/profile/SAML2/Redirect/SSO"
         },
-        "^keywords:(en|nl)$": {
+        "^keywords:(en|nl|pt)$": {
           "type": "string",
           "info": "This field defines searchable words in the WAYF dialogue for this Identity Provider."
         },
