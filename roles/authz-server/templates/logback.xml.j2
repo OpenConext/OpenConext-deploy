@@ -11,9 +11,8 @@
     <file>/var/log/authz-server/authz-server.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- daily rollover -->
-      <fileNamePattern>/var/log/authz-server/authz-server.%d{yyyy-MM-dd}.log</fileNamePattern>
-      <!-- keep 30 days' worth of history -->
-      <maxHistory>30</maxHistory>
+      <fileNamePattern>/var/log/authz-server/authz-server.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+      <maxHistory>"{{ logback_max_history }}"</maxHistory>
     </rollingPolicy>
     <encoder>
       <pattern>%date{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>

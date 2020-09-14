@@ -6,8 +6,8 @@
    <file>/var/log/attribute-aggregation/attribute-aggregation.log</file>
    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
      <!-- daily rollover -->
-     <fileNamePattern>/var/log/attribute-aggregation/attribute-aggregation-%d{yyyy-MM-dd}.log</fileNamePattern>
-     <maxHistory>30</maxHistory>
+     <fileNamePattern>/var/log/attribute-aggregation/attribute-aggregation-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+     <maxHistory>"{{ logback_max_history }}"</maxHistory>
    </rollingPolicy>
    <encoder>
      <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
@@ -18,8 +18,8 @@
    <file>/var/log/attribute-aggregation/analytics.log</file>
    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
      <!-- daily rollover -->
-     <fileNamePattern>/var/log/attribute-aggregation/analytics-%d{yyyy-MM-dd}.log</fileNamePattern>
-     <maxHistory>30</maxHistory>
+     <fileNamePattern>/var/log/attribute-aggregation/analytics-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+     <maxHistory>"{{ logback_max_history }}"</maxHistory>
    </rollingPolicy>
    <encoder>
      <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>

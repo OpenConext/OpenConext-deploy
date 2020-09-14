@@ -5,8 +5,8 @@
 	  <file>/var/log/{{ springapp_service_name }}/monitoring-tests.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
        <!-- daily rollover -->
-       <fileNamePattern>/var/log/{{ springapp_service_name }}/monitoring-tests-%d{yyyy-MM-dd}.log</fileNamePattern>
-       <maxHistory>30</maxHistory>
+       <fileNamePattern>/var/log/{{ springapp_service_name }}/monitoring-tests-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+       <maxHistory>"{{ logback_max_history }}"</maxHistory>
      </rollingPolicy>
      <encoder>
        <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
