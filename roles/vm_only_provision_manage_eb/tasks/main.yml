@@ -21,7 +21,7 @@
 
 - name: wait untill manage is up after restart
   uri:
-    url: "http://127.0.0.1:{{ springapp_tcpport }}/health"
+    url: "http://127.0.0.1:{{ springapp_tcpport }}/actuator/health"
     headers:
       Accept: "application/json"
   register: health_result
