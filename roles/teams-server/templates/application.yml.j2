@@ -55,9 +55,9 @@ teams:
 
 voot:
   serviceUrl: https://voot.{{ base_domain }}
-  accessTokenUri: https://authz.{{ base_domain }}/oauth/token
-  clientId: surf-teams
-  clientSecret: {{ teams_authz_client_secret }}
+  accessTokenUri: "{{ teams_oauth2_token_url }}"
+  clientId: "{{ teams_authz_client_id }}"
+  clientSecret: "{{ teams_authz_client_secret }}"
   scopes: groups
 
 spring:

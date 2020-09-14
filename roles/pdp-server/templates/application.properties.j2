@@ -62,11 +62,11 @@ policy.violation.retention.period.days=30
 
 # Voot client configuration for the teams PIP
 voot.serviceUrl=https://voot.{{ base_domain }}
-voot.accessTokenUri=https://authz.{{ base_domain }}/oauth/token
-voot.userAuthorizationUri=https://authz.{{ base_domain }}/oauth/authorize
+voot.accessTokenUri={{ pdp_oauth2_token_url }}
+voot.userAuthorizationUri={{ pdp_oauth2_authorize_url }}
 
-# The OAuth2 client defined in authz-admin
-voot.clientId=pdp_client
+# The OAuth2 client details
+voot.clientId={{ pdp_oauth2_clientid }}
 voot.clientSecret={{ pdp_client_secret }}
 voot.scopes = groups
 
