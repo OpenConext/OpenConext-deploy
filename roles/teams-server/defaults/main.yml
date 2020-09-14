@@ -14,4 +14,5 @@ teams_main_link: https://www.openconext.org
 teams_organization: "{{ instance_name}}"
 teams_api_lifecycle_username: teams_api_lifecycle_user
 teams_cron_session_cleanup_expression: 0 * * * * *
-
+teams_oauth2_token_url: "https://authz.{{ base_domain }}/oauth/token"
+teams_authz_client_id: "surf-teams"
