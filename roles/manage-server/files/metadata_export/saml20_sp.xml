@@ -17,6 +17,11 @@
         {{metaDataFields.mdrpi:RegistrationPolicy:nl}}
       </mdrpi:RegistrationPolicy>
       {{/metaDataFields.mdrpi:RegistrationPolicy:nl}}
+      {{#metaDataFields.mdrpi:RegistrationPolicy:pt}}
+      <mdrpi:RegistrationPolicy xml:lang="pt">
+        {{metaDataFields.mdrpi:RegistrationPolicy:pt}}
+      </mdrpi:RegistrationPolicy>
+      {{/metaDataFields.mdrpi:RegistrationPolicy:pt}}
     </mdrpi:RegistrationInfo>
   </md:Extensions>
   {{/metaDataFields.mdrpi:RegistrationInfo}}
@@ -31,12 +36,18 @@
         {{#metaDataFields.name:nl}}
         <mdui:DisplayName xml:lang="nl">{{metaDataFields.name:nl}}</mdui:DisplayName>
         {{/metaDataFields.name:nl}}
+        {{#metaDataFields.name:pt}}
+        <mdui:DisplayName xml:lang="pt">{{metaDataFields.name:pt}}</mdui:DisplayName>
+        {{/metaDataFields.name:pt}}
         {{#metaDataFields.description:en}}
         <mdui:Description xml:lang="en">{{metaDataFields.description:en}}</mdui:Description>
         {{/metaDataFields.description:en}}
         {{#metaDataFields.description:nl}}
         <mdui:Description xml:lang="nl">{{metaDataFields.description:nl}}</mdui:Description>
         {{/metaDataFields.description:nl}}
+        {{#metaDataFields.description:pt}}
+        <mdui:Description xml:lang="pt">{{metaDataFields.description:pt}}</mdui:Description>
+        {{/metaDataFields.description:pt}}
         {{#Logo}}
         <mdui:Logo width="{{metaDataFields.logo:0:width}}" height="{{metaDataFields.logo:0:height}}" xml:lang="en">{{metaDataFields.logo:0:url}}</mdui:Logo>
         {{/Logo}}
@@ -188,12 +199,18 @@
       {{#metaDataFields.name:nl}}
       <md:ServiceName xml:lang="nl">{{metaDataFields.name:nl}}</md:ServiceName>
       {{/metaDataFields.name:nl}}
+      {{#metaDataFields.name:pt}}
+      <md:ServiceName xml:lang="pt">{{metaDataFields.name:pt}}</md:ServiceName>
+      {{/metaDataFields.name:pt}}
       {{#metaDataFields.description:en}}
       <md:ServiceDescription xml:lang="en">{{metaDataFields.description:en}}</md:ServiceDescription>
       {{/metaDataFields.description:en}}
       {{#metaDataFields.description:nl}}
       <md:ServiceDescription xml:lang="nl">{{metaDataFields.description:nl}}</md:ServiceDescription>
       {{/metaDataFields.description:nl}}
+      {{#metaDataFields.description:pt}}
+      <md:ServiceDescription xml:lang="pt">{{metaDataFields.description:pt}}</md:ServiceDescription>
+      {{/metaDataFields.description:pt}}
       {{#requestedAttributes}}
       <md:RequestedAttribute Name="{{toString}}"/>
       {{/requestedAttributes}}
@@ -208,18 +225,27 @@
     {{#metaDataFields.OrganizationName:nl}}
     <md:OrganizationName xml:lang="nl">{{metaDataFields.OrganizationName:nl}}</md:OrganizationName>
     {{/metaDataFields.OrganizationName:nl}}
+    {{#metaDataFields.OrganizationName:pt}}
+    <md:OrganizationName xml:lang="pt">{{metaDataFields.OrganizationName:pt}}</md:OrganizationName>
+    {{/metaDataFields.OrganizationName:pt}}
     {{#metaDataFields.OrganizationDisplayName:en}}
     <md:OrganizationDisplayName xml:lang="en">{{metaDataFields.OrganizationDisplayName:en}}</md:OrganizationDisplayName>
     {{/metaDataFields.OrganizationDisplayName:en}}
     {{#metaDataFields.OrganizationDisplayName:nl}}
     <md:OrganizationDisplayName xml:lang="nl">{{metaDataFields.OrganizationDisplayName:nl}}</md:OrganizationDisplayName>
     {{/metaDataFields.OrganizationDisplayName:nl}}
+    {{#metaDataFields.OrganizationDisplayName:pt}}
+    <md:OrganizationDisplayName xml:lang="pt">{{metaDataFields.OrganizationDisplayName:pt}}</md:OrganizationDisplayName>
+    {{/metaDataFields.OrganizationDisplayName:pt}}
     {{#metaDataFields.OrganizationURL:en}}
     <md:OrganizationURL xml:lang="en">{{metaDataFields.OrganizationURL:en}}</md:OrganizationURL>
     {{/metaDataFields.OrganizationURL:en}}
     {{#metaDataFields.OrganizationURL:nl}}
     <md:OrganizationURL xml:lang="nl">{{metaDataFields.OrganizationURL:nl}}</md:OrganizationURL>
     {{/metaDataFields.OrganizationURL:nl}}
+    {{#metaDataFields.OrganizationURL:pt}}
+    <md:OrganizationURL xml:lang="pt">{{metaDataFields.OrganizationURL:pt}}</md:OrganizationURL>
+    {{/metaDataFields.OrganizationURL:pt}}
   </md:Organization>
   {{/metaDataFields.OrganizationInfo}}
   {{#metaDataFields.contacts:0:contactType}}
