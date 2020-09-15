@@ -9,8 +9,3 @@ springapp_jar: "{{ pdp_jar }}"
 springapp_tcpport: 9196
 springapp_heapsize: "512m"
 springapp_random_source: "file:///dev/urandom"
-
-js_error_reporting_access_token: "{{ pdp_js_access_token }}"
-js_error_enabled: "true"
-js_error_reporting_client_id: pdp
-js_error_reporting_url: /pdp/api/internal/jsError
