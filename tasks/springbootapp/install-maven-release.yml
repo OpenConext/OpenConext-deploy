@@ -6,12 +6,10 @@
     version: "{{ springapp_version }}"
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in springapp_version else maven_repo }}"
     dest: "{{ springapp_dir }}/{{ springapp_artifact_id }}-{{ springapp_version }}.{{ springapp_artifact_type }}"
-  tags: deploy
   register: maven_result
 
 - name: set ownership of application artifact
   file: path={{ maven_result.dest }} owner={{ springapp_user }} group={{ springapp_user }} mode=0500
-  tags: deploy
   when: maven_result.changed
 
 - name: stop app

@@ -5,8 +5,6 @@
     dest: "/etc/httpd/conf.d/oidc-playground.conf"
   notify:
     - "restart httpd"
-  tags:
-    - deploy
 
 - name: Include install-gui.yml
   include: ../../../tasks/springbootapp/install-gui.yml

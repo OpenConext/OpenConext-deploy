@@ -62,7 +62,6 @@
     group: manage
     mode: 0640
   with_fileglob: "metadata_configuration/*.j2"
-  tags: deploy
   notify:
     - "restart manage"
 
@@ -81,8 +80,6 @@
     owner: manage
     group: manage
     mode: 0640
-  tags:
-    - deploy
   notify:
     - "restart manage"
 
@@ -101,8 +98,6 @@
     owner: manage
     group: manage
     mode: 0640
-  tags:
-    - deploy
   notify:
     - "restart manage"
 
