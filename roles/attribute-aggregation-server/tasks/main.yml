@@ -1,14 +1,4 @@
 ---
-- name: clean up old aa directory
-  file:
-    path: "/opt/aa"
-    state: absent
-
-- name: clean up old aa log directory
-  file:
-    path: "/var/log/aa"
-    state: absent
-
 - name: Include preinstallation.yml    
   include: ../../../tasks/springbootapp/preinstallation.yml
 

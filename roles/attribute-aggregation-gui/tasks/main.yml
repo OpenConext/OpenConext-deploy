@@ -1,14 +1,4 @@
 ---
-- name: clean up old aa log directory
-  file:
-    path: "/var/www/aa"
-    state: absent
-
-- name: clean up old aa apache conf
-  file:
-    path: "/etc/httpd/conf.d/aa.conf"
-    state: absent
-
 - name: copy virtual host config
   template:
     src: "attribute_aggregation.conf.j2"
