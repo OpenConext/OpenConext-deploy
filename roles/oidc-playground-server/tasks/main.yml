@@ -4,13 +4,6 @@
 
 - name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
-  when:
-    - "oidc_playground_local_jar == ''"
-
-- name: Include install-local.yml
-  include: ../../../tasks/springbootapp/install-local.yml
-  when:
-    - "oidc_playground_local_jar != ''"
 
 - name: copy logging config
   template:

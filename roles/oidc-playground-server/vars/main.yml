@@ -7,6 +7,5 @@ springapp_user: oidc-playground
 springapp_service_name: oidc-playground
 springapp_jar: "{{ oidc_playground_jar }}"
 springapp_tcpport: 9399
-springapp_local_jar: "{{ oidc_playground_local_jar }}"
 springapp_heapsize: "512m"
 springapp_random_source: "file:///dev/urandom"

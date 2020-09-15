@@ -7,6 +7,5 @@ springapp_user: manage
 springapp_service_name: manage
 springapp_jar: "{{ manage_jar }}"
 springapp_tcpport: 9393
-springapp_local_jar: "{{ manage_local_jar }}"
 springapp_heapsize: "512m"
 springapp_random_source: "file:///dev/urandom"

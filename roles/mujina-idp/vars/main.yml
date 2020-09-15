@@ -7,6 +7,5 @@ springapp_user: mujina-idp
 springapp_service_name: mujina-idp
 springapp_jar: "{{ mujina_idp_jar }}"
 springapp_tcpport: 9390
-springapp_local_jar: "{{ mujina_idp_local_jar }}"
 springapp_heapsize: "128m"
 springapp_random_source: "file:///dev/urandom"

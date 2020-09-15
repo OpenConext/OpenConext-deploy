@@ -7,6 +7,5 @@ springapp_user: authz-server
 springapp_service_name: authz-server
 springapp_jar: "{{ authz_server_jar }}"
 springapp_tcpport: 9190
-springapp_local_jar: "{{ authz_server_local_jar }}"
 springapp_heapsize: "64m"
 springapp_random_source: "file:///dev/urandom"

@@ -4,13 +4,6 @@
 
 - name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
-  when:
-    - "dashboard_local_jar == ''"
-
-- name: Include install-local.yml
-  include: ../../../tasks/springbootapp/install-local.yml
-  when:
-    - "dashboard_local_jar != ''"
 
 - name: copy logging config
   template:
@@ -34,4 +27,3 @@
 
 - name: Include postinstallation.yml
   include: ../../../tasks/springbootapp/postinstallation.yml
-

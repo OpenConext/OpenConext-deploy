@@ -13,13 +13,6 @@
 - include: ../../../tasks/springbootapp/preinstallation.yml
 
 - include: ../../../tasks/springbootapp/install-maven-release.yml
-  when:
-    - "mujina_idp_local_jar == ''"
-
-- name: Include springbootapp/install-local.yml
-  include: "../../../tasks/springbootapp/install-local.yml"
-  when:
-    - "mujina_idp_local_jar != ''"
 
 - name: Copy logging config
   template: 

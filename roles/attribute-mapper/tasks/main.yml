@@ -19,12 +19,6 @@
   include: ../../../tasks/springbootapp/preinstallation.yml
 
 - include: ../../../tasks/springbootapp/install-maven-release.yml
-  when: 
-    - "attribute_mapper_local_jar != ''"
-
-- name: Include install-local.yml
-  include: ../../../tasks/springbootapp/install-local.yml
-  when: "attribute_mapper_local_jar != ''"
 
 - name: Copy logging config
   template:

@@ -1,8 +1,6 @@
 ---
 - name: Perform preinstallation tasks
   include: ../../../tasks/springbootapp/preinstallation.yml
-  when:
-     - "manage_local_jar == ''"
   
 - name: Import the mongo CA file
   copy:
@@ -17,13 +15,6 @@
 
 - name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
-  when:
-    - "manage_local_jar == ''"
-
-- name: Include install-local.yml
-  include: ../../../tasks/springbootapp/install-local.yml
-  when:
-    - "manage_local_jar != ''"
 
 - name: copy logging config
   template:
@@ -117,5 +108,3 @@
 
 - name: Include postinstallation.yml
   include: ../../../tasks/springbootapp/postinstallation.yml
-  when:
-    - "manage_local_jar == ''"

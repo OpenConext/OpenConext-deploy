@@ -7,6 +7,5 @@ springapp_user: monitoring-tests
 springapp_service_name: monitoring-tests
 springapp_jar: "{{ monitoring_tests_jar }}"
 springapp_tcpport: 9392
-springapp_local_jar: "{{ monitoring_tests_local_jar }}"
 springapp_heapsize: "128m"
 springapp_random_source: "file:///dev/urandom"

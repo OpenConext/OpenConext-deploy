@@ -21,12 +21,6 @@
 
 - name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
-  when:
-    - "authz_server_local_jar == ''"
-
-- name: Include install-local.yml
-  include: ../../../tasks/springbootapp/install-local.yml
-  when: "authz_server_local_jar != ''"
 
 - name: Copy logging config
   template:

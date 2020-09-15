@@ -2,7 +2,6 @@
 pdp_dir: /opt/pdp/
 pdp_group_url: org/openconext
 pdp_server_version: ''
-pdp_local_jar: ''
 pdp_jar: pdp.jar
 pdp_email_from: '{{ noreply_email }}'
 pdp_cronjobmaster: true
