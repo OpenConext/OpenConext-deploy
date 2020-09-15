@@ -1,4 +1,5 @@
 ---
-attribute_aggregation_current: /var/www/attribute-aggregation/current
-#TODO - make this into a variable, see also attribute-aggregation-server/var/main.yml
 springapp_tcpport: 9198
+springapp_artifact_id: attribute-aggregation-gui
+springapp_version: "{{ attribute_aggregation_gui_version }}"
+springapp_dir: "/var/www/attribute-aggregation/"

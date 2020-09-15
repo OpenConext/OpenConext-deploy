@@ -1,3 +1,5 @@
 ---
-account_current: /var/www/account/current
 springapp_tcpport: 9189
+springapp_artifact_id: account-gui
+springapp_version: "{{ account_gui_version }}"
+springapp_dir: "/var/www/account/"

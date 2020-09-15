@@ -1,4 +1,5 @@
 ---
-dashboard_current: /var/www/dashboard/current
-#TODO - make this into a variable, see also manage-server/var/main.yml
 springapp_tcpport: 9394
+springapp_artifact_id: dashboard_gui
+springapp_version: "{{ dashboard_gui_version }}"
+springapp_dir: "/var/www/dashboard/"

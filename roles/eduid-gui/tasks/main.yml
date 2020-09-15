@@ -1,39 +1,9 @@
 ---
-- name: create apache folder
-  file: path=/var/www/eduid owner=root group=root mode=2755 state=directory
-
 - name: copy virtual host config
   template: src=eduid.conf.j2 dest=/etc/httpd/conf.d/eduid.conf
   notify: restart httpd
   tags: deploy
 
-- name: download html archive
-  maven_artifact:
-    group_id: org.openconext
-    artifact_id: eduid-gui
-    extension: zip
-    version: "{{ eduid_gui_version }}"
-    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in eduid_gui_version else maven_repo }}"
-    dest: /var/www/eduid
-  register: maven_result
-  tags: deploy
+- name: Include install-gui.yml
+  include: ../../../tasks/springbootapp/install-gui.yml
 
-- name: extract html archive
-  unarchive:
-    src: "{{ maven_result.dest }}"
-    dest: /var/www/eduid
-    copy: no
-    owner: root
-    group: apache
-  register: unarchive_result
-  tags: deploy
-  when: maven_result.changed
-
-- name: create symlink to downloaded version
-  file:
-    src: "{{ unarchive_result.dest }}/eduid-gui-{{ eduid_gui_version }}"
-    dest: "{{ eduid_current }}"
-    state: link
-    force: yes
-  tags: deploy
-  when: unarchive_result.changed

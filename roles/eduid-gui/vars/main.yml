@@ -1,3 +1,5 @@
 ---
-eduid_current: /var/www/eduid/current
 springapp_tcpport: 9189
+springapp_artifact_id: eduid-gui
+springapp_version: "{{ eduid_gui_version }}"
+springapp_dir: "/var/www/eduid/"

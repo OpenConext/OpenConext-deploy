@@ -1,53 +1,10 @@
 ---
-- name: create apache folder
-  file:
-    path: "/var/www/teams"
-    owner: root
-    group: root
-    mode: 02755
-    state: directory
-
 - name: copy virtual host config
   template:
     src: "teams.conf.j2"
     dest: "/etc/httpd/conf.d/teams.conf"
   notify:
     - "restart httpd"
-  tags:
-    - deploy
 
-- name: download html archive
-  maven_artifact:
-    group_id: org.openconext
-    artifact_id: teams-gui
-    extension: zip
-    version: "{{ teams_gui_version }}"
-    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in teams_gui_version else maven_repo }}"
-    dest: "/var/www/teams"
-  register: maven_result
-  tags:
-    - deploy
-
-- name: extract html archive
-  unarchive:
-    src: "{{ maven_result.dest }}"
-    dest: "/var/www/teams"
-    copy: no
-    owner: root
-    group: apache
-  register: unarchive_result
-  tags:
-    - deploy
-  when:
-    - maven_result.changed
-
-- name: create symlink to downloaded version
-  file:
-    src: "{{ unarchive_result.dest }}/teams-gui-{{ teams_gui_version }}"
-    dest: "{{ teams_current }}"
-    state: link
-    force: yes
-  tags:
-    - deploy
-  when:
-    - unarchive_result.changed
+- name: Include install-gui.yml
+  include: ../../../tasks/springbootapp/install-gui.yml

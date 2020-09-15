@@ -2,7 +2,6 @@ springapp_artifact_id: oidc-playground-server
 springapp_artifact_type: jar
 springapp_artifact_group_dir: org.openconext
 springapp_version: "{{ oidc_playground_server_version }}"
-springapp_snapshot_timestamp: "{{ oidc_playground_server_snapshot_timestamp }}"
 springapp_dir: "{{ oidc_playground_dir }}"
 springapp_user: oidc-playground
 springapp_service_name: oidc-playground

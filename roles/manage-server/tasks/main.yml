@@ -1,4 +1,9 @@
 ---
+- name: Perform preinstallation tasks
+  include: ../../../tasks/springbootapp/preinstallation.yml
+  when:
+     - "manage_local_jar == ''"
+  
 - name: Import the mongo CA file
   copy:
     src: "{{ inventory_dir }}/files/certs/mongo/{{ mongo_tls_ca }}"
@@ -9,33 +14,6 @@
 - name: Update the ca trust store
   command: /bin/update-ca-trust
   changed_when: False
-
-- name: create user
-  user:
-    name: manage
-    system: yes
-    home: "{{ manage_dir }}"
-    shell: /sbin/nologin
-
-- name: Copy systemd service file
-  template:
-    src: "../../templates/spring-boot.service.j2"
-    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
-  notify:
-    - "restart manage"
-
-- name: enable service
-  service:
-    name: manage
-    enabled: yes
-
-- name: Create logging directory
-  file:
-    path: "/var/log/{{ springapp_service_name }}"
-    state: directory
-    owner: manage
-    group: manage
-    mode: 0755
 
 - name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
@@ -137,28 +115,7 @@
   notify:
     - "restart manage"
 
-# no idea why this is necessary, as the init script returns an ok status also
-# if manage is still initializing.  Waiting for the port to open works well
-# though, and seems like to correct way to handle this.
-- name: start the manage service
-  service:
-    name: manage
-    state: started
-    enabled: yes
-  ignore_errors: true
-
-- name: wait for manage to start
-  wait_for:
-    connect_timeout: 30
-    port: "{{ springapp_tcpport }}"
-    state: started
-
-- name: ensure the service is started
-  service:
-    name: manage
-    enabled: yes
-    state: started
-
-- name: cleanup old jars
-  shell: find . ! -name $(basename $(readlink manage-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ manage_dir }}
-  when: maven_result.changed
+- name: Include postinstallation.yml
+  include: ../../../tasks/springbootapp/postinstallation.yml
+  when:
+    - "manage_local_jar == ''"

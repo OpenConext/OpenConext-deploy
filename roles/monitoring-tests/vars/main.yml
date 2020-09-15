@@ -2,7 +2,6 @@ springapp_artifact_id: monitoring-tests
 springapp_artifact_type: jar
 springapp_artifact_group_dir: org/openconext
 springapp_version: "{{ monitoring_tests_version }}"
-springapp_snapshot_timestamp: "{{ monitoring_tests_snapshot_timestamp }}"
 springapp_dir: "{{ monitoring_tests_dir }}"
 springapp_user: monitoring-tests
 springapp_service_name: monitoring-tests

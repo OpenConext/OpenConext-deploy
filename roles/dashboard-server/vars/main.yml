@@ -2,7 +2,6 @@ springapp_artifact_id: dashboard-server
 springapp_artifact_type: jar
 springapp_artifact_group_dir: org.openconext
 springapp_version: "{{ dashboard_server_version }}"
-springapp_snapshot_timestamp: "{{ dashboard_server_snapshot_timestamp }}"
 springapp_dir: "{{ dashboard_dir }}"
 springapp_user: dashboard
 springapp_service_name: dashboard

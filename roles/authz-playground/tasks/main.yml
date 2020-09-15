@@ -1,18 +1,4 @@
 ---
-- name: Create user
-  user:
-    name: authz-playground
-    system: yes
-    home: "{{ authz_playground_dir }}"
-    shell: /sbin/nologin
-
-- name: Copy systemd service file
-  template:
-    src: "templates/spring-boot.service.j2"
-    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
-  notify:
-    - "restart authz-playground"
-
 - name: Check presence of legacy init script
   stat:
     path: "/etc/init.d/{{ springapp_service_name }}"
@@ -30,28 +16,13 @@
     path: "/etc/init.d/{{ springapp_service_name }}"
     state: absent
 
-- name: enable authz-playground service
-  service:
-    name: authz-playground
-    enabled: yes
+- name: Include preinstallation.yml
+  include: ../../../tasks/springbootapp/preinstallation.yml
 
-- name: Create logging directory
-  file:
-    path: "/var/log/{{ springapp_service_name }}"
-    state: directory
-    owner: authz-playground
-    group: authz-playground
-    mode: 0755
-
-- name: Include install-release.yml
-  include: ../../../tasks/springbootapp/install-release.yml
+- name: Include install-maven-release.yml
+  include: ../../../tasks/springbootapp/install-maven-release.yml
   when:
-    - "authz_playground_snapshot_timestamp == '' and authz_playground_local_jar == ''"
-
-- name: Include install-snapshot.yml
-  include: ../../../tasks/springbootapp/install-snapshot.yml
-  when:
-    - "authz_playground_snapshot_timestamp != '' and authz_playground_local_jar == ''"
+    - "authz_playground_local_jar == ''"
 
 - name: Include install-local.yml
   include: ../../../tasks/springbootapp/install-local.yml
@@ -83,9 +54,5 @@
   notify:
     - "reload httpd"
 
-- name: ensure the service is started
-  service:
-    name: authz-playground
-    enabled: yes
-    state: started
-  ignore_errors: true
+- name: Include postinstallation.yml
+  include: ../../../tasks/springbootapp/postinstallation.yml

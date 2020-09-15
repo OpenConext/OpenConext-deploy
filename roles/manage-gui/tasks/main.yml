@@ -1,12 +1,4 @@
 ---
-- name: create apache folder
-  file:
-    path: "/var/www/manage"
-    owner: root
-    group: root
-    mode: 02755
-    state: directory
-
 - name: copy virtual host config
   template:
     src: "manage.conf.j2"
@@ -25,38 +17,5 @@
   tags:
     - deploy
 
-- name: download html archive
-  maven_artifact:
-    group_id: org.openconext
-    artifact_id: manage-gui
-    extension: zip
-    version: "{{ manage_gui_version }}"
-    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in manage_gui_version else maven_repo }}"
-    dest: /var/www/manage
-  register: maven_result
-  tags:
-    - deploy
-
-- name: extract html archive
-  unarchive:
-    src: "{{ maven_result.dest }}"
-    dest: "/var/www/manage"
-    copy: no
-    owner: root
-    group: apache
-  register: unarchive_result
-  tags:
-    - deploy
-  when:
-    - maven_result.changed
-
-- name: create symlink to downloaded version
-  file:
-    src: "{{ unarchive_result.dest }}/manage-gui-{{ manage_gui_version }}"
-    dest: "{{ manage_current }}"
-    state: link
-    force: yes
-  tags:
-    - deploy
-  when:
-    - unarchive_result.changed
+- name: Include install-gui.yml
+  include: ../../../tasks/springbootapp/install-gui.yml

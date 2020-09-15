@@ -1,18 +1,4 @@
 ---
-- name: Create user
-  user:
-    name: authz-server
-    system: yes
-    home: "{{ authz_server_dir }}"
-    shell: /sbin/nologin
-
-- name: Copy systemd service file
-  template:
-    src: "templates/spring-boot.service.j2"
-    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
-  notify:
-    - "restart authz-server"
-
 - name: Check presence of legacy init script
   stat:
     path: "/etc/init.d/{{ springapp_service_name }}"
@@ -30,18 +16,8 @@
     path: "/etc/init.d/{{ springapp_service_name }}"
     state: absent
 
-- name: enable authz-server service
-  service:
-    name: authz-server
-    enabled: yes
-
-- name: Create logging directory
-  file:
-    path: "/var/log/{{ springapp_service_name }}"
-    state: directory
-    owner: authz-server
-    group: authz-server
-    mode: 0755
+- name: Include preinstallation.yml
+  include: ../../../tasks/springbootapp/preinstallation.yml
 
 - name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
@@ -79,8 +55,6 @@
   notify:
     - "reload httpd"
 
-- name: ensure the service is started
-  service:
-    name: authz-server
-    enabled: yes
-    state: started
+- name: Include postinstallation.yml
+  include: ../../../tasks/springbootapp/postinstallation.yml
+

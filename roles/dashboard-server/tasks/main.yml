@@ -1,30 +1,6 @@
 ---
-- name: create user dashboard
-  user:
-    name: dashboard
-    system: yes
-    home: "{{ dashboard_dir }}"
-    shell: /sbin/nologin
-
-- name: Copy systemd service file
-  template:
-    src: "../../templates/spring-boot.service.j2"
-    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
-  notify:
-    - "restart dashboard"
-
-- name: enable service
-  service:
-    name: dashboard
-    enabled: yes
-
-- name: Create logging directory
-  file:
-    path: /var/log/{{ springapp_service_name }} 
-    state: directory
-    owner: dashboard
-    group: dashboard
-    mode: 0755
+- name: Include preinstallation.yml
+  include: ../../../tasks/springbootapp/preinstallation.yml
 
 - name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
@@ -56,28 +32,6 @@
   notify:
     - "restart dashboard"
 
-# no idea why this is necessary, as the init script returns an ok status also
-# if dashboard is still initializing.  Waiting for the port to open works well
-# though, and seems like to correct way to handle this.
-- name: start the dashboard service
-  service:
-    name: dashboard
-    state: started
-    enabled: yes
-  ignore_errors: true
+- name: Include postinstallation.yml
+  include: ../../../tasks/springbootapp/postinstallation.yml
 
-- name: wait for dashboard to start
-  wait_for:
-    connect_timeout: 30
-    port: "{{ springapp_tcpport }}"
-    state: started
-
-- name: ensure the service is started
-  service:
-    name: dashboard
-    enabled: yes
-    state: started
-
-- name: cleanup old jars
-  shell: find . ! -name $(basename $(readlink dashboard-current.jar)) -name '*.jar' -type f -exec rm {} \; chdir={{ dashboard_dir }}
-  when: maven_result.changed

@@ -1,18 +1,4 @@
 ---
-- name: Create user
-  user:
-    name: "{{ springapp_user }}"
-    system: yes
-    home: "{{ mujina_sp_dir }}"
-    shell: /sbin/nologin
-
-- name: Copy systemd service file
-  template:
-    src: "../../templates/spring-boot.service.j2"
-    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
-  notify:
-    - "restart mujina-sp"
-
 - name: Check presence of legacy init script
   stat:
     path: "/etc/init.d/{{ springapp_service_name }}"
@@ -30,28 +16,18 @@
     path: "/etc/init.d/{{ springapp_service_name }}"
     state: absent
 
-- name: enable mujina-sp service
-  service:
-    name: "{{ springapp_service_name}}"
-    enabled: yes
+- name: Include preinstallation.yml
+  include: ../../../tasks/springbootapp/preinstallation.yml
 
-- name: Create logging directory
-  file:
-    path: "/var/log/{{ springapp_service_name }}"
-    state: directory
-    owner: "{{ springapp_user }}"
-    group: "{{ springapp_user }}"
-    mode: 0755
+- include: ../../../tasks/springbootapp/install-maven-release.yml
+ dd when:
+    - "mujina_sp_local_jar == ''"
 
-- name: Include install-release.yml
-  include: ../../../tasks/springbootapp/install-release.yml
+- name: Include springbootapp/install-local.yml
+  include: "../../../tasks/springbootapp/install-local.yml"
   when:
-    - "mujina_sp_snapshot_timestamp == '' and mujina_sp_local_jar == ''"
+    - "mujina_sp_local_jar != ''"
 
-- name: Include install-snapshot.yml
-  include: ../../../tasks/springbootapp/install-snapshot.yml
-  when:
-    - "mujina_sp_snapshot_timestamp != '' and mujina_sp_local_jar == ''"
 
 - name: Include install-local.yml
   include: ../../../tasks/springbootapp/install-local.yml
@@ -59,14 +35,13 @@
     - "mujina_sp_local_jar != ''"
 
 - name: Copy logging config
-  template:
-    src: "logback.xml.j2"
+  template: 
+    src: logback.xml.j2 
     dest: "{{ mujina_sp_dir }}/logback.xml"
-    owner: "{{ springapp_user }}"
-    group: "{{ springapp_user }}"
+    owner: "{{ springapp_user }}" 
+    group: "{{ springapp_user }}" 
     mode: 0740
-  notify:
-    - "restart mujina-sp"
+  notify: restart mujina-sp
 
 - name: Copy application config
   template:
@@ -78,11 +53,6 @@
   notify:
     - "restart mujina-sp"
 
-- name: remove old apache config
-  file:
-    path: "/etc/httpd/conf.d/mujina-sp.conf"
-    state: absent
-
 - name: copy apache config
   template:
     src: "mujina_sp.conf.j2"
@@ -90,8 +60,5 @@
   notify:
     - "reload httpd"
 
-- name: ensure the service is started
-  service:
-    name: "{{ springapp_service_name }}"
-    enabled: yes
-    state: started
+- name: Include postinstallation.yml
+  include: ../../../tasks/springbootapp/postinstallation.yml

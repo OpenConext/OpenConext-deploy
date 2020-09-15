@@ -1,4 +1,5 @@
 ---
-teams_current: /var/www/teams/current
-#TODO - make this into a variable, see also teams-server/var/main.yml
 springapp_tcpport: 9197
+springapp_artifact_id: teams-gui
+springapp_version: "{{ teams_gui_version }}"
+springapp_dir: "/var/www/teams/"

@@ -1,17 +1,6 @@
 ---
-- name: Create user
-  user:
-    name: authz-admin
-    system: yes
-    home: "{{ authz_admin_dir }}"
-    shell: /sbin/nologin
-
-- name: Copy systemd service file
-  template:
-    src: "templates/spring-boot.service.j2"
-    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
-  notify:
-    - "restart authz-admin"
+- name: Include preinstallation.yml
+  include: ../../../tasks/springbootapp/preinstallation.yml
 
 - name: Check presence of legacy init script
   stat:
@@ -30,28 +19,10 @@
     path: "/etc/init.d/{{ springapp_service_name }}"
     state: absent
 
-- name: enable authz-admin service
-  service:
-    name: authz-admin
-    enabled: yes
-
-- name: Create logging directory
-  file:
-    path: "/var/log/{{ springapp_service_name }}"
-    state: directory
-    owner: authz-admin
-    group: authz-admin
-    mode: 0755
-
-- name: Include install-release.yml
-  include: ../../../tasks/springbootapp/install-release.yml
+- name: Include install-maven-release.yml  
+  include: ../../../tasks/springbootapp/install-maven-release.yml
   when:
     - "authz_admin_snapshot_timestamp == '' and authz_admin_local_jar == ''"
-
-- name: Include install-snapshot.yml
-  include: ../../../tasks/springbootapp/install-snapshot.yml
-  when:
-    - "authz_admin_snapshot_timestamp != '' and authz_admin_local_jar == ''"
 
 - name: Include install-local.yml
   include: ../../../tasks/springbootapp/install-local.yml
@@ -95,8 +66,5 @@
   notify:
     - "reload httpd"
 
-- name: ensure the service is started
-  service:
-    name: authz-admin
-    enabled: yes
-    state: started
+- name: Include postinstallation.yml
+  include: ../../../tasks/springbootapp/postinstallation.yml

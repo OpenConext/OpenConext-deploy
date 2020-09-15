@@ -1,18 +1,4 @@
 ---
-- name: Create user
-  user:
-    name: eduproxy
-    system: yes
-    home: "{{ eduproxy_dir }}"
-    shell: /sbin/nologin
-
-- name: Copy systemd service file
-  template:
-    src: "templates/spring-boot.service.j2"
-    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
-  notify:
-    - "restart eduproxy"
-
 - name: Check presence of legacy init script
   stat:
     path: "/etc/init.d/{{ springapp_service_name }}"
@@ -30,28 +16,10 @@
     path: "/etc/init.d/{{ springapp_service_name }}"
     state: absent
 
-- name: enable eduproxy service
-  service:
-    name: eduproxy
-    enabled: yes
-
-- name: Create logging directory
-  file:
-    path: "/var/log/{{ springapp_service_name }}"
-    state: directory
-    owner: eduproxy
-    group: eduproxy
-    mode: 0755
-
-- name: Include install-release.yml
-  include: ../../../tasks/springbootapp/install-release.yml
+- name: Include install-maven-release.yml
+  include: ../../../tasks/springbootapp/install-maven-release.yml
   when:
-    - "eduproxy_snapshot_timestamp == '' and eduproxy_local_jar == ''"
-
-- name: Include install-snapshot.yml
-  include: ../../../tasks/springbootapp/install-snapshot.yml
-  when:
-    - "eduproxy_snapshot_timestamp != '' and eduproxy_local_jar == ''"
+    - "eduproxy_local_jar == ''"
 
 - name: Include install-local.yml
   include: ../../../tasks/springbootapp/install-local.yml
@@ -85,11 +53,6 @@
   notify:
     - "reload httpd"
 
-- meta: flush_handlers
+- name: Include postinstallation.yml
+  include: ../../../tasks/springbootapp/postinstallation.yml
 
-- name: ensure the service is started
-  service:
-    name: eduproxy
-    enabled: yes
-    state: started
-  ignore_errors: true
