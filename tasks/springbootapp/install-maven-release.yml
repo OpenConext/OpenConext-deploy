@@ -16,6 +16,12 @@
   service: name={{ springapp_service_name }} state=stopped
   when: maven_result.changed
 
+- name: wait for the app to be fully stopped
+  wait_for:
+    port: "{{ springapp_tcpport }}"
+    state: stopped
+    delay: 5
+
 - name: change symlink to current version
   file:
     src: "{{ maven_result.dest }}"
