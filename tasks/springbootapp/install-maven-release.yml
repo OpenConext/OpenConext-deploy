@@ -21,6 +21,7 @@
     port: "{{ springapp_tcpport }}"
     state: stopped
     delay: 5
+  when: maven_result.changed
 
 - name: change symlink to current version
   file:
