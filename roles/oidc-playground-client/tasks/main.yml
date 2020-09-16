@@ -1,53 +1,10 @@
 ---
-- name: create apache folder
-  file:
-    path: "/var/www/oidc-playground"
-    owner: root
-    group: root
-    mode: 0755
-    state: directory
-
 - name: copy virtual host config
   template:
     src: "oidc-playground.conf.j2"
     dest: "/etc/httpd/conf.d/oidc-playground.conf"
   notify:
     - "restart httpd"
-  tags:
-    - deploy
 
-- name: download html archive
-  maven_artifact:
-    group_id: org.openconext
-    artifact_id: oidc-playground-client
-    extension: zip
-    version: "{{ oidc_playground_client_version }}"
-    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in oidc_playground_client_version else maven_repo }}"
-    dest: /var/www/oidc-playground
-  register: maven_result
-  tags:
-    - deploy
-
-- name: extract html archive
-  unarchive:
-    src: "{{ maven_result.dest }}"
-    dest: "/var/www/oidc-playground"
-    copy: no
-    owner: root
-    group: apache
-  register: unarchive_result
-  tags:
-    - deploy
-  when:
-    - maven_result.changed
-
-- name: create symlink to downloaded version
-  file:
-    src: "{{ unarchive_result.dest }}/oidc-playground-client-{{ oidc_playground_client_version }}"
-    dest: "{{ oidc_playground_current }}"
-    state: link
-    force: yes
-  tags:
-    - deploy
-  when:
-    - unarchive_result.changed
+- name: Include install-gui.yml
+  include: ../../../tasks/springbootapp/install-gui.yml

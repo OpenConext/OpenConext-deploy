@@ -1,19 +1,4 @@
 ---
-- name: Create user
-  user:
-    name: pdp
-    system: yes
-    home: "{{ pdp_dir }}"
-    shell: /sbin/nologin
-
-- name: create apache folder
-  file:
-    path: "/var/www/pdp"
-    owner: root
-    group: root
-    mode: 02755
-    state: directory
-
 - name: copy virtual host config
   template:
     src: "pdp.conf.j2"
@@ -21,38 +6,5 @@
   notify:
     - "reload httpd"
 
-- name: download html archive
-  maven_artifact:
-    group_id: org.openconext
-    artifact_id: pdp-gui
-    extension: zip
-    version: "{{ pdp_gui_version }}"
-    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in pdp_gui_version else maven_repo }}"
-    dest: /var/www/pdp
-  register: maven_result
-  tags:
-    - deploy
-
-- name: extract html archive
-  unarchive:
-    src: "{{ maven_result.dest }}"
-    dest: "/var/www/pdp"
-    copy: no
-    owner: root
-    group: apache
-  register: unarchive_result
-  tags:
-    - deploy
-  when:
-    - maven_result.changed
-
-- name: create symlink to downloaded version
-  file:
-    src: "{{ unarchive_result.dest }}/pdp-gui-{{ pdp_gui_version }}"
-    dest: "{{ pdp_current }}"
-    state: link
-    force: yes
-  tags:
-    - deploy
-  when:
-    - unarchive_result.changed
+- name: Include install-gui.yml
+  include: ../../../tasks/springbootapp/install-gui.yml

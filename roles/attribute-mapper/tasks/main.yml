@@ -1,58 +1,8 @@
 ---
-- name: Create user
-  user:
-    name: attribute-mapper
-    system: yes
-    home: "{{ attribute_mapper_dir }}"
-    shell: /sbin/nologin
+- name: Include preinstallation.yml
+  include: ../../../tasks/springbootapp/preinstallation.yml
 
-- name: Copy systemd service file
-  template:
-    src: templates/spring-boot.service.j2
-    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
-  notify:
-    - "restart attribute-mapper"
-
-- name: Check presence of legacy init script
-  stat:
-    path: "/etc/init.d/{{ springapp_service_name }}"
-  register: legacy_am_present
-
-- name: Stop service when legacy init script is present
-  service:
-    name: "{{ springapp_service_name }}"
-    state: stopped
-  when: legacy_am_present.stat.exists
-
-- name: Clean up legacy init script
-  file:
-    path: "/etc/init.d/{{ springapp_service_name }}"
-    state: absent
-
-- name: enable attribute-mapper service
-  service:
-    name: attribute-mapper
-    enabled: yes
-
-- name: Create logging directory
-  file:
-    path: /var/log/{{ springapp_service_name }}
-    state: directory
-    owner: attribute-mapper
-    group: attribute-mapper
-    mode: 0755
-
-- name: Include install-release.yml
-  include: ../../../tasks/springbootapp/install-release.yml
-  when: "attribute_mapper_snapshot_timestamp == '' and attribute_mapper_local_jar == ''"
-
-- name: Include install-snapshot.yml
-  include: ../../../tasks/springbootapp/install-snapshot.yml
-  when: "attribute_mapper_snapshot_timestamp != '' and attribute_mapper_local_jar == ''"
-
-- name: Include install-local.yml
-  include: ../../../tasks/springbootapp/install-local.yml
-  when: "attribute_mapper_local_jar != ''"
+- include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: Copy logging config
   template:
@@ -78,8 +28,5 @@
     dest: /etc/httpd/conf.d/attribute_mapper.conf
   notify: reload httpd
 
-- name: ensure the service is started
-  service:
-    name: attribute-mapper
-    enabled: yes
-    state: started
+- name: Include postinstallation.yml
+  include: ../../../tasks/springbootapp/postinstallation.yml

@@ -1,4 +1,5 @@
 ---
-manage_current: /var/www/manage/current
-#TODO - make this into a variable, see also manage-server/var/main.yml
 springapp_tcpport: 9393
+springapp_artifact_id: manage-gui
+springapp_version: "{{ manage_gui_version }}" 
+springapp_dir: "/var/www/manage/"

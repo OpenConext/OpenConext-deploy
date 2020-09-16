@@ -1,42 +1,8 @@
 ---
-- name: Create user
-  user:
-    name: "{{ springapp_user }}"
-    system: yes
-    home: "{{ monitoring_tests_dir }}"
-    shell: /sbin/nologin
+- name: Include preinstallation.yml
+  include: ../../../tasks/springbootapp/preinstallation.yml
 
-- name: Copy systemd service file
-  template:
-    src: "../../templates/spring-boot.service.j2"
-    dest: "/etc/systemd/system/{{ springapp_service_name }}.service"
-  notify:
-    - "restart monitoring-tests"
-
-- name: enable monitoring-tests service
-  service:
-    name: "{{ springapp_service_name }}"
-    enabled: yes
-
-- name: Create logging directory
-  file:
-    path: "/var/log/{{ springapp_service_name }}"
-    state: directory
-    owner: "{{ springapp_user }}"
-    group: monitoring-tests
-    mode: 0755
-
-- name: Include install-release.yml
-  include: ../../../tasks/springbootapp/install-release.yml
-  when: "monitoring_tests_snapshot_timestamp == '' and monitoring_tests_local_jar == ''"
-
-- name: Include install-snapshot.yml
-  include: ../../../tasks/springbootapp/install-snapshot.yml
-  when: "monitoring_tests_snapshot_timestamp != '' and monitoring_tests_local_jar == ''"
-
-- name: Include install-local.yml
-  include: ../../../tasks/springbootapp/install-local.yml
-  when: "monitoring_tests_local_jar != ''"
+- include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: Copy logging config
   template:
@@ -58,8 +24,5 @@
   notify:
     - "restart monitoring-tests"
 
-- name: ensure the service is started
-  service:
-    name: "{{ springapp_service_name }}"
-    enabled: yes
-    state: started
+- name: Include postinstallation.yml
+  include: ../../../tasks/springbootapp/postinstallation.yml

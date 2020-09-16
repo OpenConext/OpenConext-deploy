@@ -2,12 +2,10 @@ springapp_artifact_id: voot-service
 springapp_artifact_type: jar
 springapp_artifact_group_dir: org/openconext
 springapp_version: "{{ voot_version }}"
-springapp_snapshot_timestamp: "{{ voot_snapshot_timestamp }}"
 springapp_dir: "{{ voot_dir }}"
 springapp_user: voot
 springapp_service_name: voot
 springapp_jar: "{{ voot_service_jar }}"
 springapp_tcpport: 9191
-springapp_local_jar: "{{ voot_local_jar }}"
 springapp_heapsize: "128m"
 springapp_random_source: "file:///dev/urandom"

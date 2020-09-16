@@ -1,6 +1,0 @@
-- name: Deploy | Upload from local
-  copy: src={{ springapp_local_jar }} dest={{ springapp_dir }}/ owner={{ springapp_user }} group={{ springapp_user }}
-  register: springapp_local_released
-
-- include: switch-version.yml springapp_released={{ springapp_local_released }}
-  when: springapp_local_released.changed

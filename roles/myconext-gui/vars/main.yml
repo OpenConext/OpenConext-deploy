@@ -1,3 +1,5 @@
 ---
-myconext_current: /var/www/myconext/current
 springapp_tcpport: 9189
+springapp_artifact_id: myconext-gui
+springapp_version: "{{ myconext_gui_version }}"
+springapp_dir: "/var/www/myconext/"

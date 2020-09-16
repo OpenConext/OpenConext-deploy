@@ -2,12 +2,10 @@ springapp_artifact_id: authz-server
 springapp_artifact_type: jar
 springapp_artifact_group_dir: org/openconext
 springapp_version: "{{ authz_server_version }}"
-springapp_snapshot_timestamp: "{{ authz_server_snapshot_timestamp }}"
 springapp_dir: "{{ authz_server_dir }}"
 springapp_user: authz-server
 springapp_service_name: authz-server
 springapp_jar: "{{ authz_server_jar }}"
 springapp_tcpport: 9190
-springapp_local_jar: "{{ authz_server_local_jar }}"
 springapp_heapsize: "64m"
 springapp_random_source: "file:///dev/urandom"

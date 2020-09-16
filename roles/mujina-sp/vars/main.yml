@@ -2,12 +2,10 @@ springapp_artifact_id: mujina-sp
 springapp_artifact_type: jar
 springapp_artifact_group_dir: org/openconext
 springapp_version: "{{ mujina_version }}"
-springapp_snapshot_timestamp: "{{ mujina_sp_snapshot_timestamp }}"
 springapp_dir: "{{ mujina_sp_dir }}"
 springapp_user: mujina-sp
 springapp_service_name: mujina-sp
 springapp_jar: "{{ mujina_sp_jar }}"
 springapp_tcpport: 9391
-springapp_local_jar: "{{ mujina_sp_local_jar }}"
 springapp_heapsize: "128m"
 springapp_random_source: "file:///dev/urandom"

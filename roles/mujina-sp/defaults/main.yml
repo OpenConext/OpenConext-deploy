@@ -1,6 +1,3 @@
 ---
 mujina_sp_dir: /opt/mujina-sp
-mujina_sp_version: ''
-mujina_sp_snapshot_timestamp: ''
-mujina_sp_local_jar: ''
 mujina_sp_jar: mujina-sp-current.jar

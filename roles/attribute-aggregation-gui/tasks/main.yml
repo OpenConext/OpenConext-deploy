@@ -1,62 +1,10 @@
 ---
-- name: clean up old aa log directory
-  file:
-    path: "/var/www/aa"
-    state: absent
-
-- name: create apache folder
-  file:
-    path: "/var/www/attribute-aggregation"
-    owner: root
-    group: root
-    mode: 02755
-    state: directory
-
-- name: clean up old aa apache conf
-  file:
-    path: "/etc/httpd/conf.d/aa.conf"
-    state: absent
-
 - name: copy virtual host config
   template:
     src: "attribute_aggregation.conf.j2"
     dest: "/etc/httpd/conf.d/attribute_aggregation.conf"
   notify:
     - "restart httpd"
-  tags:
-    - deploy
 
-- name: download html archive
-  maven_artifact:
-    group_id: org.openconext
-    artifact_id: attribute-aggregation-gui
-    extension: zip
-    version: "{{ attribute_aggregation_gui_version }}"
-    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in attribute_aggregation_gui_version else maven_repo }}"
-    dest: /var/www/attribute-aggregation
-  register: maven_result
-  tags: deploy
-
-- name: extract html archive
-  unarchive:
-    src: "{{ maven_result.dest }}"
-    dest: "/var/www/attribute-aggregation"
-    copy: no
-    owner: root
-    group: apache
-  register: unarchive_result
-  tags:
-    - deploy
-  when:
-    - maven_result.changed
-
-- name: create symlink to downloaded version
-  file:
-    src: "{{ unarchive_result.dest }}/attribute-aggregation-gui-{{ attribute_aggregation_gui_version }}"
-    dest: "{{ attribute_aggregation_current }}"
-    state: link
-    force: yes
-  tags:
-    - deploy
-  when:
-    - unarchive_result.changed
+- name: Include install-gui.yml
+  include: ../../../tasks/springbootapp/install-gui.yml

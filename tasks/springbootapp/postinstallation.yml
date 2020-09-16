@@ -1,0 +1,19 @@
+- name: start the {{ springapp_service_name }} service
+  service:
+    name: "{{ springapp_service_name }}"
+    state: started
+    enabled: yes
+  ignore_errors: true
+
+- name: wait for {{ springapp_service_name }} to start
+  wait_for:
+    connect_timeout: 30
+    port: "{{ springapp_tcpport }}"
+    state: started
+
+- name: cleanup old jars
+  shell: 'find . ! -name $(basename $(readlink "{{ springapp_dir }}/{{ springapp_jar }}")) -name "*.jar" -type f -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ springapp_dir }}"
+  register: clean_jars
+  changed_when: '"removed" in clean_jars'
