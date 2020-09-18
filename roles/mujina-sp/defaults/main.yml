@@ -1,3 +1,5 @@
 ---
 mujina_sp_dir: /opt/mujina-sp
 mujina_sp_jar: mujina-sp-current.jar
+mujina_sp_min_heapsize: "128m"
+mujina_sp_max_heapsize: "128m"

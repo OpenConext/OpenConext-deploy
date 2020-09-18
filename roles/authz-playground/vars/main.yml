@@ -7,5 +7,6 @@ springapp_user: authz-playground
 springapp_service_name: authz-playground
 springapp_jar: "{{ authz_playground_jar }}"
 springapp_tcpport: 9291
-springapp_heapsize: "64m"
+springapp_min_heapsize: "{{ authz_playground_min_heapsize }}"
+springapp_max_heapsize: "{{ authz_playground_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"

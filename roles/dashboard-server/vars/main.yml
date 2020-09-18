@@ -7,5 +7,6 @@ springapp_user: dashboard
 springapp_service_name: dashboard
 springapp_jar: "{{ dashboard_jar }}"
 springapp_tcpport: 9394
-springapp_heapsize: "512m"
+springapp_min_heapsize: "{{ dashboard_min_heapsize }}"
+springapp_max_heapsize: "{{ dashboard_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"

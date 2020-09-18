@@ -7,5 +7,6 @@ springapp_user: attribute-mapper
 springapp_service_name: attribute-mapper
 springapp_jar: "{{ attribute_mapper_jar }}"
 springapp_tcpport: 9292
-springapp_heapsize: "128m"
+springapp_min_heapsize: "{{ attribute_mapper_min_heapsize }}"
+springapp_max_heapsize: "{{ attribute_mapper_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"

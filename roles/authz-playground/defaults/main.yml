@@ -1,3 +1,5 @@
 ---
 authz_playground_dir: /opt/authz-playground
 authz_playground_jar: authz-playground-current.jar
+authz_playground_min_heapsize: "64m"
+authz_playground_max_heapsize: "64m"

@@ -5,3 +5,5 @@ authz_server_snapshot_timestamp: ''
 authz_server_jar: authz-server-current.jar
 authz_server_api_lifecycle_username: authz_server_api_lifecycle_user
 authz_server_cronjobmaster: true
+authz_min_heapsize: "64m"
+authz_max_heapsize: "64m"
