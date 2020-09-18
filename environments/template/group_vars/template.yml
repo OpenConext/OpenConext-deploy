@@ -156,7 +156,9 @@ teams:
   voot_api_user: "voot"
   product_name: "OpenConext Teams"
   default_stem_name: "demo:openconext:org"
-  super_admins_team_urn: "nl:surfnet:diensten:teams_super_users"
+  super_admins_team_urns:
+    - "nl:surfnet:diensten:teams_super_users"
+    - "nl:surfnet:diensten:teams_super_admin_users"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on

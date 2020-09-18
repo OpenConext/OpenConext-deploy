@@ -51,7 +51,12 @@ teams:
   group-name-context: "{{ teams.group_name_context }}"
   product-name: "{{ teams.product_name }}"
   non-guest-member-of: "{{ guest_qualifier }}"
-  super_admins_team_urn: "{{ teams.super_admins_team_urn }}"
+
+super_admins_team:
+  urns:
+    {% for value in teams.super_admins_team_urns %}
+- "{{ value }}"
+    {% endfor %}
 
 voot:
   serviceUrl: https://voot.{{ base_domain }}
