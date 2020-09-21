@@ -52,10 +52,17 @@
   with_items:
     - parameters.yml
 
-- name: Override attribute schema
+- name: Check presence of environment specific attributes.json
+  local_action: stat path="{{ inventory_dir }}/files/eb/attributes.json"
+  register: attributes_json_present
+  become: false
+
+- name: Copy environment specific attributes.json
   copy:
-    src: "attributes.json"
+    src: "{{ inventory_dir }}/files/eb/attributes.json"
     dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/application/configs/"
+  when:
+    attributes_json_present.stat.exists
 
 - name: Check presence of language specific overrides
   local_action: stat path="{{ inventory_dir }}/files/eb/languages/"
