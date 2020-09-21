@@ -33,6 +33,9 @@ if [ $# -gt 3 ]
     exit 1
 fi
 # ----- End Input handing
+# ----- Make sure Java is installed
+type java >/dev/null 2>&1 || { echo >&2 "Java is required, but it's not installed. Please install it and rerun this script"; exit; }
+# ----- End check Java presence
 
 if [ $# -eq 3 ]
   then
