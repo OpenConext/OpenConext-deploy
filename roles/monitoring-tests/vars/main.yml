@@ -7,5 +7,6 @@ springapp_user: monitoring-tests
 springapp_service_name: monitoring-tests
 springapp_jar: "{{ monitoring_tests_jar }}"
 springapp_tcpport: 9392
-springapp_heapsize: "128m"
+springapp_min_heapsize: "{{ monitoring_tests_min_heapsize }}"
+springapp_max_heapsize: "{{ monitoring_tests_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"

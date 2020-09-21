@@ -9,3 +9,5 @@ pdp_invalid_policies_error_mail_to: '{{ error_mail_to }}'
 pdp_oauth2_clientid: pdp_client
 pdp_oauth2_token_url: "https://authz.{{ base_domain }}/oauth/token"
 pdp_oauth2_authorize_url: "https://authz.{{ base_domain }}/oauth/authorize"
+pdp_min_heapsize: "512m"
+pdp_max_heapsize: "512m"

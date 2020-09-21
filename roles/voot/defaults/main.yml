@@ -3,3 +3,5 @@ voot_dir: /opt/voot/
 voot_version: ''
 voot_snapshot_timestamp: ''
 voot_service_jar: voot-service.jar
+voot_min_heapsize: "128m"
+voot_max_heapsize: "128m"

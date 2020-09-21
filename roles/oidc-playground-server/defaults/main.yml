@@ -2,3 +2,5 @@
 oidc_playground_dir: /opt/oidc-playground
 oidc_playground_jar: oidc-playground-current.jar
 oidc_playground_random_source: 'file:///dev/urandom'
+oidc_playground_min_heapsize: "256m"
+oidc_playground_max_heapsize: "256m"

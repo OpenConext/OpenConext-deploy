@@ -6,3 +6,5 @@ dashboard_random_source: 'file:///dev/urandom'
 dashboard_hide_tabs: none
 dashboard_organization: SURFconext
 dashboard_install: true
+dashboard_min_heapsize: "512m"
+dashboard_max_heapsize: "512m"

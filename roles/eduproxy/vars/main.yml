@@ -7,5 +7,6 @@ springapp_user: eduproxy
 springapp_service_name: eduproxy
 springapp_jar: "{{ eduproxy_jar }}"
 springapp_tcpport: 9299
-springapp_heapsize: 512m
+springapp_min_heapsize: "{{ eduproxy_min_heapsize }}"
+springapp_max_heapsize: "{{ eduproxy_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
