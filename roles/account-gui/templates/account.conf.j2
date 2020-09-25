@@ -29,6 +29,7 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     RewriteCond %{REQUEST_URI} !myconext
     RewriteCond %{REQUEST_URI} !config
     RewriteCond %{REQUEST_URI} !register
+    RewriteCond %{REQUEST_URI} !doLogin
     RewriteCond %{REQUEST_URI} !saml
     RewriteCond %{REQUEST_URI} !actuator
     RewriteCond %{REQUEST_URI} !fonts
@@ -42,6 +43,7 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/actuator retry=0
     ProxyPass /config http://localhost:{{ springapp_tcpport }}/config retry=0
     ProxyPass /register http://localhost:{{ springapp_tcpport }}/register retry=0
+    ProxyPass /doLogin http://localhost:{{ springapp_tcpport }}/doLogin retry=0
 
     DocumentRoot /var/www/account/current
 
