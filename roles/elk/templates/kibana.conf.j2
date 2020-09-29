@@ -9,7 +9,7 @@ Listen {{ apache_app_listen_address.kibana }}:{{ loadbalancing.kibana.port }}
         ProxyPass /health !
         ProxyPass /  http://127.0.0.1:5601/
         ProxyPassReverse / http://127.0.0.1:5601/
-       <Location "/health">
+        <Location "/health">
              allow from all
              satisfy any
         </Location>
@@ -34,8 +34,13 @@ Listen {{ apache_app_listen_address.kibana }}:{{ loadbalancing.kibana.port }}
         SSLCertificateKeyFile   {{ kibana_tls_key_path }}
         SSLCertificateChainFile {{ kibana_tls_chain_path }}
         Include ssl_backend.conf
-{% endif %}
 
+        Header always set Strict-Transport-Security "max-age=31556952"
+        Header set X-Frame-Options "DENY"
+        Header always set X-Content-Type-Options "nosniff"
+        Header always set X-Xss-Protection "1; mode=block"
+        Header set Referrer-Policy "same-origin"
+{% endif %}
 
         ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Kibana'"
         CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Kibana'" combined
