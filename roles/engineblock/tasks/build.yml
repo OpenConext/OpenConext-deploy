@@ -18,8 +18,13 @@
 
 - name: Move Composer into globally-accessible location.
   command: >
-    mv /tmp/composer.phar {{ composer_path }}
+    mv -f /tmp/composer.phar {{ composer_path }}
     creates={{ composer_path }}
+
+- name: Remove Nodesource repositories for Node.js
+  yum:
+    name: "nodesource-release"
+    state: removed
 
 - name: Add Nodesource repositories for Node.js
   yum:
