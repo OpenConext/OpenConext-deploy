@@ -351,15 +351,15 @@
         }
       },
       "patternProperties": {
-        "^name:(en|nl)$": {
+        "^name:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The name of the Identity Provider."
         },
-        "^displayName:(en|nl)$": {
+        "^displayName:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The name of the Identity Provider as displayed in applications."
         },
-        "^description:(en|nl)$": {
+        "^description:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The description of the Identity Provider."
         },
@@ -407,19 +407,19 @@
           "sibblingIndependent": true,
           "info": "From the pull down, select the type of contact."
         },
-        "^OrganizationName:(en|nl)$": {
+        "^OrganizationName:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string"
         },
-        "^OrganizationDisplayName:(en|nl)$": {
+        "^OrganizationDisplayName:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The friendly name of the organization. e.g. University of Harderwijk."
         },
-        "^OrganizationURL:(en|nl)$": {
+        "^OrganizationURL:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "format": "url",
           "info": "The URL to the website of the service e.g. http://www.example-institution.nl/en/."
         },
-        "^mdrpi:RegistrationPolicy:(en|nl)$": {
+        "^mdrpi:RegistrationPolicy:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The URL to the Registration Policy of the Identity Provider."
         },
@@ -447,7 +447,7 @@
           "multiplicity": 10,
           "info": "The URL to the a SAML protocol endpoint at an IdP that a client can contact to obtain a SAML authentication assertion for use at an SP. e.g. https://idp.example.org/idp/profile/SAML2/Redirect/SSO"
         },
-        "^keywords:(en|nl)$": {
+        "^keywords:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "This field defines searchable words in the WAYF dialogue for this Identity Provider."
         },

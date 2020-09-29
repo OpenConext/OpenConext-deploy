@@ -579,24 +579,24 @@
         }
       },
       "patternProperties": {
-        "^name:(en|nl|pt)$": {
+        "^name:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "Set the name of the service. Format: 'Service Name | Supplier'"
         },
-        "^displayName:(en|nl|pt)$": {
+        "^displayName:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "Name as displayed in applications."
         },
-        "^coin:ss:wiki_url:(en|nl)$": {
+        "^coin:ss:wiki_url:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "format": "url",
           "info": "Add the URL to the SURF wiki for additional information of this service."
         },
-        "^description:(en|nl)$": {
+        "^description:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The description of the service."
         },
-        "^coin:ss:type_of_service:(en|nl)$": {
+        "^coin:ss:type_of_service:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The type of service used in the facet search in dashboard."
         },
@@ -665,30 +665,30 @@
           "sibblingIndependent": true,
           "info": "From the pull down, select the type of contact."
         },
-        "^OrganizationName:(en|nl)$": {
+        "^OrganizationName:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The formal name of the organization. e.g. Service by University of Harderwijk."
         },
-        "^OrganizationDisplayName:(en|nl)$": {
+        "^OrganizationDisplayName:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The friendly name of the organization. e.g. University of Harderwijk."
         },
-        "^OrganizationURL:(en|nl)$": {
+        "^OrganizationURL:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "format": "url",
           "info": "The URL to the website of the service e.g. http://www.example-service.nl/en/."
         },
-        "^url:(en|nl)$": {
+        "^url:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "format": "url",
           "info": "The URL to the support site of the service."
         },
-        "^mdui:PrivacyStatementURL:(en|nl)$": {
+        "^mdui:PrivacyStatementURL:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "format": "url",
           "info": "The URL to the Privacy Statement of the service."
         },
-        "^mdrpi:RegistrationPolicy:(en|nl)$": {
+        "^mdrpi:RegistrationPolicy:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The URL to the Registration Policy of the service."
         },
