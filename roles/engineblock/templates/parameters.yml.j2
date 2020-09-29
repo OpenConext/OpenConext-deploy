@@ -240,3 +240,11 @@ parameters:
     stepup.gateway.sfo.sso_location: '{{ engine_stepup_gateway_sfo_sso_location | replace("%","%%") }}'
     ## The public key from the Stepup Gateway IdP
     stepup.gateway.sfo.key_file: {{ engine_stepup_gateway_sfo_public_key_file | replace("%","%%") }}
+
+    ##########################################################################################
+    ## THEME SETTINGS
+    ##########################################################################################
+    # When changing the default theme name, be aware that the CI build will no longer be able to select our default
+    # test suite for js e2e tests. This because a SED command is in place to rewrite the parameters.yml.
+    # See the SED command in Gitlab Actions runner: 'Run Cypress integration tests'
+    theme.name: {{ engine_theme }}
