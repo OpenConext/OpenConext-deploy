@@ -1,0 +1,9 @@
+---
+- name: daemon_reload
+  systemd:
+    daemon_reload: yes
+
+- name: restart httpd
+  systemd:
+    name: httpd
+    state: restarted
