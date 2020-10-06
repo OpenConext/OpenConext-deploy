@@ -17,7 +17,6 @@ apache_app_listen_address:
   welcome: 192.168.66.79
   oidc: 192.168.66.79
   oidcng: 192.168.66.79
-  attribute_mapper: 192.168.66.79
   myconext: 192.168.66.79
   account: 192.168.66.79
   eduid: 192.168.66.79

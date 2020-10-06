@@ -1,6 +1,0 @@
----
-- name: restart attribute-mapper
-  systemd:
-    name: attribute-mapper
-    state: restarted
-    daemon_reload: yes

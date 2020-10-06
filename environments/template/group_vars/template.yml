@@ -18,7 +18,6 @@ diy_technicalcontact_email: "{{ support_email }}"
 
 attribute_aggregation_gui_version: "2.1.0"
 attribute_aggregation_server_version: "2.1.0"
-attribute_mapper_version: "0.0.1"
 authz_admin_version: "2.0.14"
 authz_playground_version: "1.7"
 oidc_playground_client_version: "2.3.1"
