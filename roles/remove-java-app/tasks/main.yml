@@ -1,0 +1,50 @@
+---
+- name: Remove the httpd configuration
+  file: 
+    path: /etc/httpd/conf.d/{{ item}}.conf
+    state: absent
+  notify:
+    - restart httpd
+  with_items:
+    - "{{ java_apps_to_remove }}"
+
+- name: Remove the systemd service file
+  file: 
+    path: "/etc/systemd/system/{{ item }}.service"
+    state: absent
+  notify: 
+    - daemon_reload
+  with_items:
+    - "{{ java_apps_to_remove }}"
+  register: systemd_removed
+
+- name: Disable and stop the app
+  service: 
+    name: "{{ item }}"
+    enabled: no
+    state: stopped
+  with_items:
+    - "{{ java_apps_to_remove }}"
+  when:
+    - systemd_removed.changed | bool
+
+- name: Remove the app dir and its contents
+  file:
+    path: /opt/{{ item }}/
+    state: absent
+  with_items:
+    - "{{ java_apps_to_remove }}"
+
+- name: Remove the www dir
+  file:
+    path: /var/www/{{ item }}/
+    state: absent
+  with_items:
+    - "{{ java_apps_to_remove }}"
+
+- name: Remove the logs
+  file:
+    path: /var/log/{{ item }}/
+    state: absent
+  with_items:
+    - "{{ java_apps_to_remove }}"
