@@ -1,7 +1,0 @@
----
-eduproxy_dir: /opt/eduproxy
-eduproxy_version: ''
-eduproxy_snapshot_timestamp: ''
-eduproxy_jar: eduproxy-current.jar
-eduproxy_min_heapsize: "512m"
-eduproxy_max_heapsize: "512m"
