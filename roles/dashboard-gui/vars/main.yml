@@ -1,5 +1,5 @@
 ---
 springapp_tcpport: 9394
-springapp_artifact_id: dashboard_gui
+springapp_artifact_id: dashboard-gui
 springapp_version: "{{ dashboard_gui_version }}"
 springapp_dir: "/var/www/dashboard/"
