@@ -26,7 +26,7 @@ frontend internet_ip
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
     acl no_same_site_uas var(txn.useragent) -m reg -f /etc/haproxy/nosamesitebrowsers.lst
-    acl has_same_site_flag res.hdr(Set-Cookie) -m sub SameSite
+    acl has_same_site_flag res.fhdr(Set-Cookie) -m sub SameSite
     # Rewrite responses
     # Set HSTS on all outgoing responses
     http-response set-header Strict-Transport-Security max-age=15768000
