@@ -54,6 +54,10 @@ account_linking_context_class_ref:
 
 feature:
   webauthn: {{ myconext.feature_webauthn }}
+  warning_educational_email_domain: True
+  use_deny_allow_list:
+    allow_enabled: False
+    allow_location: "classpath:/deny-allow/allowed.json"
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
