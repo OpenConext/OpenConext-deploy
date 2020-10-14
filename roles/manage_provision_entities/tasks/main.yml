@@ -1,8 +1,4 @@
 --- 
-- name: Include vars of manage-server
-  include_vars:
-    file: ../../manage-server/vars/main.yml
-
 - name: Set manage search path to oidc10_rp when provisioning a client credentials client or oidc rp
   set_fact:
     manage_search_path: oidc10_rp
@@ -16,7 +12,7 @@
 
 - name: Check if the entity already exists
   uri:
-    url: "http://127.0.0.1:{{ springapp_tcpport }}/internal/search/{{ manage_search_path }}"
+    url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/search/{{ manage_search_path }}"
     body_format: json
     method: POST
     user: "{{ manage.apiUsers[2].name }}"
@@ -29,7 +25,7 @@
 
 - name: Upload entity to manage
   uri:
-    url: "http://127.0.0.1:{{ springapp_tcpport }}/internal/metadata"
+    url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/metadata"
     body_format: json
     method: POST
     user: "{{ manage.apiUsers[2].name }}"
@@ -41,7 +37,7 @@
 
 - name: push metadata eb
   uri:
-    url: "http://127.0.0.1:{{ springapp_tcpport }}/internal/push"
+    url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/push"
     method: GET
     user: "{{ manage.apiUsers[2].name }}" 
     password: "{{ manage.apiUsers[2].password }}" 

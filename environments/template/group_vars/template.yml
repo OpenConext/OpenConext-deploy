@@ -311,7 +311,7 @@ aa:
   db_password: "{{ mysql_passwords.aa_server }}"
   db_host: "{{ mysql_host }}"
   db_name: aaserver
-  authz_client_id: "https@//aa.{{base_domain}}"
+  authz_client_id: "aa.{{base_domain}}"
   authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
   idin_client_id: am_aa_client
