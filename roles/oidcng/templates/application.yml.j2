@@ -4,16 +4,6 @@ logging:
   level:
     org.springframework: INFO
 
-# Is this node in a load-balanced topology responsible for cleaning up resources
-cron:
-  node-cron-job-responsible: {{ oidcng_cronjobmaster }}
-  # Every 15 minutes
-  token-cleaner-expression: "0 0/15 * * * *"
-  # Differs per env: see https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
-  key-rollover-expression: {{ oidcng.key_rollover_cron_expression }}
-  consent-expiry-duration-days: 90
-
-
 server:
   # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
   port: {{ springapp_tcpport }}
@@ -23,13 +13,20 @@ server:
     timeout: 28800
     cookie:
       secure: true
-  error:
-    path: "/error"
   server-header: no
   max-http-header-size: 10000000
   tomcat:
+    max-http-post-size: 10000000
     max-http-form-post-size: 10000000
     max-swallow-size: 10000000
+
+# Is this node in a load-balanced topology responsible for cleaning up resources
+cron:
+  node-cron-job-responsible: {{ oidcng_cronjobmaster }}
+  # Every 15 minutes
+  token-cleaner-expression: "0 0/15 * * * *"
+  # Differs per env: see https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
+  key-rollover-expression: {{ oidcng.key_rollover_cron_expression }}
 
 mongodb_db: {{ oidcng.mongo_database }}
 oidc_saml_mapping_path: file://{{ oidcng_dir }}/oidc_saml_mapping.json
@@ -50,21 +47,38 @@ features:
   # Do we enforce that the scopes granted to an access_token are configured with the RS?
   enforce-scope-resource-server: false
 
-sp:
-  entity_id: {{ oidcng_saml_sp_entityid }}
-  acs_location: https://{{ oidcng_base_hostname }}/login/saml2/sso/oidcng
-
 idp:
-  entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
-  sso_location: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
+  alias: engine-{{ env }}
+  # comma separated string of metadata url's
+  metadata_urls: {{ oidcng_idp_metadata_url }}
+  name_id: https://engine.{{ base_domain }}/authentication/idp/metadata
   metadata_signing_certificate_path: file://{{ oidcng_dir }}/SURFconext-metadata-signer.pem
 
 spring:
   data:
     mongodb:
       uri: "mongodb://{{ oidcng.mongo_user }}:{{ oidcng.mongo_password }}@{% if not mongo_cluster %}{{ mongo_hostname }}{% else %}{% for host in groups['mongo_servers'] %}{{ hostvars[host]['mongo_hostname'] }}:{{ oidcng.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}/{{ oidcng.mongo_database }}{% if mongo_tls %}?ssl=true{% endif %}"
+
   thymeleaf:
     cache: true
+  security:
+    saml2:
+      network:
+        read-timeout: 10000
+        connect-timeout: 5000
+      service-provider:
+        entity-id: {{ oidcng_saml_sp_entityid }}
+        prefix: oidc
+        alias: oidc-proxy
+        base-path: https://{{ oidcng_base_hostname }}
+        sign-metadata: true
+        sign-requests: true
+        want-assertions-signed: true
+        single-logout-enabled: false
+        name-ids:
+          - urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified
+          - urn:oasis:names:tc:SAML:2.0:nameid-format:persistent
+          - urn:oasis:names:tc:SAML:2.0:nameid-format:transient
 
 manage:
   user: manage
