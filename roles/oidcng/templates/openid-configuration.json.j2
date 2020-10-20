@@ -84,11 +84,6 @@
   "claims_parameter_supported": true,
   "request_parameter_supported": true,
   "request_uri_parameter_supported": true,
-  "acr_values_supported": [
-     {% for loa in oidcng.acr_values_supported %}
-        "{{ loa }}"{{ "," if not loop.last else ""}}
-     {% endfor %}
-  ],
   "code_challenge_methods_supported": [
     "plain",
     "S256"
