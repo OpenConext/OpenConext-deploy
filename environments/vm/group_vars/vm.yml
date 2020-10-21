@@ -13,11 +13,8 @@ php_display_errors: 1
 
 attribute_aggregation_gui_version: "2.1.0"
 attribute_aggregation_server_version: "2.1.0"
-authz_admin_version: "2.0.14"
-authz_playground_version: "1.7"
 oidc_playground_client_version: "2.3.1"
 oidc_playground_server_version: "2.3.1"
-authz_server_version: "1.3.16"
 engine_version: "6.3.6"
 manage_gui_version: "6.0.0"
 manage_server_version: "6.0.0"
@@ -40,7 +37,6 @@ databases:
   names:
     - teams
     - "{{ engine_database_name }}"
-    - authz-server
     - pdp-server
     - oidc-server
     - aaserver
@@ -49,7 +45,6 @@ databases:
   users:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
-    - { name: authz-serverrw, db_name: authz-server, password: "{{ mysql_passwords.authz_server }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
@@ -126,12 +121,6 @@ shibboleth_apps:
   teams:
     entityID: "https://teams.{{ base_domain }}/shibboleth"
     baseurl: ""
-  authz:
-    entityID: "https://authz.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "authz-admin":
-    entityID: "https://authz-admin.{{ base_domain }}/shibboleth"
-    baseurl: ""
   pdp:
     entityID: "https://pdp.{{ base_domain }}/shibboleth"
     baseurl: ""
@@ -189,24 +178,11 @@ mujina_sp:
   idp_metadata_url: https://engine.{{ base_domain }}/authentication/idp/metadata
   single_sign_on_service_location: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   cookie_secure: true
-##
-# VM config for the Authorization Server
-##
-authzserver:
-  db_user: authz-serverrw
-  db_password: "{{ mysql_passwords.authz_server }}"
-  db_host: "{{ mysql_host }}"
-  db_name: authz-server
-
-#authz_server_snapshot_timestamp: 20150429.085158-60
 
 ##
 # VM config for the Voot app
 ##
 voot:
-  authz_checkToken_endpoint_url: "https://authz.{{ base_domain }}/oauth/check_token"
-  authz_checkToken_clientId: "vootservice"
-  authz_checkToken_secret: "{{ voot_authz_checkToken_secret }}"
   oidcng_checkToken_endpoint_url: "https://connect.{{ base_domain }}/oidc/introspect"
   oidcng_checkToken_clientId: "voot.{{ base_domain }}"
   oidcng_checkToken_secret: "{{ voot_oidcng_checkToken_secret }}"
@@ -224,75 +200,6 @@ voot:
         name: "SURFteams",
         timeoutMillis: 15000
       }
-
-##
-# VM config for the authz-admin application
-##
-authzadmin:
-  defaultClients:
-      - clientId: "{{ authzplayground.springapp_authz_client_id }}"
-        secret: "{{ authzplayground.springapp_authz_client_secret }}"
-        resourceIds:
-          - groups
-        scopes:
-          - groups
-        grantTypes:
-          - authorization_code
-          - implicit
-        redirectUris:
-          - https://authz-playground.{{ base_domain }}/redirect
-      - clientId: surf-teams
-        secret: "{{ teams_authz_client_secret }}"
-        resourceIds:
-          - groups
-        scopes:
-          - groups
-        grantTypes:
-          - client_credentials
-      - clientId: engineblock
-        secret: "{{ engineblock_authz_client_secret }}"
-        resourceIds:
-          - groups
-        scopes:
-          - groups
-        grantTypes:
-          - client_credentials
-      - clientId: pdp_client
-        secret: "{{ pdp_client_secret }}"
-        resourceIds:
-          - groups
-        scopes:
-          - groups
-        grantTypes:
-          - authorization_code
-          - implicit
-          - client_credentials
-      - clientId: "{{ aa.authz_client_id }}"
-        secret: "{{ aa_authz_client_secret }}"
-        scopes:
-          - groups
-          - attribute-aggregation
-          - saml-attribute-query
-        grantTypes:
-          - authorization_code
-          - implicit
-          - client_credentials
-  defaultResourceServers:
-    - clientId: vootservice
-      secret: "{{ voot.authz_checkToken_secret }}"
-    - clientId: pdp
-      secret: "{{ voot.oidc_checkToken_secret }}"
-    - clientId: "{{ aa.authz_resource_server_id }}"
-      secret: "{{ aa.authz_secret }}"
-
-##
-# VM config for the authz-admin application
-##
-authzplayground:
-  springapp_authz_client_id: cool_app_id
-  springapp_authz_client_secret: "{{ authzplayground_springapp_authz_client_secret }}"
-  springapp_oidc_client_id: http@//mock-sp
-  springapp_oidc_client_secret: "{{ authzplayground_springapp_oidc_client_secret }}"
 
 oidc_playground:
   discovery_endpoint: "https://connect.{{ base_domain }}/oidc/.well-known/openid-configuration"
@@ -325,13 +232,11 @@ aa:
   db_password: "{{ mysql_passwords.aa_server }}"
   db_host: "{{ mysql_host }}"
   db_name: aaserver
-  authz_client_id: "https@//aa.test.surfconext.nl"
+  authz_client_id: "aa.{{ base_domain }}"
   authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
   idin_client_id: am_aa_client
   idin_secret: "{{ aa_idin_client_secret }}"
-  oidc_client_id: "https@//aa.surfconext.test.nl"
-  oidc_secret: "{{ aa_oidc_client_secret }}"
   orcid_client_id: "anonymous"
   orcid_secret: "{{ aa_orcid_password }}"
   orcid_authorization_uri: "https://sandbox.orcid.org/oauth/authorize"
@@ -488,15 +393,6 @@ loadbalancing:
   teams:
     port: 601
 
-  authzserver:
-    port: 602
-
-  authz_admin:
-    port: 603
-
-  authz_playground:
-    port: 604
-
   oidc_playground:
     port: 619
 
@@ -584,27 +480,6 @@ haproxy_applications:
     ha_method: GET
     ha_url: "/api/teams/health"
     port: "{{ loadbalancing.teams.port }}"
-    servers: "{{java_servers}}"
-
-  - name: authzserver
-    vhost_name: authz.{{ base_domain }}
-    ha_method: "GET"
-    ha_url: "/health"
-    port: "{{ loadbalancing.authzserver.port }}"
-    servers: "{{java_servers}}"
-
-  - name: authz_admin
-    vhost_name: authz-admin.{{ base_domain }}
-    ha_method: "GET"
-    ha_url: "/health"
-    port: "{{ loadbalancing.authz_admin.port }}"
-    servers: "{{java_servers}}"
-
-  - name: authz_playground
-    vhost_name: authz-playground.{{ base_domain }}
-    ha_method: "GET"
-    ha_url: "/health"
-    port: "{{ loadbalancing.authz_playground.port }}"
     servers: "{{java_servers}}"
 
   - name: oidc_playground
