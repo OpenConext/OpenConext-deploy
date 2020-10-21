@@ -8,11 +8,6 @@
       - https://voot.vm.openconext.org/health
       - https://teams.vm.openconext.org/api/teams/health
       - https://pdp.vm.openconext.org/pdp/api/health
-      - https://voot.vm.openconext.org/health
-      - https://aa.vm.openconext.org/aa/api/health
-      - https://authz.vm.openconext.org/health
-      - https://authz-admin.vm.openconext.org/health
-      - https://authz-playground.vm.openconext.org/health
       - https://manage.vm.openconext.org/manage/api/health
       - https://connect.vm.openconext.org/actuator/health
   tasks:
