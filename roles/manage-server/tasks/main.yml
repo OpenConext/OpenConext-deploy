@@ -103,3 +103,6 @@
 
 - name: Include postinstallation.yml
   include: ../../../tasks/springbootapp/postinstallation.yml
+
+- meta: flush_handlers
+

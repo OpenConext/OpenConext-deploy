@@ -118,6 +118,9 @@
   gather_facts: true
   become: true
   roles:
+    - { role: oidcng,                       tags: ['oidcng'] }
+    - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
+    - { role: manage-server,                tags: ['manage', 'manage-server'] }
     - { role: teams-gui,                    tags: ['teams', 'teams-gui'       ] }
     - { role: teams-server,                 tags: ['teams', 'teams-server'    ] }
     - { role: authz-server,                 tags: ['oauth', 'authz-server'    ] }
@@ -126,9 +129,6 @@
     - { role: authz-playground,             tags: ['oauth', 'authz-playground'] }
     - { role: pdp-gui,                      tags: ['pdp', 'pdp-gui'] }
     - { role: pdp-server,                   tags: ['pdp', 'pdp-server'] }
-    - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
-    - { role: manage-server,                tags: ['manage', 'manage-server'] }
-    - { role: oidcng,                       tags: ['oidcng'] }
     - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
     - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
     - { role: dashboard-gui,                tags: ['dashboard', 'dashboard-gui'] , when: dashboard_install | bool }

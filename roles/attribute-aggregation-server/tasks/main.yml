@@ -37,3 +37,9 @@
 
 - name: Include postinstallation.yml
   include: ../../../tasks/springbootapp/postinstallation.yml
+
+- name: Include the role manage_provision_entities to provision the client_credentials client
+  include_role: 
+    name: manage_provision_entities
+  vars: 
+    entity_type: client_credentials_client
