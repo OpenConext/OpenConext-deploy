@@ -14,14 +14,9 @@
   run_once: true
   changed_when: false
 
-
-- name: Include vars of manage-server
-  include_vars:
-    file: ../../manage-server/vars/main.yml
-
-- name: wait untill manage is up after restart
+- name: wait until manage is up after restart
   uri:
-    url: "http://127.0.0.1:{{ springapp_tcpport }}/actuator/health"
+    url: "http://127.0.0.1:9393/actuator/health"
     headers:
       Accept: "application/json"
   register: health_result
@@ -32,7 +27,7 @@
 
 - name: push metadata eb
   uri:
-    url: "http://127.0.0.1:{{ springapp_tcpport }}/internal/push"
+    url: "http://127.0.0.1:9393/internal/push"
     method: GET
     user: "{{ manage.apiUsers[2].name }}"
     password: "{{ manage.apiUsers[2].password }}"

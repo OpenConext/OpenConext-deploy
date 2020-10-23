@@ -6,7 +6,7 @@ springapp_dir: "{{ manage_dir }}"
 springapp_user: manage
 springapp_service_name: manage
 springapp_jar: "{{ manage_jar }}"
-springapp_tcpport: 9393
+springapp_tcpport: "{{ manage_springapp_tcpport }}"
 springapp_min_heapsize: "{{ manage_min_heapsize }}"
 springapp_max_heapsize: "{{ manage_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"

@@ -24,10 +24,10 @@ JAVA_BIN=`which java`
 OIDC_KEYSET_FILE=$1
 
 ## First we download the binary to /tmp
-$CURL_BIN  -o /tmp/crypto-1.0.0-shaded.jar https://build.openconext.org/repository/public/releases/org/openconext/crypto/1.0.0/crypto-1.0.0-shaded.jar
+$CURL_BIN  -o /tmp/crypto-1.0.1-shaded.jar https://build.openconext.org/repository/public/releases/org/openconext/crypto/1.0.1/crypto-1.0.1-shaded.jar
 ## Execute it, and send the key to the secrets file
-$JAVA_BIN -jar /tmp/crypto-1.0.0-shaded.jar > $OIDC_KEYSET_FILE
+$JAVA_BIN -jar /tmp/crypto-1.0.1-shaded.jar > $OIDC_KEYSET_FILE
 ## Clean up the binary
-rm /tmp/crypto-1.0.0-shaded.jar
+rm /tmp/crypto-1.0.1-shaded.jar
 
 

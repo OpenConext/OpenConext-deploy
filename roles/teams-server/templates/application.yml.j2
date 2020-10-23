@@ -63,7 +63,7 @@ voot:
   accessTokenUri: "{{ teams_oauth2_token_url }}"
   clientId: "{{ teams_authz_client_id }}"
   clientSecret: "{{ teams_authz_client_secret }}"
-  scopes: groups
+  scopes: "{{ teams_manage_provision_scopes }}"
 
 spring:
   session:
