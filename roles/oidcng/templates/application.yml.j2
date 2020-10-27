@@ -56,8 +56,8 @@ sp:
 
 idp:
   entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
-  sso_location: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
-  metadata_signing_certificate_path: file://{{ oidcng_dir }}/SURFconext-metadata-signer.pem
+  sso_location: {{ oidcng_idp_sso_location }}
+  saml_assertion_signing_key: file://{{ oidcng_dir }}/SURFconext-metadata-signer.pem
 
 spring:
   data:
