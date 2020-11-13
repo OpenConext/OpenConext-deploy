@@ -8,10 +8,12 @@ server.session.cookie.secure=true
 server.server-header=no
 
 # Details needed so that we may check tokens presented to us by clients. This application uses them to authenticate via
-# Basic authentication with the oAuth server.
+# basic authentication with the OAuth2/oidcng server.
+{% if voot.authz_checkToken_endpoint_url is defined %}
 authz.checkToken.endpoint.url= {{ voot.authz_checkToken_endpoint_url }}
 authz.checkToken.clientId={{ voot.authz_checkToken_clientId }}
 authz.checkToken.secret={{ voot.authz_checkToken_secret }}
+{% endif %} 
 
 oidcng.checkToken.endpoint.url={{ voot.oidcng_checkToken_endpoint_url }}
 oidcng.checkToken.clientId={{ voot.oidcng_checkToken_clientId }}
