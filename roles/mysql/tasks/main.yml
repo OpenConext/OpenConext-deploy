@@ -103,7 +103,7 @@
 - name: Create database user
   mysql_user:
     name: "{{ item[0].name }}"
-    host: "{{ item[1] }}"
+    host: "{{ item[0].hosts | join(',') if item[0].hosts is defined and (item[0].hosts | length>0) else item[1] }}"
     password: "{{ item[0].password }}"
     priv: "{{ item[0].db_name }}.*:ALL"
     state: present
