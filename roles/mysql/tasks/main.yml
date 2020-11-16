@@ -107,6 +107,7 @@
     password: "{{ item[0].password }}"
     priv: "{{ item[0].db_name }}.*:ALL"
     state: present
+  no_log: true
   with_nested:
     - "{{ databases.users }}"
     - "{{ database_clients }}"
@@ -120,6 +121,7 @@
     password: "{{ item.password }}"
     priv: "*.*:ALL"
     state: present
+  no_log: true
   with_items:
     - "{{ databases.development_user|default([]) }}"
   when:
@@ -147,6 +149,7 @@
     login_password: "{{ mysql_root_password }}"
     priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
     state: present
+  no_log: true
   when:
     - backup_node | bool
 
