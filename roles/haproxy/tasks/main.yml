@@ -4,6 +4,7 @@
     name: centos-release-scl-rh
     state: absent 
   register: scl_removed
+  until: scl_removed is succeeded
 
 - name: Clean up the yum repos
   command: yum clean metadata
@@ -17,6 +18,8 @@
       - rh-haproxy18-haproxy-syspaths
       - rh-haproxy18-haproxy
     state: absent
+  register: haproxy_package_removed
+  until: haproxy_package_removed is succeeded
   when: 
     - scl_removed.changed | bool
 
@@ -36,6 +39,8 @@
       - haproxy20.x86_64
       - socat
     state: present
+  register: haproxy_package_installed
+  until: haproxy_package_installed is succeeded
 
 - name: Copy haproxy sysconfig file
   copy:
@@ -124,24 +129,14 @@
   when:
     - haproxy_backend_tls | bool
 
-- name: Copy global haproxy config
+- name: Copy haproxy config
   template:
-    src: "haproxy_global.cfg.j2"
-    dest: "/etc/haproxy/haproxy_global.cfg"
-  notify:
-    - "reload haproxy"
-
-- name: Copy frontend haproxy config
-  template:
-    src: "haproxy_frontend.cfg.j2"
-    dest: "/etc/haproxy/haproxy_frontend.cfg"
-  notify:
-    - "reload haproxy"
-
-- name: Copy backend haproxy config
-  template:
-    src: "haproxy_backend.cfg.j2"
-    dest: "/etc/haproxy/haproxy_backend.cfg"
+    src: "{{ item }}.j2"
+    dest: "/etc/haproxy/{{ item }}"
+  with_items:
+    - haproxy_global.cfg
+    - haproxy_frontend.cfg
+    - haproxy_backend.cfg
   notify:
     - "reload haproxy"
 
@@ -159,6 +154,7 @@
   service:  
     name: haproxy
     state: started
+    enabled: true
 
 - name: Run hapos-upd for initial OCSP responses
   shell: /usr/local/sbin/hapos-upd --partial-chain --good-only --socket /var/lib/haproxy/haproxy.stats --VAfile /etc/pki/haproxy/{{ item.name }}_haproxy.pem --cert /etc/pki/haproxy/{{ item.name }}_haproxy.pem
@@ -179,7 +175,6 @@
     special_time: hourly
     job: /usr/local/sbin/update_ocsp {{ ocsp_log_redirect | default('') }}
   when:  "'selfsigned_certs' not in group_names"
-
 
 - name: disable health checks for development envs
   shell: 'echo "disable health {{ item }}" | socat /var/lib/haproxy/haproxy.stats stdio'

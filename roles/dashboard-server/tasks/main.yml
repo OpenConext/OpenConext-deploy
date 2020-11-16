@@ -7,22 +7,15 @@
 
 - name: copy logging config
   template:
-    src: logback.xml.j2
-    dest: "{{ dashboard_dir }}/logback.xml"
+    src: "{{ item }}.j2"
+    dest: "{{ dashboard_dir }}/{{ item }}"
     owner: dashboard
     group: dashboard
     mode: 0740
+  with_items:
+    - logback.xml
+    - application.yml
   notify: 
-    - "restart dashboard"
-
-- name: copy application config
-  template:
-    src: "application.properties.j2"
-    dest: "{{ dashboard_dir }}/application.properties"
-    owner: dashboard
-    group: dashboard
-    mode: 0740
-  notify:
     - "restart dashboard"
 
 - name: Include postinstallation.yml

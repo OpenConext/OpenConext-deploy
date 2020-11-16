@@ -10,16 +10,21 @@
     dest: /tmp/composer-installer.php
     mode: 0755
     checksum: "sha384:{{ composer_installer_signature.content }}"
+  register: reg_composer_installer
 
 - name: Run Composer installer
   command: >
     php72 composer-installer.php
     chdir=/tmp
+  when:
+    - reg_composer_installer | changed
 
 - name: Move Composer into globally-accessible location.
   command: >
     mv /tmp/composer.phar {{ composer_path }}
     creates={{ composer_path }}
+  when:
+    - reg_composer_installer | changed
 
 - name: Add Nodesource repositories for Node.js
   yum:

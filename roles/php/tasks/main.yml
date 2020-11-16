@@ -3,20 +3,20 @@
   yum:
     name: remi-release
     state: absent
+  register: php_packages_remi_remove
+  until: php_packages_remi_remove is succeeded
 
-- name: Install the remi-safe yum repo file
+- name: Install the remi-safe yum repo files
   copy:
-    src: "remi-safe.repo"
-    dest: "/etc/yum.repos.d/remi-safe.repo"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: root
     mode: 0644
-
-- name: Install the remi RPM GPG key
-  copy: 
-    src:  "RPM-GPG-KEY-remi"
-    dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-remi"
-    owner: root
-    mode: 0644
+  with_items:
+    - src: remi-safe.repo
+      dest: /etc/yum.repos.d/remi-safe.repo
+    - src: RPM-GPG-KEY-remi
+      dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-remi
 
 - name: Install php-(cli,fpm) 7.2
   yum:
@@ -32,6 +32,8 @@
       - php72-php-xml
       - php72-php-gd
     state: present
+  register: php_packages_php_installed
+  until: php_packages_php_installed is succeeded
 
 - name: Install custom PHP configuration for 7.2
   template:
@@ -48,6 +50,8 @@
     name:
       - php72-php-pecl-xdebug
     state: present
+  register: php_packages_php_installed
+  until: php_packages_php_installed is succeeded
   when:
     - develop | bool
 
@@ -60,17 +64,15 @@
   notify:
     - "restart php72-php-fpm"
 
-- name: Put 7.2 php-fpm.conf
+- name: Put 7.2 FPM configuration
   copy:
-    src: "php72-fpm.conf"
-    dest: "/etc/opt/remi/php72/php-fpm.conf"
-  notify:
-    - "restart php72-php-fpm"
-
-- name: Put 7.2 php-fpm www pool conf
-  copy:
-    src: "www.conf"
-    dest: "/etc/opt/remi/php72/php-fpm.d/www.conf"
+    src: "{{ item.src }}"
+    dest: "/etc/opt/remi/php72/{{ item.dest }}f"
+  with_items:
+    - src: php72-fpm.conf
+      dest: php-fpm.con
+    - src: www.conf
+      dest: php-fpm.d/www.conf
   notify:
     - "restart php72-php-fpm"
 
@@ -81,10 +83,10 @@
   notify:
     - "restart php72-php-fpm"
 
-- name: Enable php72-php-fpm
-  service:
-    name: php72-php-fpm
-    enabled: yes
+# - name: Enable php72-php-fpm
+#   service:
+#     name: php72-php-fpm
+#     enabled: yes
 
 # Set mode to a+x so components can access their subdirectories under session/
 - name: Create directory for vhosts to store PHP sessions
@@ -99,6 +101,8 @@
       - "php-*"
       - "composer"
     state: absent
+  register: php_packages_php_remove
+  until: php_packages_php_remove is succeeded
 
 - name: Clean up old php-fpm 5.6 config
   file:

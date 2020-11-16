@@ -9,6 +9,8 @@
   yum:
     name: keepalived
     state: present
+  register: keepalived_package_installed
+  until: keepalived_package_installed is succeeded
 
 - name: Copy config file
   template:

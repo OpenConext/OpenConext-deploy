@@ -4,23 +4,16 @@
 
 - include: ../../../tasks/springbootapp/install-maven-release.yml
 
-- name: copy logging config
+- name: copy config
   template:
-    src: "logback.xml.j2"
-    dest: "{{ teams_dir }}/logback.xml"
+    src: "{{ item }}.j2"
+    dest: "{{ teams_dir }}/{{ item }}"
     owner: teams
     group: teams
     mode: 0740
-  notify:
-    - "restart teams"
-
-- name: copy application config
-  template:
-    src: "application.yml.j2"
-    dest: "{{ teams_dir }}/application.yml"
-    owner: "teams"
-    group: "teams"
-    mode: 0740
+  with_items:
+    - logback.xml
+    - application.yml
   notify:
     - "restart teams"
 

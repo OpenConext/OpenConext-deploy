@@ -8,7 +8,7 @@
 - name: Download current version
   get_url:
     url: "{{ lifecycle_download_url }}" 
-    dest: "{{ lifecycle_build_path }}" 
+    dest: "{{ lifecycle_build_path }}"
   register: lifecycle_download
 
 - name: Unpack current version
