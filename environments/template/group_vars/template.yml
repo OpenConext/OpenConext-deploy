@@ -1,5 +1,6 @@
 ---
 env: template
+use_selfsigned_certs: true
 
 instance_name: OpenConext
 base_domain: "%base_domain%"
