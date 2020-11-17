@@ -83,11 +83,6 @@
   notify:
     - "restart php72-php-fpm"
 
-# - name: Enable php72-php-fpm
-#   service:
-#     name: php72-php-fpm
-#     enabled: yes
-
 # Set mode to a+x so components can access their subdirectories under session/
 - name: Create directory for vhosts to store PHP sessions
   file:
