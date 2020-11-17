@@ -21,13 +21,22 @@ before_install:
   - python3 -V
   - pip3 -V
   - sudo pip3 install jinja2
+  - if [[ "${TRAVIS_BRANCH}" == "master" ]]; then sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 . ;fi
 
-install:
-  - ./scripts/syntax-check
-  - sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 .
+# install:
+#   - ./scripts/syntax-check
+#   - sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 .
 
-script:
-  - sudo /bin/bash ./tests/travis-build.sh
+deploy:
+  - provider: script
+    script: ./scripts/syntax-check
+    on:
+      all_branches: true
+      condition: $TRAVIS_BRANCH != ^master$
+  - provider: script
+    script: sudo bash ./tests/travis-build.sh
+    on:
+      branch: master
 
 after_failure:
   - sudo docker exec -t ansible-test yum install -y net-tools
