@@ -5,22 +5,16 @@
 - name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
 
-- name: Copy logging config
+- name: Copy config
   template:
-    src: "logback.xml.j2"
-    dest: "{{ authz_playground_dir }}/logback.xml"
+    src: "{{ item }}.j2"
+    dest: "{{ authz_playground_dir }}/{{ item }}"
     owner: authz-playground
     group: authz-playground
     mode: 0740
-  notify: restart authz-playground
-
-- name: Copy application config
-  template:
-    src: "application.properties.j2"
-    dest: "{{ authz_playground_dir }}/application.properties"
-    owner: authz-playground
-    group: authz-playground
-    mode: 0740
+  with_items:
+    - logback.xml
+    - application.properties
   notify: restart authz-playground
 
 - name: copy apache config

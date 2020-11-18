@@ -5,32 +5,27 @@
      - httpd
      - mod_ssl
     state: present
+  register: httpd_httpd_installed
+  until: httpd_httpd_installed is succeeded
 
 - name: Copy default config files
   template:
-    src: "{{ item }}.j2"
-    dest: "/etc/httpd/conf.d/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
   tags: httpd
   with_items:
-    - 01_default.conf
+    - src: 01_default.conf.j2
+      dest: /etc/httpd/conf.d/01_default.conf
+    - src: httpd.conf_httpd24.j2
+      dest: /etc/httpd/conf/httpd.conf
   notify:
     - "reload httpd"
 
-- name: Copy the main config file
-  template:
-    src: httpd.conf_httpd24.j2
-    dest: /etc/httpd/conf/httpd.conf
-  notify:
-    - "reload httpd"
-
-- name: Copy include files
-  copy:
-    src: "{{ item }}"
-    dest: "/etc/httpd/{{ item }}"
-  with_items:
-    - ssl_backend.conf
-  notify:
-    - "reload httpd"
+- name: Stop listening on port 443
+  lineinfile:
+    dest: /etc/httpd/conf.d/ssl.conf
+    state: absent
+    regexp: "Listen 443*"
 
 - name: Create empty welcome.conf and userdir.conf
   copy:
@@ -43,21 +38,21 @@
   notify:
     - "reload httpd"
 
-- name: Stop listening on port 443
-  lineinfile:
-    dest: /etc/httpd/conf.d/ssl.conf
-    state: absent
-    regexp: "Listen 443*"
-
-- name: Disable unused modules
+- name: Copy include files
   copy:
-    src: "{{ item }}"
-    dest: "/etc/httpd/conf.modules.d/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "/etc/httpd/{{ item.dest }}"
   with_items:
-    - 00-base.conf
-    - 00-dav.conf
-    - 00-lua.conf
-    - 00-proxy.conf
+    - src: ssl_backend.conf
+      dest: ssl_backend.conf
+    - src: 00-base.conf
+      dest: conf.modules.d/00-base.conf
+    - src: 00-dav.conf
+      dest: conf.modules.d/00-dav.conf
+    - src: 00-lua.conf
+      dest: conf.modules.d/00-lua.conf
+    - src: 00-proxy.conf
+      dest: conf.modules.d/00-proxy.conf
   notify:
     - "reload httpd"
 
@@ -71,19 +66,19 @@
     - html
     - icons
 
-- name: Create SSL key
+- name: Create SSL files
   copy:
-    content: "{{ backend_tls_key }}"
-    dest: "{{ tls.cert_private_path }}/backend.{{ base_domain  }}.key"
-    mode: 0600
+    content: "{{ item.content }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode | default(0644) }}"
     owner: root
-  when:
-    - haproxy_backend_tls | bool
-
-- name: Create SSL certificate
-  copy:
-    src: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
-    dest: "{{ tls.cert_path }}/backend.{{ base_domain}}.pem"
+  with_items:
+    - content: "{{ backend_tls_key }}"
+      dest: "{{ tls.cert_private_path }}/backend.{{ base_domain  }}.key"
+      mode: "0600"
+    - content: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
+      dest: "{{ tls.cert_path }}/backend.{{ base_domain}}.pem"
+  no_log: true
   when:
     - haproxy_backend_tls | bool
 

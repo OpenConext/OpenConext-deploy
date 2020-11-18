@@ -7,31 +7,15 @@
 
 - name: Copy logging config
   template:
-    src: "logback.xml.j2"
-    dest: "{{ pdp_dir }}/logback.xml"
+    src: "{{ item }}.j2"
+    dest: "{{ pdp_dir }}/{{ item }}"
     owner: pdp
     group: pdp
     mode: 0740
-  notify:
-    - "restart pdp"
-
-- name: Copy application config
-  template:
-    src: application.properties.j2
-    dest: "{{ pdp_dir }}/application.properties"
-    owner: pdp
-    group: pdp
-    mode: 0740
-  notify:
-    - "restart pdp"
-
-- name: Copy xacml config
-  template:
-    src: "xacml.conext.properties.j2"
-    dest: "{{ pdp_dir }}/xacml.conext.properties"
-    owner: pdp
-    group: pdp
-    mode: 0740
+  with_items:
+    - logback.xml
+    - application.properties
+    - xacml.conext.properties
   notify:
     - "restart pdp"
 

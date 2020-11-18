@@ -4,6 +4,7 @@
     name: centos-release-scl-rh
     state: absent 
   register: scl_removed
+  until: scl_removed is succeeded
 
 - name: Clean up the yum repos
   command: yum clean metadata
@@ -17,6 +18,8 @@
       - rh-haproxy18-haproxy-syspaths
       - rh-haproxy18-haproxy
     state: absent
+  register: haproxy_package_removed
+  until: haproxy_package_removed is succeeded
   when: 
     - scl_removed.changed | bool
 
@@ -36,6 +39,8 @@
       - haproxy20.x86_64
       - socat
     state: present
+  register: haproxy_package_installed
+  until: haproxy_package_installed is succeeded
 
 - name: Copy haproxy sysconfig file
   copy:
@@ -72,18 +77,21 @@
 - name: Create combined key and certificate file for HAproxy when using selfsigned certificates
   shell:
     cat {{tls.cert_path }}/{{ tls_star_cert }} {{ tls.cert_private_path }}/{{ tls_star_cert_key }} > "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
-  when: "'selfsigned_certs' in group_names"
+  args:
+    creates: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
+  when:
+    - "'selfsigned_certs' in group_names or use_selfsigned_certs | default(false)"
   with_items: "{{ haproxy_sni_ip.certs }}"
   notify:
     - "reload haproxy"
-  changed_when: false
 
 - name:  chmod 600 to the haproxy combined key and certificate file
   file:
     path: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
     mode: 0600 
-  when: "'selfsigned_certs' in group_names"
   with_items: "{{ haproxy_sni_ip.certs }}"
+  when:
+    - "'selfsigned_certs' in group_names or use_selfsigned_certs | default(false)"
 
 - name: Create combined key and certificate file for HAproxy
   copy:
@@ -91,7 +99,8 @@
     dest: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
     mode: 0600
   with_items: "{{ haproxy_sni_ip.certs }}"
-  when: "'selfsigned_certs' not in group_names"
+  when:
+    - "'selfsigned_certs' not in group_names or not use_selfsigned_certs | default(true)"
   notify:
     - "reload haproxy"
 
@@ -103,7 +112,8 @@
   with_items: "{{ haproxy_sni_ip_restricted.certs }}"
   notify:
     - "reload haproxy"
-  when: "haproxy_sni_ip_restricted is defined and 'selfsigned_certs' not in group_names"
+  when:
+    - "haproxy_sni_ip_restricted is defined and 'selfsigned_certs' not in group_names or not use_selfsigned_certs | default(true)"
 
 - name: Install ffdhe3072 DH parameters
   copy: 
@@ -124,24 +134,14 @@
   when:
     - haproxy_backend_tls | bool
 
-- name: Copy global haproxy config
+- name: Copy haproxy config
   template:
-    src: "haproxy_global.cfg.j2"
-    dest: "/etc/haproxy/haproxy_global.cfg"
-  notify:
-    - "reload haproxy"
-
-- name: Copy frontend haproxy config
-  template:
-    src: "haproxy_frontend.cfg.j2"
-    dest: "/etc/haproxy/haproxy_frontend.cfg"
-  notify:
-    - "reload haproxy"
-
-- name: Copy backend haproxy config
-  template:
-    src: "haproxy_backend.cfg.j2"
-    dest: "/etc/haproxy/haproxy_backend.cfg"
+    src: "{{ item }}.j2"
+    dest: "/etc/haproxy/{{ item }}"
+  with_items:
+    - haproxy_global.cfg
+    - haproxy_frontend.cfg
+    - haproxy_backend.cfg
   notify:
     - "reload haproxy"
 
@@ -159,27 +159,30 @@
   service:  
     name: haproxy
     state: started
+    enabled: true
 
 - name: Run hapos-upd for initial OCSP responses
   shell: /usr/local/sbin/hapos-upd --partial-chain --good-only --socket /var/lib/haproxy/haproxy.stats --VAfile /etc/pki/haproxy/{{ item.name }}_haproxy.pem --cert /etc/pki/haproxy/{{ item.name }}_haproxy.pem
   with_items:
     - "{{ haproxy_sni_ip.certs }}"
     - "{{ haproxy_sni_ip_restricted.certs }}"
-  when:  "'selfsigned_certs' not in group_names"
+  when:
+    - "'selfsigned_certs' not in group_names or not use_selfsigned_certs | default(true)"
 
 - name: install OCSP periodic update script
   template:
     src: "update_ocsp.j2"
     dest: "/usr/local/sbin/update_ocsp"
     mode: 0755
-  when:  "'selfsigned_certs' not in group_names"
+  when:
+    - "'selfsigned_certs' not in group_names or not use_selfsigned_certs | default(true)"
 
 - cron:
     name: "update ocsp info"
     special_time: hourly
     job: /usr/local/sbin/update_ocsp {{ ocsp_log_redirect | default('') }}
-  when:  "'selfsigned_certs' not in group_names"
-
+  when:
+    - "'selfsigned_certs' not in group_names or not use_selfsigned_certs | default(true)"
 
 - name: disable health checks for development envs
   shell: 'echo "disable health {{ item }}" | socat /var/lib/haproxy/haproxy.stats stdio'
