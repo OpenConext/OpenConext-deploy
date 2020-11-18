@@ -26,9 +26,17 @@ before_install:
     fi
   - if [[ "${TRAVIS_BRANCH}" == "master" ]]; then sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 . ;fi
 
-script:
-  - if [[ "${TRAVIS_BRANCH}" != "master" ]]; then ./scripts/syntax-check ;fi
-  - if [[ "${TRAVIS_BRANCH}" == "master" ]]; then sudo /bin/bash ./tests/travis-build.sh . ;fi
+jobs:
+  include:
+    - stage: syntax-check
+      script: ./scripts/syntax-check
+    - stage: build
+      script: sudo /bin/bash ./tests/travis-build.sh
+      if: branch = "master"
+
+# script:
+#   - if [[ "${TRAVIS_BRANCH}" != "master" ]]; then ./scripts/syntax-check ;fi
+#   - if [[ "${TRAVIS_BRANCH}" == "master" ]]; then sudo /bin/bash ./tests/travis-build.sh . ;fi
 
 after_failure:
   - sudo docker exec -t ansible-test yum install -y net-tools
@@ -52,5 +60,5 @@ after_failure:
   - sudo docker exec -t ansible-test cat /var/log/tomcat/oidc.log
 
 after_script:
-  - sudo docker stop ansible-test
+  - if [[ "${TRAVIS_BRANCH}" == "master" ]]; sudo docker stop ansible-test ;fi
 
