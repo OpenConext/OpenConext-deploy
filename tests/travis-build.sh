@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#
+BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+if [[ "${BRANCH}" != "master" ]]
+	then	echo "We only run on master"
+			exit 0
+fi
+
 set -e
 
 # keep exit status
@@ -13,7 +20,7 @@ ANSIBLE_PLAYBOOK_WRAPPER=/ansible/provision
 ANSIBLE_USER=vagrant
 
 # start docker container
-docker run --detach                                             \
+docker run --detach                                         \
 	-v "${PWD}":/ansible:rw                                 \
 	-v /sys/fs/cgroup:/sys/fs/cgroup:ro                     \
 	--privileged                                            \
@@ -37,7 +44,7 @@ docker run --detach                                             \
 	--add-host aa.vm.openconext.org:127.0.0.2               \
 	--add-host link.vm.openconext.org:127.0.0.1             \
 	--add-host oidc.vm.openconext.org:127.0.0.1             \
-	--add-host connect.vm.openconext.org:127.0.0.1           \
+	--add-host connect.vm.openconext.org:127.0.0.1          \
 	--add-host oidc-playground.vm.openconext.org:127.0.0.1  \
 	--add-host manage.vm.openconext.org:127.0.0.2           \
 	--add-host redirect.vm.openconext.org:127.0.0.1         \
