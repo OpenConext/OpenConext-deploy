@@ -28,10 +28,14 @@
   become: true
   roles:
     - role: hosts
+      when:
+        - update_hosts_file
       tags: ['core', 'frontend', 'hosts']
     - role: httpd
       tags: ['core', 'frontend', 'httpd']
     - role: welcome
+      when:
+        - use_welcome_role
       tags: ['core', 'frontend', 'welcome']
 
 - hosts: loadbalancer
@@ -39,8 +43,6 @@
   become: true
   roles:
     - role: haproxy
-      when:
-        - inventory_hostname not in groups['loadbalancer_ha']
       tags: ['core', 'loadbalancer', 'lb']
     - role: keepalived
       when:
