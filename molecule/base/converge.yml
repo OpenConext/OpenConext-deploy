@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  pre_tasks:
+    - name: Read vars from secrets file
+      include_vars: "../../environments/vm/secrets/vm.yml"
+    - name: Read vars from group_vars file
+      include_vars: "../../environments/vm/group_vars/vm.yml"
+
+  roles:
+    - role: common
+    - role: rsyslog
+    - role: selfsigned_certs
