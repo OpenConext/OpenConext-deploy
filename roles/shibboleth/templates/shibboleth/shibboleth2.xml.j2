@@ -95,7 +95,7 @@
 
 {% for key, value in shibboleth_metadata_sources.items() %}
         <MetadataProvider type="XML"
-                          uri="{{ value }}"
+                          url="{{ value }}"
                           backingFilePath="metadata-{{ key }}.xml"
                           reloadInterval="3600">
         </MetadataProvider>
@@ -131,7 +131,7 @@
                 <SSO entityID="{{ value.customIdP }}">SAML2</SSO>
             </Sessions>
             <MetadataProvider type="XML"
-                          uri="{{ value.customIdP }}"
+                          url="{{ value.customIdP }}"
                           backingFilePath="metadata-custom-{{ key }}.xml"
                           reloadInterval="3600">
             </MetadataProvider>
