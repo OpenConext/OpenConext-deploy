@@ -15,7 +15,7 @@ addons:
     packages:
       - docker-ce
 
-before_install:
+install:
   - |
     if [[ "${TRAVIS_BRANCH}" != "master" ]]; then
       sudo apt-get -y update
