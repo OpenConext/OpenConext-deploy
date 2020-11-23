@@ -11,7 +11,7 @@ platforms:
     command: /usr/sbin/init
     privileged: True
     volumes:
-      - '../etc-hosts:/etc/hosts'
+      - "${MOLECULE_SCENARIO_DIRECTORY}/../etc-hosts:/etc/hosts"
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
       - "loadbalancer-vm"
