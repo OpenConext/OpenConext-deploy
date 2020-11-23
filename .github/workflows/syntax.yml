@@ -29,5 +29,5 @@ jobs:
       - name: Installing dependencies
         run: pip install jinja2 ansible
 
-      - name: Run role tests
+      - name: Run syntax check
         run: ./scripts/syntax-check
