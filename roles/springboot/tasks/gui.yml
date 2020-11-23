@@ -1,0 +1,53 @@
+---
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | create html folder"
+  file:
+    path: "{{ _springapp_dir }}"
+    owner: root
+    group: root
+    mode: 02755
+    state: directory
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | download html archive"
+  maven_artifact:
+    group_id: org.openconext
+    artifact_id: "{{ _springapp_artifact_id }}"
+    extension: zip
+    version: "{{ _springapp_version }}" 
+    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in _springapp_version else maven_repo }}" 
+    dest: "{{  _springapp_dir }}"
+  register: maven_result
+  until: maven_result is succeeded
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | extract html archive"
+  unarchive:
+    src: "{{ maven_result.dest }}" 
+    dest: "{{ _springapp_dir }}"
+    copy: no
+    owner: root
+    group: apache
+  register: unarchive_result
+  when:
+    - maven_result.changed
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | create symlink to downloaded version"
+  file:
+    src: "{{ unarchive_result.dest }}/{{ _springapp_artifact_id}}-{{ _springapp_version }}"
+    dest: "{{ _springapp_dir }}/current"
+    state: link
+    force: yes
+  when:
+    - unarchive_result.changed
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Remove old zipfiles"
+  shell: 'ls -t *.zip | tail -n +3|  xargs --no-run-if-empty rm -v'
+  args:
+    chdir: "{{ _springapp_dir }}"
+  register: clean_zips
+  changed_when: '"removed" in clean_zips'
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Remove old www directories"
+  shell: 'find . ! -name $(basename $(readlink current)) -name "{{ _springapp_artifact_id }}-*" -type d  -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -vr'
+  args:
+    chdir: "{{ _springapp_dir }}"
+  register: clean_wwwdirs
+  changed_when: '"removed" in clean_wwwdirs'

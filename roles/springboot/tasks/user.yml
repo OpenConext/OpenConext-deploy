@@ -1,0 +1,30 @@
+---
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | create user"
+  user:
+    name: "{{ _springapp_user }}"
+    system: yes
+    home: "{{ _springapp_dir }}" 
+    shell: /sbin/nologin
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Create logging directory"
+  file:
+    path: "/var/log/{{ _springapp_service_name }}"
+    state: directory
+    owner: "{{ _springapp_user }}"
+    group: "{{ _springapp_user }}"
+    mode: 0755
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Copy systemd service file"
+  template:
+    src: "spring-boot.service.j2"
+    dest: "/etc/systemd/system/{{ _springapp_service_name }}.service"
+  register: springboot_service_state
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | enable service"
+  service:
+    name: "{{ _springapp_service_name }}"
+    enabled: yes
+    daemon_reload: true
+  when:
+    - springboot_service_state.changed

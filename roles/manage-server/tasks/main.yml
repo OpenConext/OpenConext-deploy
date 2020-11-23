@@ -1,7 +1,4 @@
 ---
-- name: Perform preinstallation tasks
-  include: ../../../tasks/springbootapp/preinstallation.yml
-  
 - name: Import the mongo CA file
   copy:
     src: "{{ inventory_dir }}/files/certs/mongo/{{ mongo_tls_ca }}"
@@ -12,9 +9,6 @@
 - name: Update the ca trust store
   command: /bin/update-ca-trust
   changed_when: False
-
-- name: Include install-maven-release.yml
-  include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: Create metadata {{ manage_dir }} directories
   file:
@@ -68,8 +62,3 @@
     - metadata_templates
   notify:
     - "restart manage"
-
-- name: Include postinstallation.yml
-  include: ../../../tasks/springbootapp/postinstallation.yml
-
-- meta: flush_handlers

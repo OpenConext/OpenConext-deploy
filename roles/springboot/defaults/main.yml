@@ -1,0 +1,11 @@
+---
+springboot_service_to_deploy: all
+springboot_server_services: []
+
+springboot_min_heapsize: "512m"
+springboot_max_heapsize: "512m"
+springboot_random_source: "file:///dev/urandom"
+springboot_opts:
+springboot_artifact_group_dir: org/openconext
+springboot_artifact_type: jar
+springboot_tcpport: 9999

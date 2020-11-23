@@ -1,8 +1,4 @@
 ---
-- name: Include preinstallation.yml
-  include: ../../../tasks/springbootapp/preinstallation.yml
-
-- include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: Copy logging config
   template: 
@@ -29,6 +25,3 @@
     dest: "/etc/httpd/conf.d/mujina_sp.conf"
   notify:
     - "reload httpd"
-
-- name: Include postinstallation.yml
-  include: ../../../tasks/springbootapp/postinstallation.yml
