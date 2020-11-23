@@ -66,21 +66,37 @@
     - html
     - icons
 
-- name: Create SSL files
+- name: Create SSL key
   copy:
-    content: "{{ item.content }}"
-    dest: "{{ item.dest }}"
-    mode: "{{ item.mode | default(0644) }}"
+    content: "{{ backend_tls_key }}"
+    dest: "{{ tls.cert_private_path }}/backend.{{ base_domain  }}.key"
+    mode: 0600
     owner: root
-  with_items:
-    - content: "{{ backend_tls_key }}"
-      dest: "{{ tls.cert_private_path }}/backend.{{ base_domain  }}.key"
-      mode: "0600"
-    - content: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
-      dest: "{{ tls.cert_path }}/backend.{{ base_domain}}.pem"
-  no_log: true
   when:
     - haproxy_backend_tls | bool
+
+- name: Create SSL certificate
+  copy:
+    src: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
+    dest: "{{ tls.cert_path }}/backend.{{ base_domain}}.pem"
+  when:
+    - haproxy_backend_tls | bool
+
+#- name: Create SSL files
+#  copy:
+#    content: "{{ item.content }}"
+#    dest: "{{ item.dest }}"
+#    mode: "{{ item.mode | default(0644) }}"
+#    owner: root
+#  with_items:
+#    - content: "{{ backend_tls_key }}"
+#      dest: "{{ tls.cert_private_path }}/backend.{{ base_domain  }}.key"
+#      mode: "0600"
+#    - content: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
+#      dest: "{{ tls.cert_path }}/backend.{{ base_domain}}.pem"
+#  no_log: true
+#  when:
+#    - haproxy_backend_tls | bool
 
 - name: enable httpd
   service:
