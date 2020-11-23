@@ -1,15 +1,13 @@
 ---
-- name: copy virtual host config
+- name: copy Apache config
   template:
-    src: "manage.conf.j2"
-    dest: "/etc/httpd/conf.d/manage.conf"
-  notify:
-    - "restart httpd"
-
-- name: copy virtual host backdoor config
-  template:
-    src: "manage.conf.backdoor.j2"
-    dest: "/etc/httpd/conf.d/manage.conf.backdoor"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - src: "manage.conf.j2"
+      dest: "/etc/httpd/conf.d/manage.conf"
+    - src: "manage.conf.backdoor.j2"
+      dest: "/etc/httpd/conf.d/manage.conf.backdoor"
   notify:
     - "restart httpd"
 

@@ -5,33 +5,17 @@
 - name: Include install-maven-release.yml
   include: ../../../tasks/springbootapp/install-maven-release.yml
 
-- name: copy logging config
+- name: copy config
   template:
-    src: "logback.xml.j2"
-    dest: "{{ attribute_aggregation_dir }}/logback.xml"
+    src: "{{ item }}.j2"
+    dest: "{{ attribute_aggregation_dir }}/{{ item }}"
     owner: attribute-aggregation
     group: attribute-aggregation
     mode: 0740
-  notify:
-    - "restart attribute-aggregation"
-
-- name: copy application config
-  template:
-    src: "application.yml.j2"
-    dest: "{{ attribute_aggregation_dir }}/application.yml"
-    owner: attribute-aggregation
-    group: attribute-aggregation
-    mode: 0740
-  notify:
-    - "restart attribute-aggregation"
-
-- name: Copy attributeAuthorities config
-  template:
-    src: "attributeAuthorities.yml.j2"
-    dest: "{{ attribute_aggregation_dir }}/attributeAuthorities.yml"
-    owner: attribute-aggregation
-    group: attribute-aggregation
-    mode: 0740
+  with_items:
+    - logback.xml
+    - application.yml
+    - attributeAuthorities.yml
   notify:
     - "restart attribute-aggregation"
 

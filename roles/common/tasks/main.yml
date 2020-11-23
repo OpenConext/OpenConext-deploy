@@ -28,11 +28,15 @@
       - bzip2
       - libselinux-python
     state: present
+  register: common_tools_installed
+  until: common_tools_installed is succeeded
 
 - name: Install git on development vm
   yum:
     name: git
     state: present
+  register: common_git_tools_installed
+  until: common_git_tools_installed is succeeded
   when:
     - develop | bool
 
@@ -98,6 +102,8 @@
       - sendmail
       - sendmail-cf
     state: absent
+  register: common_mail_uninstalled
+  until: common_mail_uninstalled is succeeded
   when:
     - sendmail_smarthost is defined
 
@@ -106,6 +112,8 @@
     name:
       - postfix
     state: present
+  register: common_postfix_installed
+  until: common_postfix_installed is succeeded
   when:
     - sendmail_smarthost is defined
 

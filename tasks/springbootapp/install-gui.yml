@@ -16,6 +16,7 @@
     repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in springapp_version else maven_repo }}" 
     dest: "{{  springapp_dir }}"
   register: maven_result
+  until: maven_result is succeeded
 
 - name: extract html archive
   unarchive:

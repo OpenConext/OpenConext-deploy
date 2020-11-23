@@ -22,6 +22,7 @@
       entityid: "{{ manage_provision_client_id }}"
   run_once: true
   register: manage_test_entity
+  until: manage_test_entity is succeeded
 
 - name: Upload entity to manage
   uri:
@@ -34,6 +35,8 @@
     body: "{{ lookup('template', './{{ entity_type }}.j2') }}"
   run_once: true
   when: manage_test_entity.json|length==0
+  register: upload_entity_manage
+  until: upload_entity_manage is succeeded
 
 - name: push metadata eb
   uri:
@@ -45,3 +48,5 @@
     status_code: 200
   run_once: true
   when: manage_test_entity.json|length==0
+  register: push_metadata_eb
+  until: push_metadata_eb is succeeded

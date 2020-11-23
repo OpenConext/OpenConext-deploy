@@ -116,6 +116,7 @@
     login_port: "{{ mongod_port }}"
     roles: root
     state: present
+  no_log: true
   when:
      - mongo_primary | bool
      - mongo_present.stat.exists == False
@@ -170,6 +171,7 @@
     password: "{{ item.password }}"
     roles: readWrite
     replica_set: "{{ replica_set_name }}"
+  no_log: true
   when:
     - mongo_primary | bool
     - not mongo_tls | bool
@@ -189,6 +191,7 @@
     ssl: True
     ssl_cert_reqs: CERT_NONE
     replica_set: "{{ replica_set_name }}"
+  no_log: true
   when:
     - mongo_primary | bool
     - mongo_tls | bool

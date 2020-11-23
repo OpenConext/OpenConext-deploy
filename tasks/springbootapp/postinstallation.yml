@@ -8,8 +8,11 @@
 - name: wait for {{ springapp_service_name }} to start
   wait_for:
     connect_timeout: 30
+    timeout: 120
     port: "{{ springapp_tcpport }}"
     state: started
+  register: task_springapp_service_name
+  until: task_springapp_service_name is succeeded
 
 - name: cleanup old jars
   shell: 'find . ! -name $(basename $(readlink "{{ springapp_dir }}/{{ springapp_jar }}")) -name "*.jar" -type f -printf "%T@  %p\n"  | sort -rn | awk ''{print $2}'' | tail -n +2 | xargs --no-run-if-empty rm -v'

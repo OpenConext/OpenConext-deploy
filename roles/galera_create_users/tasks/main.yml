@@ -12,3 +12,4 @@
     - "{{ databases.users }}"
     - "{{ database_clients }}"
   run_once: true
+  no_log: true

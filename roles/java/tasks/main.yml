@@ -13,6 +13,8 @@
       - java-1.8.0-openjdk-devel.x86_64
       - java-1.7.0-openjdk-devel
     state: present
+  register: java_package_java_installed
+  until: java_package_java_installed is succeeded
   tags:
     - java
 

@@ -3,23 +3,18 @@
 
 - include: ../../../tasks/springbootapp/install-maven-release.yml
 
-- name: Copy logging config
+- name: Copy config
   template: 
-    src: logback.xml.j2 
-    dest: "{{ mujina_idp_dir }}/logback.xml" 
+    src: "{{ item }}.j2"
+    dest: "{{ mujina_idp_dir }}/{{ item }}" 
     owner: "{{ springapp_user }}" 
     group: "{{ springapp_user }}" 
     mode: 0740
-  notify: restart mujina-idp
-
-- name: Copy application config
-  template: 
-    src : application.yml.j2 
-    dest: "{{ mujina_idp_dir }}/application.yml"
-    owner: "{{ springapp_user }}" 
-    group: "{{ springapp_user }}" 
-    mode: 0740
-  notify: restart mujina-idp
+  with_items:
+    - logback.xml
+    - application.yml
+  notify:
+    - restart mujina-idp
 
 - name: copy apache config
   template: 

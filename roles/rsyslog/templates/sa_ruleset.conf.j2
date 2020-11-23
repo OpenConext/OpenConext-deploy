@@ -12,11 +12,17 @@ $RuleSet {{ item.name }}
 :programname, isequal, "nginx_error_ra" { action(type="omfile" DynaFile="nginx_error_ra-{{ item.name }}") stop }
 :programname, isequal, "nginx_access_selfservice" { action(type="omfile" DynaFile="nginx_access_selfservice-{{ item.name }}") stop }
 :programname, isequal, "nginx_error_selfservice" { action(type="omfile" DynaFile="nginx_error_selfservice-{{ item.name }}") stop }
+:programname, isequal, "nginx_access_webauthn" { action(type="omfile" DynaFile="nginx_access_webauthn-{{ item.name }}") stop }
+:programname, isequal, "nginx_error_webauthn" { action(type="omfile" DynaFile="nginx_error_webauthn-{{ item.name }}") stop }
+:programname, isequal, "nginx_access_azuremfa" { action(type="omfile" DynaFile="nginx_access_azuremfa-{{ item.name }}") stop }
+:programname, isequal, "nginx_error_azuremfa" { action(type="omfile" DynaFile="nginx_error_azuremfa-{{ item.name }}") stop }
 :programname, isequal, "stepup-selfservice" { action(type="omfile" DynaFile="stepup-selfservice-{{ item.name }}") stop }
 :programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
 :programname, isequal, "stepup-tiqr" { action(type="omfile" DynaFile="stepup-tiqr-{{ item.name }}") stop }
 :programname, isequal, "stepup-ra" { action(type="omfile" DynaFile="stepup-ra-{{ item.name }}") stop }
 :programname, isequal, "stepup-middleware" { action(type="omfile" DynaFile="stepup-middleware-{{ item.name }}") stop }
+:programname, isequal, "stepup-webauthn" { action(type="omfile" DynaFile="stepup-webauthn-{{ item.name }}") stop }
+:programname, isequal, "stepup-azure-mfa" { action(type="omfile" DynaFile="stepup-azuremfa-{{ item.name }}") stop }
 :programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="garb-{{ item.name }}") stop }
 :programname, isequal, "mysqld" { action(type="omfile" DynaFile="galera-{{ item.name }}") stop }
 :programname, isequal, "sendmail" { action(type="omfile" DynaFile="sendmail-{{ item.name }}") stop }
