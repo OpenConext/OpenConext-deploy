@@ -34,4 +34,4 @@ jobs:
         run: pip install jinja2 ansible molecule molecule-docker pytest-testinfra pytest setuptools
 
       - name: Run role tests
-        run: molecule test -s base
+        run: molecule test -s loadbalancer

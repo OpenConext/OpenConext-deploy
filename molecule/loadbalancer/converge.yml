@@ -17,8 +17,6 @@
   roles:
     - role: haproxy
       base_domain: molecule.openconext.org
-      # _https_star_private_key: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm/files/certs/star.molecule.openconext.org.key"
-      # https_star_private_key: "{{ lookup('file', _https_star_private_key) }}\n"
     - role: keepalived
       keepalived:
         state_master: MASTER

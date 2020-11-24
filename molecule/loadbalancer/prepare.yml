@@ -11,31 +11,11 @@
     - name: Read vars from group_vars file
       include_vars: "../../environments/vm/group_vars/vm.yml"
 
-    - name: "Create group for imaginary host"
-      add_host:
-        name: imaginary-host
-        groups:
-          - selfsigned_certs
-      changed_when: False
-
-  roles:
-    - role: selfsigned_certs
-      base_domain: molecule.openconext.org
-
-  post_tasks:
-    # - name: Copy the certificate
-    #   fetch:
-    #     src: "/etc/pki/tls/certs/star.molecule.openconext.org.pem"
-    #     dest: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm/files/certs/star.molecule.openconext.org.pem"
-    #     flat: true
-
-    # - name: Copy the certificate
-    #   fetch:
-    #     src: "/etc/pki/tls/private/star.molecule.openconext.org.key"
-    #     dest: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm/files/certs/star.molecule.openconext.org.key"
-    #     flat: true
-
     - name: "Install package(s)"
       yum:
         name: crontabs
         state: present
+
+  roles:
+    - role: selfsigned_certs
+      base_domain: molecule.openconext.org
