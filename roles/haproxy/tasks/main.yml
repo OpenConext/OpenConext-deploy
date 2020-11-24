@@ -75,8 +75,7 @@
     mode: 0700
 
 - name: Create combined key and certificate file for HAproxy when using selfsigned certificates
-  shell:
-    cat {{tls.cert_path }}/{{ tls_star_cert }} {{ tls.cert_private_path }}/{{ tls_star_cert_key }} > "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
+  shell: cat {{tls.cert_path }}/{{ tls_star_cert }} {{ tls.cert_private_path }}/{{ tls_star_cert_key }} > "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
   args:
     creates: "/etc/pki/haproxy/{{ item.name }}_haproxy.pem"
   when:
@@ -167,6 +166,7 @@
     - "{{ haproxy_sni_ip.certs }}"
     - "{{ haproxy_sni_ip_restricted.certs }}"
   when:
+    - haproxy_sni_ip_restricted is defined
     - "'selfsigned_certs' not in group_names or not use_selfsigned_certs | default(true)"
 
 - name: install OCSP periodic update script
