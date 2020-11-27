@@ -1,0 +1,65 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+
+platforms:
+  - name: openconext-centos7-mysql
+    image: centos7-ansible
+    dockerfile: ../Dockerfile.j2
+    command: /usr/sbin/init
+    privileged: True
+    networks:
+      - name: mariadb
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    groups:
+      - storage
+      - dbcluster
+      - dbcluster_nodes
+      - galera_provision_host
+  - name: openconext-centos7-mysql-2
+    image: centos7-ansible
+    dockerfile: ../Dockerfile.j2
+    command: /usr/sbin/init
+    privileged: True
+    networks:
+      - name: mariadb
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    groups:
+      - storage
+      - dbcluster
+      - dbcluster_nodes
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  env:
+    ANSIBLE_REMOTE_TMP: /tmp/
+    ANSIBLE_ROLES_PATH: ../../roles
+  inventory:
+    links:
+      group_vars: ../../group_vars
+
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

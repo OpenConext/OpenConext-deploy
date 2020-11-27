@@ -7,6 +7,8 @@ galera_bootstrap_node: ""
 mariadb_cluster_user: galera_sst_user
 mariadb_backup_user: backup_user
 
+percona_url_rpm: https://mirrors.cloud.tencent.com/percona/release/7/RPMS/noarch/percona-release-1.0-25.noarch.rpm
+
 # Settings for galera TLS
 galera_ssl: true
 galera_tls_cert_path: /etc/pki/mysql 
@@ -27,6 +29,7 @@ galera_client_key_name: galera_client.key
 galera_client_crt_name: galera_client.pem
 galera_sst_crt_name: galera_sst.pem
 galera_gmcast_segment: 1
+galera_handler_restart: True
 
 #Install memcached on the cluster nodes
 memcached_cluster: False
