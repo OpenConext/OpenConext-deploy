@@ -31,5 +31,11 @@ jobs:
       - name: Installing dependencies
         run: pip install jinja2 ansible molecule molecule-docker pytest-testinfra pytest setuptools
 
+      - name: disable apparmor for mysql
+        run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+
+      - name: parse apparmor for mysql
+        run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+
       - name: Run role tests
         run: molecule test -s mysql
