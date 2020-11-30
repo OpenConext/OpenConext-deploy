@@ -13,7 +13,7 @@ ANSIBLE_PLAYBOOK_WRAPPER=/ansible/provision
 ANSIBLE_USER=vagrant
 
 # start docker container
-docker run --detach                                             \
+docker run --detach                                         \
 	-v "${PWD}":/ansible:rw                                 \
 	-v /sys/fs/cgroup:/sys/fs/cgroup:ro                     \
 	--privileged                                            \
@@ -37,7 +37,7 @@ docker run --detach                                             \
 	--add-host aa.vm.openconext.org:127.0.0.2               \
 	--add-host link.vm.openconext.org:127.0.0.1             \
 	--add-host oidc.vm.openconext.org:127.0.0.1             \
-	--add-host connect.vm.openconext.org:127.0.0.1           \
+	--add-host connect.vm.openconext.org:127.0.0.1          \
 	--add-host oidc-playground.vm.openconext.org:127.0.0.1  \
 	--add-host manage.vm.openconext.org:127.0.0.2           \
 	--add-host redirect.vm.openconext.org:127.0.0.1         \
@@ -64,6 +64,9 @@ docker cp /tmp/ansible.cfg ansible-test:${ANSIBLE_CONFIG}
 
 # Change the hostname in the inventory
 sed -i 's/%target_host%/localhost ansible_connection=local/g' environments-external/travis/inventory 
+
+# Listen to all interfaces, so we can run a Docker container on our hosts
+echo "listen_address_ip4: 0.0.0.0" >> environments-external/travis/group_vars/travis.yml
 
 # The docker image doesn't have ipv6: Disable it for postfix
 echo "postfix_interfaces: ipv4" >> environments-external/travis/group_vars/travis.yml
@@ -97,7 +100,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml -t core
 
 echo
 echo "================================================================="
@@ -108,7 +111,7 @@ echo "================================================================="
 echo
 
 TMPOUT=$(mktemp)
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml | tee $TMPOUT
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml -t core | tee $TMPOUT
 
 echo
 echo "================================================================="
@@ -128,5 +131,20 @@ docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
 		-i $ANSIBLE_INVENTORY                                    \
 		/ansible/tests/all_services_are_up.yml
+
+
+# BRANCH=$(if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+BRANCH="develop"
+if [[ "${BRANCH}" == "develop" ]] && [[ $status -eq 0 ]]
+	then	echo "Now we will create a Docker image."
+			DOCKER_ANSIBLE_TEST_COMMIT=$(docker commit ansible-test)
+			DOCKER_ANSIBLE_TEST_IMAGE_ID=$(echo ${DOCKER_ANSIBLE_TEST_COMMIT} | awk -F ':' '{print $2}' | cut -c1-12)
+			if [[ DOCKER_ANSIBLE_TEST_IMAGE_ID != "" ]]
+				then	# Create docker tag
+						docker tag ${DOCKER_ANSIBLE_TEST_IMAGE_ID} surfnet/centos7-openconext-core
+						# docker push surfnet/centos7-openconext-core
+			fi
+	else	echo "We only run on master to create a Docker image."
+fi
 
 exit $status

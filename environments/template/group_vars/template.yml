@@ -564,7 +564,7 @@ haproxy_applications:
 haproxy_backend_tls: False
 
 haproxy_sni_ip:
-  ipv4: 127.0.0.1
+  ipv4: "{{ listen_address_ip4 | default('127.0.0.1') }}"
   ipv6:  "::1"
   certs:
      - name: star
