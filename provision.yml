@@ -7,147 +7,183 @@
     tags:
      - always
 
-
-- hosts: loadbalancer:loadbalancer-vm:php-apps:java-apps:storage:oidc:dbcluster:sysloghost:elk:lifecycle
+- hosts: base
   gather_facts: yes
   become: true
   roles:
-    - { role: common,       tags: ['common'] }
-    - { role: rsyslog,      tags: ['rsyslog'] }
-    - { role: iptables, when: iptables_enable | bool,  tags: ['iptables'] }
+    - role: common
+      tags: ['core', 'base', 'common']
+    - role: rsyslog
+      tags: ['core', 'base', 'rsyslog']
+    - role: iptables
+      when:
+        - iptables_enable | bool
+      tags: ['core', 'base', 'iptables']
+    - role: selfsigned_certs
+      when:
+        - use_selfsigned_certs
+      tags: ['core', 'base', 'selfsigned_certs']
 
-- hosts: selfsigned_certs
-  gather_facts: no
+- hosts: frontend
   become: true
   roles:
-    - { role: selfsigned_certs, tags: ['selfsigned_certs'] } 
-
-- hosts: php-apps-vm
-  become: true
-  roles:
-    - { role: hosts,     tags: ['hosts'] }
-    - { role: httpd,     tags: ['httpd'] }
-    - { role: welcome,   tags: ['welcome'] }
-
-- hosts: loadbalancer-vm
-  gather_facts: true
-  become: true
-  roles:
-    - { role: haproxy, tags: ['lb'] }
-
-- hosts: loadbalancer_ha
-  gather_facts: true
-  become: true
-  roles:
-    - { role: keepalived, tags: ['keepalived'] }
-    - { role: bind, tags: ['bind'] }
+    - role: hosts
+      when:
+        - update_hosts_file
+      tags: ['core', 'frontend', 'hosts']
+    - role: httpd
+      tags: ['core', 'frontend', 'httpd']
+    - role: welcome
+      when:
+        - use_welcome_role
+      tags: ['core', 'frontend', 'welcome']
 
 - hosts: loadbalancer
   gather_facts: true
   become: true
   roles:
-    - { role: haproxy, tags: ['lb'] }
+    - role: haproxy
+      tags: ['core', 'loadbalancer', 'lb']
+    - role: keepalived
+      when:
+        - inventory_hostname in groups['loadbalancer_ha']
+      tags: ['core', 'loadbalancer', 'keepalived']
+    - role: bind
+      when:
+        - inventory_hostname in groups['loadbalancer_ha']
+      tags: ['core', 'loadbalancer', 'bind']
 
-- hosts: php-apps:java-apps:oidc:lifecycle
+- hosts: db_mysql
   gather_facts: no
   become: true
   roles:
-    - { role: httpd,     tags: ['httpd'] }
+    - role: mysql
+      when:
+        - inventory_hostname in groups['storage']
+      tags: ['core', 'db_mysql', 'mysql']
+    - role: galera
+      when:
+        - inventory_hostname in groups['dbcluster']
+      tags: ['core', 'db_mysql', 'galera']
+    - role: keepalived
+      when:
+        - inventory_hostname in groups['dbcluster_nodes']
+      tags: ['core', 'db_mysql', 'keepalived']
+    - role: galera_create_users
+      when:
+        - inventory_hostname in groups['galera_provision_host']
+      tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
 
-- hosts: storage
-  gather_facts: no
-  become: true
-  roles:
-    - { role: mysql, tags: ['mysql'] }
-
-- hosts: dbcluster
+- hosts: db_mongo
   gather_facts: yes
   become: true
   roles:
-    - { role: galera, tags: ['galera'] }
+    - role: mongo
+      when:
+        - inventory_hostname in groups['mongo_servers']
+      tags: ['core', 'db_mongo', 'mongo']
 
-- hosts: dbcluster_nodes
-  gather_facts: yes
-  become: true
-  roles:
-    - { role: keepalived, tags: ['keepalived'] }
-
-- hosts: galera_provision_host
-  roles:
-    - { role: galera_create_users, tags: ['galera', 'galera_create_users'] }
-
-- hosts: mongo_servers
-  gather_facts: yes
-  become: true
-  roles:
-    - { role: mongo, tags: ['mongo'] }
-
-- hosts: php-apps
+- hosts: app_php
   gather_facts: no
   become: true
   roles:
-    - { role: php,               tags: ['php'     ] }
-    - { role: static,            tags: ['static'  ] }
-    - { role: metadata,          tags: ['static'  ] }
-    - { role: openconext-common, tags: ['eb','profile'] }
-    - { role: engineblock,       tags: ['eb'      ] }
-    - { role: profile,           tags: ['profile' ] }
+    - role: php
+      tags: ['core', 'app_php', 'php']
+    - role: static
+      when:
+        - inventory_hostname not in groups['lifecycle']
+      tags: ['app_php', 'static']
+    - role: metadata
+      when:
+        - inventory_hostname not in groups['lifecycle']
+      tags: ['app_php', 'static']
+    - role: openconext-common
+      tags: ['core', 'app_php', 'eb', 'profile']
+    - role: engineblock
+      when:
+        - inventory_hostname not in groups['lifecycle']
+      tags: ['core', 'app_php', 'eb']
+    - role: profile
+      when:
+        - inventory_hostname not in groups['lifecycle']
+      tags: ['core', 'app_php', 'profile']
+    - role: lifecycle
+      when:
+        - inventory_hostname in groups['lifecycle']
+      tags: ['app_php', 'lifecycle']
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: lifecycle
-  gather_facts: no
-  become: true
-  roles:
-    - { role: php,               tags: ['php'     ] }
-    - { role: openconext-common, tags: ['lifecycle' ] }
-    - { role: lifecycle,         tags: ['lifecycle' ] }
-  handlers:
-    - include: roles/httpd/handlers/main.yml
-
-- hosts: java-apps-common
+- hosts: app_java
   gather_facts: true
   become: true
   roles:
-    - { role: java,             tags: ['java' ] }
-    - { role: shibboleth,       tags: ['shib'   ] }
+    - role: java
+      tags: ['core', 'app_java', 'java']
+    - role: shibboleth
+      tags: ['core', 'app_java', 'shib']
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: java-apps
+- hosts: app_java
   gather_facts: true
   become: true
   roles:
-    - { role: oidcng,                       tags: ['oidcng'] }
-    - { role: manage-gui,                   tags: ['manage', 'manage-gui'] }
-    - { role: manage-server,                tags: ['manage', 'manage-server'] }
-    - { role: teams-gui,                    tags: ['teams', 'teams-gui'       ] }
-    - { role: teams-server,                 tags: ['teams', 'teams-server'    ] }
-    - { role: voot,                         tags: ['oauth', 'voot'            ] }
-    - { role: pdp-gui,                      tags: ['pdp', 'pdp-gui'] }
-    - { role: pdp-server,                   tags: ['pdp', 'pdp-server'] }
-    - { role: attribute-aggregation-gui,    tags: ['attribute-aggregation', 'attribute-aggregation-gui'] }
-    - { role: attribute-aggregation-server, tags: ['attribute-aggregation', 'attribute-aggregation-server'] }
-    - { role: dashboard-gui,                tags: ['dashboard', 'dashboard-gui'] , when: dashboard_install | bool }
-    - { role: dashboard-server,             tags: ['dashboard', 'dashboard-server'], when: dashboard_install | bool }
-    - { role: oidc-playground-client,       tags: ['oidc-playground', 'oidc-playground-client'] }
-    - { role: oidc-playground-server,       tags: ['oidc-playground', 'oidc-playground-server'] }
-    - { role: myconext-gui,                 tags: ['myconext-gui', 'myconext'] }
-    - { role: myconext-server,              tags: ['myconext-server', 'myconext'] }
-    - { role: account-gui,                  tags: ['account-gui', 'myconext'] }
-    - { role: eduid-gui,                    tags: ['eduid-gui', 'myconext'] }
-    - { role: mujina-sp,                    tags: ['mujina-sp', 'mujina'] }
-    - { role: mujina-idp,                   tags: ['mujina-idp', 'mujina'] }
-
+    - role: oidcng
+      tags: ['app_java', 'oidcng']
+    - role: manage-gui
+      tags: ['core', 'app_java', 'manage', 'manage-gui']
+    - role: manage-server
+      tags: ['core', 'app_java', 'manage', 'manage-server']
+    - role: teams-gui
+      tags: ['app_java', 'teams', 'teams-gui']
+    - role: teams-server
+      tags: ['app_java', 'teams', 'teams-server']
+    - role: voot
+      tags: ['app_java', 'oauth', 'voot']
+    - role: pdp-gui
+      tags: ['app_java', 'pdp', 'pdp-gui']
+    - role: pdp-server
+      tags: ['app_java', 'pdp', 'pdp-server']
+    - role: attribute-aggregation-gui
+      tags: ['app_java', 'attribute-aggregation', 'attribute-aggregation-gui']
+    - role: attribute-aggregation-server
+      tags: ['app_java', 'attribute-aggregation', 'attribute-aggregation-server']
+    - role: dashboard-gui
+      when:
+        - dashboard_install | bool
+      tags: ['app_java', 'dashboard', 'dashboard-gui']
+    - role: dashboard-server
+      when:
+        - dashboard_install | bool
+      tags: ['app_java', 'dashboard', 'dashboard-server']
+    - role: oidc-playground-client
+      tags: ['app_java', 'oidc-playground', 'oidc-playground-client']
+    - role: oidc-playground-server
+      tags: ['app_java', 'oidc-playground', 'oidc-playground-server']
+    - role: myconext-gui
+      tags: ['app_java', 'myconext-gui', 'myconext']
+    - role: myconext-server
+      tags: ['app_java', 'myconext-server', 'myconext']
+    - role: account-gui
+      tags: ['app_java', 'account-gui', 'myconext']
+    - role: eduid-gui
+      tags: ['app_java', 'eduid-gui', 'myconext']
+    - role: mujina-sp
+      tags: ['core', 'app_java', 'mujina-sp', 'mujina']
+    - role: mujina-idp
+      tags: ['core', 'app_java', 'mujina-idp', 'mujina']
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: oidc
+- hosts: app_oidc
   gather_facts: true
   become: true
   roles:
-    - { role: tomcat,           tags: ['tomcat' ] }
-    - { role: oidc,            tags: ['oidc' ] }
+    - role: tomcat
+      tags: ['app_oidc', 'tomcat' ]
+    - role: oidc
+      tags: ['app_oidc', 'oidc' ]
   handlers:
     - include: roles/httpd/handlers/main.yml
     - include: roles/tomcat/handlers/main.yml
@@ -156,14 +192,17 @@
   gather_facts: true
   become: true
   roles:
-    - { role: elk,        tags: ['elk' ] }
+    - role: elk
+      tags: ['elk' ]
 
 - hosts: stats
   gather_facts: true
   become: true
   roles:
-    - { role: stats,      tags: ['stats' ] }
-    - { role: influxdb,   tags: ['influxdb' ] }
+    - role: stats
+      tags: ['stats' ]
+    - role: influxdb
+      tags: ['influxdb' ]
   handlers:
     - include: roles/httpd/handlers/main.yml
 
