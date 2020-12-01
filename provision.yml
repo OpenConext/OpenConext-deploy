@@ -125,9 +125,6 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: app_java
-  gather_facts: true
-  become: true
   roles:
     - role: oidcng
       tags: ['app_java', 'oidcng']
