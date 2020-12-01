@@ -4,6 +4,7 @@
 
   vars:
     inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
+    base_domain: molecule.openconext.org
 
   pre_tasks:
     - name: Read vars from secrets file
