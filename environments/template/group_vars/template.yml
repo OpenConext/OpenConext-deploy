@@ -1,5 +1,8 @@
 ---
 env: template
+use_selfsigned_certs: true
+update_hosts_file: true
+use_welcome_role: true
 
 instance_name: OpenConext
 base_domain: "%base_domain%"
