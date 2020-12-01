@@ -22,12 +22,16 @@
           - crontabs
           - python2-pip
         state: present
+      register: prepare_packages_installed
+      until: prepare_packages_installed is succeeded
 
     - name: Install python crypto module
       pip:
         name: "cryptography"
         state: "latest"
       run_once: true
+      register: prepare_pip_packages_installed
+      until: prepare_pip_packages_installed is succeeded
 
     - name: create CA key
       openssl_privatekey:
@@ -71,7 +75,7 @@
         path: /root/example_com_host_key.pem
       register: example_com_key
 
-    - name: create the CSR for the LDAP server
+    - name: create the CSR for the Galera server
       openssl_csr:
         path: /root/example_com.csr
         privatekey_path: "{{ example_com_key.filename }}"
@@ -79,7 +83,7 @@
         subject_alt_name: 'DNS:{{ inventory_hostname }}'
       register: example_com_csr
 
-    - name: sign the CSR for the LDAP server
+    - name: sign the CSR for the Galera server
       openssl_certificate:
         path: /root/example_com.crt
         csr_path: "{{ example_com_csr.filename }}"
