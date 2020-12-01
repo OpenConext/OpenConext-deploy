@@ -1,0 +1,63 @@
+---
+- name: Prepare
+  hosts: all
+  vars:
+    base_domain: molecule.openconext.org
+    inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
+    tls_ca: star.{{ base_domain }}_ca.pem
+    tls_star_cert: star.{{ base_domain }}.pem
+    tls_star_cert_key: star.{{ base_domain }}.key
+    tls:
+      cert_path: /etc/pki/tls/certs
+      cert_path_ca: /etc/pki/ca-trust/source/anchors/
+      cert_private_path: /etc/pki/tls/private
+
+  pre_tasks:
+    - name: Read vars from secrets file
+      include_vars: "../../environments/vm/secrets/vm.yml"
+
+    - name: Read vars from group_vars file
+      include_vars: "../../environments/vm/group_vars/vm.yml"
+
+    - name: Install pip
+      yum:
+        name: "python2-pip"
+        state: "installed"
+
+    - name: Install python crypto module
+      pip:
+        name: "cryptography"
+        state: "latest"
+
+    - name: Generate a private key
+      openssl_privatekey:
+        path: "{{ tls.cert_private_path }}/{{ tls_star_cert_key }}"
+        size: 2048
+
+    - name: Generate a CSR
+      openssl_csr:
+        path: /etc/pki/tls/certs/openconext.csr
+        privatekey_path: "{{ tls.cert_private_path }}/{{ tls_star_cert_key }}"
+        common_name: "*.{{ base_domain }}"
+        organization_name: OpenConext
+        basic_constraints: CA:TRUE
+
+    - name: Generate a selfsigned certificate
+      openssl_certificate:
+        path: "{{ tls.cert_path }}/{{ tls_star_cert }}"
+        privatekey_path: "{{ tls.cert_private_path }}/{{ tls_star_cert_key }}"
+        csr_path: "/etc/pki/tls/certs/openconext.csr"
+        provider: selfsigned
+
+    - name: Copy the contents of the certificate to the pki anchor source directory of all VMs
+      fetch:
+        src: "{{ tls.cert_path }}/{{ tls_star_cert }}"
+        dest: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm/files/certs/backend.{{ base_domain }}.pem"
+        flat: true
+
+  roles:
+    - role: hosts
+    - role: httpd
+      haproxy_backend_tls: true
+      base_domain: molecule.openconext.org
+    - role: mysql
