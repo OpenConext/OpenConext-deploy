@@ -2,20 +2,42 @@
 - hosts: localhost
   gather_facts: no
   vars:
-    services_health_checks:
+    run_non_core_services: True
+    services_health_checks_core:
       - https://engine.vm.openconext.org/health
       - https://profile.vm.openconext.org/health
+      - https://manage.vm.openconext.org/manage/api/health
+    services_health_checks:
       - https://voot.vm.openconext.org/health
       - https://teams.vm.openconext.org/api/teams/health
       - https://pdp.vm.openconext.org/pdp/api/health
-      - https://manage.vm.openconext.org/manage/api/health
       - https://connect.vm.openconext.org/actuator/health
+
   tasks:
-    - uri: url={{ item }}
+    - name: "Override variable when tag is set to core"
+      set_fact:
+        run_non_core_services: False
+      tags:
+        - core
+
+    - name: Check core related Services
+      uri:
+        url: "{{ item }}"
+      retries: 100
+      delay: 10
+      with_items: "{{ services_health_checks_core }}"
+
+    - name: Check non-core related Services
+      uri:
+        url: "{{ item }}"
       retries: 100
       delay: 10
       with_items: "{{ services_health_checks }}"
-    - uri:
+      when:
+        - run_non_core_services
+
+    - name: Check for redirection
+      uri:
         url: https://redirect.vm.openconext.org
       register: redirect_test
-      failed_when: redirect_test.redirected == False
+      failed_when: not redirect_test.redirected
