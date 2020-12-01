@@ -1,14 +1,21 @@
 --- 
-- name: Set manage search path to oidc10_rp when provisioning a client credentials client or oidc rp
-  set_fact:
-    manage_search_path: oidc10_rp
-  when: entity_type == "oidc10_rp" or 
-        entity_type == "client_credentials_client"
-
-- name: Set manage search path to saml20_sp when provisioning a SAML client
+- name: Set vars when provisioning a SAML client
   set_fact:
     manage_search_path: saml20_sp
+    manage_provision_client_id: "{{ manage_provision_samlsp_client_id }}"
   when: entity_type == "saml20_sp"
+
+- name: Set vars for client credentials clients
+  set_fact:
+    manage_provision_client_id: "{{ manage_provision_cc_client_id }}" 
+    manage_search_path: oidc10_rp
+  when: entity_type == "client_credentials_client"
+
+- name: Set vars for oidc rp clients
+  set_fact:
+    manage_provision_client_id: "{{ manage_provision_oidcrp_client_id }}" 
+    manage_search_path: oidc10_rp
+  when: entity_type == "oidc10_rp"
 
 - name: Check if the entity already exists
   uri:
