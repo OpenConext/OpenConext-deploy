@@ -15,6 +15,8 @@
       yum:
         name: crontabs
         state: present
+      register: prepare_packages_installed
+      until: prepare_packages_installed is succeeded
 
   roles:
     - role: selfsigned_certs

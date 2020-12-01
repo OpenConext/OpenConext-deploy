@@ -17,6 +17,7 @@ platforms:
       - "loadbalancer-vm"
       - loadbalancer_ha
       - selfsigned_certs
+      - loadbalancer
 
 provisioner:
   name: ansible
@@ -39,6 +40,7 @@ scenario:
     - create
     - prepare
     - converge
+    # No idempotence due to bind zone transfer (template with epoch seconds)
     # - idempotence
     - side_effect
     - verify
