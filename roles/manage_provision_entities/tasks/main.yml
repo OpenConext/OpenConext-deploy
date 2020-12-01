@@ -24,6 +24,12 @@
   register: manage_test_entity
   until: manage_test_entity is succeeded
 
+- name: create temp
+  template:
+    src: oidc10_rp.j2
+    dest: /tmp/123
+
+
 - name: Upload entity to manage
   uri:
     url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/metadata"

@@ -10,3 +10,12 @@ springapp_tcpport: 9195
 springapp_min_heapsize: "{{ oidcng_min_heapsize }}"
 springapp_max_heapsize: "{{ oidcng_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
+manage_provision_client_id: "https://connect.{{ base_domain }}"
+manage_provision_name_en: "{{ instance_name }} OIDC Gateway"
+manage_provision_description_en: "Trusted proxy that handles the OIDC protocol" 
+manage_provision_acs_location: "https://connect.{{ base_domain }}/oidc/SSO/alias/oidc-proxy"
+manage_provision_metadata_url: "https://connect.{{ base_domain }}/oidc/metadata"
+manage_provision_sp_cert: "{{ lookup('file', '{{ inventory_dir }}/files/certs/oidc/oidcsaml.crt') | depem }}"
+manage_provision_sign: "True"
+manage_provision_trusted_proxy: "True"
+
