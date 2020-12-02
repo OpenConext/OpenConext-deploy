@@ -74,10 +74,10 @@ echo "postfix_interfaces: ipv4" >> environments-external/travis/group_vars/travi
 # Do not install Dashboard
 echo "dashboard_install: False" >> environments-external/travis/group_vars/travis.yml
 
-# Enable oidc-ng 
-echo "manage_show_oidc_rp_tab: true" >> environments-external/travis/group_vars/travis.yml
-echo "manage_exclude_oidc_rp_imports_in_push: true" >> environments-external/travis/group_vars/travis.yml
-sed -i 's/oidc_push_enabled: false/oidc_push_enabled: true/g' environments-external/travis/group_vars/travis.yml
+# Enable oidc-ng (When doing a -t core those tasks should not be performed)
+# echo "manage_show_oidc_rp_tab: true" >> environments-external/travis/group_vars/travis.yml
+# echo "manage_exclude_oidc_rp_imports_in_push: true" >> environments-external/travis/group_vars/travis.yml
+# sed -i 's/oidc_push_enabled: false/oidc_push_enabled: true/g' environments-external/travis/group_vars/travis.yml
 
 # Create the proper host_vars file
 mv environments-external/travis/host_vars/template.yml environments-external/travis/host_vars/localhost.yml
