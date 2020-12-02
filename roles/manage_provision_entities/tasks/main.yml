@@ -25,7 +25,7 @@
 
 - name: Check if the entity already exists
   uri:
-    url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/search/{{ manage_search_path }}"
+    url: "https://manage.{{ base_domain }}/manage/api/internal/search/{{ manage_search_path }}"
     body_format: json
     method: POST
     user: "{{ manage.apiUsers[2].name }}"
@@ -45,7 +45,7 @@
 
 - name: Upload entity to manage
   uri:
-    url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/metadata"
+    url: "https://manage.{{ base_domain }}/manage/api/internal/metadata"
     body_format: json
     method: POST
     user: "{{ manage.apiUsers[2].name }}"
@@ -59,7 +59,7 @@
 
 - name: push metadata eb
   uri:
-    url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/push"
+    url: "https://manage.{{ base_domain }}/manage/api/internal/push"
     method: GET
     user: "{{ manage.apiUsers[2].name }}" 
     password: "{{ manage.apiUsers[2].password }}" 
