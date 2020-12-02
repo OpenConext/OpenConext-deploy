@@ -15,3 +15,11 @@ pdp_manage_provision_cc_name_en: "PDP client credentials client for VOOT access"
 pdp_manage_provision_cc_description_en: "OAuth client to access VOOT for group information"
 pdp_manage_provision_cc_scopes: "groups"
 pdp_manage_provision_cc_state: "prodaccepted"
+pdp_manage_provision_samlsp_client_id: "https://pdp.{{ base_domain }}/shibboleth"
+pdp_manage_provision_samlsp_name_en: "{{ instance_name }} PDP server"
+pdp_manage_provision_samlsp_description_en: "{{ instance_name }} PDP admin interface"
+pdp_manage_provision_samlsp_acs_location: "https://pdp.{{ base_domain }}/Shibboleth.sso/SAML2/POST"
+pdp_manage_provision_samlsp_metadata_url: "https://pdp.{{ base_domain }}/Shibboleth.sso/Metadata"
+pdp_manage_provision_samlsp_sp_cert: ""
+pdp_manage_provision_samlsp_trusted_proxy: false
+pdp_manage_provision_samlsp_sign: false

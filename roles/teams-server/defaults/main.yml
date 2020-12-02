@@ -21,3 +21,11 @@ teams_manage_provision_cc_name_en: "Teams client credentials client for VOOT acc
 teams_manage_provision_cc_description_en: "OAuth client to access VOOT for group information"
 teams_manage_provision_cc_scopes: "groups"
 teams_manage_provision_cc_state: "prodaccepted"
+teams_manage_provision_samlsp_client_id: "https://teams.{{ base_domain }}/shibboleth"
+teams_manage_provision_samlsp_name_en: "{{ instance_name }} Teams"
+teams_manage_provision_samlsp_description_en: "{{ instance_name }} Teams application for group memberships"
+teams_manage_provision_samlsp_acs_location: "https://teams.{{ base_domain }}/Shibboleth.sso/SAML2/POST"
+teams_manage_provision_samlsp_metadata_url: "https://teams.{{ base_domain }}/Shibboleth.sso/Metadata"
+teams_manage_provision_samlsp_sp_cert: ""
+teams_manage_provision_samlsp_trusted_proxy: false
+teams_manage_provision_samlsp_sign: false

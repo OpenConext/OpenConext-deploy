@@ -83,55 +83,55 @@
         - inventory_hostname in groups['mongo_servers']
       tags: ['core', 'db_mongo', 'mongo']
 
-- hosts: app_php
+- hosts: php-apps
   gather_facts: no
   become: true
   roles:
-    - role: php
-      tags: ['core', 'app_php', 'php']
-    - role: static
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['app_php', 'static']
-    - role: metadata
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['app_php', 'static']
-    - role: openconext-common
-      tags: ['core', 'app_php', 'eb', 'profile']
-    - role: engineblock
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['core', 'app_php', 'eb']
-    - role: profile
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['core', 'app_php', 'profile']
-    - role: lifecycle
-      when:
-        - inventory_hostname in groups['lifecycle']
-      tags: ['app_php', 'lifecycle']
+    - { role: php,               tags: ['php'     ] }
+    - { role: static,            tags: ['static'  ] }
+    - { role: metadata,          tags: ['static'  ] }
+    - { role: openconext-common, tags: ['eb','profile'] }
+    - { role: engineblock,       tags: ['eb'      ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: app_java
+- hosts: java-apps-common
   gather_facts: true
   become: true
   roles:
-    - role: java
-      tags: ['core', 'app_java', 'java']
-    - role: shibboleth
-      tags: ['core', 'app_java', 'shib']
+    - { role: java,             tags: ['java' ] }
+    - { role: shibboleth,       tags: ['shib'   ] }
   handlers:
     - include: roles/httpd/handlers/main.yml
 
+- hosts: java-apps
+  become: true
   roles:
-    - role: oidcng
-      tags: ['app_java', 'oidcng']
     - role: manage-gui
       tags: ['core', 'app_java', 'manage', 'manage-gui']
     - role: manage-server
       tags: ['core', 'app_java', 'manage', 'manage-server']
+    - role: oidcng
+      tags: ['app_java', 'oidcng']
+
+- hosts: php-apps
+  gather_facts: no
+  become: true
+  roles:
+    - role: php
+      tags: ['dummy']
+    - role: openconext-common
+      tags: ['dummy']
+    - role: engineblock
+      tags: ['dummy']
+    - role: profile           
+      tags: ['profile' ]
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: java-apps
+  become: true
+  roles:
     - role: teams-gui
       tags: ['app_java', 'teams', 'teams-gui']
     - role: teams-server
