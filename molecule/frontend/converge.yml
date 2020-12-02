@@ -4,7 +4,6 @@
 
   vars:
     inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
-    haproxy_backend_tls: true
     base_domain: molecule.openconext.org
 
   pre_tasks:
@@ -16,4 +15,6 @@
   roles:
     - role: hosts
     - role: httpd
+      haproxy_backend_tls: true
+      base_domain: molecule.openconext.org
     - role: welcome

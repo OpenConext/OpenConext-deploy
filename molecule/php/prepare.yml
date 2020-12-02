@@ -4,20 +4,17 @@
   vars:
     base_domain: molecule.openconext.org
     inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
-    tls_ca: star.{{ base_domain }}_ca.pem
-    tls_star_cert: star.{{ base_domain }}.pem
-    tls_star_cert_key: star.{{ base_domain }}.key
-    tls:
-      cert_path: /etc/pki/tls/certs
-      cert_path_ca: /etc/pki/ca-trust/source/anchors/
-      cert_private_path: /etc/pki/tls/private
 
   pre_tasks:
     - name: Read vars from secrets file
       include_vars: "../../environments/vm/secrets/vm.yml"
-
     - name: Read vars from group_vars file
       include_vars: "../../environments/vm/group_vars/vm.yml"
+
+    - name: "Set some facts"
+      set_fact:
+        base_domain: molecule.openconext.org
+        haproxy_backend_tls: true
 
     - name: Install pip
       yum:
@@ -62,6 +59,4 @@
   roles:
     - role: hosts
     - role: httpd
-      haproxy_backend_tls: true
-      base_domain: molecule.openconext.org
     - role: mysql
