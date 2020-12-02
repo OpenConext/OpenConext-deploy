@@ -1,29 +1,14 @@
 ---
-- name: Include preinstallation.yml
-  include: ../../../tasks/springbootapp/preinstallation.yml
 
-- name: Include install-maven-release.yml
-  include: ../../../tasks/springbootapp/install-maven-release.yml
-
-- name: copy logging config
+- name: copy config
   template:
-    src: "logback.xml.j2"
-    dest: "{{ oidc_playground_dir }}/logback.xml"
+    src: "{{ item }}.j2"
+    dest: "{{ oidc_playground_dir }}/{{ item }}"
     owner: oidc-playground
     group: oidc-playground
     mode: 0740
+  with_items:
+    - logback.xml
+    - application.yml
   notify:
     - "restart oidc-playground"
-
-- name: copy application config
-  template:
-    src: "application.yml.j2"
-    dest: "{{ oidc_playground_dir }}/application.yml"
-    owner: oidc-playground
-    group: oidc-playground
-    mode: 0740
-  notify:
-    - "restart oidc-playground"
-
-- name: Include postinstallation.yml
-  include: ../../../tasks/springbootapp/postinstallation.yml

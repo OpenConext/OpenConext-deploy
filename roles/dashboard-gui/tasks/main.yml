@@ -1,7 +1,6 @@
 ---
 - name: copy virtual host config
-  template: src=dashboard.conf.j2 dest=/etc/httpd/conf.d/dashboard.conf
+  template:
+    src: dashboard.conf.j2
+    dest: /etc/httpd/conf.d/dashboard.conf
   notify: restart httpd
-
-- name: Include install-gui.yml
-  include: ../../../tasks/springbootapp/install-gui.yml

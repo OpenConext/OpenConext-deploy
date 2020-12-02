@@ -1,7 +1,4 @@
 ---
-- include: ../../../tasks/springbootapp/preinstallation.yml
-
-- include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: Copy config
   template: 
@@ -21,6 +18,3 @@
     src: mujina_idp.conf.j2 
     dest: /etc/httpd/conf.d/mujina_idp.conf
   notify: reload httpd
-
-- name: Include postinstallation.yml
-  include: ../../../tasks/springbootapp/postinstallation.yml
