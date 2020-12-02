@@ -17,6 +17,12 @@
     manage_search_path: oidc10_rp
   when: entity_type == "oidc10_rp"
 
+- name: Set vars for SAML IdPs
+  set_fact:
+    manage_provision_client_id: "{{ manage_provision_samlidp_entity_id }}" 
+    manage_search_path: saml20_idp
+  when: entity_type == "saml20_idp"
+
 - name: Check if the entity already exists
   uri:
     url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/search/{{ manage_search_path }}"
