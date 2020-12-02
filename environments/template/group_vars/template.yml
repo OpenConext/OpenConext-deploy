@@ -411,6 +411,7 @@ oidcng:
   token_api_enabled: false
 
 oidcng_logback_email: false
+oidcng_saml_sp_entityid: https://connect.{{ base_domain }}
 
 myconext:
   mongo_host: "{{ mongo_host }}"
