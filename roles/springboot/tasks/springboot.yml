@@ -31,14 +31,25 @@
   when:
     - _springapp_type == "gui"
 
-- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include role"
-  include_role:
-    name: "{{ _springapp_role }}"
-
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include maven related tasks"
   include: maven.yml
   when:
     - _springapp_type == "server"
+
+# Need to make sure that manage is running before manage can do a call to manage
+- name: "Restart 'manage'"
+  systemd:
+    name: manage
+    state: restarted
+    daemon_reload: yes
+  when:
+    - maven_result.changed
+    - _springapp_type == "server"
+    - _springapp_service_name == "manage"
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include role"
+  include_role:
+    name: "{{ _springapp_role }}"
 
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include service related tasks"
   include: service.yml

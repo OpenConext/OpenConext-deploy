@@ -140,7 +140,8 @@
      when:
        - inventory_hostname not in groups['lifecycle']
      tags: ['core', 'app_php', 'profile']
-
+  handlers:
+    - include: roles/httpd/handlers/main.yml
 
 - hosts: app_oidc
   gather_facts: true
