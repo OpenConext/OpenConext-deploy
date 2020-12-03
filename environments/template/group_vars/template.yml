@@ -116,6 +116,13 @@ springboot_gui_services:
     version: "{{ eduid_gui_version }}"
 
 springboot_server_services:
+  - name: manage
+    enabled: true
+    version: "{{ manage_server_version }}"
+    type: server
+    port: "{{ manage_springapp_tcpport }}"
+    config:
+      "{{ manage }}"
   - name: oidcng
     enabled: true
     role: oidcng
@@ -125,13 +132,6 @@ springboot_server_services:
     type: server
     config:
       "{{ oidcng }}"
-  - name: manage
-    enabled: true
-    version: "{{ manage_server_version }}"
-    type: server
-    port: "{{ manage_springapp_tcpport }}"
-    config:
-      "{{ manage }}"
   - name: teams
     enabled: true
     version: "{{ teams_server_version }}"
