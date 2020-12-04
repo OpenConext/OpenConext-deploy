@@ -10,6 +10,3 @@
       dest: "/etc/httpd/conf.d/manage.conf.backdoor"
   notify:
     - "restart httpd"
-
-- name: Include install-gui.yml
-  include: ../../../tasks/springbootapp/install-gui.yml

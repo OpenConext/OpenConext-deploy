@@ -1,9 +1,4 @@
 ---
-- name: Include preinstallation.yml
-  include: ../../../tasks/springbootapp/preinstallation.yml
-
-- name: Include install-maven-release.yml
-  include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: copy logging config
   template:
@@ -17,6 +12,3 @@
     - application.yml
   notify: 
     - "restart dashboard"
-
-- name: Include postinstallation.yml
-  include: ../../../tasks/springbootapp/postinstallation.yml

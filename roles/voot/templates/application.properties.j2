@@ -18,7 +18,7 @@ authz.checkToken.secret={{ voot.authz_checkToken_secret }}
 oidcng.checkToken.endpoint.url={{ voot.oidcng_checkToken_endpoint_url }}
 oidcng.checkToken.clientId={{ voot.oidcng_checkToken_clientId }}
 oidcng.checkToken.secret={{ voot.oidcng_checkToken_secret }}
-oidcng.checkToken.issuer={{ oidcng_saml_sp_entityid }},https://org.openconext.oidc.ng
+oidcng.checkToken.issuer={{ oidcng_saml_sp_entityid | default('https://connect.' + base_domain) }},https://org.openconext.oidc.ng
 
 # Feature toggle for searching for linked GrouperGroups and ExternalGroups
 support.linkedGrouperExternalGroups=true
