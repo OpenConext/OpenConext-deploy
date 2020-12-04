@@ -52,5 +52,5 @@ def test_empty_config(host, files):
 
 def test_subject_ssll_key(host):
     cmd = host.run("openssl x509 -in  /etc/pki/tls/certs/backend.molecule.openconext.org.pem -noout -subject")
-    assert 'subject= /O=OpenConext/CN=*.molecule.openconext.org' in cmd.stdout
+    assert 'subject= /CN=molecule.openconext.org' in cmd.stdout
     assert cmd.rc == 0

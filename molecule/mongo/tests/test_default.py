@@ -42,3 +42,9 @@ def test_rc_local(host):
     tls_bundle = host.file("/etc/rc.local")
 
     assert tls_bundle.contains('/usr/local/sbin/mongo_kernel_settings.sh')
+
+
+def test_show_databases(host):
+    command = host.command('echo "show databases" | mongo -u admin -psecret | grep "GB$" | wc -l')
+    assert command.rc == 0
+    assert int(command.stdout) == 3

@@ -2,6 +2,7 @@
 - name: Prepare
   hosts: all
   vars:
+    base_domain: molecule.openconext.org
     inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
 
   pre_tasks:
@@ -13,7 +14,6 @@
     - name: "Set some facts"
       set_fact:
         base_domain: molecule.openconext.org
-        hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
         haproxy_backend_tls: true
         mongo_primary: true
 
@@ -81,7 +81,8 @@
           dest: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.key"
 
   roles:
-    - role: hosts
     - role: httpd
-      backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
+      haproxy_backend_tls: true
+      backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.{{ base_domain }}.key') }}"
     - role: mysql
+    - role: mongo

@@ -2,19 +2,33 @@
 - name: Prepare
   hosts: all
   vars:
-    base_domain: molecule.openconext.org
-    tls_ca: star.{{ base_domain }}_ca.pem
-    tls_star_cert: star.{{ base_domain }}.pem
-    tls_star_cert_key: star.{{ base_domain }}.key
-    tls:
-      cert_path: /etc/pki/tls/certs
-      cert_path_ca: /etc/pki/ca-trust/source/anchors/
-      cert_private_path: /etc/pki/tls/private
+    inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
+  #   base_domain: molecule.openconext.org
+  #   tls_ca: star.{{ base_domain }}_ca.pem
+  #   tls_star_cert: star.{{ base_domain }}.pem
+  #   tls_star_cert_key: star.{{ base_domain }}.key
+  #   tls:
+  #     cert_path: /etc/pki/tls/certs
+  #     cert_path_ca: /etc/pki/ca-trust/source/anchors/
+  #     cert_private_path: /etc/pki/tls/private
 
   tasks:
-    - name: Install pip
+    - name: Read vars from secrets file
+      include_vars: "../../environments/vm/secrets/vm.yml"
+    - name: Read vars from group_vars file
+      include_vars: "../../environments/vm/group_vars/vm.yml"
+
+    - name: "Set some facts"
+      set_fact:
+        base_domain: molecule.openconext.org
+        haproxy_backend_tls: true
+        mongo_primary: true
+
+    - name: Install packages
       yum:
-        name: "python2-pip"
+        name:
+          - python2-pip
+          - unzip
         state: "installed"
       register: prepare_packages_installed
       until: prepare_packages_installed is succeeded
@@ -26,28 +40,49 @@
       register: prepare_pip_packages_installed
       until: prepare_pip_packages_installed is succeeded
 
-    - name: Generate a private key
+    - name: create CA key
       openssl_privatekey:
-        path: "{{ tls.cert_private_path }}/{{ tls_star_cert_key }}"
-        size: 2048
+        path: /root/CA_key.key
 
-    - name: Generate a CSR
+    - name: create the CA CSR
       openssl_csr:
-        path: /etc/pki/tls/certs/openconext.csr
-        privatekey_path: "{{ tls.cert_private_path }}/{{ tls_star_cert_key }}"
-        common_name: "*.{{ base_domain }}"
-        organization_name: OpenConext
-        basic_constraints: CA:TRUE
+        path: /root/CA.csr
+        privatekey_path: /root/CA_key.key
+        common_name: "my-ca"
 
-    - name: Generate a selfsigned certificate
+    - name: sign the CA CSR
       openssl_certificate:
-        path: "{{ tls.cert_path }}/{{ tls_star_cert }}"
-        privatekey_path: "{{ tls.cert_private_path }}/{{ tls_star_cert_key }}"
-        csr_path: "/etc/pki/tls/certs/openconext.csr"
+        path: /root/CA.crt
+        csr_path: /root/CA.csr
+        privatekey_path: /root/CA_key.key
         provider: selfsigned
 
-    - name: Copy the contents of the certificate to the pki anchor source directory of all VMs
+    - name: create host key
+      openssl_privatekey:
+        path: /root/example_com_host_key.key
+
+    - name: create the CSR for the http server
+      openssl_csr:
+        path: /root/example_com.csr
+        privatekey_path: /root/example_com_host_key.key
+        common_name: "{{ base_domain }}"
+        subject_alt_name: 'DNS:{{ inventory_hostname }}'
+
+    - name: sign the CSR for the http server
+      openssl_certificate:
+        path: /root/example_com.crt
+        csr_path: /root/example_com.csr
+        provider: ownca
+        ownca_path: /root/CA.crt
+        ownca_privatekey_path: /root/CA_key.key
+
+    - name: "Fetch files"
       fetch:
-        src: "{{ tls.cert_path }}/{{ tls_star_cert }}"
-        dest: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm/files/certs/backend.{{ base_domain }}.pem"
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
         flat: true
+      with_items:
+        - src: /root/example_com.crt
+          dest: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
+        - src: /root/example_com_host_key.key
+          dest: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.key"

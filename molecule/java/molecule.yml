@@ -5,7 +5,7 @@ driver:
   name: docker
 
 platforms:
-  - name: openconext-centos7-mongod
+  - name: openconext-centos7-java
     image: centos7-ansible
     dockerfile: ../Dockerfile.j2
     command: /usr/sbin/init
@@ -14,7 +14,7 @@ platforms:
       - "${MOLECULE_SCENARIO_DIRECTORY}/../etc-hosts:/etc/hosts"
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
-      - "loadbalancer-vm"
+      - loadbalancer
       - mongod_primary
 
 provisioner:
