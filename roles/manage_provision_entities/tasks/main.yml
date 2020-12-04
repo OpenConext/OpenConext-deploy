@@ -1,18 +1,31 @@
 --- 
-- name: Set manage search path to oidc10_rp when provisioning a client credentials client or oidc rp
-  set_fact:
-    manage_search_path: oidc10_rp
-  when: entity_type == "oidc10_rp" or 
-        entity_type == "client_credentials_client"
-
-- name: Set manage search path to saml20_sp when provisioning a SAML client
+- name: Set vars when provisioning a SAML client
   set_fact:
     manage_search_path: saml20_sp
+    manage_provision_client_id: "{{ manage_provision_samlsp_client_id }}"
   when: entity_type == "saml20_sp"
+
+- name: Set vars for client credentials clients
+  set_fact:
+    manage_provision_client_id: "{{ manage_provision_cc_client_id }}" 
+    manage_search_path: oidc10_rp
+  when: entity_type == "client_credentials_client"
+
+- name: Set vars for oidc rp clients
+  set_fact:
+    manage_provision_client_id: "{{ manage_provision_oidcrp_client_id }}" 
+    manage_search_path: oidc10_rp
+  when: entity_type == "oidc10_rp"
+
+- name: Set vars for SAML IdPs
+  set_fact:
+    manage_provision_client_id: "{{ manage_provision_samlidp_entity_id }}" 
+    manage_search_path: saml20_idp
+  when: entity_type == "saml20_idp"
 
 - name: Check if the entity already exists
   uri:
-    url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/search/{{ manage_search_path }}"
+    url: "https://manage.{{ base_domain }}/manage/api/internal/search/{{ manage_search_path }}"
     body_format: json
     method: POST
     user: "{{ manage.apiUsers[2].name }}"
@@ -23,10 +36,12 @@
   run_once: true
   register: manage_test_entity
   until: manage_test_entity is succeeded
+  retries: 15
+  delay: 5
 
 - name: Upload entity to manage
   uri:
-    url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/metadata"
+    url: "https://manage.{{ base_domain }}/manage/api/internal/metadata"
     body_format: json
     method: POST
     user: "{{ manage.apiUsers[2].name }}"
@@ -40,13 +55,15 @@
 
 - name: push metadata eb
   uri:
-    url: "http://127.0.0.1:{{ manage_springapp_tcpport }}/internal/push"
+    url: "https://manage.{{ base_domain }}/manage/api/internal/push"
     method: GET
     user: "{{ manage.apiUsers[2].name }}" 
     password: "{{ manage.apiUsers[2].password }}" 
     force_basic_auth: yes
     status_code: 200
   run_once: true
-  when: manage_test_entity.json|length==0
+  when: (manage_test_entity.json|length==0) and (manage_provision_push | default(true) | bool)
   register: push_metadata_eb
   until: push_metadata_eb is succeeded
+  retries: 15
+  delay: 5

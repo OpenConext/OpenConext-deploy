@@ -54,3 +54,13 @@ profile_info_request_email: "{{ support_email }}"
 
 profile_lifecycle_enabled: false
 lifecycle_url: https://lifecycle.{{ base_domain }}/
+
+profile_manage_provision_samlsp_client_id: "https://profile.{{ base_domain }}/authentication/metadata"
+profile_manage_provision_samlsp_name_en: "{{ instance_name }} Profile"
+profile_manage_provision_samlsp_description_en: "{{ instance_name }} Profile management"
+profile_manage_provision_samlsp_acs_location: "https://profile.{{ base_domain }}/authentication/consume-assertion"
+profile_manage_provision_samlsp_metadata_url: "https://profile.{{ base_domain }}/authentication/metadata"
+profile_manage_provision_samlsp_sp_cert: ""
+profile_manage_provision_samlsp_trusted_proxy: false
+profile_manage_provision_samlsp_sign: false
+
