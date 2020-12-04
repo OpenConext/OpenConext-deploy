@@ -4,11 +4,6 @@
 
   vars:
     inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
-    mariadb_cluster_name: molecule
-    mariadb_cluster_password: secret
-    mariadb_root_password: secret
-    mariadb_backup_password: secret
-    galera_bootstrap_node: openconext-centos7-mysql
 
   pre_tasks:
     - name: Read vars from secrets file
@@ -16,23 +11,17 @@
     - name: Read vars from group_vars file
       include_vars: "../../environments/vm/group_vars/vm.yml"
 
-    - name: "Get ip current host"
-      shell: grep $(hostname) /etc/hosts | awk '{print $1}' | sort | tail -n 1
-      register: current_host_ip
-      changed_when: False
-
     - name: "Set fact for backend_ipv4"
       set_fact:
-        backend_ipv4: "{{ current_host_ip.stdout }}"
+        backend_ipv4: "{{ ansible_all_ipv4_addresses[0] }}"
+        mariadb_cluster_name: molecule
+        mariadb_cluster_password: secret
+        mariadb_root_password: secret
+        mariadb_backup_password: secret
+        galera_bootstrap_node: openconext-centos7-mysql
         galera_server_key: "{{lookup('file', inventory_dir + '/files/certs/galera/galera_server.key') }}"
         galera_client_key: "{{lookup('file', inventory_dir + '/files/certs/galera/galera_server.key') }}"
         galera_client_crt_name: "galera_server.pem"
-
-    - name: "Set specific fact for openconext-centos7-mysql-3"
-      set_fact:
-        arbiter_node: True
-      when:
-        - inventory_hostname == "openconext-centos7-mysql-3"
 
   roles:
     - role: mysql
