@@ -24,6 +24,9 @@ error_subject_prefix: "[{{ ansible_hostname }}] "
 # Some engineblock variables are shared between applications
 engine_api_domain: engine-api.{{ base_domain }}
 engine_api_metadata_push_user: serviceregistry
+engine_api_profile_user: profile
+engine_attribute_aggregation_username: "{{ aa.eb_username }}"
+engine_attribute_aggregation_password: "{{ aa.eb_password }}"
 
 # Some deprovision variables are shared between applications
 authz_server_api_lifecycle_username: authz_server_api_lifecycle_user
@@ -32,6 +35,12 @@ attribute_aggregator_api_lifecycle_username: attribute_aggregator_api_lifecycle_
 engine_api_deprovision_user: lifecycle
 lifecycle_api_username: lifecycle
 
+# PHP vars
+php_session_dir: /var/lib/openconext/session/
+openconext_releases_dir:   "/opt/openconext"
+openconext_builds_dir:     "{{ openconext_releases_dir }}/builds"
+
+# Stats vars shared over roles
 influx_stats_db: log_logins
 influxdb_admin_user: admin
 influxdb_stats_user: stats

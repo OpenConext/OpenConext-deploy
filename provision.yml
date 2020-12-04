@@ -104,10 +104,6 @@
       when:
         - inventory_hostname not in groups['lifecycle']
       tags: ['core', 'app_php', 'eb']
-    - role: profile
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['core', 'app_php', 'profile']
     - role: lifecycle
       when:
         - inventory_hostname in groups['lifecycle']
@@ -133,6 +129,17 @@
   roles:
     - { role: springboot,       tags: ['springboot'] }
 
+  handlers:
+    - include: roles/httpd/handlers/main.yml
+
+- hosts: app_php
+  gather_facts: no
+  become: true
+  roles:
+   - role: profile
+     when:
+       - inventory_hostname not in groups['lifecycle']
+     tags: ['core', 'app_php', 'profile']
   handlers:
     - include: roles/httpd/handlers/main.yml
 
@@ -167,3 +174,4 @@
     - include: roles/httpd/handlers/main.yml
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
+

@@ -18,3 +18,9 @@
     src: mujina_idp.conf.j2 
     dest: /etc/httpd/conf.d/mujina_idp.conf
   notify: reload httpd
+
+- name: Include the role manage_provision_entities to provision the mujina IdP to Manage
+  include_role: 
+    name: manage_provision_entities
+  vars: 
+    entity_type: saml20_idp

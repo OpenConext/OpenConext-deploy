@@ -3,3 +3,11 @@ mujina_sp_dir: /opt/mujina-sp
 mujina_sp_jar: mujina-sp-current.jar
 mujina_sp_min_heapsize: "128m"
 mujina_sp_max_heapsize: "128m"
+mujinasp_manage_provision_samlsp_client_id: "https://mujina-sp.{{ base_domain }}/shibboleth"
+mujinasp_manage_provision_samlsp_name_en: "{{ instance_name }} Mujina SP"
+mujinasp_manage_provision_samlsp_description_en: "{{ instance_name }} Mujina mock SP"
+mujinasp_manage_provision_samlsp_acs_location: "https://mujina-sp.{{ base_domain }}/Shibboleth.sso/SAML2/POST"
+mujinasp_manage_provision_samlsp_metadata_url: "https://mujina-sp.{{ base_domain }}/Shibboleth.sso/Metadata"
+mujinasp_manage_provision_samlsp_sp_cert: ""
+mujinasp_manage_provision_samlsp_trusted_proxy: false
+mujinasp_manage_provision_samlsp_sign: false

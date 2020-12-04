@@ -1,0 +1,35 @@
+{
+  "version": 0,
+  "type": "saml20_sp",
+  "data": {
+    "entityid": "{{ manage_provision_samlsp_client_id }}",
+    "state": "{{ manage_provision_state }}",
+    "allowedall": true,
+    "arp": {
+      "enabled": false,
+      "attributes": {}
+    },
+    "metaDataFields": {
+      "name:en": "{{ manage_provision_samlsp_name_en }}",
+      "description:en": "{{ manage_provision_samlsp_description_en }}",
+      "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "AssertionConsumerService:0:Location": "{{ manage_provision_samlsp_acs_location }}",
+      "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+{% if manage_provision_samlsp_trusted_proxy | bool %}
+      "coin:trusted_proxy": true,
+{% endif %}
+{% if manage_provision_samlsp_sign | bool %}
+      "redirect.sign": true,
+{% endif %}
+{% if manage_provision_samlsp_sp_cert != "" %}
+      "certData": "{{ manage_provision_samlsp_sp_cert }}",
+{% endif %}
+      "coin:signature_method": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+    },
+    "allowedEntities": [],
+    "metadataurl": "{{ manage_provision_samlsp_metadata_url }}",
+    "type": "saml20-sp",
+    "revisionnote": "Initial import"
+  }
+}
+
