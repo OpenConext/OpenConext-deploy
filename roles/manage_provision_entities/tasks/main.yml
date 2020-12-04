@@ -65,3 +65,5 @@
   when: (manage_test_entity.json|length==0) and (manage_provision_push | default(true) | bool)
   register: push_metadata_eb
   until: push_metadata_eb is succeeded
+  retries: 15
+  delay: 5
