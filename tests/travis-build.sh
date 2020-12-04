@@ -130,7 +130,7 @@ echo
 docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
 		-i $ANSIBLE_INVENTORY                                    \
-		/ansible/tests/all_services_are_up.yml
+		/ansible/tests/all_services_are_up.yml -t core
 
 
 # BRANCH=$(if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
