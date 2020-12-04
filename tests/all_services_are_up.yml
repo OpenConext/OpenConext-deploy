@@ -6,8 +6,8 @@
     services_health_checks_core:
       - https://engine.vm.openconext.org/health
       - https://profile.vm.openconext.org/health
-      - https://manage.vm.openconext.org/manage/api/health
     services_health_checks:
+      - https://manage.vm.openconext.org/manage/api/health
       - https://voot.vm.openconext.org/health
       - https://teams.vm.openconext.org/api/teams/health
       - https://pdp.vm.openconext.org/pdp/api/health
