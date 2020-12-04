@@ -1,35 +1,16 @@
 ---
-- include: ../../../tasks/springbootapp/preinstallation.yml
-
-- include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: Copy logging config
   template:
-    src: "logback.xml.j2"
-    dest: "{{ voot_dir }}/logback.xml"
+    src: "{{ item }}.j2"
+    dest: "{{ voot_dir }}/{{ item }}"
     owner: voot
     group: voot
     mode: 0740
-  notify:
-    - "restart voot"
-
-- name: Copy application config
-  template:
-    src: "application.properties.j2"
-    dest: "{{ voot_dir }}/application.properties"
-    owner: voot
-    group: voot
-    mode: 0740
-  notify:
-    - "restart voot"
-
-- name: Copy externalProviders config
-  template:
-    src: "externalProviders.yml.j2"
-    dest: "{{ voot_dir }}/externalProviders.yml"
-    owner: voot
-    group: voot
-    mode: 0740
+  with_items:
+    - logback.xml
+    - application.properties
+    - externalProviders.yml
   notify:
     - "restart voot"
 
@@ -39,8 +20,5 @@
     dest: "/etc/httpd/conf.d/voot.conf"
   notify:
     - "reload httpd"
-
-- name: Include postinstallation.yml
-  include: ../../../tasks/springbootapp/postinstallation.yml
 
 - meta: flush_handlers

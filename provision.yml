@@ -4,6 +4,7 @@
   tasks:
   - name: Read vars from secrets file
     include_vars: "{{ secrets_file }}"
+    no_log: true
     tags:
      - always
 
@@ -125,54 +126,13 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: app_java
-  gather_facts: true
+# run -t springboot -e springboot_service_to_deploy=manage,voot to only install
+# the manage and voot app. Both GUI as servers will be installed.
+- hosts: java-apps
   become: true
   roles:
-    - role: oidcng
-      tags: ['app_java', 'oidcng']
-    - role: manage-gui
-      tags: ['core', 'app_java', 'manage', 'manage-gui']
-    - role: manage-server
-      tags: ['core', 'app_java', 'manage', 'manage-server']
-    - role: teams-gui
-      tags: ['app_java', 'teams', 'teams-gui']
-    - role: teams-server
-      tags: ['app_java', 'teams', 'teams-server']
-    - role: voot
-      tags: ['app_java', 'oauth', 'voot']
-    - role: pdp-gui
-      tags: ['app_java', 'pdp', 'pdp-gui']
-    - role: pdp-server
-      tags: ['app_java', 'pdp', 'pdp-server']
-    - role: attribute-aggregation-gui
-      tags: ['app_java', 'attribute-aggregation', 'attribute-aggregation-gui']
-    - role: attribute-aggregation-server
-      tags: ['app_java', 'attribute-aggregation', 'attribute-aggregation-server']
-    - role: dashboard-gui
-      when:
-        - dashboard_install | bool
-      tags: ['app_java', 'dashboard', 'dashboard-gui']
-    - role: dashboard-server
-      when:
-        - dashboard_install | bool
-      tags: ['app_java', 'dashboard', 'dashboard-server']
-    - role: oidc-playground-client
-      tags: ['app_java', 'oidc-playground', 'oidc-playground-client']
-    - role: oidc-playground-server
-      tags: ['app_java', 'oidc-playground', 'oidc-playground-server']
-    - role: myconext-gui
-      tags: ['app_java', 'myconext-gui', 'myconext']
-    - role: myconext-server
-      tags: ['app_java', 'myconext-server', 'myconext']
-    - role: account-gui
-      tags: ['app_java', 'account-gui', 'myconext']
-    - role: eduid-gui
-      tags: ['app_java', 'eduid-gui', 'myconext']
-    - role: mujina-sp
-      tags: ['core', 'app_java', 'mujina-sp', 'mujina']
-    - role: mujina-idp
-      tags: ['core', 'app_java', 'mujina-idp', 'mujina']
+    - { role: springboot,       tags: ['springboot'] }
+
   handlers:
     - include: roles/httpd/handlers/main.yml
 
