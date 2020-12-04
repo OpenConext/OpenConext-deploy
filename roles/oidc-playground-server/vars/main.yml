@@ -21,9 +21,8 @@ manage_provision_oidcrp_allowed_resource_servers: "{{ oidcpg_manage_provision_oi
 manage_provision_oidcrp_is_public_client: "{{ oidcpg_manage_provision_oidcrp_is_public_client }}"
 manage_provision_oidcrp_is_resource_server: "{{ oidcpg_manage_provision_oidcrp_is_resource_server }}"
 manage_provision_cc_name_en: "{{ oidcpg_manage_provision_cc_name_en }}" 
+manage_provision_cc_description_en: "{{  oidcpg_manage_provision_cc_description_en }}"
 manage_provision_cc_client_id: "{{ oidcpg_manage_provision_cc_client_id }}"
 manage_provision_cc_rp_secret: "{{ oidcpg_manage_provision_cc_rp_secret }}"
 manage_provision_cc_scopes: "{{ oidcpg_manage_provision_cc_scopes }}"
 manage_provision_cc_is_resource_server: "{{ oidcpg_manage_provision_cc_is_resource_server }}"
-
-
