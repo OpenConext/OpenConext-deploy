@@ -29,9 +29,3 @@ gui:
   disclaimer:
     background-color: "{{ oidc_playground.gui_disclaimer.background_color }}"
     content: "{{ oidc_playground.gui_disclaimer.content }}"
-
-acr:
-  values:
-{% for loa in oidcng.acr_values_supported %}
-    - "{{ loa }}"
-{% endfor %}
