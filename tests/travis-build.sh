@@ -132,19 +132,4 @@ docker exec -t ansible-test                                      \
 		-i $ANSIBLE_INVENTORY                                    \
 		/ansible/tests/all_services_are_up.yml -t core
 
-
-# BRANCH=$(if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
-BRANCH="develop"
-if [[ "${BRANCH}" == "develop" ]] && [[ $status -eq 0 ]]
-	then	echo "Now we will create a Docker image."
-			DOCKER_ANSIBLE_TEST_COMMIT=$(docker commit ansible-test)
-			DOCKER_ANSIBLE_TEST_IMAGE_ID=$(echo ${DOCKER_ANSIBLE_TEST_COMMIT} | awk -F ':' '{print $2}' | cut -c1-12)
-			if [[ DOCKER_ANSIBLE_TEST_IMAGE_ID != "" ]]
-				then	# Create docker tag
-						docker tag ${DOCKER_ANSIBLE_TEST_IMAGE_ID} surfnet/centos7-openconext-core
-						# docker push surfnet/centos7-openconext-core
-			fi
-	else	echo "We only run on master to create a Docker image."
-fi
-
 exit $status
