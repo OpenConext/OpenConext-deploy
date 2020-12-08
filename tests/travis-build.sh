@@ -132,4 +132,21 @@ docker exec -t ansible-test                                      \
 		-i $ANSIBLE_INVENTORY                                    \
 		/ansible/tests/all_services_are_up.yml -t core
 
+BRANCH=$(if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+if [[ "${BRANCH}" == "master" ]] && [[ $status -eq 0 ]]
+	then	echo "Now we will create a Docker image."
+			DOCKER_ANSIBLE_TEST_COMMIT=$(docker commit ansible-test)
+			DOCKER_ANSIBLE_TEST_IMAGE_ID=$(echo ${DOCKER_ANSIBLE_TEST_COMMIT} | awk -F ':' '{print $2}' | cut -c1-12)
+			if [[ DOCKER_ANSIBLE_TEST_IMAGE_ID != "" ]]
+				then	# Create docker tag
+						if [[ -n ${GITHUB_USER} ]] && [[ -n ${GITHUB_TOKEN} ]]
+							then	docker login docker.pkg.github.com -u ${GITHUB_USER} -p ${GITHUB_TOKEN}
+									docker tag ${DOCKER_ANSIBLE_TEST_IMAGE_ID} docker.pkg.github.com/OpenConext/OpenConext-deploy/OpenConext-core
+									docker push docker.pkg.github.com/OpenConext/OpenConext-deploy/OpenConext-core
+							else	echo "No GITHUB_USER or GITHUB_TOKEN provided as a secret."
+						fi
+			fi
+	else	echo "We only run on master to create a Docker image."
+fi
+
 exit $status

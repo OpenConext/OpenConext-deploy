@@ -4,7 +4,7 @@ version: "3.8"
 
 services:
   web:
-    image: "surfnet/centos7-openconext-core"
+    image: docker.pkg.github.com/OpenConext/OpenConext-deploy/OpenConext-core
     privileged: true
     ports:
       - "443:443"
