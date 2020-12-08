@@ -16,6 +16,7 @@ platforms:
     groups:
       - loadbalancer
       - mongod_primary
+      - selfsigned_certs
 
 provisioner:
   name: ansible

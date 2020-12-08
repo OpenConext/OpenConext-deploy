@@ -3,14 +3,6 @@
   hosts: all
   vars:
     inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
-  #   base_domain: molecule.openconext.org
-  #   tls_ca: star.{{ base_domain }}_ca.pem
-  #   tls_star_cert: star.{{ base_domain }}.pem
-  #   tls_star_cert_key: star.{{ base_domain }}.key
-  #   tls:
-  #     cert_path: /etc/pki/tls/certs
-  #     cert_path_ca: /etc/pki/ca-trust/source/anchors/
-  #     cert_private_path: /etc/pki/tls/private
 
   tasks:
     - name: Read vars from secrets file

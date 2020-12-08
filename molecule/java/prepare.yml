@@ -2,19 +2,19 @@
 - name: Prepare
   hosts: all
   vars:
-    base_domain: molecule.openconext.org
     inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
 
   pre_tasks:
     - name: Read vars from secrets file
-      include_vars: "../../environments/vm/secrets/vm.yml"
+      include_vars: "../../environments/template/secrets/skeleton.yml"
     - name: Read vars from group_vars file
-      include_vars: "../../environments/vm/group_vars/vm.yml"
+      include_vars: "../../environments/template/group_vars/template.yml"
 
     - name: "Set some facts"
       set_fact:
         base_domain: molecule.openconext.org
         haproxy_backend_tls: true
+        use_selfsigned_certs: True
         mongo_primary: true
 
     - name: Install packages
@@ -22,6 +22,7 @@
         name:
           - python2-pip
           - unzip
+          - crontabs
         state: "installed"
       register: prepare_packages_installed
       until: prepare_packages_installed is succeeded
@@ -79,10 +80,68 @@
           dest: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
         - src: /root/example_com_host_key.key
           dest: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.key"
+        - src: /root/CA.crt
+          dest: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}_ca.pem"
 
   roles:
+    - role: selfsigned_certs
+
+- name: Prepare
+  hosts: all
+
+  vars:
+    inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
+
+  pre_tasks:
+    - name: Read vars from secrets file
+      include_vars: "../../environments/template/secrets/skeleton.yml"
+    - name: Read vars from group_vars file
+      include_vars: "../../environments/template/group_vars/template.yml"
+
+    - name: "Fetch files"
+      fetch:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        flat: true
+      with_items:
+        - src: /etc/pki/tls/certs/star.molecule.openconext.org.pem
+          dest: "{{ inventory_dir }}/files/certs/star.molecule.openconext.org.pem"
+        - src: /etc/pki/tls/private/star.molecule.openconext.org.key
+          dest: "{{ inventory_dir }}/files/certs/star.molecule.openconext.org.key"
+
+    - name: "Override some defaults"
+      set_fact:
+        hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
+        base_domain: molecule.openconext.org
+        php_servers:
+          - { ip: "127.0.0.1", label: "php"}
+        java_servers:
+          - { ip: "127.0.0.1", label: "java"}
+        engine_trusted_proxy_ips:
+          - "{{ ansible_all_ipv4_addresses[0] }}"
+        haproxy_backend_tls: true
+        backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
+        haproxy_sni_ip:
+          ipv4: "{{ ansible_all_ipv4_addresses[0] }}"
+          ipv6:  "::1"
+          certs:
+            - name: star
+              key_content: "{{lookup('file', inventory_dir + '/files/certs/star.molecule.openconext.org.key') }}"
+              crt_name: star.{{ base_domain }}.pem
+        haproxy_sni_ip_restricted:
+          ipv4: 127.0.0.2
+          ipv6: "::1"
+          certs:
+            - name: star
+              key_content: "{{lookup('file', inventory_dir + '/files/certs/star.molecule.openconext.org.key') }}"
+              crt_name: star.{{ base_domain }}.pem
+
+
+  roles:
+    - role: haproxy
     - role: httpd
-      haproxy_backend_tls: true
-      backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.{{ base_domain }}.key') }}"
     - role: mysql
     - role: mongo
+    - role: php
+    - role: openconext-common
+    - role: engineblock
