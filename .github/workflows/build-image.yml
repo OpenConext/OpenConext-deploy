@@ -39,9 +39,9 @@ jobs:
     - name: Docker login
       run: docker login docker.pkg.github.com -u ${{github.actor}} -p ${{secrets.GITHUB_TOKEN}}
     
-    - name: Docker commit and push
-      run: |
-        DOCKER_ANSIBLE_TEST_COMMIT=$(docker commit ansible-test)
-        DOCKER_ANSIBLE_TEST_IMAGE_ID=$(echo ${DOCKER_ANSIBLE_TEST_COMMIT} | awk -F ':' '{print $2}' | cut -c1-12)
-        docker tag ${DOCKER_ANSIBLE_TEST_IMAGE_ID} OpenConext/OpenConext-deploy/OpenConext-core
-        docker push docker.pkg.github.com/OpenConext/OpenConext-deploy/OpenConext-core
+#    - name: Docker commit and push
+#      run: |
+#        DOCKER_ANSIBLE_TEST_COMMIT=$(docker commit ansible-test)
+#        DOCKER_ANSIBLE_TEST_IMAGE_ID=$(echo ${DOCKER_ANSIBLE_TEST_COMMIT} | awk -F ':' '{print $2}' | cut -c1-12)
+#        docker tag ${DOCKER_ANSIBLE_TEST_IMAGE_ID} OpenConext/OpenConext-deploy/OpenConext-core
+#        docker push docker.pkg.github.com/OpenConext/OpenConext-deploy/OpenConext-core
