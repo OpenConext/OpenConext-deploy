@@ -14,8 +14,8 @@
     mode: 0740
   with_items:
     - logback.xml
-    - application.yml
-  notify: 
+    - application.properties
+  notify:
     - "restart dashboard"
 
 - name: Include postinstallation.yml
