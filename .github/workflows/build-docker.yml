@@ -9,9 +9,9 @@ on:
 
 jobs:
 
-  Build-provision-and-push-Docker-Image:
+  Build-Docker-Image:
     runs-on: ubuntu-latest
-    name: Docker Build, Provision, Tag, Push
+    name: Build Docker Image
 
     steps:
     - name: Checkout
