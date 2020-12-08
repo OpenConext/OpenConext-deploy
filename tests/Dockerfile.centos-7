@@ -1,6 +1,6 @@
 FROM centos:7
 
-MAINTAINER "Thijs Kinkhorst" <thijs.kinkhorst@surfnet.nl>
+MAINTAINER "Thijs Kinkhorst" <thijs.kinkhorst@surf.nl>
 
 ENV container docker
 
