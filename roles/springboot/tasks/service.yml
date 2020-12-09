@@ -22,3 +22,11 @@
     chdir: "{{ _springapp_dir }}"
   register: clean_jars
   changed_when: '"removed" in clean_jars'
+
+- name: "Restart 'service'"
+  systemd:
+    name: "{{ _springapp_service_name }}"
+    state: restarted
+    daemon_reload: yes
+  when:
+    - maven_result.changed

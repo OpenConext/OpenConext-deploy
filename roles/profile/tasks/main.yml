@@ -113,6 +113,12 @@
   notify:
     - "restart php72-fpm"
 
+- name: Include the role manage_provision_entities to provision profile to Manage
+  include_role: 
+    name: manage_provision_entities
+  vars: 
+    entity_type: saml20_sp
+
 # Remove all dirs, but keep the current version and from the rest the most recent one.
 - name: Clean up old releases
   shell: ls -td {{ openconext_releases_dir }}/OpenConext-profile-* | grep -v $(readlink {{ profile_current_release_symlink }}) | tail -n +2 | xargs --no-run-if-empty rm -rv

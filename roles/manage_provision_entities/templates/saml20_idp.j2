@@ -1,0 +1,21 @@
+{
+  "version": 0,
+  "type": "saml20_idp",
+  "data": {
+    "entityid": "{{ manage_provision_samlidp_entity_id }}",
+    "state": "{{ manage_provision_state }}",
+    "type": "saml20-idp",
+    "allowedall": true,
+    "metaDataFields": {
+      "description:en": "{{ manage_provision_samlidp_description_en }}",
+      "name:en": "{{ manage_provision_samlidp_name_en }}",
+      "certData": "{{ manage_provision_samlidp_idp_cert }}",
+      "SingleSignOnService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "SingleSignOnService:0:Location": "{{ manage_provision_samlidp_idp_sso_location }}"
+    },
+    "allowedEntities": [],
+    "disableConsent": [],
+    "stepupEntities": [],
+    "mfaEntities": []
+  }
+}

@@ -41,7 +41,5 @@
     state: link
     owner: "{{ _springapp_user }}"
     group: "{{ _springapp_user }}"
-  notify:
-    - "restart {{ _springapp_service_name }}"
   when:
     - maven_result.changed

@@ -62,3 +62,12 @@
     - metadata_templates
   notify:
     - "restart manage"
+
+- meta: flush_handlers
+
+- name: Include the role manage_provision_entities to provision the Manage sp to Manage
+  include_role: 
+    name: manage_provision_entities
+  vars: 
+    entity_type: saml20_sp
+
