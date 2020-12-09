@@ -7,46 +7,52 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
 
-@pytest.mark.parametrize("installed_packages", [
-    ("httpd"),
-    ("php72-php-fpm"),
-    ("php72-php-mysqlnd"),
-])
-def test_packages_installed(host, installed_packages):
-    rpackage = host.package(installed_packages)
-    assert rpackage.is_installed
+
+def test_java_binary(host):
+    java_binary = host.file("/usr/bin/java")
+    command = host.run('/usr/bin/java -version 2>&1 | grep openjdk')
+    assert java_binary.exists
+    assert java_binary.is_file
+
+    assert command.rc == 0
+    assert 'version "1.8.' in command.stdout
 
 
-@pytest.mark.parametrize("services", [
-    ("httpd"),
-    ("php72-php-fpm"),
+@pytest.mark.parametrize("components, dir_owner, file_owner, group, httpd_listen, spring_listen", [
+    ("manage", "root", "manage", "root", "617", "9393"),
+    ("mujina-idp", "mujina-idp", "mujina-idp", "mujina-idp", "608", "9390"),
+    ("mujina-sp", "mujina-sp", "mujina-sp", "mujina-sp", "607", "9391"),
 ])
-def test_services_running_and_enabled(host, services):
-    service = host.service(services)
+def test_components(host, components, dir_owner, file_owner, group, httpd_listen, spring_listen):
+    user = host.user(components)
+    service = host.service(components)
+    socket_httpd = host.socket("tcp://127.0.0.1:" + httpd_listen)
+    socket_springboot = host.socket("tcp://127.0.0.1:" + spring_listen)
+    opt_dir = host.file("/opt/" + components)
+    logback = host.file("/opt/" + components + "/logback.xml")
+    application = host.file("/opt/" + components + "/application.yml")
+    http_file = host.file("/etc/httpd/conf.d/" + components.replace("-", "_") + '.conf')
+    # manage contains a version in symlink, so lets skip that for now.
+    if components != "manage":
+        jar_file = host.file("/opt/" + components + "/" + components + '.jar')
+        assert jar_file.is_symlink
+
+    assert user.exists
+
     assert service.is_enabled
     assert service.is_running
 
+    assert opt_dir.is_directory
+    assert opt_dir.user == dir_owner
+    assert opt_dir.group == group
 
-@pytest.mark.parametrize("files", [
-    ("/etc/opt/remi/php72/php.d/40-apcu.ini"),
-    ("/etc/opt/remi/php72/php.d/openconext.ini"),
-    ("/etc/opt/remi/php72/php-fpm.conf"),
-    ("/etc/opt/remi/php72/php-fpm.d/www.conf"),
-    ("/etc/httpd/conf.d/profile.conf"),
-    ("/etc/httpd/conf.d/metadata.conf"),
-    ("/etc/httpd/conf.d/static.conf"),
-])
-def test_php_files(host, files):
-    php_file = host.file(files)
-    assert php_file.user == "root"
-    assert php_file.group == "root"
-    assert php_file.mode == 0o644
+    assert logback.exists
+    assert logback.user == file_owner
+    assert application.exists
+    assert application.user == file_owner
 
+    assert http_file.exists
+    assert http_file.is_file
 
-@pytest.mark.parametrize("components", [
-    ("profile"),
-    ("engine"),
-])
-def test_components(host, components):
-    component = host.user(components)
-    assert component.exists
+    assert socket_httpd.is_listening
+    assert socket_springboot.is_listening

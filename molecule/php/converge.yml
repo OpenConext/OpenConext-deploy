@@ -17,6 +17,5 @@
     - role: metadata
     - role: openconext-common
     - role: engineblock
-    - role: profile
   handlers:
     - include: ../../roles/httpd/handlers/main.yml

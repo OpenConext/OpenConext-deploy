@@ -7,49 +7,34 @@
 
   pre_tasks:
     - name: Read vars from secrets file
-      include_vars: "../../environments/template/secrets/skeleton.yml"
+      include_vars: "../../environments/vm/secrets/vm.yml"
     - name: Read vars from group_vars file
-      include_vars: "../../environments/template/group_vars/template.yml"
+      include_vars: "../../environments/vm/group_vars/vm.yml"
+    - name: Read vars from hosts_vars file from template
+      include_vars: "../../environments/template/host_vars/template.yml"
 
     - name: "Override some defaults"
       set_fact:
-        hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
+        # hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
         base_domain: molecule.openconext.org
-        haproxy_backend_tls: true
         backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
-        haproxy_sni_ip:
-          ipv4: "{{ ansible_all_ipv4_addresses[0] }}"
-          ipv6:  "::1"
-          certs:
-            - name: star
-              key_content: "{{lookup('file', inventory_dir + '/files/certs/star.molecule.openconext.org.key') }}"
-              crt_name: star.{{ base_domain }}.pem
-        haproxy_sni_ip_restricted:
-          ipv4: 127.0.0.2
-          ipv6: "::1"
-          certs:
-            - name: star
-              key_content: "{{lookup('file', inventory_dir + '/files/certs/star.molecule.openconext.org.key') }}"
-              crt_name: star.{{ base_domain }}.pem
-
+        springboot_services_state:
+          manage: true
+          teams: false
+          pdp: false
+          attribute_aggregation: false
+          oidc_playground: false
+          myconext: false
+          account: false
+          eduid: false
+          oidcng: false
+          voot: false
+          mujina_sp: true
+          mujina_idp: true
 
   roles:
-    - role: haproxy
     - role: java
     - role: shibboleth
     - role: springboot
-      springboot_services_state:
-        manage: true
-        teams: true
-        pdp: true
-        attribute_aggregation: true
-        oidc_playground: true
-        myconext: true
-        account: true
-        eduid: true
-        oidcng: true
-        voot: true
-        mujina_sp: true
-        mujina_idp: true
   handlers:
     - include: ../../roles/httpd/handlers/main.yml

@@ -13,8 +13,8 @@
     - name: "Set some facts"
       set_fact:
         base_domain: molecule.openconext.org
-        hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
-        haproxy_backend_tls: true
+        # hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
+        # haproxy_backend_tls: true
         mongo_primary: true
 
     - name: Install packages
@@ -81,7 +81,6 @@
           dest: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.key"
 
   roles:
-    - role: hosts
     - role: httpd
-      backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
+      # backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
     - role: mysql

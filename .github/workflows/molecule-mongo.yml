@@ -1,6 +1,6 @@
 # Github action to run Molecule for "mongo"
 
-name: frontend
+name: mongo
 on:
   push:
     paths:

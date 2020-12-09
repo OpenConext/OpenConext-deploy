@@ -6,14 +6,15 @@
 
   pre_tasks:
     - name: Read vars from secrets file
-      include_vars: "../../environments/template/secrets/skeleton.yml"
+      include_vars: "../../environments/vm/secrets/vm.yml"
     - name: Read vars from group_vars file
-      include_vars: "../../environments/template/group_vars/template.yml"
+      include_vars: "../../environments/vm/group_vars/vm.yml"
+    - name: Read vars from hosts_vars file from template
+      include_vars: "../../environments/template/host_vars/template.yml"
 
     - name: "Set some facts"
       set_fact:
         base_domain: molecule.openconext.org
-        haproxy_backend_tls: true
         use_selfsigned_certs: True
         mongo_primary: true
 
@@ -111,18 +112,15 @@
 
     - name: "Override some defaults"
       set_fact:
-        hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
+        # hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
         base_domain: molecule.openconext.org
         php_servers:
           - { ip: "127.0.0.1", label: "php"}
         java_servers:
           - { ip: "127.0.0.1", label: "java"}
-        engine_trusted_proxy_ips:
-          - "{{ ansible_all_ipv4_addresses[0] }}"
-        haproxy_backend_tls: true
-        backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
+        # backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
         haproxy_sni_ip:
-          ipv4: "{{ ansible_all_ipv4_addresses[0] }}"
+          ipv4: 127.0.0.1
           ipv6:  "::1"
           certs:
             - name: star
@@ -135,9 +133,155 @@
             - name: star
               key_content: "{{lookup('file', inventory_dir + '/files/certs/star.molecule.openconext.org.key') }}"
               crt_name: star.{{ base_domain }}.pem
+        engine_trusted_proxy_ips:
+          - 192.168.1.1
+          - 10.0.0.1
+          - "{{ ansible_all_ipv4_addresses[0] }}"
+        haproxy_applications:
+          - name: engine
+            vhost_name: engine.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/health"
+            port: "{{ loadbalancing.engine.port }}"
+            servers: "{{php_servers}}"
 
+          - name: profile
+            vhost_name: profile.{{ base_domain }}
+            ha_method: "HEAD"
+            ha_url: "/health"
+            port: "{{ loadbalancing.profile.port }}"
+            servers: "{{php_servers}}"
+
+          - name: static
+            vhost_name: static.{{ base_domain }}
+            ha_method: "HEAD"
+            ha_url: "/media/alive.txt"
+            port: "{{ loadbalancing.static.port }}"
+            servers: "{{php_servers}}"
+
+          - name: metadata
+            vhost_name: metadata.{{ base_domain }}
+            ha_method: "HEAD"
+            ha_url: "/alive.txt"
+            port: "{{ loadbalancing.metadata.port }}"
+            servers: "{{php_servers}}"
+
+          - name: engine_api
+            vhost_name: engine-api.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/"
+            port: "{{ loadbalancing.engine_api.port }}"
+            servers: "{{php_servers}}"
+            restricted: yes
+
+          - name: teams
+            vhost_name: teams.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/api/teams/health"
+            port: "{{ loadbalancing.teams.port }}"
+            servers: "{{java_servers}}"
+
+          - name: oidc_playground
+            vhost_name: "oidc-playground.{{ base_domain }}"
+            ha_method: "GET"
+            ha_url: "/health"
+            port: "{{ loadbalancing.oidc_playground.port }}"
+            servers: "{{java_servers}}"
+
+          - name: voot
+            vhost_name: voot.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/health"
+            port: "{{ loadbalancing.voot.port }}"
+            servers: "{{java_servers}}"
+
+          - name: pdp
+            vhost_name: pdp.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/pdp/api/health"
+            port: "{{ loadbalancing.pdp.port }}"
+            servers: "{{java_servers}}"
+
+          - name: oidc
+            vhost_name: oidc.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/health"
+            port: "{{ loadbalancing.oidc.port }}"
+            servers: "{{java_servers}}"
+
+          - name: aa
+            vhost_name: aa.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/aa/api/health"
+            port: "{{ loadbalancing.aa.port }}"
+            servers: "{{java_servers}}"
+
+          - name: link
+            vhost_name: link.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/aa/api/health"
+            port: "{{ loadbalancing.aa.port }}"
+            servers: "{{java_servers}}"
+
+          - name: manage
+            vhost_name: manage.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/manage/api/health"
+            port: "{{ loadbalancing.manage.port }}"
+            servers: "{{java_servers}}"
+
+          - name: mujina-sp
+            vhost_name: mujina-sp.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/"
+            port: "{{ loadbalancing.mujina_sp.port }}"
+            servers: "{{java_servers}}"
+
+          - name: mujina-idp
+            vhost_name: mujina-idp.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/"
+            port: "{{ loadbalancing.mujina_idp.port }}"
+            servers: "{{java_servers}}"
+
+          - name: welcome
+            vhost_name: welcome.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/"
+            port: "{{ loadbalancing.welcome.port }}"
+            servers: "{{php_servers}}"
+
+          - name: oidcng
+            vhost_name: connect.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/actuator/health"
+            port: "{{ loadbalancing.oidcng.port }}"
+            servers: "{{java_servers}}"
+
+          - name: myconext
+            vhost_name: my.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/actuator/health"
+            port: "{{ loadbalancing.myconext.port }}"
+            servers: "{{java_servers}}"
+
+          - name: account
+            vhost_name: account.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/actuator/health"
+            port: "{{ loadbalancing.account.port }}"
+            servers: "{{java_servers}}"
+
+          - name: eduid
+            vhost_name: eduid.{{ base_domain }}
+            ha_method: "GET"
+            ha_url: "/actuator/health"
+            port: "{{ loadbalancing.eduid.port }}"
+            servers: "{{java_servers}}"
 
   roles:
+    - role: rsyslog
+    - role: common
     - role: haproxy
     - role: httpd
     - role: mysql

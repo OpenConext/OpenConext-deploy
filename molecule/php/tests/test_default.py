@@ -32,7 +32,6 @@ def test_services_running_and_enabled(host, services):
     ("/etc/opt/remi/php72/php.d/openconext.ini"),
     ("/etc/opt/remi/php72/php-fpm.conf"),
     ("/etc/opt/remi/php72/php-fpm.d/www.conf"),
-    ("/etc/httpd/conf.d/profile.conf"),
     ("/etc/httpd/conf.d/metadata.conf"),
     ("/etc/httpd/conf.d/static.conf"),
 ])
@@ -44,7 +43,6 @@ def test_php_files(host, files):
 
 
 @pytest.mark.parametrize("components", [
-    ("profile"),
     ("engine"),
 ])
 def test_components(host, components):

@@ -17,9 +17,9 @@
   tags:
     - java
 
-- name: Link JDK alternatives to 1.7
+- name: Link JDK alternatives to 1.8
   file:
-    src: "/usr/lib/jvm/jre-1.7.0-openjdk/{{ item.path }}"
+    src: "/usr/lib/jvm/jre-1.8.0-openjdk/{{ item.path }}"
     dest: "/usr/bin/{{ item.name }}"
     state: link
     force: yes
