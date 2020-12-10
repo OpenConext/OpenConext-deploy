@@ -73,5 +73,12 @@
     dest: "/etc/httpd/conf.d/oidcng.conf"
   notify:
     - "reload httpd"
-    
+
 - meta: flush_handlers
+
+- name: Include the role manage_provision_entities to provision oidncg to Manage
+  include_role: 
+    name: manage_provision_entities
+  vars: 
+    entity_type: saml20_sp
+
