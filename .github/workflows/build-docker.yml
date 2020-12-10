@@ -32,7 +32,7 @@ jobs:
     - name: Docker build
       run: sudo docker build --rm -t surfnet/centos7-openconext -f tests/Dockerfile.centos-7 .
 
-    - name: Docker build
+    - name: Provision Docker container
       run: sudo /bin/bash ./tests/travis-build.sh
 
     - name: Docker login
