@@ -53,3 +53,6 @@ after_failure:
 after_script:
   - sudo docker stop ansible-test
 
+env:
+  global:
+    secure: J6dAXIuIpVL07lW55baMRJsn8Pg4fiCAIEk3bWWQRlWQLL4Lmt9RHvS2iEXCcxME+ExAhZ2PhFTw8eNSGZ2VE5K1Ok1kiFLxDOd4ODRK+pOYfm+A2/HP6ehkSkltIDLrcOvFA8BivUJJ8tEz7DozChWBDayaOA5fzu5jYaBlhRU=
