@@ -13,7 +13,7 @@ ANSIBLE_PLAYBOOK_WRAPPER=/ansible/provision
 ANSIBLE_USER=vagrant
 
 # start docker container
-docker run --detach                                             \
+docker run --detach                                         \
 	-v "${PWD}":/ansible:rw                                 \
 	-v /sys/fs/cgroup:/sys/fs/cgroup:ro                     \
 	--privileged                                            \
@@ -25,21 +25,15 @@ docker run --detach                                             \
 	--add-host mujina-sp.vm.openconext.org:127.0.0.1        \
 	--add-host mujina-idp.vm.openconext.org:127.0.0.1       \
 	--add-host teams.vm.openconext.org:127.0.0.1            \
-	--add-host authz.vm.openconext.org:127.0.0.1            \
-	--add-host authz-admin.vm.openconext.org:127.0.0.2      \
-	--add-host authz-playground.vm.openconext.org:127.0.0.1 \
 	--add-host voot.vm.openconext.org:127.0.0.1             \
-	--add-host lb.vm.openconext.org:127.0.0.1               \
-	--add-host apps.vm.openconext.org:127.0.0.1             \
 	--add-host db.vm.openconext.org:127.0.0.1               \
-	--add-host pdp.vm.openconext.org:127.0.0.2              \
+	--add-host pdp.vm.openconext.org:127.0.0.1              \
 	--add-host engine-api.vm.openconext.org:127.0.0.2       \
-	--add-host aa.vm.openconext.org:127.0.0.2               \
+	--add-host aa.vm.openconext.org:127.0.0.1               \
 	--add-host link.vm.openconext.org:127.0.0.1             \
-	--add-host oidc.vm.openconext.org:127.0.0.1             \
-	--add-host connect.vm.openconext.org:127.0.0.1           \
+	--add-host connect.vm.openconext.org:127.0.0.1          \
 	--add-host oidc-playground.vm.openconext.org:127.0.0.1  \
-	--add-host manage.vm.openconext.org:127.0.0.2           \
+	--add-host manage.vm.openconext.org:127.0.0.1           \
 	--add-host redirect.vm.openconext.org:127.0.0.1         \
 	--add-host localhost:127.0.0.1                          \
 	--hostname test.openconext.org                          \
@@ -65,16 +59,19 @@ docker cp /tmp/ansible.cfg ansible-test:${ANSIBLE_CONFIG}
 # Change the hostname in the inventory
 sed -i 's/%target_host%/localhost ansible_connection=local/g' environments-external/travis/inventory 
 
+# Listen to all interfaces, so we can run a Docker container on our hosts
+echo "listen_address_ip4: 0.0.0.0" >> environments-external/travis/group_vars/travis.yml
+
 # The docker image doesn't have ipv6: Disable it for postfix
 echo "postfix_interfaces: ipv4" >> environments-external/travis/group_vars/travis.yml
 
 # Do not install Dashboard
 echo "dashboard_install: False" >> environments-external/travis/group_vars/travis.yml
 
-# Enable oidc-ng 
-echo "manage_show_oidc_rp_tab: true" >> environments-external/travis/group_vars/travis.yml
-echo "manage_exclude_oidc_rp_imports_in_push: true" >> environments-external/travis/group_vars/travis.yml
-sed -i 's/oidc_push_enabled: false/oidc_push_enabled: true/g' environments-external/travis/group_vars/travis.yml
+# Enable oidc-ng (When doing a -t core those tasks should not be performed)
+# echo "manage_show_oidc_rp_tab: true" >> environments-external/travis/group_vars/travis.yml
+# echo "manage_exclude_oidc_rp_imports_in_push: true" >> environments-external/travis/group_vars/travis.yml
+# sed -i 's/oidc_push_enabled: false/oidc_push_enabled: true/g' environments-external/travis/group_vars/travis.yml
 
 # Create the proper host_vars file
 mv environments-external/travis/host_vars/template.yml environments-external/travis/host_vars/localhost.yml
@@ -97,7 +94,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=manage,mujina-sp,mujina-idp -e @/ansible/tests/travis.yml -t core
 
 echo
 echo "================================================================="
@@ -108,7 +105,7 @@ echo "================================================================="
 echo
 
 TMPOUT=$(mktemp)
-docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e @/ansible/tests/travis.yml | tee $TMPOUT
+docker exec -w /ansible -t ansible-test  /ansible/provision travis $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=manage,mujina-sp,mujina-idp -e @/ansible/tests/travis.yml -t core | tee $TMPOUT
 
 echo
 echo "================================================================="
@@ -127,6 +124,24 @@ echo
 docker exec -t ansible-test                                      \
 	ansible-playbook                                             \
 		-i $ANSIBLE_INVENTORY                                    \
-		/ansible/tests/all_services_are_up.yml
+		/ansible/tests/all_services_are_up.yml -t core
+
+BRANCH=$(if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+# if [[ "${BRANCH}" == "master" ]] && [[ $status -eq 0 ]]
+if [[ $status -eq 0 ]]
+	then	echo "Now we will create a Docker image."
+			DOCKER_ANSIBLE_TEST_COMMIT=$(docker commit ansible-test)
+			DOCKER_ANSIBLE_TEST_IMAGE_ID=$(echo ${DOCKER_ANSIBLE_TEST_COMMIT} | awk -F ':' '{print $2}' | cut -c1-12)
+			if [[ DOCKER_ANSIBLE_TEST_IMAGE_ID != "" ]]
+				then	# Create docker tag
+						if [[ -n ${GITHUB_USER} ]] && [[ -n ${GITHUB_TOKEN} ]]
+							then	docker login docker.pkg.github.com -u ${GITHUB_USER} -p ${GITHUB_TOKEN}
+									docker tag ${DOCKER_ANSIBLE_TEST_IMAGE_ID} docker.pkg.github.com/openconext/openconext-deploy/openconext-core
+									docker push docker.pkg.github.com/openconext/openconext-deploy/openconext-core
+							else	echo "No GITHUB_USER or GITHUB_TOKEN provided as a secret."
+						fi
+			fi
+	else	echo "We only run on master to create a Docker image."
+fi
 
 exit $status

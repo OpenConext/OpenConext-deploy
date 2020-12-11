@@ -127,7 +127,7 @@
 - hosts: java-apps
   become: true
   roles:
-    - { role: springboot,       tags: ['springboot', 'core'] }
+    - { role: springboot,       tags: ['core', 'springboot'] }
 
   handlers:
     - include: roles/httpd/handlers/main.yml
