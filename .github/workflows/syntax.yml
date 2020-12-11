@@ -1,0 +1,33 @@
+# Github action to run syntax check
+
+name: syntax
+on:
+  push:
+    paths:
+      - 'environments/**'
+      - 'group_vars/**'
+      - 'roles/**'
+      - '.github/workflows/syntax.yml'
+  pull_request:
+    paths:
+      - 'environments/**'
+      - 'group_vars/**'
+      - 'roles/**'
+      - '.github/workflows/syntax.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Installing dependencies
+        run: pip install jinja2 ansible
+
+      - name: Run syntax check
+        run: ./scripts/syntax-check

@@ -27,6 +27,7 @@
   systemd:
     name: "{{ _springapp_service_name }}"
     state: restarted
+    enabled: yes
     daemon_reload: yes
   when:
     - maven_result.changed

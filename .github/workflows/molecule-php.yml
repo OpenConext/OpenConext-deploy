@@ -1,0 +1,50 @@
+# Github action to run Molecule for "php"
+
+name: php
+on:
+  push:
+    paths:
+      - 'roles/httpd/**'
+      - 'roles/php/**'
+      - 'roles/static/**'
+      - 'roles/metadata/**'
+      - 'roles/openconext-common/**'
+      - 'roles/engineblock/**'
+      - 'roles/profile/**'
+      - 'molecule/php/**'
+      - '.github/workflows/molecule-php.yml'
+  pull_request:
+    paths:
+      - 'roles/httpd/**'
+      - 'roles/php/**'
+      - 'roles/static/**'
+      - 'roles/metadata/**'
+      - 'roles/openconext-common/**'
+      - 'roles/engineblock/**'
+      - 'roles/profile/**'
+      - 'molecule/php/**'
+      - '.github/workflows/molecule-php.yml'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Installing dependencies
+        run: pip install jinja2 ansible molecule molecule-docker pytest-testinfra pytest setuptools
+
+      - name: disable apparmor for mysql
+        run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+
+      - name: parse apparmor for mysql
+        run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+
+      - name: Run role tests
+        run: molecule test -s php
