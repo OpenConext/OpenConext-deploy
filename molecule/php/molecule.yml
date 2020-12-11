@@ -15,6 +15,7 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
       - "loadbalancer-vm"
+      - loadbalancer
 
 provisioner:
   name: ansible

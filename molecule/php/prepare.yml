@@ -13,8 +13,6 @@
     - name: "Set some facts"
       set_fact:
         base_domain: molecule.openconext.org
-        # hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
-        # haproxy_backend_tls: true
         mongo_primary: true
 
     - name: Install packages
@@ -26,61 +24,7 @@
       register: prepare_packages_installed
       until: prepare_packages_installed is succeeded
 
-    - name: Install python crypto module
-      pip:
-        name: "cryptography"
-        state: "latest"
-      register: prepare_pip_packages_installed
-      until: prepare_pip_packages_installed is succeeded
-
-    - name: create CA key
-      openssl_privatekey:
-        path: /root/CA_key.key
-
-    - name: create the CA CSR
-      openssl_csr:
-        path: /root/CA.csr
-        privatekey_path: /root/CA_key.key
-        common_name: "my-ca"
-
-    - name: sign the CA CSR
-      openssl_certificate:
-        path: /root/CA.crt
-        csr_path: /root/CA.csr
-        privatekey_path: /root/CA_key.key
-        provider: selfsigned
-
-    - name: create host key
-      openssl_privatekey:
-        path: /root/example_com_host_key.key
-
-    - name: create the CSR for the http server
-      openssl_csr:
-        path: /root/example_com.csr
-        privatekey_path: /root/example_com_host_key.key
-        common_name: "{{ base_domain }}"
-        subject_alt_name: 'DNS:{{ inventory_hostname }}'
-
-    - name: sign the CSR for the http server
-      openssl_certificate:
-        path: /root/example_com.crt
-        csr_path: /root/example_com.csr
-        provider: ownca
-        ownca_path: /root/CA.crt
-        ownca_privatekey_path: /root/CA_key.key
-
-    - name: "Fetch files"
-      fetch:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        flat: true
-      with_items:
-        - src: /root/example_com.crt
-          dest: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
-        - src: /root/example_com_host_key.key
-          dest: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.key"
-
   roles:
+    - role: selfsigned_certs
     - role: httpd
-      # backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
     - role: mysql
