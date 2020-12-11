@@ -607,7 +607,6 @@ haproxy_applications:
     ha_url: "/pdp/api/health"
     port: "{{ loadbalancing.pdp.port }}"
     servers: "{{java_servers}}"
-    restricted: yes
 
   - name: oidc
     vhost_name: oidc.{{ base_domain }}
@@ -622,7 +621,6 @@ haproxy_applications:
     ha_url: "/aa/api/health"
     port: "{{ loadbalancing.aa.port }}"
     servers: "{{java_servers}}"
-    restricted: yes
 
   - name: link
     vhost_name: link.{{ base_domain }}
@@ -637,7 +635,6 @@ haproxy_applications:
     ha_url: "/manage/api/health"
     port: "{{ loadbalancing.manage.port }}"
     servers: "{{java_servers}}"
-    restricted: yes
 
   - name: mujina-sp
     vhost_name: mujina-sp.{{ base_domain }}

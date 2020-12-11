@@ -14,7 +14,6 @@
       set_fact:
         base_domain: molecule.openconext.org
         haproxy_backend_tls: true
-        mongo_primary: true
 
     - name: Install packages
       yum:

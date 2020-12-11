@@ -15,9 +15,7 @@
 
     - name: "Override some defaults"
       set_fact:
-        # hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
         base_domain: molecule.openconext.org
-        backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
         springboot_services_state:
           manage: true
           teams: false

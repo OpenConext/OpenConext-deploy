@@ -13,7 +13,6 @@
 
     - name: "Override some defaults"
       set_fact:
-        hosts_ip_address: "{{ ansible_all_ipv4_addresses[0] }}"
         base_domain: molecule.openconext.org
         haproxy_backend_tls: true
         backend_tls_key: "{{lookup('file', inventory_dir + '/files/certs/backend.molecule.openconext.org.key') }}"
