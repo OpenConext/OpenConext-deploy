@@ -14,6 +14,11 @@ springboot_services_state:
   mujina_sp: true
   mujina_idp: true
 
+springboot_core_services:
+  - manage
+  - mujina-sp
+  - mujina-idp
+
 springboot_service_to_deploy: all
 springboot_gui_services:
   - name: manage
