@@ -127,7 +127,8 @@ docker exec -t ansible-test                                      \
 		/ansible/tests/all_services_are_up.yml -t core
 
 BRANCH=$(if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
-if [[ "${BRANCH}" == "master" ]] && [[ $status -eq 0 ]]
+# if [[ "${BRANCH}" == "master" ]] && [[ $status -eq 0 ]]
+if [[ $status -eq 0 ]]
 	then	echo "Now we will create a Docker image."
 			DOCKER_ANSIBLE_TEST_COMMIT=$(docker commit ansible-test)
 			DOCKER_ANSIBLE_TEST_IMAGE_ID=$(echo ${DOCKER_ANSIBLE_TEST_COMMIT} | awk -F ':' '{print $2}' | cut -c1-12)
