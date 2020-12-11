@@ -136,8 +136,8 @@ if [[ $status -eq 0 ]]
 				then	# Create docker tag
 						if [[ -n ${GITHUB_USER} ]] && [[ -n ${GITHUB_TOKEN} ]]
 							then	docker login docker.pkg.github.com -u ${GITHUB_USER} -p ${GITHUB_TOKEN}
-									docker tag ${DOCKER_ANSIBLE_TEST_IMAGE_ID} docker.pkg.github.com/OpenConext/OpenConext-deploy/OpenConext-core
-									docker push docker.pkg.github.com/OpenConext/OpenConext-deploy/OpenConext-core
+									docker tag ${DOCKER_ANSIBLE_TEST_IMAGE_ID} docker.pkg.github.com/openconext/openconext-deploy/openconext-core
+									docker push docker.pkg.github.com/openconext/openconext-deploy/openconext-core
 							else	echo "No GITHUB_USER or GITHUB_TOKEN provided as a secret."
 						fi
 			fi
