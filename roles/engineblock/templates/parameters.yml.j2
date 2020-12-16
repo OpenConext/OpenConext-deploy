@@ -175,6 +175,9 @@ parameters:
     ## Allow users to save their selected IdP and then auto-select it on returning visits.
     wayf.remember_choice: false
 
+    ## Toggle the default IdP quick link banner on the WAYF.
+    wayf.display_default_idp_banner_on_wayf: true
+
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: {{ engine_time_frame_for_authentication_loop_in_seconds | int }}
     maximum_authentication_procedures_allowed: {{ engine_maximum_authentication_procedures_allowed | int }}
@@ -240,3 +243,11 @@ parameters:
     stepup.gateway.sfo.sso_location: '{{ engine_stepup_gateway_sfo_sso_location | replace("%","%%") }}'
     ## The public key from the Stepup Gateway IdP
     stepup.gateway.sfo.key_file: {{ engine_stepup_gateway_sfo_public_key_file | replace("%","%%") }}
+
+    ##########################################################################################
+    ## THEME SETTINGS
+    ##########################################################################################
+    # When changing the default theme name, be aware that the CI build will no longer be able to select our default
+    # test suite for js e2e tests. This because a SED command is in place to rewrite the parameters.yml.
+    # See the SED command in Gitlab Actions runner: 'Run Cypress integration tests'
+    theme.name: {{ engine_theme }}

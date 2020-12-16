@@ -16,6 +16,7 @@
   command: "./bin/makeRelease.sh {{ engine_branch }}"
   environment:
     HOME: "{{ openconext_builds_dir }}"
+    PATH: /usr/local/bin:{{ ansible_env.PATH }}
   args:
     chdir: "{{ engine_branch_dir }}"
   when:
