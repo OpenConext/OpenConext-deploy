@@ -1,7 +1,7 @@
 ---
 - name: Remove the httpd configuration
   file: 
-    path: /etc/httpd/conf.d/{{ item}}.conf
+    path: /etc/httpd/conf.d/{{ item | replace('-','_') }}.conf
     state: absent
   notify:
     - restart httpd
