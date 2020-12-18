@@ -19,6 +19,8 @@ Listen {{ apache_app_listen_address.voot }}:{{ loadbalancing.voot.port }}
     Include ssl_backend.conf
     {% endif %}
 
+    Header set Content-Security-Policy "default-src 'none';"
+
     {% if apache_app_listen_address.all is defined %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}

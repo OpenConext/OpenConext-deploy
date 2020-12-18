@@ -24,6 +24,9 @@ Listen {{ apache_app_listen_address.engine_api }}:{{ loadbalancing.engine_api.po
     SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
 {% endif %}
 
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set Content-Security-Policy "default-src 'none';"
 
     SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
     SetEnv ENGINEBLOCK_ENV {{ engine_apache_environment }}

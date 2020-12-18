@@ -18,6 +18,7 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
       RewriteRule ^(.*)$ app{% if develop %}_dev{% endif %}.php [QSA,L]
     </Directory>
 
+    Header set X-Content-Type-Options "nosniff"
 
     SetEnv ENGINEBLOCK_ENV {{ engine_apache_environment }}
     SetEnv SYMFONY_ENV {{ engine_apache_symfony_environment }}
