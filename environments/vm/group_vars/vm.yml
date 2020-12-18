@@ -23,7 +23,6 @@ manage_gui_version: "6.0.2"
 manage_server_version: "6.0.2"
 monitoring_tests_version: "6.0.5"
 mujina_version: "7.4.1"
-oidc_version: "1.3.12"
 oidcng_version: "3.1.5"
 pdp_gui_version: "2.1.3"
 pdp_server_version: "2.1.3"
@@ -41,7 +40,6 @@ databases:
     - teams
     - "{{ engine_database_name }}"
     - pdp-server
-    - oidc-server
     - aaserver
     - spdashboard
     - shibboleth
@@ -49,7 +47,6 @@ databases:
     - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
-    - { name: oidc-serverrw, db_name: oidc-server, password: "{{ mysql_passwords.oidc_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
     - { name: spdrw, db_name: spdashboard, password: "{{ mysql_passwords.spdashboard }}" }
     - { name: shibrw, db_name: shibboleth, password: "{{ mysql_passwords.shibboleth }}" }
@@ -115,9 +112,6 @@ engine_keys:
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate (fixme: make variable?):
 engine_profile_idp_certificate: /etc/openconext/engineblock.crt
-
-tomcat_apps:
-  - oidc
 
 # shibboleth
 shibboleth_apps:
@@ -264,18 +258,8 @@ aa:
   eduid_password: "{{ myconext_api_attribute_aggregation_password }}"
   aggregate_cache: 0
 
-oidc:
-  environment: vm
-  issuer: https://oidc.{{ base_domain }}/
-  db_user: oidc-serverrw
-  db_password: "{{ mysql_passwords.oidc_server }}"
-  db_host: "{{ mysql_host }}"
-  db_name: oidc-server
-  sp_entity_id: https://oidc.{{ base_domain }}
-  api_user: manage
-
 oidcng:
-  issuer: https://oidc.{{ base_domain }}/
+  issuer: https://connect.{{ base_domain }}/
   mongo_host: "{{ mongo_hostname }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: oidcngrw
@@ -406,9 +390,6 @@ loadbalancing:
 
   pdp:
     port: 613
-
-  oidc:
-    port: 614
 
   aa:
     port: 615
