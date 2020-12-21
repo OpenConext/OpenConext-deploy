@@ -8,15 +8,6 @@
   with_items:
     - "{{ java_apps_to_remove }}"
 
-- name: Remove the systemd service file
-  file: 
-    path: "/etc/systemd/system/{{ item }}.service"
-    state: absent
-  notify: 
-    - daemon_reload
-  with_items:
-    - "{{ java_apps_to_remove }}"
-  register: systemd_removed
 
 - name: Disable and stop the app
   service: 
@@ -25,8 +16,6 @@
     state: stopped
   with_items:
     - "{{ java_apps_to_remove }}"
-  when:
-    - systemd_removed.changed | bool
 
 - name: Remove the app dir and its contents
   file:
@@ -48,3 +37,21 @@
     state: absent
   with_items:
     - "{{ java_apps_to_remove }}"
+
+- name: Force a daemon reload before removing the systemd file
+  systemd:
+    daemon_reload: yes
+
+- name: Remove the systemd service file
+  file: 
+    path: "/etc/systemd/system/{{ item }}.service"
+    state: absent
+  notify: 
+    - daemon_reload
+  with_items:
+    - "{{ java_apps_to_remove }}"
+  register: systemd_removed
+
+- name: Reset failed services 
+  command: "systemctl reset-failed"
+
