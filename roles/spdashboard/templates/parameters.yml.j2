@@ -2,7 +2,7 @@
 parameters:
     database_host: {{ mariadb_host }}
     database_port: 3306
-    database_name: spdashboard
+    database_name: {{ spdashboard_db_name | default('spdashboard') }}
     database_user: spdrw
     database_password: {{ mysql_passwords.spdashboard }}
     mailer_transport: smtp

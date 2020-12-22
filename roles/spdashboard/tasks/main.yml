@@ -25,6 +25,7 @@
     image: ghcr.io/surfnet/sp-dashboard/spdashboard_web:{{ spd_docker_web_version }}
     published_ports: 0.0.0.0:80:80
     pull: true
+    restart_policy: "always"
     networks:
       - name: "spdashboard"
  
@@ -33,6 +34,7 @@
     name: spdashboard_php-fpm
     image: ghcr.io/surfnet/sp-dashboard/spdashboard_php-fpm:{{ spd_docker_phpfpm_version }}
     pull: true
+    restart_policy: "always"
     mounts:
       - source: /opt/openconext/spdashboard/parameters.yml
         target: /var/www/html/app/config/parameters.yml
