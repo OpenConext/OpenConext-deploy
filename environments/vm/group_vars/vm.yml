@@ -336,7 +336,7 @@ manage:
   mongo_database: "{{ manage_mongo_db }}"
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
-  oidc_push_enabled: false
+  oidc_push_enabled: true
   features: push, validation, push_preview, orphans
   apiUsers:
     - {
@@ -374,6 +374,8 @@ manage:
     - http://{{ base_domain }}/assurance/loa3
   oidc_rp_redirect_url_format: "url"
 
+manage_show_oidc_rp_tab: true
+manage_exclude_oidc_rp_imports_in_push: false
 manage_mongo_db: metadata
 manage_mongo_user: managerw
 
