@@ -1,6 +1,7 @@
 $template haproxy-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/haproxy/haproxy.log"
 $template aa-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/aa/aa.log"
 $template apache-aa-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/aa/apache.log"
+$template apache-aalink-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/link/apache.log"
 $template authz-admin-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/authz-admin/authz-admin.log"
 $template apache-authz-admin-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/authz-admin/apache.log"
 $template authz-playground-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/authz-playground/authz-playground.log"

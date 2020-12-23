@@ -9,8 +9,8 @@
     mode: 0740
   with_items:
     - logback.xml
-    - application.yml
-  notify: 
+    - application.properties
+  notify:
     - "restart dashboard"
 
 - name: Include the role manage_provision_entities to provision the Dashboard sp to Manage
