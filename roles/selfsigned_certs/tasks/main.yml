@@ -3,19 +3,26 @@
   yum:
     name: "python2-pip"
     state: "installed"
-  when: "'loadbalancer-vm' in group_names"
+  register: selfsigned_cert_pythonpip_installed
+  until: selfsigned_cert_pythonpip_installed is succeeded
+  when:
+    - inventory_hostname in groups['loadbalancer']
 
 - name: Install python crypto module
   pip:
     name: "cryptography"
     state: "latest"
-  when: "'loadbalancer-vm' in group_names"
+  register: selfsigned_cert_pipcrypt_installed
+  until: selfsigned_cert_pipcrypt_installed is succeeded
+  when:
+    - inventory_hostname in groups['loadbalancer']
 
 - name: Generate a private key
   openssl_privatekey:
     path: "{{ tls.cert_private_path }}/{{ tls_star_cert_key }}"
     size: 2048
-  when: "'loadbalancer-vm' in group_names"
+  when:
+    - inventory_hostname in groups['loadbalancer']
 
 - name: Generate a CSR
   openssl_csr:
@@ -24,7 +31,8 @@
     common_name: "*.{{ base_domain }}"
     organization_name: OpenConext
     basic_constraints: CA:TRUE
-  when: "'loadbalancer-vm' in group_names"
+  when:
+    - inventory_hostname in groups['loadbalancer']
 
 - name: Generate a selfsigned certificate
   openssl_certificate:
@@ -32,24 +40,25 @@
     privatekey_path: "{{ tls.cert_private_path }}/{{ tls_star_cert_key }}"
     csr_path: "/etc/pki/tls/certs/openconext.csr"
     provider: selfsigned
-  when: "'loadbalancer-vm' in group_names"
+  when:
+    - inventory_hostname in groups['loadbalancer']
 
 - name: Get the contents of the certificate
   slurp:
     src: "{{ tls.cert_path }}/{{ tls_star_cert }}"
   register: selfsigned_cert
-  when: "'loadbalancer-vm' in group_names"
-  run_once: true
+  when:
+    - inventory_hostname in groups['loadbalancer']
 
 - name: Put selfsigned cert in a variable
   set_fact: 
     selfsigned_cert_contents: "{{ selfsigned_cert.content | b64decode }}"
-  when: "'loadbalancer-vm' in group_names"
-  run_once: true
+  when:
+    - inventory_hostname in groups['loadbalancer']
 
 - name: Copy the contents of the certificate to the pki anchor source directory of all VMs
   copy:
-    content: "{{ selfsigned_cert_contents }}"
+    content: "{{ hostvars[groups['loadbalancer'][0]].selfsigned_cert_contents }}"
     dest: "{{ tls.cert_path_ca }}/{{ tls_star_cert }}"
   register: copy_cert
 

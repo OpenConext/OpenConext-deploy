@@ -20,7 +20,7 @@
 
 - name: Add Percona repository
   yum:
-    name: "http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm"
+    name: "{{ percona_url_rpm }}"
     state: present
 
 - name: Install MariaDB, Galera, rsync, MySQL-python
@@ -69,7 +69,7 @@
 
 - name: copy ca certificate
   copy:
-    src: "{{ inventory_dir }}/files/certs/galera/{{item}}"
+    src: "{{ inventory_dir }}/files/certs/galera/{{ item }}"
     dest: "{{ galera_tls_cert_path }}/{{ item }}"
   with_items:
     - "{{ galera_tls_ca }}"
@@ -84,6 +84,7 @@
     mode: 0400
   with_items:
      - "{{ galera_tls }}"
+  no_log: true
   when:
     - galera_ssl | bool
 
@@ -95,14 +96,21 @@
     owner: mysql
   with_items:
      - "{{ galera_tls }}"
+  no_log: true
   when:
     - galera_ssl | bool
 
+- name: "Check if this is a new installation or not"
+  stat:
+    path: "/etc/pki/mysql/{{ galera_sst_crt_name }}"
+  register: mariadb_new_installation
+
 - name: Create state transfer key
-  shell: cat /etc/pki/mysql/{{galera_server_key_name }} /etc/pki/mysql/{{galera_server_crt_name }} > /etc/pki/mysql/{{ galera_sst_crt_name }}
+  shell: awk 'FNR==1{print ""}1' /etc/pki/mysql/{{ galera_server_key_name }} /etc/pki/mysql/{{galera_server_crt_name }} > /etc/pki/mysql/{{ galera_sst_crt_name }}
+  args:
+    creates: "/etc/pki/mysql/{{ galera_sst_crt_name }}"
   when:
     - galera_ssl | bool
-  changed_when: false
 
 - name: chmod and chown state transfer key
   file:
@@ -114,24 +122,41 @@
   template:
     src: "{{ item }}.j2"
     dest: "/etc/my.cnf.d/{{ item }}"
+    mode: 0664
+    owner: root
+    group: root
   notify:
     - "restart mysql"
   with_items:
     - server.cnf
     - mysql-clients.cnf
 
-- name: Restrict permissions on server.cnf
-  file:
-    path: "/etc/my.cnf.d/server.cnf"
-    mode: 0664
-    owner: root
-    group: root
+- name: "Stop MariaDB"
+  systemd:
+    name: mysql
+    state: stopped
+  when:
+    - not mariadb_new_installation.stat.exists
+
+- name: "Remove some files"
+  shell: rm -rf /var/lib/mysql/ib*
+  when:
+    - not mariadb_new_installation.stat.exists
 
 - name: Bootstrap the first node
   shell: /bin/galera_new_cluster
   when:
-    - (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
+    - not mariadb_new_installation.stat.exists
+    - galera_bootstrap_node is defined
+    - galera_bootstrap_node == inventory_hostname
 
+- name: Start and enable the MariaDB (mysql) service on boot.
+  service:
+    name: mysql
+    state: started
+    enabled: true
+  register: mysql_service_state
+  until: mysql_service_state is succeeded
 
 # Secure the MySQL server
 # - Set root password
@@ -139,7 +164,8 @@
 - name: Change mysql root password and remove test database
   script: mysql_bootstrap.sh "{{ mariadb_root_password }}"
   when:
-    - (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
+    - galera_bootstrap_node is defined
+    - galera_bootstrap_node == inventory_hostname
   register: db_bootstrap_result
   changed_when: db_bootstrap_result.rc > 0
   failed_when: db_bootstrap_result.rc >= 2
@@ -153,7 +179,9 @@
     login_password: "{{ mariadb_root_password  }}"
     priv: "*.*:ALL"
     state: present
-    #  when: (galera_bootstrap_node is defined) and (galera_bootstrap_node == inventory_hostname)
+  when:
+    - galera_bootstrap_node is defined
+    - galera_bootstrap_node == inventory_hostname
 
 # Add backup user
 - name: add mariadb backup user
@@ -164,6 +192,9 @@
     login_password: "{{ mariadb_root_password }}"
     priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
     state: present
+  when:
+    - galera_bootstrap_node is defined
+    - galera_bootstrap_node == inventory_hostname
 
 - name: Put mariadb_backup script
   template:
@@ -182,13 +213,6 @@
   when:
     - backup_node is defined
 
-- name: Start and enable the MariaDB (mysql) service on boot.
-  service:
-    name: mysql
-    state: started
-    enabled: true
-  ignore_errors: true
-
 - name: Create database
   mysql_db:
     name: "{{ item }}"
@@ -205,7 +229,7 @@
     name: "{{ item.0.name }}"
     host: "{{ item.1 }}"
     password: "{{ item.0.password }}"
-    priv: "{{ item.0.privs | join('/') }}"
+    priv: "{{ item.0.privs }}"
     state: present
     login_user: root
     login_password: "{{ mariadb_root_password }}"

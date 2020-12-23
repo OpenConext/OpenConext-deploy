@@ -1,8 +1,4 @@
 ---
-- name: Include preinstallation.yml
-  include: ../../../tasks/springbootapp/preinstallation.yml
-
-- include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: Copy logging config
   template: 
@@ -30,5 +26,8 @@
   notify:
     - "reload httpd"
 
-- name: Include postinstallation.yml
-  include: ../../../tasks/springbootapp/postinstallation.yml
+- name: Include the role manage_provision_entities to provision the Mujina sp to Manage
+  include_role: 
+    name: manage_provision_entities
+  vars: 
+    entity_type: saml20_sp

@@ -1,0 +1,42 @@
+# Github action to run Molecule for "java"
+
+name: java
+on:
+  push:
+    paths:
+      - 'roles/java/**'
+      - 'roles/shibboleth/**'
+      - 'roles/springboot/**'
+      - 'molecule/java/**'
+      - '.github/workflows/molecule-java.yml'
+  pull_request:
+    paths:
+      - 'roles/java/**'
+      - 'roles/shibboleth/**'
+      - 'roles/springboot/**'
+      - 'molecule/java/**'
+      - '.github/workflows/molecule-java.yml'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Installing dependencies
+        run: pip install jinja2 ansible molecule molecule-docker pytest-testinfra pytest setuptools
+
+      - name: disable apparmor for mysql
+        run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+
+      - name: parse apparmor for mysql
+        run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+
+      - name: Run role tests
+        run: molecule test -s java

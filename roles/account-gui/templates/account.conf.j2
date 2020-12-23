@@ -45,9 +45,9 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     ProxyPass /register http://localhost:{{ springapp_tcpport }}/register retry=0
     ProxyPass /doLogin http://localhost:{{ springapp_tcpport }}/doLogin retry=0
 
-    DocumentRoot /var/www/account/current
+    DocumentRoot "{{ _springapp_dir }}/current"
 
-    <Directory /var/www/account/current>
+    <Directory "{{ _springapp_dir }}/current">
       Order       allow,deny
       Allow       from all
       Options     -Indexes

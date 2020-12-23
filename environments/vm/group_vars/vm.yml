@@ -1,5 +1,8 @@
 ---
 env: vm
+use_selfsigned_certs: true
+update_hosts_file: true
+use_welcome_role: true
 
 instance_name: OpenConext
 base_domain: "vm.openconext.org"
@@ -13,8 +16,8 @@ php_display_errors: 1
 
 attribute_aggregation_gui_version: "2.1.1"
 attribute_aggregation_server_version: "2.1.1"
-oidc_playground_client_version: "2.3.1"
-oidc_playground_server_version: "2.3.1"
+oidc_playground_client_version: "2.4.1"
+oidc_playground_server_version: "2.4.1"
 engine_version: "6.3.6"
 manage_gui_version: "6.0.2"
 manage_server_version: "6.0.2"
@@ -333,7 +336,7 @@ manage:
   mongo_database: "{{ manage_mongo_db }}"
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
-  oidc_push_enabled: false
+  oidc_push_enabled: true
   features: push, validation, push_preview, orphans
   apiUsers:
     - {
@@ -371,6 +374,8 @@ manage:
     - http://{{ base_domain }}/assurance/loa3
   oidc_rp_redirect_url_format: "url"
 
+manage_show_oidc_rp_tab: true
+manage_exclude_oidc_rp_imports_in_push: false
 manage_mongo_db: metadata
 manage_mongo_user: managerw
 

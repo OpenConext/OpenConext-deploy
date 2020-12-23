@@ -1,8 +1,6 @@
 ---
 - name: copy virtual host config
-  template: src=eduid.conf.j2 dest=/etc/httpd/conf.d/eduid.conf
+  template:
+    src: eduid.conf.j2
+    dest: /etc/httpd/conf.d/eduid.conf
   notify: restart httpd
-
-- name: Include install-gui.yml
-  include: ../../../tasks/springbootapp/install-gui.yml
-

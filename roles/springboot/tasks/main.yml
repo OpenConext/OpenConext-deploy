@@ -1,0 +1,46 @@
+---
+
+- name: "Generate complete servers_to_install list"
+  set_fact:
+    _services_to_install: "{{ _services_to_install | default([]) }} + [ '{{ item.name }}' ]"
+  with_items: "{{ springboot_server_services }}"
+  when:
+    - springboot_service_to_deploy | lower == "all"
+  no_log: true
+
+- name: "Generate complete servers_to_install list"
+  set_fact:
+    _services_to_install: "{{ springboot_core_services }}"
+  with_items: "{{ springboot_server_services }}"
+  when:
+    - springboot_service_to_deploy | lower == "all"
+  tags: [ 'never', 'core' ]
+  no_log: true
+
+- name: "Create servers_to_install list"
+  set_fact:
+    _services_to_install: "{{ _services_to_install | default([]) }} + [ '{{ item }}' ]"
+  with_items: "{{ springboot_service_to_deploy.split(',') }}"
+  when:
+    - springboot_service_to_deploy | lower != "all"
+  no_log: true
+
+- name: "Install Springboot GUI services"
+  include_tasks: "springboot.yml"
+  with_items: "{{ springboot_gui_services }}"
+  loop_control:
+    loop_var: springboot
+  no_log: true
+  when:
+    - springboot.name in _services_to_install
+    - springboot.enabled
+
+- name: "Install Springboot Server services"
+  include_tasks: "springboot.yml"
+  with_items: "{{ springboot_server_services }}"
+  loop_control:
+    loop_var: springboot
+  no_log: true
+  when:
+    - springboot.name in _services_to_install
+    - springboot.enabled

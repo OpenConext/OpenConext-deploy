@@ -43,9 +43,9 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
     ProxyPass /startSSO http://localhost:{{ springapp_tcpport }}/startSSO retry=0
     ProxyPass /config http://localhost:{{ springapp_tcpport }}/config retry=0
 
-    DocumentRoot /var/www/myconext/current
+    DocumentRoot "{{ _springapp_dir }}/current"
 
-    <Directory /var/www/myconext/current>
+    <Directory "{{ _springapp_dir }}/current">
       Order       allow,deny
       Allow       from all
       Options     -Indexes

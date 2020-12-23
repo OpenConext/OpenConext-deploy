@@ -52,10 +52,7 @@ engine_pdp_path: /pdp/api/decide/policy
 
 ## Attribute Aggregation endpoint
 engine_attribute_aggregation_baseurl: "https://aa.{{ base_domain }}/aa/api/internal/attribute/aggregation"
-engine_attribute_aggregation_username: "{{ aa.eb_username }}"
-engine_attribute_aggregation_password: "{{ aa.eb_password }}"
 
-engine_api_profile_user: profile
 engine_api_deprovision_user: lifecycle
 
 # Minimum execution time in milliseconds when a received response is deemed invalid

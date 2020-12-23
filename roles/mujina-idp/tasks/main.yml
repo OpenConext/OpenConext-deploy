@@ -1,7 +1,4 @@
 ---
-- include: ../../../tasks/springbootapp/preinstallation.yml
-
-- include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: Copy config
   template: 
@@ -22,5 +19,8 @@
     dest: /etc/httpd/conf.d/mujina_idp.conf
   notify: reload httpd
 
-- name: Include postinstallation.yml
-  include: ../../../tasks/springbootapp/postinstallation.yml
+- name: Include the role manage_provision_entities to provision the mujina IdP to Manage
+  include_role: 
+    name: manage_provision_entities
+  vars: 
+    entity_type: saml20_idp

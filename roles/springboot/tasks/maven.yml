@@ -1,0 +1,45 @@
+---
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | download maven-artifact"
+  maven_artifact:
+    group_id: "{{ _springapp_artifact_group_dir }}"
+    artifact_id: "{{ _springapp_artifact_id }}"
+    extension: "{{ _springapp_artifact_type }}"
+    version: "{{ _springapp_version }}"
+    repository_url: "{{ maven_snapshot_repo if 'SNAPSHOT' in _springapp_version else maven_repo }}"
+    dest: "{{ _springapp_dir }}/{{ _springapp_artifact_id }}-{{ _springapp_version }}.{{ _springapp_artifact_type }}"
+  register: maven_result
+  until: maven_result is succeeded
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | set ownership of application artifact"
+  file:
+    path: "{{ maven_result.dest }}"
+    owner: "{{ _springapp_user }}"
+    group: "{{ _springapp_user }}"
+    mode: 0600
+  when:
+    - maven_result.changed
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | stop app"
+  service:
+    name: "{{ _springapp_service_name }}"
+    state: stopped
+  when:
+    - maven_result.changed
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | wait for the app to be fully stopped"
+  wait_for:
+    port: "{{ _springapp_tcpport }}"
+    state: stopped
+    delay: 5
+  when:
+    - maven_result.changed
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | change symlink to current version"
+  file:
+    src: "{{ maven_result.dest }}"
+    dest: "{{ _springapp_dir }}/{{ _springapp_jar }}"
+    state: link
+    owner: "{{ _springapp_user }}"
+    group: "{{ _springapp_user }}"
+  when:
+    - maven_result.changed
