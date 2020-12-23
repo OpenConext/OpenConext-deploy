@@ -4,7 +4,7 @@ version: "3.8"
 
 services:
   web:
-    image: docker.pkg.github.com/OpenConext/OpenConext-deploy/OpenConext-core
+    image: ghcr.io/openconext/openconext-deploy/openconext-core
     privileged: true
     ports:
       - "443:443"
