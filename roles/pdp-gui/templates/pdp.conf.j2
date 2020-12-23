@@ -31,9 +31,9 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     ProxyPass /pdp/api http://localhost:{{ springapp_tcpport }} retry=0
     ProxyPassReverse /pdp/api http://localhost:{{ springapp_tcpport }}
 
-    DocumentRoot /var/www/pdp/current
+    DocumentRoot "{{ _springapp_dir }}/current"
 
-    <Directory /var/www/pdp/current>
+    <Directory "{{ _springapp_dir }}/current">
       Order       allow,deny
       Allow       from all
       Options     -Indexes

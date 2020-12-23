@@ -29,11 +29,10 @@ Listen {{ apache_app_listen_address.oidc_playground }}:{{ loadbalancing.oidc_pla
     ProxyPass /oidc/api http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse /oidc/api http://localhost:{{ springapp_tcpport }}/
 
-    DocumentRoot /var/www/oidc-playground/current
+    DocumentRoot "{{ _springapp_dir }}/current"
 
-    <Directory /var/www/oidc-playground/current>
-      Order       allow,deny
-      Allow       from all
+    <Directory "{{ _springapp_dir }}/current">
+      satisfy     any 
       Options     -Indexes
     </Directory>
 
