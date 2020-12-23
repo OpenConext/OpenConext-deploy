@@ -21,7 +21,6 @@
     name: 
       - telnet
       - sudo
-      - lynx
       - ntp
       - unzip
       - mysql
