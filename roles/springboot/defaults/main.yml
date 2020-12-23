@@ -33,10 +33,11 @@ springboot_gui_services:
   - name: attribute-aggregation
     enabled: "{{ springboot_services_state.attribute_aggregation }}"
     version: "{{ attribute_aggregation_gui_version }}"
-  - name: oidc-playground-client
+  - name: oidc-playground
     enabled: "{{ springboot_services_state.oidc_playground }}"
     version: "{{ oidc_playground_client_version }}"
     role: oidc-playground-client
+    artifactid: oidc-playground-client
   - name: myconext
     enabled: "{{ springboot_services_state.myconext }}"
     version: "{{ myconext_gui_version }}"
