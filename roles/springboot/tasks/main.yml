@@ -32,7 +32,7 @@
     loop_var: springboot
   no_log: true
   when:
-    - springboot.name in _services_to_install
+    - springboot.name in _services_to_install or (springboot.alias is defined and springboot.alias in _services_to_install)
     - springboot.enabled
 
 - name: "Install Springboot Server services"
@@ -42,5 +42,5 @@
     loop_var: springboot
   no_log: true
   when:
-    - springboot.name in _services_to_install
+    - springboot.name in _services_to_install or (springboot.alias is defined and springboot.alias in _services_to_install)
     - springboot.enabled
