@@ -13,6 +13,7 @@ springboot_services_state:
   voot: true
   mujina_sp: true
   mujina_idp: true
+  dashboard: true
 
 springboot_core_services:
   - manage
@@ -47,6 +48,9 @@ springboot_gui_services:
   - name: eduid
     enabled: "{{ springboot_services_state.eduid }}"
     version: "{{ eduid_gui_version }}"
+  - name: dashboard
+    enabled: "{{ springboot_services_state.dashboard }}"
+    version: "{{ dashboard_gui_version }}"
 
 springboot_server_services:
   - name: manage
@@ -137,6 +141,13 @@ springboot_server_services:
     port: 9390
     config:
       "{{ mujina_idp }}"
+  - name: dashboard
+    enabled: "{{ springboot_services_state.dashboard }}"
+    min_heapsize: '512m'
+    max_heapsize: '512m'
+    version: "{{ dashboard_server_version }}"
+    type: server
+    port: 9394
 
 
 springboot_min_heapsize: "512m"
