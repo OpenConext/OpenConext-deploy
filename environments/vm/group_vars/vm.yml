@@ -489,13 +489,6 @@ haproxy_applications:
     port: "{{ loadbalancing.pdp.port }}"
     servers: "{{java_servers}}"
 
-  - name: oidc
-    vhost_name: oidc.{{ base_domain }}
-    ha_method: "GET"
-    ha_url: "/health"
-    port: "{{ loadbalancing.oidc.port }}"
-    servers: "{{java_servers}}"
-
   - name: aa
     vhost_name: aa.{{ base_domain }}
     ha_method: "GET"

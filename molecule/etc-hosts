@@ -13,7 +13,6 @@ ff02::2	ip6-allrouters
 127.0.0.1 oidc_playground.molecule.openconext.org
 127.0.0.1 voot.molecule.openconext.org
 127.0.0.1 pdp.molecule.openconext.org
-127.0.0.1 oidc.molecule.openconext.org
 127.0.0.1 aa.molecule.openconext.org
 127.0.0.1 link.molecule.openconext.org
 127.0.0.1 manage.molecule.openconext.org
