@@ -5,6 +5,7 @@ $RuleSet {{ item.name }}
 :programname, isequal, "haproxy" { action(type="omfile" DynaFile="haproxy-{{ item.name }}") stop }
 :programname, isequal, "aa" { action(type="omfile" DynaFile="aa-{{ item.name }}") stop }
 :programname, isequal, "Apache-AA" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}") stop }
+:programname, isequal, "Apache-AAlink" { action(type="omfile" DynaFile="apache-aalink-{{ item.name }}") stop }
 :programname, isequal, "Apache-Authz-Admin" { action(type="omfile" DynaFile="apache-authz-admin-{{ item.name }}") stop }
 :programname, isequal, "AUTHZADMINMAIN" { action(type="omfile" DynaFile="authz-admin-{{ item.name }}") stop }
 :programname, isequal, "Apache-Playground" { action(type="omfile" DynaFile="apache-authz-playground-{{ item.name }}") stop }

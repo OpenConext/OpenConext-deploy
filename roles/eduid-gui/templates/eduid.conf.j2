@@ -35,9 +35,9 @@ Listen {{ apache_app_listen_address.eduid }}:{{ loadbalancing.eduid.port }}
     ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/actuator retry=0
     ProxyPass /config http://localhost:{{ springapp_tcpport }}/config retry=0
 
-    DocumentRoot /var/www/eduid/current
+    DocumentRoot "{{ _springapp_dir }}/current"
 
-    <Directory /var/www/eduid/current>
+    <Directory "{{ _springapp_dir }}/current">
       Order       allow,deny
       Allow       from all
       Options     -Indexes

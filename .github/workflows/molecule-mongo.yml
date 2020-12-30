@@ -1,0 +1,31 @@
+# Github action to run Molecule for "mongo"
+
+name: mongo
+on:
+  push:
+    paths:
+      - 'roles/mongo/**'
+      - 'molecule/mongo/**'
+      - '.github/workflows/molecule-mongo.yml'
+  pull_request:
+    paths:
+      - 'roles/mongo/**'
+      - 'molecule/mongo/**'
+      - '.github/workflows/molecule-mongo.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Installing dependencies
+        run: pip install jinja2 ansible molecule molecule-docker pytest-testinfra pytest setuptools
+
+      - name: Run role tests
+        run: molecule test -s mongo

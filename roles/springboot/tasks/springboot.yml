@@ -1,0 +1,57 @@
+---
+
+- name: "{{ springboot.name }} | Set facts (1)"
+  set_fact:
+    _springapp_service_name: "{{ springboot.name }}"
+    _springapp_type: "{{ springboot.type if springboot.type is defined else 'gui' }}"
+
+- name: "{{ springboot.name }}-{{ _springapp_type }} | Set facts (2)"
+  set_fact:
+    _springapp_min_heapsize: "{{ springboot.min_heapsize if springboot.min_heapsize is defined else springboot_min_heapsize }}"
+    _springapp_max_heapsize: "{{ springboot.max_heapsize if springboot.max_heapsize is defined else springboot_max_heapsize }}"
+    _springapp_random_source: "{{ springboot.random_source if springboot.random_source is defined else springboot_random_source }}"
+    _springapp_jar: "{{ springboot.jar if springboot.jar is defined else _springapp_service_name + '.jar' }}"
+    _springapp_opts: "{{ springboot.opts if springboot.opts is defined else springboot_opts }}"
+    _springapp_user: "{{ springboot.user if springboot.user is defined else _springapp_service_name }}"
+    _springapp_dir: "{{ springboot.dir if springboot.dir is defined else '/opt/' + _springapp_service_name }}"
+    _springapp_role: "{{ springboot.role if springboot.role is defined else _springapp_service_name + '-' + _springapp_type }}"
+    _springapp_artifact_id: "{{ springboot.artifactid if springboot.artifactid is defined else _springapp_service_name + '-' + _springapp_type }}"
+    _springapp_artifact_group_dir: "{{ springboot.artifactgroup if springboot.artifactgroup is defined else springboot_artifact_group_dir }}"
+    _springapp_artifact_type: "{{ springboot.artifacttype if springboot.artifacttype is defined else springboot_artifact_type }}"
+    _springapp_version: "{{ springboot.version }}"
+    _springapp_tcpport: "{{ springboot.port if springboot.port is defined else springboot_tcpport }}"
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include user related tasks"
+  include: user.yml
+  when:
+    - _springapp_type == "server"
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include GUI related tasks"
+  include: gui.yml
+  when:
+    - _springapp_type == "gui"
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include maven related tasks"
+  include: maven.yml
+  when:
+    - _springapp_type == "server"
+
+# Need to make sure that manage is running before manage can do a call to manage
+- name: "Restart 'manage'"
+  systemd:
+    name: manage
+    state: restarted
+    daemon_reload: yes
+  when:
+    - maven_result.changed
+    - _springapp_type == "server"
+    - _springapp_service_name == "manage"
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include role"
+  include_role:
+    name: "{{ _springapp_role }}"
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include service related tasks"
+  include: service.yml
+  when:
+    - _springapp_type == "server"

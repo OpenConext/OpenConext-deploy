@@ -1,0 +1,30 @@
+---
+- name: Prepare
+  hosts: all
+  vars:
+    inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
+
+  pre_tasks:
+    - name: Read vars from secrets file
+      include_vars: "../../environments/vm/secrets/vm.yml"
+    - name: Read vars from group_vars file
+      include_vars: "../../environments/vm/group_vars/vm.yml"
+
+    - name: "Set some facts"
+      set_fact:
+        base_domain: molecule.openconext.org
+        mongo_primary: true
+
+    - name: Install packages
+      yum:
+        name:
+          - python2-pip
+          - unzip
+        state: "installed"
+      register: prepare_packages_installed
+      until: prepare_packages_installed is succeeded
+
+  roles:
+    - role: selfsigned_certs
+    - role: httpd
+    - role: mysql

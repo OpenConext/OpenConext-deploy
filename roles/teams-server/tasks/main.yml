@@ -1,8 +1,4 @@
 ---
-- name: Include preinstallation.yml
-  include: ../../../tasks/springbootapp/preinstallation.yml
-
-- include: ../../../tasks/springbootapp/install-maven-release.yml
 
 - name: copy config
   template:
@@ -17,11 +13,15 @@
   notify:
     - "restart teams"
 
-- name: Include postinstallation.yml
-  include: ../../../tasks/springbootapp/postinstallation.yml
-
 - name: Include the role manage_provision_entities to provision the client_credentials client
   include_role: 
     name: manage_provision_entities
   vars: 
     entity_type: client_credentials_client
+
+- name: Include the role manage_provision_entities to provision the Dashboard sp to Manage
+  include_role: 
+    name: manage_provision_entities
+  vars: 
+    entity_type: saml20_sp
+

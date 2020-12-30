@@ -1,0 +1,4 @@
+manage_provision_state: "prodaccepted"
+manage_provision_samlsp_sign: false
+manage_provision_samlsp_trusted_proxy: false
+manage_provision_samlsp_sp_cert: ""

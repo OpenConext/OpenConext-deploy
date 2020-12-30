@@ -1,0 +1,35 @@
+---
+- name: Converge
+  hosts: all
+
+  vars:
+    inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
+
+  pre_tasks:
+    - name: Read vars from secrets file
+      include_vars: "../../environments/vm/secrets/vm.yml"
+    - name: Read vars from group_vars file
+      include_vars: "../../environments/vm/group_vars/vm.yml"
+
+    - name: "Override some defaults"
+      set_fact:
+        base_domain: molecule.openconext.org
+        use_selfsigned_certs: True
+
+  roles:
+    - role: haproxy
+    - role: keepalived
+      keepalived:
+        state_master: MASTER
+        state_backup: BACKUP
+        masterprio: 101
+        backupprio: 100
+      keepalived_loadbalancer_vrrp_password: mysecret
+    - role: bind
+      haproxy_sni_ip_restricted:
+        ipv4: 127.0.0.2
+        ipv6: "::1"
+        certs:
+          - name: star
+            key_content: "{{ https_star_private_key }}"
+            crt_name: star.{{ base_domain }}.pem

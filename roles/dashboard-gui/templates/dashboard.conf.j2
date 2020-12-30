@@ -42,9 +42,9 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     ProxyPass /login http://localhost:{{ springapp_tcpport }}/login retry=0
     ProxyPass /startSSO http://localhost:{{ springapp_tcpport }}/startSSO retry=0
 
-    DocumentRoot /var/www/dashboard/current
+    DocumentRoot "{{ _springapp_dir }}/current"
 
-    <Directory /var/www/dashboard/current>
+    <Directory "{{ _springapp_dir }}/current">
       Order       allow,deny
       Allow       from all
       Options     -Indexes

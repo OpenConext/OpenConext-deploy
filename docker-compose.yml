@@ -1,0 +1,11 @@
+---
+
+version: "3.8"
+
+services:
+  web:
+    image: ghcr.io/openconext/openconext-deploy/openconext-core
+    privileged: true
+    ports:
+      - "443:443"
+    
