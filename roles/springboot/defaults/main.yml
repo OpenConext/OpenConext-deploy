@@ -40,12 +40,15 @@ springboot_gui_services:
     role: oidc-playground-client
     artifactid: oidc-playground-client
   - name: myconext
+    alias: myconext
     enabled: "{{ springboot_services_state.myconext }}"
     version: "{{ myconext_gui_version }}"
   - name: account
+    alias: myconext
     enabled: "{{ springboot_services_state.account }}"
     version: "{{ account_gui_version }}"
   - name: eduid
+    alias: myconext
     enabled: "{{ springboot_services_state.eduid }}"
     version: "{{ eduid_gui_version }}"
   - name: dashboard
@@ -113,6 +116,7 @@ springboot_server_services:
     config:
       "{{ oidc_playground }}"
   - name: myconext
+    alias: myconext
     enabled: "{{ springboot_services_state.myconext }}"
     version: "{{ myconext_server_version }}"
     type: server
@@ -120,6 +124,7 @@ springboot_server_services:
     config:
       "{{ myconext }}"
   - name: mujina-sp
+    alias: mujina
     enabled: "{{ springboot_services_state.mujina_sp }}"
     min_heapsize: '128m'
     max_heapsize: '128m'
@@ -131,6 +136,7 @@ springboot_server_services:
     config:
       "{{ mujina_sp }}"
   - name: mujina-idp
+    alias: mujina
     enabled: "{{ springboot_services_state.mujina_idp }}"
     min_heapsize: '128m'
     max_heapsize: '128m'
