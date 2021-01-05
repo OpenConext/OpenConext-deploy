@@ -49,6 +49,8 @@ features:
   enforce-eduid-resource-server-linked-account: false
   # Do we enforce that the scopes granted to an access_token are configured with the RS?
   enforce-scope-resource-server: false
+  # Do we show consent if configured for a RP in manage
+  consent-enabled: {{ oidcng.consent_enabled }}
 
 sp:
   entity_id: {{ oidcng_saml_sp_entityid }}
