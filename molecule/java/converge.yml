@@ -27,6 +27,7 @@
           eduid: false
           oidcng: false
           voot: false
+          dashboard: false
           mujina_sp: true
           mujina_idp: true
 
