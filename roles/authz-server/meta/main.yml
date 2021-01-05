@@ -1,5 +1,0 @@
----
-dependencies:
- - java
- - httpd
- - role: maven_artifact_requirements

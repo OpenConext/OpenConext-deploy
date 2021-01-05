@@ -1,7 +1,0 @@
----
-tomcat_lib_dir: "{{ tomcat.lib_dir }}"
-tomcat_install_dir: "{{ tomcat.install_dir }}"
-tomcat_cache_dir: "{{ tomcat.cache_dir }}"
-tomcat_app_base_dir_name: "{{ tomcat.app_base_dir_name }}"
-tomcat_service_name: tomcat
-tomcat_handler_name: tomcat
