@@ -1,6 +1,0 @@
----
-- name: restart authz-playground
-  systemd:
-    name: authz-playground
-    state: restarted
-    daemon_reload: yes

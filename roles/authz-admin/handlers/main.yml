@@ -1,6 +1,0 @@
----
-- name: restart authz-admin
-  systemd:
-    name: authz-admin
-    state: restarted
-    daemon_reload: yes
