@@ -41,5 +41,3 @@
     state: link
     owner: "{{ _springapp_user }}"
     group: "{{ _springapp_user }}"
-  when:
-    - maven_result.changed
