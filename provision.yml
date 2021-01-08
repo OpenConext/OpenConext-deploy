@@ -143,18 +143,6 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- hosts: app_oidc
-  gather_facts: true
-  become: true
-  roles:
-    - role: tomcat
-      tags: ['app_oidc', 'tomcat' ]
-    - role: oidc
-      tags: ['app_oidc', 'oidc' ]
-  handlers:
-    - include: roles/httpd/handlers/main.yml
-    - include: roles/tomcat/handlers/main.yml
-
 - hosts: elk
   gather_facts: true
   become: true

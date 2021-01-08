@@ -26,16 +26,10 @@ pdp:
   base_url: https://pdp.{{ base_domain }}
 
 voot:
-  authz:
-    authorization_url: https://authz.{{ base_domain }}/oauth/token
-    voot_base_url: https://voot.{{ base_domain }}
-    client_id: {{ monitoring_tests.authz_client_id }}
-    secret: {{ monitoring_tests_authz_client_secret }}
-    person_id: {{ monitoring_tests.person_id }}
   oidc:
-    authorization_url: https://oidc.{{ base_domain }}/token
+    authorization_url: https://connect.{{ base_domain }}/oidc/token
     voot_base_url: https://voot.{{ base_domain }}
-    client_id: https@//monitoring.{{ base_domain }}
+    client_id: monitoring.{{ base_domain }}
     secret: {{ monitoring_oidc_client_secret }}
     person_id: {{ monitoring_tests.person_id }}
 

@@ -3,9 +3,6 @@ apache_app_listen_address:
   engine: 192.168.66.99
   engine_api: 192.168.66.99
   profile: 192.168.66.99
-  authzserver: 192.168.66.99
-  authz_admin: 192.168.66.99
-  authz_playground: 192.168.66.99
   oidc_playground: 192.168.66.99
   mujina_idp: 192.168.66.99
   mujina_sp: 192.168.66.99
@@ -14,7 +11,6 @@ apache_app_listen_address:
   voot: 192.168.66.99
   pdp: 192.168.66.99
   welcome: 192.168.66.99
-  oidc: 192.168.66.99
   oidcng: 192.168.66.99
   aa: 192.168.66.99
   metadata: 192.168.66.99

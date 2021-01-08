@@ -12,7 +12,6 @@ apache_app_listen_address:
   pdp: 192.168.66.79
   aa: 192.168.66.79
   welcome: 192.168.66.79
-  oidc: 192.168.66.79
   oidcng: 192.168.66.79
   myconext: 192.168.66.79
   account: 192.168.66.79
