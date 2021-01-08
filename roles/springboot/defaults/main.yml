@@ -23,35 +23,41 @@ springboot_core_services:
 springboot_service_to_deploy: all
 springboot_gui_services:
   - name: manage
+    alias: manage-gui
     enabled: "{{ springboot_services_state.manage }}"
     version: "{{ manage_gui_version }}"
   - name: teams
+    alias: teams-gui
     enabled: "{{ springboot_services_state.teams }}"
     version: "{{ teams_gui_version }}"
   - name: pdp
+    alias: pdp-gui
     enabled: "{{ springboot_services_state.pdp }}"
     version: "{{ pdp_gui_version }}"
   - name: attribute-aggregation
+    alias: attribute-aggregation-gui
     enabled: "{{ springboot_services_state.attribute_aggregation }}"
     version: "{{ attribute_aggregation_gui_version }}"
   - name: oidc-playground
+    alias: oidc-playground-gui
     enabled: "{{ springboot_services_state.oidc_playground }}"
     version: "{{ oidc_playground_client_version }}"
     role: oidc-playground-client
     artifactid: oidc-playground-client
   - name: myconext
-    alias: myconext
+    alias: myconext, myconext-gui
     enabled: "{{ springboot_services_state.myconext }}"
     version: "{{ myconext_gui_version }}"
   - name: account
-    alias: myconext
+    alias: myconext, account-gui
     enabled: "{{ springboot_services_state.account }}"
     version: "{{ account_gui_version }}"
   - name: eduid
-    alias: myconext
+    alias: myconext, eduid-gui
     enabled: "{{ springboot_services_state.eduid }}"
     version: "{{ eduid_gui_version }}"
   - name: dashboard
+    alias: dashboard-gui
     enabled: "{{ springboot_services_state.dashboard }}"
     version: "{{ dashboard_gui_version }}"
 
