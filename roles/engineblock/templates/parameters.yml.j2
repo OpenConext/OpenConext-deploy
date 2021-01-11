@@ -177,6 +177,8 @@ parameters:
 
     ## Toggle the default IdP quick link banner on the WAYF.
     wayf.display_default_idp_banner_on_wayf: true
+    ## Set the EntityId of the default IdP
+    wayf.default_idp_entity_id: {{ insert.your.eduid-entityid.here }}
 
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: {{ engine_time_frame_for_authentication_loop_in_seconds | int }}
