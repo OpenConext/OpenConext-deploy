@@ -37,8 +37,8 @@ engine_domain: engine.{{ base_domain }}
 
 engine_debug: false
 
-#engine_theme: "skeune"
-engine_theme: openconext
+engine_theme: "skeune"
+#engine_theme: openconext
 
 engine_profile_baseurl: "https://profile.{{ base_domain }}"
 
