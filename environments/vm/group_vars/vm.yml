@@ -23,7 +23,7 @@ manage_gui_version: "6.0.2"
 manage_server_version: "6.0.2"
 monitoring_tests_version: "6.0.5"
 mujina_version: "7.4.1"
-oidcng_version: "3.1.5"
+oidcng_version: "4.0.4"
 pdp_gui_version: "2.1.3"
 pdp_server_version: "2.1.3"
 profile_version: "2.0.3"
@@ -277,6 +277,7 @@ oidcng:
     - https://eduid.nl/trust/affiliation-student
   default_acr_value: http://{{ base_domain }}/assurance/loa1
   eduid_attribute_manipulation_enabled: false
+  consent_enabled: false
   token_api_enabled: false
 oidcng_logback_email: false
 
