@@ -13,9 +13,6 @@
 [php-apps]
 %target_host%
 
-[loadbalancer-vm]
-%target_host%
-
 [mongo_servers]
 %target_host%
 
@@ -30,7 +27,6 @@ storage
 java-apps
 java-apps-vm
 php-apps
-loadbalancer-vm
 mongo_servers
 selfsigned_certs
 mongod_primary
@@ -70,7 +66,6 @@ lifecycle
 selfsigned_certs
 
 [loadbalancer:children]
-loadbalancer-vm
 loadbalancer_ha
 
 [frontend:children]
