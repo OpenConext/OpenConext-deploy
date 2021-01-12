@@ -46,6 +46,10 @@ after_failure:
   - sudo docker exec -t ansible-test cat /var/log/voot/voot.log
   - sudo docker exec -t ansible-test cat /var/log/attribute-aggregation/attribute-aggregation.log
   - sudo docker exec -t ansible-test cat /var/log/pdp/pdp.log
+  - sudo docker exec -t ansible-test cat /ansible/roles-external/travis/inventory
+  - sudo docker exec -t ansible-test cat /ansible/roles-external/travis/group_vars/travis.yml
+  - sudo docker exec -t ansible-test ls -al /ansible/roles-external/travis/group_vars/
+  - sudo docker exec -t ansible-test cat /var/log/pdp/pdp.log
   - sudo docker exec -t ansible-test env TERM=xterm tail -500 /var/log/messages
 
 after_script:
