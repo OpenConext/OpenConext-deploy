@@ -443,7 +443,7 @@ manage:
   oidc_push_enabled: false
   run_migrations: false
   push_after_migration: false
-  features: push, validation, push_preview, orphans
+  features: push, validation, push_preview, orphans, edugain
   apiUsers:
     - {
         name: "dashboard",

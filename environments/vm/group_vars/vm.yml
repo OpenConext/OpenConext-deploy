@@ -322,7 +322,7 @@ manage:
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
   oidc_push_enabled: true
-  features: push, validation, push_preview, orphans
+  features: push, validation, push_preview, orphans, edugain
   apiUsers:
     - {
         name: "dashboard",
