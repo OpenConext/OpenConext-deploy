@@ -1,0 +1,181 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "oauth20_rs",
+  "order": 4,
+  "definitions": {
+    "NameIDFormat": {
+      "type": "string",
+      "enum": [
+        "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+        "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+        "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+      ],
+      "default": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+      "info": "This indicates whether the nameID is set to something random or the same every time the user logs in. Use transient if user does not need to be identified in a new session."
+    }
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "eid": {
+      "type": "number"
+    },
+    "entityid": {
+      "type": "string",
+      "format": "basic-authentication-user"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "oauth2_rs"
+      ]
+    },
+    "revisionid": {
+      "type": "number"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "prodaccepted",
+        "testaccepted"
+      ]
+    },
+    "user": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string"
+    },
+    "revisionnote": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metaDataFields": {
+      "type": "object",
+      "properties": {
+        "NameIDFormat": {
+          "$ref": "#/definitions/NameIDFormat"
+        },
+        "logo:0:url": {
+          "type": "string",
+          "format": "url",
+          "info": "Enter the URL to the logo used for this service. e.g. https://static.example-logo.nl/media/sp/logo.png."
+        },
+        "logo:0:width": {
+          "type": "number",
+          "info": "The width of the logo found at logo:0:url in pixels."
+        },
+        "logo:0:height": {
+          "type": "number",
+          "info": "The height of the logo found at logo:0:url in pixels."
+        },
+        "coin:institution_guid": {
+          "type": "string",
+          "format": "uuid",
+          "info": "This is a 128 bit number also known as a globally unique identifier (GUID or UUID) for this service."
+        },
+        "coin:service_team_id": {
+          "type": "string",
+          "info": "Enter the team name as used in the SP Dashboard. e.g. urn:collab:group:example-teams.nl:nl:surfnet:services:spd_example. "
+        },
+        "secret": {
+          "type": "string",
+          "format": "password",
+          "info": "The secret of this Resource Server for authentication purposes."
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "fetch": "scopes"
+          },
+          "info": "The allowed scopes for this Resource Server."
+        }
+      },
+      "patternProperties": {
+        "^name:({{ supported_language_codes | replace(',','|') }})$": {
+          "type": "string",
+          "info": "Set the name of the service. Format: 'Service Name | Supplier'"
+        },
+        "^description:({{ supported_language_codes | replace(',','|') }})$": {
+          "type": "string",
+          "info": "The description of the service."
+        },
+        "^OrganizationName:({{ supported_language_codes | replace(',','|') }})$": {
+          "type": "string",
+          "info": "The formal name of the organization. e.g. Service by University of Harderwijk."
+        },
+        "^OrganizationDisplayName:({{ supported_language_codes | replace(',','|') }})$": {
+          "type": "string",
+          "info": "The friendly name of the organization. e.g. University of Harderwijk."
+        },
+        "^NameIDFormats:([0-2]{1})$": {
+          "$ref": "#/definitions/NameIDFormat",
+          "multiplicity": 3,
+          "info": "The NameIDFormat(s) this service provider supports. This can be transient, persistent or unspecified."
+        },
+        "^contacts:([0-3]{1}):surName$": {
+          "type": "string",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "The surname of the contact. e.g. for 'John Doe', 'Doe' is the surname."
+        },
+        "^contacts:([0-3]{1}):givenName$": {
+          "type": "string",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "The given name of the contact. e.g. for 'John Doe', 'John' is the given name."
+        },
+        "^contacts:([0-3]{1}):emailAddress$": {
+          "type": "string",
+          "format": "local-email",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "The e-mail address; syntax in accordance with RFC 5322. e.g. m.l.vermeegen@university.example.org."
+        },
+        "^contacts:([0-3]{1}):telephoneNumber$": {
+          "type": "string",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "The telephone number of the contact."
+        },
+        "^contacts:([0-3]{1}):contactType$": {
+          "type": "string",
+          "enum": [
+            "technical",
+            "support",
+            "administrative",
+            "billing",
+            "other"
+          ],
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "From the pull down, select the type of contact."
+        }
+      },
+      "required": [
+        "name:en",
+        "secret",
+        "scopes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "entityid",
+    "state",
+    "metaDataFields"
+  ],
+  "additionalProperties": false,
+  "indexes": []
+}
