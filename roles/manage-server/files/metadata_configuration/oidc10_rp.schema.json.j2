@@ -513,11 +513,6 @@
           },
           "info": "The authorisation grant type's of this Relying Party."
         },
-        "isResourceServer": {
-          "type": "boolean",
-          "default": false,
-          "info": "Must be set for this Relying Party to be marked as a Resource Server to explicitly grant access to the Introspect endpoint."
-        },
         "isPublicClient": {
           "type": "boolean",
           "default": false,
@@ -648,7 +643,6 @@
       "required": [
         "name:en",
         "secret",
-        "scopes",
         "grants"
       ],
       "additionalProperties": false
