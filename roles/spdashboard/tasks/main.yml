@@ -39,5 +39,8 @@
       - source: /opt/openconext/spdashboard/parameters.yml
         target: /var/www/html/app/config/parameters.yml
         type: bind
+      - source: /dev/log
+        target: /dev/log
+        type: bind
     networks:
       - name: "spdashboard"
