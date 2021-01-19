@@ -1,5 +1,5 @@
 ---
-- name: Install pip
+- name: Get the pip
   yum:
     name: "python2-pip"
     state: "installed"
