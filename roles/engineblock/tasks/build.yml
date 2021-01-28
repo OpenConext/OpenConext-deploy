@@ -17,14 +17,14 @@
     php72 composer-installer.php
     chdir=/tmp
   when:
-    - reg_composer_installer | changed
+    - reg_composer_installer.changed | bool
 
 - name: Move Composer into globally-accessible location.
   command: >
     mv -f /tmp/composer.phar {{ composer_path }}
     creates={{ composer_path }}
   when:
-    - reg_composer_installer | changed
+    - reg_composer_installer.changed | bool
 
 - name: Remove Nodesource repositories for Node.js
   yum:
