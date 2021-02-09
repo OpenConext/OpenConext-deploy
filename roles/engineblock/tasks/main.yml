@@ -89,6 +89,18 @@
   when:
     customlogo.stat.exists
 
+- name: Check if we have a custom favicon
+  local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
+  register: customfavicon
+  become: false
+
+- name: Install environment specific favicon
+  copy:
+    src: "{{ inventory_dir }}/files/favicon.ico"
+    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/web/"
+  when:
+    customfavicon.stat.exists
+
 - name: Check if we have a custom background back image for the feedback page
   local_action: stat path="{{ inventory_dir }}/files/eb/background-back.svg"
   register: eb_customfeedbackbackground
