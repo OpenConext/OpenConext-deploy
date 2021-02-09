@@ -29,6 +29,18 @@
   when:
     - maven_result.changed
 
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Check if we have a custom favicon"
+  local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
+  register: customfavicon
+  become: false
+
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Install environment specific favicon"
+  copy:
+    src: "{{ inventory_dir }}/files/favicon.ico"
+    dest: "{{ _springapp_dir }}/{{ _springapp_artifact_id }}-{{ _springapp_version }}/"
+  when:
+    - customfavicon.stat.exists
+
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | create symlink to downloaded version"
   file:
     src: "{{ unarchive_result.dest }}/{{ _springapp_artifact_id}}-{{ _springapp_version }}"
