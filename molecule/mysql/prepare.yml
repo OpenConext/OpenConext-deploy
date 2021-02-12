@@ -20,18 +20,10 @@
       yum:
         name:
           - crontabs
-          - python2-pip
+          - python2-cryptography
         state: present
       register: prepare_packages_installed
       until: prepare_packages_installed is succeeded
-
-    - name: Install python crypto module
-      pip:
-        name: "cryptography"
-        state: "latest"
-      run_once: true
-      register: prepare_pip_packages_installed
-      until: prepare_pip_packages_installed is succeeded
 
     - name: create CA key
       openssl_privatekey:
