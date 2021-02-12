@@ -8,8 +8,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 @pytest.mark.parametrize("services", [
-    ("mongodb-org"),
-    ("python2-pip")
+    ("mongodb-org")
 ])
 def test_services_running_and_enabled(host, services):
     service = host.service(services)
