@@ -47,6 +47,7 @@
     - name: "Override some defaults"
       set_fact:
         base_domain: molecule.openconext.org
+        myconext_base_domain: molecule.openconext.org
         use_selfsigned_certs: True
         mongo_primary: true
         engine_trusted_proxy_ips:
