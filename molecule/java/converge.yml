@@ -25,7 +25,7 @@
           myconext: false
           account: false
           eduid: false
-          oidcng: false
+          oidcng: true
           voot: false
           dashboard: false
           mujina_sp: true
