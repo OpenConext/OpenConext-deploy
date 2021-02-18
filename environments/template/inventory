@@ -22,6 +22,9 @@
 [selfsigned_certs]
 %target_host%
 
+[loadbalancer]
+%target_host%
+
 [%env%:children]
 storage
 java-apps
@@ -32,6 +35,7 @@ selfsigned_certs
 mongod_primary
 sysloghost
 loadbalancer_ha
+loadbalancer
 elk
 lifecycle
 oidc

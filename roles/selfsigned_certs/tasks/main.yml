@@ -1,19 +1,11 @@
 ---
-- name: Install pip
+- name: Install python2-cryptography
   yum:
-    name: "python2-pip"
+    name: 
+       - "python2-cryptography"
     state: "installed"
   register: selfsigned_cert_pythonpip_installed
   until: selfsigned_cert_pythonpip_installed is succeeded
-  when:
-    - inventory_hostname in groups['loadbalancer']
-
-- name: Install python crypto module
-  pip:
-    name: "cryptography"
-    state: "latest"
-  register: selfsigned_cert_pipcrypt_installed
-  until: selfsigned_cert_pipcrypt_installed is succeeded
   when:
     - inventory_hostname in groups['loadbalancer']
 

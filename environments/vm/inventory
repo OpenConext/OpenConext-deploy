@@ -28,6 +28,9 @@ php-apps
 [mongo_servers]
 192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
 
+[loadbalancer]
+192.168.66.98 ansible_ssh_private_key_file=./.vagrant/machines/lb_centos7/virtualbox/private_key
+
 [logstash]
 192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
 
@@ -45,6 +48,7 @@ logstash
 selfsigned_certs
 sysloghost
 loadbalancer_ha
+loadbalancer
 elk
 lifecycle
 oidc

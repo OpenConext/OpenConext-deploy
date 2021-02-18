@@ -113,6 +113,18 @@
   notify:
     - "restart php72-fpm"
 
+- name: Check if we have a custom favicon
+  local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
+  register: customfavicon
+  become: false
+
+- name: Install environment specific favicon
+  copy:
+    src: "{{ inventory_dir }}/files/favicon.ico"
+    dest: "{{ profile_current_release_symlink }}/web/"
+  when:
+    customfavicon.stat.exists
+
 - name: Include the role manage_provision_entities to provision profile to Manage
   include_role: 
     name: manage_provision_entities

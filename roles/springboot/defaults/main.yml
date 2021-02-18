@@ -45,7 +45,7 @@ springboot_gui_services:
     role: oidc-playground-client
     artifactid: oidc-playground-client
   - name: myconext
-    alias: myconext, myconext-gui
+    alias: myconext-gui
     enabled: "{{ springboot_services_state.myconext }}"
     version: "{{ myconext_gui_version }}"
   - name: account
