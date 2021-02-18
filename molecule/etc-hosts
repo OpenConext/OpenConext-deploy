@@ -10,7 +10,7 @@ ff02::2	ip6-allrouters
 127.0.0.1 metadata.molecule.openconext.org
 127.0.0.2 engine-api.molecule.openconext.org
 127.0.0.1 teams.molecule.openconext.org
-127.0.0.1 oidc_playground.molecule.openconext.org
+127.0.0.1 oidc-playground.molecule.openconext.org
 127.0.0.1 voot.molecule.openconext.org
 127.0.0.1 pdp.molecule.openconext.org
 127.0.0.1 aa.molecule.openconext.org
@@ -19,7 +19,7 @@ ff02::2	ip6-allrouters
 127.0.0.1 mujina-sp.molecule.openconext.org
 127.0.0.1 mujina-idp.molecule.openconext.org
 127.0.0.1 welcome.molecule.openconext.org
-127.0.0.1 oidcng.molecule.openconext.org
+127.0.0.1 connect.molecule.openconext.org
 127.0.0.1 myconext.molecule.openconext.org
 127.0.0.1 account.molecule.openconext.org
 127.0.0.1 eduid.molecule.openconext.org
