@@ -119,11 +119,6 @@
           "type": "string",
           "info": "The friendly name of the organization. e.g. University of Harderwijk."
         },
-        "^NameIDFormats:([0-2]{1})$": {
-          "$ref": "#/definitions/NameIDFormat",
-          "multiplicity": 3,
-          "info": "The NameIDFormat(s) this service provider supports. This can be transient, persistent or unspecified."
-        },
         "^contacts:([0-3]{1}):surName$": {
           "type": "string",
           "multiplicity": 4,
@@ -165,8 +160,7 @@
       },
       "required": [
         "name:en",
-        "secret",
-        "scopes"
+        "secret"
       ],
       "additionalProperties": false
     }
