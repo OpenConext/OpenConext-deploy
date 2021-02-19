@@ -18,7 +18,6 @@
     - name: Install packages
       yum:
         name:
-          - python2-pip
           - unzip
         state: "installed"
       register: prepare_packages_installed
