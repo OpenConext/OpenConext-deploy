@@ -14,6 +14,7 @@
   haproxy_commands:
     java_blauwrood_servers: "{{ java_blauwrood_servers }}"
     php_blauwrood_servers: "{{ php_blauwrood_servers }}"
+    color: "{{ color }}"
     state: "{{ state }}"
     app_name: "{{ app_name }}"
     app_type: "{{ app_type }}"
