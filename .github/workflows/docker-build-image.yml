@@ -18,13 +18,8 @@ jobs:
         with: 
           java-version: 8
      
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
       - name: Installing dependencies
-        run: pip install jinja2 ansible setuptools
+        run: sudo apt install haveged ansible
 
       - name: Build the docker image
         run: docker build --rm -t surfnet/centos7-openconext-ga -f tests/Dockerfile.centos-7-ga .
