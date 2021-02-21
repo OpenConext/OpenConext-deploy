@@ -22,7 +22,7 @@ jobs:
         run: sudo apt install haveged ansible
 
       - name: test 
-        run: tr -cd '[:alnum:]' < /dev/urandom | fold -w20 | head -n1
+        run: time dd if=/dev/urandom bs=1 count=20 2>/dev/null | base64 -w 0 | rev | cut -b 2-  | rev
 
       - name: Build the docker image
         run: docker build --rm -t surfnet/centos7-openconext-ga -f tests/Dockerfile.centos-7-ga .
