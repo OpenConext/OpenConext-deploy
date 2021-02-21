@@ -93,6 +93,7 @@ scripts/gen_certs.sh $OC_ENV $OC_BASEDOMAIN $OIDCCERT_FILES_BASE
 scripts/gen_tink_keyset_oidc.sh  $OIDCCERT_FILES_BASE.keyset
 
 # Generate Secret vars
+echo "generating secrets"
 scripts/gen_secrets.sh $SECRET_VARS_TEMPLATE $EBCERT_FILES_BASE $SHIBCERT_FILES_BASE $OIDCCERT_FILES_BASE $SECRET_VARS_FILE
 # Move the generated OIDC cert to its own directory
 mkdir "${ENVEXT_DIR}/${OC_ENV}/files/certs/oidc/"
