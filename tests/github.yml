@@ -1,0 +1,8 @@
+haproxy_redirects:
+  - name: "redirecttest"
+    url: "redirect.vm.openconext.org"
+    redirecturl: "https://engine.vm.openconext.org"
+
+listen_address_ip4: 0.0.0.0
+postfix_interfaces: ipv4
+dashboard_install: False
