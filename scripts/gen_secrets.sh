@@ -69,7 +69,7 @@ while IFS= read -r line; do
 
 
   if [ "$value" == 'secret' ]; then
-    password=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w20 | head -n1)
+    password=$(dd if=/dev/urandom bs=1 count=20 2>/dev/null | base64 -w 0 | rev | cut -b 2- | rev)
     line="$key: $password "
     echo "$line" >> $SECRET_VARS_TEMP
     continue
