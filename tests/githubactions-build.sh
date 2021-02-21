@@ -50,7 +50,7 @@ EOF
 
 # Prepare the environment
 ./prep-env github vm.openconext.org
-
+echo "Prepping the environment" 
 # Change the hostname in the inventory
 sed -i 's/%target_host%/ansible-test-ga ansible_connection=docker/g' environments-external/github/inventory 
 
