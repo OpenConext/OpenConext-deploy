@@ -16,7 +16,7 @@ if [ $# -lt 5 ]
 fi
 
 # ----- End Input handing
-
+echo "Starting to generate secrets" 
 SECRET_VARS_TEMPLATE=$1
 EBCERT_FILES_BASE=$2
 SHIBCERT_FILES_BASE="$3"
@@ -32,6 +32,7 @@ tempfile() {
 SECRET_VARS_TEMP=$(tempfile)
 
 while IFS= read -r line; do
+  echo $line
   if [ -z "$line" ]; then
     echo "" >> $SECRET_VARS_TEMP
     continue
@@ -61,7 +62,7 @@ while IFS= read -r line; do
 
   if [ "$value" == 'salt' ]; then
     salt=`tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo`
-    line="$key: $salt "
+    line=":$key: $salt "
     echo "$line" >> $SECRET_VARS_TEMP
     continue
   fi
@@ -99,12 +100,16 @@ while IFS= read -r line; do
     echo "$line" >> $SECRET_VARS_TEMP
     cat "${OIDCCERT_FILES_BASE}.keyset" | sed "s/^/  /g" >> "$SECRET_VARS_TEMP"
     continue
-  fi
-   
-
+  else
+    line="$key:"
+    echo "$line" >> $SECRET_VARS_TEMP
+    continue 
+  fi 
+  
   echo "$line" >> $SECRET_VARS_TEMP
-done < $SECRET_VARS_TEMPLATE
 
+done < $SECRET_VARS_TEMPLATE
+echo "secrets have been generated"
 
 # Move temp file to SECRET_VARS_FILE
 mv -f $SECRET_VARS_TEMP $SECRET_VARS_FILE
@@ -117,3 +122,5 @@ rm "${OIDCCERT_FILES_BASE}.key"
 rm "${EBCERT_FILES_BASE}.csr"
 rm "${SHIBCERT_FILES_BASE}.csr"
 rm "${OIDCCERT_FILES_BASE}.csr"
+
+echo "Done creating secrets"
