@@ -21,6 +21,9 @@ jobs:
       - name: Installing dependencies
         run: sudo apt install haveged ansible
 
+      - name: test 
+        run: tr -cd '[:alnum:]' < /dev/urandom | fold -w20 | head -n1
+
       - name: Build the docker image
         run: docker build --rm -t surfnet/centos7-openconext-ga -f tests/Dockerfile.centos-7-ga .
 
