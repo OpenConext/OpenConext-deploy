@@ -32,10 +32,6 @@ jobs:
           docker exec ansible-test-ga cat /var/log/manage/manage.log
           docker exec systemctl status haproxy
 
-  publish:
-    runs-on: ubuntu-latest
-    needs: build
-    steps: 
       - name: commit the docker image
         run: DOCKER_COMMIT_SHA=$(docker commit ansible-test-ga)
 
@@ -44,3 +40,9 @@ jobs:
 
       - name: Show the docker image
         run: docker images
+
+      - name: Login to the GitHub container registry
+        run: |
+         export CR_PAT=${{ secrets.SECRET_TOKEN }}
+         echo $CR_PAT | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+         docker push ghcr.io/openconext/openconext-deploy/openconext-core:$GITHUB_REF
