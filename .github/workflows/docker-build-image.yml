@@ -50,6 +50,4 @@ jobs:
           password: ${{ secrets.GH_CONTAINER_REGISTRY_PAT }}
 
       - name: Push the image
-        run: |
-          docker push ghcr.io/openconext/openconext-deploy/openconext-core:latest
-          docker push ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG
+        run: docker push ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG
