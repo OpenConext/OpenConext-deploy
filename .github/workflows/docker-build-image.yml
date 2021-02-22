@@ -22,8 +22,8 @@ jobs:
       - name: Build the docker image
         run: docker build --rm -t surfnet/centos7-openconext-ga -f tests/Dockerfile.centos-7-ga .
 
-          #      - name: Run Ansible on the Docker container to install OpenConext
-          #run: sh tests/githubactions-build.sh
+      - name: Run Ansible on the Docker container to install OpenConext
+        run: sh tests/githubactions-build.sh
 
       - name: Check other issues
         if: ${{ failure() }}
@@ -31,8 +31,6 @@ jobs:
           docker exec ansible-test-ga cat /var/log/messages
           docker exec ansible-test-ga cat /var/log/manage/manage.log
           docker exec systemctl status haproxy
-      - name: create a test image
-        run: docker run --detach -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name ansible-test-ga surfnet/centos7-openconext-ga
 
       - name: Commit and tag the Docker image
         run: |
@@ -51,6 +49,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_CONTAINER_REGISTRY_PAT }}
 
-            #      - name: Login to the GitHub container registry
-            #run: |
-         #         docker push ghcr.io/openconext/openconext-deploy/openconext-core:$GITHUB_REF
+      - name: Push the image
+        run: |
+          docker push ghcr.io/openconext/openconext-deploy/openconext-core:latest
+          docker push ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG
