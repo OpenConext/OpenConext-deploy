@@ -50,10 +50,13 @@ EOF
 
 # Prepare the environment
 echo "Prepping the environment" 
+mkdir -p environments-external
 cp -r environments/vm/ environments-external/github
+mv environments-external/github/group_vars/vm.yml environments-external/github/group_vars/github.yml
 
 # Change the hostname in the inventory
 cp environments/template/inventory environments-external/github/
+sed -i 's/%env%/github/g' environments-external/github/inventory
 sed -i 's/%target_host%/ansible-test-ga ansible_connection=docker/g' environments-external/github/inventory 
 
 # Create the proper host_vars file
