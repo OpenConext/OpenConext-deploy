@@ -100,10 +100,6 @@ while IFS= read -r line; do
     echo "$line" >> $SECRET_VARS_TEMP
     cat "${OIDCCERT_FILES_BASE}.keyset" | sed "s/^/  /g" >> "$SECRET_VARS_TEMP"
     continue
-  else
-    line="$key:"
-    echo "$line" >> $SECRET_VARS_TEMP
-    continue 
   fi 
   
   echo "$line" >> $SECRET_VARS_TEMP
