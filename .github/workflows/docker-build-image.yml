@@ -22,8 +22,8 @@ jobs:
       - name: Build the docker image
         run: docker build --rm -t surfnet/centos7-openconext-ga -f tests/Dockerfile.centos-7-ga .
 
-      - name: Run Ansible on the Docker container to install OpenConext
-        run: sh tests/githubactions-build.sh
+          #      - name: Run Ansible on the Docker container to install OpenConext
+          #run: sh tests/githubactions-build.sh
 
       - name: Check other issues
         if: ${{ failure() }}
@@ -36,9 +36,11 @@ jobs:
         run: DOCKER_COMMIT_SHA=$(docker commit ansible-test-ga)
 
       - name: Change GitHub ref to something usable
-        run:  CONTAINER_TAG=$(echo $GITHUB_REF | sed -e 's,.*/\(.*\),\1,')
       - name: Tag the Docker image
-        run: docker tag $DOCKER_COMMIT_SHA ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG ghcr.io/openconext/openconext-deploy/openconext-core:latest
+        run: |
+          CONTAINER_TAG=$(echo $GITHUB_REF | sed -e 's,.*/\(.*\),\1,')
+          docker tag $DOCKER_COMMIT_SHA ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG 
+          docker tag $DOCKER_COMMIT_SHA ghcr.io/openconext/openconext-deploy/openconext-core:latest
 
       - name: Show the docker image
         run: docker images
@@ -47,4 +49,4 @@ jobs:
         run: |
          export CR_PAT=${{ secrets.SECRET_TOKEN }}
          echo $CR_PAT | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-         docker push ghcr.io/openconext/openconext-deploy/openconext-core:$GITHUB_REF
+         #         docker push ghcr.io/openconext/openconext-deploy/openconext-core:$GITHUB_REF
