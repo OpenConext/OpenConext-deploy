@@ -76,10 +76,10 @@ echo
 ./provision github $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=manage,mujina-sp,mujina-idp -e @tests/github.yml -t core
 
 # Make the image a bit smaller
-docker exec systemctl stop mysql mongod
-docker exec yum remove mongodb-org-mongos mongodb-org-tools
-docker exec rm -rf /var/lib/mongo/journal/*
-docker exec rm -rf /var/lib/mysql/ib_logfile*
-docker stop ansible-test-ga
+docker exec ansible-test-ga systemctl stop mysql mongod
+docker exec ansible-test-ga yum remove mongodb-org-mongos mongodb-org-tools
+docker exec ansible-test-ga rm -rf /var/lib/mongo/journal/*
+docker exec ansible-test-ga rm -rf /var/lib/mysql/ib_logfile*
+docker stop ansible-test-ga ansible-test-ga
 
 exit $status
