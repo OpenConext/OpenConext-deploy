@@ -14,15 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-java@v1
-        with: 
-          java-version: 8
-     
-      - name: Installing dependencies
-        run: sudo apt install haveged ansible
-
-      - name: test 
-        run: time dd if=/dev/urandom bs=1 count=20 2>/dev/null | base64 -w 0 | rev | cut -b 2-  | rev
+      - name: Disable apparmor
+        run |
+        sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+        sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
 
       - name: Build the docker image
         run: docker build --rm -t surfnet/centos7-openconext-ga -f tests/Dockerfile.centos-7-ga .
