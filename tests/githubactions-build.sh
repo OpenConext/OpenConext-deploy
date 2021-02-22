@@ -7,7 +7,7 @@ status=0
 
 ANSIBLE_PLAYBOOK=./provision.yml
 ANSIBLE_INVENTORY=./environments-external/github/inventory
-ANSIBLE_SECRETS=./environments-external/github/secrets/github.yml
+ANSIBLE_SECRETS=./environments-external/github/secrets/vm.yml
 ANSIBLE_PLAYBOOK_WRAPPER=./provision
 ANSIBLE_USER=root
 
@@ -49,28 +49,15 @@ cat <<-'EOF' > ansible.cfg
 EOF
 
 # Prepare the environment
-./prep-env github vm.openconext.org
 echo "Prepping the environment" 
+cp -r environments/vm/ environments-external/github
+
 # Change the hostname in the inventory
+cp environments/template/inventory environments-external/github/
 sed -i 's/%target_host%/ansible-test-ga ansible_connection=docker/g' environments-external/github/inventory 
 
-# Enable oidc-ng (When doing a -t core those tasks should not be performed)
-# echo "manage_show_oidc_rp_tab: true" >> environments-external/github/group_vars/github.yml
-# echo "manage_exclude_oidc_rp_imports_in_push: true" >> environments-external/github/group_vars/github.yml
-# sed -i 's/oidc_push_enabled: false/oidc_push_enabled: true/g' environments-external/github/group_vars/github.yml
-
 # Create the proper host_vars file
-mv environments-external/github/host_vars/template.yml environments-external/github/host_vars/ansible-test-ga.yml
-
-echo
-echo "================================================================="
-echo "================================================================="
-echo "== STARTING SYNTAX CHECK ========================================"
-echo "================================================================="
-echo "================================================================="
-echo
-
-./provision github $ANSIBLE_USER $ANSIBLE_SECRETS --syntax-check -e @tests/github.yml
+cp environments/template/host_vars/template.yml environments-external/github/host_vars/ansible-test-ga.yml
 
 echo
 echo "================================================================="
@@ -82,38 +69,11 @@ echo
 
 ./provision github $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=manage,mujina-sp,mujina-idp -e @tests/github.yml -t core
 
-echo
-echo "================================================================="
-echo "================================================================="
-echo "== STARTING IDEMPOTENCY TEST ===================================="
-echo "================================================================="
-echo "================================================================="
-echo
-
-TMPOUT=$(mktemp)
-./provision github $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=manage,mujina-sp,mujina-idp -e @tests/github.yml -t core | tee $TMPOUT
-
-echo
-echo "================================================================="
-echo "================================================================="
-if grep -q 'changed=0.*failed=0' $TMPOUT
-then
-	echo "== IDEMPOTENCY CHECK: PASS ======================================"
-else
-	echo "== IDEMPOTENCY CHECK: FAILED! ==================================="
-	status=1
-fi
-echo "================================================================="
-echo "================================================================="
-echo
-
 # Make the image a bit smaller
 docker exec systemctl stop mysql mongod
 docker exec yum remove mongodb-org-mongos mongodb-org-tools
 docker exec rm -rf /var/lib/mongo/journal/*
 docker exec rm -rf /var/lib/mysql/ib_logfile*
 docker stop ansible-test-ga
-
-
 
 exit $status
