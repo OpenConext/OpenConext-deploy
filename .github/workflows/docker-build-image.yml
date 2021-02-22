@@ -33,6 +33,14 @@ jobs:
       - name: Check mysql start issue
         if: ${{ cancelled() }}
         run: docker exec -i -t ansible-test-ga systemctl status mariadb -l
+      
+      - name: Check other issues
+        if: ${{ cancelled() }}
+        run: docker exec -i -t ansible-test-ga cat /var/log/messages
+
+      - name: Check yet other issues
+        if: ${{ cancelled() }}
+        run: docker ps
 
   publish:
     runs-on: ubuntu-latest
