@@ -77,7 +77,7 @@ echo
 
 # Make the image a bit smaller
 docker exec ansible-test-ga systemctl stop mysql mongod
-docker exec ansible-test-ga yum remove mongodb-org-mongos mongodb-org-tools
+docker exec ansible-test-ga yum -y remove mongodb-org-mongos mongodb-org-tools
 docker exec ansible-test-ga rm -rf /var/lib/mongo/journal/*
 docker exec ansible-test-ga rm -rf /var/lib/mysql/ib_logfile*
 docker stop ansible-test-ga ansible-test-ga
