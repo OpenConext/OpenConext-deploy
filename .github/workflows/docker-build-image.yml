@@ -25,17 +25,12 @@ jobs:
       - name: Run Ansible on the Docker container to install OpenConext
         run: sh tests/githubactions-build.sh
 
-      - name: Check mysql start issue
-        if: ${{ cancelled() }}
-        run: docker exec  ansible-test-ga systemctl status mariadb -l
-      
       - name: Check other issues
-        if: ${{ cancelled() }}
-        run: docker exec ansible-test-ga cat /var/log/messages
-
-      - name: Check yet other issues
-        if: ${{ cancelled() }}
-        run: docker ps
+        if: ${{ failed() }}
+        run: |
+          docker exec ansible-test-ga cat /var/log/messages
+          docker exec ansible-test-ga cat /var/log/manage/manage.log
+          docker exec systemctl status haproxy
 
   publish:
     runs-on: ubuntu-latest
