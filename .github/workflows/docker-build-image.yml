@@ -36,7 +36,7 @@ jobs:
         run: DOCKER_COMMIT_SHA=$(docker commit ansible-test-ga)
 
       - name: Change GitHub ref to something usable
-        run:  CONTAINER_TAG=$(echo $$GITHUB_REF | sed -e 's,.*/\(.*\),\1,')
+        run:  CONTAINER_TAG=$(echo $GITHUB_REF | sed -e 's,.*/\(.*\),\1,')
       - name: Tag the Docker image
         run: docker tag $DOCKER_COMMIT_SHA ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG ghcr.io/openconext/openconext-deploy/openconext-core:latest
 
