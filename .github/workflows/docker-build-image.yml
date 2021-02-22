@@ -26,7 +26,7 @@ jobs:
         run: sh tests/githubactions-build.sh
 
       - name: Check other issues
-        if: ${{ failed() }}
+        if: ${{ failure() }}
         run: |
           docker exec ansible-test-ga cat /var/log/messages
           docker exec ansible-test-ga cat /var/log/manage/manage.log
