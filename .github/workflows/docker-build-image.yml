@@ -50,4 +50,6 @@ jobs:
           password: ${{ secrets.GH_CONTAINER_REGISTRY_PAT }}
 
       - name: Push the image
-        run: docker push ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG
+        run: |
+          CONTAINER_TAG=$(echo $GITHUB_REF | sed -e 's,.*/\(.*\),\1,')
+          docker push ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG
