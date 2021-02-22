@@ -46,6 +46,6 @@ jobs:
 
       - name: Login to the GitHub container registry
         run: |
-         export CR_PAT=${{ secrets.SECRET_TOKEN }}
+         export CR_PAT=${{ secrets.GH_CONTAINER_REGISTRY_PAT }}
          echo $CR_PAT | docker login ghcr.io -u ${{ github.actor }} --password-stdin
          #         docker push ghcr.io/openconext/openconext-deploy/openconext-core:$GITHUB_REF
