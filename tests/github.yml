@@ -6,3 +6,4 @@ haproxy_redirects:
 listen_address_ip4: 0.0.0.0
 postfix_interfaces: ipv4
 dashboard_install: False
+update_hosts_file: False
