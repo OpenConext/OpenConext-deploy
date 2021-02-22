@@ -35,10 +35,10 @@ jobs:
         run: docker run --detach -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name ansible-test-ga surfnet/centos7-openconext-ga
 
       - name: commit the docker image
-        run: DOCKER_COMMIT_SHA=$(docker commit ansible-test-ga)
 
-      - name: Tag the Docker image
+      - name: Commit and tag the Docker image
         run: |
+          DOCKER_COMMIT_SHA=$(docker commit ansible-test-ga)
           CONTAINER_TAG=$(echo $GITHUB_REF | sed -e 's,.*/\(.*\),\1,')
           docker tag $DOCKER_COMMIT_SHA ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG 
           docker tag $DOCKER_COMMIT_SHA ghcr.io/openconext/openconext-deploy/openconext-core:latest
