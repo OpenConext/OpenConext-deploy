@@ -46,7 +46,7 @@ if __name__ == "__main__":
       state_servers = blue_servers
   
   if state:
-    haproxy_items = [_haproxy_state(s, state, app_name,color) for s in state_servers]
+    haproxy_items = [_haproxy_state(s, state, app_name) for s in state_servers]
     module.exit_json(haproxy_items=haproxy_items)
   else:
     weight = int(weight[:-1]) if weight.endswith("%") else int(weight)
