@@ -1,10 +1,14 @@
 # Github action to build and publish a Docker image
-
+# 
 name: build and publish docker
 on:
   pull_request:
     branches: 
       - 'master'
+  push:
+    branches: 
+      - 'master'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,13 +32,21 @@ jobs:
           docker exec ansible-test-ga cat /var/log/messages
           docker exec ansible-test-ga cat /var/log/manage/manage.log
           docker exec systemctl status haproxy
+ 
+      - name: Set branch name 
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
+      - name: Set branch name on pull_request
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | sed 's/\//_/g')" >> $GITHUB_ENV
+      
       - name: Commit and tag the Docker image
         run: |
           DOCKER_COMMIT_SHA=$(docker commit ansible-test-ga)
-          CONTAINER_TAG=$(echo $GITHUB_REF | sed -e 's,.*/\(.*\),\1,')
-          docker tag $DOCKER_COMMIT_SHA ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG 
-          docker tag $DOCKER_COMMIT_SHA ghcr.io/openconext/openconext-deploy/openconext-core:latest
+          docker tag $DOCKER_COMMIT_SHA ghcr.io/openconext/openconext-deploy/openconext-core:${{ env.BRANCH_NAME }}
 
       - name: Show the docker image
         run: docker images
@@ -47,6 +59,4 @@ jobs:
           password: ${{ secrets.GH_CONTAINER_REGISTRY_PAT }}
 
       - name: Push the image
-        run: |
-          CONTAINER_TAG=$(echo $GITHUB_REF | sed -e 's,.*/\(.*\),\1,')
-          docker push ghcr.io/openconext/openconext-deploy/openconext-core:$CONTAINER_TAG
+        run:  docker push ghcr.io/openconext/openconext-deploy/openconext-core:${{ env.BRANCH_NAME }}
