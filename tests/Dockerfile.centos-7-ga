@@ -1,6 +1,7 @@
 FROM centos:7
 
 MAINTAINER "Bart Geesink" <bart.geesink@surf.nl>
+LABEL org.opencontainers.image.source https://github.com/OpenConext/OpenConext-deploy
 
 ENV container docker
 
