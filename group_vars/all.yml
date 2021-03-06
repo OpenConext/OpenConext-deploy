@@ -17,6 +17,7 @@ apache_user: apache
 
 httpd_scp:
   lenient: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:;
+  lenient_with_static_img: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' https://static.surfconext.nl data:;
   strict: default-src; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:;
 
 error_subject_prefix: "[{{ ansible_hostname }}] "

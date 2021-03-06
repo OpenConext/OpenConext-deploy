@@ -21,7 +21,7 @@ if __name__ == "__main__":
     "java_blauwrood_servers": {"java_blauwrood_servers": True, "type": "list"},
     "php_blauwrood_servers": {"php_blauwrood_servers": True, "type": "list"},
     "weight": {"type": "str"},
-    "color": {"type": "str"},
+    "color": {"required": True, "type": "str"},
     "app_name": {"required": True, "type": "str"},
     "app_type": {"required": True, "type": "str"},
     "state": {"type": "str"}
@@ -40,9 +40,13 @@ if __name__ == "__main__":
   servers = java_servers if app_type == "java" else php_servers
   red_servers = [s for s in servers if s.upper().endswith("ROOD")]
   blue_servers = [s for s in servers if s.upper().endswith("BLAUW")]
-
+  if color == "rood":
+      state_servers = red_servers
+  elif color == "blauw":
+      state_servers = blue_servers
+  
   if state:
-    haproxy_items = [_haproxy_state(s, state, app_name) for s in red_servers + blue_servers]
+    haproxy_items = [_haproxy_state(s, state, app_name) for s in state_servers]
     module.exit_json(haproxy_items=haproxy_items)
   else:
     weight = int(weight[:-1]) if weight.endswith("%") else int(weight)
