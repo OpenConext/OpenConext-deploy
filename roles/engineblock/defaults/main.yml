@@ -80,10 +80,8 @@ engine_stepup_gateway_sfo_sso_location: "https://{{ engine_stepup_gateway_domain
 # The public key from the Stepup Gateway IdP
 engine_stepup_gateway_sfo_public_key_file: "{{ engine_keys.default.publicFile }}"
 
-## The priority of messages that should be logged to syslog
-## 7 = debug
-## 6 = notices
-engine_syslog_priority: 7
+## The minimum priority of messages that will be logged
+engine_logging_passthru_level: NOTICE
 
 #engine_initial_sql: ''
 
