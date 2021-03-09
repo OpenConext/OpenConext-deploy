@@ -114,7 +114,7 @@ parameters:
     ## INFO: informational messages
     ## DEBUG: debug messages
     logger.channel: engineblock
-    logger.fingers_crossed.passthru_level: NOTICE
+    logger.fingers_crossed.passthru_level: {{ engine_logging_passthru_level }}
     logger.fingers_crossed.action_level: ERROR
     logger.syslog.ident: EBLOG
     logger.line_format: '{{ '[%datetime%] %channel%.%level_name%: %message% %extra% %context%' | replace("%","%%") }}'
