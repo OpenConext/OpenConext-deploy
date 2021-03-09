@@ -31,6 +31,7 @@
       - php72-php-soap
       - php72-php-xml
       - php72-php-gd
+      - php72-php-opcache
     state: present
   register: php_packages_php_installed
   until: php_packages_php_installed is succeeded
@@ -41,6 +42,7 @@
     dest: "/etc/opt/remi/php72/php.d/{{ item }}"
   with_items:
     - 40-apcu.ini
+    - 10-opcache.ini
     - openconext.ini
   notify:
     - "restart php72-php-fpm"
@@ -100,6 +102,7 @@
     state: absent
   register: php_packages_php_remove
   until: php_packages_php_remove is succeeded
+
 
 - name: Clean up old php-fpm 5.6 config
   file:
