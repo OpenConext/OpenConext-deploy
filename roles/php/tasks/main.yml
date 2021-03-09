@@ -66,13 +66,15 @@
 
 - name: Put 7.2 FPM configuration
   copy:
-    src: "{{ item.src }}"
-    dest: "/etc/opt/remi/php72/{{ item.dest }}f"
-  with_items:
-    - src: php72-fpm.conf
-      dest: php-fpm.con
-    - src: www.conf
-      dest: php-fpm.d/www.conf
+    src: php72-fpm.conf
+    dest: "/etc/opt/remi/php72/php-fpm.conf"
+  notify:
+    - "restart php72-php-fpm"
+
+- name: Create an empty default www pool file    
+  copy: 
+    content: ""
+    dest: /etc/opt/remi/php72/php-fpm.d/www.conf 
   notify:
     - "restart php72-php-fpm"
 
