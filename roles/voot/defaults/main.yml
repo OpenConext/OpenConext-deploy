@@ -10,4 +10,4 @@ voot_manage_provision_cc_rp_secret: "{{ voot.oidcng_checkToken_secret }}"
 voot_manage_provision_cc_name_en: "{{ instance_name }} VOOT Resource Server"
 voot_manage_provision_cc_description_en: "The VOOT API is for group membership information"
 voot_manage_provision_cc_scopes: "groups"
-voot_manage_provision_cc_is_resource_server: true
+voot_manage_provision_cc_is_resource_server: True

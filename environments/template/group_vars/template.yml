@@ -409,6 +409,7 @@ myconext:
   feature_webauthn: false
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
   sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
+  oidcng_rs_client_id: myconext.rs.{{ base_domain }}
   links:
     - { name: "help" , url: "https://wiki.surfnet.nl/x/EYzaAQ" }
     - { name: "help_en" , url: "https://wiki.surfnet.nl/x/FYzaAQ" }

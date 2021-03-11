@@ -54,6 +54,11 @@ account_linking_context_class_ref:
   validate_names: https://eduid.nl/trust/validate-names
   affiliation_student: https://eduid.nl/trust/affiliation-student
 
+eduid_api:
+  oidcng_introspection_uri: https://connect.{{ base_domain }}/oidc/introspect
+  oidcng_client_id: {{ myconext.oidcng_rs_client_id }}
+  oidcng_secret: {{ myconext_oidcng_rs_client_secret }}
+
 feature:
   webauthn: {{ myconext.feature_webauthn }}
   warning_educational_email_domain: True
