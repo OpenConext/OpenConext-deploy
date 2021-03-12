@@ -15,8 +15,9 @@ frontend internet_ip
     # Rewrite requests
     # We want to log the tls cipher, tls protocol and the http version
     http-request add-header X-TLS-Client %[ssl_fc_cipher],%[ssl_fc_protocol],%[ssl_fc_alpn]
-    # First we strip any Proxy headers
+    # First we strip any Proxy or X-Forwarded-for headers
     http-request del-header Proxy
+    http-request del-header X-Forwarded-For
     # We redirect all port 80 to port 443
     http-request redirect scheme https code 301 if !{ ssl_fc }
     # Log the user agent in the httplogs
@@ -91,8 +92,9 @@ frontend internet_restricted_ip
     # Rewrite requests
     # We want to log the tls cipher, tls protocol and the http version
     http-request add-header X-TLS-Client %[ssl_fc_cipher],%[ssl_fc_protocol],%[ssl_fc_alpn]
-    # First we strip any Proxy headers
+    # First we strip any Proxy or X-Forwarded-for headers
     http-request del-header Proxy
+    http-request del-header X-Forwarded-For
     # We redirect all port 80 to port 443
     http-request redirect scheme https code 301 if !{ ssl_fc }
     # Log the user agent in the httplogs
