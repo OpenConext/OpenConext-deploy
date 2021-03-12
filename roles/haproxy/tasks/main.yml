@@ -61,6 +61,17 @@
     group: lbops
     mode: 0775
 
+- name: Create haproxy config map and acl directories
+  file:
+    path: "/etc/haproxy/{{ item }}"
+    state: directory
+    owner: root
+    group: lbops
+    mode: 0755
+  with_items:
+    - acls
+    - maps
+
 - name: Enable haproxy
   service:
     name: haproxy
@@ -144,15 +155,41 @@
   notify:
     - "reload haproxy"
 
+- name: Copy haproxy acls
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/haproxy/acls/{{ item }}"
+    owner: root
+    group: lbops
+    mode: 0664
+  with_items:
+    - validvhostsrestricted.acl
+    - validvhostsunrestricted.acl
+  notify:
+    - "reload haproxy"
+
+- name: Copy haproxy maps
+  template: 
+    src: "{{ item }}.j2"
+    dest: "/etc/haproxy/maps/{{ item }}"
+    owner: root
+    group: lbops
+    mode: 0664
+  with_items:
+    - backends.map
+    - redirects.map
+  notify:
+    - "reload haproxy"
+ 
 - name: Place file with list of browsers that do not accept samesite=none cookies
   copy:
     src: nosamesitebrowsers.lst
-    dest: /etc/haproxy/nosamesitebrowsers.lst
+    dest: /etc/haproxy/maps/nosamesitebrowsers.lst
     owner: root
-    group: root
-    mode: 0644
-  notify: 
-    - "reload haproxy" 
+    group: lbops
+    mode: 0664
+  notify:
+    - "reload haproxy"
 
 - name: Start haproxy
   service:  

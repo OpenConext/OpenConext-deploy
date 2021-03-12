@@ -1,0 +1,5 @@
+{% for application in haproxy_applications %}
+{%if application.restricted is defined %}
+{{ application.vhost_name }}
+{% endif %}
+{% endfor %}
