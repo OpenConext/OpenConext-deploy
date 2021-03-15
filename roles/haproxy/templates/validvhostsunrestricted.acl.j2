@@ -1,0 +1,10 @@
+{% for application in haproxy_applications %}
+{%if application.restricted is not defined %}
+{{ application.vhost_name }}
+{% endif %}
+{% endfor %}
+{%if haproxy_redirects is defined %}
+{% for application in haproxy_redirects %}
+{{ application.url }}
+{% endfor %}
+{% endif %}
