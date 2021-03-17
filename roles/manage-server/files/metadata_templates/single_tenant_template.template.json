@@ -7,7 +7,8 @@
     "attributes": {}
   },
   "metaDataFields": {
-    "name:en": "Single Tenant Template for ...."
+    "name:en": "Single Tenant Template for ....",
+    "OrganizationName:en": ""
   },
   "allowedEntities": []
 }
