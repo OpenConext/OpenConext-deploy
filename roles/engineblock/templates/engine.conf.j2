@@ -48,4 +48,9 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
     Include ssl_backend.conf
     {% endif %}
 
+    ExpiresActive on
+    ExpiresByType font/* "access plus 1 year"
+    ExpiresByType image/* "access plus 6 months"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType text/js "access plus 1 year"
 </VirtualHost>

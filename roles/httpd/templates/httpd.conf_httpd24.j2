@@ -265,6 +265,8 @@ LogLevel warn
     #
     AddType application/x-compress .Z
     AddType application/x-gzip .gz .tgz
+    AddType font/woff2 .woff2
+    AddType image/x-icon .ico
 
     #
     # AddHandler allows you to map certain file extensions to "handlers":
@@ -297,6 +299,8 @@ LogLevel warn
 # directive:
 #
 AddDefaultCharset UTF-8
+AddCharset UTF-8 .css
+AddCharset UTF-8 .js
 
 <IfModule mime_magic_module>
     #

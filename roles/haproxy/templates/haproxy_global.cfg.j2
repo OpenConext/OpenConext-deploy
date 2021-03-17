@@ -22,7 +22,7 @@ global
 {% if haproxy_metricbeat %}
   stats socket 127.0.0.1:14567
 {% endif %}
-  stats socket /var/lib/haproxy/haproxy.stats mode 660 level admin user root group lbops
+  stats socket /var/lib/haproxy/haproxy.stats mode 660 level admin user root group lbops expose-fd listeners
   server-state-file /var/lib/haproxy/state
 
 #---------------------------------------------------------------------
@@ -35,7 +35,6 @@ defaults
     log                         global
     option                      http-ignore-probes
     option                      http-server-close
-    option                      forwardfor       except 127.0.0.0/8
     option                      redispatch
     retries                     3
     timeout http-request        10s

@@ -1,0 +1,3 @@
+{% for application in haproxy_applications %}
+{{ application.vhost_name }} {{ application.name }}_be
+{% endfor %}

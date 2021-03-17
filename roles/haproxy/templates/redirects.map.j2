@@ -1,0 +1,5 @@
+{%if haproxy_redirects is defined %}
+{% for application in haproxy_redirects %}
+{{ application.url }} {{ application.redirecturl }}
+{% endfor %}
+{% endif %}
