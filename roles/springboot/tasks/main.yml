@@ -29,6 +29,7 @@
     loop_var: springboot
   when:
     - springboot.name in _services_to_install or (springboot.alias is defined and springboot.alias in _services_to_install)
+                                              or (springboot.group is defined and springboot.group in _services_to_install)
     - springboot.enabled
 
 - name: "Install Springboot Server services"
@@ -38,4 +39,5 @@
     loop_var: springboot
   when:
     - springboot.name in _services_to_install or (springboot.alias is defined and springboot.alias in _services_to_install)
+                                              or (springboot.group is defined and springboot.group in _services_to_install)
     - springboot.enabled
