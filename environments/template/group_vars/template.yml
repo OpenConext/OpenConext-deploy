@@ -398,6 +398,7 @@ oidcng:
   eduid_attribute_manipulation_enabled: false
   consent_enabled: false
   token_api_enabled: false
+  environment: SURFconext
 
 oidcng_logback_email: false
 oidcng_saml_sp_entityid: https://connect.{{ base_domain }}
