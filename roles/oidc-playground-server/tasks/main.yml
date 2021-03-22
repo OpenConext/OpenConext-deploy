@@ -17,7 +17,7 @@
   include_role:
     name: manage_provision_entities
   vars:
-    entity_type: client_credentials_client
+    entity_type: oauth20_rs
 
 - name: Include the role manage_provision_entities to provision oidc-playground client to Manage
   include_role: 

@@ -18,4 +18,4 @@
   include_role: 
     name: manage_provision_entities
   vars: 
-    entity_type: client_credentials_client
+    entity_type: oidc10_rp

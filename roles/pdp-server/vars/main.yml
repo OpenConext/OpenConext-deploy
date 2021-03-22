@@ -10,12 +10,11 @@ springapp_tcpport: 9196
 springapp_min_heapsize: "{{ pdp_min_heapsize }}"
 springapp_max_heapsize: "{{ pdp_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
-manage_provision_cc_client_id: "{{ pdp_oauth2_clientid }}"
-manage_provision_cc_rp_secret: "{{ pdp_client_secret }}"
-manage_provision_cc_name_en: "{{ pdp_manage_provision_cc_name_en }}"
-manage_provision_cc_description_en: "{{ pdp_manage_provision_cc_description_en }}"
-manage_provision_cc_scopes: "{{ pdp_manage_provision_cc_scopes }}"
-manage_provision_cc_is_resource_server: False
+manage_provision_oidcrp_client_id: "{{ pdp_oauth2_clientid }}"
+manage_provision_oidcrp_secret: "{{ pdp_client_secret }}"
+manage_provision_oidcrp_name_en: "{{ pdp_manage_provision_oidcrp_name_en }}"
+manage_provision_oidcrp_description_en: "{{ pdp_manage_provision_oidcrp_description_en }}"
+manage_provision_oidcrp_grants: "{{ pdp_manage_provision_oidcrp_grants }}"
 
 manage_provision_samlsp_client_id: "{{ pdp_manage_provision_samlsp_client_id }}"
 manage_provision_samlsp_name_en: "{{ pdp_manage_provision_samlsp_name_en }}"
