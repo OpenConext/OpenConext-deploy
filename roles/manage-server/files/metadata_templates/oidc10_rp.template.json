@@ -11,8 +11,10 @@
     "OrganizationName:en": "",
     "secret": "",
     "redirectUrls": [],
+    "scopes": ["openid"],
     "grants": ["authorization_code"],
-    "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+    "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+    "isResourceServer": false
   },
   "allowedEntities": [],
   "allowedResourceServers": []

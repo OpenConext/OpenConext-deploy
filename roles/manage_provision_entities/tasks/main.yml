@@ -5,11 +5,11 @@
     manage_provision_client_id: "{{ manage_provision_samlsp_client_id }}"
   when: entity_type == "saml20_sp"
 
-- name: Set vars for resource servers
+- name: Set vars for client credentials clients
   set_fact:
-    manage_provision_client_id: "{{ manage_provision_oauth_rs_client_id }}" 
-    manage_search_path: oauth20_rs
-  when: entity_type == "oauth20_rs"
+    manage_provision_client_id: "{{ manage_provision_cc_client_id }}" 
+    manage_search_path: oidc10_rp
+  when: entity_type == "client_credentials_client"
 
 - name: Set vars for oidc rp clients
   set_fact:
@@ -23,11 +23,6 @@
     manage_search_path: saml20_idp
   when: entity_type == "saml20_idp"
 
-- name: template
-  template: 
-    src: "{{ entity_type }}.j2"
-    dest: /tmp/temp.json
-    
 - name: Check if the entity already exists
   uri:
     url: "https://manage.{{ base_domain }}/manage/api/internal/search/{{ manage_search_path }}"
