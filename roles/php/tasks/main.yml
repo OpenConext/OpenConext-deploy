@@ -113,9 +113,3 @@
     - "/etc/php.d/40-apcu.ini"
     - "/etc/php.d/openconext.ini"
     - "/etc/php-fpm.conf"
-
-- name: enable and start phpfpm
-  service:
-    name: php72-php-fpm
-    enabled: yes
-    state: started
