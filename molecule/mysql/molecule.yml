@@ -40,6 +40,7 @@ provisioner:
   env:
     ANSIBLE_REMOTE_TMP: /tmp/
     ANSIBLE_ROLES_PATH: ../../roles
+    ANSIBLE_FILTER_PLUGINS: ../../filter_plugins
   inventory:
     links:
       group_vars: ../../group_vars
