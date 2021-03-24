@@ -49,11 +49,13 @@ springboot_gui_services:
     enabled: "{{ springboot_services_state.myconext }}"
     version: "{{ myconext_gui_version }}"
   - name: account
-    alias: myconext, account-gui
+    alias: account-gui
+    group: myconext
     enabled: "{{ springboot_services_state.account }}"
     version: "{{ account_gui_version }}"
   - name: eduid
-    alias: myconext, eduid-gui
+    alias: eduid-gui
+    group: myconext
     enabled: "{{ springboot_services_state.eduid }}"
     version: "{{ eduid_gui_version }}"
   - name: dashboard
