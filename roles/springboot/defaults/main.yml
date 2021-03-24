@@ -55,7 +55,8 @@ springboot_gui_services:
     version: "{{ account_gui_version }}"
   - name: eduid
     alias: eduid-gui
-    group: myconext
+#   eduid has moved to WP theme
+#   group: myconext
     enabled: "{{ springboot_services_state.eduid }}"
     version: "{{ eduid_gui_version }}"
   - name: dashboard
