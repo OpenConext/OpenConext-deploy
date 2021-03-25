@@ -2,6 +2,8 @@ logging:
   config: file://{{ myconext_dir }}/logback.xml
   level:
     org.springframework.data.mongodb: INFO
+    org.springframework.data.convert: INFO
+    org.springframework.security: INFO
 
 server:
   # The port to where this Spring Boot application listens to.
@@ -28,7 +30,7 @@ cron:
   service-name-resolver-fixed-rate-milliseconds: 3600000
   metadata-resolver-initial-delay-milliseconds: 1
   metadata-resolver-fixed-rate-milliseconds: 86_400_000
-  metadata-resolver-url: "https://metadata.surfconext.nl/idps-metadata.xml"
+  metadata-resolver-url: "https://metadata.{{ base_domain }}/idps-metadata.xml"
 
 metadata_sp_url: https://metadata.{{ base_domain }}/sp-names.json
 
@@ -45,25 +47,15 @@ sp_entity_metadata_url: {{ myconext.sp_entity_metadata_url }}
 onegini_entity_id: {{ myconext_onegini_entity_id }}
 guest_idp_entity_id: https://login.{{ myconext_base_domain }}
 my_conext_url: https://mijn.{{ myconext_base_domain }}
-migration_landing_page_url: https://login.{{ myconext_base_domain }}/migration
 domain: {{ myconext_base_domain }}
 mijn_eduid_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
 
-account_linking_context_class_ref:
-  linked_institution: https://eduid.nl/trust/linked-institution
-  validate_names: https://eduid.nl/trust/validate-names
-  affiliation_student: https://eduid.nl/trust/affiliation-student
-
-eduid_api:
-  oidcng_introspection_uri: https://connect.{{ base_domain }}/oidc/introspect
-  oidcng_client_id: {{ myconext.oidcng_rs_client_id }}
-  oidcng_secret: {{ myconext_oidcng_rs_client_secret }}
-
 feature:
   webauthn: {{ myconext.feature_webauthn }}
-  warning_educational_email_domain: True
+  warning_educational_email_domain: {{ myconext.feature_warning_educational_email_domain }}
+  connections: {{ myconext.feature_show_connections }}
   use_deny_allow_list:
-    allow_enabled: False
+    allow_enabled: {{ myconext.feature_allowlist }}
     allow_location: "classpath:/deny-allow/allowed.json"
 
 secure_cookie: true
@@ -94,7 +86,18 @@ oidc:
   idp-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
   sp-flow-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
   base-url: https://connect.{{ base_domain }}
-  expiry-duration-days: 90
+  expiry-duration-days-non-validated: 180
+  expiry-duration-days-validated: 2190
+
+account_linking_context_class_ref:
+  linked_institution: https://eduid.nl/trust/linked-institution
+  validate_names: https://eduid.nl/trust/validate-names
+  affiliation_student: https://eduid.nl/trust/affiliation-student
+
+eduid_api:
+  oidcng_introspection_uri: https://connect.{{ base_domain }}/oidc/introspect
+  oidcng_client_id: {{ myconext.rs_client_id }}
+  oidcng_secret: {{ myconext_rs_client_secret }}
 
 spring:
   data:

@@ -25,17 +25,21 @@
 - name: "Install Springboot GUI services"
   include_tasks: "springboot.yml"
   with_items: "{{ springboot_gui_services }}"
+  no_log: true
   loop_control:
     loop_var: springboot
   when:
     - springboot.name in _services_to_install or (springboot.alias is defined and springboot.alias in _services_to_install)
+                                              or (springboot.group is defined and springboot.group in _services_to_install)
     - springboot.enabled
 
 - name: "Install Springboot Server services"
   include_tasks: "springboot.yml"
   with_items: "{{ springboot_server_services }}"
+  no_log: true
   loop_control:
     loop_var: springboot
   when:
     - springboot.name in _services_to_install or (springboot.alias is defined and springboot.alias in _services_to_install)
+                                              or (springboot.group is defined and springboot.group in _services_to_install)
     - springboot.enabled
