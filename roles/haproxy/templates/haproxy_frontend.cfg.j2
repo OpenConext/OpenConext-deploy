@@ -32,7 +32,7 @@ frontend internet_ip
     acl has_same_site_flag res.fhdr(Set-Cookie) -m sub SameSite
     # Rewrite responses
     # Set HSTS on all outgoing responses
-    http-response set-header Strict-Transport-Security max-age=15768000
+    http-response set-header Strict-Transport-Security max-age=34214400
     # Add samesite=none to all outgoing cookies except unsupported browsers
     http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !no_same_site_uas !has_same_site_flag
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
@@ -89,7 +89,7 @@ frontend internet_restricted_ip
     acl has_same_site_flag res.fhdr(Set-Cookie) -m sub SameSite
     # Rewrite responses
     # Set HSTS on all outgoing responses
-    http-response set-header Strict-Transport-Security max-age=15768000
+    http-response set-header Strict-Transport-Security max-age=34214400
     # Add samesite=none to all outgoing cookies except unsupported browsers
     http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !no_same_site_uas !has_same_site_flag
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
