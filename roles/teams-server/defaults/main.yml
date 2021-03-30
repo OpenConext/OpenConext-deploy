@@ -22,6 +22,7 @@ teams_manage_provision_oidcrp_description_en: "OAuth client to access VOOT for g
 teams_manage_provision_oidcrp_grants: "client_credentials"
 teams_manage_provision_oidcrp_state: "prodaccepted"
 teams_manage_provision_oidcrp_scopes: "groups"
+teams_manage_provision_oidcrp_allowed_resource_servers: '{"name": "{{ voot.oidcng_checkToken_clientId }}"}'
 teams_manage_provision_samlsp_client_id: "https://teams.{{ base_domain }}/shibboleth"
 teams_manage_provision_samlsp_name_en: "{{ instance_name }} Teams"
 teams_manage_provision_samlsp_description_en: "{{ instance_name }} Teams application for group memberships"

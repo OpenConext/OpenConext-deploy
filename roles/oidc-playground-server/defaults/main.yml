@@ -9,7 +9,7 @@ oidcpg_manage_provision_oidcrp_name_en: "{{ instance_name }} OIDC Playground"
 oidcpg_manage_provision_oidcrp_description_en: "OIDC Playground application to test and make the OIDC flows visible"
 oidcpg_manage_provision_oidcrp_secret: "{{ oidc_playground.secret }}"
 oidcpg_manage_provision_oidcrp_redirecturls: "https://oidc-playground.{{ base_domain }}/redirect"
-oidcpg_manage_provision_oidcrp_grants: '"authorization_code", "implicit", "refresh_token", "client_credentials"'
+oidcpg_manage_provision_oidcrp_grants: 'authorization_code", "implicit", "refresh_token", "client_credentials'
 oidcpg_manage_provision_oidcrp_allowed_resource_servers: '{"name": "{{ oidc_playground.resource_server_id }}"}'
 oidcpg_manage_provision_oidcrp_is_public_client: True
 

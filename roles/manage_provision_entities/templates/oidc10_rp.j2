@@ -18,12 +18,10 @@
       "redirectUrls": [ "{{ manage_provision_oidcrp_redirecturls }}" ],
       "isPublicClient": "{{ manage_provision_oidcrp_is_public_client }}",
 {% endif %}
-      "grants": [ {{ manage_provision_oidcrp_grants }} ]
+      "grants": [ "{{ manage_provision_oidcrp_grants }}" ]
     },
     "allowedEntities": [],
-{% if manage_provision_oidcrp_grants != "client_credentials" %}
     "allowedResourceServers": [ {{ manage_provision_oidcrp_allowed_resource_servers }} ],
-{% endif %}
     "revisionnote": "Initial import"
   }
 }

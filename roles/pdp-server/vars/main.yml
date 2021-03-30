@@ -15,7 +15,7 @@ manage_provision_oidcrp_secret: "{{ pdp_client_secret }}"
 manage_provision_oidcrp_name_en: "{{ pdp_manage_provision_oidcrp_name_en }}"
 manage_provision_oidcrp_description_en: "{{ pdp_manage_provision_oidcrp_description_en }}"
 manage_provision_oidcrp_grants: "{{ pdp_manage_provision_oidcrp_grants }}"
-
+manage_provision_oidcrp_allowed_resource_servers: "{{ pdp_manage_provision_oidcrp_allowed_resource_servers }}"
 manage_provision_samlsp_client_id: "{{ pdp_manage_provision_samlsp_client_id }}"
 manage_provision_samlsp_name_en: "{{ pdp_manage_provision_samlsp_name_en }}"
 manage_provision_samlsp_description_en: "{{ pdp_manage_provision_samlsp_description_en }}"

@@ -23,11 +23,6 @@
     manage_search_path: saml20_idp
   when: entity_type == "saml20_idp"
 
-- name: template
-  template: 
-    src: "{{ entity_type }}.j2"
-    dest: /tmp/temp.json
-    
 - name: Check if the entity already exists
   uri:
     url: "https://manage.{{ base_domain }}/manage/api/internal/search/{{ manage_search_path }}"
