@@ -81,15 +81,6 @@ springboot_server_services:
     type: server
     config:
       "{{ oidcng }}"
-  - name: teams
-    enabled: "{{ springboot_services_state.teams }}"
-    version: "{{ teams_server_version }}"
-    min_heapsize: '256m'
-    max_heapsize: '256m'
-    type: server
-    port: 9197
-    config:
-      "{{ teams }}"
   - name: voot
     enabled: "{{ springboot_services_state.voot }}"
     version: "{{ voot_version }}"
@@ -101,6 +92,15 @@ springboot_server_services:
     type: server
     config:
       "{{ voot }}"
+  - name: teams
+    enabled: "{{ springboot_services_state.teams }}"
+    version: "{{ teams_server_version }}"
+    min_heapsize: '256m'
+    max_heapsize: '256m'
+    type: server
+    port: 9197
+    config:
+      "{{ teams }}"
   - name: pdp
     enabled: "{{ springboot_services_state.pdp }}"
     version: "{{ pdp_server_version }}"

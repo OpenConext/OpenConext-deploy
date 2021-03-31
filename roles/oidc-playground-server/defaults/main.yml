@@ -9,15 +9,12 @@ oidcpg_manage_provision_oidcrp_name_en: "{{ instance_name }} OIDC Playground"
 oidcpg_manage_provision_oidcrp_description_en: "OIDC Playground application to test and make the OIDC flows visible"
 oidcpg_manage_provision_oidcrp_secret: "{{ oidc_playground.secret }}"
 oidcpg_manage_provision_oidcrp_redirecturls: "https://oidc-playground.{{ base_domain }}/redirect"
-oidcpg_manage_provision_oidcrp_scopes: '"openid","groups"'
-oidcpg_manage_provision_oidcrp_grants: '"authorization_code", "implicit", "refresh_token", "client_credentials"'
+oidcpg_manage_provision_oidcrp_grants: 'authorization_code", "implicit", "refresh_token", "client_credentials'
 oidcpg_manage_provision_oidcrp_allowed_resource_servers: '{"name": "{{ oidc_playground.resource_server_id }}"}'
 oidcpg_manage_provision_oidcrp_is_public_client: True
-oidcpg_manage_provision_oidcrp_is_resource_server: True
 
-oidcpg_manage_provision_cc_name_en: "{{ instance_name }} Playground client Resource Server"
-oidcpg_manage_provision_cc_description_en: "{{ instance_name }} Playground client Resource Server"
-oidcpg_manage_provision_cc_client_id: "{{ oidc_playground.resource_server_id }}"
-oidcpg_manage_provision_cc_rp_secret: "{{ oidc_playground.resource_server_secret }}"
-oidcpg_manage_provision_cc_scopes: "openid,groups"
-oidcpg_manage_provision_cc_is_resource_server: True
+oidcpg_manage_provision_oauth_rs_name_en: "{{ instance_name }} Playground client Resource Server"
+oidcpg_manage_provision_oauth_rs_description_en: "{{ instance_name }} Playground client Resource Server"
+oidcpg_manage_provision_oauth_rs_client_id: "{{ oidc_playground.resource_server_id }}"
+oidcpg_manage_provision_oauth_rs_rp_secret: "{{ oidc_playground.resource_server_secret }}"
+oidcpg_manage_provision_oauth_rs_scopes: "openid,groups"

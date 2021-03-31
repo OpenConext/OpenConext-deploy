@@ -14,11 +14,11 @@
       "description:en": "{{ manage_provision_oidcrp_description_en }}",
       "OrganizationName:en": "{{ instance_name }}",
       "secret": "{{ manage_provision_oidcrp_secret }}",
+{% if manage_provision_oidcrp_grants != "client_credentials" %}
       "redirectUrls": [ "{{ manage_provision_oidcrp_redirecturls }}" ],
-      "scopes": [ {{ manage_provision_oidcrp_scopes }} ],
-      "grants": [ {{ manage_provision_oidcrp_grants }} ],
-      "isResourceServer": {{ manage_provision_oidcrp_is_resource_server }},
-      "isPublicClient": {{ manage_provision_oidcrp_is_public_client }}
+      "isPublicClient": "{{ manage_provision_oidcrp_is_public_client }}",
+{% endif %}
+      "grants": [ "{{ manage_provision_oidcrp_grants }}" ]
     },
     "allowedEntities": [],
     "allowedResourceServers": [ {{ manage_provision_oidcrp_allowed_resource_servers }} ],
