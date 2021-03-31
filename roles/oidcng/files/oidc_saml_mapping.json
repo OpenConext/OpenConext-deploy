@@ -36,6 +36,11 @@
     "multiValue": false
   },
   {
+    "saml": "urn:mace:dir:attribute-def:ou",
+    "oidc": "ou",
+    "multiValue": true
+  },
+  {
     "saml": "urn:mace:terena.org:attribute-def:schacHomeOrganization",
     "oidc": "schac_home_organization",
     "multiValue": false
