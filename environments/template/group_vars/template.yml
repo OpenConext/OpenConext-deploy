@@ -708,13 +708,6 @@ java_servers:
 iptables_enable: false
 dashboard_install: false
 
-tls_https:
-  - name: star
-    key_name: "star.{{ base_domain }}.key"
-    crt_name: "star.{{ base_domain }}.pem"
-    bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
-    key_content: "{{ https_star_private_key }}"
-
 springboot_services_state:
   manage: true
   teams: true
