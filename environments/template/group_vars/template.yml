@@ -714,3 +714,19 @@ tls_https:
     crt_name: "star.{{ base_domain }}.pem"
     bundle_name: "star.{{ base_domain }}_ca_bundle.pem"
     key_content: "{{ https_star_private_key }}"
+
+springboot_services_state:
+  manage: true
+  teams: true
+  pdp: true
+  attribute_aggregation: true
+  oidc_playground: true
+  myconext: true
+  account: true
+  eduid: true
+  oidcng: true
+  voot: true
+  mujina_sp: true
+  mujina_idp: true
+  dashboard: false
+
