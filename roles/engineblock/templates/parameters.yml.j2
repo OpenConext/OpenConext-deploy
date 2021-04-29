@@ -179,6 +179,10 @@ parameters:
     wayf.display_default_idp_banner_on_wayf: true
     wayf.default_idp_entity_id: "https://login.{{ myconext_base_domain }}"
 
+    ## Toggle display & content of global site notice
+    global.site_notice.show: false
+    global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'
+
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: {{ engine_time_frame_for_authentication_loop_in_seconds | int }}
     maximum_authentication_procedures_allowed: {{ engine_maximum_authentication_procedures_allowed | int }}
@@ -197,6 +201,13 @@ parameters:
             address: {{ engine_idp_debugging_email_address }}
             name: '{{ engine_idp_debugging_to_name }}'
         subject: '{{ engine_idp_debugging_subject | replace("%","%%") }}'
+
+    ## Swiftmailer configuration
+    mailer_transport: 'smtp'
+    mailer_host: 'localhost'
+    mailer_port: '25'
+    mailer_user: ''
+    mailer_password: ''
 
     ##########################################################################################
     ## FEATURE SETTINGS
