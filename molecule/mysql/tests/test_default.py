@@ -10,7 +10,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 @pytest.mark.parametrize("installed_packages", [
     ("MariaDB-server"),
     ("MariaDB-client"),
-    ("MySQL-python"),
+    ("python2-PyMySQL"),
     ("galera"),
 ])
 def test_packages_installed(host, installed_packages):
