@@ -61,5 +61,9 @@
 -A INPUT -d ff02::12 -p vrrp -j ACCEPT
 {% endif %}
 
+-A INPUT -j REJECT --reject-with icmp6-adm-prohibited
+-A FORWARD -j REJECT --reject-with icmp6-adm-prohibited
+
+
 COMMIT
 # A newline after COMMIT is required
