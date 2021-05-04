@@ -11,12 +11,11 @@
     src: "mariadb.repo.j2"
     dest: "/etc/yum.repos.d/mariadb.repo"
 
-- name: Install MariaDB, Galera, rsync, MySQL-python
+- name: Install Galera, rsync
   yum:
     name:
       - galera
       - rsync         # For galera sync
-      - MySQL-python  # Required for using the Ansible mysql_* modules
     state: installed
 
 - name: Create directory to keep Galera key material

@@ -10,7 +10,7 @@
     name:
       - MariaDB-server
       - MariaDB-client
-      - MySQL-python
+      - python2-PyMySQL
     state: present
   tags:
     - mysql

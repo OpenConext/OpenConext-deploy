@@ -1,7 +1,7 @@
 ---
-- name: Install mysql python
+- name: Install python2-PyMySQL
   yum:
-    name: MySQL-python
+    name: python2-PyMySQL
     state: present
 
 - name: Create directory to contain the MariaDB ODBC driver

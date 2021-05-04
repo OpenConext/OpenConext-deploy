@@ -23,13 +23,13 @@
     name: "{{ percona_url_rpm }}"
     state: present
 
-- name: Install MariaDB, Galera, rsync, MySQL-python
+- name: Install MariaDB, Galera, rsync, python2-PyMySQL
   yum:
     name:
       - MariaDB-server
       - MariaDB-client
       - galera
-      - MySQL-python  # Required for using the Ansible mysql_* modules
+      - python2-PyMySQL  # Required for using the Ansible mysql_* modules
       - socat
       - percona-xtrabackup-24
     state: present
