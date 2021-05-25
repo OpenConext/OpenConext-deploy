@@ -7,8 +7,8 @@ Listen {{ apache_app_listen_address.voot }}:{{ loadbalancing.voot.port }}
     # General setup for the virtual host, inherited from global configuration
     ServerName https://voot.{{ base_domain }}
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-VOOT'" 
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-VOOT'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-VOOT'" 
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-VOOT'" combined
 
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
 

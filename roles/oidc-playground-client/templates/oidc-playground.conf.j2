@@ -7,8 +7,8 @@ Listen {{ apache_app_listen_address.oidc_playground }}:{{ loadbalancing.oidc_pla
     # General setup for the virtual host, inherited from global configuration
     ServerName https://oidc-playground.{{ base_domain }}
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Oidc-Playground'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Oidc-Playground'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-Oidc-Playground'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-Oidc-Playground'" combined
 
     RewriteEngine on
 

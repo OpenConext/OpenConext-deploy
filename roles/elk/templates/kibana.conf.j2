@@ -41,6 +41,6 @@ Listen {{ apache_app_listen_address.kibana }}:{{ loadbalancing.kibana.port }}
         Header always set X-Xss-Protection "1; mode=block"
         Header set Referrer-Policy "same-origin"
 
-        ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Kibana'"
-        CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Kibana'" combined
+        ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-Kibana'"
+        CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-Kibana'" combined
 </VirtualHost>

@@ -9,8 +9,8 @@ Listen {{ apache_app_listen_address.welcome }}:{{ loadbalancing.welcome.port }}
 
     DocumentRoot /var/www/welcome
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Welcome'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Welcome'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-Welcome'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-Welcome'" combined
     
     {% if haproxy_backend_tls %}
     SSLEngine on
