@@ -10,8 +10,8 @@ Listen {{ apache_app_listen_address.mujina_sp }}:{{ loadbalancing.mujina_sp.port
 
     UseCanonicalName On
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-mujina-sp'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-mujina-sp'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-mujina-sp'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-mujina-sp'" combined
 
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0

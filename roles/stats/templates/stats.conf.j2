@@ -9,8 +9,8 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
     ServerAdmin {{ apache_server_admin }}
 
     DocumentRoot {{ stats_api_env_dir }}/www/
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-STATS'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-STATS'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-STATS'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-STATS'" combined
 
     RewriteEngine on
 

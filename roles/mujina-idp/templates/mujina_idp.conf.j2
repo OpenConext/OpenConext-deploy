@@ -8,8 +8,8 @@ Listen {{ apache_app_listen_address.mujina_idp }}:{{ loadbalancing.mujina_idp.po
 
     UseCanonicalName On
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-mujina-idp'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-mujina-idp'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-mujina-idp'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-mujina-idp'" combined
 
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0

@@ -7,8 +7,8 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     # General setup for the virtual host, inherited from global configuration
     ServerName https://manage.{{ base_domain }}
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-Manage'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-Manage'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-Manage'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-Manage'" combined
 
     RewriteEngine on
 

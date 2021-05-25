@@ -7,8 +7,8 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
     # General setup for the virtual host, inherited from global configuration
     ServerName https://mijn.{{ myconext_base_domain }}
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-myconext'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-myconext'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-myconext'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-myconext'" combined
 
     RewriteEngine on
 

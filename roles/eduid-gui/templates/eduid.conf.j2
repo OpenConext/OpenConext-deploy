@@ -7,8 +7,8 @@ Listen {{ apache_app_listen_address.eduid }}:{{ loadbalancing.eduid.port }}
     # General setup for the virtual host, inherited from global configuration
     ServerName https://{{ myconext_base_domain }}
 
-    ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-eduid'"
-    CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-eduid'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-eduid'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-eduid'" combined
 
     RewriteEngine on
 
