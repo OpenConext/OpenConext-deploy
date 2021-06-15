@@ -159,6 +159,11 @@ on a separate branch.
 
 These files are licensed under version 2.0 of the Apache License, as described in the file [LICENSE](LICENSE).
 
+# Support
+
+* You can ask questions on the [OpenConext mailing list](https://openconext.org/get-involved/mailing-lists/) 
+* Or you can join our [Slack Workspace](https://edu.nl/ocslk)
+
 # VM
 
 To provision the VM use the following (password is vagrant and sudo password is <enter>
