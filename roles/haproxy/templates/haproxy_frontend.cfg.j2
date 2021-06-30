@@ -28,7 +28,7 @@ frontend internet_ip
     http-request set-var(txn.useragent) req.fhdr(User-Agent)
     # The ACL below makes sure only supported http methods are allowed
     acl valid_method method {{ haproxy_supported_http_methods }}
-    http-request deny if !valid_method
+    http-request deny deny_status 405 if !valid_method
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
     acl no_same_site_uas var(txn.useragent) -m reg -f /etc/haproxy/maps/nosamesitebrowsers.lst
@@ -88,7 +88,7 @@ frontend internet_restricted_ip
     http-request set-var(txn.useragent) req.fhdr(User-Agent)
     # The ACL below makes sure only supported http methods are allowed
     acl valid_method method {{ haproxy_supported_http_methods }}
-    http-request deny if !valid_method
+    http-request deny deny_status 405 if !valid_method
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
     acl no_same_site_uas var(txn.useragent) -m reg -f /etc/haproxy/maps/nosamesitebrowsers.lst
