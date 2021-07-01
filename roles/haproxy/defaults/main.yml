@@ -2,3 +2,4 @@ tls_backend_ca: /etc/pki/haproxy/backend.{{ base_domain }}.pem
 haproxy_cookie_max_idle: 3600
 haproxy_metricbeat: False
 haproxy_supported_http_methods: "GET HEAD OPTIONS POST PUT DELETE"
+haproxy_max_request_rate: 1000

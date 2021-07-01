@@ -52,10 +52,12 @@ frontend local_ip
     option httplog
     capture request header User-agent len 256
     capture request header X-TLS-Client len 256
-    # The following lines are to log the request rate per 10s
-    stick-table type ip size 1m expire 10s store http_req_rate(10s)
-    http-request track-sc0 src
+    # Measure and log the request rate per 10s
+    http-request track-sc0 src table st_httpreqs_per_ip
     http-request capture sc_http_req_rate(0) len 4
+    # Create an ACL when the request rate exceeds {{ haproxy_max_request_rate }} per 10s and deny them
+    acl exceeds_max_request_rate_per_ip sc_http_req_rate(0) gt {{ haproxy_max_request_rate }}
+    http-request deny deny_status 429 if exceeds_max_request_rate_per_ip
     # Deny the request when no valid host header is used
     http-request deny if ! valid_vhost
     http-request redirect location %[req.hdr(host),lower,map(/etc/haproxy/maps/redirects.map)] if { req.hdr(host),lower,map_str(/etc/haproxy/maps/redirects.map) -m found }
@@ -112,10 +114,12 @@ frontend localhost_restricted
     option httplog
     capture request header User-agent len 256
     capture request header X-TLS-Client len 256
-    # The following lines are to log the request rate per 10s
-    stick-table type ip size 1m expire 10s store http_req_rate(10s)
-    http-request track-sc0 src
+    # Measure and log the request rate per 10s
+    http-request track-sc0 src table st_httpreqs_per_ip
     http-request capture sc_http_req_rate(0) len 4
+    # Create an ACL when the request rate exceeds {{ haproxy_max_request_rate }} per 10s and deny them
+    acl exceeds_max_request_rate_per_ip sc_http_req_rate(0) gt {{ haproxy_max_request_rate }}
+    http-request deny deny_status 429 if exceeds_max_request_rate_per_ip
     # Deny the request when no valid host header is used
     http-request deny if ! valid_vhost
 
