@@ -58,6 +58,9 @@ frontend local_ip
     # Create an ACL when the request rate exceeds {{ haproxy_max_request_rate }} per 10s and deny them
     acl exceeds_max_request_rate_per_ip sc_http_req_rate(0) gt {{ haproxy_max_request_rate }}
     http-request deny deny_status 429 if exceeds_max_request_rate_per_ip
+    # Measure and log the request rate per path and ip 
+    http-request track-sc1 base32+src table st_httpreqs_per_ip_and_path
+    http-request capture sc_http_req_rate(1) len 4
     # Deny the request when no valid host header is used
     http-request deny if ! valid_vhost
     http-request redirect location %[req.hdr(host),lower,map(/etc/haproxy/maps/redirects.map)] if { req.hdr(host),lower,map_str(/etc/haproxy/maps/redirects.map) -m found }
@@ -120,6 +123,9 @@ frontend localhost_restricted
     # Create an ACL when the request rate exceeds {{ haproxy_max_request_rate }} per 10s and deny them
     acl exceeds_max_request_rate_per_ip sc_http_req_rate(0) gt {{ haproxy_max_request_rate }}
     http-request deny deny_status 429 if exceeds_max_request_rate_per_ip
+    # Measure and log the request rate per path and ip 
+    http-request track-sc1 base32+src table st_httpreqs_per_ip_and_path
+    http-request capture sc_http_req_rate(1) len 4
     # Deny the request when no valid host header is used
     http-request deny if ! valid_vhost
 
