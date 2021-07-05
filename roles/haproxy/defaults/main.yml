@@ -3,3 +3,6 @@ haproxy_cookie_max_idle: 3600
 haproxy_metricbeat: False
 haproxy_supported_http_methods: "GET HEAD OPTIONS POST PUT DELETE"
 haproxy_max_request_rate: 1000
+# You can create an allowlist of ips that are allowed to go over the configured ratelimit
+haproxy_allowlistips:
+  - ''
