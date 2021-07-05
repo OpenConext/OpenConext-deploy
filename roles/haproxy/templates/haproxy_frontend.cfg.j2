@@ -26,6 +26,9 @@ frontend internet_ip
     capture request header User-agent len 256
     # Put the useragent header in a variable, shared between request and response. 
     http-request set-var(txn.useragent) req.fhdr(User-Agent)
+    # The ACL below makes sure only supported http methods are allowed
+    acl valid_method method {{ haproxy_supported_http_methods }}
+    http-request deny deny_status 405 if !valid_method
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
     acl no_same_site_uas var(txn.useragent) -m reg -f /etc/haproxy/maps/nosamesitebrowsers.lst
@@ -83,6 +86,9 @@ frontend internet_restricted_ip
     capture request header User-agent len 256 
     # Put the useragent header in a variable, shared between request and response. 
     http-request set-var(txn.useragent) req.fhdr(User-Agent)
+    # The ACL below makes sure only supported http methods are allowed
+    acl valid_method method {{ haproxy_supported_http_methods }}
+    http-request deny deny_status 405 if !valid_method
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
     acl no_same_site_uas var(txn.useragent) -m reg -f /etc/haproxy/maps/nosamesitebrowsers.lst

@@ -1,4 +1,6 @@
 tls_backend_ca: /etc/pki/haproxy/backend.{{ base_domain }}.pem
-haproxy_removal_applications: []
 haproxy_cookie_max_idle: 3600
 haproxy_metricbeat: False
+# The default http methods whitelist is meant to disable methods like TRACE or DEBUG.
+# OPTIONS is mainly used for CORS requests in OIDC-NG (like SPA apps)
+haproxy_supported_http_methods: "GET HEAD OPTIONS POST PUT DELETE"
