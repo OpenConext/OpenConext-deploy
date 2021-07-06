@@ -46,6 +46,8 @@
   copy:
     src: sysconfig_haproxy 
     dest: /etc/sysconfig/haproxy
+  notify:
+    - "restart haproxy"
 
 - name: install OCSP update tool
   copy:
@@ -152,6 +154,7 @@
     - haproxy_global.cfg
     - haproxy_frontend.cfg
     - haproxy_backend.cfg
+    - haproxy_stick_table_backend.cfg
   notify:
     - "reload haproxy"
 
@@ -165,6 +168,7 @@
   with_items:
     - validvhostsrestricted.acl
     - validvhostsunrestricted.acl
+    - allowedips.acl
   notify:
     - "reload haproxy"
 
