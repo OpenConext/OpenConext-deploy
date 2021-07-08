@@ -96,13 +96,47 @@ haproxy_allowlistips:
 
 You can also do this on a running loadbalancer by using entering this command:
 ```
-echo "add acl /etc/haproxy/acls/allowedips 1.1.1.1" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
-echo "add acl /etc/haproxy/acls/allowedips 2.2.2.2" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+echo "add acl /etc/haproxy/acls/allowedips.acl 1.1.1.1" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+echo "add acl /etc/haproxy/acls/allowedips.acl 2.2.2.2" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
 ```
 Please note that such a change does not survive a restart of haproxy. Adding them to the acl and deploying haproxy makes it permanent. 
 
+Removing an ip address is done using the command del acl:
+```
+echo "del acl /etc/haproxy/acls/allowedips.acl 1.1.1.1" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+echo "del acl /etc/haproxy/acls/allowedips.acl 2.2.2.2" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+```
+If you want to view the current list, you can enter:
+```
+echo "show acl /etc/haproxy/acls/allowedips.acl" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+```
 
+## Blocking IP addresses
+A blocklist ACL is present to block IP addresses. This can be usefull to quickly block abusers.
+If you want to block IP addresses (either in cidr notation, or single ip addresses), you can add them to your configuration under ```haproxy_blocklistips```. Suppose you want to put the ip address 1.1.1.1 and the ip addres 2.2.2.2 to the blocklist, you can do so by putting the following in your environment:
 
+```
+haproxy_blocklistips:
+  - 1.1.1.1
+  - 2.2.2.2
+```
+
+You can also do this on a running loadbalancer by using entering this command:
+```
+echo "add acl /etc/haproxy/acls/blockedips.acl 1.1.1.1" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+echo "add acl /etc/haproxy/acls/blockedips.acl 2.2.2.2" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+```
+Please note that such a change does not survive a restart of haproxy. Adding them to the acl and deploying haproxy makes it permanent. 
+Removing an ip address is done using the command del acl:
+```
+echo "del acl /etc/haproxy/acls/blockedips.acl 1.1.1.1" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+echo "del acl /etc/haproxy/acls/blockedips.acl 2.2.2.2" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+```
+
+If you want to view the current list, you can enter:
+```
+echo "show acl /etc/haproxy/acls/blockedips.acl" | socat unix-connect:/var/lib/haproxy/haproxy.stats stdio
+```
 
 
 

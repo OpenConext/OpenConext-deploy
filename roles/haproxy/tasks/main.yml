@@ -169,6 +169,7 @@
     - validvhostsrestricted.acl
     - validvhostsunrestricted.acl
     - allowedips.acl
+    - blockedips.acl
   notify:
     - "reload haproxy"
 
