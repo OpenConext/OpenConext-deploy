@@ -8,3 +8,6 @@ haproxy_max_request_rate: 1000
 # You can create an allowlist of ips that are allowed to go over the configured ratelimit
 haproxy_allowlistips:
   - ''
+# You can create a blocklist of ips that are blocked. 
+haproxy_blocklistips:
+  - ''
