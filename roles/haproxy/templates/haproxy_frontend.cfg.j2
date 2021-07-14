@@ -6,8 +6,8 @@
 # -------------------------------------------------------------------
 frontend internet_ip
 
-    bind {{ haproxy_sni_ip.ipv4 }}:443 ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(False) %} no-tlsv10 no-tlsv11 {% endif %} alpn h2,http/1.1 transparent 
-    bind {{ haproxy_sni_ip.ipv6 }}:443 ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(False) %} no-tlsv10 no-tlsv11 {% endif %} alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip.ipv4 }}:443 ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(True) %} no-tlsv10 no-tlsv11 {% endif %} alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip.ipv6 }}:443 ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(True) %} no-tlsv10 no-tlsv11 {% endif %} alpn h2,http/1.1 transparent 
     bind {{ haproxy_sni_ip.ipv4 }}:80 transparent
     bind {{ haproxy_sni_ip.ipv6 }}:80 transparent
     # Logging is done in the local_ip backend, otherwise all requests are logged twice
