@@ -115,11 +115,6 @@
     src: "login.definition.json.j2"
     dest: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/dictionaries/login.definition.json"
 
-- name: Copy DIY IdP logo
-  copy:
-    src: "keyserver.png"
-    dest: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/www/"
-
 - name: Copy the database dump file
   copy:
     src: diyidp.sql
