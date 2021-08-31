@@ -155,6 +155,8 @@ teams:
   db_host: "{{ mysql_host }}"
   group_name_context: "urn:collab:group:{{ base_domain }}:"
   voot_api_user: "voot"
+  spdashboard_api_user: "spdashboard"
+  spdashboard_person_urn: "urn:collab:person:surfnet.nl:sp-dashboard-C133A36F-CFCA-4F3D-87CE-7ECE29773FE0"
   product_name: "OpenConext Teams"
   default_stem_name: "demo:openconext:org"
   super_admins_team_urns:

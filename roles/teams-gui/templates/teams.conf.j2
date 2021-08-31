@@ -58,6 +58,12 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
       satisfy any
     </Location>
 
+    # The SP dashboard API is secured with basic auth
+    <Location ~ "/spdashboard/">
+      allow from all
+      satisfy any
+    </Location>
+
     # The internal lifecycle API is secured with basic auth
     <Location ~ "/deprovision/">
       allow from all
