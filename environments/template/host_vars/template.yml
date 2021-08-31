@@ -12,7 +12,6 @@ apache_app_listen_address:
   teams: 127.0.0.1
   voot: 127.0.0.1
   pdp: 127.0.0.1
-  oidc: 127.0.0.1
   oidcng: 127.0.0.1
   aa: 127.0.0.1
   manage: 127.0.0.1
