@@ -103,6 +103,7 @@
     - role: engineblock
       when:
         - inventory_hostname not in groups['lifecycle']
+        - profile_docker|bool == false
       tags: ['core', 'app_php', 'eb']
     - role: lifecycle
       when:
@@ -161,5 +162,12 @@
   handlers:
     - include: roles/httpd/handlers/main.yml
 
-- import_playbook: "{{ environment_dir }}/playbook.yml"
+- hosts: docker
+  become: true
+  roles: 
+    - role: profile
+      tags: ['profile']
+      when:
+        - profile_docker|bool 
 
+- import_playbook: "{{ environment_dir }}/playbook.yml"

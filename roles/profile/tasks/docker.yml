@@ -1,0 +1,55 @@
+---
+- name: Create directory to keep configfile
+  file:
+    dest: "/opt/openconext/profile"
+    state: directory
+    owner: root
+    group: root
+    mode: 0770
+
+- name: Place the configfile
+  template:
+    src: parameters.yml.j2
+    dest: /opt/openconext/profile/parameters.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy default engineblock certificate to correct location
+  copy:
+    src: "{{ inventory_dir }}/files/certs/{{ engine_keys.default.publicKey }}" 
+    dest: "/opt/openconext/profile/{{ engine_keys.default.publicKey }}"
+
+- name: Create the Profile container network
+  docker_network:
+    name: "profile"
+
+- name: Create the web container
+  docker_container:
+    name: profile_web
+    image: ghcr.io/openconext/openconext-profile/profile_web:{{ profile_docker_version }}
+    published_ports: 0.0.0.0:81:80
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "profile"
+
+- name: Create the php-fpm container
+  docker_container:
+    name: profile_php-fpm
+    image: ghcr.io/openconext/openconext-profile/profile_php-fpm:{{ profile_docker_version }}
+    pull: true
+    restart_policy: "always"
+    mounts:
+      - source: /opt/openconext/profile/parameters.yml
+        target: /var/www/html/app/config/parameters.yml
+        type: bind
+      - source: "/opt/openconext/profile/{{ engine_keys.default.publicKey }}"
+        target: "/etc/openconext/{{ engine_keys.default.publicKey }}"
+        type: bind
+      - source: /dev/log
+        target: /dev/log
+        type: bind
+    networks:
+      - name: "profile"
+

@@ -64,3 +64,6 @@ profile_manage_provision_samlsp_sp_cert: ""
 profile_manage_provision_samlsp_trusted_proxy: false
 profile_manage_provision_samlsp_sign: false
 
+# You can use docker to run profile
+profile_docker: false
+
