@@ -4,3 +4,4 @@
   gather_facts: no
   roles:
     - { role: haproxy_mgnt,        tags: ['haproxy_mgnt'] }
+    - { role: haproxy_acls,        tags: ['haproxy_acls'] }
