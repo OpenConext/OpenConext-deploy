@@ -35,4 +35,5 @@ spdashboard_playground_uri_test: https://authz-playground.dev.support.surfconext
 spdashboard_playground_uri_prod: https://authz-playground.dev.support.surfconext.nl/redirect
 spdashboard_oidcng_playground_uri_test: https://oidc-playground.dev.support.surfconext.nl/redirect
 spdashboard_oidcng_playground_uri_prod: https://oidc-playground.dev.support.surfconext.nl/redirect
-
+spdashboard_show_global_notice: False
+spdashboard_global_notice_date: "01-01-2020"
