@@ -53,3 +53,8 @@ parameters:
     jira_test_mode_storage_path: {{ spdashboard_test_mode_path }}
     playground_uri_test: {{ spdashboard_playground_uri_test }}
     playground_uri_prod: {{ spdashboard_playground_uri_prod }}
+    ## Toggle display & content of global site notice.  Use a date to ensure that multiple notification in short order do not interfere with each other (aka: the user can close the first, and still see the second).
+    global.site_notice.show: {{ spdashboard_show_global_notice }}
+    global.site_notice.date: {{ spdashboard_global_notice_date }}
+    global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'
+
