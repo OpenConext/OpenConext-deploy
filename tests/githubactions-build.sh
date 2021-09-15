@@ -77,7 +77,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-./provision github $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=teams,manage,mujina-sp,mujina-idp -e @tests/github.yml -t core
+./provision github $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=teams,voot,oidcng,manage,mujina-sp,mujina-idp -e @tests/github.yml -t core
 
 # Make the image a bit smaller
 docker exec ansible-test-ga systemctl stop mysql mongod
