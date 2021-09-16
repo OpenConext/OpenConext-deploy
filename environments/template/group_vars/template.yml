@@ -99,10 +99,11 @@ springboot_gui_services:
   - name: dashboard
     enabled: "{{ dashboard_install }}"
     version: "{{ dashboard_gui_version | default('SNAPSHOT') }}"
-  - name: oidc-playground-client
+  - name: oidc-playground
     enabled: true
     version: "{{ oidc_playground_client_version }}"
     role: oidc-playground-client
+    artifactid: oidc-playground-client
   - name: myconext
     enabled: true
     version: "{{ myconext_gui_version }}"
