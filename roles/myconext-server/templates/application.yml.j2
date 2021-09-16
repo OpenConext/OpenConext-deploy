@@ -33,7 +33,10 @@ cron:
   metadata-resolver-fixed-rate-milliseconds: 86_400_000
   metadata-resolver-url: "https://metadata.{{ base_domain }}/idps-metadata.xml"
 
-metadata_sp_url: https://metadata.{{ base_domain }}/sp-names.json
+manage:
+  username: myconext
+  password: "{{ manage_myconext_secret }}"
+  base_url: "https://manage.{{ base_domain }}"
 
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}

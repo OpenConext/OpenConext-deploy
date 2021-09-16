@@ -462,6 +462,11 @@ manage:
         scopes: ["READ"]
       }
     - {
+        name: "myconext",
+        password: "{{ manage_myconext_secret }}",
+        scopes: ["READ"]
+      }
+    - {
         name: "pdp",
         password: "{{ manage_pdp_secret }}",
         scopes: ["READ"]
