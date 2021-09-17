@@ -11,13 +11,13 @@
         <Library path="odbc-store.so" fatal="true"/>
     </Extensions>
     </OutOfProcess>
-    <StorageService type="ODBC" id="db" cleanupInterval="900" isolationLevel="REPEATABLE_READ">
+    <StorageService type="ODBC" id="db" cleanupInterval="{{ shibboleth_db_cleanup_interval }}" isolationLevel="REPEATABLE_READ">
       <ConnectionString>
       DRIVER=MariaDB;SERVER={{ shib.db_host }};USER=shibrw;PASSWORD={{ mysql_passwords.shibboleth }};DATABASE=shibboleth
       </ConnectionString>
     </StorageService>
     <SessionCache type="StorageService" StorageService="db" cacheAssertions="false"
-              cacheTimeout="3600" inprocTimeout="900" cleanupInterval="900"/>
+              cacheTimeout="3600" inprocTimeout="900" cleanupInterval="{{ shibboleth_db_cleanup_interval }}"/>
     <ReplayCache StorageService="db"/>
     <ArtifactMap StorageService="db" artifactTTL="180"/>
     {% endif %}
