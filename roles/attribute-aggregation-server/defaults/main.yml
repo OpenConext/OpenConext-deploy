@@ -10,8 +10,6 @@ aa_cronjobmaster: true
 attribute_aggregator_api_lifecycle_username: attribute_aggregator_api_lifecycle_user
 aa_flyway_schema_version_table_name: schema_version
 aa_oauth2_token_url: "https://connect.{{ base_domain }}/oidc/token"
-aa_min_heapsize: "256m"
-aa_max_heapsize: "256m"
 aa_manage_provision_oidcrp_name_en: "AA client credentials client for VOOT access"
 aa_manage_provision_oidcrp_description_en: "OAuth client to access VOOT for group information"
 aa_manage_provision_oidcrp_grants: "client_credentials"

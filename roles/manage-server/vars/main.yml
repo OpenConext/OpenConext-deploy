@@ -7,8 +7,6 @@ springapp_user: manage
 springapp_service_name: manage
 springapp_jar: "{{ manage_jar }}"
 springapp_tcpport: "{{ manage_springapp_tcpport }}"
-springapp_min_heapsize: "{{ manage_min_heapsize }}"
-springapp_max_heapsize: "{{ manage_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
 manage_provision_samlsp_client_id: "{{ manage_manage_provision_samlsp_client_id }}"
 manage_provision_samlsp_name_en: "{{ manage_manage_provision_samlsp_name_en }}"

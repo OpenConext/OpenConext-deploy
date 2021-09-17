@@ -15,8 +15,6 @@ teams_api_lifecycle_username: teams_api_lifecycle_user
 teams_cron_session_cleanup_expression: 0 * * * * *
 teams_oauth2_token_url: "https://connect.{{ base_domain }}/oidc/token"
 teams_authz_client_id: "teams.{{ base_domain }}"
-teams_min_heapsize: "256m"
-teams_max_heapsize: "256m"
 teams_manage_provision_oidcrp_name_en: "Teams client credentials client for VOOT access"
 teams_manage_provision_oidcrp_description_en: "OAuth client to access VOOT for group information"
 teams_manage_provision_oidcrp_grants: "client_credentials"

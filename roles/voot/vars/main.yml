@@ -7,8 +7,6 @@ springapp_user: voot
 springapp_service_name: voot
 springapp_jar: "{{ voot_service_jar }}"
 springapp_tcpport: 9191
-springapp_min_heapsize: "{{ voot_min_heapsize }}"
-springapp_max_heapsize: "{{ voot_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
 manage_provision_oauth_rs_client_id: "{{ voot_manage_provision_oauth_rs_client_id }}"
 manage_provision_oauth_rs_name_en: "{{ voot_manage_provision_oauth_rs_name_en }}"

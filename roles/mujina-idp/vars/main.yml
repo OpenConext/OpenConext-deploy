@@ -7,8 +7,6 @@ springapp_user: mujina-idp
 springapp_service_name: mujina-idp
 springapp_jar: "{{ mujina_idp_jar }}"
 springapp_tcpport: 9390
-springapp_min_heapsize: "{{ mujina_idp_min_heapsize }}"
-springapp_max_heapsize: "{{ mujina_idp_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
 manage_provision_samlidp_entity_id: "{{ mujina_manage_provision_samlidp_entity_id }}"
 manage_provision_samlidp_description_en: "{{ mujina_manage_provision_samlidp_description_en }}"

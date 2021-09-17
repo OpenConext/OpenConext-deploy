@@ -9,8 +9,6 @@ oidcng_saml_sp_entityid: https://connect.{{ base_domain }}
 oidcng_idp_metadata_url: https://engine.{{ base_domain }}/authentication/idp/metadata
 oidcng_base_hostname: connect.{{ base_domain }}
 oidcng_logback_email: true
-oidcng_min_heapsize: "512m"
-oidcng_max_heapsize: "512m"
 oidcng_idp_sso_location: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
 oidcng_manage_provision_samlsp_client_id: "https://connect.{{ base_domain }}"
 oidcng_manage_provision_samlsp_name_en: "{{ instance_name }} OIDC Gateway"
