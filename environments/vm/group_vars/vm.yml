@@ -299,6 +299,7 @@ myconext:
   mongo_password: "{{ mongo_passwords.myconext }}"
   rp_client_id: myconext.ala.eduid
   rs_client_id: myconext.rs
+  idp_external_validation_entity_id: http://mock-idp
   feature_webauthn: false
   feature_warning_educational_email_domain: false
   feature_show_connections: false

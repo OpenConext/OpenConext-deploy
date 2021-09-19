@@ -98,6 +98,10 @@ account_linking_context_class_ref:
   validate_names: https://eduid.nl/trust/validate-names
   affiliation_student: https://eduid.nl/trust/affiliation-student
 
+account_linking:
+  idp_external_validation_entity_id: {{ myconext.idp_external_validation_entity_id }}
+  myconext_sp_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
+
 eduid_api:
   oidcng_introspection_uri: https://connect.{{ base_domain }}/oidc/introspect
   oidcng_client_id: {{ myconext.rs_client_id }}
