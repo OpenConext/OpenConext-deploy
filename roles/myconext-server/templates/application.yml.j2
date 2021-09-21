@@ -58,6 +58,8 @@ feature:
   webauthn: {{ myconext.feature_webauthn }}
   warning_educational_email_domain: {{ myconext.feature_warning_educational_email_domain }}
   connections: {{ myconext.feature_show_connections }}
+  # Do we allow the account linking to take place with the accounting IdP, e.g. add extra button in IdP link screen
+  use_external_validation: {{ myconext.feature_use_external_validation }}
   use_deny_allow_list:
     allow_enabled: {{ myconext.feature_allowlist }}
     allow_location: "classpath:/deny-allow/allowed.json"

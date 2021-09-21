@@ -302,6 +302,7 @@ myconext:
   idp_external_validation_entity_id: http://mock-idp
   feature_webauthn: false
   feature_warning_educational_email_domain: false
+  feature_use_external_validation: false
   feature_show_connections: false
   feature_allowlist: false
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
