@@ -10,8 +10,6 @@ manage_service_provider_feed_url: "http://mds.edugain.org/"
 manage_exclude_edugain_imports_in_push: true
 manage_show_oidc_rp_tab: false
 manage_exclude_oidc_rp_imports_in_push: false
-manage_min_heapsize: "512m"
-manage_max_heapsize: "512m"
 manage_manage_provision_samlsp_client_id: "https://manage.{{ base_domain }}/shibboleth"
 manage_manage_provision_samlsp_name_en: "{{ instance_name }} Manage"
 manage_manage_provision_samlsp_description_en: "{{ instance_name }} Manage"

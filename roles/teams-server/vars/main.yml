@@ -7,8 +7,6 @@ springapp_user: teams
 springapp_service_name: teams
 springapp_jar: "{{ teams_jar }}"
 springapp_tcpport: 9197
-springapp_min_heapsize: "{{ teams_min_heapsize }}"
-springapp_max_heapsize: "{{ teams_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
 manage_provision_oidcrp_client_id: "{{ teams_authz_client_id }}"
 manage_provision_oidcrp_secret: "{{ teams_authz_client_secret }}"

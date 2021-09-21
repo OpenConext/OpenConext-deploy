@@ -7,8 +7,6 @@ springapp_user: oidc-playground
 springapp_service_name: oidc-playground
 springapp_jar: "{{ oidc_playground_jar }}"
 springapp_tcpport: 9399
-springapp_min_heapsize: "{{ oidc_playground_min_heapsize }}"
-springapp_max_heapsize: "{{ oidc_playground_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
 manage_provision_oidcrp_client_id: "{{ oidcpg_manage_provision_oidcrp_client_id }}"
 manage_provision_oidcrp_name_en: "{{ oidcpg_manage_provision_oidcrp_name_en }}"

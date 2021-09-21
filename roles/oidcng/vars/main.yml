@@ -7,8 +7,6 @@ springapp_user: oidcng
 springapp_service_name: oidcng
 springapp_jar: "{{ oidcng_jar }}"
 springapp_tcpport: 9195
-springapp_min_heapsize: "{{ oidcng_min_heapsize }}"
-springapp_max_heapsize: "{{ oidcng_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
 manage_provision_samlsp_client_id: "{{ oidcng_manage_provision_samlsp_client_id }}"
 manage_provision_samlsp_name_en: "{{ oidcng_manage_provision_samlsp_name_en }}"

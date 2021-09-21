@@ -7,6 +7,4 @@ springapp_user: myconext
 springapp_service_name: myconext
 springapp_jar: "{{ myconext_jar }}"
 springapp_tcpport: 9189
-springapp_min_heapsize: "{{ myconext_min_heapsize }}"
-springapp_max_heapsize: "{{ myconext_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"

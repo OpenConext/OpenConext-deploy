@@ -70,6 +70,8 @@ springboot_server_services:
     version: "{{ manage_server_version }}"
     type: server
     port: "{{ manage_springapp_tcpport }}"
+    min_heapsize: "{{ manage_min_heapsize | default('512m') }}"
+    max_heapsize: "{{ manage_max_heapsize | default('512m') }}"
     config:
       "{{ manage }}"
   - name: oidcng
@@ -79,26 +81,28 @@ springboot_server_services:
     artifactid: oidcng
     port: 9195
     type: server
+    min_heapsize: "{{ oidcng_min_heapsize | default('512m') }}"
+    max_heapsize: "{{ oidcng_max_heapsize | default('512m')}}"
     config:
       "{{ oidcng }}"
   - name: voot
     enabled: "{{ springboot_services_state.voot }}"
     version: "{{ voot_version }}"
-    min_heapsize: '128m'
-    max_heapsize: '128m'
     role: voot
     artifactid: voot-service
     port: 9191
     type: server
+    min_heapsize: "{{ voot_min_heapsize | default('128m') }}"
+    max_heapsize: "{{ voot_max_heapsize | default('128m') }}"
     config:
       "{{ voot }}"
   - name: teams
     enabled: "{{ springboot_services_state.teams }}"
     version: "{{ teams_server_version }}"
-    min_heapsize: '256m'
-    max_heapsize: '256m'
     type: server
     port: 9197
+    min_heapsize: "{{ teams_min_heapsize | default('256m') }}"
+    max_heapsize: "{{ teams_max_heapsize | default('256m') }}"
     config:
       "{{ teams }}"
   - name: pdp
@@ -106,22 +110,24 @@ springboot_server_services:
     version: "{{ pdp_server_version }}"
     port: 9196
     type: server
+    min_heapsize: "{{ pdp_min_heapsize | default('512m') }}"
+    max_heapsize: "{{ pdp_max_heapsize | default('512m') }}"
     config:
       "{{ pdp }}"
   - name: attribute-aggregation
     enabled: "{{ springboot_services_state.attribute_aggregation }}"
-    min_heapsize: '256m'
-    max_heapsize: '256m'
     version: "{{ attribute_aggregation_server_version }}"
     type: server
     port: 9198
+    min_heapsize: "{{ pdp_min_heapsize | default('256m') }}"
+    max_heapsize: "{{ pdp_max_heapsize | default('256m') }}"
   - name: oidc-playground
     enabled: "{{ springboot_services_state.oidc_playground }}"
-    min_heapsize: '256m'
-    max_heapsize: '256m'
     version: "{{ oidc_playground_server_version }}"
     type: server
     port: 9399
+    min_heapsize: "{{ oidc_playground_min_heapsize | default('256m') }}"
+    max_heapsize: "{{ oidc_playground_max_heapsize | default('256m') }}"
     config:
       "{{ oidc_playground }}"
   - name: myconext
@@ -130,40 +136,41 @@ springboot_server_services:
     version: "{{ myconext_server_version }}"
     type: server
     port: 9189
+    min_heapsize: "{{ myconext_min_heapsize | default('512m') }}"
+    max_heapsize: "{{ myconext_max_heapsize | default('512m') }}"
     config:
       "{{ myconext }}"
   - name: mujina-sp
     alias: mujina
     enabled: "{{ springboot_services_state.mujina_sp }}"
-    min_heapsize: '128m'
-    max_heapsize: '128m'
     version: "{{ mujina_version }}"
     role: mujina-sp
     artifactid: mujina-sp
     type: server
     port: 9391
+    min_heapsize: "{{ mujina_sp_min_heapsize | default('128m') }}"
+    max_heapsize: "{{ mujina_sp_max_heapsize | default('128m') }}"
     config:
       "{{ mujina_sp }}"
   - name: mujina-idp
     alias: mujina
     enabled: "{{ springboot_services_state.mujina_idp }}"
-    min_heapsize: '128m'
-    max_heapsize: '128m'
     version: "{{ mujina_version }}"
     role: mujina-idp
     artifactid: mujina-idp
     type: server
     port: 9390
+    min_heapsize: "{{ mujina_idp_min_heapsize | default('128m') }}"
+    max_heapsize: "{{ mujina_idp_max_heapsize | default('128m') }}"
     config:
       "{{ mujina_idp }}"
   - name: dashboard
     enabled: "{{ springboot_services_state.dashboard }}"
-    min_heapsize: '512m'
-    max_heapsize: '512m'
     version: "{{ dashboard_server_version }}"
     type: server
     port: 9394
-
+    min_heapsize: "{{ dashboard_min_heapsize | default('512m') }}"
+    max_heapsize: "{{ dashboard_max_heapsize | default('512m') }}"
 
 springboot_min_heapsize: "512m"
 springboot_max_heapsize: "512m"

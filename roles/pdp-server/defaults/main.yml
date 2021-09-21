@@ -9,8 +9,6 @@ pdp_invalid_policies_error_mail_to: '{{ error_mail_to }}'
 pdp_oauth2_clientid: "pdp.{{ base_domain }}"
 pdp_oauth2_token_url: "https://connect.{{ base_domain }}/oidc/token"
 pdp_oauth2_authorize_url: "https://connect.{{ base_domain }}/oidc/authorize"
-pdp_min_heapsize: "512m"
-pdp_max_heapsize: "512m"
 pdp_manage_provision_oidcrp_name_en: "PDP client credentials client for VOOT access"
 pdp_manage_provision_oidcrp_description_en: "OAuth client to access VOOT for group information"
 pdp_manage_provision_oidcrp_grants: "client_credentials"

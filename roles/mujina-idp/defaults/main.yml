@@ -3,8 +3,6 @@ mujina_idp_dir: /opt/mujina-idp
 mujina_idp_version: ''
 mujina_idp_snapshot_timestamp: ''
 mujina_idp_jar: mujina-idp-current.jar
-mujina_idp_min_heapsize: "128m"
-mujina_idp_max_heapsize: "128m"
 mujina_manage_provision_samlidp_entity_id: "{{ mujina_idp.entity_id }}"
 mujina_manage_provision_samlidp_description_en: "{{ instance_name }} Mujina IdP"
 mujina_manage_provision_samlidp_name_en: "The {{ instance_name }} Mujina Mock IdP"

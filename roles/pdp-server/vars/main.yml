@@ -7,8 +7,6 @@ springapp_user: pdp
 springapp_service_name: pdp
 springapp_jar: "{{ pdp_jar }}"
 springapp_tcpport: 9196
-springapp_min_heapsize: "{{ pdp_min_heapsize }}"
-springapp_max_heapsize: "{{ pdp_max_heapsize }}"
 springapp_random_source: "file:///dev/urandom"
 manage_provision_oidcrp_client_id: "{{ pdp_oauth2_clientid }}"
 manage_provision_oidcrp_secret: "{{ pdp_client_secret }}"

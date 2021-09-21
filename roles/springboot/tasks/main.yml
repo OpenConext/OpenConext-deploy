@@ -36,7 +36,7 @@
 - name: "Install Springboot Server services"
   include_tasks: "springboot.yml"
   with_items: "{{ springboot_server_services }}"
-  no_log: true
+    #  no_log: true
   loop_control:
     loop_var: springboot
   when:

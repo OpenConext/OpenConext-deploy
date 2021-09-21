@@ -6,5 +6,3 @@ myconext_random_source: 'file:///dev/urandom'
 myconext_install: true
 myconext_cronjobmaster: true
 myconext_onegini_entity_id: "https://www.onegini.me"
-myconext_min_heapsize: "512m"
-myconext_max_heapsize: "512m"

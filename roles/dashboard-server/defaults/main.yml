@@ -6,8 +6,6 @@ dashboard_random_source: 'file:///dev/urandom'
 dashboard_hide_tabs: none
 dashboard_organization: SURFconext
 dashboard_install: true
-dashboard_min_heapsize: "512m"
-dashboard_max_heapsize: "512m"
 dashboard_manage_provision_samlsp_client_id: "https://dashboard.{{ base_domain }}/shibboleth"
 dashboard_manage_provision_samlsp_name_en: "{{ instance_name }} IdP Dashboard"
 dashboard_manage_provision_samlsp_description_en: "{{ instance_name }} IdP Dashboard"

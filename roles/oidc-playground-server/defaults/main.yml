@@ -2,8 +2,6 @@
 oidc_playground_dir: /opt/oidc-playground
 oidc_playground_jar: oidc-playground-current.jar
 oidc_playground_random_source: 'file:///dev/urandom'
-oidc_playground_min_heapsize: "256m"
-oidc_playground_max_heapsize: "256m"
 oidcpg_manage_provision_oidcrp_client_id: "{{ oidc_playground.client_id }}"
 oidcpg_manage_provision_oidcrp_name_en: "{{ instance_name }} OIDC Playground"
 oidcpg_manage_provision_oidcrp_description_en: "OIDC Playground application to test and make the OIDC flows visible"

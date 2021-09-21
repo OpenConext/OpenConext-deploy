@@ -3,8 +3,6 @@ voot_dir: /opt/voot/
 voot_version: ''
 voot_snapshot_timestamp: ''
 voot_service_jar: voot-service.jar
-voot_min_heapsize: "128m"
-voot_max_heapsize: "128m"
 voot_manage_provision_oauth_rs_client_id: "{{ voot.oidcng_checkToken_clientId }}"
 voot_manage_provision_oauth_rs_rp_secret: "{{ voot.oidcng_checkToken_secret }}"
 voot_manage_provision_oauth_rs_name_en: "{{ instance_name }} VOOT Resource Server"
