@@ -1,3 +1,4 @@
+# This will build the OpenConext Docker
 #!/bin/bash
 
 set -e
