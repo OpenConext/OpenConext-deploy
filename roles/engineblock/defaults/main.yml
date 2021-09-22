@@ -12,6 +12,7 @@ engine_feature_enable_sso_notification: 0
 
 engine_api_feature_metadata_push: 1
 engine_api_feature_consent_listing: 1
+engine_api_feature_consent_remove: 0
 engine_api_feature_metadata_api: 1
 engine_api_feature_deprovision: 1
 
