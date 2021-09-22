@@ -73,7 +73,7 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-./provision github $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=manage,mujina-sp,mujina-idp -e @tests/github.yml -t core
+./provision github $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=manage,mujina-sp,mujina-idp -e @tests/github.yml -t core -e engine_api_feature_consent_remove=true
 
 # Make the image a bit smaller
 docker exec ansible-test-ga systemctl stop mysql mongod
