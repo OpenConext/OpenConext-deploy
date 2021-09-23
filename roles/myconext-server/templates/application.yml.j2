@@ -27,7 +27,7 @@ schac_home_organization: eduid.nl
 cron:
   node-cron-job-responsible: {{ myconext_cronjobmaster }}
   token-cleaner-expression: "0 0/15 * * * *"
-  service-name-resolver-initial-delay-milliseconds: 15000
+  service-name-resolver-initial-delay-milliseconds: 120_000
   service-name-resolver-fixed-rate-milliseconds: 43_200_000
   metadata-resolver-initial-delay-milliseconds: 1
   metadata-resolver-fixed-rate-milliseconds: 86_400_000
