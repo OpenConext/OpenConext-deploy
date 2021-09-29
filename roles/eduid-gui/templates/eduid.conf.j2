@@ -26,9 +26,9 @@ Listen {{ apache_app_listen_address.eduid }}:{{ loadbalancing.eduid.port }}
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
-    RewriteCond %{REQUEST_URI} !config
-    RewriteCond %{REQUEST_URI} !actuator
-    RewriteCond %{REQUEST_URI} !fonts
+    RewriteCond %{REQUEST_URI} !^/config
+    RewriteCond %{REQUEST_URI} !^/actuator
+    RewriteCond %{REQUEST_URI} !^/fonts
     RewriteRule (.*) /index.html [L]
 
     ProxyPreserveHost On
