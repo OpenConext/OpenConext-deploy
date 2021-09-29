@@ -8,7 +8,6 @@ springboot_services_state:
   oidc_playground: true
   myconext: true
   account: true
-  eduid: true
   oidcng: true
   voot: true
   mujina_sp: true
@@ -53,12 +52,6 @@ springboot_gui_services:
     group: myconext
     enabled: "{{ springboot_services_state.account }}"
     version: "{{ account_gui_version }}"
-  - name: eduid
-    alias: eduid-gui
-#   eduid has moved to WP theme
-#   group: myconext
-    enabled: "{{ springboot_services_state.eduid }}"
-    version: "{{ eduid_gui_version }}"
   - name: dashboard
     alias: dashboard-gui
     enabled: "{{ springboot_services_state.dashboard }}"

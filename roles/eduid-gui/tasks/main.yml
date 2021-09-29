@@ -1,6 +1,0 @@
----
-- name: copy virtual host config
-  template:
-    src: eduid.conf.j2
-    dest: /etc/httpd/conf.d/eduid.conf
-  notify: restart httpd
