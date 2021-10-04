@@ -42,7 +42,7 @@
     restart_policy: "always"
     mounts:
       - source: /opt/openconext/profile/parameters.yml
-        target: /var/www/html/app/config/parameters.yml
+        target: /var/www/html/config/legacy/parameters.yml
         type: bind
       - source: "/opt/openconext/profile/{{ engine_keys.default.publicKey }}"
         target: "/etc/openconext/{{ engine_keys.default.publicKey }}"
