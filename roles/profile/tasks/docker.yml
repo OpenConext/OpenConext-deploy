@@ -52,4 +52,6 @@
         type: bind
     networks:
       - name: "profile"
+    env:
+      APP_ENV: "prod"
 
