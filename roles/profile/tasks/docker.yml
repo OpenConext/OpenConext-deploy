@@ -9,8 +9,8 @@
 
 - name: Place the configfile
   template:
-    src: parameters.yml.j2
-    dest: /opt/openconext/profile/parameters.yml
+    src: parameters.yaml.j2
+    dest: /opt/openconext/profile/parameters.yaml
     owner: root
     group: root
     mode: 0644
@@ -41,8 +41,8 @@
     pull: true
     restart_policy: "always"
     mounts:
-      - source: /opt/openconext/profile/parameters.yml
-        target: /var/www/html/config/legacy/parameters.yml
+      - source: /opt/openconext/profile/parameters.yaml
+        target: /var/www/html/config/legacy/parameters.yaml
         type: bind
       - source: "/opt/openconext/profile/{{ engine_keys.default.publicKey }}"
         target: "/etc/openconext/{{ engine_keys.default.publicKey }}"
