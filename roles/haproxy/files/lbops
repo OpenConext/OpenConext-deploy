@@ -1,0 +1,1 @@
+lbops ALL=(ALL) NOPASSWD: /usr/bin/systemctl reload haproxy

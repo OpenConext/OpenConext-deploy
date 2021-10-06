@@ -69,7 +69,7 @@
     state: directory
     owner: root
     group: lbops
-    mode: 0755
+    mode: 0775
   with_items:
     - acls
     - maps
@@ -238,3 +238,10 @@
   shell: echo "show servers state" | socat /var/lib/haproxy/haproxy.stats - > /var/lib/haproxy/state
   when:
     - develop | bool
+
+- name: Add lbops user to sudoers and let it reload haproxy
+  copy:
+    src: lbops
+    dest: /etc/sudoers.d/lbops
+    owner: root
+    mode: 0440
