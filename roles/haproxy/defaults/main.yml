@@ -11,3 +11,7 @@ haproxy_allowlistips:
 # You can create a blocklist of ips that are blocked. 
 haproxy_blocklistips:
   - ''
+# You can protect internal api to allow access from trusted ip's only. Open to the world by default
+haproxy_internalips:
+  - 0.0.0.0/0
+  - ::0/0
