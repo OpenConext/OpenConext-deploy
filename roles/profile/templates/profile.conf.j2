@@ -7,24 +7,24 @@ Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
     ServerName   {{ profile_domain }}
     ServerAdmin {{ apache_server_admin }}
 
-    DocumentRoot {{ profile_current_release_symlink }}/web
+    DocumentRoot {{ profile_current_release_symlink }}/public
 
-    SetEnv SYMFONY_ENV {{ profile_apache_symfony_environment }}
+    SetEnv APP_ENV {{ profile_apache_symfony_environment }}
     SetEnv HTTPS on
 
-    <Directory "{{ profile_current_release_symlink }}/web">
+    <Directory "{{ profile_current_release_symlink }}/public">
         Require all granted
 
 	Options -MultiViews
 	RewriteEngine On
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^(.*)$ app.php [QSA,L]
+	RewriteRule ^(.*)$ index.php [QSA,L]
     </Directory>
 
     Header set Referrer-Policy "origin-when-cross-origin"
 
     # Proxy the requests to FPM
-    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/profile-pool-72.sock|fcgi://localhost/{{ profile_current_release_symlink }}/web/$1
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/profile-pool-72.sock|fcgi://localhost/{{ profile_current_release_symlink }}/public/$1
 
     ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-PROFILE'"
     CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-PROFILE'" combined

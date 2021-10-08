@@ -43,19 +43,19 @@
     group: '{{ profile_fpm_user }}'
     recurse: yes
 
-- name: Place parameters.yml
+- name: Place parameters.yaml
   template:
     src: "{{ item }}.j2"
-    dest: "{{ profile_current_release_symlink }}/app/config/{{ item }}"
+    dest: "{{ profile_current_release_symlink }}/config/legacy/{{ item }}"
     mode: 0644
   with_items:
-    - parameters.yml
+    - parameters.yaml
 
 - name: Instantiate global_view_parameters.yml.dist
-  command: mv global_view_parameters.yml.dist global_view_parameters.yml
+  command: mv global_view_parameters.yaml.dist global_view_parameters.yaml
   args:
-    chdir: "{{ profile_current_release_symlink }}/app/config/"
-    creates: "{{ profile_current_release_symlink }}/app/config/global_view_parameters.yml"
+    chdir: "{{ profile_current_release_symlink }}/config/legacy/"
+    creates: "{{ profile_current_release_symlink }}/config/legacy/global_view_parameters.yaml"
 
 - name: Create the symfony cache
   command: php72 bin/console cache:clear --env={{ profile_apache_symfony_environment }} --no-debug
@@ -75,7 +75,7 @@
 
 - name: Make sure log dir has correct permissions
   file:
-    path: "{{ profile_current_release_symlink }}/var/logs"
+    path: "{{ profile_current_release_symlink }}/var/log"
     owner: "{{ profile_fpm_user }}"
     group: "{{ profile_fpm_user }}"
     recurse: yes
@@ -104,14 +104,10 @@
   notify:
     - "restart php72-fpm"
 
-- name: Configure Profile
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/openconext/{{ item }}"
-  with_items:
-    - profile.yml
-  notify:
-    - "restart php72-fpm"
+- name: clean up profile <3.0 config
+  file:
+    path: "/etc/openconext/profile.yml"
+    state: absent
 
 - name: Check if we have a custom favicon
   local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
@@ -121,7 +117,7 @@
 - name: Install environment specific favicon
   copy:
     src: "{{ inventory_dir }}/files/favicon.ico"
-    dest: "{{ profile_current_release_symlink }}/web/"
+    dest: "{{ profile_current_release_symlink }}/public/"
   when:
     customfavicon.stat.exists
 
