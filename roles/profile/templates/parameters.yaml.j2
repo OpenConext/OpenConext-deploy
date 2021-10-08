@@ -1,12 +1,12 @@
 parameters:
     secret: '{{ profile_secret }}'
     locales: [en, nl]
-    default_locale: '{{ profile_default_locale }}'
+    default_locale: {{ profile_default_locale }}
     open_conext_locale_cookie_key: lang
     open_conext_locale_cookie_domain: .{{ base_domain }}
     open_conext_locale_cookie_expires_in: "+2 months"
     open_conext_locale_cookie_http_only: false
-    open_conext_locale_cookie_secure: false
+    open_conext_locale_cookie_secure: true
 
     saml_sp_publickey: '{{ profile_saml_sp_publickey }}'
     saml_sp_privatekey: '{{ profile_saml_sp_privatekey }}'
@@ -49,3 +49,5 @@ parameters:
     # The email addresses used for sending the information request email message
     information_request_email_from: '{{ noreply_email }}'
     information_request_email_to: '{{ profile_info_request_email }}'
+
+    remove_consent_enabled: false
