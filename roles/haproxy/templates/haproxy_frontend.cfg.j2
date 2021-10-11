@@ -33,6 +33,11 @@ frontend internet_ip
     # See https://www.chromium.org/updates/same-site/incompatible-clients
     acl no_same_site_uas var(txn.useragent) -m reg -f /etc/haproxy/maps/nosamesitebrowsers.lst
     acl has_same_site_flag res.fhdr(Set-Cookie) -m sub SameSite
+    # ACL to protect APIs of public vhosts
+    acl internal src -f /etc/haproxy/acls/internalips.acl
+    # Deny the requests to internal APIs from IP addresses that are not on the internal ips list
+    # Access to /internal/groups is for VOOT access and is allowed from anywhere
+    http-request deny if { path -m beg /internal/ } !{ path -m beg /internal/groups } !internal
     # Rewrite responses
     # Set HSTS on all outgoing responses
     http-response set-header Strict-Transport-Security max-age=34214400
