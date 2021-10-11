@@ -11,6 +11,7 @@
   yum:
     name:
       - java-1.8.0-openjdk-devel.x86_64
+      - java-11-openjdk-headless.x86_64
     state: present
   register: java_package_java_installed
   until: java_package_java_installed is succeeded
