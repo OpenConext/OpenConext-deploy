@@ -1,0 +1,11 @@
+---
+- name: Create block- and allowlists
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/haproxy/acls/{{ item }}"
+  with_items:
+    - allowedips.acl
+    - blockedips.acl
+  notify: 
+    - reload haproxy
+
