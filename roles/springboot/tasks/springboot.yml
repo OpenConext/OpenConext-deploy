@@ -20,6 +20,7 @@
     _springapp_artifact_type: "{{ springboot.artifacttype if springboot.artifacttype is defined else springboot_artifact_type }}"
     _springapp_version: "{{ springboot.version }}"
     _springapp_tcpport: "{{ springboot.port if springboot.port is defined else springboot_tcpport }}"
+    _springapp_java_binary: "{{ springboot.java_binary if springboot.java_binary is defined else springboot_java_binary }}"
 
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include user related tasks"
   include: user.yml
