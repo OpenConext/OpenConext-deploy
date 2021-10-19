@@ -38,10 +38,7 @@ parameters:
     attribute_aggregation_orcid_logo_path: 'build/images/orcid.png'
     attribute_aggregation_orcid_connect_url: 'https://link.{{ base_domain }}/orcid?redirectUrl=https://profile.{{ base_domain }}/my-connections'
 
-    mailer_transport:  sendmail
-    mailer_host:       ~
-    mailer_user:       ~
-    mailer_password:   ~
+    mailer_url: 'smtp://localhost:25'
 
     attribute_support_email_from: '{{ noreply_email }}'
     attribute_support_email_to: '{{ support_email }}'
