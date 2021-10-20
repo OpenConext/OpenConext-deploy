@@ -50,7 +50,7 @@ policy.base.dir=file://{{ pdp_dir }}/xacml-policies
 policies.cachePolicies={{ pdp.cache_policies }}
 
 # The refresh period for policies (if cached)
-period.policies.refresh.minutes=10
+period.policies.refresh.minutes={{ pdp.cache_policies_period }}
 
 manage.username=pdp
 manage.password={{ manage_pdp_secret }}

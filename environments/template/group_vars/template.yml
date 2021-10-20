@@ -335,6 +335,7 @@ pdp:
   db_name: pdp-server
   spring_profiles_active: test
   cache_policies: false
+  cache_policies_period: 10
   include_inactive_policies: true
   sab_username: coin-test
   sab_password: "{{ pdp_sab_password }}"
