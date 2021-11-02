@@ -68,9 +68,6 @@
     - localLogout.html
     - shibboleth2.xml
     - attribute-policy.xml
-  notify:
-    - "restart shibd"
-    - "reload httpd"
 
 - name: enable shibd
   service:
