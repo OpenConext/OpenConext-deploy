@@ -1,41 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="utf-8">
   <title>{{ instance_name }} - Local logout</title>
-  <link rel="stylesheet" href="<shibmlp styleSheet/>"/>
-  <link rel="stylesheet" href="<shibmlp styleSheet2/>"/>
+  <link rel="stylesheet" href="<shibmlp styleSheet/>">
+  <link rel="stylesheet" href="<shibmlp styleSheet2/>">
 </head>
 <body class="index">
 <div id="wrapper">
 
-  <!-- = Header -->
+  <header>
   <div id="header">
   </div>
-  <!-- / Header -->
+  </header>
 
-  <!-- = Main -->
+  <main>
   <div id="main">
+
     <h1>Local Logout</h1>
 
     <div class="main-top"></div>
     <div class="main">
-      <span class="text">
-        <strong>Status of Local Logout:</strong><br/>
+      <p class="text">
+        <strong>Status of Local Logout:</strong><br>
         <shibmlp logoutStatus/>
-      </span>
-      <br/>
-      <span class="text">
+      </p>
+      <p class="text">
         You <strong>must</strong> close your browser to complete the logout process.
-      </span><br/>
+      </p>
 
     </div>
     <div class="main-bottom"></div>
+    <footer>
     <div class="bottom">
       <p>This service is provided by {{ instance_name }}.</p>
     </div>
+    </footer>
   </div>
-  <!-- / Main -->
+  </main>
 </div>
 
 </body>
