@@ -109,6 +109,19 @@
     path: "/etc/openconext/profile.yml"
     state: absent
 
+- name: Check presence of language specific overrides
+  local_action: stat path="{{ inventory_dir }}/files/profile/languages/"
+  register: overrides_present
+  become: false
+
+- name: Copy language specific overrides
+  template:
+    src: "{{ item }}"
+    dest: "{{ profile_current_release_symlink }}/translations/overrides"
+  when: overrides_present.stat.exists
+  with_fileglob:
+    - "{{ inventory_dir }}/files/profile/languages/*"
+
 - name: Check if we have a custom favicon
   local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
   register: customfavicon
