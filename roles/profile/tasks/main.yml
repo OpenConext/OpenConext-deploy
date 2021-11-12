@@ -57,6 +57,33 @@
     chdir: "{{ profile_current_release_symlink }}/config/legacy/"
     creates: "{{ profile_current_release_symlink }}/config/legacy/global_view_parameters.yaml"
 
+- name: Check presence of language specific overrides
+  local_action: stat path="{{ inventory_dir }}/files/profile/overrides/"
+  register: overrides_present
+  become: false
+
+- name: Copy language specific overrides
+  template:
+    src: "{{ item }}"
+    dest: "{{ profile_current_release_symlink }}/translations/overrides"
+  when: overrides_present.stat.exists
+  with_fileglob:
+    - "{{ inventory_dir }}/files/profile/overrides/*"
+  notify:
+    - "restart php72-fpm"
+
+- name: Check if we have a custom favicon
+  local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
+  register: customfavicon
+  become: false
+
+- name: Install environment specific favicon
+  copy:
+    src: "{{ inventory_dir }}/files/favicon.ico"
+    dest: "{{ profile_current_release_symlink }}/public/"
+  when:
+    customfavicon.stat.exists
+
 - name: Create the symfony cache
   command: php72 bin/console cache:clear --env={{ profile_apache_symfony_environment }} --no-debug
   args:
@@ -108,31 +135,6 @@
   file:
     path: "/etc/openconext/profile.yml"
     state: absent
-
-- name: Check presence of language specific overrides
-  local_action: stat path="{{ inventory_dir }}/files/profile/languages/"
-  register: overrides_present
-  become: false
-
-- name: Copy language specific overrides
-  template:
-    src: "{{ item }}"
-    dest: "{{ profile_current_release_symlink }}/translations/overrides"
-  when: overrides_present.stat.exists
-  with_fileglob:
-    - "{{ inventory_dir }}/files/profile/languages/*"
-
-- name: Check if we have a custom favicon
-  local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
-  register: customfavicon
-  become: false
-
-- name: Install environment specific favicon
-  copy:
-    src: "{{ inventory_dir }}/files/favicon.ico"
-    dest: "{{ profile_current_release_symlink }}/public/"
-  when:
-    customfavicon.stat.exists
 
 - name: Include the role manage_provision_entities to provision profile to Manage
   include_role: 

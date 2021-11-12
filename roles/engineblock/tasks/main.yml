@@ -76,6 +76,8 @@
   when: overrides_present.stat.exists
   with_fileglob:
     - "{{ inventory_dir }}/files/eb/languages/*"
+  notify:
+    - "restart php72-fpm"
 
 - name: Check if we have a custom logo
   local_action: stat path="{{ inventory_dir }}/files/logo.png"
