@@ -73,7 +73,7 @@
   file:
     path: "{{ profile_current_release_symlink }}/translations/overrides"
     state: absent
-  when: overrides_present.stat.exists and not overridesisfile.stat.isdir
+  when: overrides_present.stat.exists and overridesisfile.stat.exists and overridesisfile.stat.isdir == False
 
 - name: Copy language specific overrides
   template:
