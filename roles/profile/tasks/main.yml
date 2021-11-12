@@ -62,10 +62,23 @@
   register: overrides_present
   become: false
 
+# Can be removed after 2022-01-01
+- name: Check for wrongly created overrides file (not dir)
+  stat:
+    path: "{{ profile_current_release_symlink }}/translations/overrides"
+  register: overridesisfile
+
+# Can be removed after 2022-01-01
+- name: Clean up wrongly created overrides file (not dir)
+  file:
+    path: "{{ profile_current_release_symlink }}/translations/overrides"
+    state: absent
+  when: overrides_present.stat.exists and not overridesisfile.stat.isdir
+
 - name: Copy language specific overrides
   template:
     src: "{{ item }}"
-    dest: "{{ profile_current_release_symlink }}/translations/overrides"
+    dest: "{{ profile_current_release_symlink }}/translations/overrides/"
   when: overrides_present.stat.exists
   with_fileglob:
     - "{{ inventory_dir }}/files/profile/overrides/*"
