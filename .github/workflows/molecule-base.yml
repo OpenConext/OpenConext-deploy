@@ -29,7 +29,7 @@ jobs:
           python-version: 3.8
 
       - name: Installing dependencies
-        run: pip install jinja2 ansible molecule molecule-docker pytest-testinfra pytest setuptools
+        run: pip install jinja2 netaddr ansible molecule molecule-docker pytest-testinfra pytest setuptools
 
       - name: Run role tests
         run: molecule test -s base
