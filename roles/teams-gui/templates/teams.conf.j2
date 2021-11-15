@@ -68,9 +68,13 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
       AuthType none
     </Location>
 
-    # The SP dashboard API is secured with basic auth
+    # The SP dashboard API is secured with basic auth; only allow
+    # explicitly allowed IP ranges. If the setting is missing, noone is allowed.
     <Location "/api/spdashboard/">
-      Require all granted
+      {% if teams_allow_spd_api is defined %}
+        SetEnvIfNoCase X-Forwarded-For {{ teams_allow_spd_api }} env_spd_allow
+      {% endif %}
+      Require env env_spd_allow
       AuthType none
     </Location>
 
