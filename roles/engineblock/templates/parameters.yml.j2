@@ -19,9 +19,11 @@ parameters:
 
     ## Configure trusted proxies to use their X-Forwarded-For header.
     trusted_proxies:
-{% for engine_trusted_proxy_ip in engine_trusted_proxy_ips %}
-        - {{ engine_trusted_proxy_ip }}
+{% if 'loadbalancer' in groups %}
+{% for lb in groups['loadbalancer'] %}
+        - {{ lb if lb|ipaddr() else lookup('dig', lb) }}
 {% endfor %}
+{% endif %}
 
     ## The enabled languages, currently 'en', 'nl' and 'pt' are supported
     enabled_languages:

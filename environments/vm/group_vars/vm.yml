@@ -100,10 +100,6 @@ engine_test_database_password: "{{ mysql_passwords.eb }}"
 engine_apache_environment: vm
 engine_apache_symfony_environment: prod
 
-engine_trusted_proxy_ips:
-  - 192.168.1.1
-  - 10.0.0.1
-#
 engine_keys:
   default:
     privateFile: /etc/openconext/engineblock.pem
