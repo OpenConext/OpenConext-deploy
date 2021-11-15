@@ -45,6 +45,17 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
       Options     -Indexes
     </Directory>
 
+    <Location />
+      AuthType shibboleth
+      ShibUseHeaders On
+      ShibRequestSetting applicationId teams
+      ShibRequireSession On
+      require valid-user
+    </Location>
+
+    <Location /invitation/>
+      ShibRequestSetting forceAuthn true
+    </Location>
 
     # Enable shibboleth for all other URLs, but the health check and info endpoint
     <Location ~ "/api/teams/(health|info)">
@@ -73,17 +84,6 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     <Location ~ "(.*)(eot|svg|ttf|woff2|woff|js|css|png|jpg|ico)$">
       allow from all
       satisfy any
-    </Location>
-
-    <Location />
-      AuthType shibboleth
-      ShibUseHeaders On
-      ShibRequestSetting applicationId teams
-      ShibRequireSession On
-      require valid-user
-    </Location>
-    <Location /invitation/>
-      ShibRequestSetting forceAuthn true
     </Location>
 
     Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' static.surfconext.nl static.{{ base_domain }} data:;"
