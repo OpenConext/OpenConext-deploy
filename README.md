@@ -1,8 +1,6 @@
 Ansible-driven provisioning of the OpenConext platform.
 ==============================
 
-[![Build Status](https://travis-ci.org/OpenConext/OpenConext-deploy.svg?branch=master)](https://travis-ci.org/OpenConext/OpenConext-deploy)
-
 # Getting started
 
 # Deploy to a remote machine
