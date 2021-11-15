@@ -40,8 +40,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     DocumentRoot "{{ _springapp_dir }}/current"
 
     <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
+      Require all granted
       Options     -Indexes
     </Directory>
 
@@ -50,7 +49,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
       ShibUseHeaders On
       ShibRequestSetting applicationId teams
       ShibRequireSession On
-      require valid-user
+      Require valid-user
     </Location>
 
     <Location /invitation/>
@@ -59,31 +58,31 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 
     # Enable shibboleth for all other URLs, but the health check and info endpoint
     <Location ~ "/api/teams/(health|info)">
-      allow from all
-      satisfy any
+      Require all granted
+      AuthType none
     </Location>
 
     # The VOOT API is secured with basic auth
     <Location ~ "/api/voot/">
-      allow from all
-      satisfy any
+      Require all granted
+      AuthType none
     </Location>
 
     # The SP dashboard API is secured with basic auth
     <Location ~ "/spdashboard/">
-      allow from all
-      satisfy any
+      Require all granted
+      AuthType none
     </Location>
 
     # The internal lifecycle API is secured with basic auth
     <Location ~ "/deprovision/">
-      allow from all
-      satisfy any
+      Require all granted
+      AuthType none
     </Location>
 
     <Location ~ "(.*)(eot|svg|ttf|woff2|woff|js|css|png|jpg|ico)$">
-      allow from all
-      satisfy any
+      Require all granted
+      AuthType none
     </Location>
 
     Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' static.surfconext.nl static.{{ base_domain }} data:;"
