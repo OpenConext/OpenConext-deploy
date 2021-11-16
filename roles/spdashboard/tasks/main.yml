@@ -35,6 +35,8 @@
     image: ghcr.io/surfnet/sp-dashboard/spdashboard_php-fpm:{{ spd_docker_phpfpm_version }}
     pull: true
     restart_policy: "always"
+    env:
+      SYMFONY_ENV: "prod"
     mounts:
       - source: /opt/openconext/spdashboard/parameters.yml
         target: /var/www/html/app/config/parameters.yml
