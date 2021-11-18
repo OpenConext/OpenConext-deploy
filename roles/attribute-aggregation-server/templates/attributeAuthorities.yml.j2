@@ -91,34 +91,6 @@ authorities:
       validationRegExp: "^urn:collab:group:.*$"
     }
   - {
-      id: "surfmarket_entitlements",
-      description: "SURFmarket entitlements",
-      endpoint: "{{ aa.surfmarket_url }}",
-      user: "{{ aa.surfmarket_username }}",
-      password: "{{ aa.surfmarket_password }}",
-      timeOut: 3000,
-      attributes: [
-        {
-          name: "urn:mace:dir:attribute-def:eduPersonEntitlement",
-          description: "The entitlements of the user.",
-          type: "string",
-          example: "urn:mace:surfnet.nl:surfmarket.nl:estudybooks:entitlement:E1"
-        }
-      ],
-      requiredInputAttributes: [
-        {
-          name: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
-        },
-        {
-          name: "urn:mace:terena.org:attribute-def:schacHomeOrganization"
-        },
-        {
-          name: "urn:mace:dir:attribute-def:uid"
-        }
-      ],
-      validationRegExp: "^urn:mace:surfnet.nl:surfmarket.nl:.*$"
-    }
-  - {
       id: "ala",
       description: "Account Linking App",
       endpoint: "{{ aa.ala_url }}",
