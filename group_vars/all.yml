@@ -15,10 +15,16 @@ ssl_key_dir: /etc/httpd/keys
 
 apache_user: apache
 
-httpd_scp:
+# Virtal host that hosts shared static images (logos primarily)
+# Can be overridden in environments if it lives outside this env's base domain
+static_vhost: "static.{{ base_domain }}"
+
+httpd_csp:
   lenient: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:;
-  lenient_with_static_img: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' https://static.surfconext.nl data:;
+  lenient_with_static_img: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' {{ static_vhost }} data:;
   strict: default-src; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:;
+  strict_with_static_img: default-src; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' {{ static_vhost }} data:;
+  nothing: default-src 'none';
 
 error_subject_prefix: "[{{ ansible_hostname }}] "
 

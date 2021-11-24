@@ -21,7 +21,8 @@ Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
 	RewriteRule ^(.*)$ index.php [QSA,L]
     </Directory>
 
-    Header set Referrer-Policy "origin-when-cross-origin"
+    Header always set Referrer-Policy "origin-when-cross-origin"
+    Header always set Content-Security-Policy "{{ httpd_csp.strict_with_static_img }}"
 
     # Proxy the requests to FPM
     ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/profile-pool-72.sock|fcgi://localhost/{{ profile_current_release_symlink }}/public/$1
