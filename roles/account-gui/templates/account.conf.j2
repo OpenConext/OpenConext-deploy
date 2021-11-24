@@ -58,10 +58,10 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
       satisfy any
     </Location>
 
-    Header set Content-Security-Policy "{{ httpd_scp.lenient }}"
-    Header set X-Frame-Options "DENY"
-    Header set Referrer-Policy "same-origin"
-    Header set X-Content-Type-Options "nosniff"
+    Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "same-origin"
+    Header always set X-Content-Type-Options "nosniff"
 
     {% if haproxy_backend_tls %}
     SSLEngine on

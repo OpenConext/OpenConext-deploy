@@ -11,11 +11,11 @@ Listen {{ apache_app_listen_address.metadata }}:{{ loadbalancing.metadata.port }
           Require all granted
     </Directory>
 
-    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'"
-    Header set X-Frame-Options "DENY"
-    Header set Referrer-Policy "origin-when-cross-origin"
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-XSS-Protection "1; mode=block"
+    Header always set Content-Security-Policy "{{ httpd_csp.strict }}"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "origin-when-cross-origin"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
 
     AddType application/x-pem-file .pem
     <Location "/sp/">

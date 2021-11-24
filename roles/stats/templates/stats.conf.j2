@@ -68,9 +68,9 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
       Require valid-user
     </Location>
 
-    Header set Content-Security-Policy "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
-    Header set X-Frame-Options "DENY"
-    Header set Referrer-Policy "same-origin"
-    Header set X-Content-Type-Options "nosniff"
+    Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "same-origin"
+    Header always set X-Content-Type-Options "nosniff"
 
 </VirtualHost>

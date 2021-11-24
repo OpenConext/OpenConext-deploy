@@ -8,9 +8,9 @@ Listen {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}
 
     DocumentRoot {{ static_dir }}
 
-    Header set Referrer-Policy "origin-when-cross-origin"
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "origin-when-cross-origin"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
 
     ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-STATIC'"
     CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-STATIC'" combined
