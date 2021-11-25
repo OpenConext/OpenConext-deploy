@@ -32,7 +32,6 @@ frontend internet_ip
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
     acl no_same_site_uas var(txn.useragent) -m reg -f /etc/haproxy/maps/nosamesitebrowsers.lst
-    acl has_same_site_flag res.fhdr(Set-Cookie) -m sub SameSite
     # ACL to protect APIs of public vhosts
     acl internal src -f /etc/haproxy/acls/internalips.acl
     # Deny the requests to internal APIs from IP addresses that are not on the internal ips list
@@ -42,7 +41,8 @@ frontend internet_ip
     # Set HSTS on all outgoing responses
     http-response set-header Strict-Transport-Security max-age=34214400
     # Add samesite=none to all outgoing cookies except unsupported browsers
-    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !no_same_site_uas !has_same_site_flag
+    # or when the SameSite cookie parameter is already present
+    http-response replace-header Set-Cookie (?i)(^(?!.*samesite).*$) \1;\ SameSite=None if !no_same_site_uas 
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
     use_backend dummy_backend
 
@@ -110,12 +110,13 @@ frontend internet_restricted_ip
     # Create ACLs to make samesite=origin execeptions for unsupported browsers
     # See https://www.chromium.org/updates/same-site/incompatible-clients
     acl no_same_site_uas var(txn.useragent) -m reg -f /etc/haproxy/maps/nosamesitebrowsers.lst
-    acl has_same_site_flag res.fhdr(Set-Cookie) -m sub SameSite
     # Rewrite responses
     # Set HSTS on all outgoing responses
     http-response set-header Strict-Transport-Security max-age=34214400
     # Add samesite=none to all outgoing cookies except unsupported browsers
-    http-response replace-header Set-Cookie (.*) \1;\ SameSite=None if !no_same_site_uas !has_same_site_flag
+    # Add samesite=none to all outgoing cookies except unsupported browsers
+    # or when the SameSite cookie parameter is already present
+    http-response replace-header Set-Cookie (?i)(^(?!.*samesite).*$) \1;\ SameSite=None if !no_same_site_uas 
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
     use_backend dummy_backend_restricted
 
