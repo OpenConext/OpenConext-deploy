@@ -1,1 +1,1 @@
-HAPROXYCAPTUREDREQUESTHEADERS %{DATA:request_header_user_agent}\|%{DATA:request_header_tls_cipher},%{DATA:request_header_tls_version},%{DATA:request_header_http_version}\|%{DATA:http_req_rate_10s}\|%{DATA:http_req_rate_ip_path_1m}
+HAPROXYCAPTUREDREQUESTHEADERS %{DATA:request_header_user_agent}\|%{DATA:request_header_tls_cipher},%{DATA:request_header_tls_version},%{DATA:request_header_http_version}\|%{DATA:request_header_samesitesupport}\|%{DATA:http_req_rate_10s}\|%{DATA:http_req_rate_ip_path_1m}
