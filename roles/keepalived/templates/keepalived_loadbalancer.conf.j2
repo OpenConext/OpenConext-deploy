@@ -18,6 +18,10 @@ vrrp_instance ipv4 {
        {{ haproxy_sni_ip_restricted.ipv4 }}
        {% endif %}
    }
+   
+       notify_master "/bin/echo 'master' > /tmp/keepalived.state"
+       notify_backup "/bin/echo 'backup' > /tmp/keepalived.state"
+       notify_fault "/bin/echo 'fault' > /tmp/keepalived.state"
 }
 vrrp_instance ipv6 {        
    interface {{ ansible_default_ipv4.interface }} 
@@ -33,4 +37,8 @@ vrrp_instance ipv6 {
         {{ haproxy_sni_ip_restricted.ipv6 }}
         {% endif %}
    }
+   
+       notify_master "/bin/echo 'master' > /tmp/keepalived6.state"
+       notify_backup "/bin/echo 'backup' > /tmp/keepalived6.state"
+       notify_fault "/bin/echo 'fault' > /tmp/keepalived6.state"
 }
