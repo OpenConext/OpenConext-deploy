@@ -5,6 +5,8 @@ $backupdir = "/home/backup";
 $username = "admin";
 $password = "{{ mongo_admin_password }}";
 
+umask 0077;
+
 # First check if this is the keepalived master: If it is, no backups are performed, to keep the backup load on the database standby node
 
 my $keepalived_status;
@@ -52,4 +54,4 @@ if ( -d "$backupdir/mongo-dump-$day/$dir") {
 }
 }
 }
-
+umask 0022; 

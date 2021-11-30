@@ -1,5 +1,7 @@
 #!/bin/bash
 
+umask 0077
+
 declare -x PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
 MYSQL_USER="{{ mysql_backup_user }}"
@@ -60,3 +62,5 @@ rm tmp_sqlend.sql
 
 echo "-- FINISH —"
 fi
+
+umask 0022
