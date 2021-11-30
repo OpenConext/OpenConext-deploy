@@ -45,6 +45,9 @@ frontend internet_ip
     http-response replace-header Set-Cookie (?i)(^(?!.*samesite).*$) \1;\ SameSite=None if !no_same_site_uas
     # Remove an already present SameSite cookie attribute for unsupported browsers
     http-response replace-value Set-Cookie (^.*)(?i);\ *SameSite=(Lax|Strict|None)(.*$) \1\3 if no_same_site_uas
+    # Log whether the no_same_site_uas ACL has been hit 
+    http-request set-header samesitesupport samesite_notsupported if no_same_site_uas
+    http-request set-header samesitesupport samesite_supported if !no_same_site_uas
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
     use_backend dummy_backend
 
@@ -120,6 +123,9 @@ frontend internet_restricted_ip
     http-response replace-header Set-Cookie (?i)(^(?!.*samesite).*$) \1;\ SameSite=None if !no_same_site_uas
     # Remove an already present SameSite cookie attribute for unsupported browsers
     http-response replace-value Set-Cookie (^.*)(?i);\ *SameSite=(Lax|Strict|None)(.*$) \1\3 if no_same_site_uas
+    # Log whether the no_same_site_uas ACL has been hit
+    http-request set-header samesitesupport samesite_notsupported if no_same_site_uas
+    http-request set-header samesitesupport samesite_supported if !no_same_site_uas
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
     use_backend dummy_backend_restricted
 
