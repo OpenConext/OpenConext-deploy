@@ -196,6 +196,14 @@
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
 
+- name: Create the backup directory
+  file:
+    path: /home/backup
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
 - name: Put mariadb_backup script
   template:
     src: "mariadb_backup.sh.j2"
