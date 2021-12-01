@@ -15,3 +15,4 @@ haproxy_blocklistips:
 haproxy_internalips:
   - 0.0.0.0/0
   - ::0/0
+haproxy_hsts_value: "max-age=34214400"
