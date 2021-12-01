@@ -39,7 +39,7 @@ frontend internet_ip
     http-request deny if { path -m beg /internal/ } !{ path -m beg /internal/groups } !internal
     # Rewrite responses
     # Set HSTS on all outgoing responses
-    http-response set-header Strict-Transport-Security max-age=34214400
+    http-response set-header Strict-Transport-Security {{ haproxy_hsts_value }}
     # Add samesite=none to all outgoing cookies except for unsupported browsers,
     # or when the SameSite cookie attribute is already present
     http-response replace-header Set-Cookie (?i)(^(?!.*samesite).*$) \1;\ SameSite=None if !no_same_site_uas
@@ -114,7 +114,7 @@ frontend internet_restricted_ip
     acl no_same_site_uas var(txn.useragent) -m reg -f /etc/haproxy/maps/nosamesitebrowsers.lst
     # Rewrite responses
     # Set HSTS on all outgoing responses
-    http-response set-header Strict-Transport-Security max-age=34214400
+    http-response set-header Strict-Transport-Security {{ haproxy_hsts_value }}
     # Add samesite=none to all outgoing cookies except for unsupported browsers,
     # or when the SameSite cookie attribute is already present
     http-response replace-header Set-Cookie (?i)(^(?!.*samesite).*$) \1;\ SameSite=None if !no_same_site_uas
