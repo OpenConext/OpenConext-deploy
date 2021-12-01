@@ -20,7 +20,7 @@
 - name: Install pymongo
   pip:
     name: pymongo
-    state: latest
+    version: 3.9.0
 
 - name: Install kernel settings script
   copy:
