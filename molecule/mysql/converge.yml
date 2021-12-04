@@ -31,7 +31,8 @@
       galera_root_users:
         - name: molecule
           password: secret
-          privs: '*.*:ALL'
+          privs: 
+            - '*.*:ALL'
           hosts:
             - '%'
     - role: galera_create_users

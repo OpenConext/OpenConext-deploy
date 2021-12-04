@@ -96,16 +96,9 @@
           dest: "{{ inventory_dir }}/files/certs/galera/galera_server.key"
         - src: /root/example_com.crt
           dest: "{{ inventory_dir }}/files/certs/galera/galera_server.pem"
-      run_once: true
-
-    - name: "Fetch files all servers"
-      fetch:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        flat: true
-      with_items:
         - src: /root/example_com.crt
           dest: "{{ inventory_dir }}/files/certs/galera/{{ inventory_hostname }}-galera_client.pem"
+      run_once: true
 
   roles:
     - role: keepalived

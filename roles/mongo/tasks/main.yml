@@ -73,6 +73,16 @@
   when:
     - mongo_tls | bool
 
+- name: Create the backup directory
+  file:
+    path: /home/backup
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  when:
+    - mongo_cluster | bool
+
 - name: Install the backup script
   template:
     src: "backup_mongo.pl.j2"

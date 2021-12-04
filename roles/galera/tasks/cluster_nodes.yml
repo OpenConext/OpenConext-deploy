@@ -196,6 +196,14 @@
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
 
+- name: Create the backup directory
+  file:
+    path: /home/backup
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
 - name: Put mariadb_backup script
   template:
     src: "mariadb_backup.sh.j2"
@@ -229,7 +237,7 @@
     name: "{{ item.0.name }}"
     host: "{{ item.1 }}"
     password: "{{ item.0.password }}"
-    priv: "{{ item.0.privs }}"
+    priv: "{{ item.0.privs | join('/') }}"
     state: present
     login_user: root
     login_password: "{{ mariadb_root_password }}"
