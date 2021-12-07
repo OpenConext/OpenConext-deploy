@@ -1,4 +1,3 @@
-loghost_fqdn: logging.{{ base_domain }}
 rsyslog_ca: /etc/pki/rsyslog/rsyslog_ca.pem
 rsyslog_dir: /opt/openconext/logs
 rsyslog_read_group: adm
