@@ -33,7 +33,7 @@ chomp($day);
 
 # Remove old backups if exists
 if ( -e "$backupdir/mongo-dump-$day/") {
-`rm -f $backupdir/mongo-dump-$day/*`;
+`rm -rf $backupdir/mongo-dump-$day/`;
 }
 
 # Dump databases
