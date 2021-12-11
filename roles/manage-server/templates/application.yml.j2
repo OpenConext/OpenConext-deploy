@@ -3,7 +3,11 @@ logging:
   level:
     org.springframework.data.mongodb: INFO
 
-secure_cookie: true
+cookie:
+  secure: true
+  # Options are 'Strict', 'Lax' or 'None'
+  same_site: None
+
 base_domain: {{ base_domain }}
 
 server:
