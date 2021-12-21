@@ -143,7 +143,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
       require valid-user
     </Location>
 
-    Header always set Content-Security-Policy {{ httpd_csp.lenient }}
+    Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"
     Header always set X-Frame-Options "DENY"
     Header always set Referrer-Policy "origin-when-cross-origin"
     Header always set X-Content-Type-Options "nosniff"
