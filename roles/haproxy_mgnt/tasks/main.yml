@@ -3,6 +3,7 @@
   haproxy_commands:
     java_blauwrood_servers: "{{ java_blauwrood_servers }}"
     php_blauwrood_servers: "{{ php_blauwrood_servers }}"
+    static_blauwrood_servers: "{{ static_blauwrood_servers }}"
     weight: "{{ weight }}"
     color: "{{ color }}"
     app_name: "{{ app_name }}"
@@ -14,6 +15,7 @@
   haproxy_commands:
     java_blauwrood_servers: "{{ java_blauwrood_servers }}"
     php_blauwrood_servers: "{{ php_blauwrood_servers }}"
+    static_blauwrood_servers: "{{ static_blauwrood_servers }}"
     color: "{{ color }}"
     state: "{{ state }}"
     app_name: "{{ app_name }}"
