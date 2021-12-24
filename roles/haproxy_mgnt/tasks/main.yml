@@ -1,4 +1,16 @@
 ---
+- name: Check if the patchproces is running, except when called from the patchproces
+  stat:
+    path: /tmp/patchprocesstarted
+  register: patch_process_started
+
+- block:
+     - name: End the play if the patchprocess is running
+       debug:
+         msg: "The patchprocess is running. No loadbalancer management allowed"
+     - meta: end_play
+  when: patch_process_started.stat.exists and skip_patch_check is not defined 
+
 - name: get new weight for haproxy hosts
   haproxy_commands:
     java_blauwrood_servers: "{{ java_blauwrood_servers }}"
