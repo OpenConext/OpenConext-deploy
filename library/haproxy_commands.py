@@ -20,6 +20,7 @@ if __name__ == "__main__":
   fields = {
     "java_blauwrood_servers": {"java_blauwrood_servers": True, "type": "list"},
     "php_blauwrood_servers": {"php_blauwrood_servers": True, "type": "list"},
+    "static_blauwrood_servers": {"static_blauwrood_servers": True, "type": "list"},
     "weight": {"type": "str"},
     "color": {"required": True, "type": "str"},
     "app_name": {"required": True, "type": "str"},
@@ -29,6 +30,7 @@ if __name__ == "__main__":
   module = AnsibleModule(argument_spec=fields)
   java_servers = [s["label"] for s in module.params["java_blauwrood_servers"]]
   php_servers = [s["label"] for s in module.params["php_blauwrood_servers"]]
+  static_servers = [s["label"] for s in module.params["static_blauwrood_servers"]]
   app_name = module.params["app_name"].lower()
   app_type = module.params["app_type"].lower()
 
@@ -37,7 +39,13 @@ if __name__ == "__main__":
 
   state = module.params["state"]
 
-  servers = java_servers if app_type == "java" else php_servers
+  if app_type == "java":
+      servers = java_servers 
+  elif app_type == "php":
+      servers = php_servers
+  elif app_type == "static":
+      servers = static_servers
+
   red_servers = [s for s in servers if s.upper().endswith("ROOD")]
   blue_servers = [s for s in servers if s.upper().endswith("BLAUW")]
   if color == "rood":
