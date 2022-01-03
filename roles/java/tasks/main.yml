@@ -29,3 +29,12 @@
     - { name: 'keytool', path: 'bin/keytool' }
   tags:
     - java
+
+- name: Uninstall once used Java versions
+  yum:
+    name:
+     - java-1.7.0-openjdk
+     - java-1.7.0-openjdk-headless
+    state: absent
+  tags:
+    - java
