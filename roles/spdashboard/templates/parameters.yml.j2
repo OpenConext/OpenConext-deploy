@@ -57,4 +57,8 @@ parameters:
     global.site_notice.show: {{ spdashboard_show_global_notice }}
     global.site_notice.date: {{ spdashboard_global_notice_date }}
     global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'
-
+    teams_host: {{ spdashboard_teams_host }}
+    teams_username: {{ spdashboard_teams_api_user }}
+    teams_password: {{ spdashboard_teams_api_password }}
+    team.prefix.default_stem_name: '{{ spdashboard_teams_default_stem }}'
+    team.prefix.group_name_context: '{{ spdashboard_teams_group_name_context }}'
