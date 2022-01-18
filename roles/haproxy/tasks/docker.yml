@@ -1,0 +1,153 @@
+---
+- name: Set directory facts
+  set_fact:
+    haproxy_config_directory: "/opt/{{ env }}/haproxy"
+    haproxy_pki_directory: "/opt/{{ env }}/pki/haproxy"
+
+- name: Create lbops group
+  group:
+    name: lbops
+    state: present
+
+- name: Create haproxy config map and acl directories
+  file:
+    path: "{{ haproxy_config_directory }}/{{ item }}"
+    state: directory
+    owner: root
+    group: lbops
+    mode: 0775
+  with_items:
+    - acls
+    - maps
+    - configs
+
+- name: Create haproxy SSL key directory
+  file:
+    dest: "{{ haproxy_pki_directory }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create combined key and certificate file for HAproxy
+  copy:
+    content: "{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
+    dest: "{{ haproxy_pki_directory }}/{{ item.name }}_haproxy.pem"
+    mode: 0640
+    owner: root
+    gid: "99"
+  with_items: "{{ haproxy_sni_ip.certs }}"
+  notify:
+    - "reload haproxy"
+
+- name: Create combined key and certificate file for HAproxy restricted
+  copy:
+    content: "{{ item.key_content }}{{lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
+    dest: "{{ haproxy_pki_directory}}/{{ item.name }}_haproxy.pem"
+    mode: 0640
+    owner: root
+    gid: 99
+  with_items: "{{ haproxy_sni_ip_restricted.certs }}"
+  when:
+    - "haproxy_sni_ip_restricted is defined"
+  notify:
+    - "reload haproxy"
+
+- name: Install ffdhe3072 DH parameters
+  copy: 
+    src: ffdhe3072.pem
+    dest: "{{ haproxy_pki_directory }}/ffdhe3072.pem"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - "reload haproxy"
+
+- name: Copy haproxy config
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ haproxy_config_directory }}/configs/{{ ansible_loop.index }}{{ item }}"
+  with_items:
+    - haproxy_global.cfg
+    - haproxy_frontend.cfg
+    - haproxy_backend.cfg
+    - haproxy_stick_table_backend.cfg
+    - haproxy_resolvers.cfg
+  notify:
+    - "reload haproxy"
+  loop_control:
+    extended: yes
+
+- name: Copy haproxy acls
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ haproxy_config_directory }}/acls/{{ item }}"
+    owner: root
+    group: lbops
+    mode: 0664
+  with_items:
+    - validvhostsrestricted.acl
+    - validvhostsunrestricted.acl
+    - allowedips.acl
+    - blockedips.acl
+    - internalips.acl
+  notify:
+    - "reload haproxy"
+
+- name: Copy haproxy maps
+  template: 
+    src: "{{ item }}.j2"
+    dest: "{{ haproxy_config_directory }}/maps/{{ item }}"
+    owner: root
+    group: lbops
+    mode: 0664
+  with_items:
+    - backends.map
+    - redirects.map
+  notify:
+    - "reload haproxy"
+ 
+- name: Place file with list of browsers that do not accept samesite=none cookies
+  copy:
+    src: nosamesitebrowsers.lst
+    dest: "{{ haproxy_config_directory }}/maps/nosamesitebrowsers.lst"
+    owner: root
+    group: lbops
+    mode: 0664
+
+- name: Create the Haproxy backend  network
+  community.docker.docker_network:
+    name: haproxybackend_{{ env }}
+    driver: overlay
+    driver_options: 
+      encrypted: ""
+  delegate_to: "{{ groups['docker_swarm_manager'][0] }}"
+  tags: network
+
+- name: Create the haproxy docker service
+  community.docker.docker_swarm_service:
+    name: haproxy_{{ env }}
+    image: haproxy:{{ haproxy_docker_version }}-alpine
+    publish:
+     - mode: host
+       protocol: tcp 
+       published_port: 8443
+       target_port: 8443
+     - mode: host
+       protocol: tcp 
+       published_port: 8080
+       target_port: 8080
+    dns: 127.0.0.11
+    mounts:
+      - source: "{{ haproxy_config_directory }}"
+        target: /etc/haproxy/
+        type: bind
+      - source: "{{ haproxy_pki_directory }}"
+        target: /etc/pki/haproxy/
+        type: bind
+    args:
+      - "-f" 
+      - "/etc/haproxy/configs/"
+    networks:
+      - haproxybackend_{{ env }}
+  delegate_to: "{{ groups['docker_swarm_manager'][0] }}"

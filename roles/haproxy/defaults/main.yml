@@ -16,3 +16,10 @@ haproxy_internalips:
   - 0.0.0.0/0
   - ::0/0
 haproxy_hsts_value: "max-age=34214400"
+haproxy_config_directory: /etc/haproxy/
+haproxy_pki_directory: /etc/pki/haproxy/
+haproxy_listen_port_nonssl: 80
+haproxy_listen_port_ssl: 443
+haproxy_listen_port_nonssl_restricted: 80
+haproxy_listen_port_ssl_restricted: 443
+haproxy_docker_version: 2.4.12

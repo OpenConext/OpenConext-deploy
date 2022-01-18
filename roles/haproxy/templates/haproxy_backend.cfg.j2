@@ -23,20 +23,21 @@
   backend {{ application.name }}_be
   option httpchk {{ application.ha_method }} {{ application.ha_url }} "HTTP/1.0\r\nHost: {{ application.vhost_name }}"
 
-  {%if application.x_forwarded_port is defined %}
+  {% if application.x_forwarded_port is defined %}
   http-request set-header X-Forwarded-Port {{ application.x_forwarded_port }}
   {% endif %}
   http-response del-header ^Strict-Transport-Security:.* #Remove hsts header from backend applications
   mode http
   balance roundrobin
   option httpclose
-
   cookie HTTPSERVERID insert nocache indirect httponly secure maxidle {{ haproxy_cookie_max_idle }}
-
+  {% if 'docker_loadbalancer' in group_names %}
+  server-template DOCKERBLAUW- 20 {{ application.name }}httpdblauw_{{ env }}:80 check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} weight 100 resolvers docker init-addr none,libc
+  server-template DOCKERROOD- 20 {{ application.name }}httpdrood_{{ env }}:80 check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} weight 100 resolvers docker init-addr none,libc
+  {% else %}
   {% for server in application.servers %}
   server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}{% endif %} weight 100
-    
   {% endfor %}
-
+  {% endif %}
 {% endfor %}
 

@@ -1,0 +1,11 @@
+resolvers docker
+    nameserver dns1 127.0.0.11:53
+    resolve_retries 3
+    timeout resolve 1s
+    timeout retry   1s  
+    hold other      10s 
+    hold refused    10s 
+    hold nx         10s 
+    hold timeout    10s 
+    hold valid      10s 
+    hold obsolete   10s 
