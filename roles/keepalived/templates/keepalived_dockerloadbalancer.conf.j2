@@ -1,0 +1,50 @@
+#jinja2: lstrip_blocks: True
+global_defs {
+  vrrp_garp_master_refresh 60
+}
+vrrp_instance ipv4 {
+   interface {{ ansible_default_ipv4.interface }}       # interface to monitor
+   state {{ keepalived.state_master }}
+   virtual_router_id {{ keepalived_vrid_ipv4 }} 
+   priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
+   advert_int 5
+   authentication {
+        auth_type PASS
+        auth_pass {{ keepalived_loadbalancer_vrrp_password }}
+   }
+   virtual_ipaddress {
+       {% for ip in docker_unrestricted_ips.ipv4 %}
+       {{ ip }}
+       {% endfor %}
+       {% if docker_restricted_ips is defined %}
+       {% for ip in docker_restricted_ips.ipv4 %}
+       {{ ip }}
+       {% endfor %}
+       {% endif %}
+   }
+   
+       notify_master "/bin/echo 'master' > /tmp/keepalived.state"
+       notify_backup "/bin/echo 'backup' > /tmp/keepalived.state"
+       notify_fault "/bin/echo 'fault' > /tmp/keepalived.state"
+}
+vrrp_instance ipv6 {        
+   interface {{ ansible_default_ipv4.interface }} 
+   state {{ keepalived.state_backup }}
+   virtual_router_id {{ keepalived_vrid_ipv6 }}
+   priority {{ keepalived.backupprio }}
+   advert_int 5
+   virtual_ipaddress {
+        {% for ip in docker_unrestricted_ips.ipv6 %}
+        {{ ip }}
+        {% endfor %}
+        {% if docker_restricted_ips is defined %}
+        {% for ip in docker_restricted_ips.ipv6 %}
+        {{ ip }}
+        {% endfor %}
+        {% endif %}
+   }
+   
+       notify_master "/bin/echo 'master' > /tmp/keepalived6.state"
+       notify_backup "/bin/echo 'backup' > /tmp/keepalived6.state"
+       notify_fault "/bin/echo 'fault' > /tmp/keepalived6.state"
+}

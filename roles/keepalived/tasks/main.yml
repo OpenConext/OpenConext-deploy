@@ -6,7 +6,7 @@
     ignoreerrors: yes
 
 - name: Install keepalived
-  yum:
+  package:
     name: keepalived
     state: present
   register: keepalived_package_installed
