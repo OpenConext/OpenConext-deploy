@@ -1,0 +1,33 @@
+- name: Create the spdashboardhttpd{{ item }} docker swarm service
+  community.docker.docker_swarm_service:
+    name: spdashboardhttpd{{ item }}_{{ env }}
+    image: ghcr.io/surfnet/sp-dashboard/spdashboard_web:{{ spd_docker_web_version }}
+    networks:
+      - haproxybackend_{{ env }}
+    mounts:
+      - source: "/opt/{{ env }}/spdashboard/000-default.conf"
+        target: "/usr/local/apache2/conf/000-default.conf"
+        type: bind
+    env:
+      PHPFPM_SERVER: spdashboardphpfpm{{ item }}_{{ env }}
+  delegate_to: "{{ groups['docker_swarm_manager'][0] }}"
+  with_items: 
+    - rood
+    - blauw
+
+- name: Create the spdashboardphpfpm{{ item }} docker swarm service
+  community.docker.docker_swarm_service:
+    name: spdashboardphpfpm{{ item }}_{{ env }}
+    image: ghcr.io/surfnet/sp-dashboard/spdashboard_php-fpm:{{ spd_docker_phpfpm_version }}
+    networks:
+      - haproxybackend_{{ env }}
+    mounts:
+      - source: "/opt/{{ env }}/spdashboard/parameters.yml"
+        target: "/var/www/html/app/config/parameters.yml"
+        type: bind
+    env:
+      SYMFONY_ENV: "prod"
+  delegate_to: "{{ groups['docker_swarm_manager'][0] }}"
+  with_items: 
+    - rood
+    - blauw

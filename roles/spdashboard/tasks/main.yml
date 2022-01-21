@@ -1,7 +1,7 @@
 ---
 - name: Create directory to keep configfile
   file:
-    dest: "/opt/openconext/spdashboard"
+    dest: "/opt/{{ env }}/spdashboard"
     state: directory
     owner: root
     group: root
@@ -9,40 +9,19 @@
 
 - name: Place the configfile
   template:
-    src: parameters.yml.j2
-    dest: /opt/openconext/spdashboard/parameters.yml
+    src: "{{ item }}.j2"
+    dest: "/opt/{{ env }}/spdashboard/{{ item }}"
     owner: root
     group: root
     mode: 0644
+  with_items: 
+    - parameters.yml
+    - 000-default.conf
 
-- name: Create the spdashboard container network
-  docker_network:
-    name: "spdashboard"
+- name: Include docker swarm based SPdashboard installation
+  include_tasks: dockerswarm.yml
+  when: "'docker_swarm_apps' in group_names"
 
-- name: Create the web container
-  docker_container:
-    name: spdashboard_web
-    image: ghcr.io/surfnet/sp-dashboard/spdashboard_web:{{ spd_docker_web_version }}
-    published_ports: 0.0.0.0:80:80
-    pull: true
-    restart_policy: "always"
-    networks:
-      - name: "spdashboard"
- 
-- name: Create the php-fpm container
-  docker_container:
-    name: spdashboard_php-fpm
-    image: ghcr.io/surfnet/sp-dashboard/spdashboard_php-fpm:{{ spd_docker_phpfpm_version }}
-    pull: true
-    restart_policy: "always"
-    env:
-      SYMFONY_ENV: "prod"
-    mounts:
-      - source: /opt/openconext/spdashboard/parameters.yml
-        target: /var/www/html/app/config/parameters.yml
-        type: bind
-      - source: /dev/log
-        target: /dev/log
-        type: bind
-    networks:
-      - name: "spdashboard"
+- name: Include docker based Haproxy installation
+  include_tasks: docker.yml
+  when: "'docker_swarm_apps' not in group_names"

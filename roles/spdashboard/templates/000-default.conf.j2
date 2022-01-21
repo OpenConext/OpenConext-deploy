@@ -1,0 +1,33 @@
+TraceEnable Off
+ServerTokens Prod
+
+DocumentRoot "/var/www/html/web"
+SetEnvIfNoCase ^Authorization\$ "(.+)" HTTP_AUTHORIZATION=\$1
+SetEnv HTTPS on
+
+<Directory "/var/www/html/web">
+  AllowOverride None
+  Require all granted
+  Options -MultiViews
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ app.php/$1 [QSA,L]
+<IfModule mod_headers.c>
+        <If "%{THE_REQUEST} =~ /translations/">
+            Header always unset X-Content-Security-Policy
+            Header always unset Content-Security-Policy
+            Header always set Content-Security-Policy "default-src 'self'; block-all-mixed-content; font-src 'self' netdna.bootstrapcdn.com; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' ajax.googleapis.com; style-src 'self' netdna.bootstrapcdn.com 'unsafe-inline'; upgrade-insecure-requests; report-uri /csp/report"
+        </If>
+        Header set Referrer-Policy "origin-when-cross-origin"
+</IfModule>
+
+<FilesMatch \.php$>
+  SetHandler "proxy:fcgi://${PHPFPM_SERVER}:9000"
+</FilesMatch>
+ExpiresActive on
+ExpiresByType font/* "access plus 1 year"
+ExpiresByType image/* "access plus 6 months"
+ExpiresByType text/css "access plus 1 year"
+ExpiresByType text/js "access plus 1 year"
+</Directory>
+
