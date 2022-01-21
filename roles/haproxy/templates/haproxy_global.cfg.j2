@@ -26,7 +26,7 @@ global
 {% if haproxy_metricbeat %}
   stats socket 127.0.0.1:14567
 {% endif %}
-#  stats socket /var/lib/haproxy/haproxy.stats mode 660 level admin user root group {% if 'docker_loadbalancer' in group_names %}root{% else %}lbops{% endif %} expose-fd listeners
+  stats socket /var/lib/haproxy/haproxy.stats mode 660 level admin user {% if 'docker_loadbalancer' in group_names %}haproxy group haproxy{% else %}root group lbops{% endif %} expose-fd listeners
   server-state-file /var/lib/haproxy/state
 
 
