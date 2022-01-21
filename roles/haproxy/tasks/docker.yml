@@ -131,12 +131,8 @@
     publish:
      - mode: host
        protocol: tcp 
-       published_port: 8443
+       published_port: "{{ haproxy_listen_port_ssl }}"
        target_port: 8443
-     - mode: host
-       protocol: tcp 
-       published_port: 8080
-       target_port: 8080
     dns: 127.0.0.11
     mounts:
       - source: "{{ haproxy_config_directory }}"
