@@ -1,4 +1,7 @@
 ---
+- name: Include the all.yml vars from OpenConext-deploy
+  include_vars: ../../group_vars/all.yml
+
 - name: Create directory to keep configfile
   file:
     dest: "/opt/{{ env }}/profile"
