@@ -48,3 +48,13 @@ parameters:
     information_request_email_to: '{{ profile_info_request_email }}'
 
     remove_consent_enabled: false
+    
+    # Change to the following to use the database to store sessions:  
+    #session_handler: 'Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler'
+    session_handler: '{{ profile_session_handler | default('~') }}'
+    # Database settings when using a db to store sessions. Unused in the default setup
+    database_user: '{{ profile_db_user | default('') }}'
+    database_name: '{{ profile_db_name | default('') }}'
+    database_password: '{{ profile_db_password | default('') }}'
+    database_host: '{{ profile_db_host | default('') }}'
+

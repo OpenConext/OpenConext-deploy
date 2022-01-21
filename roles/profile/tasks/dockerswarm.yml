@@ -1,0 +1,101 @@
+---
+- name: Create directory to keep configfile
+  file:
+    dest: "/opt/{{ env }}/profile"
+    state: directory
+    owner: root
+    group: root
+    mode: 0770
+
+- name: Place the configfile
+  template:
+    src: "{{ item }}.j2"
+    dest: "/opt/{{ env }}/profile/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - parameters.yaml
+    - 000-default.conf
+    - global_view_parameters.yaml
+
+- name: Check presence of language specific overrides
+  local_action: stat path="{{ inventory_dir }}/files/profile/overrides/"
+  register: overrides_present
+  become: false
+
+- name: Copy language specific overrides
+  template:
+    src: "{{ item }}"
+    dest: "/opt/{{ env }}/profile/overrides/"
+  when: overrides_present.stat.exists
+  with_fileglob:
+    - "{{ inventory_dir }}/files/profile/overrides/*"
+
+- name: Check if we have a custom favicon
+  local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
+  register: customfavicon
+  become: false
+
+- name: Install environment specific favicon
+  copy:
+    src: "{{ inventory_dir }}/files/favicon.ico"
+    dest: "/opt/{{ env }}/profile/"
+  when:
+    customfavicon.stat.exists
+
+- name: copy default engineblock certificate to correct location
+  copy:
+    src: "{{ inventory_dir }}/files/certs/{{ engine_keys.default.publicKey }}" 
+    dest: "/opt/{{ env }}/profile/{{ engine_keys.default.publicKey }}"
+
+- name: "Create the profilehttpd docker swarm service"
+  community.docker.docker_swarm_service:
+    name: profilehttpd{{ item }}_{{ env }}
+    image: ghcr.io/openconext/openconext-profile/profile_web:{{ profile_docker_version }}
+    networks:
+      - haproxybackend_{{ env }}
+    mounts:
+      - source: "/opt/{{ env }}/profile/000-default.conf"
+        target: "/usr/local/apache2/conf/000-default.conf"
+        type: bind
+      - source: "/opt/{{ env }}/profile/favicon.ico"
+        target: "/var/www/html/public/favicon.ico"
+        type: bind
+    env:
+      PHPFPM_SERVER: profilephpfpm{{ item }}_{{ env }}
+  delegate_to: "{{ groups['docker_swarm_manager'][0] }}" 
+  with_items: 
+    - rood
+    - blauw
+  run_once: true
+
+- name: "Create the profilephpfpm docker swarm service"
+  community.docker.docker_swarm_service:
+    name: profilephpfpm{{ item }}_{{ env }}
+    image: ghcr.io/openconext/openconext-profile/profile_php-fpm:{{ profile_docker_version }}
+    networks:
+      - haproxybackend_{{ env }}
+    mounts:
+      - source: "/opt/{{ env }}/profile/parameters.yaml"
+        target: "/var/www/html/config/legacy/parameters.yaml"
+        type: bind
+      - source: "/opt/{{ env }}/profile/monolog.yaml"
+        target: "/var/www/html/config/packages/monolog.yaml"
+        type: bind
+      - source: "/opt/{{ env }}/profile/{{ engine_keys.default.publicKey }}"
+        target: "/etc/openconext/{{ engine_keys.default.publicKey }}"
+        type: bind
+      - source: "/opt/{{ env }}/profile/global_view_parameters.yaml"
+        target: "/var/www/html/public/config/legacy/global_view_parameters.yaml"
+        type: bind
+      - source: "/opt/{{ env }}/profile/overrides/"
+        target: "/var/www/html/public/overrides/"
+        type: bind
+    env:
+      APP_ENV: "prod"
+  delegate_to: "{{ groups['docker_swarm_manager'][0] }}" 
+  with_items: 
+    - rood
+    - blauw
+  run_once: true

@@ -64,3 +64,18 @@ profile_manage_provision_samlsp_sp_cert: ""
 profile_manage_provision_samlsp_trusted_proxy: false
 profile_manage_provision_samlsp_sign: false
 
+profile_support_url_help_en: "https://www.openconext.org"
+profile_support_url_help_nl: "https://www.openconext.org" 
+profile_support_url_help_pt: "https://www.openconext.org"
+profile_support_url_privacy_en: "https://www.openconext.org"
+profile_support_url_privacy_nl: "https://www.openconext.org"
+profile_support_url_privacy_pt: "https://www.openconext.org" 
+profile_support_url_terms_en: "https://www.openconext.org"
+profile_support_url_terms_nl: "https://www.openconext.org"
+profile_support_url_terms_pt: "https://www.openconext.org"
+profile_platform_url_en: "https://www.openconext.org"
+profile_platform_url_nl: "https://www.openconext.org"
+profile_platform_url_pt: "https://www.openconext.org"
+profile_support_url_attributes_en: "https://www.openconext.org"
+profile_support_url_attributes_nl: "https://www.openconext.org"
+profile_support_url_attributes_pt: "https://www.openconext.org"
