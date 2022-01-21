@@ -1,15 +1,18 @@
 #jinja2: lstrip_blocks: True
 ## Frontend configuration
-
 #--------------------------------------------------------------------
 #  frontend public ips
 # -------------------------------------------------------------------
 frontend internet_ip
 
-    bind {{ haproxy_sni_ip.ipv4 }}:{{ haproxy_listen_port_ssl }} ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(True) %} no-tlsv10 no-tlsv11 {% endif %} alpn h2,http/1.1 transparent 
-#    bind {{ haproxy_sni_ip.ipv6 }}:{{ haproxy_listen_port_ssl }} ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(True) %} no-tlsv10 no-tlsv11 {% endif %} alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip.ipv4 }}:{{ haproxy_listen_port_ssl }} ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem{% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(True) %} no-tlsv10 no-tlsv11{% endif %} alpn h2,http/1.1 transparent 
+    {% if haproxy_sni_ip.ipv6 is defined %}
+    bind {{ haproxy_sni_ip.ipv6 }}:{{ haproxy_listen_port_ssl }} ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem{% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(True) %} no-tlsv10 no-tlsv11{% endif %} alpn h2,http/1.1 transparent 
+    {% endif %}
     bind {{ haproxy_sni_ip.ipv4 }}:{{ haproxy_listen_port_nonssl }} transparent
-#    bind {{ haproxy_sni_ip.ipv6 }}:{{ haproxy_listen_port_nonssl }} transparent
+    {% if haproxy_sni_ip.ipv6 is defined %}
+    bind {{ haproxy_sni_ip.ipv6 }}:{{ haproxy_listen_port_nonssl }} transparent
+    {% endif %}
     # Logging is done in the local_ip backend, otherwise all requests are logged twice
     no log
     # We add the X-Forward-For header here
@@ -88,8 +91,8 @@ frontend local_ip
 ##  frontend restricted applications
 ## -------------------------------------------------------------------
 frontend internet_restricted_ip
-    bind {{ haproxy_sni_ip_restricted.ipv4 }}:{{ haproxy_listen_port_ssl_restricted }} ssl {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
-#    bind {{ haproxy_sni_ip_restricted.ipv6 }}:{{ haproxy_listen_port_ssl_restricted }} ssl {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip_restricted.ipv4 }}:{{ haproxy_listen_port_ssl_restricted }} ssl{% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem{% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip_restricted.ipv6 }}:{{ haproxy_listen_port_ssl_restricted }} ssl{% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem{% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
     bind {{ haproxy_sni_ip_restricted.ipv4 }}:{{ haproxy_listen_port_nonssl_restricted }} transparent
     bind {{ haproxy_sni_ip_restricted.ipv6 }}:{{ haproxy_listen_port_nonssl_restricted }} transparent
     # Logging is done in the local_ip_restriced backend, otherwise all requests are logged twice
