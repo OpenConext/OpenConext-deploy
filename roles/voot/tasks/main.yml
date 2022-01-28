@@ -9,7 +9,7 @@
     mode: 0740
   with_items:
     - logback.xml
-    - application.properties
+    - application.yml
     - externalProviders.yml
   notify:
     - "restart voot"
