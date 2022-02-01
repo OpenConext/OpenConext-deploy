@@ -19,6 +19,8 @@ apache_user: apache
 # Can be overridden in environments if it lives outside this env's base domain
 static_vhost: "static.{{ base_domain }}"
 
+admin_email: "openconext-admin@example.edu"
+
 httpd_csp:
   lenient: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:;
   lenient_with_static_img: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' {{ static_vhost }} data:;

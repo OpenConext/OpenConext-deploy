@@ -5,7 +5,7 @@ Listen {{ apache_app_listen_address.profile }}:{{ loadbalancing.profile.port }}
 <Virtualhost *:443 >
 {% endif %}
     ServerName   {{ profile_domain }}
-    ServerAdmin {{ apache_server_admin }}
+    ServerAdmin {{ admin_email }}
 
     DocumentRoot {{ profile_current_release_symlink }}/public
 

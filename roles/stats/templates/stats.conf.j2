@@ -6,7 +6,7 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
 {% endif %}
 
     ServerName https://stats.{{ base_domain }}
-    ServerAdmin {{ apache_server_admin }}
+    ServerAdmin {{ admin_email }}
 
     DocumentRoot {{ stats_api_env_dir }}/www/
     ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-STATS'"
