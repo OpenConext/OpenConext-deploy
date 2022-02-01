@@ -4,7 +4,7 @@ Listen {{ apache_app_listen_address.lifecycle }}:{{ loadbalancing.lifecycle.port
 {% else %}
 <Virtualhost *:443 >
 {% endif %}
-    ServerAdmin {{ apache_server_admin}}
+    ServerAdmin {{ admin_email }}
     DocumentRoot "{{ lifecycle_current_release_symlink }}/web"
     SetEnv SYMFONY_ENV prod
     SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1

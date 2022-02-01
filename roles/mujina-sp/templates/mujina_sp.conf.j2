@@ -4,7 +4,7 @@ Listen {{ apache_app_listen_address.mujina_sp }}:{{ loadbalancing.mujina_sp.port
 {% else %}
 <Virtualhost *:443 >
 {% endif %}
-    ServerAdmin {{ apache_server_admin}}
+    ServerAdmin {{ admin_email }}
 
     ServerName https://mujina-sp.{{ base_domain }}
 

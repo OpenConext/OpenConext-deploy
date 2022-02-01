@@ -10,13 +10,11 @@ myconext_base_domain: "%base_domain%"
 
 support_email: help@{{ base_domain }}
 noreply_email: no-reply@{{ base_domain }}
+admin_email: admin@{{ base_domain }}
 smtp_server: localhost
 error_mail_to: "{{ support_email }}"
 
 php_display_errors: 1
-apache_server_admin: "{{ support_email }}"
-diy_technicalcontact_name: "Technical Contact"
-diy_technicalcontact_email: "{{ support_email }}"
 
 attribute_aggregation_gui_version: "2.1.1"
 attribute_aggregation_server_version: "2.1.1"

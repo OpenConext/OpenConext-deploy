@@ -4,7 +4,7 @@ Listen {{ apache_app_listen_address.engine }}:{{ loadbalancing.engine.port }}
 {% else %}
 <Virtualhost *:443 >
 {% endif %}
-    ServerAdmin {{ apache_server_admin}}
+    ServerAdmin {{ admin_email }}
 
     DocumentRoot {{ engine_current_release_symlink }}/web
     ServerName   {{ engine_domain }}
