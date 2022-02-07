@@ -1,7 +1,7 @@
 Listen {{ apache_app_listen_address.diyidp }}:{{ loadbalancing.diyidp.port }}
 <Virtualhost {{ apache_app_listen_address.diyidp }}:{{ loadbalancing.diyidp.port }}>
     ServerName   https://{{ diyidp_domain }}
-    ServerAdmin {{ apache_server_admin }}
+    ServerAdmin {{ admin_email }}
     DirectoryIndex index.php
     DocumentRoot {{ diyidp_current_release_symlink }}/www
 

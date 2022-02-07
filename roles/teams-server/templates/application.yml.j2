@@ -46,7 +46,7 @@ sp_dashboard:
   password: {{ teams_api_spdashboard_password }}
   person-urn: "{{ teams.spdashboard_person_urn }}"
   name: "SP Dashboard"
-  email: "support@surfconext.nl"
+  email: "{{ support_email }}"
 
 # Is this node in a load-balanced topology responsible for cleaning up resources (See ExpiredInvitationsRemover)
 cron:
