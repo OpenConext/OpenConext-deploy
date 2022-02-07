@@ -23,6 +23,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !^/api/
+    RewriteCond %{REQUEST_URI} !^/internal/
     RewriteCond %{REQUEST_URI} !^/deprovision/
     RewriteCond %{REQUEST_URI} !^/fonts/
     RewriteRule (.*) /index.html [L]
@@ -34,6 +35,9 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 
     ProxyPass /api http://localhost:{{ springapp_tcpport }}/api retry=0
     ProxyPassReverse /api http://localhost:{{ springapp_tcpport }}/api
+
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPassReverse /internal http://localhost:{{ springapp_tcpport }}/internal
 
     ProxyPass /deprovision http://localhost:{{ springapp_tcpport }}/deprovision retry=0
 
