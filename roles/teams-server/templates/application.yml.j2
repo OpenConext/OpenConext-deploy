@@ -16,9 +16,7 @@ server:
   port: {{ springapp_tcpport }}
   error:
     path: "/error"
-  # We serve from the root. Do not change this
   servlet:
-    context-path:
     session:
       timeout: 28800
       cookie:
@@ -94,18 +92,14 @@ spring:
     url: jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}?useMysqlMetadata=true
     username: {{ teams.db_user }}
     password: {{ teams.db_password }}
-    tomcat:
-      test-on-borrow: true
-      validation-query: SELECT count(*) FROM invitations
-      remove-abandoned: true
   mail:
     host: {{ smtp_server }}
     port: 25
   main:
     banner-mode: "off"
-flyway:
-  validate-on-migrate: false
-   table: schema_version
+  flyway:
+    validate-on-migrate: false
+    table: schema_version
 
 management:
   health:

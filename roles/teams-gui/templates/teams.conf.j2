@@ -30,8 +30,8 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 
     ProxyPass /Shibboleth.sso !
 
-    ProxyPass /api/teams/health http://localhost:{{ springapp_tcpport }}/health retry=0
-    ProxyPass /api/teams/info http://localhost:{{ springapp_tcpport }}/info retry=0
+    ProxyPass /api/teams/health http://localhost:{{ springapp_tcpport }}/internal/health retry=0
+    ProxyPass /api/teams/info http://localhost:{{ springapp_tcpport }}/internal/info retry=0
 
     ProxyPass /api http://localhost:{{ springapp_tcpport }}/api retry=0
     ProxyPassReverse /api http://localhost:{{ springapp_tcpport }}/api
@@ -66,6 +66,11 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
       AuthType none
     </LocationMatch>
 
+    <LocationMatch "^/internal/(health|info)">
+      Require all granted
+      AuthType none
+    </LocationMatch>
+
     # The VOOT API is secured with basic auth
     <Location "/api/voot/">
       Require all granted
@@ -73,14 +78,14 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     </Location>
 
     # The SP dashboard API is secured with basic auth; only allow
-    # explicitly allowed IP ranges. If the setting is missing, noone is allowed.
-    <Location "/api/spdashboard/">
+    # explicitly allowed IP ranges. If the setting is missing, none is allowed.
+    <LocationMatch "^/(api/spdashboard|internal)/">
       {% if teams_allow_spd_api is defined %}
         SetEnvIfNoCase X-Forwarded-For {{ teams_allow_spd_api }} env_spd_allow
       {% endif %}
       Require env env_spd_allow
       AuthType none
-    </Location>
+    </LocationMatch>
 
     # The internal lifecycle API is secured with basic auth
     <Location "/deprovision/">
