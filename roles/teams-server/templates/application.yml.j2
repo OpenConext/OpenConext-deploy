@@ -14,12 +14,15 @@ secure_cookie: true
 server:
   # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
   port: {{ springapp_tcpport }}
+  error:
+    path: "/error"
   # We serve from the root. Do not change this
-  contextPath:
-  session:
-    timeout: 28800
-    cookie:
-      secure: true
+  servlet:
+    context-path:
+    session:
+      timeout: 28800
+      cookie:
+        secure: true
   server-header: no
 
 feature-toggles:
@@ -102,11 +105,23 @@ spring:
     banner-mode: "off"
 flyway:
   validate-on-migrate: false
+   table: schema_version
 
 management:
   health:
     mail:
-      enabled: false
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+  endpoint:
+    info:
+      enabled: true
+  info:
+    git:
+      mode: full
+
 email:
   from: {{ instance_name }} Teams <{{ noreply_email }}>
   base-url: https://teams.{{ base_domain }}
