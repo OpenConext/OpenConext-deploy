@@ -7,11 +7,12 @@ logging:
 server:
   # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
   port: {{ springapp_tcpport }}
-  contextPath: /aa/api
-  session:
-    timeout: 28800
-    cookie:
-      secure: true
+  servlet:
+    context-path: /aa/api
+    session:
+      timeout: 28800
+      cookie:
+        secure: true
   server-header: no
 
 scim_server_environment: test.surfconext
