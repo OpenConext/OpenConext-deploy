@@ -32,15 +32,19 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     RewriteCond %{REQUEST_URI} !^/doLogin
     RewriteCond %{REQUEST_URI} !^/saml
     RewriteCond %{REQUEST_URI} !^/actuator
+    RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/fonts
     RewriteRule (.*) /index.html [L]
 
     ProxyPreserveHost On
     ProxyPass /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api retry=0
     ProxyPassReverse /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api
+
     ProxyPass /saml/guest-idp http://localhost:{{ springapp_tcpport }}/saml/guest-idp retry=0
     ProxyPassReverse /saml/guest-idp http://localhost:{{ springapp_tcpport }}/saml/guest-idp
-    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/actuator retry=0
+
+    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
     ProxyPass /config http://localhost:{{ springapp_tcpport }}/config retry=0
     ProxyPass /register http://localhost:{{ springapp_tcpport }}/register retry=0
     ProxyPass /doLogin http://localhost:{{ springapp_tcpport }}/doLogin retry=0

@@ -34,8 +34,8 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     ProxyPass /internal/health http://localhost:{{ springapp_tcpport }}/internal/health retry=0
     ProxyPass /internal/info http://localhost:{{ springapp_tcpport }}/internal/info retry=0
 
-    ProxyPass /manage/api http://localhost:{{ springapp_tcpport }}/ retry=0
-    ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}/
+    ProxyPass /manage/api http://localhost:{{ springapp_tcpport }} retry=0
+    ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}
 
     DocumentRoot "{{ _springapp_dir }}/current"
 

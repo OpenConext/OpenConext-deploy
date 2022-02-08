@@ -28,6 +28,7 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !^/myconext
     RewriteCond %{REQUEST_URI} !^/actuator
+    RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/config
     RewriteCond %{REQUEST_URI} !^/login
     RewriteCond %{REQUEST_URI} !^/startSSO
@@ -36,9 +37,12 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
 
     ProxyPreserveHost On
     ProxyPass /Shibboleth.sso !
+
     ProxyPass /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api retry=0
     ProxyPassReverse /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api
-    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/actuator retry=0
+
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/internal retry=0
     ProxyPass /login http://localhost:{{ springapp_tcpport }}/login retry=0
     ProxyPass /startSSO http://localhost:{{ springapp_tcpport }}/startSSO retry=0
     ProxyPass /config http://localhost:{{ springapp_tcpport }}/config retry=0
@@ -65,6 +69,10 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
 
     # The Spring Boot endpoints
     <Location ~ "/actuator/">
+      allow from all
+      satisfy any
+    </Location>
+    <Location ~ "/internal/">
       allow from all
       satisfy any
     </Location>

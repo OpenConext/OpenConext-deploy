@@ -11,6 +11,8 @@ Listen {{ apache_app_listen_address.oidcng }}:{{ loadbalancing.oidcng.port }}
     CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-oidcng'" combined
 
     ProxyPass /.well-known/openid-configuration http://localhost:{{ springapp_tcpport}}/oidc/.well-known/openid-configuration retry=0
+    ProxyPass /actuator http://localhost:{{ springapp_tcpport}}/internal retry=0
+
     ProxyPass / http://localhost:{{ springapp_tcpport }}/ retry=0
     ProxyPassReverse / http://localhost:{{ springapp_tcpport }}/ retry=0
 

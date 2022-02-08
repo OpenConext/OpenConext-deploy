@@ -8,14 +8,17 @@ logging:
 server:
   # The port to where this Spring Boot application listens to.
   port: {{ springapp_tcpport }}
-  # We serve from the root. Do not change this
-  contextPath:
-  session:
-    timeout: 28800
-    cookie:
-      secure: true
-  server-header: no
-  max-http-header-size: 20000
+  error:
+    path: "/error"
+  server-header:
+  servlet:
+    # We serve from the root. Do not change this
+    context-path:
+    session:
+      timeout: 28800
+      cookie:
+        secure: true
+    max-http-header-size: 20000
 
 email:
   from: eduID <noreply@{{ myconext_base_domain }}>
@@ -120,17 +123,19 @@ spring:
   main:
     banner-mode: "off"
 
+# We disable all endpoints except health for the load-balancer and info for git information.
 management:
   health:
     mail:
       enabled: true
-
-# We disable all endpoints except health for the load-balancer and info for git information.
-endpoints:
-  enabled: false
-  health:
-    enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
   info:
-    enabled: true
     git:
       mode: full
