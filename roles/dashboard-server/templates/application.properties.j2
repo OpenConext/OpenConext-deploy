@@ -6,11 +6,11 @@ supported_language_codes={{ supported_language_codes }}
 organization={{ dashboard_organization }}
 
 # 8 hours
-server.session.timeout=28800
+server.servlet.session.timeout=28800
 
 # An empty value will be replaced with the default
 server.server-header=no
-server.session.cookie.secure=true
+server.servlet.session.cookie.secure=true
 
 # Team id that is used as definition of who is a 'dashboard_admin'.
 dashboard.admin={{ dashboard.admin_team }}
@@ -38,9 +38,11 @@ sab-rest.password={{ dashboard_sab_rest_password }}
 admin.surfconext.idp.sabRole=SURFconextverantwoordelijke
 viewer.surfconext.idp.sabRole=SURFconextbeheerder
 
-endpoints.enabled=false
-endpoints.health.enabled=true
-endpoints.info.enabled=true
+management.health.mail.enabled=true
+management.endpoints.web.exposure.include=health,info
+management.endpoints.web.base-path=/internal
+management.endpoint.info.enabled=true
+management.info.git.mode=full
 
 server.tomcat.basedir={{ dashboard_dir }}/tomcat_work
 
@@ -86,7 +88,7 @@ guestidp.entityids={{ dashboard.guestidp_entityids }}
 
 # tabs that can be hidden are: statistics,apps,policies,tickets,my_idp and user_invite
 dashboard.hide_tabs={{ dashboard_hide_tabs }}
-management.health.mail.enabled=true
+
 
 default_loa_level={{ manage.loa_values_supported[0] }}
 loa_values_supported={% for loa in manage.loa_values_supported %}{{ loa }}{{ "," if not loop.last else ""}} {% endfor %}

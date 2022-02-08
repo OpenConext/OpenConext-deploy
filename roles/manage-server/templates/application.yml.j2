@@ -78,6 +78,14 @@ management:
   health:
     mail:
       enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
   info:
     git:
       mode: full

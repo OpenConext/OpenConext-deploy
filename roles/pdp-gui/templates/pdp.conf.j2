@@ -24,12 +24,20 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !^/pdp
+    RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/fonts
     RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
+
+    ProxyPass /pdp/api/health http://localhost:{{ springapp_tcpport }}/internal/health retry=0
+    ProxyPass /pdp/api/info http://localhost:{{ springapp_tcpport }}/internal/info retry=0
+
     ProxyPass /pdp/api http://localhost:{{ springapp_tcpport }} retry=0
     ProxyPassReverse /pdp/api http://localhost:{{ springapp_tcpport }}
+
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPassReverse /internal http://localhost:{{ springapp_tcpport }}/internal
 
     DocumentRoot "{{ _springapp_dir }}/current"
 
@@ -40,8 +48,13 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     </Directory>
 
 
-    # Enable shibboleth for all other URLs, but the health check and EB endpoint
+    # Enable shibboleth for all other URLs, but the health . info check and EB endpoint
     <Location ~ "/pdp/api/(protected/*|decide/policy|health|info)">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location ~ "/internal/(health|info)">
       allow from all
       satisfy any
     </Location>

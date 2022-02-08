@@ -39,9 +39,6 @@ api:
 pseudo:
   mail_postfix: {{ attribute_aggregation_pseudo_mail_postfix }}
 
-flyway:
-  table: {{ aa_flyway_schema_version_table_name }}
-
 spring:
   jpa:
     properties:
@@ -53,12 +50,11 @@ spring:
     url: jdbc:mysql://{{ aa.db_host }}/{{ aa.db_name }}
     username: {{ aa.db_user }}
     password: {{ aa.db_password }}
-    tomcat:
-      test-on-borrow: true
-      validation-query: SELECT 1
-      remove-abandoned: true
   main:
     banner-mode: "off"
+  flyway:
+    validate-on-migrate: false
+    table: schema_version
 
 # In a multi master database setup toggle which machine is reponsible for cron jobs
 cron_job_responsible: {{ aa_cronjobmaster }}
@@ -66,10 +62,15 @@ pseudo_emails_retention_days_period: {{ attribute_aggregation_pseudo_emails_rete
 
 
 # We disable all endpoints except health for the load-balancer and info for git information.
-endpoints:
-  enabled: false
-  health:
-    enabled: true
-    sensitive: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
   info:
-    enabled: true
+    git:
+      mode: full

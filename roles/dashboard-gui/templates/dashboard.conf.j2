@@ -26,6 +26,7 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     RewriteCond %{REQUEST_URI} !^/spDashboard
     RewriteCond %{REQUEST_URI} !^/health
     RewriteCond %{REQUEST_URI} !^/info
+    RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/login
     RewriteCond %{REQUEST_URI} !^/startSSO
     RewriteCond %{REQUEST_URI} !^/fonts
@@ -35,12 +36,17 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     ProxyPass /Shibboleth.sso !
     ProxyPass /dashboard/api http://localhost:{{ springapp_tcpport }}/dashboard/api retry=0
     ProxyPassReverse /dashboard/api http://localhost:{{ springapp_tcpport }}/dashboard/api
-    ProxyPass /spDashboard/api http://localhost:9394/spDashboard/api retry=0
-    ProxyPassReverse /spDashboard/api http://localhost:9394/spDashboard/api
-    ProxyPass /health http://localhost:{{ springapp_tcpport }}/health retry=0
-    ProxyPass /info http://localhost:{{ springapp_tcpport }}/info retry=0
+
+    ProxyPass /health http://localhost:{{ springapp_tcpport }}/internal/health retry=0
+    ProxyPass /info http://localhost:{{ springapp_tcpport }}/internal/info retry=0
     ProxyPass /login http://localhost:{{ springapp_tcpport }}/login retry=0
     ProxyPass /startSSO http://localhost:{{ springapp_tcpport }}/startSSO retry=0
+
+    ProxyPass /spDashboard/api http://localhost:{{ springapp_tcpport }}/spDashboard/api retry=0
+    ProxyPassReverse /spDashboard/api http://localhost:{{ springapp_tcpport }}/spDashboard/api
+
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPassReverse /internal http://localhost:{{ springapp_tcpport }}/internal
 
     DocumentRoot "{{ _springapp_dir }}/current"
 
@@ -49,6 +55,16 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
       Allow       from all
       Options     -Indexes
     </Directory>
+
+    <Location ~ "/(health|info)">
+      allow from all
+      satisfy any
+    </Location>
+
+    <Location ~ "/internal/(health|info)">
+      allow from all
+      satisfy any
+    </Location>
 
     <Location ~ "^/(?!startSSO)">
       allow from all
