@@ -15,17 +15,18 @@ cron:
 
 
 server:
-  # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
+  # The port to where this Spring Boot application listens to.
   port: {{ springapp_tcpport }}
-  # We serve from the root. Do not change this
-  contextPath:
-  session:
-    timeout: 28800
-    cookie:
-      secure: true
   error:
     path: "/error"
-  server-header: no
+  server-header:
+  servlet:
+    # We serve from the root. Do not change this
+    context-path:
+    session:
+      timeout: 28800
+      cookie:
+        secure: true
   max-http-header-size: 10000000
   tomcat:
     max-http-form-post-size: 10000000
