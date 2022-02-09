@@ -3,7 +3,7 @@ logging.config=file://{{ pdp_dir }}/logback.xml
 
 # Port for spring boot application
 server.port={{ springapp_tcpport }}
-server.session.cookie.secure=true
+server.servlet.session.cookie.secure=true
 
 # We serve from the root. Do not change this
 server.servlet.context-path=
