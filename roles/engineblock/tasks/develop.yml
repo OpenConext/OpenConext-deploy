@@ -31,10 +31,8 @@
     entity: "{{ item[0] }}"
     default: "{{ item[1] }}"
     path: "{{ item[2] }}"
-    etype: user
     permissions: rwx
-    recursive: yes
-    state: present
+    use_nfsv4_acls: yes
   with_nested:
     - [ "{{ engine_fpm_user }}", "vagrant" ]
     - [ "no", "yes" ]
