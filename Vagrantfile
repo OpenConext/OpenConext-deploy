@@ -35,8 +35,14 @@ Vagrant.configure("2") do |config|
     end
 
     if development
-      apps_centos7.vm.synced_folder "../OpenConext-engineblock", "/opt/openconext/OpenConext-engineblock", :nfs => true
-      apps_centos7.vm.synced_folder ".", "/vagrant", :nfs => true
+      apps_centos7.vm.synced_folder "../OpenConext-engineblock", "/opt/openconext/OpenConext-engineblock",
+        type: "nfs",
+        nfs_version: 4,
+        nfs_udp: false
+      apps_centos7.vm.synced_folder ".", "/vagrant",
+        type: "nfs",
+        nfs_version: 4,
+        nfs_udp: false
     end
 
   end
