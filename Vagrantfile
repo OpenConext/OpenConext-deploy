@@ -25,6 +25,15 @@ end
 Vagrant.configure("2") do |config|
   config.vm.box = "OpenConext-CentOS-7.0"
   config.vm.box_url = "https://build.openconext.org/vagrant_boxes/openconext.json"
+  config.vm.define "lb_centos7" do |lb_centos7|
+    lb_centos7.vm.network :private_network, ip: "192.168.66.98"
+    lb_centos7.vm.hostname = "lb.vm.openconext.org"
+    lb_centos7.vm.provider :virtualbox do |vb|
+      vb.name = "OpenConext Engineblock Loadbalancer"
+      vb.customize ["modifyvm", :id, "--memory", "512"]
+      vb.customize ["modifyvm", :id, "--cpus", "1"]
+    end
+  end
   config.vm.define "apps_centos7", primary: true do |apps_centos7|
     apps_centos7.vm.network :private_network, ip: "192.168.66.99"
     apps_centos7.vm.hostname = "apps.vm.openconext.org"
@@ -35,8 +44,14 @@ Vagrant.configure("2") do |config|
     end
 
     if development
-      apps_centos7.vm.synced_folder "../OpenConext-engineblock", "/opt/openconext/OpenConext-engineblock", :nfs => true
-      apps_centos7.vm.synced_folder ".", "/vagrant", :nfs => true
+      apps_centos7.vm.synced_folder "../OpenConext-engineblock", "/opt/openconext/OpenConext-engineblock",
+        type: "nfs",
+        nfs_version: 4,
+        nfs_udp: false
+      apps_centos7.vm.synced_folder ".", "/vagrant",
+        type: "nfs",
+        nfs_version: 4,
+        nfs_udp: false
     end
 
   end

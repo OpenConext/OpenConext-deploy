@@ -9,9 +9,11 @@ engine_feature_encrypted_assertions_require_outer_signature: 1
 engine_feature_run_all_manipulations_prior_to_consent: 0
 engine_feature_block_user_on_violation: 0
 engine_feature_enable_sso_notification: 0
+engine_feature_enable_consent: 1
 
 engine_api_feature_metadata_push: 1
 engine_api_feature_consent_listing: 1
+engine_api_feature_consent_remove: 0
 engine_api_feature_metadata_api: 1
 engine_api_feature_deprovision: 1
 
