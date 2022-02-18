@@ -40,8 +40,7 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     DocumentRoot /var/www/manage/current
 
     <Directory /var/www/manage/current>
-      Order       allow,deny
-      Allow       from all
+      Require all granted
       Options     -Indexes
     </Directory>
 

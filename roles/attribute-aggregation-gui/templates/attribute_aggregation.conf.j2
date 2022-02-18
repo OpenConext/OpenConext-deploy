@@ -42,45 +42,39 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     ProxyPass /aa/api http://localhost:{{ springapp_tcpport }}/aa/api retry=0
     ProxyPassReverse /aa/api http://localhost:{{ springapp_tcpport }}/aa/api
 
-    DocumentRoot "{{ _springapp_dir }}/current"
-
-    <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
-      Options     -Indexes
-    </Directory>
-
-
-    # Disable shibboleth health / info check
-    <Location ~ "/aa/api/(health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    # The EB endpoints are secured with basic auth
-    <Location ~ "/aa/api/internal/">
-      allow from all
-      satisfy any
-    </Location>
-
-    # The internal info and health
-    <Location ~ "/internal/(health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    # The Lifecycle endpoints are secured with basic auth
-    <Location ~ "/aa/api/deprovision/">
-      allow from all
-      satisfy any
-    </Location>
-
     <Location />
       AuthType shibboleth
       ShibUseHeaders On
       ShibRequestSetting applicationId attribute-aggregation
       ShibRequireSession On
-      require valid-user
+      Require valid-user
+    </Location>
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+      Options     -Indexes
+    </Directory>
+
+    # Disable shibboleth health / info check
+    <Location ~ "/aa/api/(health|info)">
+      Require all granted
+    </Location>
+
+    # The EB endpoints are secured with basic auth
+    <Location ~ "/aa/api/internal/">
+      Require all granted
+    </Location>
+
+    # The internal info and health
+    <Location ~ "/internal/(health|info)">
+      Require all granted
+    </Location>
+
+    # The Lifecycle endpoints are secured with basic auth
+    <Location ~ "/aa/api/deprovision/">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"

@@ -48,36 +48,31 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
     ProxyPassReverse /internal http://localhost:{{ springapp_tcpport }}/internal
 
-    DocumentRoot "{{ _springapp_dir }}/current"
-
-    <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
-      Options     -Indexes
-    </Directory>
-
-    <Location ~ "/(health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "/internal/(health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "^/(?!startSSO)">
-      allow from all
-      satisfy any
-    </Location>
-
     <Location />
       AuthType shibboleth
       ShibUseHeaders On
       ShibRequestSetting applicationId dashboard
       ShibRequireSession On
       ShibRequestSetting REMOTE_ADDR X-Forwarded-For
-      require valid-user
+      Require valid-user
+    </Location>
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+    </Directory>
+
+    <Location ~ "/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "/internal/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "^/(?!startSSO)">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient_with_static_img }}"

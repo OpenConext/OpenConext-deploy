@@ -37,43 +37,38 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     ProxyPass /manage/api http://localhost:{{ springapp_tcpport }} retry=0
     ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}
 
-    DocumentRoot "{{ _springapp_dir }}/current"
-
-    <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
-      Options     -Indexes
-    </Directory>
-
-    # Enable shibboleth for all other URLs, but the health check and info endpoint
-    <Location ~ "/manage/api/(health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "/internal/(health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    # The internal API is secured with basic auth
-    <Location ~ "/manage/api/internal/">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|html|js|css|png|jpg|ico)$">
-      allow from all
-      satisfy any
-    </Location>
-
     <Location />
       AuthType shibboleth
       ShibUseHeaders On
       ShibRequestSetting applicationId manage
       ShibRequireSession On
       ShibRequestSetting REMOTE_ADDR X-Forwarded-For
-      require valid-user
+      Require valid-user
+    </Location>
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+      Options     -Indexes
+    </Directory>
+
+    # Enable shibboleth for all other URLs, but the health check and info endpoint
+    <Location ~ "/manage/api/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "/internal/(health|info)">
+      Require all granted
+    </Location>
+
+    # The internal API is secured with basic auth
+    <Location ~ "/manage/api/internal/">
+      Require all granted
+    </Location>
+
+    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|html|js|css|png|jpg|ico)$">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient_with_static_img }}"

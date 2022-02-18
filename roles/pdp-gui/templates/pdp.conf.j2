@@ -39,37 +39,32 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
     ProxyPassReverse /internal http://localhost:{{ springapp_tcpport }}/internal
 
-    DocumentRoot "{{ _springapp_dir }}/current"
-
-    <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
-      Options     -Indexes
-    </Directory>
-
-
-    # Enable shibboleth for all other URLs, but the health . info check and EB endpoint
-    <Location ~ "/pdp/api/(protected/*|decide/policy|health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "/internal/(health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "(.*)(js|css|png)$">
-      allow from all
-      satisfy any
-    </Location>
-
     <Location />
       AuthType shibboleth
       ShibUseHeaders On
       ShibRequestSetting applicationId pdp
       ShibRequireSession On
       require valid-user
+    </Location>
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+      Options     -Indexes
+    </Directory>
+
+    # Enable shibboleth for all other URLs, but the health . info check and EB endpoint
+    <Location ~ "/pdp/api/(protected/*|decide/policy|health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "/internal/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "(.*)(js|css|png)$">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"
