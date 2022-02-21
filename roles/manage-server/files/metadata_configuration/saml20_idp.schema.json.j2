@@ -267,7 +267,13 @@
         },
         "coin:publish_in_edugain": {
           "type": "boolean",
-          "info": "Set this for Identity Providers published in eduGAIN."
+          "info": "Set this for Identity Providers published in eduGAIN.",
+          "requiredAttributes": [
+              "coin:publish_in_edugain_date",
+              "OrganizationName:en",
+              "OrganizationDisplayName:en",
+              "OrganizationURL:en"
+          ]
         },
         "coin:publish_in_edugain_date": {
           "type": "string",

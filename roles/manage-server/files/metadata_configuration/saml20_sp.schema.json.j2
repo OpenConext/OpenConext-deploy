@@ -336,7 +336,10 @@
         "coin:publish_in_edugain": {
           "type": "boolean",
           "default": false,
-          "info": "Set this for service providers that we publish in eduGAIN. When set, this entity also needs to have a value for coin:publish_in_edugain_date."
+          "info": "Set this for service providers that we publish in eduGAIN. When set, this entity also needs to have a value for coin:publish_in_edugain_date.",
+          "requiredAttributes": [
+              "coin:publish_in_edugain_date"
+          ]
         },
         "coin:publish_in_edugain_date": {
           "type": "string",
