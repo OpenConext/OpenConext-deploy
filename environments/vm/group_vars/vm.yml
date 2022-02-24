@@ -342,7 +342,7 @@ manage:
     - {
         name: "dashboard",
         password: "{{ manage_dashboard_secret }}",
-        scopes: ["READ"]
+        scopes: ["READ", "WRITE"]
       }
     - {
         name: "myconext",
