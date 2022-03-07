@@ -54,17 +54,19 @@ echo "Commit: ${COMMITHASH}" >> ${PROJECT_DIR}/RELEASE &&
 echo "Cleaning build of dev files" &&
 rm -rf ${PROJECT_DIR}/.idea &&
 rm -rf ${PROJECT_DIR}/.git &&
+rm -rf ${PROJECT_DIR}/tests &&
 rm -f ${PROJECT_DIR}/.gitignore &&
 rm -f ${PROJECT_DIR}/makeRelease.sh &&
 rm -f ${PROJECT_DIR}/bin/composer.phar &&
-rm -rf ${PROJECT_DIR}/features &&
-rm -rf ${PROJECT_DIR}/behat.yml &&
-rm -rf ${PROJECT_DIR}/build.xml &&
-rm -rf ${PROJECT_DIR}/tests &&
-rm -rf ${PROJECT_DIR}/ci &&
-rm -rf ${PROJECT_DIR}/.travis.yml &&
-rm -rf ${PROJECT_DIR}/ansible &&
-rm -rf ${PROJECT_DIR}/Vagrantfile &&
+rm -f ${PROJECT_DIR}/build.xml &&
+rm -f ${PROJECT_DIR}/.travis.yml &&
+rm -f ${PROJECT_DIR}/travis.php.ini &&
+rm -f ${PROJECT_DIR}/docker-compose.yml &&
+rm -f ${PROJECT_DIR}/phpcs.xml &&
+rm -f ${PROJECT_DIR}/phpcs_test.xml &&
+rm -f ${PROJECT_DIR}/phpmd.xml &&
+rm -f ${PROJECT_DIR}/phpunit.xml &&
+rm -f ${PROJECT_DIR}/phpunit.yml.dist &&
 
 echo "Create tarball" &&
 cd ${RELEASE_DIR} &&
