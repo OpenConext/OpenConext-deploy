@@ -62,6 +62,7 @@ frontend local_ip
     option httplog
     capture request header User-agent len 256
     capture request header X-TLS-Client len 256
+    capture request header samesitesupport len 32
     # Allowlist ACL
     acl allowlist src -f /etc/haproxy/acls/allowedips.acl
     # Blocklist ACL
@@ -140,6 +141,7 @@ frontend localhost_restricted
     option httplog
     capture request header User-agent len 256
     capture request header X-TLS-Client len 256
+    capture request header samesitesupport len 32
     # Allowlist ACL
     acl allowlist src -f /etc/haproxy/acls/allowedips.acl
     # Blocklist ACL
