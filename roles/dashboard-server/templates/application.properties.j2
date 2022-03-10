@@ -89,8 +89,6 @@ guestidp.entityids={{ dashboard.guestidp_entityids }}
 # tabs that can be hidden are: statistics,apps,policies,tickets,my_idp and user_invite
 dashboard.hide_tabs={{ dashboard_hide_tabs }}
 
-
 default_loa_level={{ manage.loa_values_supported[0] }}
 loa_values_supported={% for loa in manage.loa_values_supported %}{{ loa }}{{ "," if not loop.last else ""}} {% endfor %}
-# The entity ID of the SURF secure ID IdP to check when non-default loa is requested
-surf_secure_id_idp=https://sa-gw.{{ base_domain }}/authentication/metadata
+
