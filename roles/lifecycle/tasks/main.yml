@@ -49,10 +49,16 @@
 - name: Place parameters.yml
   template:
     src: "{{ item }}.j2"
-    dest: "{{ lifecycle_current_release_symlink }}/app/config/{{ item }}"
+    dest: "{{ lifecycle_current_release_symlink }}/config/legacy/{{ item }}"
     mode: 0644
   with_items:
     - parameters.yml
+
+- name: Place .envl file 
+  copy:
+    src: env
+    dest: "{{ lifecycle_current_release_symlink }}/.env"
+    mode: 0644
 
 - name: Create the symfony cache
   command: "/usr/bin/php72 bin/console cache:clear --env={{ lifecycle_apache_symfony_environment }} --no-debug"
@@ -96,5 +102,5 @@
     minute: "8"
     hour: "01"
     user: "{{ lifecycle_user }}"
-    job: "SYMFONY_ENV=prod /usr/bin/php72 {{ lifecycle_current_release_symlink }}/userlifecycle deprovision"
+    job: "/usr/bin/php72 {{ lifecycle_current_release_symlink }}/userlifecycle deprovision"
     cron_file: user_lifecycle
