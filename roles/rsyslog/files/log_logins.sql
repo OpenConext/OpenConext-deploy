@@ -16,3 +16,18 @@ CREATE TABLE  IF NOT EXISTS  `log_logins` (
   KEY `keyid_index` (`keyid`,`loginstamp`,`spentityid`(255)),
   KEY `userid_idp_index` (`userid`(128),`idpentityid`(64))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE  IF NOT EXISTS  `log_logins_stepup` (
+  `loginstamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `userid` varchar(200) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_index` (`loginstamp`,`userid`),
+  KEY `loginstamp_index` (`loginstamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ CREATE TABLE IF NOT EXISTS `last_login` (
+  `userid` varchar(255) NOT NULL,
+  `lastseen` date DEFAULT NULL,
+  PRIMARY KEY (`userid`),
+  UNIQUE KEY `idx_user` (`userid`),
+  KEY `idx_lastseen` (`lastseen`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

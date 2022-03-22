@@ -48,7 +48,7 @@ function GetLatestDate($dbh)
 
 }
 
-function FillLastseen($dbh,$date)
+function FillLastseen($dbh,$date,$table)
 {
 	print("Processing $date...");
 
@@ -59,7 +59,7 @@ function FillLastseen($dbh,$date)
 		INSERT INTO `last_login`
 			SELECT 
 				`userid`, DATE(MAX(`loginstamp`)) as `lastseen`
-			FROM `log_logins`
+			FROM `$table`
 			WHERE `loginstamp` > :date AND `loginstamp` < ADDDATE(:date,INTERVAL 1 DAY)
 			GROUP BY `userid`
 		ON DUPLICATE KEY 
@@ -94,7 +94,8 @@ function main()
 	do
 	{
 		$date = $start->format('Y-m-d');
-		FillLastseen($dbh,$date);
+		FillLastseen($dbh,$date,'log_logins');
+		FillLastseen($dbh,$date,'log_logins_stepup');
 		$start->add(new DateInterval('P1D'));
 	} 
 	while ($date !== $date_stop);
