@@ -75,6 +75,10 @@ certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
 remember_me_max_age_seconds: 15_768_000
 email_guessing_sleep_millis: 500
 
+sms:
+  url: "https://rest.spryngsms.com/v1/messages"
+  bearer: {{ myconext_sms_bearer }}
+
 attribute_aggregation:
   user: aa
   password:  {{ myconext_api_attribute_aggregation_password }}
