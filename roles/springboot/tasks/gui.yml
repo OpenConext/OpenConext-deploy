@@ -63,3 +63,9 @@
     chdir: "{{ _springapp_dir }}"
   register: clean_wwwdirs
   changed_when: '"removed" in clean_wwwdirs'
+
+# These are pre-2020 deploys which put gui under /var/www
+- name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Remove ancient www directories"
+  file:
+    state: absent
+    path: "/var/www/{{ _springapp_service_name }}"
