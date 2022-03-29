@@ -2,5 +2,3 @@
 springapp_tcpport: 9196
 springapp_artifact_id: pdp-gui
 springapp_version: "{{ pdp_gui_version }}"
-springapp_dir: "/var/www/pdp/"
-
