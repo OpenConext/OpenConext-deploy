@@ -54,8 +54,8 @@
  </appender>
 {%endif%}
 
- <logger name="oidc" level="INFO" />
- <logger name="org.springframework" level="INFO" />
+ <logger name="oidc" level="WARN" />
+ <logger name="org.springframework" level="WARN" />
  <root level="WARN">
    <appender-ref ref="FILE" />
 {%if oidcng_logback_email |bool  %}
