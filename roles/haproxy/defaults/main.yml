@@ -4,7 +4,10 @@ haproxy_metricbeat: False
 # The default http methods whitelist is meant to disable methods like TRACE or DEBUG.
 # OPTIONS is mainly used for CORS requests in OIDC-NG (like SPA apps)
 haproxy_supported_http_methods: "GET HEAD OPTIONS POST PUT DELETE"
+# maximum number of requests per 10s
 haproxy_max_request_rate: 1000
+# maximum number of requests per host header src ip and path per 1 m
+haproxy_max_request_rate_ip_path: 250
 # You can create an allowlist of ips that are allowed to go over the configured ratelimit
 haproxy_allowlistips:
   - ''
