@@ -9,7 +9,6 @@ lifecycle_build_path: "{{ openconext_builds_dir }}/OpenConext-user-lifecycle-{{ 
 lifecycle_download_url: "https://github.com/OpenConext/OpenConext-user-lifecycle/releases/download/{{ lifecycle_version }}/OpenConext-user-lifecycle-{{ lifecycle_version_dir }}.tar.gz"
 lifecycle_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-user-lifecycle"
  
-front_controller: app.php
 lifecycle_user: lifecycle
 lifecycle_data_dir: /opt/openconext/OpenConext-lifecycle
 lifecycle_symfony_env: prod
