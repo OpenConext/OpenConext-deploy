@@ -28,6 +28,7 @@
     name: root
     password: "{{ mysql_root_password }}"
     priv: "*.*:ALL,GRANT"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   tags:
     - mysql
 
