@@ -25,16 +25,16 @@
 
   roles:
     - role: mysql
-    - role: galera
-      innodb_buffer_pool_size: 32M
-      galera_handler_restart: False
-      galera_root_users:
-        - name: molecule
-          password: secret
-          privs: 
-            - '*.*:ALL'
-          hosts:
-            - '%'
+#    - role: galera
+#      innodb_buffer_pool_size: 32M
+#      galera_handler_restart: False
+#      galera_root_users:
+#        - name: molecule
+#          password: secret
+#          privs: 
+#            - '*.*:ALL'
+#          hosts:
+#            - '%'
     - role: galera_create_users
       databases:
         users:
