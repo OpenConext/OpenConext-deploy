@@ -1,4 +1,9 @@
 ---
+- name: Install git
+  yum:
+    name: git
+    state: present
+
 - name: Check if target dir exists
   stat:
     path: "{{ engine_release_dir }}"
