@@ -1,7 +1,9 @@
 ---
-- name: Install git
+- name: Install git and which
   yum:
-    name: git
+    name: 
+      - which 
+      - git
     state: present
 
 - name: Symlink /usr/bin/php to /usr/bin/php72
