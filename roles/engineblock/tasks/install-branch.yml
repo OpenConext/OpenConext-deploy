@@ -4,6 +4,12 @@
     name: git
     state: present
 
+- name: Symlink /usr/bin/php to /usr/bin/php72
+  file:
+    src: /usr/bin/php72
+    dest: /usr/bin/php
+    state: link
+
 - name: Check if target dir exists
   stat:
     path: "{{ engine_release_dir }}"
