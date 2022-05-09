@@ -67,7 +67,6 @@ sed -i 's/%target_host%/ansible-test-ga ansible_connection=docker/g' environment
 
 # Remove ipv6 listening address in Haproxy
 sed -i '/haproxy_sni_ip\.ipv6/d' roles/haproxy/templates/haproxy_frontend.cfg.j2
-
 echo
 echo "================================================================="
 echo "================================================================="
@@ -83,6 +82,11 @@ docker exec ansible-test-ga systemctl stop mysql mongod
 docker exec ansible-test-ga yum -y remove mongodb-org-mongos mongodb-org-tools
 docker exec ansible-test-ga rm -rf /var/lib/mongo/journal/*
 docker exec ansible-test-ga rm -rf /var/lib/mysql/ib_logfile*
+
+# The latest systemd update breaks mongo on docker (systemd[1]: New main PID 951 does not belong to service, and PID file is not owned by root. Refusing)
+# dowgrading it fixes the issue
+docker exec ansible-test-ga yum -y downgrade http://vault.centos.org/7.6.1810/updates/x86_64/Packages/systemd-219-62.el7_6.9.x86_64.rpm http://vault.centos.org/7.6.1810/updates/x86_64/Packages/systemd-libs-219-62.el7_6.9.x86_64.rpm http://vault.centos.org/7.6.1810/updates/x86_64/Packages/systemd-sysv-219-62.el7_6.9.x86_64.rpm
+
 docker stop ansible-test-ga ansible-test-ga
 
 exit $status
