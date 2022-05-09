@@ -87,6 +87,7 @@ springboot_server_services:
     type: server
     min_heapsize: "{{ voot_min_heapsize | default('128m') }}"
     max_heapsize: "{{ voot_max_heapsize | default('128m') }}"
+    java_binary: "/usr/lib/jvm/jre-11-openjdk/bin/java"
     config:
       "{{ voot }}"
   - name: teams
