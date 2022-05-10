@@ -156,6 +156,8 @@ teams:
     - "nl:surfnet:diensten:teams_super_users"
     - "nl:surfnet:diensten:teams_super_admin_users"
 
+teams_allow_spd_api: '.'
+
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
   idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
