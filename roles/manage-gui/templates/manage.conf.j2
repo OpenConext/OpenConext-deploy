@@ -76,10 +76,11 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
       Require all granted
     </Location>
 
-    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|html|js|js\.map|css|css\.map|png|jpg|ico)$">
+
+    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|html|js|css|png|jpg|ico)$">
       Require all granted
     </Location>
-
+    
     <Location ~ "/(asset-)?manifest.json$">
       Require all granted
     </Location>
