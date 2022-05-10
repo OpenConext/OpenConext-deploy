@@ -14,15 +14,6 @@ listcontains() {
 	return 1
 }
 
-# check ansible
-ANSVER=$(ansible --version|head -1|cut -d " " -f 2)
-ANSVER1=$(echo "$ANSVER" | cut -d '.' -f 1)
-ANSVER2=$(echo "$ANSVER" | cut -d '.' -f 2)
-if [ "$ANSVER1" -le 1 -a "$ANSVER2" -lt 9 ]; then
-	echo "Requires at least Ansible 1.9, found $ANSVER instead."
-	exit 1
-fi
-
 # parse parameters
 help="Usage: $0 vm    [ANSIBLE_OPT]\n       $0 <ENV> <SSH_USERNAME> <SECRET_FILE> [ANSIBLE_OPT]"
 if [ "$#" -eq 0 ]
