@@ -65,6 +65,7 @@ springboot_server_services:
     port: "{{ manage_springapp_tcpport }}"
     min_heapsize: "{{ manage_min_heapsize | default('512m') }}"
     max_heapsize: "{{ manage_max_heapsize | default('512m') }}"
+    java_binary: "/usr/lib/jvm/jre-11-openjdk/bin/java"
     config:
       "{{ manage }}"
   - name: oidcng
