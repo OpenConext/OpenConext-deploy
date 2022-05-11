@@ -25,7 +25,6 @@
     copy: no
     owner: root
     group: apache
-  register: unarchive_result
   when:
     - maven_result.changed
 
@@ -43,12 +42,10 @@
 
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | create symlink to downloaded version"
   file:
-    src: "{{ unarchive_result.dest }}/{{ _springapp_artifact_id}}-{{ _springapp_version }}"
+    src: "{{ _springapp_dir }}/{{ _springapp_artifact_id}}-{{ _springapp_version }}"
     dest: "{{ _springapp_dir }}/current"
     state: link
     force: yes
-  when:
-    - unarchive_result.changed
 
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Remove old zipfiles"
   shell: 'ls -t *.zip | tail -n +3|  xargs --no-run-if-empty rm -v'
