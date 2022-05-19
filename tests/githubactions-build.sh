@@ -65,6 +65,9 @@ sed -i 's/%target_host%/ansible-test-ga ansible_connection=docker/g' environment
 # Create the proper host_vars file
 /bin/cp environments/template/host_vars/template.yml environments-external/github/host_vars/ansible-test-ga.yml
 
+# Remove ipv6 listening address in Haproxy
+sed -i '/haproxy_sni_ip\.ipv6/d' roles/haproxy/templates/haproxy_frontend.cfg.j2
+
 echo
 echo "================================================================="
 echo "================================================================="

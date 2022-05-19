@@ -45,7 +45,7 @@ provisioner:
     links:
       group_vars: ../../group_vars
 
-verifier:
-  name: testinfra
-  lint:
-    name: flake8
+#verifier:
+#  name: testinfra
+#  lint:
+#    name: flake8

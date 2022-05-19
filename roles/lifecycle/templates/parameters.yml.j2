@@ -16,11 +16,6 @@ parameters:
             username: "{{ teams_api_lifecycle_username }}"
             password: "{{ teams_api_lifecycle_password }}"
             verify_ssl: true
-        authz-server:
-            url: 'https://authz.{{ base_domain}}/'
-            username: "{{ authz_server_api_lifecycle_username }}"
-            password: "{{ authz_server_api_lifecycle_password }}"
-            verify_ssl: true
         attribute-aggregation-server:
             url: 'https://aa.{{ base_domain}}/aa/api/'
             username: "{{ attribute_aggregator_api_lifecycle_username }}"
