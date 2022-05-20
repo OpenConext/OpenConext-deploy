@@ -79,7 +79,7 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 
     # The SP dashboard API is secured with basic auth; only allow
     # explicitly allowed IP ranges. If the setting is missing, none is allowed.
-    <LocationMatch "^/(api/spdashboard|internal)/">
+    <LocationMatch "^/(api/spdashboard|internal/teams)/">
       {% if teams_allow_spd_api is defined %}
         SetEnvIfNoCase X-Forwarded-For {{ teams_allow_spd_api }} env_spd_allow
       {% endif %}
