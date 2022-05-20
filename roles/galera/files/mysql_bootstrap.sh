@@ -33,7 +33,7 @@ res=$?
 if [ $res == 0 ]; then
    echo "Root access without password is allowed to localhost. Setting new root password for all root users."
    changed=1
-   mysql --user=root --password= -e "UPDATE mysql.user SET Password = PASSWORD('${mysql_root_password}') WHERE User = 'root'; FLUSH PRIVILEGES;"
+   mysql --user=root --password= -e "UPDATE mysql.global_priv SET priv=json_set(priv, '$.plugin', 'mysql_native_password', '$.authentication_string', PASSWORD('${mysql_root_password}')) WHERE User='root'; FLUSH PRIVILEGES;"
    res=$?
    if [ $res == 1 ]; then
       echo "Error setting new mysql password"
@@ -48,23 +48,6 @@ else
    echo ${out_err}
    exit 2
 fi
-
-# Fix any root acounts that we may have missed
-echo -n "Securing all root accounts... "
-out=`mysql -u root -p${mysql_root_password} -N -B -e "UPDATE mysql.user SET Password = PASSWORD('${mysql_root_password}') WHERE User = 'root'; SELECT ROW_COUNT(); FLUSH PRIVILEGES;"`
-res=$?
-if [ ${res} == 0 ]; then
-   if [ "${out}" -gt "0" ]; then
-      changed=1
-      echo "Changed. OK"
-   else
-      echo "OK"
-   fi
-else
-   echo "Failed"
-   exit 2
-fi
-
 
 echo -n "Removing anonymous users (if any)... "
 out=`mysql -u root -p"${mysql_root_password}" -N -B -e "DELETE FROM mysql.user WHERE User = ''; SELECT ROW_COUNT(); FLUSH PRIVILEGES;"`
