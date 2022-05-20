@@ -18,36 +18,16 @@
     src: "mariadb.repo.j2"
     dest: "/etc/yum.repos.d/mariadb.repo"
 
-- name: Add Percona repository
-  yum:
-    name: "{{ percona_url_rpm }}"
-    state: present
-
-- name: Install MariaDB, Galera, rsync, python2-PyMySQL
+- name: Install MariaDB, Galera, socat, python3-PyMySQL
   yum:
     name:
       - MariaDB-server
       - MariaDB-client
       - galera
-      - python2-PyMySQL  # Required for using the Ansible mysql_* modules
+      - python3-PyMySQL  # Required for using the Ansible mysql_* modules
+      - mariadb-backup
       - socat
-      - percona-xtrabackup-24
     state: present
-
-- name: Install memcached
-  yum:
-    name: memcached
-    state: present
-  when:
-    - memcached_cluster | bool
-
-- name: Start and enable memcached
-  service:
-    name: memcached
-    enabled: yes
-    state: started
-  when:
-    - memcached_cluster | bool
 
 - name: Create mysqltmp directory
   file:
