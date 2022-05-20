@@ -155,10 +155,11 @@
   mysql_user:
     name: "{{ mariadb_cluster_user }}"
     password: "{{ mariadb_cluster_password }}"
-    login_user: root
-    login_password: "{{ mariadb_root_password  }}"
     priv: "*.*:ALL"
     state: present
+    login_user: root
+    login_password: "{{ mariadb_root_password  }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   when:
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
@@ -168,10 +169,11 @@
   mysql_user:
     name: "{{ mariadb_backup_user }}"
     password: "{{ mariadb_backup_password  }}"
-    login_user: root
-    login_password: "{{ mariadb_root_password }}"
     priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
     state: present
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   when:
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
@@ -207,6 +209,7 @@
     state: present
     login_user: root
     login_password: "{{ mariadb_root_password }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   with_items:
     - "{{ databases.names }}"
   run_once: true
@@ -221,6 +224,7 @@
     state: present
     login_user: root
     login_password: "{{ mariadb_root_password }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   with_subelements:
      - "{{ galera_root_users }}"
      - hosts
