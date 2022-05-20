@@ -1,0 +1,24 @@
+encryptionSecret: "{{ myconext_tiqr_encryption }}"
+baseUrl: "https://{{ myconext_base_domain }}"
+identifier: "{{ myconext_base_domain }}"
+displayName: "{{ myconext_base_domain }}"
+version: "0.0.1"
+logoUrl: "https://static.surfconext.nl/media/idp/eduid.png"
+infoUrl: "https://{{ myconext_base_domain }}/help"
+pushNotificationsEnabled: false
+eduIdAppBaseUrl: "https://{{ myconext_base_domain }}" # URL used in QR-codes ans push-notifications to the app
+rateLimitThreshold: 5
+
+apns:
+  serverHost: "localhost"
+  port: 8099
+  signingKey: "file://{{ myconext_dir }}/apns.p8"
+  # Leave empty for non-local development
+  serverCertificateChain: ""
+  topic: "eduid.nl"
+  teamId: "myconext.apns_teamid"
+  keyId: "myconext.apns_keyid"
+
+gcm:
+  firebaseServiceAccount: "file://{{ myconext_dir }}/firebase.json"
+  appName: "tiqr"
