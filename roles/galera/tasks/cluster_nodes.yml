@@ -130,6 +130,14 @@
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
 
+- name: place the plugin config file
+  copy:
+    src: plugins.cnf
+    dest: /etc/my.cnf.d/plugins.cnf
+    mode: 0664
+    owner: root
+    group: root
+
 - name: Start and enable the MariaDB (mysql) service on boot.
   service:
     name: mysql
