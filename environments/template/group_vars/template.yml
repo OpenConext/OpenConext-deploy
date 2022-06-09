@@ -626,7 +626,7 @@ haproxy_applications:
   - name: manage
     vhost_name: manage.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/manage/api/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.manage.port }}"
     servers: "{{java_servers}}"
 

@@ -7,7 +7,7 @@
       - https://engine.vm.openconext.org/health
       - https://profile.vm.openconext.org/health
     services_health_checks:
-      - https://manage.vm.openconext.org/manage/api/health
+      - https://manage.vm.openconext.org/internal/health
       - https://voot.vm.openconext.org/internal/health
       - https://teams.vm.openconext.org/api/teams/health
       - https://pdp.vm.openconext.org/pdp/api/health
