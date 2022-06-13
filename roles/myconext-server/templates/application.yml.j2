@@ -79,8 +79,11 @@ email_guessing_sleep_millis: 500
 email_spam_threshold_seconds: 15
 
 sms:
-  url: "https://rest.spryngsms.com/v1/messages"
-  bearer: {{ myconext_sms_bearer }}
+  url: "{{ myconext.sms_api_url}}"
+  bearer: "{{ myconext_sms_bearer }}"
+
+tiqr_configuration: "file://{{ myconext_dir }}/tiqr.configuration.yml"
+
 
 attribute_aggregation:
   user: aa
@@ -135,14 +138,12 @@ management:
   health:
     mail:
       enabled: true
+  # We disable all endpoints except health for the load-balancer and info for git information.
   endpoints:
-    web:
-      exposure:
-        include: "health,info"
-      base-path: "/internal"
-  endpoint:
+    enabled: false
+    health:
+      enabled: true
     info:
       enabled: true
-  info:
-    git:
-      mode: full
+      git:
+        mode: full
