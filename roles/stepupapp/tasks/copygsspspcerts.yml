@@ -1,0 +1,15 @@
+---
+- name: Copy GSSP sp certificate | {{ appname }}
+  copy: 
+    src: "{{ inventory_dir }}/files/certs/stepup/{{ appname }}_gssp_sp.crt"
+    dest: "{{ current_release_config_file_dir_name }}/sp_gssp.crt"
+    mode: 0640
+    group: "{{ appname }}"
+    owner: root
+
+- name: Write GSSP sp private key | {{ appname }}
+  copy:
+    content: "{{ gssp_sp_private_key }}"
+    dest: "{{ current_release_config_file_dir_name }}/sp_gssp.key"
+    owner: "{{ appname }}"
+    mode: "0400"

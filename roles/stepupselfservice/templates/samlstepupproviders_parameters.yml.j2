@@ -1,0 +1,34 @@
+parameters:
+    # Authentication flow:
+    # Real GSSP IdP <--> Gateway GSSP proxy SP <--> Gateway GSSP proxy IdP <--> SelfService
+    # AuthnRequests from the RA and SS are proxied through the GSSP proxy on the Gateway
+
+{% for key, value in stepup_enabled_generic_second_factors.items() %}
+    # GSSP Proxy SP used to authenticate to the Real GSSP IdP though GSSP IdP proxy in the gateway
+    gssp_{{ key }}_sp_publickey: '{{ current_release_config_file_dir_name }}/sp_gssp.crt'
+    gssp_{{ key }}_sp_privatekey: '{{ current_release_config_file_dir_name }}/sp_gssp.key'
+
+    # Certificate used to sign metadata of the GSSP Proxy SP on the gateway
+    gssp_{{ key }}_metadata_publickey: '{{ current_release_config_file_dir_name }}/sp_gssp.crt'
+    gssp_{{ key }}_metadata_privatekey: '{{ current_release_config_file_dir_name }}/sp_gssp.key'
+
+    # EntityID and SSO Location of the GSSP IdP Proxy on the Gateway
+    gssp_{{ key }}_remote_entity_id: 'https://{{ gateway_vhost_name }}/gssp/{{ key }}/metadata'
+    gssp_{{ key }}_remote_sso_url: 'https://{{ gateway_vhost_name }}/gssp/{{ key }}/single-sign-on'
+
+    # base64 without pem headers
+    gssp_{{ key }}_remote_certificate: '{{ gateway_gssp_idp_publickey | depem }}'
+
+    # GUI
+    gssp_{{ key }}_logo: '{{ hostvars[inventory_hostname]['ss_gssp_' + key + '_logo'] }}'
+
+    gssp_{{ key }}_app_android_url: '{{ hostvars[inventory_hostname]['ss_gssp_' + key + '_app_android_url'] }}'
+    gssp_{{ key }}_app_ios_url: '{{ hostvars[inventory_hostname]['ss_gssp_' + key + '_app_ios_url'] }}'
+
+{% for param in [ 'title', 'alt', 'description', 'button_use', 'initiate_title', 'initiate_button', 'explanation', 'authn_failed', 'pop_failed'] %}
+    gssp_{{ key }}_{{ param }}:
+{% for lang in enabled_locales %}
+        {{ lang }}: '{{ hostvars[inventory_hostname]['ss_gssp_' + key + '_' + param][lang] | replace("'", "''") }}'
+{% endfor %}
+{% endfor %}
+{% endfor %}

@@ -1,0 +1,7 @@
+- name: Put images from <env>/files/stepup-app into public/images | {{ appname }}
+  copy:
+    src: "{{ item }}"
+    dest: "{{ current_release_appdir }}/public/images"
+    mode: "444"
+  with_fileglob:
+  - "{{ inventory_dir }}/files/stepup-app/images/*"

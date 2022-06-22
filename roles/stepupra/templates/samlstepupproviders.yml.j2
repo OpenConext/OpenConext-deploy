@@ -1,0 +1,29 @@
+imports:
+    - { resource: samlstepupproviders_parameters.yml }
+
+surfnet_stepup_ra_saml_stepup_provider:
+    routes:
+        consume_assertion: ra_vetting_gssf_verify
+        metadata: ra_vetting_gssf_metadata
+
+    providers:
+{% for key, value in stepup_enabled_generic_second_factors.items() %}
+        {{ key }}:
+            hosted:
+                service_provider:
+                    public_key: "%gssp_{{ key }}_sp_publickey%"
+                    private_key: "%gssp_{{ key }}_sp_privatekey%"
+                metadata:
+                    public_key: "%gssp_{{ key }}_metadata_publickey%"
+                    private_key: "%gssp_{{ key }}_metadata_privatekey%"
+            remote:
+                entity_id: "%gssp_{{ key }}_remote_entity_id%"
+                sso_url: "%gssp_{{ key }}_remote_sso_url%"
+                certificate: "%gssp_{{ key }}_remote_certificate%"
+            view_config:
+                title: "%gssp_{{ key }}_title%"
+                page_title: "%gssp_{{ key }}_page_title%"
+                explanation: "%gssp_{{ key }}_explanation%"
+                initiate: "%gssp_{{ key }}_initiate%"
+                gssf_id_mismatch: "%gssp_{{ key }}_gssf_id_mismatch%"
+{% endfor %}

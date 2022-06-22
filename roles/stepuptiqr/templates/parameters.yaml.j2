@@ -1,0 +1,100 @@
+parameters:
+    secret: {{ tiqr_secret }}
+
+    # All locales supported by the application
+    locales: [{{ enabled_locales | join(",") }}]
+
+    # SAML configuration
+    saml_idp_publickey: '{{ current_release_config_file_dir_name }}/cert.pem'
+    saml_idp_privatekey: '{{ current_release_config_file_dir_name }}/key.pem'
+    # NOTE: same key used for metadata and response/assertion signing
+    saml_metadata_publickey: '{{ current_release_config_file_dir_name }}/cert.pem'
+    saml_metadata_privatekey: '{{ current_release_config_file_dir_name }}/key.pem'
+
+    saml_remote_sp_entity_id: 'https://{{ gateway_vhost_name }}/gssp/tiqr/metadata'
+    saml_remote_sp_certificate: '{{ current_release_config_file_dir_name }}/gateway.crt'
+    saml_remote_sp_acs: 'https://{{ gateway_vhost_name }}/gssp/tiqr/consume-assertion'
+
+    base_url: 'https://{{ vhost_name }}'
+    tiqr_identity: {{ vhost_name }}
+
+    use_firebase_fallback_for_gcm: true
+
+    # View parameters
+    support_url:
+{% for locale, url in tiqr_support_url.items() %}
+        {{ locale }}: "{{ url | replace('%', '%%') }}"
+{% endfor %}
+
+    mobile_app_user_agent_pattern: "/^.*$/"
+
+    # Options for the tiqr library
+    tiqr_library_options:
+        general:
+            identifier: '%tiqr_identity%'
+            # The name of the service that uses tiqr for second factor authentication.
+            # Used by both the TiqrService and the legacy Tiqr_Service during enrollment and when sending an
+            # authentication notification.
+            name: '{{ tiqr_info_name }}'
+            auth_protocol: 'tiqrauth'
+            enroll_protocol: 'tiqrenroll'
+            ocra_suite: 'OCRA-1:HOTP-SHA1-6:QH10-S'
+            logoUrl: '%base_url%/images/header-logo.png'
+            infoUrl: '{{ tiqr_info_url }}'
+        library:
+{% if tiqr_gcm_apikey is defined %}
+          gcm:
+            apikey: '{{ tiqr_gcm_apikey  }}'
+            application: 'nl.surfnet.authenticator'
+{% endif %}
+{% if tiqr_firebase_apikey is defined %}
+          firebase:
+            apikey: '{{ tiqr_firebase_apikey }}'
+{% endif %}
+          apns:
+            certificate: '{{ current_release_config_file_dir_name }}/apns.pem'
+            environment: production
+        accountblocking:
+            maxAttempts: 5
+            # temporarilyBlockDuration:
+            # maxTemporarilyBlocks:
+        storage:
+            statestorage:
+{% if tiqr_statestorage is defined and tiqr_statestorage == 'pdo' %}
+              type: 'pdo'
+              arguments:
+                table: 'tiqrstate'
+                dsn: 'mysql:host={{ tiqr_db_host }};dbname=tiqr'
+                username: '{{ database_tiqr_user }}'
+                password: '{{ mysql_passwords.tiqr }}'
+
+{% else %}
+              type: 'memcache'
+              arguments:
+                prefix: 'tiqr_'
+                servers:
+                  - host: '{{ memcache_lb_address }}'
+{% endif %}
+            userstorage:
+              type: 'pdo'
+              arguments:
+                table: 'user'
+                dsn: 'mysql:host={{ tiqr_db_host }};dbname=tiqr'
+                username: '{{ database_tiqr_user }}'
+                password: '{{ mysql_passwords.tiqr }}'
+            devicestorage:
+              type: 'tokenexchange'
+              arguments:
+                url: 'https://tx.tiqr.org/tokenexchange/'
+                appid: 'tiqr'
+            usersecretstorage:
+{% if tiqr_oathserviceclient is defined and tiqr_oathserviceclient is sameas true %}
+              type: 'oathserviceclient'
+              arguments:
+                apiURL: 'https://{{ keyserver_vhost_name }}'
+                consumerKey: '{{ keyserver_consumerkey  }}'
+{% else %}
+              type: 'pdo'
+              # Use PDO config from userstorage
+              arguments: []
+{% endif %}

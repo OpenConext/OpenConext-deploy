@@ -1,0 +1,24 @@
+#!/bin/bash
+# Add sraa users with their yubikey ID without using the ra interface.
+# The NameIDs of these users must also be listed in the sraa array in the middleware configuration
+# This must be run once from an app server after setting up a new stepup environment
+
+echo "WARNING: About to run middleware:bootstrap:identity-with-yubikey action(s)"
+echo "These actions must not be run more than once for each identity."
+
+pushd /opt/www/{{ middleware_vhost_name }}
+#Format: php app/console middleware:bootstrap:identity-with-yubikey --env=prod <nameID> <schachomeorganization> <common name> <email> <preferred locale> <modhex yubikeyid>
+
+{% for sraa in middleware_sraa %}
+if [ "$1" == "--always-yes" ]; then
+    REPLY="y"
+else
+    read -p "Add identity {{ sraa.nameid }} (y/n)? " -r
+fi
+if [[ ${REPLY} =~ ^[Yy]$ ]]
+then
+    {{ php_cli }} bin/console middleware:bootstrap:identity-with-yubikey --env=prod {{ sraa.nameid }} {{ sraa.institution }} "{{ sraa.cn }}" {{ sraa.email }} {{ sraa.lang }} {{ sraa['yubikey_id'] }}
+
+fi
+{% endfor %}
+popd

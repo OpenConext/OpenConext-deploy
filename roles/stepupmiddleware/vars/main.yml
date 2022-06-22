@@ -1,0 +1,10 @@
+---
+appname: "middleware"
+vhost_name: "{{ appname }}.{{ base_domain }}"
+loadbalancingport: "413"
+appversion: "{{ middleware_version }}"
+appversion_sha: "{{ middleware_version_sha }}"
+stepup_gh_appname: Middleware
+current_release_symlink: "/opt/openconext/OpenConext-{{ appname }}"
+current_release_appdir: "{{ current_release_symlink }}-{{ appversion }}"
+current_release_config_dir_name: "{{ current_release_appdir }}/config/legacy"

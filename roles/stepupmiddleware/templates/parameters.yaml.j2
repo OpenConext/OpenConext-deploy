@@ -1,0 +1,82 @@
+parameters:
+    # IP addresses of any HTTP proxies that are sitting in from of the application
+    # See: http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html
+    trusted_proxies:   [ 127.0.0.1 ]
+
+    database_driver:   pdo_mysql
+
+    database_host:     {{ database_lb_address }}
+    database_port:     3306
+    # Enabling the STRICT_ALL_TABLES SQL mode. To prevent 'magic' truncation problems where string
+    # values like the identity name id would be truncated after 255 characters without notice. Enabling
+    # STRICT_ALL_TABLES changes this behaviour, and raises SQLSTATE[22001] 'Bad response' when this
+    # occurs.
+    database_driver_options_1002: 'SET @@SQL_MODE = CONCAT(@@SQL_MODE, ",STRICT_ALL_TABLES")'
+    # The database server version is used in the dbal configuration and is required to prevent issues when the database
+    # connection is booted. See https://github.com/doctrine/DoctrineBundle/issues/351 for more details on this.
+    # Also see: https://symfony.com/doc/current/reference/configuration/doctrine.html#doctrine-dbal-configuration
+    database_middleware_name:     {{ database_middleware_name }}
+    database_middleware_user:     {{ database_middleware_user }}
+    database_middleware_password: {{ mysql_passwords.middleware }}
+    database_gateway_name:     {{ database_gateway_name }}
+    database_gateway_user:     {{ database_middleware_user }}
+    database_gateway_password: {{ mysql_passwords.middleware }}
+    # TODO: Deploy creds should only be available during deploy
+    database_deploy_user:      {{ database_middleware_deploy_user }}
+    database_deploy_password:  {{ database_middleware_deploy_password }}
+    database_server_version:   {{ database_server_version | default("5.6") }}
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ''
+    mailer_password:   ''
+
+    default_locale:       {{ default_locale }}
+    locales:              [{{ enabled_locales | join(",") }}]
+
+    secret:            {{ middleware_secret }}
+
+    use_assetic_controller: true
+
+    selfservice_api_password: {{ selfservice_api_password  }}
+    registration_authority_api_password: {{ registration_authority_api_password }}
+    readonly_api_password: {{ readonly_api_password }}
+    management_password: {{ management_password }}
+
+    self_service_email_verification_url_template: https://{{ selfservice_vhost_name }}/verify-email?n={nonce}
+    email_sender_name: {{ noreply_email_name }}
+    email_sender_email: {{ noreply_email }}
+    email_verification_window: 3600 # the number of seconds an email verification email/url is valid
+
+    stepup_loa_loa1: '{{ stepup_uri_loa1 }}'
+    stepup_loa_loa2: '{{ stepup_uri_loa2 }}'
+    stepup_loa_loa3: '{{ stepup_uri_loa3 }}'
+
+    self_service_url:  https://{{ selfservice_vhost_name }}
+
+    enabled_generic_second_factors:
+{% for key, value in stepup_enabled_generic_second_factors.items() %}
+      {{ key }}:
+        loa: {{ value.loa }}
+{% endfor %}
+
+    second_factors_display_name:
+{% for key, value in second_factors_display_name.items() %}
+      {{ key }}: {{ value }}
+{% endfor %}
+
+    # Sets the number of tokens allowed for each identity.
+    #
+    # This is the global, application wide default. This configuration should be specified for each institution in the
+    # institution config (middleware api). The value configured in the parameters.yml will be used as the
+    # fallback/default value.
+    number_of_tokens_per_identity: 1
+
+    # Sets the tokens that can skip the prove possession step.
+    #
+    # This is the global, application wide default. The configuration consists of an array with second factors types
+    # that will skip the prove possession step in RA.
+    skip_prove_possession_second_factors:
+    {% for key in skip_prove_possession_second_factors %}
+      - {{ key }}
+    {% endfor %}

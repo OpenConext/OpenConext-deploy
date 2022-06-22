@@ -1,0 +1,80 @@
+- name: Install Apache and FPM config
+  include_role:
+    name: apachefpm
+
+- name: Install the symfony app
+  include_role:
+    name: stepupapp
+
+- name: Place parameters.yml
+  template:
+    src: parameters.yaml.j2
+    dest: "{{ current_release_config_dir_name }}/parameters.yaml"
+    mode: 0640
+    owner: root
+    group: "{{ appname }}"
+  notify:
+    - clear cache {{ appname }}
+    - reload php72-fpm {{ appname }}
+
+- name: Activate the symlink
+  file:
+    src: "{{ current_release_appdir }}"
+    dest: "{{ current_release_symlink }}"
+    state: link
+
+- name: Put middleware configuration scripts in /root/
+  template:
+    src: "{{ item }}.j2"
+    dest: "/root/{{ item }}"
+    group: "root"
+    owner: "root"
+    mode: "500"
+  with_items:
+  - "01-middleware-db_migrate.sh"
+  - "06-middleware-bootstrap-sraa-users.sh"
+
+- name: Create /opt/scripts
+  file:
+    path: /opt/scripts
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+
+- name: Put middleware config from environment in /opt/scripts
+  template:
+    src: "{{ inventory_dir }}/templates/middleware/{{ item }}.j2"
+    dest: "/opt/scripts/{{ item }}"
+    group: "{{ appname }}"
+    owner: "{{ appname }}"
+    mode: "400"
+  with_items:
+  - "middleware-config.json"
+  - "middleware-whitelist.json"
+  - "middleware-institution.json"
+
+- name: Put middleware configuration scripts in /opt/scripts
+  template:
+    src: "{{ item}}.j2"
+    dest: "/opt/scripts/{{ item }}"
+    group: "{{ appname }}"
+    owner: root
+    mode: 550
+  with_items:
+  - "middleware-push-config.sh"
+  - "middleware-push-whitelist.sh"
+  - "middleware-push-institution.sh"
+
+- name: Create symlinks to middleware configuration scripts in /root
+  file:
+    src: "/opt/scripts/{{ item.key }}"
+    dest: "/root/{{ item.value }}"
+    group: "{{ appname }}"
+    owner: root
+    state: link
+    force: true
+  with_dict:
+    "middleware-push-config.sh": "02-middleware-config.sh"
+    "middleware-push-whitelist.sh": "04-middleware-whitelist.sh"
+    "middleware-push-institution.sh": "05-middleware-institution.sh"

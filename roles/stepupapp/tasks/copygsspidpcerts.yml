@@ -1,0 +1,23 @@
+---
+- name: Copy gateway SP certificate | {{ appname }}
+  copy:
+    src: "{{ inventory_dir }}/files/certs/stepup/gateway_gssp_sp.crt"
+    dest: "{{ current_release_config_file_dir_name }}/gateway.crt"
+    mode: 0640
+    owner: root
+    group: "{{ appname }}"
+
+- name: Copy GSSP idp certificate| {{ appname }}
+  copy: 
+    src: "{{ inventory_dir }}/files/certs/stepup/{{ appname }}_idp.crt"
+    dest: "{{ current_release_config_file_dir_name }}/cert.pem"
+    mode: 0640
+    group: "{{ appname }}"
+    owner: root
+
+- name: Write GSSP idp private key | {{ appname }}
+  copy:
+    content: "{{ gssp_idp_private_key }}"
+    dest: "{{ current_release_config_file_dir_name }}/key.pem"
+    owner: "{{ appname }}"
+    mode: "0400"
