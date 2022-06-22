@@ -100,10 +100,10 @@
       tags: ['app_php', 'static']
     - role: openconext-common
       tags: ['core', 'app_php', 'eb', 'profile']
-    - role: engineblock
+    - role: diyidp
       when:
         - inventory_hostname not in groups['lifecycle']
-      tags: ['core', 'app_php', 'eb']
+      tags: ['core', 'app_php', 'diyidp']
     - role: lifecycle
       when:
         - inventory_hostname in groups['lifecycle']
@@ -160,6 +160,17 @@
       tags: ['influxdb' ]
   handlers:
     - include: roles/httpd/handlers/main.yml
+
+- hosts: stepuppapp
+  become: true
+  roles:
+    - { role: stepupwebauthn,                            tags: ['stepupwebauthn','stepup' ] }
+    - { role: stepupazuremfa,                            tags: ['stepupazuremfa', 'stepup'] }
+    - { role: stepuptiqr,                                tags: ['stepuptiqr' , 'stepup'] }
+    - { role: stepupmiddleware,                          tags: ['stepupmiddelware' , 'stepup'] }
+    - { role: stepupgateway,                             tags: ['stepupgateway' , 'stepup'] }
+    - { role: stepupselfservice,                         tags: ['stepupselfservice' , 'stepup'] }
+    - { role: stepupra        ,                          tags: ['stepupra' , 'stepup'] }
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 
