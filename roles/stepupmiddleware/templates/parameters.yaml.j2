@@ -1,4 +1,6 @@
 parameters:
+    # Name of the application, used in lifecycle API 
+    application_name: "{{ lifecycle_application_name }}
     # IP addresses of any HTTP proxies that are sitting in from of the application
     # See: http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html
     trusted_proxies:   [ 127.0.0.1 ]

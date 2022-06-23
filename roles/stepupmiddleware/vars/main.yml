@@ -8,3 +8,4 @@ stepup_gh_appname: Middleware
 current_release_symlink: "/opt/openconext/OpenConext-{{ appname }}"
 current_release_appdir: "{{ current_release_symlink }}-{{ appversion }}"
 current_release_config_dir_name: "{{ current_release_appdir }}/config/legacy"
+lifecycle_application_name: "OpenConext Stepup" 
