@@ -167,7 +167,7 @@
     - { role: stepupwebauthn,                            tags: ['stepupwebauthn','stepup' ] }
     - { role: stepupazuremfa,                            tags: ['stepupazuremfa', 'stepup'] }
     - { role: stepuptiqr,                                tags: ['stepuptiqr' , 'stepup'] }
-    - { role: stepupmiddleware,                          tags: ['stepupmiddelware' , 'stepup'] }
+    - { role: stepupmiddleware,                          tags: ['stepupmiddleware' , 'stepup'] }
     - { role: stepupgateway,                             tags: ['stepupgateway' , 'stepup'] }
     - { role: stepupselfservice,                         tags: ['stepupselfservice' , 'stepup'] }
     - { role: stepupra        ,                          tags: ['stepupra' , 'stepup'] }
