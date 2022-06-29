@@ -22,7 +22,6 @@
       - telnet
       - sudo
       - unzip
-      - mysql
       - bzip2
     state: present
   register: common_tools_installed
