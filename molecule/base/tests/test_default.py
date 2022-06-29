@@ -6,17 +6,6 @@ import testinfra.utils.ansible_runner
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
-
-@pytest.mark.parametrize("services", [
-    ("ntpd"),
-    ("postfix")
-])
-def test_services_running_and_enabled(host, services):
-    service = host.service(services)
-    assert service.is_enabled
-    assert service.is_running
-
-
 @pytest.mark.parametrize("removed_packages", [
     ("exim"),
     ("sendmail"),

@@ -31,5 +31,8 @@ jobs:
       - name: Installing dependencies
         run: pip install jinja2 ansible molecule molecule-docker pytest-testinfra pytest setuptools
 
+      - name: Remove chrony apparmor
+        run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.chronyd
+
       - name: Run role tests
         run: molecule test -s base

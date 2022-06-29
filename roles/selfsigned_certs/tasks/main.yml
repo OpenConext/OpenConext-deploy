@@ -8,6 +8,7 @@
   until: selfsigned_cert_pythonpip_installed is succeeded
   when:
     - inventory_hostname in groups['loadbalancer']
+    - ansible_distribution_major_version == '7'
 
 - name: Generate a private key
   openssl_privatekey:
