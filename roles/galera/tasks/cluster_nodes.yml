@@ -18,36 +18,16 @@
     src: "mariadb.repo.j2"
     dest: "/etc/yum.repos.d/mariadb.repo"
 
-- name: Add Percona repository
-  yum:
-    name: "{{ percona_url_rpm }}"
-    state: present
-
-- name: Install MariaDB, Galera, rsync, python2-PyMySQL
+- name: Install MariaDB, Galera, socat, python3-PyMySQL
   yum:
     name:
       - MariaDB-server
       - MariaDB-client
       - galera
-      - python2-PyMySQL  # Required for using the Ansible mysql_* modules
+      - python3-PyMySQL  # Required for using the Ansible mysql_* modules
+      - mariadb-backup
       - socat
-      - percona-xtrabackup-24
     state: present
-
-- name: Install memcached
-  yum:
-    name: memcached
-    state: present
-  when:
-    - memcached_cluster | bool
-
-- name: Start and enable memcached
-  service:
-    name: memcached
-    enabled: yes
-    state: started
-  when:
-    - memcached_cluster | bool
 
 - name: Create mysqltmp directory
   file:
@@ -150,6 +130,14 @@
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
 
+- name: place the plugin config file
+  copy:
+    src: plugins.cnf
+    dest: /etc/my.cnf.d/plugins.cnf
+    mode: 0664
+    owner: root
+    group: root
+
 - name: Start and enable the MariaDB (mysql) service on boot.
   service:
     name: mysql
@@ -158,27 +146,37 @@
   register: mysql_service_state
   until: mysql_service_state is succeeded
 
-# Secure the MySQL server
-# - Set root password
-# - Remove anonymous users and test database
-- name: Change mysql root password and remove test database
-  script: mysql_bootstrap.sh "{{ mariadb_root_password }}"
+- name: Remove test database
+  mysql_db:
+    name: "test"
+    state: absent
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   when:
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
-  register: db_bootstrap_result
-  changed_when: db_bootstrap_result.rc > 0
-  failed_when: db_bootstrap_result.rc >= 2
 
-# Add cluster user
+- name: Remove anonymous users
+  mysql_user:
+    name: ""
+    host_all: yes
+    state: absent
+    login_unix_socket: /var/lib/mysql/mysql.sock
+  when:
+    - galera_bootstrap_node is defined
+    - galera_bootstrap_node == inventory_hostname
+
+#  Add cluster user
 - name: add mariadb cluster sst user
   mysql_user:
     name: "{{ mariadb_cluster_user }}"
     password: "{{ mariadb_cluster_password }}"
-    login_user: root
-    login_password: "{{ mariadb_root_password  }}"
     priv: "*.*:ALL"
     state: present
+    login_user: root
+    login_password: "{{ mariadb_root_password  }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   when:
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
@@ -188,10 +186,11 @@
   mysql_user:
     name: "{{ mariadb_backup_user }}"
     password: "{{ mariadb_backup_password  }}"
-    login_user: root
-    login_password: "{{ mariadb_root_password }}"
     priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
     state: present
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   when:
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
@@ -227,6 +226,7 @@
     state: present
     login_user: root
     login_password: "{{ mariadb_root_password }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   with_items:
     - "{{ databases.names }}"
   run_once: true
@@ -241,6 +241,7 @@
     state: present
     login_user: root
     login_password: "{{ mariadb_root_password }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
   with_subelements:
      - "{{ galera_root_users }}"
      - hosts

@@ -1,0 +1,42 @@
+---
+- name: Converge
+  hosts: all
+
+  vars:
+    inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
+
+  pre_tasks:
+    - name: Read vars from secrets file
+      include_vars: "../../environments/vm/secrets/vm.yml"
+    - name: Read vars from group_vars file
+      include_vars: "../../environments/vm/group_vars/vm.yml"
+
+    - name: "Set fact for backend_ipv4"
+      set_fact:
+        backend_ipv4: "{{ ansible_all_ipv4_addresses[0] }}"
+        mariadb_cluster_name: molecule
+        mariadb_cluster_password: secret
+        mariadb_root_password: secret
+        mariadb_backup_password: secret
+        galera_bootstrap_node: openconext-rocky8-mysql
+        galera_provision_host: localhost
+        galera_server_key: "{{lookup('file', inventory_dir + '/files/certs/galera/galera_server.key') }}"
+        galera_client_key: "{{lookup('file', inventory_dir + '/files/certs/galera/galera_server.key') }}"
+        galera_client_crt_name: "galera_server.pem"
+
+  roles:
+    - role: galera
+      innodb_buffer_pool_size: 32M
+      galera_handler_restart: False
+      galera_root_users:
+        - name: molecule
+          password: secret
+          privs:
+            - '*.*:ALL'
+          hosts:
+            - '%'
+    - role: galera_create_users
+      databases:
+        users:
+          - { name: amolecule, db_name: amolecule, password: secret, privilege: ALL }
+  

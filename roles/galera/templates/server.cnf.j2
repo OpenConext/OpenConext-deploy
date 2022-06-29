@@ -10,6 +10,8 @@
 
 # this is only for the mysqld standalone daemon
 [mysqld]
+userstat = ON
+log_slave_updates = ON
 tmpdir = /var/lib/mysqltemp
 ssl-ca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }} 
 ssl-key = {{ galera_tls_cert_path }}/{{ galera_server_key_name }}
@@ -28,12 +30,10 @@ skip-name-resolve
 max_allowed_packet = 256M
 table_cache = 4096
 read_buffer_size = 4M
-thread_cache_size = 8
 query_cache_size = 96M
 query_cache_limit = 2M
 query_cache_type = 1
 thread_cache_size = 8
-thread_concurrency = 16
 sort_buffer_size = 16M
 wait_timeout=28800
 query_prealloc_size=32K
@@ -42,19 +42,19 @@ read_rnd_buffer_size=8M
 join_buffer_size=16M
 
 # * InnoDB settings
-innodb_log_file_size=100M
+innodb_log_file_size=256M
 innodb_file_per_table=1
 innodb_flush_log_at_trx_commit=2
 innodb_data_file_path = ibdata1:32M:autoextend
 innodb_buffer_pool_size = {{ innodb_buffer_pool_size }}
 innodb_log_files_in_group = 2
-innodb_log_buffer_size = 4M
+innodb_log_buffer_size = 64M
 innodb_flush_method = O_DIRECT
 innodb_open_files = 600
 innodb_thread_concurrency = 2
-innodb_support_xa = 0
 innodb_flush_log_at_trx_commit = 2
 innodb_doublewrite = 0
+innodb_print_all_deadlocks = ON
 
 # Character set UTF-8
 init_connect = 'SET collation_connection = utf8_unicode_ci'
@@ -68,16 +68,16 @@ syslog
 
 [galera]
 wsrep_on=ON
-wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
 wsrep_cluster_address="gcomm://{% for host in groups['dbcluster'] %}{{ hostvars[host]['backend_ipv4'] }}{% if not loop.last %},{% endif %}{% endfor %}"
 wsrep_cluster_name='{{ mariadb_cluster_name }}'
 wsrep_node_address='{{ backend_ipv4 }}:4567'
 wsrep_node_name='{{ inventory_hostname }}'
-wsrep_sst_method=xtrabackup-v2
+wsrep_sst_method=mariabackup
 wsrep_sst_auth={{ mariadb_cluster_user }}:{{ mariadb_cluster_password }}
 wsrep_provider_options="socket.ssl_key={{ galera_tls_cert_path }}/{{ galera_server_key_name }};socket.ssl_cert={{ galera_tls_cert_path }}/{{ galera_server_crt_name }};socket.ssl_ca={{ galera_tls_cert_path }}/{{ galera_tls_ca }};socket.ssl_cipher=AES128-SHA;gmcast.segment={{ galera_gmcast_segment }};gcache.size=1G;cert.log_conflicts=YES"
 wsrep_retry_autocommit = 2
-wsrep_slave_threads = 4
+wsrep_slave_threads = 8
 wsrep_log_conflicts=ON
 
 # this is only for embedded server
