@@ -1,3 +1,10 @@
+- name: Install extra php packages
+  yum:
+    name: 
+      - php72-php-intl
+      - php72-php-gmp
+    state: present
+
 - name: Create the appdirs | {{ appname }}
   file:
     state: directory
