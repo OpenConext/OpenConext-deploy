@@ -96,5 +96,9 @@ parameters:
 {% else %}
               type: 'pdo'
               # Use PDO config from userstorage
-              arguments: []
+              arguments:
+                table: 'user'
+                dsn: 'mysql:host={{ tiqr_db_host }};dbname=tiqr'
+                username: '{{ database_tiqr_user }}'
+                password: '{{ mysql_passwords.tiqr }}'
 {% endif %}

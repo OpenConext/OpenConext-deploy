@@ -47,6 +47,9 @@
     group: "{{ appname }}"
   notify: clear cache {{ appname }}
 
+- name: Install assets
+  command: php72 {{ current_release_appdir }}/bin/console assets:install 
+
 - name: Activate the symlink
   file:
     src: "{{ current_release_appdir }}"
