@@ -195,6 +195,16 @@
     - galera_bootstrap_node is defined
     - galera_bootstrap_node == inventory_hostname
 
+- name: Add Galera clustercheck user, used for keepalived to connect
+  mysql_user:
+    name: clustercheck
+    password: "{{ galera_clustercheck_password }}"
+    priv: "*.*:USAGE"
+    state: present
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
+
 - name: Create the backup directory
   file:
     path: /home/backup
