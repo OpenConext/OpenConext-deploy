@@ -50,6 +50,12 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
     SSLCertificateChainFile {{ tls.cert_path_ca }}/stats.{{ base_domain }}.intermediate
     Include ssl_backend.conf
     {% endif %}
+    {% if haproxy_backend_tls %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
     OIDCClaimPrefix OIDC-CLAIM-
     OIDCProviderMetadataURL {{ stats_oidc_metadata_url }}
     OIDCClientID {{ stats_oidc_client_id }}
@@ -67,6 +73,7 @@ Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
       AuthType openid-connect
       Require valid-user
     </Location>
+
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"
     Header always set X-Frame-Options "DENY"
