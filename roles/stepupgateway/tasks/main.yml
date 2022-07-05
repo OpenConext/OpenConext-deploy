@@ -107,3 +107,8 @@
     state: link
 
 - meta: flush_handlers
+
+- name: Include post installation tasks
+  include_role:
+    name: stepupapp
+    tasks_from: postinstall

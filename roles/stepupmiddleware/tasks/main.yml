@@ -78,3 +78,8 @@
     "middleware-push-config.sh": "02-middleware-config.sh"
     "middleware-push-whitelist.sh": "04-middleware-whitelist.sh"
     "middleware-push-institution.sh": "05-middleware-institution.sh"
+
+- name: Include post installation tasks
+  include_role:
+    name: stepupapp
+    tasks_from: postinstall
