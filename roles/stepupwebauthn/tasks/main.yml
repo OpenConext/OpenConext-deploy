@@ -32,7 +32,7 @@
     group: "{{ appname }}"
   notify:
     - clear cache {{ appname }}
-    - reload php72-fpm
+    - reload php72-fpm {{ appname }}
 
 - name: Place .env file
   template:
