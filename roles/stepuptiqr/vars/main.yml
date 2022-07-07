@@ -11,6 +11,8 @@ current_release_config_file_dir_name: "{{ current_release_appdir }}/app/files"
 current_release_config_dir_name: "{{ current_release_appdir }}/config/legacy"
 gssp_idp_private_key: "{{ lookup('file', inventory_dir+'/files/certs/stepup/tiqr_idp.key') }}"
 database_tiqr_user: tiqrrw
+database_tiqr_deploy_user: tiqrdeploy
+database_tiqr_name: tiqr
 # API key
 tiqr_gcm_apikey: "{{ lookup('file', inventory_dir+'/secrets/stepup/gcm_apikey') }}"
 # Optional API key for Firebase Cloud Messaging (FCM)

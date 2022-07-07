@@ -56,6 +56,27 @@
     dest: "{{ current_release_symlink }}"
     state: link
 
+- name: Put tiqr configuration script in /root/
+  template: 
+    src: "{{ item }}.j2"
+    dest: "/root/{{ item }}" 
+    group: root 
+    owner: root 
+    mode: "0500"
+  with_items:
+  - "01-tiqr-db_init.sh"
+
+- name: Put tiqr keyserver migration script in /root/
+  template: 
+    src: "{{ item }}.j2"
+    dest: "/root/{{ item }}" 
+    group: root 
+    owner: root 
+    mode: "500"
+  with_items:
+  - "02-tiqr-migrate-to-keyserver.php"
+  when: keyserver_consumerkey is defined
+
 - meta: flush_handlers
 
 - name: Include post installation tasks

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+pushd {{ current_release_symlink }}
+echo "{{ php_cli }} bin/console u2f:migrations:migrate --env=prod"
+{{ php_cli }} bin/console u2f:migrations:migrate --env=prod
+popd

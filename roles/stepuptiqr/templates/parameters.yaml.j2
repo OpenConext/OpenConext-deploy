@@ -62,7 +62,7 @@ parameters:
               type: 'pdo'
               arguments:
                 table: 'tiqrstate'
-                dsn: 'mysql:host={{ tiqr_db_host }};dbname=tiqr'
+                dsn: 'mysql:host={{ tiqr_db_host }};dbname={{ database_tiqr_name }}'
                 username: '{{ database_tiqr_user }}'
                 password: '{{ mysql_passwords.tiqr }}'
 
@@ -77,7 +77,7 @@ parameters:
               type: 'pdo'
               arguments:
                 table: 'user'
-                dsn: 'mysql:host={{ tiqr_db_host }};dbname=tiqr'
+                dsn: 'mysql:host={{ tiqr_db_host }};dbname={{ database_tiqr_name }}'
                 username: '{{ database_tiqr_user }}'
                 password: '{{ mysql_passwords.tiqr }}'
             devicestorage:
@@ -96,7 +96,7 @@ parameters:
               # Use PDO config from userstorage
               arguments:
                 table: 'user'
-                dsn: 'mysql:host={{ tiqr_db_host }};dbname=tiqr'
+                dsn: 'mysql:host={{ tiqr_db_host }};dbname={{ database_tiqr_name }}'
                 username: '{{ database_tiqr_user }}'
                 password: '{{ mysql_passwords.tiqr }}'
 {% endif %}

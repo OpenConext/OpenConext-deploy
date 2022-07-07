@@ -106,6 +106,17 @@
     dest: "{{ current_release_symlink }}"
     state: link
 
+- name: Put gateway database db_migrate scripts in /root/
+  template: 
+    src: "{{ item }}.j2" 
+    dest: "/root/{{ item }}"
+    group: root 
+    owner: root 
+    mode: "0500"
+  with_items:
+  - "01-gateway-db_migrate.sh"
+
+
 - meta: flush_handlers
 
 - name: Include post installation tasks
