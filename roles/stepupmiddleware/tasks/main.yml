@@ -29,7 +29,7 @@
     dest: "/root/{{ item }}"
     group: "root"
     owner: "root"
-    mode: "500"
+    mode: "0500"
   with_items:
   - "01-middleware-db_migrate.sh"
   - "06-middleware-bootstrap-sraa-users.sh"
@@ -48,11 +48,15 @@
     dest: "/opt/scripts/{{ item }}"
     group: "{{ appname }}"
     owner: "{{ appname }}"
-    mode: "400"
+    mode: "0400"
   with_items:
   - "middleware-config.json"
   - "middleware-whitelist.json"
   - "middleware-institution.json"
+  tags: 
+    - push_mw_config
+    - push_mw_institution
+    - push_mw_whitelist
 
 - name: Put middleware configuration scripts in /opt/scripts
   template:
@@ -60,7 +64,7 @@
     dest: "/opt/scripts/{{ item }}"
     group: "{{ appname }}"
     owner: root
-    mode: 550
+    mode: "0550"
   with_items:
   - "middleware-push-config.sh"
   - "middleware-push-whitelist.sh"
@@ -83,3 +87,24 @@
   include_role:
     name: stepupapp
     tasks_from: postinstall
+
+- name: Push middleware configuration
+  command: /opt/scripts/middleware-push-config.sh
+  run_once: true
+  tags:
+    - never
+    - push_mw_config
+
+- name: Push middleware whitelist
+  command: /opt/scripts/middleware-push-whitelist.sh
+  run_once: True
+  tags:
+    - never
+    - push_mw_whitelist
+
+- name: Push middleware institution configuration
+  command: /opt/scripts/middleware-push-institution.sh
+  run_once: True
+  tags:
+    - never
+    - push_mw_institution
