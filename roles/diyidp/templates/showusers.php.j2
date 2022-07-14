@@ -17,103 +17,6 @@ function doQuery($qryString, $dbuser, $dbpass, $dbhost) {
 	return $result;
 }
 
-function mkCSV($rset, $datasetname){
-
-	$now = new DateTime("", new DateTimeZone('Europe/Amsterdam'));
-
-	// Add query description and publish date
-	//$csvresult = '{"'.$datasetname.'" : ' . json_encode($rows) . ',"pubdate": "'. $now->format("d-m-Y H:i:s") .'"}';
-
-	return convertResult($rset, "csv");
-}
-
-function mkXML($rset, $datasetname, $depth = 0){
-    
-    $now = new DateTime("", new DateTimeZone('Europe/Amsterdam'));
-
-    $rows = array();
-	while($r = mysql_fetch_assoc($rset)) {
-	$rows[] = $r;
-    }
-    return "<?xml version='1.0' ?>\n<DATA>\n" . ARRAYtoXML($rows) . "</DATA>";
-}
-
-function convertResult($rs, $type, $jsonmain="") {
-	// receive a recordset and convert it to csv, json (default) or to xml based on "type" parameter.
-	$jsonArray = array();
-	$csvString = "";
-	$csvcolumns = "";
-	$count = 0;
-	$returndata = "";
-	while($r = mysql_fetch_row($rs)) {
-		for($k = 0; $k < count($r); $k++) {
-			$jsonArray[$count][mysql_field_name($rs, $k)] = $r[$k];
-			$csvString.=",\"".$r[$k]."\"";
-		}
-		if (!$csvcolumns) for($k = 0; $k < count($r); $k++) $csvcolumns.=($csvcolumns?",":"").mysql_field_name($rs, $k);
-		$csvString.="\n";
-		$count++;
-	}
-
-	switch ($type) {
-	    case "csv":
-		// CSV
-		$returndata = str_replace("\n,","\n",$csvcolumns."\n".$csvString);
-	    break;
-	    
-	    case "xml":
-		// XML
-		// TODO
-		break;
-
-	    default:
-		// JSON
-		$returndata = "{\"$jsonmain\":".json_encode($jsonArray)."}";
-        }
-
-	return ($returndata);
-}
-
-
-function mkJson($rset, $datasetname){
-	
-	$now = new DateTime("", new DateTimeZone('Europe/Amsterdam'));
-
-	$rows = array();
-	while($r = mysql_fetch_assoc($rset)) {
-		$rows[] = $r;
-	}
-	
-	// Add query description and publish date
-	$jsonresult = '{"'.$datasetname.'" : ' . json_encode($rows) . ',"pubdate": "'. $now->format("d-m-Y H:i:s") .'"}';
-	
-	return $jsonresult;
-}
-
-function mkArray($rset, $datasetname){
-
-	$rows = array();
-	while($r = mysql_fetch_assoc($rset)) {
-		$rows[] = $r;
-	}
-
-	return $rows;
-}
-
-function mkHTML($rset){
-
-	$data = mkArray($rset, "rSet");	
-	$htmlTable = "";
-	
-	//$htmlTable = '<html><head><link href="https://'.$_SERVER['SERVER_NAME']."/stats/".$_SERVER['PATH_INFO'].'css/stats.css" rel="stylesheet" type="text/css" /></head><body>';				
-		
-	$htmlTable .= array2table($data);
-	
-	//$htmlTable .= "</body></html>";	
-
-	return $htmlTable;
-}
-
 /**
  * Translate a result array into a HTML table
  *
@@ -314,5 +217,3 @@ ORDER BY LPAD(lower(username), 2,0), LPAD(lower(username), 10,0)";
 	
 	$htmlTable = array2table($rows);
 	print_r($htmlTable);
-
-?>
