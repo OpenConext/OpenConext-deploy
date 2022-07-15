@@ -17,10 +17,12 @@
       - python2-pip
     state: present
 
+- name: Use temporarily python3 as remote interpreter, this fixes pymongo
+  set_fact: ansible_python_interpreter=/usr/bin/python3
+
 - name: Install pymongo
   pip:
     name: pymongo
-    version: 3.9.0
 
 - name: Install kernel settings script
   copy:
@@ -208,3 +210,6 @@
   with_items: "{{ mongo.users }}"
   changed_when: False
   tags: mongo_users
+
+- name: Use python2 again remote interpreter
+  set_fact: ansible_python_interpreter=/usr/bin/python
