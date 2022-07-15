@@ -2,6 +2,6 @@
 shibboleth_metadata_sources:
   engine: "https://engine.{{ base_domain }}/authentication/idp/metadata"
 shibd_sp_crt_not_in_inventory: false
-mariadb_odbc_version: 3.0.8
+mariadb_odbc_version: 3.1.9
 shibboleth_database_backend: false
 shibboleth_db_cleanup_interval: 900
