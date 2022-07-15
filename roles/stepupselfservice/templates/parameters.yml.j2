@@ -75,13 +75,8 @@ parameters:
         loa: {{ value.loa }}
 {% endfor %}
 
-    u2f_app_id: https://{{ gateway_vhost_name }}/u2f/app-id
-
     tiqr_app_android_url: https://play.google.com/store/apps/details?id=org.tiqr.authenticator&hl=en
     tiqr_app_ios_url: https://itunes.apple.com/us/app/tiqr/id430838214?mt=8&ls=1
-
-    # TODO: Unused, remove requirement from component
-    graylog_hostname: ""
 
     session_max_absolute_lifetime: {{ app_session_max_duration }}
     session_max_relative_lifetime: {{ app_session_expiry_time }}

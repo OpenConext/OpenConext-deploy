@@ -66,8 +66,6 @@ parameters:
         loa: {{ value.loa }}
 {% endfor %}
 
-    u2f_app_id: https://{{ gateway_vhost_name }}/u2f/app-id
-
     session_max_absolute_lifetime: {{ app_session_max_duration }}
     session_max_relative_lifetime: {{ app_session_expiry_time }}
 
