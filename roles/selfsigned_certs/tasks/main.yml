@@ -10,6 +10,17 @@
     - inventory_hostname in groups['loadbalancer']
     - ansible_distribution_major_version == '7'
 
+- name: Install python-cryptography Rocky8
+  yum:
+    name: 
+       - "python3-cryptography"
+    state: "installed"
+  register: selfsigned_cert_python3_installed
+  until: selfsigned_cert_python3_installed is succeeded
+  when:
+    - inventory_hostname in groups['loadbalancer']
+    - ansible_distribution_major_version == '8'
+
 - name: Generate a private key
   openssl_privatekey:
     path: "{{ tls.cert_private_path }}/{{ tls_star_cert_key }}"
