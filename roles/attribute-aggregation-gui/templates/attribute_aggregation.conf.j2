@@ -124,6 +124,7 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !^/aa/
     RewriteCond %{REQUEST_URI} !^/redirect
+    RewriteCond %{REQUEST_URI} !^/internal/
     RewriteCond %{REQUEST_URI} !^/fonts/
     RewriteCond %{REQUEST_URI} !^/orcid
     RewriteRule (.*) /index.html [L]
@@ -133,9 +134,25 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     ProxyPass /Shibboleth.sso !
 
     ProxyPass /redirect http://localhost:{{ springapp_tcpport }}/aa/api/redirect retry=0
-    ProxyPass /aa/api/health http://localhost:{{ springapp_tcpport }}/aa/api/health retry=0
-    ProxyPass /aa/api/client http://localhost:{{ springapp_tcpport }}/aa/api/client retry=0
+
+    ProxyPass /aa/api/health http://localhost:{{ springapp_tcpport }}/aa/api/internal/health retry=0
+    ProxyPass /aa/api/info http://localhost:{{ springapp_tcpport }}/aa/api/internal/info retry=0
+
+    ProxyPass /internal/health http://localhost:{{ springapp_tcpport }}/aa/api/internal/health retry=0
+    ProxyPass /internal/info http://localhost:{{ springapp_tcpport }}/aa/api/internal/info retry=0
+
+    ProxyPass /aa/api http://localhost:{{ springapp_tcpport }}/aa/api retry=0
+    ProxyPassReverse /aa/api http://localhost:{{ springapp_tcpport }}/aa/api
+
     ProxyPassReverse /aa/api/client http://localhost:{{ springapp_tcpport }}/aa/api/client
+    
+    <Location />
+      AuthType shibboleth
+      ShibUseHeaders On
+      ShibRequestSetting applicationId attribute-aggregation-link
+      ShibRequireSession On
+      require valid-user
+    </Location>
 
     # Disable shibboleth for health / info check
     <Location ~ "/aa/api/(health|info)">
@@ -143,12 +160,14 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
       satisfy any
     </Location>
 
-    <Location />
-      AuthType shibboleth
-      ShibUseHeaders On
-      ShibRequestSetting applicationId attribute-aggregation-link
-      ShibRequireSession On
-      require valid-user
+    # The EB endpoints are secured with basic auth
+    <Location ~ "/aa/api/internal/">
+      Require all granted
+    </Location>
+
+    # The internal info and health
+    <Location ~ "/internal/(health|info)">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"
