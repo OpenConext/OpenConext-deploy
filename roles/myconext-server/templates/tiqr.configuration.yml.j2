@@ -2,7 +2,7 @@ encryptionSecret: "{{ myconext_tiqr_encryption }}"
 baseUrl: "https://login.{{ myconext_base_domain }}"
 identifier: "{{ myconext_base_domain }}"
 displayName: "{{ myconext_base_domain }}"
-version: "0.0.1"
+version: "2"
 logoUrl: "https://static.surfconext.nl/media/idp/eduid.png"
 infoUrl: "https://{{ myconext_base_domain }}/help"
 pushNotificationsEnabled: true
@@ -17,8 +17,8 @@ apns:
   # Leave empty for non-local development
   serverCertificateChain: ""
   topic: "nl.eduid"
-  teamId: "myconext.apns_teamid"
-  keyId: "myconext.apns_keyid"
+  teamId: "{{ myconext.apns_teamid }}"
+  keyId: "{{ myconext.apns_keyid }}"
 
 gcm:
   firebaseServiceAccount: "file://{{ myconext_dir }}/firebase.json"
