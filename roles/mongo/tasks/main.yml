@@ -14,7 +14,8 @@
   yum:
     name:
       - mongodb-org
-      - python2-pip
+      - python-pip
+      - python3
     state: present
 
 - name: Use temporarily python3 as remote interpreter, this fixes pymongo
