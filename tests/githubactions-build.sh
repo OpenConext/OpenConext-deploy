@@ -13,8 +13,9 @@ ANSIBLE_USER=root
 
 # start docker container
 docker run --detach                                         \
-	-v /sys/fs/cgroup:/sys/fs/cgroup:ro                     \
+	-v /sys/fs/cgroup:/sys/fs/cgroup:rw                     \
 	-t                                                      \
+	--cgroupns=host                                         \
 	--privileged                                            \
 	--publish 443:443                                       \
 	--name ansible-test-ga                                  \
