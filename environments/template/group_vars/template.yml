@@ -591,14 +591,14 @@ haproxy_applications:
   - name: oidc_playground
     vhost_name: "oidc-playground.{{ base_domain }}"
     ha_method: "GET"
-    ha_url: "/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.oidc_playground.port }}"
     servers: "{{java_servers}}"
 
   - name: voot
     vhost_name: voot.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.voot.port }}"
     servers: "{{java_servers}}"
 
@@ -626,7 +626,7 @@ haproxy_applications:
   - name: manage
     vhost_name: manage.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/manage/api/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.manage.port }}"
     servers: "{{java_servers}}"
 
@@ -654,35 +654,28 @@ haproxy_applications:
   - name: oidcng
     vhost_name: connect.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/actuator/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.oidcng.port }}"
     servers: "{{java_servers}}"
 
   - name: myconext
     vhost_name: my.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/actuator/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.myconext.port }}"
     servers: "{{java_servers}}"
 
   - name: account
     vhost_name: account.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/actuator/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.account.port }}"
-    servers: "{{java_servers}}"
-
-  - name: eduid
-    vhost_name: eduid.{{ base_domain }}
-    ha_method: "GET"
-    ha_url: "/actuator/health"
-    port: "{{ loadbalancing.eduid.port }}"
     servers: "{{java_servers}}"
 
   - name: dashboard
     vhost_name: dashboard.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.dashboard.port }}"
     servers: "{{java_servers}}"
 
