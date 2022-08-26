@@ -154,6 +154,12 @@
     - "reload postfix"
     - "rebuild header_checks"
 
+- name: start and enable Postfix
+  service: 
+    name: postfix
+    enabled: yes
+    state: started
+
 # journald binary logs corrupt on specific engineblock messages.
 # disabling compression fixes that issue
 - name: Disable journald compression
