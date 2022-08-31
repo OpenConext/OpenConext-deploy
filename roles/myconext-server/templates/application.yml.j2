@@ -105,8 +105,12 @@ oidc:
   idp-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
   sp-flow-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
   base-url: https://connect.{{ base_domain }}
+  # The duration that non validated-name linked accounts are valid - note that they are not removed and will still be used for EPPN Pseudonymisation
   expiry-duration-days-non-validated: 180
-  expiry-duration-days-validated: 2190
+  # The duration after which non validated-name linked accounts are removed
+  removal-duration-days-non-validated: 540
+  # The duration after which validated-name linked accounts are removed
+  removal-duration-days-validated: 2190
 
 account_linking_context_class_ref:
   linked_institution: https://eduid.nl/trust/linked-institution
