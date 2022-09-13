@@ -21,8 +21,8 @@ parameters:
     database_middleware_user:     {{ database_middleware_user }}
     database_middleware_password: {{ mysql_passwords.middleware }}
     database_gateway_name:     {{ database_gateway_name }}
-    database_gateway_user:     {{ database_middleware_user }}
-    database_gateway_password: {{ mysql_passwords.middleware }}
+    database_gateway_user:     {{ database_gateway_middleware_user }}
+    database_gateway_password: {{ mysql_passwords.mwgatewayrw }}
     # TODO: Deploy creds should only be available during deploy
     database_deploy_user:      {{ database_middleware_deploy_user }}
     database_deploy_password:  {{ database_middleware_deploy_password }}
