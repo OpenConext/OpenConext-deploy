@@ -88,23 +88,30 @@
     name: stepupapp
     tasks_from: postinstall
 
+# The following push scripts have an additional conditional check on the presence of 
+# a tag, so these are only ran when explicitly called. 
+
 - name: Push middleware configuration
   command: /opt/scripts/middleware-push-config.sh
   run_once: true
-  tags:
-    - never
+  when: 
+    - "'push_mw_config' in ansible_run_tags"
+  tags: 
     - push_mw_config
 
 - name: Push middleware whitelist
   command: /opt/scripts/middleware-push-whitelist.sh
   run_once: True
-  tags:
-    - never
+  when: 
+    - "'push_mw_whitelist' in ansible_run_tags"
+  tags: 
     - push_mw_whitelist
 
 - name: Push middleware institution configuration
   command: /opt/scripts/middleware-push-institution.sh
   run_once: True
-  tags:
-    - never
+  when: 
+    - "'push_mw_institution' in ansible_run_tags"
+  tags: 
     - push_mw_institution
+
