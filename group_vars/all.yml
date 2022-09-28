@@ -65,3 +65,9 @@ logback_max_history: 7
 
 # The manage spring_app port is used by various roles
 manage_springapp_tcpport: 9393
+
+mfa_values_supported:
+ - "http://schemas.microsoft.com/claims/multipleauthn"
+ - "https://refeds.org/profile/mfa"
+ - "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorContract"
+ - "transparent_authn_context"

@@ -155,12 +155,11 @@
               "string"
             ],
             "enum": [
-              "http://schemas.microsoft.com/claims/multipleauthn",
-              "https://refeds.org/profile/mfa",
-              "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorContract",
-              "transparent_authn_context"
+              {% for mfa in mfa_values_supported %}
+              "{{ mfa }}"{{ "," if not loop.last else ""}}
+              {% endfor %}
             ],
-            "default": "http://schemas.microsoft.com/claims/multipleauthn"
+            "default": "{{ mfa_values_supported[0] }}"
           }
         }
       },

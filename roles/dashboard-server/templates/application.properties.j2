@@ -94,3 +94,4 @@ dashboard.hide_tabs={{ dashboard_hide_tabs }}
 default_loa_level={{ manage.loa_values_supported[0] }}
 loa_values_supported={% for loa in manage.loa_values_supported %}{{ loa }}{{ "," if not loop.last else ""}} {% endfor %}
 
+authn_context_levels={% for mfa in mfa_values_supported %}{{ mfa }}{{ "," if not loop.last else ""}} {% endfor %}
