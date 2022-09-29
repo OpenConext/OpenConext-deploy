@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Run database migrations of the stepup-middleware compnent.
+# This updates both the middleware and the gateway database schemas
+# to the latest versions supported by the currently active version
+# of the middleware.
+#
+# You must run this command/script manually, it is not invoked from
+# the Ansible site.yml or deploy.yml playbooks
+#
+# This action is idempotent. I.e. it will have no effect when the database
+# schema's are already up-to-date
+#
+# A separate "deploy" user is used to update the schema's as the middleware
+# and gateway users do not have sufficient privileges to update the schema's
+
+pushd /opt/www/{{ middleware_vhost_name }}
+
+# Before Symfony 4 there was a separate console command to run the migrations:
+# console middleware:migrations:migrate --env=prod
+
+# Run the middleware and gateway database migrations
+echo "{{ php_cli }} bin/console doctrine:migrations:migrate --env=prod --em=deploy"
+{{ php_cli }} bin/console doctrine:migrations:migrate --env=prod --em=deploy
+
+popd

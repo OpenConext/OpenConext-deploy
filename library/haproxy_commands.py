@@ -21,6 +21,7 @@ if __name__ == "__main__":
     "java_blauwrood_servers": {"java_blauwrood_servers": True, "type": "list"},
     "php_blauwrood_servers": {"php_blauwrood_servers": True, "type": "list"},
     "static_blauwrood_servers": {"static_blauwrood_servers": True, "type": "list"},
+    "stepup_blauwrood_servers": {"stepup_blauwrood_servers": True, "type": "list"},
     "weight": {"type": "str"},
     "color": {"required": True, "type": "str"},
     "app_name": {"required": True, "type": "str"},
@@ -31,6 +32,7 @@ if __name__ == "__main__":
   java_servers = [s["label"] for s in module.params["java_blauwrood_servers"]]
   php_servers = [s["label"] for s in module.params["php_blauwrood_servers"]]
   static_servers = [s["label"] for s in module.params["static_blauwrood_servers"]]
+  stepup_servers = [s["label"] for s in module.params["stepup_blauwrood_servers"]]
   app_name = module.params["app_name"].lower()
   app_type = module.params["app_type"].lower()
 
@@ -45,6 +47,8 @@ if __name__ == "__main__":
       servers = php_servers
   elif app_type == "static":
       servers = static_servers
+  elif app_type == "stepup":
+      servers = stepup_servers
 
   red_servers = [s for s in servers if s.upper().endswith("ROOD")]
   blue_servers = [s for s in servers if s.upper().endswith("BLAUW")]

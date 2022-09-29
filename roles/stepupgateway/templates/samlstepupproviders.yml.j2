@@ -1,0 +1,33 @@
+imports:
+    - { resource: samlstepupproviders_parameters.yaml }
+
+surfnet_stepup_gateway_saml_stepup_provider:
+    allowed_sps: "%gssp_allowed_sps%"
+    routes:
+        sso: gssp_verify
+        consume_assertion: gssp_consume_assertion
+        metadata: gssp_saml_metadata
+    providers:
+{% for key, value in stepup_enabled_generic_second_factors.items() %}
+        {{ key }}:
+{# TODO: "enabled" does not seem to do anything anymore #}
+            enabled: true
+            hosted:
+                service_provider:
+                    public_key: "%gssp_{{ key }}_sp_publickey%"
+                    private_key: "%gssp_{{ key }}_sp_privatekey%"
+                identity_provider:
+                    service_provider_repository: saml.entity_repository
+                    public_key: "%gssp_{{ key }}_idp_publickey%"
+                    private_key: "%gssp_{{ key }}_idp_privatekey%"
+                metadata:
+                    public_key: "%gssp_{{ key }}_metadata_publickey%"
+                    private_key: "%gssp_{{ key }}_metadata_privatekey%"
+            remote:
+                entity_id: "%gssp_{{ key }}_remote_entity_id%"
+                sso_url: "%gssp_{{ key }}_remote_sso_url%"
+                certificate: "%gssp_{{ key }}_remote_certificate%"
+            view_config:
+                logo: "%gssp_{{ key }}_logo%"
+                title: "%gssp_{{ key }}_title%"
+{% endfor %}

@@ -1,0 +1,117 @@
+- name: Install Apache and FPM config
+  include_role:
+    name: apachefpm
+
+- name: Install the symfony app
+  include_role:
+    name: stepupapp
+
+- name: Place parameters.yml
+  template:
+    src: parameters.yaml.j2
+    dest: "{{ current_release_config_dir_name }}/parameters.yaml"
+    mode: 0640
+    owner: root
+    group: "{{ appname }}"
+  notify:
+    - clear cache {{ appname }}
+    - reload php72-fpm {{ appname }}
+
+- name: Activate the symlink
+  file:
+    src: "{{ current_release_appdir }}"
+    dest: "{{ current_release_symlink }}"
+    state: link
+
+- name: Put middleware configuration scripts in /root/
+  template:
+    src: "{{ item }}.j2"
+    dest: "/root/{{ item }}"
+    group: "root"
+    owner: "root"
+    mode: "0500"
+  with_items:
+  - "01-middleware-db_migrate.sh"
+  - "06-middleware-bootstrap-sraa-users.sh"
+
+- name: Create /opt/scripts
+  file:
+    path: /opt/scripts
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+
+- name: Put middleware config from environment in /opt/scripts
+  template:
+    src: "{{ inventory_dir }}/templates/middleware/{{ item }}.j2"
+    dest: "/opt/scripts/{{ item }}"
+    group: "{{ appname }}"
+    owner: "{{ appname }}"
+    mode: "0400"
+  with_items:
+  - "middleware-config.json"
+  - "middleware-whitelist.json"
+  - "middleware-institution.json"
+  tags: 
+    - push_mw_config
+    - push_mw_institution
+    - push_mw_whitelist
+
+- name: Put middleware configuration scripts in /opt/scripts
+  template:
+    src: "{{ item}}.j2"
+    dest: "/opt/scripts/{{ item }}"
+    group: "{{ appname }}"
+    owner: root
+    mode: "0550"
+  with_items:
+  - "middleware-push-config.sh"
+  - "middleware-push-whitelist.sh"
+  - "middleware-push-institution.sh"
+
+- name: Create symlinks to middleware configuration scripts in /root
+  file:
+    src: "/opt/scripts/{{ item.key }}"
+    dest: "/root/{{ item.value }}"
+    group: "{{ appname }}"
+    owner: root
+    state: link
+    force: true
+  with_dict:
+    "middleware-push-config.sh": "02-middleware-config.sh"
+    "middleware-push-whitelist.sh": "04-middleware-whitelist.sh"
+    "middleware-push-institution.sh": "05-middleware-institution.sh"
+
+- name: Include post installation tasks
+  include_role:
+    name: stepupapp
+    tasks_from: postinstall
+
+# The following push scripts have an additional conditional check on the presence of 
+# a tag, so these are only ran when explicitly called. 
+
+- name: Push middleware configuration
+  command: /opt/scripts/middleware-push-config.sh
+  run_once: true
+  when: 
+    - "'push_mw_config' in ansible_run_tags"
+  tags: 
+    - push_mw_config
+
+- name: Push middleware whitelist
+  command: /opt/scripts/middleware-push-whitelist.sh
+  run_once: True
+  when: 
+    - "'push_mw_whitelist' in ansible_run_tags"
+  tags: 
+    - push_mw_whitelist
+
+- name: Push middleware institution configuration
+  command: /opt/scripts/middleware-push-institution.sh
+  run_once: True
+  when: 
+    - "'push_mw_institution' in ansible_run_tags"
+  tags: 
+    - push_mw_institution
+

@@ -1,0 +1,41 @@
+Listen {{ ansible_default_ipv4.address }}:{{ loadbalancingport }}
+<Virtualhost {{ ansible_default_ipv4.address }}:{{ loadbalancingport }}>
+    ServerName   {{ vhost_name }}
+    ServerAdmin {{ admin_email }}
+
+    DocumentRoot {{ current_release_symlink }}/public
+
+    SetEnv HTTPS on
+    SetEnv APP_ENV prod
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+    
+    <Directory "{{ current_release_symlink }}/public">
+        Require all granted
+
+	Options -MultiViews
+	RewriteEngine On
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^(.*)$ index.php [QSA,L]
+    </Directory>
+
+    # Proxy the requests to FPM
+    <FilesMatch \.php$>
+        SetHandler proxy:unix:/var/run/php-fpm/{{ appname }}-pool-72.sock|fcgi://dummy
+    </FilesMatch>
+
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-{{ appname }}'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-{{ appname }}'" combined
+    {% if haproxy_backend_tls %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
+
+    ExpiresActive on
+    ExpiresByType font/* "access plus 1 year"
+    ExpiresByType image/* "access plus 6 months"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType text/js "access plus 1 year"
+
+</VirtualHost>

@@ -1,0 +1,10 @@
+# These parameters are to be rendered into the view according to a specific locale
+# A typical example would be showing locale-dependent external URLs
+# Note that a '%' in strings must be escaped by a '%'
+# http://symfony.com/doc/2.7/service_container/parameters.html#parameters-in-configuration-files
+
+parameters:
+    support_url:  # Link to the support pages
+{% for locale, url in gateway_support_url.items() %}
+        {{ locale }}: "{{ url | replace('%', '%%') }}"
+{% endfor %}

@@ -1,0 +1,8 @@
+---
+- name: clear cache {{ appname }}
+  shell: "php72 {{ current_release_symlink }}/bin/console cache:clear --env=prod"
+
+- name: reload php72-fpm {{ appname }}
+  service:
+    name: php72-php-fpm
+    state: reloaded

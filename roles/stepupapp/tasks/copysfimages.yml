@@ -1,0 +1,7 @@
+- name: Copy second factor images from <env>/files/stepup-app/second-factor into public/images/second-factor | {{ appname }}
+  copy:
+    src: "{{ item }}"
+    dest: "{{ current_release_appdir }}/public/images/second-factor/"
+    mode: "444"
+  with_fileglob:
+    - "{{ inventory_dir }}/files/stepup-app/images/second-factor/*"

@@ -1,0 +1,42 @@
+parameters:
+    # A list of service provider EntityIDs that are allowed to send AuthnRequests to the GSSPs through
+    # the gateway
+    gssp_allowed_sps:
+{% for key, value in stepup_enabled_generic_second_factors.items() %}
+    - 'https://{{ selfservice_vhost_name }}/registration/gssf/{{ key }}/metadata'
+    - 'https://{{ ra_vhost_name }}/vetting-procedure/gssf/{{ key }}/metadata'
+{% endfor %}
+
+{% for key, value in stepup_enabled_generic_second_factors.items() %}
+    # Authentication flow:
+    # Real GSSP IdP <--> GSSP Proxy SP <--> GSSP Proxy IdP <--> RA | SS
+    # AuthnRequests from the RA and SS are proxied through the GSSP proxy on the Gateway
+    #
+    # Metadata URL: https://<gateway>/gssp/{{ key }}/metadata
+
+    # GSSP SP Proxy for authenticating with the real (i.e. external) GSSP IdP
+    gssp_{{ key }}_sp_publickey: {{ component_config_file_dir_name }}/sp_gssp.crt
+    gssp_{{ key }}_sp_privatekey: {{ component_config_file_dir_name }}/sp_gssp.key
+
+    # Certificate and private key of GSSP IdP Proxy for use by RA and SS
+    gssp_{{ key }}_idp_publickey: {{ component_config_file_dir_name }}/idp_gssp.crt
+    gssp_{{ key }}_idp_privatekey: {{ component_config_file_dir_name }}/idp_gssp.key
+
+    # Metadata signing cert and key for tiqr SP/IdP proxy
+    gssp_{{ key }}_metadata_publickey: {{ component_config_file_dir_name }}/idp_gssp.crt
+    gssp_{{ key }}_metadata_privatekey: {{ component_config_file_dir_name }}/idp_gssp.key
+
+    # Real (i.e. external) GSSP IdP
+    gssp_{{ key }}_remote_entity_id: '{{ hostvars[inventory_hostname]['gateway_' + key + '_remote_entity_id'] }}'
+    gssp_{{ key }}_remote_sso_url: '{{ hostvars[inventory_hostname]['gateway_' + key + '_remote_sso_url'] }}'
+    gssp_{{ key }}_remote_certificate: '{{ hostvars[inventory_hostname]['gateway_' + key + '_remote_certificate'] }}'
+
+    gssp_{{ key }}_logo: '{{ hostvars[inventory_hostname]['gateway_' + key + '_logo'] }}'
+    gssp_{{ key }}_title:
+{% for param in ['title'] %}
+    gssp_{{ key }}_{{ param }}:
+{% for lang in enabled_locales %}
+        {{ lang }}: '{{ hostvars[inventory_hostname]['gateway_' + key + '_' + param][lang] | replace("'", "''") }}'
+{% endfor %}
+{% endfor %}
+{% endfor %}

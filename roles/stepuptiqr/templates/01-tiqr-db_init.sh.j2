@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mysql -v -u {{ database_tiqr_deploy_user }} -p{{  mysql_passwords.tiqrdeploy }} -h {{  tiqr_db_host }} {{ database_tiqr_name }} < {{  current_release_symlink }}/config/db/mysql-create-tables.sql
+res=$?
+if [ "$res" -gt 0 ]; then
+    echo "mysql failed"
+fi
