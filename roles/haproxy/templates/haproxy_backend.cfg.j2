@@ -35,8 +35,12 @@
 
   {% for server in application.servers %}
   server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}{% endif %} weight 100
-    
   {% endfor %}
+  {% if application.newservers is defined %}
+  {% for server in application.newservers %}
+  server {{ server.label }} {{ server.ip }}:{{ application.portnew }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} {% if application.sslbackendnew is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}{% endif %} weight 100
+  {% endfor %}
+  {% endif %}
 
 {% endfor %}
 
