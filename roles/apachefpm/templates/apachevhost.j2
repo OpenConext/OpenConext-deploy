@@ -12,10 +12,10 @@ Listen {{ ansible_default_ipv4.address }}:{{ loadbalancingport }}
     <Directory "{{ current_release_symlink }}/public">
         Require all granted
 
-	Options -MultiViews
-	RewriteEngine On
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^(.*)$ index.php [QSA,L]
+        Options -MultiViews
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ index.php [QSA,L]
     </Directory>
 
     # Proxy the requests to FPM
