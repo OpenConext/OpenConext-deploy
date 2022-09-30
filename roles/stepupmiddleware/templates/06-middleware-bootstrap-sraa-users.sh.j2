@@ -6,7 +6,8 @@
 echo "WARNING: About to run middleware:bootstrap:identity-with-yubikey action(s)"
 echo "These actions must not be run more than once for each identity."
 
-pushd /opt/openconext/OpenConext-middleware
+pushd {{ current_release_symlink }}
+
 #Format: php app/console middleware:bootstrap:identity-with-yubikey --env=prod <nameID> <schachomeorganization> <common name> <email> <preferred locale> <modhex yubikeyid>
 
 {% for sraa in middleware_sraa %}

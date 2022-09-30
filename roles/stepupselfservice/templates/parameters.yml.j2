@@ -61,6 +61,7 @@ parameters:
     stepup_loa_loa1: {{ stepup_uri_loa1 }}
     stepup_loa_loa2: {{ stepup_uri_loa2 }}
     stepup_loa_loa3: {{ stepup_uri_loa3 }}
+    stepup_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
 
     logout_redirect_url:
 {% for key, value in logout_redirect_url.items() %}
@@ -80,3 +81,6 @@ parameters:
 
     session_max_absolute_lifetime: {{ app_session_max_duration }}
     session_max_relative_lifetime: {{ app_session_expiry_time }}
+
+    preferred_activation_flow_name: activate
+    preferred_activation_flow_options: [ra, self]

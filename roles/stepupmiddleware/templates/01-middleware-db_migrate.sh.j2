@@ -14,7 +14,7 @@
 # A separate "deploy" user is used to update the schema's as the middleware
 # and gateway users do not have sufficient privileges to update the schema's
 
-pushd /opt/www/{{ middleware_vhost_name }}
+pushd {{ current_release_symlink }}
 
 # Before Symfony 4 there was a separate console command to run the migrations:
 # console middleware:migrations:migrate --env=prod

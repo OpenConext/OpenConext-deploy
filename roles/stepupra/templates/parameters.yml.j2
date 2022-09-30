@@ -50,6 +50,7 @@ parameters:
     stepup_loa_loa1: '{{ stepup_uri_loa1 }}'
     stepup_loa_loa2: '{{ stepup_uri_loa2 }}'
     stepup_loa_loa3: '{{ stepup_uri_loa3 }}'
+    stepup_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
 
     asset_version: {{ appversion_sha }}
 
@@ -71,3 +72,7 @@ parameters:
 
     # URL of the selfselrvice interface, for display in (error) messages to the user
     self_service_url: https://{{ selfservice_vhost_name }}
+
+    # Date format defaults for Twig date functions
+    date_format: 'Y-m-d H:i P'
+    date_timezone: Europe/Amsterdam
