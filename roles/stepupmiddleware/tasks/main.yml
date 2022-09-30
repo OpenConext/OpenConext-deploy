@@ -83,6 +83,8 @@
     "middleware-push-whitelist.sh": "04-middleware-whitelist.sh"
     "middleware-push-institution.sh": "05-middleware-institution.sh"
 
+- meta: flush_handlers
+
 - name: Include post installation tasks
   include_role:
     name: stepupapp
