@@ -414,6 +414,7 @@ myconext:
   feature_warning_educational_email_domain: false
   feature_show_connections: false
   feature_use_external_validation: false
+  feature_deny_disposable_email_providers: true
   feature_allowlist: false
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
   sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata

@@ -63,6 +63,8 @@ feature:
   connections: {{ myconext.feature_show_connections }}
   # Do we allow the account linking to take place with the accounting IdP, e.g. add extra button in IdP link screen
   use_external_validation: {{ myconext.feature_use_external_validation }}
+  # Do we deny emails that are known Disposable Email Providers
+  deny_disposable_email_providers: {{ myconext.feature_deny_disposable_email_providers }}
   use_deny_allow_list:
     allow_enabled: {{ myconext.feature_allowlist }}
     allow_location: "classpath:/deny-allow/allowed.json"
