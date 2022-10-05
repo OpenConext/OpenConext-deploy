@@ -1,3 +1,8 @@
+- name: Install procps-ng
+  yum:
+    name: procps-ng
+    state: present
+
 - name: Ensure nonlocal ipv4 bind kernel parameter is set
   sysctl:
     name: net.ipv4.ip_nonlocal_bind
