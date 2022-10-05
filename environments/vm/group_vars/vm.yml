@@ -281,6 +281,7 @@ oidcng:
     - https://eduid.nl/trust/validate-names
     - https://eduid.nl/trust/linked-institution
     - https://eduid.nl/trust/affiliation-student
+    - https://refeds.org/profile/mfa
   default_acr_value: http://{{ base_domain }}/assurance/loa1
   eduid_attribute_manipulation_enabled: false
   consent_enabled: false
