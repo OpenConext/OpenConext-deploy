@@ -44,6 +44,11 @@
     group: mysql
     mode: 0770
 
+- name: Create mysqlusers group
+  group: 
+    name: mysqlusers
+    state: present 
+
 - name: Create directory to keep Galera key material
   file:
     dest: "/etc/pki/mysql/"
@@ -58,12 +63,13 @@
   copy:
     src: "{{ inventory_dir }}/files/certs/galera/{{ item }}"
     dest: "{{ galera_tls_cert_path }}/{{ item }}"
+    mode: 0444
   with_items:
     - "{{ galera_tls_ca }}"
   when:
     - galera_ssl | bool
 
-- name: copy certificates to correct location
+- name: copy server certificates to correct location
   copy:
     src: "{{ inventory_dir }}/files/certs/galera/{{ item.crt_name }}"
     dest: "{{ galera_tls_cert_path }}/{{ item.crt_name }}"
@@ -74,8 +80,9 @@
   no_log: true
   when:
     - galera_ssl | bool
+    - item.name == 'server'
 
-- name: copy private keys to correct location
+- name: copy server private keys to correct location
   copy:
     content: "{{ item.key_content }}"
     dest: "{{ galera_tls_cert_path }}/{{ item.key_name }}"
@@ -86,6 +93,35 @@
   no_log: true
   when:
     - galera_ssl | bool
+    - item.name == 'server'
+
+- name: copy client certificates to correct location
+  copy:
+    src: "{{ inventory_dir }}/files/certs/galera/{{ item.crt_name }}"
+    dest: "{{ galera_tls_cert_path }}/{{ item.crt_name }}"
+    owner: mysql
+    group: mysqlusers
+    mode: 0440
+  with_items:
+     - "{{ galera_tls }}"
+  no_log: true
+  when:
+    - galera_ssl | bool
+    - item.name == 'client'
+
+- name: copy client private keys to correct location
+  copy:
+    content: "{{ item.key_content }}"
+    dest: "{{ galera_tls_cert_path }}/{{ item.key_name }}"
+    mode: 0440
+    owner: mysql
+    group: mysqlusers
+  with_items:
+     - "{{ galera_tls }}"
+  no_log: true
+  when:
+    - galera_ssl | bool
+    - item.name == 'client'
 
 - name: "Check if this is a new installation or not"
   stat:
