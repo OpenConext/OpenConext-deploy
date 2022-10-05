@@ -299,13 +299,6 @@
   run_once: true
   tags: galera_create_db
 
-- name: Put clustercheck script in place
-  copy:
-    src: "clustercheck"
-    dest: "/usr/local/bin/"
-    mode: 0770
-    owner: root
-
 - name: MySQL my.cnf
   template:
     src: "my.cnf.j2"

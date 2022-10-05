@@ -1,5 +1,7 @@
 global_defs {
   vrrp_garp_master_refresh 60
+  enable_script_security true
+  script_user keepalived_script mysqlusers
 }
 vrrp_script chk_cluster {
         script "/usr/local/bin/clustercheck clustercheck {{ galera_clustercheck_password }} 1"
@@ -26,7 +28,7 @@ vrrp_instance galera {
         chk_cluster
     }
  
-    notify_master "/bin/echo 'master' > /tmp/keepalived.state"
-    notify_backup "/bin/echo 'backup' > /tmp/keepalived.state"
-    notify_fault "/bin/echo 'fault' > /tmp/keepalived.state"
+    notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived.state"
+    notify_backup "/bin/echo 'backup' > /var/lib/keepalived/keepalived.state"
+    notify_fault "/bin/echo 'fault' > /var/lib/keepalived/keepalived.state"
 }

@@ -1,6 +1,7 @@
 #jinja2: lstrip_blocks: True
 global_defs {
   vrrp_garp_master_refresh 60
+  enable_script_security true
 }
 vrrp_instance ipv4 {
    interface {{ ansible_default_ipv4.interface }}       # interface to monitor
@@ -19,9 +20,9 @@ vrrp_instance ipv4 {
        {% endif %}
    }
    
-       notify_master "/bin/echo 'master' > /tmp/keepalived.state"
-       notify_backup "/bin/echo 'backup' > /tmp/keepalived.state"
-       notify_fault "/bin/echo 'fault' > /tmp/keepalived.state"
+       notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived.state"
+       notify_backup "/bin/echo 'backup' > /var/lib/keepalived/keepalived.state"
+       notify_fault "/bin/echo 'fault' > /var/lib/keepalived/keepalived.state"
 }
 vrrp_instance ipv6 {        
    interface {{ ansible_default_ipv4.interface }} 
@@ -38,7 +39,7 @@ vrrp_instance ipv6 {
         {% endif %}
    }
    
-       notify_master "/bin/echo 'master' > /tmp/keepalived6.state"
-       notify_backup "/bin/echo 'backup' > /tmp/keepalived6.state"
-       notify_fault "/bin/echo 'fault' > /tmp/keepalived6.state"
+       notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived6.state"
+       notify_backup "/bin/echo 'backup' > /var/lib/keepalived/keepalived6.state"
+       notify_fault "/bin/echo 'fault' > /var/lib/keepalived/keepalived6.state"
 }

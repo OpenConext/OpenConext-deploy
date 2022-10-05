@@ -5,12 +5,46 @@
     state: present
     ignoreerrors: yes
 
+- name: Make sure the group mysqlusers is present
+  group:
+    name: mysqlusers
+    state: present
+
 - name: Install keepalived
   yum:
     name: keepalived
     state: present
   register: keepalived_package_installed
   until: keepalived_package_installed is succeeded
+
+- name: Create keepalived_scripts user to execute scripts 
+  user: 
+    name: keepalived_script
+    shell: /sbin/nologin
+    state: present
+
+- name: Add the keepalived_scripts user to the group mysqlusers on the dbcluster nodes
+  user: 
+    name: keepalived_script
+    groups: mysqlusers
+    append: yes
+
+- name: Create directory to keep the statefile
+  file:
+    path: /var/lib/keepalived
+    state: directory
+    mode: 0755
+    owner: keepalived_script
+    group: keepalived_script
+
+- name: Put clustercheck script in place on db cluster nodes
+  copy:
+    src: "clustercheck"
+    dest: "/usr/local/bin/"
+    mode: 0750
+    owner: root
+    group: mysqlusers
+  when : "'dbcluster_nodes' in group_names"
 
 - name: Copy config file
   template:
