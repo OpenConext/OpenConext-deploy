@@ -22,7 +22,6 @@
         galera_provision_host: localhost
         galera_server_key: "{{lookup('file', inventory_dir + '/files/certs/galera/galera_server.key') }}"
         galera_client_key: "{{lookup('file', inventory_dir + '/files/certs/galera/galera_server.key') }}"
-        galera_client_crt_name: "galera_server.pem"
 
   roles:
     - role: galera
