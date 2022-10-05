@@ -51,6 +51,14 @@
     group: mysqlusers
   when : "'dbcluster_nodes' in group_names"
 
+- name: Put the notify script to the correct location
+  copy:
+    src: "keepalived_notify"
+    dest: "/usr/local/bin/"
+    mode: 0750
+    owner: root
+    group: mysqlusers
+
 - name: Copy config file
   template:
     src: "keepalived_{{ keepalived_config_name }}.conf.j2"

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+TYPE=$1
+NAME=$2
+STATE=$3
+
+case $STATE in
+        "MASTER") /bin/echo master > /var/lib/keepalived/keepalived.state
+                  exit 0
+                  ;;
+        "BACKUP") /bin/echo backup > /var/lib/keepalived/keepalived.state 
+                  exit 0
+                  ;;
+        "FAULT")  /bin/echo fault > /var/lib/keepalived/keepalived.state
+                  exit 0
+                  ;;
+        *)        echo "unknown state"
+                  exit 1
+                  ;;
+esac

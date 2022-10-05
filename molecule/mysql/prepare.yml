@@ -25,6 +25,11 @@
       register: prepare_packages_installed
       until: prepare_packages_installed is succeeded
 
+    - name: "Create mysqlusers group"
+      group:
+        name: mysqlusers
+        state: present
+    
     - name: create CA key
       openssl_privatekey:
         path: /root/CA_key.pem
