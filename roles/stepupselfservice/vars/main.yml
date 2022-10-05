@@ -1,6 +1,6 @@
 ---
 appname: "selfservice"
-vhost_name: "{{ appname }}.{{ base_domain }}"
+vhost_name: "sa.{{ base_domain }}"
 loadbalancingport: "415"
 appversion: "{{ selfservice_version }}"
 appversion_sha: "{{ selfservice_version_sha }}"
@@ -13,3 +13,4 @@ gssp_sp_private_key: "{{ lookup('file', inventory_dir+'/files/certs/stepup/selfs
 stepup_saml_sp_privatekey: "{{ lookup('file', inventory_dir+'/files/certs/stepup/selfservice_saml_sp.key') }}"
 gateway_saml_idp_publickey: "{{ lookup('file', inventory_dir+'/files/certs/stepup/gateway_saml_idp.crt') }}"
 gateway_gssp_idp_publickey: "{{ lookup('file', inventory_dir+'/files/certs/stepup/gateway_gssp_idp.crt') }}"
+fpmmemory: 128M

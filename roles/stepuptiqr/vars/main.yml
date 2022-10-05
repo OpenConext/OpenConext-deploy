@@ -17,3 +17,4 @@ database_tiqr_name: tiqr
 tiqr_gcm_apikey: "{{ lookup('file', inventory_dir+'/secrets/stepup/gcm_apikey') }}"
 # Optional API key for Firebase Cloud Messaging (FCM)
 tiqr_firebase_apikey: "{{ lookup('file', inventory_dir+'/secrets/stepup/firebase_apikey') }}"
+fpmmemory: 128M

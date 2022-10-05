@@ -1,5 +1,5 @@
 appname: "gateway"
-vhost_name: "{{ appname }}.{{ base_domain }}"
+vhost_name: "sa-gw.{{ base_domain }}"
 loadbalancingport: "414"
 appversion: "{{ gateway_version }}"
 appversion_sha: "{{ gateway_version_sha }}"
@@ -13,3 +13,4 @@ gateway_gssp_sp_privatekey: "{{ lookup('file', inventory_dir+'/files/certs/stepu
 gateway_gssp_idp_privatekey: "{{ lookup('file', inventory_dir+'/files/certs/stepup/gateway_gssp_idp.key') }}"
 gateway_saml_idp_privatekey: "{{  lookup('file', inventory_dir+'/files/certs/stepup/gateway_saml_idp.key') }}"
 spryng_api_key: "{{ lookup('file', inventory_dir+'/secrets/stepup/spryng_api') }}"
+fpmmemory: 128M
