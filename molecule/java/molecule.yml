@@ -11,12 +11,19 @@ platforms:
     command: /usr/sbin/init
     privileged: True
     volumes:
-      - "${MOLECULE_SCENARIO_DIRECTORY}/../etc-hosts:/etc/hosts"
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
       - loadbalancer
       - mongod_primary
       - selfsigned_certs
+    etc_hosts:
+      engine.molecule.openconext.org : 127.0.0.1
+      engine-api.molecule.openconext.org : 127.0.0.2
+      pdp.molecule.openconext.org : 127.0.0.1
+      manage.molecule.openconext.org : 127.0.0.1
+      connect.molecule.openconext.org : 127.0.0.1
+        
+
 
 provisioner:
   name: ansible
