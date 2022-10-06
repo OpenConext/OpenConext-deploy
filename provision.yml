@@ -100,10 +100,10 @@
       tags: ['app_php', 'static']
     - role: openconext-common
       tags: ['core', 'app_php', 'eb', 'profile']
-    - role: diyidp
+    - role: engineblock
       when:
         - inventory_hostname not in groups['lifecycle']
-      tags: ['core', 'app_php', 'diyidp']
+      tags: ['core', 'app_php', 'eb']
     - role: lifecycle
       when:
         - inventory_hostname in groups['lifecycle']
