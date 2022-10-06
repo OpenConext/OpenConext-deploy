@@ -17,6 +17,7 @@
         base_domain: molecule.openconext.org
         use_selfsigned_certs: True
         mongo_primary: true
+        postfix_interfaces: ipv4
 
     - name: Install packages
       yum:
