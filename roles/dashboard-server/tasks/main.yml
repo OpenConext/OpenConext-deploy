@@ -1,6 +1,6 @@
 ---
 
-- name: copy logging config
+- name: copy application config
   template:
     src: "{{ item }}.j2"
     dest: "{{ dashboard_dir }}/{{ item }}"
