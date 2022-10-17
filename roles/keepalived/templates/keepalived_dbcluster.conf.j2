@@ -27,8 +27,5 @@ vrrp_instance galera {
    track_script {
         chk_cluster
     }
- 
-    notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived.state"
-    notify_backup "/bin/echo 'backup' > /var/lib/keepalived/keepalived.state"
-    notify_fault "/bin/echo 'fault' > /var/lib/keepalived/keepalived.state"
+   notify /usr/local/bin/keepalived_notify
 }
