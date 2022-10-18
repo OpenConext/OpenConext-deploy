@@ -65,6 +65,7 @@ parameters:
                 dsn: 'mysql:host={{ tiqr_db_host }};dbname={{ database_tiqr_name }}'
                 username: '{{ database_tiqr_user }}'
                 password: '{{ mysql_passwords.tiqr }}'
+                cleanup_probability: '{{ tiqr_cleanup_probability | default('0.01') }}'
 
 {% else %}
               type: 'memcache'
