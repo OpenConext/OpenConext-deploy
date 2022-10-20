@@ -27,7 +27,7 @@
   notify:
     - "restart oidcng"
 
-- name: copy application config
+- name: copy oidc saml mapping
   copy:
     src: oidc_saml_mapping.json
     dest: "{{ oidcng_dir }}"
@@ -77,8 +77,8 @@
 - meta: flush_handlers
 
 - name: Include the role manage_provision_entities to provision oidncg to Manage
-  include_role: 
+  include_role:
     name: manage_provision_entities
-  vars: 
+  vars:
     entity_type: saml20_sp
 

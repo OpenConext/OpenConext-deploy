@@ -6,6 +6,11 @@
     "customMapping": true
   },
   {
+    "saml": "urn:oasis:names:tc:SAML:attribute:subject-id",
+    "oidc": "subject_id",
+    "multiValue": false
+  },
+  {
     "saml": "urn:mace:dir:attribute-def:cn",
     "oidc": "name",
     "multiValue": false
