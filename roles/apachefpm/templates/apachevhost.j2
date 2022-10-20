@@ -23,8 +23,8 @@ Listen {{ ansible_default_ipv4.address }}:{{ loadbalancingport }}
         SetHandler proxy:unix:/var/run/php-fpm/{{ appname }}-pool-72.sock|fcgi://dummy
     </FilesMatch>
 
-    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-{{ appname }}'"
-    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-{{ appname }}'" combined
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-{{ appname }}'" 
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-{{ appname }}'" stepup
     {% if haproxy_backend_tls %}
     SSLEngine on
     SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem

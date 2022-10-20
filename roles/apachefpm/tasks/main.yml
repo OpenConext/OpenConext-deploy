@@ -19,6 +19,13 @@
     group: root
     mode: 0770
 
+- name: Add stepup logformat config
+  copy: 
+    src: stepuplogging.conf
+    dest: /etc/httpd/conf.d/stepuplogging.conf
+  notify:
+    - "restart httpd"
+
 - name: Install Apache vhost
   template:
     src: "apachevhost.j2"
