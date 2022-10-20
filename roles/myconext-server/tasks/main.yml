@@ -54,4 +54,12 @@
   notify:
     - "restart myconext"
 
+- name: create geo download directory
+  file:
+    path: "{{ myconext_dir }}/geo2lite"
+    state: directory
+    owner: "{{ _springapp_user }}"
+    group: "{{ _springapp_user }}"
+    mode: 0760
+
 - meta: flush_handlers

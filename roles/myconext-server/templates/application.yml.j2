@@ -130,6 +130,11 @@ eduid_api:
   oidcng_client_id: {{ myconext.rs_client_id }}
   oidcng_secret: {{ myconext_rs_client_secret }}
 
+geo_location:
+  license_key: {{ myconext_geo2lite_license_key }}
+  external_url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license_key}&suffix=tar.gz"
+  download_directory: "{{ myconext_dir }}/geo2lite"
+
 spring:
   data:
     mongodb:
