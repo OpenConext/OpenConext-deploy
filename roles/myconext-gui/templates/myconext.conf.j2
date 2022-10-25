@@ -79,6 +79,10 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
       Require all granted
     </Location>
 
+    <Location ~ "/create-from-institution(.*)">
+      Require all granted
+    </Location>
+
     # The Spring Boot endpoints
     <Location ~ "/actuator/">
       Require all granted

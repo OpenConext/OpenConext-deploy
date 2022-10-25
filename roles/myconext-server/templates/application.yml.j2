@@ -68,6 +68,9 @@ feature:
   use_deny_allow_list:
     allow_enabled: {{ myconext.feature_allowlist }}
     allow_location: "classpath:/deny-allow/allowed.json"
+  # Do we show the landing page for the create-from-institution flow
+  create_eduid_institution_landing: {{ myconext.feature_create_eduid_institution_landing }}
+
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
@@ -106,7 +109,9 @@ oidc:
   secret: {{ myconext_client_secret }}
   idp-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
   sp-flow-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
+  sp-create-from-institution-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/oidc/create-from-institution-redirect
   base-url: https://connect.{{ base_domain }}
+
 linked_accounts:
   # The duration that non validated-name linked accounts are valid - note that they are not removed and will still be used for EPPN Pseudonymisation
   expiry-duration-days-non-validated: 180
