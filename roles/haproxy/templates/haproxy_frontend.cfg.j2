@@ -89,6 +89,10 @@ frontend local_ip
     # Deny the request when the request rate per host header url path and src ip exceeds {{ haproxy_max_request_rate_ip_path }} per 1 m 
     http-request deny deny_status 429 if exceeds_max_request_rate_per_ip_and_path !allowlist
     # Create some http redirects
+    {% if haproxy_securitytxt_target_url is defined %}
+    acl securitytxt path /.well-known/security.txt
+    http-request redirect location {{ haproxy_securitytxt_target_url }} if securitytxt
+    {% endif %}
     http-request redirect location %[req.hdr(host),lower,map(/etc/haproxy/maps/redirects.map)] if { req.hdr(host),lower,map_str(/etc/haproxy/maps/redirects.map) -m found }
 
 {% if haproxy_sni_ip_restricted is defined %}
@@ -175,5 +179,10 @@ frontend localhost_restricted
     http-request deny deny_status 429 if exceeds_max_request_rate_per_ip !allowlist
     # Deny the request when the request rate per host header url path and src ip exceeds {{ haproxy_max_request_rate_ip_path }} per 1 m 
     http-request deny deny_status 429 if exceeds_max_request_rate_per_ip_and_path !allowlist
+    # Create some http redirects
+    {% if haproxy_securitytxt_target_url is defined %}
+    acl securitytxt path /.well-known/security.txt
+    http-request redirect location {{ haproxy_securitytxt_target_url }} if securitytxt
+    {% endif %}
 
 {% endif %}
