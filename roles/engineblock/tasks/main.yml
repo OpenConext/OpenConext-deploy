@@ -20,27 +20,27 @@
     mode: 0770
 
 - name: Install build tools (npm, composer)
-  include: build.yml
+  include_tasks: build.yml
   when:
     - "(engine_branch is defined and engine_branch != '') or develop"
 
 - name: Include install-release.yml
-  include: install-release.yml
+  include_tasks: install-release.yml
   when:
     - "(engine_branch is not defined or engine_branch == '') and not develop"
 
 - name: Include install-branch.yml
-  include: install-branch.yml
+  include_tasks: install-branch.yml
   when:
     - "(engine_branch is defined and engine_branch != '') and not develop"
 
 - name: Include develop.yml
-  include: develop.yml
+  include_tasks: develop.yml
   when:
     - develop | bool
 
 - name: Include test.yml
-  include: test.yml
+  include_tasks: test.yml
   when:
     - develop | bool
 

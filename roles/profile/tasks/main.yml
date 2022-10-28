@@ -20,11 +20,11 @@
     mode: 0770
 
 - name: Include install-release.yml
-  include: install-release.yml
+  include_tasks: install-release.yml
   when: profile_branch is not defined or profile_branch == ''
 
 - name: Include install-branch.yml
-  include: install-branch.yml
+  include_tasks: install-branch.yml
   when: profile_branch is defined and profile_branch != ''
 
 - name: Create the cache dir for Symfony
