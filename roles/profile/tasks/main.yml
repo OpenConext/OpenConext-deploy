@@ -50,6 +50,8 @@
     mode: 0644
   with_items:
     - parameters.yaml
+  notify:
+    - "restart php72-fpm"
 
 - name: Instantiate global_view_parameters.yml.dist
   command: mv global_view_parameters.yaml.dist global_view_parameters.yaml

@@ -53,6 +53,8 @@
     mode: 0644
   with_items:
     - parameters.yml
+  notify:
+    - "restart php72-fpm"
 
 - name: Place .envl file 
   copy:

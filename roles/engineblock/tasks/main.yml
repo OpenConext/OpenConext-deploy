@@ -51,6 +51,8 @@
     mode: 0644
   with_items:
     - parameters.yml
+  notify:
+    - "restart php72-fpm"
 
 - name: Check presence of environment specific attributes.json
   local_action: stat path="{{ inventory_dir }}/files/eb/attributes.json"
