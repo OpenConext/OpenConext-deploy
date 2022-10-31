@@ -17,18 +17,14 @@ platforms:
       - mongod_primary
       - selfsigned_certs
     etc_hosts:
-      engine.molecule.openconext.org : 127.0.0.1
-      engine-api.molecule.openconext.org : 127.0.0.2
-      pdp.molecule.openconext.org : 127.0.0.1
-      manage.molecule.openconext.org : 127.0.0.1
-      connect.molecule.openconext.org : 127.0.0.1
-        
-
+      engine.molecule.openconext.org: 127.0.0.1
+      engine-api.molecule.openconext.org: 127.0.0.2
+      pdp.molecule.openconext.org: 127.0.0.1
+      manage.molecule.openconext.org: 127.0.0.1
+      connect.molecule.openconext.org: 127.0.0.1
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
   env:
     ANSIBLE_REMOTE_TMP: /tmp/
     ANSIBLE_ROLES_PATH: ../../roles
@@ -39,5 +35,3 @@ provisioner:
 
 verifier:
   name: testinfra
-  lint:
-    name: flake8

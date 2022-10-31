@@ -9,7 +9,7 @@ platforms:
     image: centos7-ansible
     dockerfile: ../Dockerfile.j2
     command: /usr/sbin/init
-    privileged: True
+    privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
@@ -20,8 +20,6 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
   env:
     ANSIBLE_REMOTE_TMP: /tmp/
     ANSIBLE_ROLES_PATH: ../../roles
@@ -48,5 +46,3 @@ scenario:
     - destroy
 verifier:
   name: testinfra
-  lint:
-    name: flake8
