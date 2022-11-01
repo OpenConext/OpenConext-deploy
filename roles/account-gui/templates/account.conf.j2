@@ -32,6 +32,7 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     RewriteCond %{REQUEST_URI} !^/register
     RewriteCond %{REQUEST_URI} !^/doLogin
     RewriteCond %{REQUEST_URI} !^/doLogout
+    RewriteCond %{REQUEST_URI} !^/create-from-institution-login
     RewriteCond %{REQUEST_URI} !^/saml
     RewriteCond %{REQUEST_URI} !^/actuator
     RewriteCond %{REQUEST_URI} !^/internal
@@ -54,6 +55,7 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     ProxyPass /register http://localhost:{{ springapp_tcpport }}/register retry=0
     ProxyPass /doLogin http://localhost:{{ springapp_tcpport }}/doLogin retry=0
     ProxyPass /doLogout http://localhost:{{ springapp_tcpport }}/doLogout retry=0
+    ProxyPass /create-from-institution-login http://localhost:{{ springapp_tcpport }}/create-from-institution-login retry=0
 
     DocumentRoot "{{ _springapp_dir }}/current"
 
