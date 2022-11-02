@@ -84,3 +84,10 @@ parameters:
 
     preferred_activation_flow_name: activate
     preferred_activation_flow_options: [ra, self]
+
+    # Self-asserted tokens: enable/disable recovery methods
+    #
+    # One of the two options should be enabled to have a fully functioning
+    # Self-asserted token registration process.
+    recovery_method_sms_enabled: true
+    recovery_method_safe_store_code_enabled: true
