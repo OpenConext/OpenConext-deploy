@@ -11,7 +11,7 @@ FOLDER="/home/backup"
 DAY=`/bin/date +'%a'`
 
 # Check if we are on the active or passive node
-declare keepalived_status=$( cat /tmp/keepalived.state )
+declare keepalived_status=$( cat /var/lib/keepalived/keepalived.state )
 if [[ $keepalived_status = "master" ]]
   then
         echo "No backups on the master node, exiting"

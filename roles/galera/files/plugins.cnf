@@ -1,3 +1,3 @@
 [mysqld]
-plugin_load_add = sql_errorlog
+plugin_load_add = sql_errlog
 sql_error_log_size_limit = 100M
