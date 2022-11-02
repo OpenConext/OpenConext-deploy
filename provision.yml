@@ -124,7 +124,7 @@
 
 # run -t springboot -e springboot_service_to_deploy=manage,voot to only install
 # the manage and voot app. Both GUI as servers will be installed.
-- hosts: java_apps
+- hosts: java-apps
   become: true
   roles:
     - { role: springboot,       tags: ['core', 'springboot'] }
