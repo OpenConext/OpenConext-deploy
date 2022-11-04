@@ -39,11 +39,11 @@
     - "restart php72-php-fpm"
 
 - name: Include install-branch.yml
-  include: install-branch.yml
+  include_tasks: install-branch.yml
   when: lifecycle_branch is defined and lifecycle_branch != ''
 
 - name: Include install-release.yml
-  include: install-release.yml
+  include_tasks: install-release.yml
   when: lifecycle_branch is not defined or lifecycle_branch == ''
 
 - name: Place parameters.yml

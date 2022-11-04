@@ -51,9 +51,9 @@
     - "restart rsyslog"
 
 - name: include tasks for central syslog server
-  include: rsyslog_central.yml
+  include_tasks: rsyslog_central.yml
   when:  "'sysloghost' in group_names"
 
 - name: Include tasks for authentication log processing 
-  include: process_auth_logs.yml
+  include_tasks: process_auth_logs.yml
   when: "'auth_processor' in group_names"

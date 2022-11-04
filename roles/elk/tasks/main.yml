@@ -22,13 +22,13 @@
     mode: 0775
 
 - name: Include logstash specific tasks
-  include: logstash.yml
+  include_tasks: logstash.yml
   when: "'logstash' in group_names"
 
 - name: Include elastic specific tasks
-  include: elastic.yml
+  include_tasks: elastic.yml
   when: "'elasticsearch' in group_names"
 
 - name: Include kibana specific tasks
-  include: kibana.yml
+  include_tasks: kibana.yml
   when: "'kibana' in group_names" 
