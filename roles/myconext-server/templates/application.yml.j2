@@ -68,6 +68,8 @@ feature:
   use_deny_allow_list:
     allow_enabled: {{ myconext.feature_allowlist }}
     allow_location: "classpath:/deny-allow/allowed.json"
+  # Do we allow the create-from-institution flow
+  create_eduid_institution_enabled: {{ myconext.feature_create_eduid_institution_enabled }}
   # Do we show the landing page for the create-from-institution flow
   create_eduid_institution_landing: {{ myconext.feature_create_eduid_institution_landing }}
 
