@@ -17,15 +17,15 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
     {% endfor %}
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/myconext
     RewriteCond %{REQUEST_URI} !^/tiqr
     RewriteCond %{REQUEST_URI} !^/actuator
@@ -92,7 +92,11 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
     </Location>
 
     # Svelte resources
-    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|js|css|png|jpg|ico)$">
+    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|js|js\.map|css|css\.map|png|jpg|ico)$">
+      Require all granted
+    </Location>
+
+    <Location ~ "/(asset-)?manifest.json$">
       Require all granted
     </Location>
 

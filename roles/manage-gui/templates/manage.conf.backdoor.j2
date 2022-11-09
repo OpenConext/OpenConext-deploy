@@ -13,15 +13,15 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     RewriteEngine on
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/manage
     RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/fonts

@@ -14,7 +14,7 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     RewriteEngine on
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
     RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
@@ -23,6 +23,7 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/pdp
     RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/fonts
@@ -63,7 +64,11 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
       Require all granted
     </Location>
 
-    <Location ~ "(.*)(js|css|png)$">
+    <Location ~ "(.*)(js|js\.map|css|css\.map|png)$">
+      Require all granted
+    </Location>
+
+    <Location ~ "/(asset-)?manifest.json$">
       Require all granted
     </Location>
 

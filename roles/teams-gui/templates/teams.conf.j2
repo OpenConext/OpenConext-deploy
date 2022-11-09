@@ -13,15 +13,15 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 
     RewriteEngine on
 
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/api/
     RewriteCond %{REQUEST_URI} !^/internal/
     RewriteCond %{REQUEST_URI} !^/deprovision/
@@ -93,10 +93,14 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
       AuthType none
     </Location>
 
-    <LocationMatch "\\.(eot|svg|ttf|woff2|woff|js|css|png|jpg|ico)$">
+    <LocationMatch "\\.(eot|svg|ttf|woff2|woff|js|js\.map|css|css\.map|png|jpg|ico)$">
       Require all granted
       AuthType none
     </LocationMatch>
+
+    <Location ~ "/(asset-)?manifest.json$">
+      Require all granted
+    </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.strict_with_static_img }}"
     Header always set X-Frame-Options "DENY"
