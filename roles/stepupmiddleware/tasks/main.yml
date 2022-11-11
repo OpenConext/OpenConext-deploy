@@ -117,3 +117,17 @@
   tags: 
     - push_mw_institution
 
+
+# Middleware migrate identities from CSV
+
+- name: Migrate middleware identities from CSV
+  include_tasks: migrate_identities.yml
+  args:
+    apply:
+      tags:
+        - mw_migrate_identities
+  run_once: True
+  when:
+    - "'mw_migrate_identities' in ansible_run_tags"
+  tags:
+    - mw_migrate_identities
