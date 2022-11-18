@@ -76,13 +76,11 @@ voot:
 
 spring:
   session:
-    cleanup:
-      cron:
-        expression: {{ teams_cron_session_cleanup_expression }}
     store-type: jdbc
     jdbc:
       schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
       initialize-schema: always
+      cleanup-cron: "{% if teams_cronjobmaster %}0 13 * * * *{% else %}-{% endif %}"
   jpa:
     properties:
       hibernate:
