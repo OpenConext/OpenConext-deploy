@@ -3,6 +3,14 @@ global_defs {
   vrrp_garp_master_refresh 60
   enable_script_security true
 }
+
+vrrp_script chk_maint {
+        script "/usr/local/bin/keepalived_check_maintenance"
+        interval 1
+        fall 3
+        rise 1
+}
+
 vrrp_instance ipv4 {
    interface {{ ansible_default_ipv4.interface }}       # interface to monitor
    state {{ keepalived.state_master }}
@@ -18,6 +26,9 @@ vrrp_instance ipv4 {
        {% if haproxy_sni_ip_restricted.ipv4 is defined %}
        {{ haproxy_sni_ip_restricted.ipv4 }}
        {% endif %}
+   }
+   track_script {
+        chk_maint
    }
    
        notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived.state"
@@ -37,6 +48,9 @@ vrrp_instance ipv6 {
         {% if haproxy_sni_ip_restricted.ipv6 is defined %}
         {{ haproxy_sni_ip_restricted.ipv6 }}
         {% endif %}
+   }
+   track_script {
+        chk_maint
    }
    
        notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived6.state"
