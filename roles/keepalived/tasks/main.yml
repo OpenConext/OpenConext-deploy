@@ -27,7 +27,6 @@
     name: keepalived_script
     shell: /sbin/nologin
     state: present
-  when: "'dbcluster_nodes' in group_names"
 
 - name: Add the keepalived_scripts user to the group mysqlusers on the dbcluster nodes
   user:
@@ -64,13 +63,14 @@
 
 - name: Put the notify and maintenance checkscript to the correct location
   copy:
-    src:
-      - "keepalived_notify"
-      - "keepalived_check_maintenance"
+    src: "{{ item }}"
     dest: "/usr/local/bin/"
     mode: 0750
     owner: root
     group: keepalived_script
+  with_items:
+    - "keepalived_notify"
+    - "keepalived_check_maintenance"
   when: "'loadbalancer' in group_names"
 
 - name: Copy config file
