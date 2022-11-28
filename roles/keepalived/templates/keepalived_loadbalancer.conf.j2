@@ -30,10 +30,7 @@ vrrp_instance ipv4 {
    track_script {
         chk_maint
    }
-   
-       notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived.state"
-       notify_backup "/bin/echo 'backup' > /var/lib/keepalived/keepalived.state"
-       notify_fault "/bin/echo 'fault' > /var/lib/keepalived/keepalived.state"
+   notify /usr/local/bin/keepalived_notify   
 }
 vrrp_instance ipv6 {        
    interface {{ ansible_default_ipv4.interface }} 
@@ -52,8 +49,5 @@ vrrp_instance ipv6 {
    track_script {
         chk_maint
    }
-   
-       notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived6.state"
-       notify_backup "/bin/echo 'backup' > /var/lib/keepalived/keepalived6.state"
-       notify_fault "/bin/echo 'fault' > /var/lib/keepalived/keepalived6.state"
+   notify /usr/local/bin/keepalived_notify
 }
