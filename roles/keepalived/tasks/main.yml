@@ -22,17 +22,18 @@
   register: keepalived_package_installed
   until: keepalived_package_installed is succeeded
 
-- name: Create keepalived_scripts user to execute scripts 
-  user: 
+- name: Create keepalived_scripts user to execute scripts
+  user:
     name: keepalived_script
     shell: /sbin/nologin
     state: present
 
 - name: Add the keepalived_scripts user to the group mysqlusers on the dbcluster nodes
-  user: 
+  user:
     name: keepalived_script
     groups: mysqlusers
     append: yes
+  when: "'dbcluster_nodes' in group_names"
 
 - name: Create directory to keep the statefile
   file:
@@ -49,7 +50,7 @@
     mode: 0750
     owner: root
     group: mysqlusers
-  when : "'dbcluster_nodes' in group_names"
+  when: "'dbcluster_nodes' in group_names"
 
 - name: Put the notify script to the correct location
   copy:
@@ -58,6 +59,19 @@
     mode: 0750
     owner: root
     group: mysqlusers
+  when: "'dbcluster_nodes' in group_names"
+
+- name: Put the notify and maintenance checkscript to the correct location
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/local/bin/"
+    mode: 0750
+    owner: root
+    group: keepalived_script
+  with_items:
+    - "keepalived_notify"
+    - "keepalived_check_maintenance"
+  when: "'loadbalancer' in group_names"
 
 - name: Copy config file
   template:

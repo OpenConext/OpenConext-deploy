@@ -3,12 +3,20 @@ global_defs {
   vrrp_garp_master_refresh 60
   enable_script_security true
 }
+
+vrrp_script chk_maint {
+        script "/usr/local/bin/keepalived_check_maintenance"
+        interval 1
+        fall 3
+        rise 1
+}
+
 vrrp_instance ipv4 {
    interface {{ ansible_default_ipv4.interface }}       # interface to monitor
    state {{ keepalived.state_master }}
    virtual_router_id 55                                 # Assign one ID for this route
    priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
-   advert_int 5
+   advert_int 1
    authentication {
         auth_type PASS
         auth_pass {{ keepalived_loadbalancer_vrrp_password }}
@@ -19,10 +27,10 @@ vrrp_instance ipv4 {
        {{ haproxy_sni_ip_restricted.ipv4 }}
        {% endif %}
    }
-   
-       notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived.state"
-       notify_backup "/bin/echo 'backup' > /var/lib/keepalived/keepalived.state"
-       notify_fault "/bin/echo 'fault' > /var/lib/keepalived/keepalived.state"
+   track_script {
+        chk_maint
+   }
+   notify /usr/local/bin/keepalived_notify   
 }
 vrrp_instance ipv6 {        
    interface {{ ansible_default_ipv4.interface }} 
@@ -38,8 +46,8 @@ vrrp_instance ipv6 {
         {{ haproxy_sni_ip_restricted.ipv6 }}
         {% endif %}
    }
-   
-       notify_master "/bin/echo 'master' > /var/lib/keepalived/keepalived6.state"
-       notify_backup "/bin/echo 'backup' > /var/lib/keepalived/keepalived6.state"
-       notify_fault "/bin/echo 'fault' > /var/lib/keepalived/keepalived6.state"
+   track_script {
+        chk_maint
+   }
+   notify /usr/local/bin/keepalived_notify
 }

@@ -4,14 +4,21 @@ TYPE=$1
 NAME=$2
 STATE=$3
 
+case $NAME in
+        "ipv6")   FILENAME=/var/lib/keepalived/keepalived6.state ;;
+
+        *)        FILENAME=/var/lib/keepalived/keepalived.state ;;
+
+esac
+
 case $STATE in
-        "MASTER") /bin/echo master > /var/lib/keepalived/keepalived.state
+        "MASTER") /bin/echo master > $FILENAME
                   exit 0
                   ;;
-        "BACKUP") /bin/echo backup > /var/lib/keepalived/keepalived.state 
+        "BACKUP") /bin/echo backup > $FILENAME
                   exit 0
                   ;;
-        "FAULT")  /bin/echo fault > /var/lib/keepalived/keepalived.state
+        "FAULT")  /bin/echo fault > $FILENAME
                   exit 0
                   ;;
         *)        echo "unknown state"
