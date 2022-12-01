@@ -5,7 +5,6 @@
     dest: "/etc/yum.repos.d/{{ item }}"
   with_items:
     - shibboleth-centos7.repo
-    - shibboleth.repo.gpgkey
 
 - name: Install Shibboleth
   yum:
