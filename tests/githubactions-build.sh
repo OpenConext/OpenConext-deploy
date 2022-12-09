@@ -48,6 +48,10 @@ cat <<-'EOF' > ansible.cfg
 	ssh_args=-o ControlMaster=auto -o ControlPersist=60m
 	pipelining=True
 EOF
+# Download and extract Mitogen
+git clone https://github.com/dw/mitogen.git
+export ANSIBLE_STRATEGY_PLUGINS=mitogen/ansible_mitogen/plugins
+export ANSIBLE_STRATEGY=mitogen_linear
 
 # Prepare the environment
 echo "Prepping the environment" 
