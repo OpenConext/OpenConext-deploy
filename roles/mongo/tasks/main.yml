@@ -41,7 +41,7 @@
 
 - name: Add mongo kernel settings script to rc.local
   lineinfile:
-    dest: "/etc/rc.local"
+    dest: "/etc/rc.d/rc.local"
     state: present
     line: "/usr/local/sbin/mongo_kernel_settings.sh"
     create: true

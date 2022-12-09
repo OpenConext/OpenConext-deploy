@@ -9,6 +9,7 @@ platforms:
     image: centos7-ansible
     dockerfile: ../Dockerfile.j2
     command: /usr/sbin/init
+    cgroupns_mode: host
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
