@@ -55,7 +55,6 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
       Options     -Indexes
     </Directory>
 
-    # Enable shibboleth for all other URLs, but the health . info check and EB endpoint
     <Location ~ "/pdp/api/(protected/*|decide/policy|health|info)">
       Require all granted
     </Location>
