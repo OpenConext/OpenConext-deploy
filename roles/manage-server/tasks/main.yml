@@ -22,7 +22,7 @@
     - "{{ manage_dir }}/metadata_export"
     - "{{ manage_dir }}/metadata_templates"
 
-- name: copy logging config
+- name: copy application config
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"

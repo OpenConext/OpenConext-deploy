@@ -1,0 +1,21 @@
+- name: Install extra php packages
+  yum:
+    name: 
+      - php72-php-intl
+      - php72-php-gmp
+    state: present
+
+- name: Create the appdirs | {{ appname }}
+  file:
+    state: directory
+    dest: "{{ item }}"
+  with_items:
+    - "{{ current_release_appdir }}"
+    - "{{ current_release_config_file_dir_name }}"
+
+- name: Download and extract the release | {{ appname }}
+  unarchive:
+    src: https://github.com/OpenConext/Stepup-{{ stepup_gh_appname }}/releases/download/{{ appversion }}/Stepup-{{ stepup_gh_appname }}-{{ appversion }}-{{ appversion_sha }}.tar.bz2
+    dest: "{{ current_release_appdir }}"
+    remote_src: yes
+    creates: "{{ current_release_appdir }}/component_info"

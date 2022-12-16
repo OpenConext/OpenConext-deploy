@@ -42,6 +42,15 @@
 {% endfor %}
 {% endif %}
 
+{% if iptables_incoming_stepup is defined %}
+### STEPUP apps rules
+{% for service in iptables_incoming_stepup %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+-A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
+{% endfor %}
+{% endif %}
+
 {% if iptables_incoming_java is defined %}
 ### JAVA apps rules
 {% for service in iptables_incoming_java %}

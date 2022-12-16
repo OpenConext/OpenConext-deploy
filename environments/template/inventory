@@ -1,16 +1,16 @@
 [storage]
 %target_host%
 
-[java-apps]
+[java_apps]
 %target_host%
 
-[java-apps-vm]
+[java_apps_vm]
 %target_host%
 
-[java-apps-common]
+[java_apps_common]
 %target_host%
 
-[php-apps]
+[php_apps]
 %target_host%
 
 [mongo_servers]
@@ -27,9 +27,9 @@
 
 [%env%:children]
 storage
-java-apps
-java-apps-vm
-php-apps
+java_apps
+java_apps_vm
+php_apps
 mongo_servers
 selfsigned_certs
 mongod_primary
@@ -53,14 +53,14 @@ stats
 [dbcluster_nodes]
 [galera_provision_host]
 [stats]
-[php-apps-vm]
+[php_apps_vm]
 
 # Overview of "services"
 
 [base:children]
 loadbalancer
-php-apps
-java-apps
+php_apps
+java_apps
 storage
 oidc
 dbcluster
@@ -73,8 +73,8 @@ selfsigned_certs
 loadbalancer_ha
 
 [frontend:children]
-php-apps-vm
-java-apps-vm
+php_apps_vm
+java_apps_vm
 oidc
 lifecycle
 
@@ -89,13 +89,13 @@ mongod_primary
 mongo_servers
 
 [app_php:children]
-php-apps
-php-apps-vm
+php_apps
+php_apps_vm
 lifecycle
 
 [app_java:children]
-java-apps
-java-apps-vm
+java_apps
+java_apps_vm
 
 [app_oidc:children]
 oidc

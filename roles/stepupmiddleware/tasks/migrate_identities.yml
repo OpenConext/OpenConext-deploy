@@ -1,0 +1,60 @@
+---
+# Migrate active tokens of existing identities to a new institution
+# The new account may exist, but this is not required
+# Only active tokens are moved, and only when there is no corresponding token in the new account
+# Provide a CSV file with the current and the new identity, one identity per line
+#
+# The CSV file has no header and must have four columns:
+# <NameID of the user to migrate>,<NameID of the new identity>,<the SHO of the new institution>,<the new user's email address>
+#
+# Run using the mw_migrate_identities tag
+# Provide the path to the CSV file on the local host in the Ansible identities_file variable
+# E.g.
+# OpenConext-deploy/provision test deployuser OpenConext-deploy/environments-external/test2/secrets/secrets_test2.yml -t mw_migrate_identities -e identities_file='test.csv'
+# ansible-playbook Stepup-Deploy/migrate-identities.yml -i <environment>/inventory -e identities_file=`pwd`/identities_to_migrate.csv
+
+# SQL Query to get the NameIDs of the active tokens:
+#  SELECT distinct name_id, email
+#    FROM `identity` i, vetted_second_factor v
+#    WHERE i.institution = 'surfnet.nl' AND i.id = v.identity_id
+#    ORDER BY name_id
+
+- name: Require identities_file
+  assert:
+    that:
+      - identities_file is defined
+    msg: "The 'identities_file' Ansible parameter must be set. Use e.g. the ansible-playbook option -e 'identities_file=`pwd`/identities.csv' to set this parameter."
+
+- name: Read CSV file from the local host
+  read_csv:
+    path: "{{ identities_file }}"
+    fieldnames: old_name_id,new_name_id,new_institution,new_email
+    delimiter: ','
+  register: identities
+  delegate_to: localhost
+  become: false
+
+# Use block so we can use always action to print the stdout and stderr results of the migrate commands
+- name: Migrate users block
+  block:
+  - name: Migrate users using middleware:migrate:vetted-tokens middleware console command
+    shell: "php72 /opt/openconext/OpenConext-middleware/bin/console --env prod --no-ansi --no-debug middleware:migrate:vetted-tokens {{ item.old_name_id | quote }} {{ item.new_name_id | quote }} {{ item.new_institution | quote }} {{ item.new_email | quote }}"
+
+    register: result # Save result
+
+    # Run command as user middleware
+    become: yes
+    become_user: middleware
+
+    loop: "{{ identities.list }}"
+    loop_control:
+      pause: 0.1
+
+  always:
+  # Print the output of console command to stdout and stderr 'indexed' by the old_name_id from the CSV file
+  # Remove all the whitespace that used for formatting by the console command for readability
+  - name: Print migrate results
+    debug: msg={{ item.stderr | regex_replace('\\s+', ' ') | replace('\\n', ' ') + '\n' + item.stdout | regex_replace('\\s+', ' ')  | replace('\\n', ' ') }}
+    loop: "{{ result.results }}"
+    loop_control:
+      label: '{{ item.item.old_name_id }} => {{ item.item.new_name_id }} in {{ item.item.new_institution }}'

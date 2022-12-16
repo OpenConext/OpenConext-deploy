@@ -1,0 +1,37 @@
+imports:
+    - { resource: samlstepupproviders_parameters.yaml }
+
+surfnet_stepup_self_service_saml_stepup_provider:
+    routes:
+        consume_assertion: ss_registration_gssf_consume_assertion
+        metadata: ss_registration_gssf_saml_metadata
+
+    providers:
+{% for key, value in stepup_enabled_generic_second_factors.items() %}
+        {{ key }}:
+            hosted:
+                service_provider:
+                    public_key: "%gssp_{{ key }}_sp_publickey%"
+                    private_key: "%gssp_{{ key }}_sp_privatekey%"
+                metadata:
+                    public_key: "%gssp_{{ key }}_metadata_publickey%"
+                    private_key: "%gssp_{{ key }}_metadata_privatekey%"
+            remote:
+                entity_id: "%gssp_{{ key }}_remote_entity_id%"
+                sso_url: "%gssp_{{ key }}_remote_sso_url%"
+                certificate: "%gssp_{{ key }}_remote_certificate%"
+            view_config:
+                loa: {{ value.loa }}
+                logo: "%gssp_{{ key }}_logo%"
+                alt: "%gssp_{{ key }}_alt%"
+                title: "%gssp_{{ key }}_title%"
+                description: "%gssp_{{ key }}_description%"
+                button_use: "%gssp_{{ key }}_button_use%"
+                initiate_title: "%gssp_{{ key }}_initiate_title%"
+                initiate_button: "%gssp_{{ key }}_initiate_button%"
+                explanation: "%gssp_{{ key }}_explanation%"
+                authn_failed: "%gssp_{{ key }}_authn_failed%"
+                pop_failed: "%gssp_{{ key }}_pop_failed%"
+                app_android_url: "%gssp_{{ key }}_app_android_url%"
+                app_ios_url: "%gssp_{{ key }}_app_ios_url%"
+{% endfor %}

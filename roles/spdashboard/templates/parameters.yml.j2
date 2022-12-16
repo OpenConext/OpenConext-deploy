@@ -20,7 +20,7 @@ parameters:
     metadata_url_timeout: 30
     session_max_absolute_lifetime: 172800
     session_max_relative_lifetime: 28800
-    logout_redirect_url: https://www.surf.nl/over-surf/werkmaatschappijen/surfnet
+    logout_redirect_url: "https://engine.{{ base_domain }}/logout"
     saml_sp_publickey: "{{ spdashboard_saml_sp_publickey }}"
     saml_sp_privatekey: "{{ spdashboard_saml_sp_privatekey }}"
     saml_metadata_publickey: "{{ spdashboard_saml_metadata_publickey }}"
@@ -45,9 +45,11 @@ parameters:
     jira_issue_priority: {{ spdashboard_jira_issue_priority }}
     jira_issue_type: {{ spdashboard_jira_issue_type }}
     jira_issue_type_publication_request: {{ spdashboard_jira_issue_type_publication_request }}
+    jira_issue_type_entity_change_request: {{ spdashboard_jira_entity_change_request }}
     jira_issue_entityid_fieldname: {{ spdashboard_jira_entityid_fieldname }}
     jira_issue_manageid_fieldname: {{ spdashboard_jira_manageid_fieldname }}
     jira_issue_manageid_field_label: {{ spdashboard_jira_manageid_field_label }}
+    jira_issue_reporter_fieldname: {{ spdashboard_jira_reporter_fieldname }}
     jira_issue_project_key: {{ spdashboard_jira_project_key }}
     jira_enable_test_mode: {{ spdashboard_test_mode_enabled }}
     jira_test_mode_storage_path: {{ spdashboard_test_mode_path }}

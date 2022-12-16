@@ -87,12 +87,19 @@
   notify:
     - "restart php72-php-fpm"
 
+- name: Create OpenConext dir to hold sessions
+  file:
+    path: /var/lib/openconext
+    state: directory
+    mode: 0775
+    owner: root
+
 # Set mode to a+x so components can access their subdirectories under session/
 - name: Create directory for vhosts to store PHP sessions
   file:
     path: "{{ php_session_dir }}"
     state: directory
-    mode: 0771
+    mode: 0775
 
 - name: Remove all php56 packages and composer
   yum: 

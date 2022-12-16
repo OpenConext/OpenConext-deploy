@@ -14,28 +14,28 @@ error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
-attribute_aggregation_gui_version: "2.1.2"
-attribute_aggregation_server_version: "2.1.2"
+attribute_aggregation_gui_version: "3.0.1"
+attribute_aggregation_server_version: "3.0.1"
 oidc_playground_client_version: "3.0.0"
 oidc_playground_server_version: "3.0.0"
-engine_version: "6.7.0"
-manage_gui_version: "7.1.0"
-manage_server_version: "7.1.0"
+engine_version: "6.7.2"
+manage_gui_version: "7.2.2"
+manage_server_version: "7.2.2"
 lifecycle_version: "0.1.1"
-monitoring_tests_version: "6.1.1"
-mujina_version: "7.4.4"
-oidcng_version: "6.0.4"
-pdp_server_version: "4.0.0"
-pdp_gui_version: "4.0.0"
-profile_version: "3.0.4"
-teams_gui_version: "9.0.1"
-teams_server_version: "9.0.1"
+monitoring_tests_version: "7.0.0"
+mujina_version: "8.0.2"
+oidcng_version: "6.1.3"
+pdp_server_version: "4.0.1"
+pdp_gui_version: "4.0.1"
+profile_version: "3.1.2"
+teams_gui_version: "9.1.1"
+teams_server_version: "9.1.1"
 voot_version: "5.0.0"
 myconext_server_version: "6.0.2"
 myconext_gui_version: "6.0.2"
 account_gui_version: "6.0.2"
-dashboard_server_version: "12.0.0"
-dashboard_gui_version: "12.0.0"
+dashboard_server_version: "12.3.4"
+dashboard_gui_version: "12.3.4"
 
 databases:
   names:
@@ -341,7 +341,7 @@ manage:
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
   oidc_push_enabled: true
-  features: push, validation, push_preview, orphans, edugain
+  features: push, validation, push_preview, orphans, find_my_data, edugain
   apiUsers:
     - {
         name: "dashboard",

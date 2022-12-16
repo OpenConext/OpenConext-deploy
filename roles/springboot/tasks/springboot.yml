@@ -23,17 +23,17 @@
     _springapp_java_binary: "{{ springboot.java_binary if springboot.java_binary is defined else springboot_java_binary }}"
 
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include user related tasks"
-  include: user.yml
+  include_tasks: user.yml
   when:
     - _springapp_type == "server"
 
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include GUI related tasks"
-  include: gui.yml
+  include_tasks: gui.yml
   when:
     - _springapp_type == "gui"
 
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include maven related tasks"
-  include: maven.yml
+  include_tasks: maven.yml
   when:
     - _springapp_type == "server"
 
@@ -53,6 +53,6 @@
     name: "{{ _springapp_role }}"
 
 - name: "{{ _springapp_service_name }}-{{ _springapp_type }} | Include service related tasks"
-  include: service.yml
+  include_tasks: service.yml
   when:
     - _springapp_type == "server"

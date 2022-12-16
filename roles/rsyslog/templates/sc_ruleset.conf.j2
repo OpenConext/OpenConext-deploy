@@ -20,7 +20,7 @@ $RuleSet {{ item.name }}
 :programname, isequal, "Apache-teams" { action(type="omfile" DynaFile="apache-teams-{{ item.name }}") stop }
 :programname, isequal, "VOOTMAIN" { action(type="omfile" DynaFile="voot-{{ item.name }}") stop }
 :programname, isequal, "Apache-VOOT" { action(type="omfile" DynaFile="apache-voot-{{ item.name }}") stop }
-:programname, isequal, "mysqld" { action(type="omfile" DynaFile="galera-{{ item.name }}") stop }
+:programname, isequal, "mariadbd" { action(type="omfile" DynaFile="galera-{{ item.name }}") stop }
 :programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="haproxy-{{ item.name }}") stop }
 :programname, isequal, "Keepalived_vrrp" { action(type="omfile" DynaFile="keepalived-{{ item.name }}") stop }
 :programname, isequal, "Apache-STATIC" { action(type="omfile" DynaFile="apache-static-{{ item.name }}") stop }
@@ -35,5 +35,10 @@ $RuleSet {{ item.name }}
 :programname, isequal, "Apache-myconext" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}") stop }
 :programname, isequal, "Apache-account" { action(type="omfile" DynaFile="apache-account-{{item.name }}") stop }
 :programname, isequal, "Apache-eduid" { action(type="omfile" DynaFile="apache-eduid-{{item.name }}") stop }
+{% for stepupapp in stepupapps %}
+:programname, isequal, "stepup-{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
+:programname, isequal, "Apache-{{ stepupapp }}" { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
+{% endfor %}
+:programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
 :msg, contains, "-- MARK --" { action(type="omfile" DynaFile="MARK-{{ item.name }}") stop }
 *.* ?hostleft-{{ item.name }}

@@ -1,8 +1,6 @@
 Ansible-driven provisioning of the OpenConext platform.
 ==============================
 
-[![Build Status](https://travis-ci.org/OpenConext/OpenConext-deploy.svg?branch=master)](https://travis-ci.org/OpenConext/OpenConext-deploy)
-
 # Getting started
 
 # Deploy to a remote machine
@@ -41,7 +39,7 @@ With the above commands you get the latest versions. There might be incompatibil
 
 Ansible is the configuration tool we use to describe our servers.
 Installation instruction can be found on the [Ansible website](http://docs.ansible.com/intro_installation.html).
-The minimum required version of Ansible is 1.9. 
+The minimum required version of Ansible is 2.4.
 To install for development with Homebrew:
 
     brew install python

@@ -1,0 +1,16 @@
+---
+appname: "webauthn"
+vhost_name: "{{ appname }}.{{ base_domain }}"
+loadbalancingport: "410"
+appversion: "{{ webauthn_version }}"
+appversion_sha: "{{ webauthn_version_sha }}"
+stepup_gh_appname: Webauthn
+current_release_symlink: "/opt/openconext/OpenConext-{{ appname }}"
+current_release_appdir: "{{ current_release_symlink }}-{{ appversion }}"
+current_release_config_file_dir_name: "{{ current_release_appdir }}/app/files"
+current_release_config_dir_name: "{{ current_release_appdir }}/config/packages"
+gssp_idp_private_key: "{{ lookup('file', inventory_dir+'/files/certs/stepup/webauthn_idp.key') }}"
+database_webauthn_user: webauthnrw
+database_webauthn_deploy_user: webauthndeploy
+database_webauthn_name: webauthn
+fpmmemory: 128M

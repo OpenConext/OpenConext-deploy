@@ -1,0 +1,93 @@
+parameters:
+    trusted_proxies:   [ 127.0.0.1 ]
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    default_locale:       {{ default_locale }}
+    locales:              [{{ enabled_locales | join(",") }}]
+    locale_cookie_domain: {{ locale_cookie_domain }}
+
+    secret:               {{ selfservice_secret }}
+
+    debug_toolbar:          true
+    debug_redirects:        false
+    use_assetic_controller: true
+
+    gateway_api_url: https://{{ gateway_vhost_name }}/
+    gateway_api_username: ss
+    gateway_api_password: {{ selfservice_api_password  }}
+
+    middleware_credentials_username: ss
+    middleware_credentials_password: {{ selfservice_api_password }}
+
+{# Note: Middleware API acces over HTTP #}
+{# middleware vhost ip is set in /etc/hosts #}
+    middleware_url_command_api: https://{{ middleware_vhost_name }}/command
+    middleware_url_api: https://{{ middleware_vhost_name }}/
+
+    sms_originator: {{ sms_originator }}
+    sms_otp_expiry_interval: {{ sms_otp_expiry_interval }}
+    sms_maximum_otp_requests: {{ sms_maximum_otp_requests }}
+
+    saml_sp_publickey: {{ current_release_config_file_dir_name }}/sp.crt
+
+    saml_sp_privatekey: {{ current_release_config_file_dir_name }}/sp.key
+
+    saml_metadata_publickey: {{ current_release_config_file_dir_name }}/sp.crt
+
+    saml_metadata_privatekey: {{ current_release_config_file_dir_name }}/sp.key
+
+    # Connect to remote IdP through Stepup Gateway
+    saml_remote_idp_entity_id: https://{{ gateway_vhost_name }}/authentication/metadata
+    saml_remote_idp_sso_url: https://{{ gateway_vhost_name }}/authentication/single-sign-on
+    saml_remote_idp_certificate: {{ gateway_saml_idp_publickey | depem }}
+
+{#
+    # Connect to remote IdP directly
+    saml_remote_idp_entity_id: {{ saml_remote_idp_entity_id }}
+    saml_remote_idp_sso_url: {{ saml_remote_idp_sso_url }}
+    saml_remote_idp_certificate: {{ saml_remote_idp_certificate }}
+#}
+
+    second_factor_test_idp_entity_id: https://{{ gateway_vhost_name }}/authentication/metadata
+    second_factor_test_idp_sso_url: https://{{ gateway_vhost_name }}/authentication/single-sign-on
+    second_factor_test_idp_certificate: {{ gateway_saml_idp_publickey | depem }}
+
+    asset_version: {{ appversion_sha }}
+
+    stepup_loa_loa1: {{ stepup_uri_loa1 }}
+    stepup_loa_loa2: {{ stepup_uri_loa2 }}
+    stepup_loa_loa3: {{ stepup_uri_loa3 }}
+    stepup_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
+
+    logout_redirect_url:
+{% for key, value in logout_redirect_url.items() %}
+      {{ key }}: {{ value }}
+{% endfor %}
+
+    enabled_second_factors: [ {{ stepup_enabled_factors }} ]
+
+    enabled_generic_second_factors:
+{% for key, value in stepup_enabled_generic_second_factors.items() %}
+      {{ key }}:
+        loa: {{ value.loa }}
+{% endfor %}
+
+    tiqr_app_android_url: https://play.google.com/store/apps/details?id=org.tiqr.authenticator&hl=en
+    tiqr_app_ios_url: https://itunes.apple.com/us/app/tiqr/id430838214?mt=8&ls=1
+
+    session_max_absolute_lifetime: {{ app_session_max_duration }}
+    session_max_relative_lifetime: {{ app_session_expiry_time }}
+
+    preferred_activation_flow_name: activate
+    preferred_activation_flow_options: [ra, self]
+
+    # Self-asserted tokens: enable/disable recovery methods
+    #
+    # One of the two options should be enabled to have a fully functioning
+    # Self-asserted token registration process.
+    recovery_method_sms_enabled: true
+    recovery_method_safe_store_code_enabled: true

@@ -8,6 +8,8 @@ haproxy_supported_http_methods: "GET HEAD OPTIONS POST PUT DELETE"
 haproxy_max_request_rate: 1000
 # maximum number of requests per host header src ip and path per 1 m
 haproxy_max_request_rate_ip_path: 250
+# Some paths allow for higher ratelimits (now by default introspect, userinfo and token)
+haproxy_max_request_rate_ip_path_exceptions: 500
 # You can create an allowlist of ips that are allowed to go over the configured ratelimit
 haproxy_allowlistips:
   - ''

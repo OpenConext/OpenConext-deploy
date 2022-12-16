@@ -5,7 +5,6 @@
     dest: "/etc/yum.repos.d/{{ item }}"
   with_items:
     - shibboleth-centos7.repo
-    - shibboleth.repo.gpgkey
 
 - name: Install Shibboleth
   yum:
@@ -14,7 +13,7 @@
     state: present
 
 - name: Include tasks to save Shibboleth sessions to the database
-  include: shibboleth_database_backend.yml
+  include_tasks: shibboleth_database_backend.yml
   when: shibboleth_database_backend | bool
 
 - name: Remove default conf files apache

@@ -52,11 +52,11 @@
 
 
 - name: Include OpenConext-stats specific tasks
-  include: logstash_stats.yml
+  include_tasks: logstash_stats.yml
   when: logstash_stats | bool
 
 - name: Include ELK stack specific tasks
-  include: logstash_elk.yml
+  include_tasks: logstash_elk.yml
   when: logstash_elk | bool
 
 - name: Enable and start logstash service

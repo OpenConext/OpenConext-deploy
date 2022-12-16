@@ -1,0 +1,115 @@
+parameters:
+    trusted_proxies:   [ 127.0.0.1 ]
+
+    database_driver:   pdo_mysql
+    database_host:     {{ database_lb_address }}
+    database_port:     3306
+    database_gateway_name:     {{ database_gateway_name }}
+    database_gateway_user:     {{ database_gateway_user }}
+    database_gateway_password: {{ mysql_passwords.gateway }}
+    database_deploy_user:      {{ database_gateway_deploy_user }}
+    database_deploy_password:  {{ database_gateway_deploy_password }}
+    database_server_version:   {{ database_server_version | default("5.6") }}
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    default_locale:       {{ default_locale }}
+    locales:              [{{ enabled_locales | join(",") }}]
+    locale_cookie_domain: {{ locale_cookie_domain }}
+
+    app_name: {{ gateway_app_name | default("Stepup Gateway") }}
+
+    secret:            {{ gateway_secret }}
+
+    debug_toolbar:          true
+    debug_redirects:        false
+    use_assetic_controller: true
+
+    # Choose which SMS service to use. At this moment you can choose: 'spryng' or 'messagebird'
+    sms_service: {{ sms_service | default('messagebird') }}
+
+{% if messagebird_authorization is defined %}
+    messagebird_authorization: AccessKey {{ messagebird_authorization }}
+{% else %}
+    messagebird_authorization: AccessKey dummy_access_key
+{% endif %}
+
+    # Spryng config for sending SMS messages
+{% if spryng_api_key is defined %}
+    spryng_api_key: {{ spryng_api_key }}
+{% else %}
+    spryng_api_key: dummy_access_key
+{% endif %}
+    spryng_route: {{ spryng_route | default('business') }}
+
+    sms_originator: {{ sms_originator }}
+    sms_otp_expiry_interval: {{ sms_otp_expiry_interval }}
+    sms_maximum_otp_requests: {{ sms_maximum_otp_requests }}
+
+    yubikey_client_id: {{ yubikey_client_id }}
+    {% if yubikey_client_secret | length == 0 %}yubikey_client_secret: dummy_client_secret{% else %}yubikey_client_secret: {{ yubikey_client_secret }}{% endif %}
+
+    selfservice_api_password: {{ selfservice_api_password }}
+    registration_authority_api_password: {{ registration_authority_api_password }}
+
+    # The private key and certificate that are used by the Gateway SP to sign SAML AuthnRequests
+    # Filename of the PEM CERTIFICATE
+    saml_sp_publickey: {{ current_release_config_file_dir_name }}/sp.crt
+    # Filename of the PEM RSA PRIVATE KEY
+    saml_sp_privatekey: {{ current_release_config_file_dir_name }}/sp.key
+
+    # The private key and certificate that are used by the Gateway IdP to sign SAML Responses/Assertions
+    # Filename of the PEM CERTIFICATE
+    saml_idp_publickey: {{ current_release_config_file_dir_name }}/idp.crt
+    # Filename of the PEM RSA PRIVATE KEY
+    saml_idp_privatekey: {{ current_release_config_file_dir_name }}/idp.key
+
+    # The certificate and private key that are used by the Gateway to sign the metadata that it publishes
+    # Filename of the PEM CERTIFICATE
+    saml_metadata_publickey: {{ current_release_config_file_dir_name }}/idp.crt
+    # Filename of the PEM RSA PRIVATE KEY
+    saml_metadata_privatekey: {{ current_release_config_file_dir_name }}/idp.key
+
+    # The remote IdP (i.e. not the local IdP that is part of the Gateway) is the IdP that provides the first
+    # factor authentication of users to the Gateway.
+    # The Gateway does publish very basic SAML Metadata that can be used by the Remote IdP (it currently does
+    # not include the signing certificate in the SPSSODescriptor). The Stepup-Gateway cannot import
+    # SAML Metadata published by the Remote IdP, you must configure that here by hand.
+    # The location of the metadata is: https://{{ gateway_vhost_name }}/authentication/metadata
+    # The Gateway uses the HTTP-Redirect binding to send the AuthnRequest to the Remote IdP. The AuthnRequest
+    # is signed using SHA256 (`http://www.w3.org/2001/04/xmldsig-more#rsa-sha256`)
+    # The Remote IdP must use the HTTP-POST Binding to send the Response back to to the Gateway
+    # The Remote IdP may sign the Assertion in the Response using either:
+    # - SHA-1 (http://www.w3.org/2000/09/xmldsig#rsa-sha1); or
+    # - SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256)
+    # The ACS location is: https://{{ gateway_vhost_name }}/authentication/consume-assertion
+
+    # The SAML EntityID of the Remote IdP
+    saml_remote_idp_entity_id: {{ saml_remote_idp_entity_id }}
+    # The SAML SSO Location of the Remote IdP
+    saml_remote_idp_sso_url: {{ saml_remote_idp_sso_url }}
+    # The SAML
+    saml_remote_idp_certificate: {{ saml_remote_idp_certificate }}
+
+    gateway_loa_loa1: '{{ stepup_uri_loa1 }}'
+    gateway_loa_loa2: '{{ stepup_uri_loa2 }}'
+    gateway_loa_loa3: '{{ stepup_uri_loa3 }}'
+    gateway_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
+    second_factor_only_loa_loa2: '{{ stepup_uri_sfo_loa2 }}'
+    second_factor_only_loa_loa3: '{{ stepup_uri_sfo_loa3 }}'
+    second_factor_only_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
+
+    second_factor_only: {{ gateway_second_factor_only | default(false) }}
+
+    asset_version: {{ appversion_sha }}
+
+    enabled_second_factors: [ {{ stepup_enabled_factors }} ]
+
+    enabled_generic_second_factors:
+{% for sf in stepup_enabled_generic_second_factors.keys() %}
+      {{ sf }}:
+        loa: {{ stepup_enabled_generic_second_factors[sf].loa }}
+{% endfor %}

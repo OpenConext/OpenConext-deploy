@@ -9,7 +9,7 @@ platforms:
     image: centos7-ansible
     dockerfile: ../Dockerfile.j2
     command: /usr/sbin/init
-    privileged: True
+    privileged: true
     networks:
       - name: mariadb
     volumes:
@@ -23,7 +23,7 @@ platforms:
     image: centos7-ansible
     dockerfile: ../Dockerfile.j2
     command: /usr/sbin/init
-    privileged: True
+    privileged: true
     networks:
       - name: mariadb
     volumes:
@@ -35,8 +35,6 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
   env:
     ANSIBLE_REMOTE_TMP: /tmp/
     ANSIBLE_ROLES_PATH: ../../roles
@@ -44,8 +42,3 @@ provisioner:
   inventory:
     links:
       group_vars: ../../group_vars
-
-#verifier:
-#  name: testinfra
-#  lint:
-#    name: flake8

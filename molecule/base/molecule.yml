@@ -11,7 +11,16 @@ platforms:
     command: /usr/sbin/init
     privileged: True
     volumes:
-      - "${MOLECULE_SCENARIO_DIRECTORY}/../etc-hosts:/etc/hosts"
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    groups:
+      - "loadbalancer-vm"
+      - loadbalancer
+  - name: openconext-rocky8-base
+    image: rocky8-ansible
+    dockerfile: ../Dockerfile-Rocky8.j2
+    command: /usr/sbin/init
+    privileged: True
+    volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
       - "loadbalancer-vm"
@@ -19,8 +28,6 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
   env:
     ANSIBLE_REMOTE_TMP: /tmp/
     ANSIBLE_ROLES_PATH: ../../roles
@@ -31,5 +38,3 @@ provisioner:
 
 verifier:
   name: testinfra
-  lint:
-    name: flake8

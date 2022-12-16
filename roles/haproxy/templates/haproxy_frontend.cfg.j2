@@ -75,8 +75,11 @@ frontend local_ip
     # Measure and log the request rate per path and ip 
     http-request track-sc1 base32+src table st_httpreqs_per_ip_and_path
     http-request capture sc_http_req_rate(1) len 4
+    # Some paths allow for a higher ratelimit. These are in a seperate mapfile
+    http-request set-var(req.rate_limit)  path,map_beg(/etc/haproxy/maps/ratelimits.map,{{ haproxy_max_request_rate_ip_path }})
+    http-request set-var(req.request_rate)  sc_http_req_rate(1)
     # Create an ACL when the request rate per host header url path and src ip exceeds {{ haproxy_max_request_rate_ip_path }} per 1m
-    acl exceeds_max_request_rate_per_ip_and_path sc_http_req_rate(1) gt {{ haproxy_max_request_rate_ip_path }}
+    acl exceeds_max_request_rate_per_ip_and_path var(req.rate_limit),sub(req.request_rate) lt 0
     # Deny the request when the ip address is on the blocklist
     http-request deny if blocklist
     # Deny the request when no valid host header is used
@@ -86,6 +89,10 @@ frontend local_ip
     # Deny the request when the request rate per host header url path and src ip exceeds {{ haproxy_max_request_rate_ip_path }} per 1 m 
     http-request deny deny_status 429 if exceeds_max_request_rate_per_ip_and_path !allowlist
     # Create some http redirects
+    {% if haproxy_securitytxt_target_url is defined %}
+    acl securitytxt path /.well-known/security.txt
+    http-request redirect location {{ haproxy_securitytxt_target_url }} if securitytxt
+    {% endif %}
     http-request redirect location %[req.hdr(host),lower,map(/etc/haproxy/maps/redirects.map)] if { req.hdr(host),lower,map_str(/etc/haproxy/maps/redirects.map) -m found }
 
 {% if haproxy_sni_ip_restricted is defined %}
@@ -159,8 +166,11 @@ frontend localhost_restricted
     # Measure and log the request rate per path and ip 
     http-request track-sc1 base32+src table st_httpreqs_per_ip_and_path
     http-request capture sc_http_req_rate(1) len 4
+    # Some paths allow for a higher ratelimit. These are in a seperate mapfile
+    http-request set-var(req.rate_limit)  path,map_beg(/etc/haproxy/maps/ratelimits.map,{{ haproxy_max_request_rate_ip_path }})
+    http-request set-var(req.request_rate)  sc_http_req_rate(1)
     # Create an ACL when the request rate per host header url path and src ip exceeds {{ haproxy_max_request_rate_ip_path }} per 1m
-    acl exceeds_max_request_rate_per_ip_and_path sc_http_req_rate(1) gt {{ haproxy_max_request_rate_ip_path }}
+    acl exceeds_max_request_rate_per_ip_and_path var(req.rate_limit),sub(req.request_rate) lt 0
     # Deny the request when the ip address is on the blocklist
     http-request deny if blocklist
     # Deny the request when no valid host header is used
@@ -169,5 +179,10 @@ frontend localhost_restricted
     http-request deny deny_status 429 if exceeds_max_request_rate_per_ip !allowlist
     # Deny the request when the request rate per host header url path and src ip exceeds {{ haproxy_max_request_rate_ip_path }} per 1 m 
     http-request deny deny_status 429 if exceeds_max_request_rate_per_ip_and_path !allowlist
+    # Create some http redirects
+    {% if haproxy_securitytxt_target_url is defined %}
+    acl securitytxt path /.well-known/security.txt
+    http-request redirect location {{ haproxy_securitytxt_target_url }} if securitytxt
+    {% endif %}
 
 {% endif %}

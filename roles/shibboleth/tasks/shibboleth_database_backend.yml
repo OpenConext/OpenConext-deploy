@@ -13,12 +13,19 @@
 
 - name: Install mariadb odbc driver
   unarchive:
-    src: "https://downloads.mariadb.com/Connectors/odbc/connector-odbc-{{ mariadb_odbc_version}}/mariadb-connector-odbc-{{ mariadb_odbc_version }}-ga-rhel7-x86_64.tar.gz"
+    src: "https://downloads.mariadb.com/Connectors/odbc/connector-odbc-{{ mariadb_odbc_version}}/mariadb-connector-odbc-{{ mariadb_odbc_version }}-centos7-amd64.tar.gz"
     dest: "/usr/local/lib/mariadb"
     remote_src: yes
     owner: root
     group: root
     mode: 0744
+
+- name: Place the odbc libs in /usr/local/lib/mariadb/lib64/ where shib expects them
+  copy:
+    src: /usr/local/lib/mariadb/mariadb-connector-odbc-{{ mariadb_odbc_version }}-centos7-amd64/lib/mariadb/
+    dest: /usr/local/lib/mariadb/lib64/
+    remote_src: yes
+  changed_when: false
 
 - name: Install ODBC ini file
   copy:

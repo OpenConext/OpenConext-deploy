@@ -1,0 +1,9 @@
+#!/bin/bash
+#overwrite database settings for deploy
+export DATABASE_URL=mysql://{{ database_webauthn_deploy_user }}:{{  mysql_passwords.webauthndeploy }}@{{ webauthn_db_host }}:3306/{{ database_webauthn_name }}
+cd {{ current_release_symlink }}
+echo "Create database if not exists"
+{{ php_cli }} bin/console doctrine:database:create --if-not-exists
+echo "Create or migrate schema"
+{{ php_cli }} bin/console doctrine:migrations:migrate
+echo "Done!"

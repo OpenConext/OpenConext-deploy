@@ -9,9 +9,8 @@ platforms:
     image: centos7-ansible
     dockerfile: ../Dockerfile.j2
     command: /usr/sbin/init
-    privileged: True
+    privileged: true
     volumes:
-      - "${MOLECULE_SCENARIO_DIRECTORY}/../etc-hosts:/etc/hosts"
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
       - "loadbalancer-vm"
@@ -21,8 +20,6 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
   env:
     ANSIBLE_REMOTE_TMP: /tmp/
     ANSIBLE_ROLES_PATH: ../../roles
@@ -49,5 +46,3 @@ scenario:
     - destroy
 verifier:
   name: testinfra
-  lint:
-    name: flake8

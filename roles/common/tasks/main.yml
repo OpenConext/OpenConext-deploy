@@ -21,14 +21,23 @@
     name: 
       - telnet
       - sudo
-      - ntp
       - unzip
-      - mysql
       - bzip2
-      - libselinux-python
     state: present
   register: common_tools_installed
   until: common_tools_installed is succeeded
+
+- name: Install CentOS7 packages
+  yum:
+    name: 
+      - ntp
+  when: ansible_distribution_major_version == '7'
+
+- name: Install CentOS8 / Rocky 8 packages
+  yum:
+    name: 
+      - chrony
+  when: ansible_distribution_major_version == '8'
 
 - name: Install git on development vm
   yum:
@@ -93,6 +102,14 @@
     name: ntpd
     state: started
     enabled: yes
+  when: ansible_distribution_major_version == '7'
+
+- name: Start chrony
+  service:
+    name: chronyd
+    state: started
+    enabled: yes
+  when: ansible_distribution_major_version == '8'
 
 - name: Remove exim,sendmail when Postfix needs to be installed
   yum:
@@ -136,6 +153,12 @@
   notify:
     - "reload postfix"
     - "rebuild header_checks"
+
+- name: start and enable Postfix
+  service: 
+    name: postfix
+    enabled: yes
+    state: started
 
 # journald binary logs corrupt on specific engineblock messages.
 # disabling compression fixes that issue

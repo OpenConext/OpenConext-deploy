@@ -109,7 +109,7 @@
         - inventory_hostname in groups['lifecycle']
       tags: ['app_php', 'lifecycle']
   handlers:
-    - include: roles/httpd/handlers/main.yml
+    - import_tasks: roles/httpd/handlers/main.yml
 
 - hosts: app_java
   gather_facts: true
@@ -120,17 +120,17 @@
     - role: shibboleth
       tags: ['core', 'app_java', 'shib']
   handlers:
-    - include: roles/httpd/handlers/main.yml
+    - import_tasks: roles/httpd/handlers/main.yml
 
 # run -t springboot -e springboot_service_to_deploy=manage,voot to only install
 # the manage and voot app. Both GUI as servers will be installed.
-- hosts: java-apps
+- hosts: java_apps
   become: true
   roles:
     - { role: springboot,       tags: ['core', 'springboot'] }
 
   handlers:
-    - include: roles/httpd/handlers/main.yml
+    - import_tasks: roles/httpd/handlers/main.yml
 
 - hosts: app_php
   gather_facts: no
@@ -141,7 +141,7 @@
        - inventory_hostname not in groups['lifecycle']
      tags: ['core', 'app_php', 'profile']
   handlers:
-    - include: roles/httpd/handlers/main.yml
+    - import_tasks: roles/httpd/handlers/main.yml
 
 - hosts: elk
   gather_facts: true
@@ -159,7 +159,18 @@
     - role: influxdb
       tags: ['influxdb' ]
   handlers:
-    - include: roles/httpd/handlers/main.yml
+    - include_tasks: roles/httpd/handlers/main.yml
+
+- hosts: stepuppapp
+  become: true
+  roles:
+    - { role: stepupwebauthn,                            tags: ['stepupwebauthn','stepup' ] }
+    - { role: stepupazuremfa,                            tags: ['stepupazuremfa', 'stepup'] }
+    - { role: stepuptiqr,                                tags: ['stepuptiqr' , 'stepup'] }
+    - { role: stepupmiddleware,                          tags: ['stepupmiddleware' , 'stepup'] }
+    - { role: stepupgateway,                             tags: ['stepupgateway' , 'stepup'] }
+    - { role: stepupselfservice,                         tags: ['stepupselfservice' , 'stepup'] }
+    - { role: stepupra        ,                          tags: ['stepupra' , 'stepup'] }
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 

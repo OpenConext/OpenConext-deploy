@@ -1,0 +1,41 @@
+---
+- name: Add group {{ appname }}
+  group:
+    name: "{{ appname }}"
+    state: present
+
+- name: Add user {{ appname }}
+  user:
+    name: "{{ appname }}"
+    group: "{{ appname }}"
+    createhome: no
+    state: present
+
+- name: Create directory for vhosts to store PHP sessions
+  file:
+    path: "{{ php_session_dir}}/{{ appname }}"
+    state: directory
+    owner: "{{ appname }}"
+    group: root
+    mode: 0770
+
+- name: Add stepup logformat config
+  copy: 
+    src: stepuplogging.conf
+    dest: /etc/httpd/conf.d/stepuplogging.conf
+  notify:
+    - "restart httpd"
+
+- name: Install Apache vhost
+  template:
+    src: "apachevhost.j2"
+    dest: "/etc/httpd/conf.d/{{ appname }}.conf"
+  notify:
+    - "restart httpd"
+
+- name: Install php-fpm 72 config
+  template:
+    src: "phpfpm.j2"
+    dest: "/etc/opt/remi/php72/php-fpm.d/{{ appname }}.conf"
+  notify:
+    - "restart phpfpm"

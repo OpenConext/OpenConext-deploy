@@ -1,5 +1,7 @@
 global_defs {
   vrrp_garp_master_refresh 60
+  enable_script_security true
+  script_user keepalived_script mysqlusers
 }
 vrrp_script chk_cluster {
         script "/usr/local/bin/clustercheck clustercheck {{ galera_clustercheck_password }} 1"
@@ -13,7 +15,7 @@ vrrp_instance galera {
    state {{ keepalived.state }}
    virtual_router_id {{ keepalived_vrid }}          # Assign one ID for this route
    priority {{ keepalived.prio }}                 # 101 on master, 100 on backup
-   advert_int 5
+   advert_int 1
    authentication {
         auth_type PASS
         auth_pass {{ keepalived_dbcluster_vrrp_password }}
@@ -25,8 +27,5 @@ vrrp_instance galera {
    track_script {
         chk_cluster
     }
- 
-    notify_master "/bin/echo 'master' > /tmp/keepalived.state"
-    notify_backup "/bin/echo 'backup' > /tmp/keepalived.state"
-    notify_fault "/bin/echo 'fault' > /tmp/keepalived.state"
+   notify /usr/local/bin/keepalived_notify
 }

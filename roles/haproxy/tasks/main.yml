@@ -184,6 +184,7 @@
   with_items:
     - backends.map
     - redirects.map
+    - ratelimits.map
   notify:
     - "reload haproxy"
  
