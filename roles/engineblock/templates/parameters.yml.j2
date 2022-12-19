@@ -244,13 +244,16 @@ parameters:
     ## The integer after the mapping field indicates the LoA level (1, 2 or 3 are supported).
     ## The engineblock or gateway keys specify the LoAs identifier as will be carried in the AuthnContextClassRef of an assertion.
     stepup.loa.mapping:
-        1:
+        10:
             engineblock: '{{ engine_stepup_engineblock_loa1 | replace("%","%%") }}'
             gateway: '{{ engine_stepup_gateway_loa1 | replace("%","%%") }}'
-        2:
+        15:
+            engineblock: '{{ engine_stepup_engineblock_loa1_5 | replace("%","%%") }}'
+            gateway: '{{ engine_stepup_gateway_loa1_5 | replace("%","%%") }}'
+        20:
             engineblock: '{{ engine_stepup_engineblock_loa2 | replace("%","%%") }}'
             gateway: '{{ engine_stepup_gateway_loa2 | replace("%","%%") }}'
-        3:
+        30:
             engineblock: '{{ engine_stepup_engineblock_loa3 | replace("%","%%") }}'
             gateway: '{{ engine_stepup_gateway_loa3 | replace("%","%%") }}'
     ## The fallback LoA to return when the Stepup authentication fails but is not required
