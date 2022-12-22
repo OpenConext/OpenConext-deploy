@@ -1,9 +1,14 @@
 [
   {
-    "saml": "urn:mace:dir:attribute-def:eduPersonTargetedID",
+    "saml": "urn:mace:surf.nl:attribute-def:internal-collabPersonId",
     "oidc": "sub",
     "multiValue": false,
     "customMapping": true
+  },
+  {
+    "saml": "urn:oasis:names:tc:SAML:attribute:subject-id",
+    "oidc": "subject_id",
+    "multiValue": false
   },
   {
     "saml": "urn:mace:dir:attribute-def:cn",

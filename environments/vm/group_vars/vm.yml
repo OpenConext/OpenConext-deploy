@@ -14,28 +14,28 @@ error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
-attribute_aggregation_gui_version: "2.1.3"
-attribute_aggregation_server_version: "2.1.3"
-oidc_playground_client_version: "2.4.3"
-oidc_playground_server_version: "2.4.3"
+attribute_aggregation_gui_version: "3.0.1"
+attribute_aggregation_server_version: "3.0.1"
+oidc_playground_client_version: "3.0.0"
+oidc_playground_server_version: "3.0.0"
 engine_version: "6.9.1"
-manage_gui_version: "6.0.10"
-manage_server_version: "6.0.10"
-lifecycle_version: "0.0.5"
-monitoring_tests_version: "6.1.1"
-mujina_version: "7.4.4"
-oidcng_version: "5.0.5"
-pdp_server_version: "3.0.3"
-pdp_gui_version: "3.0.3"
+manage_gui_version: "7.2.2"
+manage_server_version: "7.2.2"
+lifecycle_version: "0.1.1"
+monitoring_tests_version: "7.0.0"
+mujina_version: "8.0.2"
+oidcng_version: "6.1.3"
+pdp_server_version: "4.0.1"
+pdp_gui_version: "4.0.1"
 profile_version: "3.1.4"
-teams_gui_version: "8.5.3"
-teams_server_version: "8.5.3"
-voot_version: "4.0.2"
-myconext_server_version: "5.1.7"
-myconext_gui_version: "5.1.7"
-account_gui_version: "5.1.7"
-dashboard_server_version: "10.1.5"
-dashboard_gui_version: "10.1.5"
+teams_gui_version: "9.1.1"
+teams_server_version: "9.1.1"
+voot_version: "5.0.0"
+myconext_server_version: "6.0.2"
+myconext_gui_version: "6.0.2"
+account_gui_version: "6.0.2"
+dashboard_server_version: "12.3.4"
+dashboard_gui_version: "12.3.4"
 
 databases:
   names:
@@ -281,6 +281,7 @@ oidcng:
     - https://eduid.nl/trust/validate-names
     - https://eduid.nl/trust/linked-institution
     - https://eduid.nl/trust/affiliation-student
+    - https://refeds.org/profile/mfa
   default_acr_value: http://{{ base_domain }}/assurance/loa1
   eduid_attribute_manipulation_enabled: false
   consent_enabled: false
@@ -301,6 +302,9 @@ myconext:
   feature_webauthn: false
   feature_warning_educational_email_domain: false
   feature_use_external_validation: false
+  feature_deny_disposable_email_providers: true
+  feature_create_eduid_institution_enabled: true
+  feature_create_eduid_institution_landing: true
   feature_show_connections: false
   feature_allowlist: false
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
@@ -342,7 +346,7 @@ manage:
     - {
         name: "dashboard",
         password: "{{ manage_dashboard_secret }}",
-        scopes: ["READ"]
+        scopes: ["READ", "WRITE"]
       }
     - {
         name: "myconext",
@@ -495,14 +499,14 @@ haproxy_applications:
   - name: oidc_playground
     vhost_name: "oidc-playground.{{base_domain }}"
     ha_method: "GET"
-    ha_url: "/oidc/api/actuator/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.oidc_playground.port }}"
     servers: "{{java_servers}}"
 
   - name: voot
     vhost_name: voot.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.voot.port }}"
     servers: "{{java_servers}}"
 
@@ -530,35 +534,35 @@ haproxy_applications:
   - name: manage
     vhost_name: manage.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/manage/api/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.manage.port }}"
     servers: "{{java_servers}}"
 
   - name: oidcng
     vhost_name: connect.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/actuator/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.oidcng.port }}"
     servers: "{{java_servers}}"
 
   - name: myconext
     vhost_name: my.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/actuator/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.myconext.port }}"
     servers: "{{java_servers}}"
 
   - name: account
     vhost_name: account.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/actuator/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.account.port }}"
     servers: "{{java_servers}}"
 
   - name: eduid
     vhost_name: eduid.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/actuator/health"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.eduid.port }}"
     servers: "{{java_servers}}"
 
@@ -600,7 +604,7 @@ haproxy_applications:
   - name: dashboard
     vhost_name: dashboard.{{ base_domain }}
     ha_method: "GET"
-    ha_url: "/"
+    ha_url: "/internal/health"
     port: "{{ loadbalancing.dashboard.port }}"
     servers: "{{java_servers}}"
 

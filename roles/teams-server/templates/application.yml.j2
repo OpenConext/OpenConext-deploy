@@ -14,12 +14,13 @@ secure_cookie: true
 server:
   # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
   port: {{ springapp_tcpport }}
-  # We serve from the root. Do not change this
-  contextPath:
-  session:
-    timeout: 28800
-    cookie:
-      secure: true
+  error:
+    path: "/error"
+  servlet:
+    session:
+      timeout: 28800
+      cookie:
+        secure: true
   server-header: no
 
 feature-toggles:
@@ -34,6 +35,7 @@ config:
   help-tos-nl: {{ teams_tos_nl }}
   main-link: {{ teams_main_link }}
   organization: {{ teams_organization }}
+  sponsor: {{ sponsor_name }}
   supported_language_codes: {{ supported_language_codes }}
 
 security:
@@ -74,13 +76,11 @@ voot:
 
 spring:
   session:
-    cleanup:
-      cron:
-        expression: {{ teams_cron_session_cleanup_expression }}
     store-type: jdbc
     jdbc:
       schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
       initialize-schema: always
+      cleanup-cron: "{% if teams_cronjobmaster %}0 13 * * * *{% else %}-{% endif %}"
   jpa:
     properties:
       hibernate:
@@ -91,22 +91,30 @@ spring:
     url: jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}?useMysqlMetadata=true
     username: {{ teams.db_user }}
     password: {{ teams.db_password }}
-    tomcat:
-      test-on-borrow: true
-      validation-query: SELECT count(*) FROM invitations
-      remove-abandoned: true
   mail:
     host: {{ smtp_server }}
     port: 25
   main:
     banner-mode: "off"
-flyway:
-  validate-on-migrate: false
+  flyway:
+    validate-on-migrate: false
+    table: schema_version
 
 management:
   health:
     mail:
-      enabled: false
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+  endpoint:
+    info:
+      enabled: true
+  info:
+    git:
+      mode: full
+
 email:
   from: {{ instance_name }} Teams <{{ noreply_email }}>
   base-url: https://teams.{{ base_domain }}

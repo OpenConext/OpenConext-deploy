@@ -201,6 +201,9 @@
               "$ref": "#/definitions/ArpAttribute",
               "alias": "urn:oid:1.3.6.1.4.1.5923.1.1.1.11"
             },
+            "urn:oasis:names:tc:SAML:attribute:subject-id": {
+              "$ref": "#/definitions/ArpAttribute"
+            },
             "urn:mace:surf.nl:attribute-def:eckid": {
               "$ref": "#/definitions/ArpAttribute"
             },
@@ -471,9 +474,11 @@
           "enum": [
             "AO",
             "IX",
-            "R&S+CoCo",
+            "eduGAIN (community)",
             "Entree",
-            "Clarin"
+            "Clarin",
+            "None",
+            "R&S+CoCo"
           ],
           "default": "AO",
           "info": "Set the contractual base that underlies a production SP / RP entity."

@@ -13,27 +13,31 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
 
     RewriteEngine on
 
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/api/
+    RewriteCond %{REQUEST_URI} !^/internal/
     RewriteCond %{REQUEST_URI} !^/deprovision/
     RewriteCond %{REQUEST_URI} !^/fonts/
     RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
 
-    ProxyPass /api/teams/health http://localhost:{{ springapp_tcpport }}/health retry=0
-    ProxyPass /api/teams/info http://localhost:{{ springapp_tcpport }}/info retry=0
+    ProxyPass /api/teams/health http://localhost:{{ springapp_tcpport }}/internal/health retry=0
+    ProxyPass /api/teams/info http://localhost:{{ springapp_tcpport }}/internal/info retry=0
 
     ProxyPass /api http://localhost:{{ springapp_tcpport }}/api retry=0
     ProxyPassReverse /api http://localhost:{{ springapp_tcpport }}/api
+
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPassReverse /internal http://localhost:{{ springapp_tcpport }}/internal
 
     ProxyPass /deprovision http://localhost:{{ springapp_tcpport }}/deprovision retry=0
 
@@ -62,6 +66,11 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
       AuthType none
     </LocationMatch>
 
+    <LocationMatch "^/internal/(health|info)">
+      Require all granted
+      AuthType none
+    </LocationMatch>
+
     # The VOOT API is secured with basic auth
     <Location "/api/voot/">
       Require all granted
@@ -69,14 +78,14 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
     </Location>
 
     # The SP dashboard API is secured with basic auth; only allow
-    # explicitly allowed IP ranges. If the setting is missing, noone is allowed.
-    <Location "/api/spdashboard/">
+    # explicitly allowed IP ranges. If the setting is missing, none is allowed.
+    <LocationMatch "^/(api/spdashboard|internal/teams)/">
       {% if teams_allow_spd_api is defined %}
         SetEnvIfNoCase X-Forwarded-For {{ teams_allow_spd_api }} env_spd_allow
       {% endif %}
       Require env env_spd_allow
       AuthType none
-    </Location>
+    </LocationMatch>
 
     # The internal lifecycle API is secured with basic auth
     <Location "/deprovision/">
@@ -84,10 +93,14 @@ Listen {{ apache_app_listen_address.teams }}:{{ loadbalancing.teams.port }}
       AuthType none
     </Location>
 
-    <LocationMatch "\\.(eot|svg|ttf|woff2|woff|js|css|png|jpg|ico)$">
+    <LocationMatch "\\.(eot|svg|ttf|woff2|woff|js|js\.map|css|css\.map|png|jpg|ico)$">
       Require all granted
       AuthType none
     </LocationMatch>
+
+    <Location ~ "/(asset-)?manifest.json$">
+      Require all granted
+    </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.strict_with_static_img }}"
     Header always set X-Frame-Options "DENY"

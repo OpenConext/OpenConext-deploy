@@ -3,10 +3,10 @@ logging.config=file://{{ pdp_dir }}/logback.xml
 
 # Port for spring boot application
 server.port={{ springapp_tcpport }}
-server.session.cookie.secure=true
+server.servlet.session.cookie.secure=true
 
 # We serve from the root. Do not change this
-server.contextPath=
+server.servlet.context-path=
 
 # An empty value will be replaced with the default
 server.server-header=no
@@ -22,9 +22,6 @@ spring.datasource.driverClassName=org.mariadb.jdbc.Driver
 spring.datasource.url=jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}
 spring.datasource.username={{ pdp.db_user }}
 spring.datasource.password={{ pdp.db_password }}
-spring.datasource.validationQuery=SELECT count(*) FROM schema_version
-spring.datasource.testWhileIdle=true
-spring.datasource.testOnBorrow=true
 
 spring.mail.host=localhost
 spring.mail.port=25
@@ -89,4 +86,9 @@ pdpCronJobResponsible= {{ pdp_cronjobmaster }}
 loa.levels=http://{{ base_domain }}/assurance/loa1_5,http://{{ base_domain }}/assurance/loa2,http://{{ base_domain }}/assurance/loa3
 
 management.health.mail.enabled=true
+management.endpoints.web.exposure.include=health,info
+management.endpoints.web.base-path=/internal
+management.endpoint.info.enabled=true
+management.info.git.mode=full
+
 

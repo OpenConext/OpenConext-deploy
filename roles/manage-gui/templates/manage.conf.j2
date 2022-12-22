@@ -13,49 +13,29 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     RewriteEngine on
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/manage
+    RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/fonts
     RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
-    ProxyPass /manage/api/health http://localhost:{{ springapp_tcpport }}/actuator/health retry=0
-    ProxyPass /manage/api/info http://localhost:{{ springapp_tcpport }}/actuator/info retry=0
-    ProxyPass /manage/api http://localhost:{{ springapp_tcpport }}/ retry=0
-    ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}/
+    ProxyPass /manage/api/health http://localhost:{{ springapp_tcpport }}/internal/health retry=0
+    ProxyPass /manage/api/info http://localhost:{{ springapp_tcpport }}/internal/info retry=0
 
-    DocumentRoot "{{ _springapp_dir }}/current"
+    ProxyPass /internal/health http://localhost:{{ springapp_tcpport }}/internal/health retry=0
+    ProxyPass /internal/info http://localhost:{{ springapp_tcpport }}/internal/info retry=0
 
-    <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
-      Options     -Indexes
-    </Directory>
-
-    # Enable shibboleth for all other URLs, but the health check and info endpoint
-    <Location ~ "/manage/api/(health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    # The internal API is secured with basic auth
-    <Location ~ "/manage/api/internal/">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|html|js|css|png|jpg|ico)$">
-      allow from all
-      satisfy any
-    </Location>
+    ProxyPass /manage/api http://localhost:{{ springapp_tcpport }} retry=0
+    ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}
 
     <Location />
       AuthType shibboleth
@@ -63,7 +43,36 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
       ShibRequestSetting applicationId manage
       ShibRequireSession On
       ShibRequestSetting REMOTE_ADDR X-Forwarded-For
-      require valid-user
+      Require valid-user
+    </Location>
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+      Options     -Indexes
+    </Directory>
+
+    # Enable shibboleth for all other URLs, but the health check and info endpoint
+    <Location ~ "/manage/api/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "/internal/(health|info)">
+      Require all granted
+    </Location>
+
+    # The internal API is secured with basic auth
+    <Location ~ "/manage/api/internal/">
+      Require all granted
+    </Location>
+
+    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|html|js|js\.map|css|css\.map|png|jpg|ico)$">
+      Require all granted
+    </Location>
+
+    <Location ~ "/(asset-)?manifest.json$">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient_with_static_img }}"

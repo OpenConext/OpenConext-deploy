@@ -17,46 +17,52 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     {% endfor %}
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/myconext
+    RewriteCond %{REQUEST_URI} !^/tiqr
     RewriteCond %{REQUEST_URI} !^/config
     RewriteCond %{REQUEST_URI} !^/register
     RewriteCond %{REQUEST_URI} !^/doLogin
+    RewriteCond %{REQUEST_URI} !^/doLogout
+    RewriteCond %{REQUEST_URI} !^/create-from-institution-login
     RewriteCond %{REQUEST_URI} !^/saml
     RewriteCond %{REQUEST_URI} !^/actuator
+    RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/fonts
     RewriteRule (.*) /index.html [L]
 
     ProxyPreserveHost On
     ProxyPass /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api retry=0
     ProxyPassReverse /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api
+
+    ProxyPass /tiqr http://localhost:{{ springapp_tcpport }}/tiqr retry=0
+    ProxyPassReverse /tiqr http://localhost:{{ springapp_tcpport }}/tiqr
+
     ProxyPass /saml/guest-idp http://localhost:{{ springapp_tcpport }}/saml/guest-idp retry=0
     ProxyPassReverse /saml/guest-idp http://localhost:{{ springapp_tcpport }}/saml/guest-idp
-    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/actuator retry=0
+
+    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
     ProxyPass /config http://localhost:{{ springapp_tcpport }}/config retry=0
     ProxyPass /register http://localhost:{{ springapp_tcpport }}/register retry=0
     ProxyPass /doLogin http://localhost:{{ springapp_tcpport }}/doLogin retry=0
+    ProxyPass /doLogout http://localhost:{{ springapp_tcpport }}/doLogout retry=0
+    ProxyPass /create-from-institution-login http://localhost:{{ springapp_tcpport }}/create-from-institution-login retry=0
 
     DocumentRoot "{{ _springapp_dir }}/current"
 
     <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
+      Require all granted
       Options     -Indexes
     </Directory>
-
-    <Location />
-      allow from all
-      satisfy any
-    </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"
     Header always set X-Frame-Options "DENY"

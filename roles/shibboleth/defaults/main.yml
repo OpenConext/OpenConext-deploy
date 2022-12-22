@@ -1,6 +1,7 @@
 ---
 shibboleth_metadata_sources:
   engine: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+engine_logout_url: "https://engine.{{ base_domain }}/logout"
 shibd_sp_crt_not_in_inventory: false
 mariadb_odbc_version: 3.1.9
 shibboleth_database_backend: false

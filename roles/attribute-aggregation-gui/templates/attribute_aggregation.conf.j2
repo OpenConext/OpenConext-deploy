@@ -14,16 +14,17 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     RewriteEngine on
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/aa/
+    RewriteCond %{REQUEST_URI} !^/internal/
     RewriteCond %{REQUEST_URI} !^/redirect
     RewriteCond %{REQUEST_URI} !^/fonts/
     RewriteRule (.*) /index.html [L]
@@ -31,42 +32,49 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     ProxyPass /Shibboleth.sso !
 
     ProxyPass /redirect http://localhost:{{ springapp_tcpport }}/aa/api/redirect retry=0
+
+    ProxyPass /aa/api/health http://localhost:{{ springapp_tcpport }}/aa/api/internal/health retry=0
+    ProxyPass /aa/api/info http://localhost:{{ springapp_tcpport }}/aa/api/internal/info retry=0
+
+    ProxyPass /internal/health http://localhost:{{ springapp_tcpport }}/aa/api/internal/health retry=0
+    ProxyPass /internal/info http://localhost:{{ springapp_tcpport }}/aa/api/internal/info retry=0
+
     ProxyPass /aa/api http://localhost:{{ springapp_tcpport }}/aa/api retry=0
     ProxyPassReverse /aa/api http://localhost:{{ springapp_tcpport }}/aa/api
-
-    DocumentRoot "{{ _springapp_dir }}/current"
-
-    <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
-      Options     -Indexes
-    </Directory>
-
-
-    # Disable shibboleth health / info check
-    <Location ~ "/aa/api/(health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    # The EB endpoints are secured with basic auth
-    <Location ~ "/aa/api/internal/">
-      allow from all
-      satisfy any
-    </Location>
-
-    # The Lifecycle endpoints are secured with basic auth
-    <Location ~ "/aa/api/deprovision/">
-      allow from all
-      satisfy any
-    </Location>
 
     <Location />
       AuthType shibboleth
       ShibUseHeaders On
       ShibRequestSetting applicationId attribute-aggregation
       ShibRequireSession On
-      require valid-user
+      Require valid-user
+    </Location>
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+      Options     -Indexes
+    </Directory>
+
+    # Disable shibboleth health / info check
+    <Location ~ "/aa/api/(health|info)">
+      Require all granted
+    </Location>
+
+    # The EB endpoints are secured with basic auth
+    <Location ~ "/aa/api/internal/">
+      Require all granted
+    </Location>
+
+    # The internal info and health
+    <Location ~ "/internal/(health|info)">
+      Require all granted
+    </Location>
+
+    # The Lifecycle endpoints are secured with basic auth
+    <Location ~ "/aa/api/deprovision/">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"
@@ -105,17 +113,18 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     RewriteEngine on
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/aa/
     RewriteCond %{REQUEST_URI} !^/redirect
+    RewriteCond %{REQUEST_URI} !^/internal/
     RewriteCond %{REQUEST_URI} !^/fonts/
     RewriteCond %{REQUEST_URI} !^/orcid
     RewriteRule (.*) /index.html [L]
@@ -125,9 +134,25 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
     ProxyPass /Shibboleth.sso !
 
     ProxyPass /redirect http://localhost:{{ springapp_tcpport }}/aa/api/redirect retry=0
-    ProxyPass /aa/api/health http://localhost:{{ springapp_tcpport }}/aa/api/health retry=0
-    ProxyPass /aa/api/client http://localhost:{{ springapp_tcpport }}/aa/api/client retry=0
+
+    ProxyPass /aa/api/health http://localhost:{{ springapp_tcpport }}/aa/api/internal/health retry=0
+    ProxyPass /aa/api/info http://localhost:{{ springapp_tcpport }}/aa/api/internal/info retry=0
+
+    ProxyPass /internal/health http://localhost:{{ springapp_tcpport }}/aa/api/internal/health retry=0
+    ProxyPass /internal/info http://localhost:{{ springapp_tcpport }}/aa/api/internal/info retry=0
+
+    ProxyPass /aa/api http://localhost:{{ springapp_tcpport }}/aa/api retry=0
+    ProxyPassReverse /aa/api http://localhost:{{ springapp_tcpport }}/aa/api
+
     ProxyPassReverse /aa/api/client http://localhost:{{ springapp_tcpport }}/aa/api/client
+    
+    <Location />
+      AuthType shibboleth
+      ShibUseHeaders On
+      ShibRequestSetting applicationId attribute-aggregation-link
+      ShibRequireSession On
+      require valid-user
+    </Location>
 
     # Disable shibboleth for health / info check
     <Location ~ "/aa/api/(health|info)">
@@ -135,12 +160,14 @@ Listen {{ apache_app_listen_address.aa }}:{{ loadbalancing.aa.port }}
       satisfy any
     </Location>
 
-    <Location />
-      AuthType shibboleth
-      ShibUseHeaders On
-      ShibRequestSetting applicationId attribute-aggregation-link
-      ShibRequireSession On
-      require valid-user
+    # The EB endpoints are secured with basic auth
+    <Location ~ "/aa/api/internal/">
+      Require all granted
+    </Location>
+
+    # The internal info and health
+    <Location ~ "/internal/(health|info)">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"

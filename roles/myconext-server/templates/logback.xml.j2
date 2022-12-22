@@ -43,13 +43,13 @@
 
     <filter class="filter.CustomThresholdFilter">
         <clazz>myconext.exceptions.ExpiredAuthenticationException</clazz>
-        <clazz>myconext.exceptions.MigrationDuplicateUserEmailException</clazz>
         <level>ERROR</level>
     </filter>
  </appender>
 
- <logger name="myconext" level="DEBUG" />
- <logger name="io.changock" level="DEBUG" />
+ <logger name="myconext" level="INFO" />
+ <logger name="tiqr.org" level="INFO" />
+ <logger name="io.changock" level="INFO" />
 
  <root level="WARN">
    <appender-ref ref="FILE" />

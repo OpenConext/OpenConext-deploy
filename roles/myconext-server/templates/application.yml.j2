@@ -8,14 +8,17 @@ logging:
 server:
   # The port to where this Spring Boot application listens to.
   port: {{ springapp_tcpport }}
-  # We serve from the root. Do not change this
-  contextPath:
-  session:
-    timeout: 28800
-    cookie:
-      secure: true
-  server-header: no
-  max-http-header-size: 20000
+  error:
+    path: "/error"
+  server-header:
+  servlet:
+    # We serve from the root. Do not change this
+    context-path:
+    session:
+      timeout: 28800
+      cookie:
+        secure: true
+    max-http-header-size: 20000
 
 email:
   from: eduID <noreply@{{ myconext_base_domain }}>
@@ -31,7 +34,7 @@ cron:
   service-name-resolver-fixed-rate-milliseconds: 43_200_000
   metadata-resolver-initial-delay-milliseconds: 1
   metadata-resolver-fixed-rate-milliseconds: 86_400_000
-  metadata-resolver-url: "https://metadata.{{ base_domain }}/idps-metadata.xml"
+  metadata-resolver-url: "https://metadata.surfconext.nl/idps-metadata.xml"
 
 manage:
   username: myconext
@@ -60,9 +63,16 @@ feature:
   connections: {{ myconext.feature_show_connections }}
   # Do we allow the account linking to take place with the accounting IdP, e.g. add extra button in IdP link screen
   use_external_validation: {{ myconext.feature_use_external_validation }}
+  # Do we deny emails that are known Disposable Email Providers
+  deny_disposable_email_providers: {{ myconext.feature_deny_disposable_email_providers }}
   use_deny_allow_list:
     allow_enabled: {{ myconext.feature_allowlist }}
     allow_location: "classpath:/deny-allow/allowed.json"
+  # Do we allow the create-from-institution flow
+  create_eduid_institution_enabled: {{ myconext.feature_create_eduid_institution_enabled }}
+  # Do we show the landing page for the create-from-institution flow
+  create_eduid_institution_landing: {{ myconext.feature_create_eduid_institution_landing }}
+
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
@@ -70,7 +80,17 @@ private_key_path: file://{{ myconext_dir }}/myconext_saml.key
 certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
 
 remember_me_max_age_seconds: 15_768_000
+nudge_eduid_app_days: 7
+remember_me_question_asked_days: 30
 email_guessing_sleep_millis: 500
+email_spam_threshold_seconds: 15
+
+sms:
+  url: "{{ myconext.sms_api_url}}"
+  bearer: "{{ myconext_sms_bearer }}"
+
+tiqr_configuration: "file://{{ myconext_dir }}/tiqr.configuration.yml"
+
 
 attribute_aggregation:
   user: aa
@@ -91,14 +111,22 @@ oidc:
   secret: {{ myconext_client_secret }}
   idp-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
   sp-flow-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
+  sp-create-from-institution-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/create-from-institution/oidc-redirect
   base-url: https://connect.{{ base_domain }}
+
+linked_accounts:
+  # The duration that non validated-name linked accounts are valid - note that they are not removed and will still be used for EPPN Pseudonymisation
   expiry-duration-days-non-validated: 180
-  expiry-duration-days-validated: 2190
+  # The duration after which non validated-name linked accounts are removed
+  removal-duration-days-non-validated: 540
+  # The duration after which validated-name linked accounts are removed
+  removal-duration-days-validated: 2190
 
 account_linking_context_class_ref:
   linked_institution: https://eduid.nl/trust/linked-institution
   validate_names: https://eduid.nl/trust/validate-names
   affiliation_student: https://eduid.nl/trust/affiliation-student
+  profile_mfa: https://refeds.org/profile/mfa
 
 account_linking:
   idp_external_validation_entity_id: {{ myconext.idp_external_validation_entity_id }}
@@ -108,6 +136,11 @@ eduid_api:
   oidcng_introspection_uri: https://connect.{{ base_domain }}/oidc/introspect
   oidcng_client_id: {{ myconext.rs_client_id }}
   oidcng_secret: {{ myconext_rs_client_secret }}
+
+geo_location:
+  license_key: {{ myconext_geo2lite_license_key }}
+  external_url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license_key}&suffix=tar.gz"
+  download_directory: "{{ myconext_dir }}/geo2lite"
 
 spring:
   data:
@@ -120,17 +153,17 @@ spring:
   main:
     banner-mode: "off"
 
+# We disable all endpoints except health for the load-balancer and info for git information.
 management:
   health:
     mail:
       enabled: true
-
-# We disable all endpoints except health for the load-balancer and info for git information.
-endpoints:
-  enabled: false
-  health:
-    enabled: true
-  info:
-    enabled: true
-    git:
-      mode: full
+  # We disable all endpoints except health for the load-balancer and info for git information.
+  endpoints:
+    enabled: false
+    health:
+      enabled: true
+    info:
+      enabled: true
+      git:
+        mode: full

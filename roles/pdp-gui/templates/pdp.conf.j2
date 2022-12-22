@@ -14,7 +14,7 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     RewriteEngine on
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
     RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
@@ -23,33 +23,22 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/pdp
+    RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/fonts
     RewriteRule (.*) /index.html [L]
 
     ProxyPass /Shibboleth.sso !
+
+    ProxyPass /pdp/api/health http://localhost:{{ springapp_tcpport }}/internal/health retry=0
+    ProxyPass /pdp/api/info http://localhost:{{ springapp_tcpport }}/internal/info retry=0
+
     ProxyPass /pdp/api http://localhost:{{ springapp_tcpport }} retry=0
     ProxyPassReverse /pdp/api http://localhost:{{ springapp_tcpport }}
 
-    DocumentRoot "{{ _springapp_dir }}/current"
-
-    <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
-      Options     -Indexes
-    </Directory>
-
-
-    # Enable shibboleth for all other URLs, but the health check and EB endpoint
-    <Location ~ "/pdp/api/(protected/*|decide/policy|health|info)">
-      allow from all
-      satisfy any
-    </Location>
-
-    <Location ~ "(.*)(js|css|png)$">
-      allow from all
-      satisfy any
-    </Location>
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPassReverse /internal http://localhost:{{ springapp_tcpport }}/internal
 
     <Location />
       AuthType shibboleth
@@ -57,6 +46,29 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
       ShibRequestSetting applicationId pdp
       ShibRequireSession On
       require valid-user
+    </Location>
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+      Options     -Indexes
+    </Directory>
+
+    <Location ~ "/pdp/api/(protected/*|decide/policy|health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "/internal/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "(.*)(js|js\.map|css|css\.map|png)$">
+      Require all granted
+    </Location>
+
+    <Location ~ "/(asset-)?manifest.json$">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"

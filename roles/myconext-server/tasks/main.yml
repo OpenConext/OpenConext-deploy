@@ -10,6 +10,27 @@
   with_items:
     - logback.xml
     - application.yml
+    - tiqr.configuration.yml
+  notify:
+    - "restart myconext"
+
+- name: copy / create GCM config
+  copy:
+    src: "{{ inventory_dir }}/files/myconext/firebase.json"
+    dest: "{{ myconext_dir }}/firebase.json"
+    owner: "root"
+    group: "myconext"
+    mode: 0740
+  notify:
+    - "restart myconext"
+
+- name: copy / create APNS certificate
+  copy:
+    content: "{{ myconext_apns }}"
+    dest: "{{ myconext_dir }}/apns.p8"
+    owner: "root"
+    group: "myconext"
+    mode: 0740
   notify:
     - "restart myconext"
 
@@ -32,5 +53,13 @@
     mode: 0740
   notify:
     - "restart myconext"
+
+- name: create geo download directory
+  file:
+    path: "{{ myconext_dir }}/geo2lite"
+    state: directory
+    owner: "{{ _springapp_user }}"
+    group: "{{ _springapp_user }}"
+    mode: 0760
 
 - meta: flush_handlers

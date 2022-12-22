@@ -8,8 +8,9 @@ server:
   # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
   port: {{ springapp_tcpport }}
   # The context path of the server. You can skip this value in the overriding application.properties on the classpath
-  contextPath:
-  server-header: no
+  servlet:
+    contextPath:
+    server-header: no
 
 eb:
   metadata_sp_url: {{ monitoring_tests.metadata_sp_url }}
@@ -30,24 +31,32 @@ voot:
     authorization_url: https://connect.{{ base_domain }}/oidc/token
     voot_base_url: https://voot.{{ base_domain }}
     client_id: monitoring.{{ base_domain }}
-    secret: {{ monitoring_oidc_client_secret }}
+    secret: {{ monitoring_tests_oidcng_client_secret }}
     person_id: {{ monitoring_tests.person_id }}
 
 oidcng:
   base_url: https://connect.{{ base_domain }}/oidc
   client_id: {{ monitoring_tests.oidcng_client_id }}
-  secret: {{ monitoring_tests_oidcng_client_secret }}secret
+  secret: {{ monitoring_tests_oidcng_client_secret }}
   resource_server_id: {{ monitoring_tests.oidcng_resource_server_id }}
   resource_server_secret: {{ monitoring_tests_oidcng_resource_server_secret }}
 
-# We disable all endpoints except health for the actual monitoring and info for git information.
-endpoints:
-  enabled: false
-  health:
-    enabled: true
-    sensitive: false
+# We disable all endpoints except health for the load-balancer and info for git information.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      show-details: always
+    mappings:
+      enabled: true
   info:
-    enabled: true
+    git:
+      mode: full
 
 security:
   user:

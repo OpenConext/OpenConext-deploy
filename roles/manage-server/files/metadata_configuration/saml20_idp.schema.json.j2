@@ -155,12 +155,11 @@
               "string"
             ],
             "enum": [
-              "http://schemas.microsoft.com/claims/multipleauthn",
-              "https://refeds.org/profile/mfa",
-              "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorContract",
-              "transparent_authn_context"
+              {% for mfa in mfa_values_supported %}
+              "{{ mfa }}"{{ "," if not loop.last else ""}}
+              {% endfor %}
             ],
-            "default": "http://schemas.microsoft.com/claims/multipleauthn"
+            "default": "{{ mfa_values_supported[0] }}"
           }
         }
       },
@@ -267,7 +266,13 @@
         },
         "coin:publish_in_edugain": {
           "type": "boolean",
-          "info": "Set this for Identity Providers published in eduGAIN."
+          "info": "Set this for Identity Providers published in eduGAIN.",
+          "requiredAttributes": [
+              "coin:publish_in_edugain_date",
+              "OrganizationName:en",
+              "OrganizationDisplayName:en",
+              "OrganizationURL:en"
+          ]
         },
         "coin:publish_in_edugain_date": {
           "type": "string",
@@ -388,6 +393,13 @@
           "multiplicity": 4,
           "sibblingIndependent": true,
           "info": "The telephoneNumber of the contact."
+        },
+        "^contacts:([0-3]{1}):supportURL$": {
+          "type": "string",
+          "format": "url",
+          "multiplicity": 4,
+          "sibblingIndependent": true,
+          "info": "A url where end users can get support."
         },
         "^contacts:([0-3]{1}):isSirtfiSecurityContact$": {
           "type": "boolean",

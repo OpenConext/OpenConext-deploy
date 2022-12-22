@@ -17,17 +17,19 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
     {% endfor %}
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/myconext
+    RewriteCond %{REQUEST_URI} !^/tiqr
     RewriteCond %{REQUEST_URI} !^/actuator
+    RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/config
     RewriteCond %{REQUEST_URI} !^/login
     RewriteCond %{REQUEST_URI} !^/startSSO
@@ -36,44 +38,18 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
 
     ProxyPreserveHost On
     ProxyPass /Shibboleth.sso !
+
     ProxyPass /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api retry=0
     ProxyPassReverse /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api
-    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/actuator retry=0
+
+    ProxyPass /tiqr http://localhost:{{ springapp_tcpport }}/tiqr retry=0
+    ProxyPassReverse /tiqr http://localhost:{{ springapp_tcpport }}/tiqr
+
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/internal retry=0
     ProxyPass /login http://localhost:{{ springapp_tcpport }}/login retry=0
     ProxyPass /startSSO http://localhost:{{ springapp_tcpport }}/startSSO retry=0
     ProxyPass /config http://localhost:{{ springapp_tcpport }}/config retry=0
-
-    DocumentRoot "{{ _springapp_dir }}/current"
-
-    <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
-      Options     -Indexes
-    </Directory>
-
-    # Public endpoints
-    <Location ~ "/(config|register|404)">
-      allow from all
-      satisfy any
-    </Location>
-
-    # After logout / delete
-      <Location ~ "/landing(.*)">
-      allow from all
-      satisfy any
-    </Location>
-
-    # The Spring Boot endpoints
-    <Location ~ "/actuator/">
-      allow from all
-      satisfy any
-    </Location>
-
-    # Svelte resources
-    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|js|css|png|jpg|ico)$">
-      allow from all
-      satisfy any
-    </Location>
 
     <Location />
       AuthType shibboleth
@@ -83,7 +59,47 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
       ShibRequestSetting entityID https://login.{{ myconext_base_domain }}
       {% endif %}
       ShibRequireSession On
-      require valid-user
+      Require valid-user
+    </Location>
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+      Options     -Indexes
+    </Directory>
+
+    # Public endpoints
+    <Location ~ "/(config|register|404)">
+      Require all granted
+    </Location>
+
+    # After logout / delete
+    <Location ~ "/landing(.*)">
+      Require all granted
+    </Location>
+
+    {% if myconext.feature_create_eduid_institution_enabled %}
+    <Location ~ "/create-from-institution(.*)">
+      Require all granted
+    </Location>
+    {% endif %}
+
+    # The Spring Boot endpoints
+    <Location ~ "/actuator/">
+      Require all granted
+    </Location>
+    <Location ~ "/internal/">
+      Require all granted
+    </Location>
+
+    # Svelte resources
+    <Location ~ "(.*)(eot|svg|ttf|woff2|woff|js|js\.map|css|css\.map|png|jpg|ico)$">
+      Require all granted
+    </Location>
+
+    <Location ~ "/(asset-)?manifest.json$">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient_with_static_img }}"

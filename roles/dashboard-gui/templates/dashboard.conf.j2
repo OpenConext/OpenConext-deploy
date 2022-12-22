@@ -13,19 +13,20 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     RewriteEngine on
 
     RewriteCond %{REQUEST_URI} !\.html$
-    RewriteCond %{REQUEST_URI} !\.js$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
     RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.css$
     RewriteCond %{REQUEST_URI} !\.png$
     RewriteCond %{REQUEST_URI} !\.ico$
     RewriteCond %{REQUEST_URI} !\.woff$
     RewriteCond %{REQUEST_URI} !\.woff2$
     RewriteCond %{REQUEST_URI} !\.ttf$
     RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/dashboard
     RewriteCond %{REQUEST_URI} !^/spDashboard
     RewriteCond %{REQUEST_URI} !^/health
     RewriteCond %{REQUEST_URI} !^/info
+    RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/login
     RewriteCond %{REQUEST_URI} !^/startSSO
     RewriteCond %{REQUEST_URI} !^/fonts
@@ -35,25 +36,17 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
     ProxyPass /Shibboleth.sso !
     ProxyPass /dashboard/api http://localhost:{{ springapp_tcpport }}/dashboard/api retry=0
     ProxyPassReverse /dashboard/api http://localhost:{{ springapp_tcpport }}/dashboard/api
-    ProxyPass /spDashboard/api http://localhost:9394/spDashboard/api retry=0
-    ProxyPassReverse /spDashboard/api http://localhost:9394/spDashboard/api
-    ProxyPass /health http://localhost:{{ springapp_tcpport }}/health retry=0
-    ProxyPass /info http://localhost:{{ springapp_tcpport }}/info retry=0
+
+    ProxyPass /health http://localhost:{{ springapp_tcpport }}/internal/health retry=0
+    ProxyPass /info http://localhost:{{ springapp_tcpport }}/internal/info retry=0
     ProxyPass /login http://localhost:{{ springapp_tcpport }}/login retry=0
     ProxyPass /startSSO http://localhost:{{ springapp_tcpport }}/startSSO retry=0
 
-    DocumentRoot "{{ _springapp_dir }}/current"
+    ProxyPass /spDashboard/api http://localhost:{{ springapp_tcpport }}/spDashboard/api retry=0
+    ProxyPassReverse /spDashboard/api http://localhost:{{ springapp_tcpport }}/spDashboard/api
 
-    <Directory "{{ _springapp_dir }}/current">
-      Order       allow,deny
-      Allow       from all
-      Options     -Indexes
-    </Directory>
-
-    <Location ~ "^/(?!startSSO)">
-      allow from all
-      satisfy any
-    </Location>
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPassReverse /internal http://localhost:{{ springapp_tcpport }}/internal
 
     <Location />
       AuthType shibboleth
@@ -61,7 +54,25 @@ Listen {{ apache_app_listen_address.dashboard }}:{{ loadbalancing.dashboard.port
       ShibRequestSetting applicationId dashboard
       ShibRequireSession On
       ShibRequestSetting REMOTE_ADDR X-Forwarded-For
-      require valid-user
+      Require valid-user
+    </Location>
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+    </Directory>
+
+    <Location ~ "/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "/internal/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "^/(?!startSSO)">
+      Require all granted
     </Location>
 
     Header always set Content-Security-Policy "{{ httpd_csp.lenient_with_static_img }}"
