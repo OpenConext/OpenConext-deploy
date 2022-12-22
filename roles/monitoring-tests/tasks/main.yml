@@ -1,9 +1,4 @@
 ---
-- name: Include preinstallation.yml
-  import_tasks: ../../../tasks/springbootapp/preinstallation.yml
-
-- import_tasks: ../../../tasks/springbootapp/install-maven-release.yml
-
 - name: Copy logging config
   template:
     src: "logback.xml.j2"
@@ -23,6 +18,3 @@
     mode: 0740
   notify:
     - "restart monitoring-tests"
-
-- name: Include postinstallation.yml
-  import_tasks: ../../../tasks/springbootapp/postinstallation.yml

@@ -1,9 +1,11 @@
 ---
 - name: restart monitoring-tests
   systemd:
-    name: "{{ springapp_systemd_name }}"
+    name: "{{ springapp_service_name }}"
     state: restarted
     daemon_reload: yes
+-
+
 
 - name: restart monitoring-tests-acc
   systemd:
