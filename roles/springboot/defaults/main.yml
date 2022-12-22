@@ -172,5 +172,4 @@ springboot_opts:
 springboot_artifact_group_dir: org/openconext
 springboot_artifact_type: jar
 springboot_tcpport: 9999
-# springboot_java_binary: "/usr/lib/jvm/java-1.8.0/bin/java"
 springboot_java_binary: "/usr/lib/jvm/jre-11-openjdk/bin/java"
