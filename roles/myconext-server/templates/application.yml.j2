@@ -80,8 +80,8 @@ private_key_path: file://{{ myconext_dir }}/myconext_saml.key
 certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
 
 remember_me_max_age_seconds: 15_768_000
-nudge_eduid_app_days: 7
-remember_me_question_asked_days: 30
+nudge_eduid_app_days: {{ myconext.nudge_eduid_app_days }}
+remember_me_question_asked_days: {{ myconext.remember_me_question_asked_days }}
 email_guessing_sleep_millis: 500
 email_spam_threshold_seconds: 15
 
