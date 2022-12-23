@@ -10,7 +10,6 @@
 - name: Install java
   yum:
     name:
-      - java-1.8.0-openjdk-devel.x86_64
       - java-11-openjdk-headless.x86_64
     state: present
   register: java_package_java_installed
@@ -18,23 +17,14 @@
   tags:
     - java
 
-- name: Link JDK alternatives to 1.8
-  file:
-    src: "/usr/lib/jvm/jre-1.8.0-openjdk/{{ item.path }}"
-    dest: "/usr/bin/{{ item.name }}"
-    state: link
-    force: yes
-  with_items:
-    - { name: 'java', path: 'bin/java' }
-    - { name: 'keytool', path: 'bin/keytool' }
-  tags:
-    - java
-
 - name: Uninstall once used Java versions
   yum:
     name:
-     - java-1.7.0-openjdk
-     - java-1.7.0-openjdk-headless
+      - java-1.7.0-openjdk
+      - java-1.7.0-openjdk-headless
+      - java-1.8.0-openjdk
+      - java-1.8.0-openjdk-headless
+      - java-1.8.0-openjdk-devel.x86_64
     state: absent
   tags:
     - java

@@ -15,7 +15,7 @@ def test_java_binary(host):
     assert java_binary.is_file
 
     assert command.rc == 0
-    assert 'version "1.8.' in command.stdout
+    assert 'version "11.' in command.stdout
 
 
 @pytest.mark.parametrize("components, dir_owner, file_owner, group, httpd_listen, spring_listen", [
