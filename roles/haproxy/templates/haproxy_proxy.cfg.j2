@@ -1,0 +1,14 @@
+{% if 'stepuppapp' in group_names %}
+# Apple API v2 only uses http/2. Since curl on Centos7 does not support http/2 we provide a seperate proxy to fix that.
+frontend apple_fe
+
+    bind 127.0.0.1:5000
+    mode http
+    default_backend apple_be
+
+backend apple_be    
+    mode http
+    server apple api.push.apple.com:443 ssl verify required ca-file /etc/pki/tls/certs/ca-bundle.crt alpn h2 crt /opt/openconext/OpenConext-tiqr/app/files/apns.pem
+{% else %}
+# Empty placeholder. This functionality is only used on StepupTIQR servers that also have the loadbalancer role installed locally
+{% endif %}
