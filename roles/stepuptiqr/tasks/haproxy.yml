@@ -1,0 +1,27 @@
+---
+- name: Enable ius repo
+  yum:
+    name: "https://repo.ius.io/ius-release-el7.rpm"
+    state: present
+
+- name: Install haproxy and socat
+  yum:
+    name:
+      - haproxy20.x86_64
+      - socat
+
+- name: Install haproxy config file
+  copy:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: haproxy
+    mode: 0640
+  notify:
+    - "reload haproxy"
+
+- name: Start and enable haproxy
+  service:
+    name: haproxy
+    state: started
+    enabled: true

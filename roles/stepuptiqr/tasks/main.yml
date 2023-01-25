@@ -77,6 +77,10 @@
   - "02-tiqr-migrate-to-keyserver.php"
   when: keyserver_consumerkey is defined
 
+- name: Inlude haproxy tasks 
+  include_tasks: "haproxy.yml"
+  when: "'loadbalancer' not in group_names"
+
 - meta: flush_handlers
 
 - name: Include post installation tasks
