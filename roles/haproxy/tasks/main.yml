@@ -1,28 +1,4 @@
 ---
-- name: Remove CentOS SCLO repo
-  yum:
-    name: centos-release-scl-rh
-    state: absent 
-  register: scl_removed
-  until: scl_removed is succeeded
-
-- name: Clean up the yum repos
-  command: yum clean metadata
-  when: 
-    - scl_removed.changed | bool
-
-- name: Remove haproxy 1.8
-  yum: 
-    name: 
-      - rh-haproxy18-runtime
-      - rh-haproxy18-haproxy-syspaths
-      - rh-haproxy18-haproxy
-    state: absent
-  register: haproxy_package_removed
-  until: haproxy_package_removed is succeeded
-  when: 
-    - scl_removed.changed | bool
-
 - name: Create lbops group
   group:
     name: lbops
