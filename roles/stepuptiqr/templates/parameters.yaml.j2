@@ -52,6 +52,11 @@ parameters:
           apns:
             certificate: '{{ current_release_config_file_dir_name }}/apns.pem'
             environment: production
+{% if apns_http2_proxy |default(false) | bool %}
+            version: 2
+            proxy_host_url: 'http://localhost'
+            apns.proxy_host_port: 5000
+{% endif %}
         accountblocking:
             maxAttempts: 5
             # temporarilyBlockDuration:

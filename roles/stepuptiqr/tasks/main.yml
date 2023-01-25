@@ -79,7 +79,7 @@
 
 - name: Inlude haproxy tasks 
   include_tasks: "haproxy.yml"
-  when: "'loadbalancer' not in group_names"
+  when: "'loadbalancer' not in group_names and apns_http2_proxy |default(false) | bool"
 
 - meta: flush_handlers
 
