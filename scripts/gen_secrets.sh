@@ -29,6 +29,10 @@ tempfile() {
     mktemp /tmp/${tempprefix}.XXXXXX
 }
 
+randstring() {
+    cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9_-' | fold -w $1 | sed 1q
+}
+
 SECRET_VARS_TEMP=$(tempfile)
 
 while IFS= read -r line; do
@@ -52,7 +56,7 @@ while IFS= read -r line; do
     passwordkey=`echo $key | sed 's/_sha$//g'`
     passwordline=`cat $SECRET_VARS_TEMP | grep -w $passwordkey`
     password=$(echo $passwordline | cut -f2 -d:)
-    salt=`tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=4 count=1 2>/dev/null;echo`
+    salt=`randstring 4`
     ssha=`( echo -n ${password}${salt} | openssl dgst -sha1 -binary; echo -n ${salt} )  | openssl enc -base64`
     line="$key: \"{SSHA}$ssha\""
     echo "$line" >> $SECRET_VARS_TEMP
@@ -60,7 +64,7 @@ while IFS= read -r line; do
   fi
 
   if [ "$value" == 'salt' ]; then
-    salt=`tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo`
+    salt=`randstring 32`
     line="$key: $salt "
     echo "$line" >> $SECRET_VARS_TEMP
     continue
@@ -68,7 +72,7 @@ while IFS= read -r line; do
 
 
   if [ "$value" == 'secret' ]; then
-    password=`(tr -cd '[:alnum:]' < /dev/urandom | fold -w20 | head -n1)`
+    password=`randstring 20`
     line="$key: $password "
     echo "$line" >> $SECRET_VARS_TEMP
     continue

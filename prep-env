@@ -34,7 +34,7 @@ if [ $# -gt 3 ]
 fi
 # ----- End Input handing
 # ----- Make sure Java is installed
-type java >/dev/null 2>&1 || { echo >&2 "Java is required, but it's not installed. Please install it and rerun this script"; exit; }
+java -version >/dev/null 2>&1 || { echo >&2 "Java is required, but it's not installed. Please install it and rerun this script"; exit; }
 # ----- End check Java presence
 
 if [ $# -eq 3 ]
@@ -102,14 +102,14 @@ mv "$OIDCCERT_FILES_BASE.crt" "${ENVEXT_DIR}/${OC_ENV}/files/certs/oidc/oidcsaml
 mv "${ENVEXT_DIR}/${OC_ENV}/group_vars/template.yml" "${ENVEXT_DIR}/${OC_ENV}/group_vars/${OC_ENV}.yml"
 
 # Replace %env% and %base_domain% with OC_ENV
-sed -i "s/%env%/${OC_ENV}/g" ${ENVEXT_DIR}/${OC_ENV}/*/${OC_ENV}.yml
-sed -i "s/%base_domain%/${OC_BASEDOMAIN}/g" ${ENVEXT_DIR}/${OC_ENV}/*/${OC_ENV}.yml
+sed -i'.bak' "s/%env%/${OC_ENV}/g" ${ENVEXT_DIR}/${OC_ENV}/*/${OC_ENV}.yml; rm ${ENVEXT_DIR}/${OC_ENV}/*/${OC_ENV}.yml.bak
+sed -i'.bak' "s/%base_domain%/${OC_BASEDOMAIN}/g" ${ENVEXT_DIR}/${OC_ENV}/*/${OC_ENV}.yml; rm ${ENVEXT_DIR}/${OC_ENV}/*/${OC_ENV}.yml.bak
 
 # Remove skeleton secrets file from target
 rm -f "${ENVEXT_DIR}/${OC_ENV}/secrets/skeleton.yml"
 
 # Replace %env% with OC_ENV in inventory
-sed -i "s/%env%/${OC_ENV}/g" ${ENVEXT_DIR}/${OC_ENV}/inventory
+sed -i'.bak' "s/%env%/${OC_ENV}/g" ${ENVEXT_DIR}/${OC_ENV}/inventory; rm ${ENVEXT_DIR}/${OC_ENV}/inventory.bak
 
 
 echo -e "\n\n*** Please replace all following placeholders ***\n"
