@@ -1,5 +1,5 @@
 ---
-env: template
+env: "%env%"
 use_selfsigned_certs: true
 update_hosts_file: true
 use_welcome_role: true
