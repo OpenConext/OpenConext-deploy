@@ -571,6 +571,10 @@
           "type": "boolean",
           "info": "When Stepup Authentication is required for this SP, allow users without a registered token to log in regardless."
         },
+        "coin:stepup:forceauthn": {
+          "type": "boolean",
+          "info": "When Stepup Authentication is required for this SP, disable Single Sign On on the token validation and require the user to always present the token."
+        },
         "coin:contractual_base": {
           "type": "string",
           "enum": [
