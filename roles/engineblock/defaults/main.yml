@@ -109,11 +109,11 @@ engine_idp_debugging_to_name: "{{ instance_name }} Admin"
 engine_idp_debugging_email_address: "{{ support_email }}"
 engine_idp_debugging_subject: "IdP debug info from %1$s"
 
-eb_edugain_authority_url: "https://example.org"
-eb_edugain_policy_url: "https://example.org"
 eb_support_url: "https://example.org"
 eb_support_url_nameid: "https://example.org"
 eb_tos_url: "https://example.org"
+
+engine_site_notice_show: false
 
 # Backwards compatibility with older secrets files
 engineblock_private_keys:

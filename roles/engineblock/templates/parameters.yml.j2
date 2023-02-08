@@ -183,7 +183,7 @@ parameters:
     wayf.default_idp_entity_id: "https://login.{{ myconext_base_domain }}"
 
     ## Toggle display & content of global site notice
-    global.site_notice.show: false
+    global.site_notice.show: {{ engine_site_notice_show }}
     global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'
 
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
