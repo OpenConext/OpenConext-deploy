@@ -20,6 +20,20 @@ server:
         secure: true
     max-http-header-size: 20000
 
+springdoc:
+  pathsToMatch: "/mobile/**"
+  api-docs:
+    path: "/myconext/api/mobile/api-docs"
+  swagger-ui:
+    path: "/myconext/api/mobile/api-ui.html"
+    operationsSorter: method
+
+#  api-docs:
+#    path: "https://login.{{ myconext_base_domain }}/myconext/api/mobile/api-docs"
+#  swagger-ui:
+#    path: "https://login.{{ myconext_base_domain }}/myconext/api/mobile/api-ui.html"
+#    operationsSorter: method
+
 email:
   from: eduID <noreply@{{ myconext_base_domain }}>
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
@@ -136,6 +150,7 @@ eduid_api:
   oidcng_introspection_uri: https://connect.{{ base_domain }}/oidc/introspect
   oidcng_client_id: {{ myconext.rs_client_id }}
   oidcng_secret: {{ myconext_rs_client_secret }}
+  base_url: https://login.{{ myconext_base_domain }}
 
 geo_location:
   license_key: {{ myconext_geo2lite_license_key }}
