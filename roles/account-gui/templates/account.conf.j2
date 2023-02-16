@@ -27,6 +27,7 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     RewriteCond %{REQUEST_URI} !\.eot$
     RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
     RewriteCond %{REQUEST_URI} !^/myconext
+    RewriteCond %{REQUEST_URI} !^/mobile
     RewriteCond %{REQUEST_URI} !^/tiqr
     RewriteCond %{REQUEST_URI} !^/config
     RewriteCond %{REQUEST_URI} !^/register
@@ -42,6 +43,9 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     ProxyPreserveHost On
     ProxyPass /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api retry=0
     ProxyPassReverse /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api
+
+    ProxyPass /mobile http://localhost:{{ springapp_tcpport }}/mobile retry=0
+    ProxyPassReverse /mobile http://localhost:{{ springapp_tcpport }}/mobile
 
     ProxyPass /tiqr http://localhost:{{ springapp_tcpport }}/tiqr retry=0
     ProxyPassReverse /tiqr http://localhost:{{ springapp_tcpport }}/tiqr
