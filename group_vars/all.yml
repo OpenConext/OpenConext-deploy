@@ -21,12 +21,14 @@ sponsor_name: SURF
 # Virtal host that hosts shared static images (logos primarily)
 # Can be overridden in environments if it lives outside this env's base domain
 static_vhost: "static.{{ base_domain }}"
+oidcng_vhost: "connect.{{ base_domain }}"
 
 admin_email: "openconext-admin@example.edu"
 
 httpd_csp:
   lenient: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:;
   lenient_with_static_img: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' {{ static_vhost }} data:;
+  lenient_with_static_img_with_oidcng: default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' {{ oidcng_vhost }}; img-src 'self' {{ static_vhost }} data:;
   strict: default-src; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:;
   strict_with_static_img: default-src; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' {{ static_vhost }} data:;
   nothing: default-src 'none'; frame-ancestors 'none';
