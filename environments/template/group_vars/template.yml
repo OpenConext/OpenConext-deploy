@@ -363,9 +363,6 @@ aa:
   surfmarket_password: "{{ aa_surfmarket_password }}"
   sbs_username: sbs_aa
   sbs_password: "{{ aa_sbs_password }}"
-  ala_url: https://ala.demo.eduid.nl/attribute_aggregation
-  ala_username: admin
-  ala_password: "{{ aa_ala_password }}"
   manage_url: https://manage.test.surfconext.nl
   manage_username: attribute-aggregation
   manage_password: "{{ aa_manage_password }}"
