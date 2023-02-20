@@ -36,6 +36,7 @@ $template myconextjson-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/
 $template apache-myconext-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/myconext-apache.log"
 $template apache-account-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/account-apache.log"
 $template apache-eduid-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/eduid-apache.log"
+$template spdashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/spdashboard/spdashboard.log"
 {% for stepupapp in stepupapps %}
 $template stepup-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}.log
 $template apache-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log
