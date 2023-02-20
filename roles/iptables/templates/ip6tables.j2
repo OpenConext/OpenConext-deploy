@@ -61,7 +61,7 @@
 {% endif %}
 
 {% if ip6tables_incoming_hostspecific is defined %}
-### DB rules
+### Host specific rules
 {% for service in ip6tables_incoming_hostspecific %}
 {{'##'|e }} {{ service.name }}
 {{'##'|e }} {{'=' * service.name|length }}
