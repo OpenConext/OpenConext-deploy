@@ -30,4 +30,4 @@
     enabled: yes
     daemon_reload: yes
   when:
-    - maven_result.changed
+    - maven_result.changed or maven_symlink.changed

@@ -41,3 +41,4 @@
     state: link
     owner: "{{ _springapp_user }}"
     group: "{{ _springapp_user }}"
+  register: maven_symlink
