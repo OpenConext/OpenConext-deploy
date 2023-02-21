@@ -101,7 +101,7 @@
 -A INPUT -d 224.0.0.0/8 -p vrrp -j ACCEPT
 {% endif %}
 
-{% if 'dbcluster' in group_names %}
+{% if 'dbcluster_nodes' in group_names %}
 ### Allow VRRP
 -A INPUT -d 224.0.0.0/8 -p vrrp -j ACCEPT
 {% endif %}
