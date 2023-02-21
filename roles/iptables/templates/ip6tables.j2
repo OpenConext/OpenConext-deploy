@@ -51,9 +51,9 @@
 {% endfor %}
 {% endif %}
 
-{% if ip6tables_incoming_db is defined %}
+{% if ip6tables_incoming_db_cluster is defined %}
 ### DB rules
-{% for service in ip6tables_incoming_db %}
+{% for service in ip6tables_incoming_db_cluster %}
 {{'##'|e }} {{ service.name }}
 {{'##'|e }} {{'=' * service.name|length }}
 -A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
