@@ -18,7 +18,6 @@ platforms:
       - storage
       - dbcluster
       - dbcluster_nodes
-      - galera_provision_host
   - name: openconext-rocky8-mysql-2
     image: rocky8-ansible
     dockerfile: ../Dockerfile-Rocky8.j2

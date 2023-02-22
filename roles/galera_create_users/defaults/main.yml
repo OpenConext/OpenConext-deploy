@@ -1,4 +1,0 @@
-galera_provision_user: root
-galera_provision_password: "{{ mariadb_root_password }}"
-galera_provision_host: localhost
-

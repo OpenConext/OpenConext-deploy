@@ -72,7 +72,7 @@
       tags: ['core', 'db_mysql', 'keepalived']
     - role: galera_create_users
       when:
-        - inventory_hostname in groups['galera_provision_host']
+        - inventory_hostname in groups['dbcluster']
       tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
 
 - hosts: db_mongo
