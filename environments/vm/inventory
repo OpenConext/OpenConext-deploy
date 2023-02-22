@@ -54,7 +54,6 @@ lifecycle
 oidc
 dbcluster
 dbcluster_nodes
-galera_provision_host
 stats
 
 [sysloghost]
@@ -64,7 +63,6 @@ stats
 [oidc]
 [dbcluster]
 [dbcluster_nodes]
-[galera_provision_host]
 [stats]
 
 # Overview of "services"
@@ -74,7 +72,6 @@ loadbalancer
 php_apps
 java_apps
 storage
-oidc
 dbcluster
 sysloghost
 elk
@@ -94,7 +91,6 @@ lifecycle
 storage
 dbcluster
 dbcluster_nodes
-galera_provision_host
 
 [db_mongo:children]
 mongod_primary
