@@ -19,13 +19,13 @@ parameters:
     # Also see: https://symfony.com/doc/current/reference/configuration/doctrine.html#doctrine-dbal-configuration
     database_middleware_name:     {{ database_middleware_name }}
     database_middleware_user:     {{ database_middleware_user }}
-    database_middleware_password: {{ mysql_passwords.middleware }}
+    database_middleware_password: {{ database_middleware_password }}
     database_gateway_name:     {{ database_gateway_name }}
     database_gateway_user:     {{ database_gateway_middleware_user }}
-    database_gateway_password: {{ mysql_passwords.mwgatewayrw }}
+    database_gateway_password: {{ database_gateway_middleware_password }}
     # TODO: Deploy creds should only be available during deploy
     database_deploy_user:      {{ database_middleware_deploy_user }}
-    database_deploy_password:  {{ mysql_passwords.middlewaredeploy }}
+    database_deploy_password:  {{ database_middleware_deploy_password }}
     database_server_version:   {{ database_server_version | default("5.6") }}
 
     mailer_transport:  smtp
