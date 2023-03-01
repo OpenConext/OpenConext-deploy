@@ -27,10 +27,6 @@ storage:
       cacheSizeGB: {{ mongo_cache_size }}
   journal:
     enabled: true
-{% if 'mongod_arbiters' in group_names %}
-  mmapv1:
-    smallFiles: true
-{% endif %}
 
 replication:
   replSetName: {{ replica_set_name }}

@@ -15,8 +15,4 @@ net:
 storage:
   dbPath: /var/lib/mongo
   journal:
-    enabled: {% if 'mongod_arbiters' in group_names %}false{% else %}true{% endif %}  
-{% if 'mongod_arbiters' in group_names %}
-  mmapv1:
-    smallFiles: true
-{% endif %}
+    enabled: true
