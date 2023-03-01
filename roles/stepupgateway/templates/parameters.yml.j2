@@ -6,7 +6,7 @@ parameters:
     database_port:     3306
     database_gateway_name:     {{ database_gateway_name }}
     database_gateway_user:     {{ database_gateway_user }}
-    database_gateway_password: {{ mysql_passwords.gateway }}
+    database_gateway_password: {{ database_gateway_password }}
     database_deploy_user:      "database_deploy_user_is_deprecated"
     database_deploy_password:  "database_deploy_password_is_deprecated"
     database_server_version:   {{ database_server_version | default("5.6") }}
