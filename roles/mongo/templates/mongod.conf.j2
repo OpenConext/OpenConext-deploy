@@ -13,9 +13,9 @@ net:
   bindIp: {{ mongo_bind_listen_address }}
   port: 27017
 {% if mongo_tls %}
-  ssl:
-    mode: preferSSL
-    PEMKeyFile: /etc/pki/mongo/mongo.{{ base_domain }}.pem
+  tls:
+    mode: preferTLS
+    certificateKeyFile: /etc/pki/mongo/mongo.{{ base_domain }}.pem
     CAFile: /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem
     allowConnectionsWithoutCertificates: true
 {% endif %}
