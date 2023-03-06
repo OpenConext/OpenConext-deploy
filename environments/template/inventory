@@ -16,9 +16,6 @@
 [mongo_servers]
 %target_host%
 
-[mongod_primary]
-%target_host%
-
 [selfsigned_certs]
 %target_host%
 
@@ -32,7 +29,6 @@ java_apps_vm
 php_apps
 mongo_servers
 selfsigned_certs
-mongod_primary
 sysloghost
 loadbalancer_ha
 loadbalancer
@@ -79,10 +75,6 @@ lifecycle
 storage
 dbcluster
 dbcluster_nodes
-
-[db_mongo:children]
-mongod_primary
-mongo_servers
 
 [app_php:children]
 php_apps

@@ -30,6 +30,7 @@ replication:
 
 security: 
     authorization: enabled
+    keyFile: /etc/pki/mongo/keyfile
 {% if mongo_tls %}
     clusterAuthMode: x509
 {% endif %}

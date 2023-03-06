@@ -13,8 +13,7 @@ platforms:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
-      - "loadbalancer-vm"
-      - mongod_primary
+      - mongo_servers
 
 provisioner:
   name: ansible

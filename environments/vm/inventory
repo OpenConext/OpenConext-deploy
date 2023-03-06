@@ -22,9 +22,6 @@ java_apps
 [php_apps_vm:children]
 php_apps
 
-[mongod_primary]
-192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
-
 [mongo_servers]
 192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
 
@@ -42,7 +39,6 @@ php_apps
 storage
 java_apps_vm
 php_apps
-mongod_primary
 mongo_servers
 logstash
 selfsigned_certs
@@ -91,10 +87,6 @@ lifecycle
 storage
 dbcluster
 dbcluster_nodes
-
-[db_mongo:children]
-mongod_primary
-mongo_servers
 
 [app_php:children]
 php_apps
