@@ -23,6 +23,7 @@
       - sudo
       - unzip
       - bzip2
+      - python3
     state: present
   register: common_tools_installed
   until: common_tools_installed is succeeded

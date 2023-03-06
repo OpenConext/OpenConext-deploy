@@ -1,0 +1,34 @@
+---
+- name: Add logrotate snippet
+  ansible.builtin.copy:
+    src: "mongodb.logrotate"
+    dest: "/etc/logrotate.d/mongodb"
+    mode: "0644"
+    owner: root
+    group: root
+
+- name: Create the backup directory
+  ansible.builtin.file:
+    path: /home/backup
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Install the backup script
+  ansible.builtin.template:
+    src: "backup_mongo.pl.j2"
+    dest: "/usr/local/sbin/backup_mongo.pl"
+    mode: "0700"
+    owner: root
+    group: root
+  when: mongo_replication_role != 'arbiter'
+
+
+- name: Create cron symlink for backup script
+  ansible.builtin.file:
+    src: "/usr/local/sbin/backup_mongo.pl"
+    dest: "/etc/cron.daily/mongodb_backup"
+    state: link
+    mode: "0700"
+    owner: root

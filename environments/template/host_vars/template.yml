@@ -19,4 +19,4 @@ apache_app_listen_address:
   account: 127.0.0.1
   eduid: 127.0.0.1
 
-mongo_primary: True
+mongo_replication_role: primary

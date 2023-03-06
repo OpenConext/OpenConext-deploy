@@ -75,14 +75,12 @@
         - inventory_hostname in groups['dbcluster']
       tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
 
-- hosts: db_mongo
+- hosts: mongo_servers
   gather_facts: yes
   become: true
   roles:
     - role: mongo
-      when:
-        - inventory_hostname in groups['mongo_servers']
-      tags: ['core', 'db_mongo', 'mongo']
+      tags: ['core', 'mongo']
 
 - hosts: app_php
   gather_facts: no

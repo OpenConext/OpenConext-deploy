@@ -12,13 +12,11 @@ processManagement:
 net:
   bindIp: {{ mongo_bind_listen_address }}
   port: 27017
-{% if mongo_tls %}
   tls:
     mode: preferTLS
-    certificateKeyFile: /etc/pki/mongo/mongo.{{ base_domain }}.pem
-    CAFile: /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem
+    certificateKeyFile: /etc/pki/mongo/keyandcert.pem
+    CAFile: /etc/pki/mongo/mongoca.pem
     allowConnectionsWithoutCertificates: true
-{% endif %}
 
 storage:
   dbPath: /var/lib/mongo
@@ -30,6 +28,5 @@ replication:
 
 security: 
     authorization: enabled
-{% if mongo_tls %}
+    keyFile: /etc/pki/mongo/keyfile
     clusterAuthMode: x509
-{% endif %}
