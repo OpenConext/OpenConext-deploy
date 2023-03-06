@@ -44,6 +44,6 @@ def test_rc_local(host):
 
 
 def test_show_databases(host):
-    command = host.command('echo "show databases" | mongo -u admin -psecret | grep "GB$" | wc -l')
+    command = host.command('echo "show databases" | mongosh -u admin -p secret | grep "KiB" | wc -l')
     assert command.rc == 0
     assert int(command.stdout) == 3
