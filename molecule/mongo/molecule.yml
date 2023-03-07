@@ -5,9 +5,9 @@ driver:
   name: docker
 
 platforms:
-  - name: openconext-centos7-mongod
-    image: centos7-ansible
-    dockerfile: ../Dockerfile.j2
+  - name: openconext-rocky9-mongod
+    dockerfile: ../Dockerfile-Rocky9.j2
+    image: rockylinux:9
     command: /usr/sbin/init
     privileged: true
     volumes:
