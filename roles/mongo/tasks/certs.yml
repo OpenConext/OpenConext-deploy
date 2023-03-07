@@ -4,8 +4,21 @@
     name:
       - python3
       - python3-pip
+    state: present
+
+- name: Install python36-cryptography on CentOS7
+  ansible.builtin.yum:
+    name:
       - python36-cryptography
     state: present
+  when: ansible_distribution_major_version == '7'
+
+- name: Install python36-cryptography on Rocky 8 and 9
+  ansible.builtin.yum:
+    name:
+      - python3-cryptography
+    state: present
+  when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
 
 - name: Create directory to keep mongo key material
   ansible.builtin.file:
