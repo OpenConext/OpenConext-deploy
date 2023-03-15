@@ -639,3 +639,4 @@ springboot_services_state:
   mujina_idp: true
   dashboard: false
 
+springboot_service_to_deploy: manage,oidcng,teams,voot,pdp,attribute-aggregation,oidc-playground,mujina 
