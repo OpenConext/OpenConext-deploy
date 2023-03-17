@@ -120,6 +120,8 @@ oidc:
   secret: {{ myconext_client_secret }}
   idp-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
   sp-flow-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
+  mobile-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/mobile/oidc/redirect
+
   sp-create-from-institution-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/create-from-institution/oidc-redirect
   base-url: https://connect.{{ base_domain }}
 
