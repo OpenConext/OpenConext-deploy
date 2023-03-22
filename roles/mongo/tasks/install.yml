@@ -57,6 +57,12 @@
     owner: root
     group: root
 
+- name: Set sysctl vm.max_map_count
+  ansible.posix.sysctl:
+    name: vm.max_map_count
+    value: 128000
+    state: present
+
 - name: Install mongodb.conf file
   ansible.builtin.template:
     src: "mongod.conf.j2"
