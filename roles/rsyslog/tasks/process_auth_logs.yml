@@ -26,7 +26,7 @@
     state: import
     target: /tmp/log_logins.sql
   changed_when: false
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Create lastseen table for each log_login environment
   mysql_db:
@@ -37,7 +37,7 @@
     state: import
     target: /tmp/lastseen.sql
   changed_when: false
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Create a python script that parses log_logins per environment
   template: 
@@ -46,7 +46,7 @@
     mode: 0740
     owner: root
     group: root
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Create last_login PHP script
   template:
@@ -55,7 +55,7 @@
     mode: 0740
     owner: root
     group: root
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Create logdir for lastseen cronjob output
   file:
@@ -64,16 +64,16 @@
     owner: root
     group: root
     mode: 0775
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Create cronjobs for proecessing lastseen script
-  template: 
+  template:
     src: cron_update_lastseen.j2
     dest: /etc/cron.daily/update_lastseen_{{ item.name }}
     owner: root
     group: root
     mode: 0774
-  with_items: "{{ rsyslog_environments.sc }}" 
+  with_items: "{{ rsyslog_environments }}" 
 
 - name: Put log_logins logrotate scripts
   template:
@@ -82,7 +82,7 @@
     mode: 0644
     owner: root
     group: root
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Create logdirectory for log_logins cleanup script
   file: 
@@ -91,7 +91,7 @@
     owner: root
     group: "{{ rsyslog_read_group }}"
     mode: 0750
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Put log_logins cleanup script
   template: 
@@ -100,7 +100,7 @@
     owner: root
     group: root
     mode: 0700
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Create cronjobs to run the log_logins script
   cron: 
@@ -110,4 +110,4 @@
     hour: "02"
     job: "/usr/local/sbin/clean_loglogins_{{ item.name }}"
     cron_file: loglogins_cleanup_{{ item.name }}
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
