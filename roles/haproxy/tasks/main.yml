@@ -3,6 +3,7 @@
   group:
     name: lbops
     state: present
+  tags: haproxy_config
 
 - name: Enable ius repo
   yum:
@@ -49,6 +50,7 @@
   with_items:
     - acls
     - maps
+  tags: haproxy_config
 
 - name: Enable haproxy
   service:
@@ -133,6 +135,7 @@
     - haproxy_stick_table_backend.cfg
   notify:
     - "reload haproxy"
+  tags: haproxy_config
 
 - name: Copy haproxy acls
   template:
@@ -149,6 +152,7 @@
     - internalips.acl
   notify:
     - "reload haproxy"
+  tags: haproxy_config
 
 - name: Copy haproxy maps
   template: 
@@ -163,6 +167,7 @@
     - ratelimits.map
   notify:
     - "reload haproxy"
+  tags: haproxy_config
  
 - name: Place file with list of browsers that do not accept samesite=none cookies
   copy:
