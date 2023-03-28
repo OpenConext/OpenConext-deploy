@@ -8,6 +8,8 @@
   service:
     name: haproxy
     state: reloaded
+  when: 
+  - skip_handlers | default("false") == "false"
 
 - name: restart rsyslog
   service:
