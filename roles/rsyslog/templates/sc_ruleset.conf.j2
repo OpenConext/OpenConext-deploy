@@ -37,6 +37,7 @@ $RuleSet {{ item.name }}
 :programname, isequal, "Apache-eduid" { action(type="omfile" DynaFile="apache-eduid-{{item.name }}") stop }
 :programname, isequal, "spdashboard" { action(type="omfile" DynaFile="spdashboard-{{ item.name }}") stop }
 :programname, isequal, "audispd" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
+:programname, isequal, "audisp-syslog" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
 :programname, isequal, "-bash" { action(type="omfile" DynaFile="bash-{{ item.name }}") stop }
 :syslogfacility-text, isequal, "authpriv" { action(type="omfile" dynafile="secure-{{ item.name }}") stop }
 {% for stepupapp in stepupapps %}
