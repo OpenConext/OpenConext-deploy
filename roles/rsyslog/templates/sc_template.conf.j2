@@ -37,6 +37,9 @@ $template apache-myconext-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name 
 $template apache-account-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/account-apache.log"
 $template apache-eduid-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/eduid-apache.log"
 $template spdashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/spdashboard/spdashboard.log"
+$template auditd-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/auditd/%HOSTNAME%/auditd.log"
+$template bash-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/bash/%HOSTNAME%/bash.log"
+$template secure-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/secure/%HOSTNAME%/secure.log"
 {% for stepupapp in stepupapps %}
 $template stepup-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}.log
 $template apache-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log
