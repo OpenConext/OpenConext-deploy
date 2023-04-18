@@ -16,7 +16,7 @@
   with_items:
     - log_logins.sql
     - lastseen.sql
-    
+   
 - name: Create log_logins table for each log_login environment
   mysql_db:
     name: "{{ item.db_loglogins_name }}"
@@ -27,6 +27,7 @@
     target: /tmp/log_logins.sql
   changed_when: false
   with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
 
 - name: Create lastseen table for each log_login environment
   mysql_db:
@@ -38,6 +39,7 @@
     target: /tmp/lastseen.sql
   changed_when: false
   with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
 
 - name: Create a python script that parses log_logins per environment
   template: 
@@ -47,6 +49,7 @@
     owner: root
     group: root
   with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
 
 - name: Create last_login PHP script
   template:
@@ -56,6 +59,7 @@
     owner: root
     group: root
   with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
 
 - name: Create logdir for lastseen cronjob output
   file:
@@ -65,6 +69,7 @@
     group: root
     mode: 0775
   with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
 
 - name: Create cronjobs for proecessing lastseen script
   template:
@@ -74,6 +79,7 @@
     group: root
     mode: 0774
   with_items: "{{ rsyslog_environments }}" 
+  when: item.db_loglogins_name is defined
 
 - name: Put log_logins logrotate scripts
   template:
@@ -83,6 +89,7 @@
     owner: root
     group: root
   with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
 
 - name: Create logdirectory for log_logins cleanup script
   file: 
@@ -92,6 +99,7 @@
     group: "{{ rsyslog_read_group }}"
     mode: 0750
   with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
 
 - name: Put log_logins cleanup script
   template: 
@@ -101,6 +109,7 @@
     group: root
     mode: 0700
   with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
 
 - name: Create cronjobs to run the log_logins script
   cron: 
@@ -111,3 +120,4 @@
     job: "/usr/local/sbin/clean_loglogins_{{ item.name }}"
     cron_file: loglogins_cleanup_{{ item.name }}
   with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
