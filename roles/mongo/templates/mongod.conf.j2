@@ -4,10 +4,6 @@ systemLog:
   logAppend: true
   path: /var/log/mongodb/mongod.log
 
-processManagement:
-  pidFilePath: /var/run/mongodb/mongod.pid  # location of pidfile
-
-# network interfaces
 net:
   bindIp: {{ mongo_bind_listen_address }}
   port: 27017
