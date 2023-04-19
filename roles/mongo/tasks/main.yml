@@ -32,6 +32,7 @@
   ansible.builtin.include_tasks:
     file: postinstall.yml
 
-- name: Use python2 again remote interpreter
+- name: Use python2 again as remote interpreter
   ansible.builtin.set_fact:
     ansible_python_interpreter: "/usr/bin/python"
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
