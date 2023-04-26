@@ -32,6 +32,6 @@ gui:
 
 acr:
   values:
-  {% for loa in oidcng.acr_values_supported %}
+  {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported + oidcng.acr_values_supported %}
     - "{{ loa }}"
   {% endfor %}

@@ -91,7 +91,7 @@ guestidp.entityids={{ dashboard.guestidp_entityids }}
 # tabs that can be hidden are: statistics,apps,policies,tickets,my_idp and user_invite
 dashboard.hide_tabs={{ dashboard_hide_tabs }}
 
-default_loa_level={{ manage.loa_values_supported[0] }}
-loa_values_supported={% for loa in manage.loa_values_supported %}{{ loa }}{{ "," if not loop.last else ""}} {% endfor %}
+default_loa_level={{ stepup_intrinsic_loa }}
+loa_values_supported={{ stepup_loa_values_supported | join(",") }}
 
-authn_context_levels={% for mfa in mfa_values_supported %}{{ mfa }}{{ "," if not loop.last else ""}} {% endfor %}
+authn_context_levels={{ mfa_values_supported | join(",") }}
