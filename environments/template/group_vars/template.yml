@@ -382,14 +382,11 @@ oidcng:
   api_user: manage
   key_rollover_cron_expression: "0 0 0 * * *"
   acr_values_supported:
-    - http://{{ base_domain }}/assurance/loa1
-    - http://{{ base_domain }}/assurance/loa2
-    - http://{{ base_domain }}/assurance/loa3
     - https://eduid.nl/trust/validate-names
     - https://eduid.nl/trust/linked-institution
     - https://eduid.nl/trust/affiliation-student
     - https://refeds.org/profile/mfa
-  default_acr_value: http://{{ base_domain }}/assurance/loa1
+  default_acr_value: "{{ stepup_intrinsic_loa }}"
   eduid_attribute_manipulation_enabled: false
   consent_enabled: false
   token_api_enabled: false
@@ -479,9 +476,6 @@ manage:
         password: "{{ aa_manage_password }}",
         scopes: ["READ"]
       }
-  loa_values_supported:
-    - http://{{ base_domain }}/assurance/loa2
-    - http://{{ base_domain }}/assurance/loa3
   oidc_rp_redirect_url_format: "url"
 
 loadbalancing:
