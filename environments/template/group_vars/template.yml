@@ -472,6 +472,11 @@ manage:
         scopes: [READ, WRITE, PUSH, SYSTEM]
       }
     - {
+        name: "access",
+        password: "{{ manage_access_secret }}",
+        scopes: ["READ"]
+      }
+    - {
         name: "attribute-aggregation",
         password: "{{ aa_manage_password }}",
         scopes: ["READ"]

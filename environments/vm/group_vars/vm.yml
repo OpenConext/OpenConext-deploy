@@ -358,6 +358,11 @@ manage:
         scopes: ["READ", "WRITE", "PUSH"]
       }
     - {
+        name: "access",
+        password: "{{ manage_access_secret }}",
+        scopes: ["READ"]
+      }
+    - {
         name: "sysadmin",
         password: "{{ manage_sysadmin_secret }}",
         scopes: ["READ", "WRITE", "PUSH", "SYSTEM"]
