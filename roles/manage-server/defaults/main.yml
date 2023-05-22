@@ -6,7 +6,7 @@ manage_random_source: 'file:///dev/urandom'
 manage_cronjobmaster: false
 manage_disclaimer_background_color: skyblue
 manage_disclaimer_content: "{{ env }}"
-manage_service_provider_feed_url: "http://mds.edugain.org/"
+manage_service_provider_feed_url: "http://mds.edugain.org/edugain-v2.xml"
 manage_exclude_edugain_imports_in_push: true
 manage_show_oidc_rp_tab: false
 manage_exclude_oidc_rp_imports_in_push: false
