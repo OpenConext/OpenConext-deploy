@@ -31,3 +31,4 @@
     daemon_reload: yes
   when:
     - maven_result.changed or maven_symlink.changed
+  ignore_errors: "{{ ansible_check_mode }}"
