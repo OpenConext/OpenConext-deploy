@@ -533,19 +533,6 @@
           "default": 3600,
           "info": "The number of seconds that a new refresh token is valid for this Relying Party."
         },
-        "scim:url": {
-          "type": "string",
-          "format": "url",
-          "info": "The URL to the SCIM endpoint of the service provider."
-        },
-        "scim:user_name": {
-          "type": "string",
-          "info": "The user name for authentication of the SCIM endpoint of the service provider."
-        },
-        "scim:password": {
-          "type": "string",
-          "info": "The password for authentication of the SCIM endpoint of the service provider."
-        }
       },
       "patternProperties": {
         "^name:({{ supported_language_codes | replace(',','|') }})$": {

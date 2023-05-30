@@ -588,19 +588,6 @@
           "default": "AO",
           "info": "Set the contractual base that underlies a production SP / RP entity."
         },
-        "scim:url": {
-          "type": "string",
-          "format": "url",
-          "info": "The URL to the SCIM endpoint of the service provider."
-        },
-        "scim:user_name": {
-          "type": "string",
-          "info": "The user name for authentication of the SCIM endpoint of the service provider."
-        },
-        "scim:password": {
-          "type": "string",
-          "info": "The password for authentication of the SCIM endpoint of the service provider."
-        }
       },
       "patternProperties": {
         "^name:({{ supported_language_codes | replace(',','|') }})$": {
