@@ -89,6 +89,7 @@ private_key_path: file://{{ myconext_dir }}/myconext_saml.key
 certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
 
 remember_me_max_age_seconds: 15_768_000
+sso_mfa_duration_seconds: 3600
 nudge_eduid_app_days: {{ myconext.nudge_eduid_app_days }}
 remember_me_question_asked_days: {{ myconext.remember_me_question_asked_days }}
 email_guessing_sleep_millis: 500
