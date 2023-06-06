@@ -416,12 +416,12 @@ myconext:
   sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
   oidcng_rs_client_id: myconext.rs.{{ base_domain }}
   links:
-    - { name: "help" , url: "https://wiki.surfnet.nl/x/EYzaAQ" }
-    - { name: "help_en" , url: "https://wiki.surfnet.nl/x/FYzaAQ" }
-    - { name: "privacyverklaring" , url: "https://wiki.surfnet.nl/x/G4zaAQ" }
-    - { name: "privacy_policy" , url: "https://wiki.surfnet.nl/x/MIzaAQ" }
-    - { name: "terms_of_service" , url: "https://wiki.surfnet.nl/x/LozaAQ"}
-    - { name: "voorwaarden" , url: "https://wiki.surfnet.nl/x/HYzaAQ"}
+    - { name: "help" , url: "https://example.org/x/EYzaAQ" }
+    - { name: "help_en" , url: "https://example.org/x/FYzaAQ" }
+    - { name: "privacyverklaring" , url: "https://example.org/x/G4zaAQ" }
+    - { name: "privacy_policy" , url: "https://example.org/x/MIzaAQ" }
+    - { name: "terms_of_service" , url: "https://example.org/x/LozaAQ"}
+    - { name: "voorwaarden" , url: "https://example.org/x/HYzaAQ"}
 myconext_onegini_entity_id: http://mock-idp
 
 monitoring_tests:
