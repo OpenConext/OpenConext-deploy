@@ -10,6 +10,8 @@ platforms:
     dockerfile: ../Dockerfile.j2
     command: /usr/sbin/init
     privileged: True
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: 1
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
