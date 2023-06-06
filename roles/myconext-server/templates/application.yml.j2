@@ -154,7 +154,7 @@ geo_location:
 spring:
   data:
     mongodb:
-      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% if not mongo_cluster %}{{ mongo_hostname }}{% else %}{% for host in groups['mongo_servers'] %}{{ hostvars[host]['mongo_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}/{{ myconext.mongo_database }}{% if mongo_tls %}?ssl=true{% endif %}
+      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% if not mongo_cluster %}{{ mongo_hostname }}{% else %}{% for host in groups['mongo_servers'] %}{{ hostvars[host]['mongo_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}/{{ myconext.mongo_database }}?ssl=true
 
   mail:
     host: localhost

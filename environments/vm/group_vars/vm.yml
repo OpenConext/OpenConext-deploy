@@ -56,10 +56,6 @@ databases:
     - { name: development, password: development }
 
 mongo_port: 27017
-mongo_cluster: false
-mongo_tls: false
-mongo_hostname: localhost
-mongo_host: "{{ mongo_hostname }}"
 
 mongo:
   users:

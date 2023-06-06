@@ -12,18 +12,6 @@ mongo_admin_pass: "{{ mongo_admin_password }}"
 # The name of the replication set
 replica_set_name: "{{ instance_name }}"
 
-# When using tls, use this root CA certificate
-
-mongo_tls_ca: mongo.{{ base_domain }}_ca.pem
-
-# Some default switches
-mongo_primary: false
-mongo_tls: false
-mongo_cluster: false
-
-# Default cache size
-mongo_cache_size: 1
-
 # Add a database
 mongo:
   users:

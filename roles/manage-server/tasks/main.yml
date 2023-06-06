@@ -1,10 +1,10 @@
 ---
 - name: Import the mongo CA file
   copy:
-    src: "{{ inventory_dir }}/files/certs/mongo/{{ mongo_tls_ca }}"
+    src: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
     dest: "{{ tls.cert_path_ca }}/"
-  when:
-    - mongo_tls | bool
+    owner: root
+    mode: "0644"
 
 - name: Update the ca trust store
   command: /bin/update-ca-trust
