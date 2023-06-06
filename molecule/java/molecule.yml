@@ -16,7 +16,7 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
       - loadbalancer
-      - mongod_primary
+      - mongo_servers
       - selfsigned_certs
     etc_hosts:
       engine.molecule.openconext.org: 127.0.0.1
