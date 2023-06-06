@@ -3,9 +3,6 @@
 # The port for mongo server
 mongod_port: 27017
 
-# The default hostname for mongo:
-mongo_hostname: localhost
-
 # The password for admin user
 mongo_admin_pass: "{{ mongo_admin_password }}"
 

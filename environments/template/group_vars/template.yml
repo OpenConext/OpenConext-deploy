@@ -369,7 +369,6 @@ aa:
 
 oidcng:
   issuer: https://connect.{{ base_domain }}/
-  mongo_host: "{{ mongo_hostname }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: oidcngrw
   mongo_password: "{{ mongo_passwords.oidcng }}"
@@ -395,7 +394,6 @@ oidcng_logback_email: false
 oidcng_saml_sp_entityid: https://connect.{{ base_domain }}
 
 myconext:
-  mongo_host: "{{ mongo_host }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: myconextrw
   mongo_database: myconext
