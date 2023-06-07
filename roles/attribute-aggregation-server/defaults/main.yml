@@ -13,3 +13,4 @@ aa_manage_provision_oidcrp_name_en: "AA client credentials client for VOOT acces
 aa_manage_provision_oidcrp_description_en: "OAuth client to access VOOT for group information"
 aa_manage_provision_oidcrp_grants: "client_credentials"
 aa_manage_provision_oidcrp_allowed_resource_servers: '{"name": "{{ voot.oidcng_checkToken_clientId }}"}'
+aa_spring_flyway_enabled: true

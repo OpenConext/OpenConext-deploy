@@ -1,5 +1,5 @@
 parameters:
-    trusted_proxies:   [ 127.0.0.1 ]
+    trusted_proxies:   [ {{ engine_trusted_proxy_ips|join(',') }} ]
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1

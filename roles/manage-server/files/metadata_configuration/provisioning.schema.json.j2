@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "provisioning",
+  "order": 5,
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "eid": {
+      "type": "number"
+    },
+    "entityid": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "provisioning"
+      ]
+    },
+    "revisionid": {
+      "type": "number"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "prodaccepted",
+        "testaccepted"
+      ]
+    },
+    "created": {
+      "type": "string"
+    },
+    "revisionnote": {
+      "type": "string"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "applications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "saml20_sp",
+              "oidc10_rp"
+            ]
+          }
+        }
+      }
+    },
+    "metaDataFields": {
+      "type": "object",
+      "properties": {
+        "provisioning_type": {
+          "type": "string",
+          "enum": [
+            "scim",
+            "eva",
+            "mail",
+            "graph"
+          ],
+          "info": "From the pull down, select the type of provisioning."
+        },
+        "scim_url": {
+          "type": "string",
+          "format": "url",
+          "info": "Enter the URL for the SCIM endpoint"
+        },
+        "scim_user": {
+          "type": "string",
+          "info": "The user of the SCIM endpoint."
+        },
+        "scim_password": {
+          "type": "string",
+          "info": "The password of the SCIM endpoint."
+        },
+        "scim_update_role_put_method": {
+          "type": "boolean",
+          "default": false,
+          "info": "If checked then we use the PUT method for updates, otherwise POST."
+        },
+        "provisioning_mail": {
+          "type": "string",
+          "format": "local-email",
+          "info": "The e-mail address for provisioning; syntax in accordance with RFC 5322. e.g. m.l.vermeegen@university.example.org."
+        },
+        "eva_token": {
+          "type": "string",
+          "info": "The token of the EVA endpoint."
+        }
+      },
+      "patternProperties": {
+        "^name:({{ supported_language_codes | replace(',','|') }})$": {
+          "type": "string",
+          "info": "Set the name of the provisioning group."
+        },
+        "^description:({{ supported_language_codes | replace(',','|') }})$": {
+          "type": "string",
+          "info": "The description of the service."
+        }
+      },
+      "required": [
+        "provisioning_type",
+        "name:en"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "metaDataFields"
+  ],
+  "additionalProperties": false,
+  "indexes": []
+}

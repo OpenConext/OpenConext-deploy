@@ -1,9 +1,7 @@
 parameters:
     # Name of the application, used in lifecycle API
     application_name: "{{ lifecycle_application_name }}"
-    # IP addresses of any HTTP proxies that are sitting in from of the application
-    # See: http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html
-    trusted_proxies:   [ 127.0.0.1 ]
+    trusted_proxies:   [ {{ engine_trusted_proxy_ips|join(',') }} ]
 
     database_driver:   pdo_mysql
 
@@ -19,10 +17,10 @@ parameters:
     # Also see: https://symfony.com/doc/current/reference/configuration/doctrine.html#doctrine-dbal-configuration
     database_middleware_name:     {{ database_middleware_name }}
     database_middleware_user:     {{ database_middleware_user }}
-    database_middleware_password: {{ mysql_passwords.middleware }}
+    database_middleware_password: {{ database_middleware_password }}
     database_gateway_name:     {{ database_gateway_name }}
     database_gateway_user:     {{ database_gateway_middleware_user }}
-    database_gateway_password: {{ mysql_passwords.mwgatewayrw }}
+    database_gateway_password: {{ database_gateway_middleware_password }}
     # TODO: Deploy creds should only be available during deploy
     database_deploy_user:      {{ database_middleware_deploy_user }}
     database_deploy_password:  {{ database_middleware_deploy_password }}

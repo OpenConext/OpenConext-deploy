@@ -377,14 +377,11 @@ oidcng:
   api_user: manage
   key_rollover_cron_expression: "0 0 0 * * *"
   acr_values_supported:
-    - http://{{ base_domain }}/assurance/loa1
-    - http://{{ base_domain }}/assurance/loa2
-    - http://{{ base_domain }}/assurance/loa3
     - https://eduid.nl/trust/validate-names
     - https://eduid.nl/trust/linked-institution
     - https://eduid.nl/trust/affiliation-student
     - https://refeds.org/profile/mfa
-  default_acr_value: http://{{ base_domain }}/assurance/loa1
+  default_acr_value: "{{ stepup_intrinsic_loa }}"
   eduid_attribute_manipulation_enabled: false
   consent_enabled: false
   token_api_enabled: false
@@ -413,12 +410,12 @@ myconext:
   sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
   oidcng_rs_client_id: myconext.rs.{{ base_domain }}
   links:
-    - { name: "help" , url: "https://wiki.surfnet.nl/x/EYzaAQ" }
-    - { name: "help_en" , url: "https://wiki.surfnet.nl/x/FYzaAQ" }
-    - { name: "privacyverklaring" , url: "https://wiki.surfnet.nl/x/G4zaAQ" }
-    - { name: "privacy_policy" , url: "https://wiki.surfnet.nl/x/MIzaAQ" }
-    - { name: "terms_of_service" , url: "https://wiki.surfnet.nl/x/LozaAQ"}
-    - { name: "voorwaarden" , url: "https://wiki.surfnet.nl/x/HYzaAQ"}
+    - { name: "help" , url: "https://example.org/x/EYzaAQ" }
+    - { name: "help_en" , url: "https://example.org/x/FYzaAQ" }
+    - { name: "privacyverklaring" , url: "https://example.org/x/G4zaAQ" }
+    - { name: "privacy_policy" , url: "https://example.org/x/MIzaAQ" }
+    - { name: "terms_of_service" , url: "https://example.org/x/LozaAQ"}
+    - { name: "voorwaarden" , url: "https://example.org/x/HYzaAQ"}
 myconext_onegini_entity_id: http://mock-idp
 
 monitoring_tests:
@@ -469,13 +466,15 @@ manage:
         scopes: [READ, WRITE, PUSH, SYSTEM]
       }
     - {
+        name: "access",
+        password: "{{ manage_access_secret }}",
+        scopes: ["READ"]
+      }
+    - {
         name: "attribute-aggregation",
         password: "{{ aa_manage_password }}",
         scopes: ["READ"]
       }
-  loa_values_supported:
-    - http://{{ base_domain }}/assurance/loa2
-    - http://{{ base_domain }}/assurance/loa3
   oidc_rp_redirect_url_format: "url"
 
 loadbalancing:

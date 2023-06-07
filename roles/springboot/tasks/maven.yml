@@ -42,3 +42,4 @@
     owner: "{{ _springapp_user }}"
     group: "{{ _springapp_user }}"
   register: maven_symlink
+  ignore_errors: "{{ ansible_check_mode }}"

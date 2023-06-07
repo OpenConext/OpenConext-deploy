@@ -6,9 +6,9 @@ parameters:
     database_port:     3306
     database_gateway_name:     {{ database_gateway_name }}
     database_gateway_user:     {{ database_gateway_user }}
-    database_gateway_password: {{ mysql_passwords.gateway }}
-    database_deploy_user:      {{ database_gateway_deploy_user }}
-    database_deploy_password:  {{ database_gateway_deploy_password }}
+    database_gateway_password: {{ database_gateway_password }}
+    database_deploy_user:      "database_deploy_user_is_deprecated"
+    database_deploy_password:  "database_deploy_password_is_deprecated"
     database_server_version:   {{ database_server_version | default("5.6") }}
 
     mailer_transport:  smtp
@@ -100,7 +100,7 @@ parameters:
     gateway_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
     second_factor_only_loa_loa2: '{{ stepup_uri_sfo_loa2 }}'
     second_factor_only_loa_loa3: '{{ stepup_uri_sfo_loa3 }}'
-    second_factor_only_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
+    second_factor_only_loa_self_asserted: '{{ stepup_uri_sfo_self_asserted }}'
 
     second_factor_only: {{ gateway_second_factor_only | default(false) }}
 

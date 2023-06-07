@@ -37,9 +37,9 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}
 
 
-    DocumentRoot /var/www/manage/current
+    DocumentRoot {{ _springapp_dir }}/current
 
-    <Directory /var/www/manage/current>
+    <Directory {{ _springapp_dir }}/current>
       Require all granted
       Options     -Indexes
     </Directory>

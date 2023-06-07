@@ -45,41 +45,23 @@
     - rulesets
     - templates
 
-- name: Create sc template configurations
-  template: 
+- name: Create template configurations
+  template:
     src: sc_template.conf.j2
     dest: /etc/rsyslog.d/templates/{{ item.name }}.conf
-  with_items: "{{ rsyslog_environments.sc }}"
+  with_items: "{{ rsyslog_environments }}"
 
-- name: Create sa template configurations
-  template: 
-    src: sa_template.conf.j2
-    dest: /etc/rsyslog.d/templates/{{ item.name }}.conf
-  with_items: "{{ rsyslog_environments.sa }}"
-
-- name: Create sc ruleset configurations
-  template: 
+- name: Create ruleset configurations
+  template:
     src: sc_ruleset.conf.j2
     dest: /etc/rsyslog.d/rulesets/{{ item.name }}.conf
-  with_items: "{{ rsyslog_environments.sc }}"
-
-- name: Create sa ruleset configurations
-  template: 
-    src: sa_ruleset.conf.j2
-    dest: /etc/rsyslog.d/rulesets/{{ item.name }}.conf
-  with_items: "{{ rsyslog_environments.sa }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Create sc listener configurations
-  template: 
+  template:
     src: listener.conf.j2
     dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
-  with_items: "{{ rsyslog_environments.sc }}"
-
-- name: Create sa listener configurations
-  template: 
-    src: listener.conf.j2
-    dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
-  with_items: "{{ rsyslog_environments.sa }}"
+  with_items: "{{ rsyslog_environments }}"
 
 - name: Create logrotate file for apps and host logs
   template:

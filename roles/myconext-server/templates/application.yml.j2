@@ -32,6 +32,7 @@ email:
   from: eduID <noreply@{{ myconext_base_domain }}>
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
+  idp-surfconext-url: https://login.{{ myconext_base_domain }}
 
 schac_home_organization: eduid.nl
 
@@ -88,6 +89,7 @@ private_key_path: file://{{ myconext_dir }}/myconext_saml.key
 certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
 
 remember_me_max_age_seconds: 15_768_000
+sso_mfa_duration_seconds: 3600
 nudge_eduid_app_days: {{ myconext.nudge_eduid_app_days }}
 remember_me_question_asked_days: {{ myconext.remember_me_question_asked_days }}
 email_guessing_sleep_millis: 500
@@ -119,6 +121,8 @@ oidc:
   secret: {{ myconext_client_secret }}
   idp-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
   sp-flow-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
+  mobile-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/mobile/oidc/redirect
+
   sp-create-from-institution-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/create-from-institution/oidc-redirect
   base-url: https://connect.{{ base_domain }}
 

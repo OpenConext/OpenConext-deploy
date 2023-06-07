@@ -68,6 +68,15 @@ logback_max_history: 7
 # The manage spring_app port is used by various roles
 manage_springapp_tcpport: 9393
 
+# OpenConext Stepup Level of Assurance Identifiers
+# The intrinsic loa is "LoA 1" / just first factor / no stepup required
+stepup_intrinsic_loa: "http://{{ base_domain }}/assurance/loa1"
+# This does not include the intrinsic loa since most apps only require the >1 loa's
+stepup_loa_values_supported:
+ - "http://{{ base_domain }}/assurance/loa1.5"
+ - "http://{{ base_domain }}/assurance/loa2"
+ - "http://{{ base_domain }}/assurance/loa3"
+
 mfa_values_supported:
  - "http://schemas.microsoft.com/claims/multipleauthn"
  - "https://refeds.org/profile/mfa"
