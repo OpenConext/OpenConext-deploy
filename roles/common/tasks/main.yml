@@ -23,6 +23,7 @@
       - sudo
       - unzip
       - bzip2
+      - python3
     state: present
   register: common_tools_installed
   until: common_tools_installed is succeeded
@@ -37,7 +38,7 @@
   yum:
     name: 
       - chrony
-  when: ansible_distribution_major_version == '8'
+  when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
 
 - name: Install git on development vm
   yum:
@@ -109,7 +110,7 @@
     name: chronyd
     state: started
     enabled: yes
-  when: ansible_distribution_major_version == '8'
+  when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
 
 - name: Remove exim,sendmail when Postfix needs to be installed
   yum:
@@ -168,3 +169,4 @@
     dest: "/etc/systemd/journald.conf"
   notify:
     - "restart journald"
+  when: ansible_distribution_major_version == '7'

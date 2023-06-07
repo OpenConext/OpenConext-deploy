@@ -1,6 +1,10 @@
 ---
 - name: Converge
   hosts: all
+
+  vars:
+    inventory_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/../../environments/vm"
+
   pre_tasks:
     - name: Read vars from secrets file
       include_vars: "../../environments/vm/secrets/vm.yml"
@@ -9,7 +13,7 @@
 
     - name: "Set some facts"
       set_fact:
-        mongo_primary: true
+        mongo_replication_role: primary
 
   roles:
     - role: mongo

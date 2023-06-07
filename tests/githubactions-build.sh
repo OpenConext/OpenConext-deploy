@@ -36,6 +36,7 @@ docker run --detach                                         \
 	--add-host manage.vm.openconext.org:127.0.0.1           \
 	--add-host redirect.vm.openconext.org:127.0.0.1         \
 	--add-host localhost:127.0.0.1                          \
+	--add-host ansible-test-ga:127.0.0.1                          \
 	--hostname test.openconext.org                          \
 	-e TERM=xterm                                           \
 	surfnet/centos7-openconext-ga

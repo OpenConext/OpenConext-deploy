@@ -1,0 +1,15 @@
+- name: Create mongo database users
+  mongodb_user:
+    login_database: admin
+    database: "{{ item.db_name }}"
+    login_user: admin
+    login_password: "{{ mongo_admin_pass }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    roles: readWrite
+    replica_set: "{{ replica_set_name }}"
+  no_log: true
+  run_once: true
+  with_items: "{{ mongo.users }}"
+  changed_when: false
+  tags: mongo_users

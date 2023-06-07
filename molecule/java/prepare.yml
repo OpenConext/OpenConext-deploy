@@ -16,7 +16,6 @@
       set_fact:
         base_domain: molecule.openconext.org
         use_selfsigned_certs: True
-        mongo_primary: true
         postfix_interfaces: ipv4
 
     - name: Install packages
@@ -50,7 +49,6 @@
         base_domain: molecule.openconext.org
         myconext_base_domain: molecule.openconext.org
         use_selfsigned_certs: True
-        mongo_primary: true
         engine_trusted_proxy_ips:
           - 192.168.1.1
           - 10.0.0.1

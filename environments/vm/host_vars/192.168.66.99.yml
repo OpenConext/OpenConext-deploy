@@ -21,4 +21,4 @@ apache_app_listen_address:
   account: 192.168.66.99
   eduid: 192.168.66.99
 
-mongo_primary: True
+mongo_replication_role: primary

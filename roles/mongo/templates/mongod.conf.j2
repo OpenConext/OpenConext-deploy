@@ -4,39 +4,23 @@ systemLog:
   logAppend: true
   path: /var/log/mongodb/mongod.log
 
-processManagement:
-  fork: true  # fork and run in background
-  pidFilePath: /var/run/mongodb/mongod.pid  # location of pidfile
-
-# network interfaces
 net:
   bindIp: {{ mongo_bind_listen_address }}
   port: 27017
-{% if mongo_tls %}
-  ssl:
-    mode: preferSSL
-    PEMKeyFile: /etc/pki/mongo/mongo.{{ base_domain }}.pem
-    CAFile: /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem
+  tls:
+    mode: preferTLS
+    certificateKeyFile: /etc/pki/mongo/keyandcert.pem
+    CAFile: /etc/pki/mongo/mongoca.pem
     allowConnectionsWithoutCertificates: true
-{% endif %}
 
 storage:
   dbPath: /var/lib/mongo
-  wiredTiger:
-    engineConfig:
-      cacheSizeGB: {{ mongo_cache_size }}
   journal:
     enabled: true
-{% if 'mongod_arbiters' in group_names %}
-  mmapv1:
-    smallFiles: true
-{% endif %}
 
 replication:
   replSetName: {{ replica_set_name }}
 
 security: 
     authorization: enabled
-{% if mongo_tls %}
     clusterAuthMode: x509
-{% endif %}

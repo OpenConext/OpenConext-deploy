@@ -1,0 +1,79 @@
+---
+- name: Create the repository for mongodb
+  ansible.builtin.copy:
+    src: "mongo.repo"
+    dest: "/etc/yum.repos.d/mongo.repo"
+    owner: root
+    mode: "0640"
+
+- name: Install the mongodb package
+  ansible.builtin.yum:
+    name:
+      - mongodb-org
+    state: present
+
+- name: Slurp the private key
+  ansible.builtin.slurp:
+    path: "/etc/pki/mongo/mongo.key"
+  register: mongo_key
+
+- name: Create combined key and certificate file
+  ansible.builtin.copy:
+    content: "{{ mongo_key['content'] | b64decode }}{{ certificate.certificate }}"
+    dest: "/etc/pki/mongo/keyandcert.pem"
+    owner: root
+    group: mongod
+    mode: "0440"
+
+- name: Install pymongo
+  ansible.builtin.pip:
+    name: pymongo
+    version: '3.12.3'
+
+- name: Install kernel settings script
+  ansible.builtin.copy:
+    src: "mongo_kernel_settings.sh"
+    dest: "/usr/local/sbin/mongo_kernel_settings.sh"
+    mode: "0700"
+    owner: root
+    group: root
+  register: mongo_kernel_settings
+
+- name: Set kernel parameters
+  ansible.builtin.command: /usr/local/sbin/mongo_kernel_settings.sh
+  when:
+    - mongo_kernel_settings.changed
+
+- name: Add mongo kernel settings script to rc.local
+  ansible.builtin.lineinfile:
+    dest: "/etc/rc.local"
+    state: present
+    line: "/usr/local/sbin/mongo_kernel_settings.sh"
+
+- name: Make rc.local executable
+  ansible.builtin.file:
+    dest: "/etc/rc.d/rc.local"
+    mode: "0744"
+    owner: root
+    group: root
+
+- name: Set sysctl vm.max_map_count
+  ansible.posix.sysctl:
+    name: vm.max_map_count
+    value: 128000
+    state: present
+
+- name: Install mongodb.conf file
+  ansible.builtin.template:
+    src: "mongod.conf.j2"
+    dest: "/etc/mongod.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart mongod
+
+- name: Enable and start mongod
+  ansible.builtin.service:
+    name: mongod.service
+    enabled: true
+    state: started

@@ -3,6 +3,7 @@
   yum:
     name: 
        - "python2-cryptography"
+       - "python36-cryptography"
     state: "installed"
   register: selfsigned_cert_pythonpip_installed
   until: selfsigned_cert_pythonpip_installed is succeeded

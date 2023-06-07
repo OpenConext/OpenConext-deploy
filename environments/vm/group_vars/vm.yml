@@ -56,10 +56,6 @@ databases:
     - { name: development, password: development }
 
 mongo_port: 27017
-mongo_cluster: false
-mongo_tls: false
-mongo_hostname: localhost
-mongo_host: "{{ mongo_hostname }}"
 
 mongo:
   users:
@@ -263,7 +259,6 @@ aa:
 
 oidcng:
   issuer: https://connect.{{ base_domain }}/
-  mongo_host: "{{ mongo_hostname }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: oidcngrw
   mongo_password: "{{ mongo_passwords.oidcng }}"
@@ -285,7 +280,6 @@ oidcng:
 oidcng_logback_email: false
 
 myconext:
-  mongo_host: "{{ mongo_host }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: myconextrw
   mongo_database: myconext

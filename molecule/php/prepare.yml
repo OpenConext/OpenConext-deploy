@@ -13,7 +13,6 @@
     - name: "Set some facts"
       set_fact:
         base_domain: molecule.openconext.org
-        mongo_primary: true
 
     - name: Install packages
       yum:

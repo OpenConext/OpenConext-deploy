@@ -58,10 +58,6 @@ databases:
     - { name: lifecyclerw, db_name: eb_logins, password: "{{ mysql_passwords.lifecycle }}" }
 
 mongo_port: 27017
-mongo_cluster: false
-mongo_hostname: localhost
-mongo_host: "{{ mongo_hostname }}"
-mongo_tls: false
 
 mongo:
   users:
@@ -373,7 +369,6 @@ aa:
 
 oidcng:
   issuer: https://connect.{{ base_domain }}/
-  mongo_host: "{{ mongo_hostname }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: oidcngrw
   mongo_password: "{{ mongo_passwords.oidcng }}"
@@ -396,7 +391,6 @@ oidcng_logback_email: false
 oidcng_saml_sp_entityid: https://connect.{{ base_domain }}
 
 myconext:
-  mongo_host: "{{ mongo_host }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: myconextrw
   mongo_database: myconext

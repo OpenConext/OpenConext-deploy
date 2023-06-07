@@ -1,216 +1,38 @@
 ---
-- name: Check if mongo is installed. If not, the admin user is created
-  stat:
-    path: "/var/lib/mongo"
-  register: mongo_present
-  when: mongo_primary | bool
-
-- name: Create the repository for mongodb
-  copy:
-    src: "mongo.repo"
-    dest: "/etc/yum.repos.d/mongo.repo"
-
-- name: Install the mongodb package
-  yum:
-    name:
-      - mongodb-org
-      - python-pip
-      - python3
-    state: present
-
 - name: Use temporarily python3 as remote interpreter, this fixes pymongo
-  set_fact: ansible_python_interpreter=/usr/bin/python3
-
-- name: Install pymongo
-  pip:
-    name: pymongo
-
-- name: Install kernel settings script
-  copy:
-    src: "mongo_kernel_settings.sh"
-    dest: "/usr/local/sbin/mongo_kernel_settings.sh"
-    mode: 0700
-    owner: root
-    group: root
-  register: mongo_kernel_settings
-
-- name: Set kernel parameters
-  command: /usr/local/sbin/mongo_kernel_settings.sh
-  when:
-    - mongo_kernel_settings.changed
-
-- name: Add mongo kernel settings script to rc.local
-  lineinfile:
-    dest: "/etc/rc.local"
-    state: present
-    line: "/usr/local/sbin/mongo_kernel_settings.sh"
-
-- name: Make rc.local executable
-  file:
-    dest: "/etc/rc.d/rc.local"
-    mode: 0744
-
-- name: Create directory to keep mongo key material
-  file:
-    dest: "/etc/pki/mongo/"
-    state: directory
-    owner: root
-    group: root
-    mode: 775
-  when:
-    - mongo_tls | bool
-
-- name: copy ca certificate
-  copy:
-    src: "{{ inventory_dir }}/files/certs/mongo/{{ mongo_tls_ca }}"
-    dest: "/etc/pki/mongo/{{ mongo_tls_ca }}"
-  when:
-    - mongo_tls | bool
-
-- name: Create combined key and certificate file for mongo
-  copy:
-    content: "{{ mongo_tls_key }}{{lookup('file', '{{ inventory_dir }}/files/certs/mongo/mongo.{{ base_domain }}.crt')}}"
-    dest: "/etc/pki/mongo/mongo.{{ base_domain }}.pem"
-    mode: 0600
-    owner: mongod
-  when:
-    - mongo_tls | bool
-
-- name: Create the backup directory
-  file:
-    path: /home/backup
-    state: directory
-    owner: root
-    group: root
-    mode: 0700
-  when:
-    - mongo_cluster | bool
-
-- name: Install the backup script
-  template:
-    src: "backup_mongo.pl.j2"
-    dest: "/usr/local/sbin/backup_mongo.pl"
-    mode: 0700
-    owner: root
-  when:
-    - mongo_cluster | bool
-
-- name: Create cron symlink for backup script
-  file:
-    src: "/usr/local/sbin/backup_mongo.pl"
-    dest: "/etc/cron.daily/mongodb_backup"
-    state: link
-    mode: 0700
-    owner: root
-  when:
-    - mongo_cluster | bool
-
-- name: Install mongod.conf file without configuration on the primary host
-  template:
-    src: "mongod_standalone.conf.j2"
-    dest: "/etc/mongod.conf"
-  when:
-     - mongo_primary | bool
-     - mongo_present.stat.exists == False
-
-- name: Enable and start mongod on the primary host
-  service:
-    name: mongod.service
-    enabled: yes
-    state: started
-  when:
-    - mongo_primary | bool
-
-- name: Add the admin user
-  mongodb_user:
-    database: admin
-    name: admin
-    password: "{{ mongo_admin_password }}"
-    login_port: "{{ mongod_port }}"
-    roles: root
-    state: present
-  no_log: true
-  when:
-     - mongo_primary | bool
-     - mongo_present.stat.exists == False
-
-- name: Install mongodb.conf file  with authorisation enabled
-  template:
-    src: "mongod.conf.j2"
-    dest: "/etc/mongod.conf"
-  register: mongo_conf_changed
-
-- name: Add logrotate snippet
-  copy:
-    src: "mongodb.logrotate"
-    dest: "/etc/logrotate.d/mongodb"
-
-- name: Restart Mongo
-  service:
-    name: mongod.service
-    enabled: yes
-    state: restarted
-  when:
-    - mongo_conf_changed.changed
-
-- name: Install replica set initialization file
-  template:
-    src: "repset_init.j2"
-    dest: "/tmp/repset_init.js"
-  when:
-    - mongo_primary | bool
-
-- name: Initialize the replication set on the primary, tls enabled
-  shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --ssl --sslCAFile /etc/pki/mongo/mongo.{{ base_domain }}_ca.pem --authenticationDatabase admin /tmp/repset_init.js --host "{{mongo_hostname }}"
-  when:
-    - mongo_primary | bool
-    - mongo_tls | bool
-  changed_when: false
-
-- name: Initialize the replication set on the primary
-  shell: /usr/bin/mongo  -u admin -p {{ mongo_admin_pass }} --authenticationDatabase admin /tmp/repset_init.js --host 127.0.0.1
-  when:
-    - mongo_primary | bool
-    - not mongo_tls | bool
-  changed_when: false
-
-- name: Create mongo database users
-  mongodb_user:
-    login_database: admin
-    database: "{{ item.db_name }}"
-    login_user: admin
-    login_password: "{{ mongo_admin_pass }}"
-    name: "{{ item.name }}"
-    password: "{{ item.password }}"
-    roles: readWrite
-    replica_set: "{{ replica_set_name }}"
-  no_log: true
-  when:
-    - mongo_primary | bool
-    - not mongo_tls | bool
-  with_items: "{{ mongo.users }}"
-  changed_when: False
+  ansible.builtin.set_fact:
+    ansible_python_interpreter: "/usr/bin/python3"
   tags: mongo_users
 
-- name: Create mongo database users, tls enabled
-  mongodb_user:
-    login_database: admin
-    database: "{{ item.db_name }}"
-    login_user: admin
-    login_password: "{{ mongo_admin_pass }}"
-    name: "{{ item.name }}"
-    password: "{{ item.password }}"
-    roles: readWrite
-    ssl: True
-    ssl_cert_reqs: CERT_NONE
-    replica_set: "{{ replica_set_name }}"
-  no_log: true
-  when:
-    - mongo_primary | bool
-    - mongo_tls | bool
-  with_items: "{{ mongo.users }}"
-  changed_when: False
-  tags: mongo_users
+- name: Include CA tasks
+  ansible.builtin.include_tasks:
+    file: ca.yml
+    apply:
+      delegate_to: localhost
+      run_once: true
+      become: false
 
-- name: Use python2 again remote interpreter
-  set_fact: ansible_python_interpreter=/usr/bin/python
+- name: Include Certificate tasks
+  ansible.builtin.include_tasks:
+    file: certs.yml
+
+- name: Include installation tasks
+  ansible.builtin.include_tasks:
+    file: install.yml
+
+- name: Include cluster installation tasks
+  ansible.builtin.include_tasks:
+    file: cluster.yml
+
+- name: Include user creation
+  ansible.builtin.include_tasks:
+    file: users.yml
+
+- name: Include postinstallation tasks
+  ansible.builtin.include_tasks:
+    file: postinstall.yml
+
+- name: Use python2 again as remote interpreter
+  ansible.builtin.set_fact:
+    ansible_python_interpreter: "/usr/bin/python"
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
