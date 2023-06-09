@@ -67,7 +67,6 @@
           "enum": [
             "scim",
             "eva",
-            "mail",
             "graph"
           ],
           "info": "From the pull down, select the type of provisioning."
@@ -90,14 +89,27 @@
           "default": false,
           "info": "If checked then we use the PUT method for Group updates thus sending all information (e.g. all members), otherwise PATCH with only the added or removed member."
         },
-        "provisioning_mail": {
+        "eva_url": {
           "type": "string",
-          "format": "local-email",
-          "info": "The e-mail address for provisioning; syntax in accordance with RFC 5322. e.g. m.l.vermeegen@university.example.org."
+          "format": "url",
+          "info": "Enter the URL for the Eva endpoint"
         },
         "eva_token": {
           "type": "string",
           "info": "The token of the EVA endpoint."
+        },
+        "eva_guest_account_duration": {
+          "type": "number",
+          "info": "The number of days the EVA guest account will be valid."
+        },
+        "graph_url": {
+          "type": "string",
+          "format": "url",
+          "info": "Enter the URL for the Graph endpoint"
+        },
+        "graph_token": {
+          "type": "string",
+          "info": "The token of the Graph endpoint."
         }
       },
       "patternProperties": {
