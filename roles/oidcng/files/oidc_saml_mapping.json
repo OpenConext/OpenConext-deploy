@@ -114,5 +114,10 @@
     "saml": "urn:mace:surf.nl:attribute-def:surf-crm-id",
     "oidc": "surf-crm-id",
     "multiValue": false
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:preferredLanguage",
+    "oidc": "locale",
+    "multiValue": false
   }
 ]
