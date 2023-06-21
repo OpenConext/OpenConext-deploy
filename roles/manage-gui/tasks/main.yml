@@ -6,7 +6,5 @@
   with_items:
     - src: "manage.conf.j2"
       dest: "/etc/httpd/conf.d/manage.conf"
-    - src: "manage.conf.backdoor.j2"
-      dest: "/etc/httpd/conf.d/manage.conf.backdoor"
   notify:
     - "restart httpd"
