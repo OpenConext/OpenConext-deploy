@@ -28,7 +28,7 @@ spring:
           oidcng:
             client-id: "{{ access.oidc_client_id }}"
             client-secret: "{{ access.oidc_secret }}"
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri: "https://{baseHost}{basePort}{basePath}/login/oauth2/code/{registrationId}"
             authorization-grant-type: "authorization_code"
             scope: openid
         provider:
@@ -36,7 +36,7 @@ spring:
             authorization-uri: "https://connect.{{ base_domain }}/oidc/authorize"
             token-uri: "https://connect.{{ base_domain }}/oidc/token"
             user-info-uri: "https://connect.{{ base_domain }}/oidc/userinfo"
-            jwk-set-uri: "https://connect.{{ base_domain }}.nl/oidc/certs"
+            jwk-set-uri: "https://connect.{{ base_domain }}/oidc/certs"
             user-name-attribute: sub
             user-info-authentication-method: client_secret_basic
   jpa:
@@ -70,16 +70,16 @@ oidcng:
   introspect-url: "https://connect.{{ base_domain }}/oidc/introspect"
   resource-server-id: {{ access.resource_server_id }}
   resource-server-secret: "{{ access.resource_server_secret }}"
-  base-url: http://localhost:8080
+  base-url: https://access.{{ base_domain }}
 
 super-admin:
   users:
     - "urn:collab:person:example.com:admin"
 
 config:
-  client-url: "https://acess.{{ base_domain}}"
+  client-url: "https://access.{{ base_domain}}"
   welcome-url: "https://welcome.{{ base_domain}}"
-  server-url: "http://localhost:8080"
+  server-url: "https://access.{{ base_domain }}"
   eduid-entity-id: eduid.{{ base_domain}}
   role-search-required: false
 
