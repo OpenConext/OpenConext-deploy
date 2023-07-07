@@ -1,0 +1,69 @@
+---
+- name: Create directory to keep configfile
+  ansible.builtin.file:
+    dest: "/opt/openconext/access"
+    state: directory
+    owner: root
+    group: root
+    mode: "0770"
+
+- name: Place the configfile
+  ansible.builtin.template:
+    src: application.yml.j2
+    dest: /opt/openconext/access/application.yml
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Create the access container network
+  community.docker.docker_network:
+    name: "access"
+
+- name: Create the server container
+  community.docker.docker_container:
+    name: openconextaccessserver
+    image: ghcr.io/openconext/openconext-access/accessserver:latest
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "access"
+    mounts:
+      - source: /opt/openconext/access/application.yml
+        target: /application.yml
+        type: bind
+    command: '--spring.config.location=./'
+
+
+- name: Create the client container
+  community.docker.docker_container:
+    name: accessclient
+    image: ghcr.io/openconext/openconext-access/accessclient:latest
+    pull: true
+    restart_policy: "always"
+    published_ports:
+      - 81:80
+    networks:
+      - name: "access"
+
+- name: Create the welcome container
+  community.docker.docker_container:
+    name: accesswelcome
+    image: ghcr.io/openconext/openconext-access/accessswelcome:latest
+    pull: true
+    restart_policy: "always"
+    published_ports:
+      - 82:80
+    networks:
+      - name: "access"
+
+- name: Include the role manage_provision_entities to provision access client to Manage
+  include_role:
+    name: manage_provision_entities
+  vars:
+    entity_type: oidc10_rp
+
+- name: Include the role manage_provision_entities to provision access client to Manage
+  include_role:
+    name: manage_provision_entities
+  vars:
+    entity_type: oauth20_rs
