@@ -89,6 +89,10 @@ voot:
   password: {{ access.vootsecret}}
   group_urn_domain: urn:mace:surf.nl:test.surfaccess.nl
 
+attribute-aggregation:
+  user: {{ access.attribute_aggregation_user }}
+  password: {{ access.attribute_aggregation_secret }}
+
 email:
   from: "{{ noreply_email }}"
   contactEmail: "{{ support_email }}"
