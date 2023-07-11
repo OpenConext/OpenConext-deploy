@@ -1,0 +1,38 @@
+logging:
+  level:
+    org.springframework: INFO
+    org.springframework.security: INFO
+
+environment: local
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://{{ access.db_host }}/access
+    username: {{ access.db_user }}
+    password: {{ access.db_secret }}
+
+server:
+  port: 8081
+  error:
+    whitelabel:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
+  info:
+    git:
+      mode: full

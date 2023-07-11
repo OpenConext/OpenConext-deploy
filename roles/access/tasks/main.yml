@@ -7,13 +7,16 @@
     group: root
     mode: "0770"
 
-- name: Place the configfile
+- name: Place the server configfiles
   ansible.builtin.template:
-    src: application.yml.j2
-    dest: /opt/openconext/access/application.yml
+    src: "{{ item }}.j2"
+    dest: /opt/openconext/access/{{ item }}
     owner: root
     group: root
     mode: "0644"
+  with_items:
+    - serverapplication.yml
+    - mockapplication.yml
 
 - name: Create the access container network
   community.docker.docker_network:
@@ -28,7 +31,7 @@
     networks:
       - name: "access"
     mounts:
-      - source: /opt/openconext/access/application.yml
+      - source: /opt/openconext/access/serverapplication.yml
         target: /application.yml
         type: bind
     command: '--spring.config.location=./'
@@ -58,6 +61,22 @@
       - 82:80
     networks:
       - name: "access"
+
+- name: Create the mock provisioning container
+  community.docker.docker_container:
+    name: accesssprovisioningmock
+    image: ghcr.io/openconext/openconext-access/accesssprovisioningmock:latest
+    pull: true
+    restart_policy: "always"
+    command: '--spring.config.location=./'
+    mounts:
+      - source: /opt/openconext/access/mockapplication.yml
+        target: /application.yml
+        type: bind
+    networks:
+      - name: "access"
+    published_ports:
+      - 83:8081
 
 - name: Include the role manage_provision_entities to provision access client to Manage
   include_role:
