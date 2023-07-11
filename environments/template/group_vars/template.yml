@@ -409,6 +409,7 @@ myconext:
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
   sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
   oidcng_rs_client_id: myconext.rs.{{ base_domain }}
+  mobile_app_rp_entity_id: mobile_app_rp_entity_id
   links:
     - { name: "help" , url: "https://example.org/x/EYzaAQ" }
     - { name: "help_en" , url: "https://example.org/x/FYzaAQ" }

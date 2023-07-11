@@ -65,6 +65,9 @@ guest_idp_entity_id: https://login.{{ myconext_base_domain }}
 my_conext_url: https://mijn.{{ myconext_base_domain }}
 domain: {{ myconext_base_domain }}
 mijn_eduid_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
+mobile_app_redirect: eduid:///client/mobile
+# For this RP we nudge the user to use the magic link
+mobile_app_rp_entity_id: {{ myconext.mobile_app_rp_entity_id }}
 
 feature:
   webauthn: {{ myconext.feature_webauthn }}
