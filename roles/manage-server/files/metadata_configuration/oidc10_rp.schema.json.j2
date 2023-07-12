@@ -415,13 +415,13 @@
         "coin:privacy:dpa_type": {
           "type": "string",
           "enum": [
-            "service_is_not_processor",
-            "service_aqcuired_through_surf",
-            "service_willing_or_signed_surf_model_dpa",
-            "service_has_own_dpa",
+            "dpa_not_applicable",
+            "dpa_in_surf_agreement",
+            "dpa_model_surf",
+            "dpa_supplied_by_service",
             "other"
-           ],
-          "default" : "service_has_own_dpa",
+          ],
+          "default": "dpa_supplied_by_service",
           "info": "Determines what DPA this service has to offer"
         },
         "coin:privacy:privacy_policy": {
