@@ -365,6 +365,9 @@ aa:
   eduid_url: "https://login.{{ myconext_base_domain }}/myconext/api/attribute-aggregation"
   eduid_username: aa
   eduid_password: "{{ myconext_api_attribute_aggregation_password }}"
+  access_url: "https://access.{{ base_domain }}/api/aa/%s"
+  access_username: aa
+  access_password: "todo"
   aggregate_cache: 0
 
 oidcng:
