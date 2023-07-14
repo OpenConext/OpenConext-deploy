@@ -137,3 +137,41 @@ authorities:
     ],
     validationRegExp: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
   }
+  - {
+    id: "access",
+    description: "SURF Access",
+    endpoint: "{{ aa.access_url }}",
+    user: "{{ aa.access_username }}",
+    password: "{{ aa.access_password }}",
+    timeOut: 5000,
+    type: "rest",
+    pathParams: [
+      { index: 1, sourceAttribute: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" }
+    ],
+    requestParams: [
+      {
+        sourceAttribute: "SPentityID",
+        name: "SPentityID"
+      }
+    ],
+    mappings: [
+      { responseKey: "id", targetAttribute: "urn:mace:dir:attribute-def:isMemberOf" }
+    ],
+    attributes: [
+      {
+        name: "urn:mace:dir:attribute-def:isMemberOf",
+        description: "Lists the roles the user is a member of",
+        type: "string",
+        example: "urn:mace:surf.nl:test.surfaccess.nl:77a273cf-6f0a-480a-991e-ada8e89e1d74:scim_mock_test_role"
+      }
+    ],
+    requiredInputAttributes: [
+      {
+        name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+      },
+      {
+        name: "SPentityID"
+      }
+    ],
+    validationRegExp: "^urn:mace:surf.nl:.*$"
+  }
