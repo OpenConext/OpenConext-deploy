@@ -82,6 +82,7 @@ config:
   server-welcome-url: "https://welcome.{{ base_domain }}"
   eduid-entity-id: "https://login.{{ myconext_base_domain }}"
   role-search-required: false
+  past-date-allowed: {{ access.past_date_allowed }}
 
 voot:
   user: {{ access.vootuser}}
