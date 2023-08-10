@@ -114,6 +114,7 @@ parameters:
         loa: {{ stepup_enabled_generic_second_factors[sf].loa }}
 {% endfor %}
 
-    sso_cookie_lifetime: 86400 # 1 day
-    sso_cookie_type: 'persistent'
-    sso_cookie_name: 'stepup-gateway_sso-on-second-factor-authentication'
+    sso_cookie_lifetime: {{ gateway_sso_cookie_lifetime }}
+    sso_cookie_type: "{{ gateway_sso_cookie_type }}"
+    sso_cookie_name: "{{ gateway_sso_cookie_name }}"
+    sso_encryption_key: "{{ gateway_sso_encryption_key }}"
