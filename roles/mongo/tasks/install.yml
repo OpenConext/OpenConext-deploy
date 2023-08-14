@@ -12,9 +12,23 @@
       - mongodb-org
     state: present
 
+- name: Slurp the private key
+  ansible.builtin.slurp:
+    path: "/etc/pki/mongo/mongo.key"
+  register: mongo_key
+
+- name: Create combined key and certificate file
+  ansible.builtin.copy:
+    content: "{{ mongo_key['content'] | b64decode }}{{ certificate.certificate }}"
+    dest: "/etc/pki/mongo/keyandcert.pem"
+    owner: root
+    group: mongod
+    mode: "0440"
+
 - name: Install pymongo
   ansible.builtin.pip:
     name: pymongo
+    version: '3.12.3'
 
 - name: Install kernel settings script
   ansible.builtin.copy:
@@ -43,13 +57,11 @@
     owner: root
     group: root
 
-- name: Create the mongo keyfile for replication
-  ansible.builtin.copy:
-    content: "{{ mongo_keyfilesecret }}"
-    dest: /etc/pki/mongo/keyfile
-    owner: mongod
-    group: mongod
-    mode: "0400"
+- name: Set sysctl vm.max_map_count
+  ansible.posix.sysctl:
+    name: vm.max_map_count
+    value: 128000
+    state: present
 
 - name: Install mongodb.conf file
   ansible.builtin.template:
@@ -58,6 +70,7 @@
     owner: root
     group: root
     mode: "0644"
+  notify: restart mongod
 
 - name: Enable and start mongod
   ansible.builtin.service:

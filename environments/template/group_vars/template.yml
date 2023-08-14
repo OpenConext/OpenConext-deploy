@@ -21,8 +21,8 @@ attribute_aggregation_server_version: "3.0.1"
 oidc_playground_client_version: "3.0.0"
 oidc_playground_server_version: "3.0.0"
 engine_version: "6.9.1"
-manage_gui_version: "7.2.2"
-manage_server_version: "7.2.2"
+manage_gui_version: "7.2.4"
+manage_server_version: "7.2.4"
 lifecycle_version: "0.1.1"
 monitoring_tests_version: "7.0.0"
 mujina_version: "8.0.2"
@@ -58,10 +58,6 @@ databases:
     - { name: lifecyclerw, db_name: eb_logins, password: "{{ mysql_passwords.lifecycle }}" }
 
 mongo_port: 27017
-mongo_cluster: false
-mongo_hostname: localhost
-mongo_host: "{{ mongo_hostname }}"
-mongo_tls: false
 
 mongo:
   users:
@@ -369,11 +365,13 @@ aa:
   eduid_url: "https://login.{{ myconext_base_domain }}/myconext/api/attribute-aggregation"
   eduid_username: aa
   eduid_password: "{{ myconext_api_attribute_aggregation_password }}"
+  access_url: "https://access.{{ base_domain }}/api/aa/%s"
+  access_username: aa
+  access_password: "todo"
   aggregate_cache: 0
 
 oidcng:
   issuer: https://connect.{{ base_domain }}/
-  mongo_host: "{{ mongo_hostname }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: oidcngrw
   mongo_password: "{{ mongo_passwords.oidcng }}"
@@ -382,14 +380,11 @@ oidcng:
   api_user: manage
   key_rollover_cron_expression: "0 0 0 * * *"
   acr_values_supported:
-    - http://{{ base_domain }}/assurance/loa1
-    - http://{{ base_domain }}/assurance/loa2
-    - http://{{ base_domain }}/assurance/loa3
     - https://eduid.nl/trust/validate-names
     - https://eduid.nl/trust/linked-institution
     - https://eduid.nl/trust/affiliation-student
     - https://refeds.org/profile/mfa
-  default_acr_value: http://{{ base_domain }}/assurance/loa1
+  default_acr_value: "{{ stepup_intrinsic_loa }}"
   eduid_attribute_manipulation_enabled: false
   consent_enabled: false
   token_api_enabled: false
@@ -399,7 +394,6 @@ oidcng_logback_email: false
 oidcng_saml_sp_entityid: https://connect.{{ base_domain }}
 
 myconext:
-  mongo_host: "{{ mongo_host }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: myconextrw
   mongo_database: myconext
@@ -418,13 +412,14 @@ myconext:
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
   sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
   oidcng_rs_client_id: myconext.rs.{{ base_domain }}
+  mobile_app_rp_entity_id: mobile_app_rp_entity_id
   links:
-    - { name: "help" , url: "https://wiki.surfnet.nl/x/EYzaAQ" }
-    - { name: "help_en" , url: "https://wiki.surfnet.nl/x/FYzaAQ" }
-    - { name: "privacyverklaring" , url: "https://wiki.surfnet.nl/x/G4zaAQ" }
-    - { name: "privacy_policy" , url: "https://wiki.surfnet.nl/x/MIzaAQ" }
-    - { name: "terms_of_service" , url: "https://wiki.surfnet.nl/x/LozaAQ"}
-    - { name: "voorwaarden" , url: "https://wiki.surfnet.nl/x/HYzaAQ"}
+    - { name: "help" , url: "https://example.org/x/EYzaAQ" }
+    - { name: "help_en" , url: "https://example.org/x/FYzaAQ" }
+    - { name: "privacyverklaring" , url: "https://example.org/x/G4zaAQ" }
+    - { name: "privacy_policy" , url: "https://example.org/x/MIzaAQ" }
+    - { name: "terms_of_service" , url: "https://example.org/x/LozaAQ"}
+    - { name: "voorwaarden" , url: "https://example.org/x/HYzaAQ"}
 myconext_onegini_entity_id: http://mock-idp
 
 monitoring_tests:
@@ -475,13 +470,15 @@ manage:
         scopes: [READ, WRITE, PUSH, SYSTEM]
       }
     - {
+        name: "access",
+        password: "{{ manage_access_secret }}",
+        scopes: ["READ"]
+      }
+    - {
         name: "attribute-aggregation",
         password: "{{ aa_manage_password }}",
         scopes: ["READ"]
       }
-  loa_values_supported:
-    - http://{{ base_domain }}/assurance/loa2
-    - http://{{ base_domain }}/assurance/loa3
   oidc_rp_redirect_url_format: "url"
 
 loadbalancing:

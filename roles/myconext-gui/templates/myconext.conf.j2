@@ -34,6 +34,7 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
     RewriteCond %{REQUEST_URI} !^/login
     RewriteCond %{REQUEST_URI} !^/startSSO
     RewriteCond %{REQUEST_URI} !^/fonts
+    RewriteCond %{REQUEST_URI} !^/.well-known
     RewriteRule (.*) /index.html [L]
 
     ProxyPreserveHost On
@@ -95,6 +96,10 @@ Listen {{ apache_app_listen_address.myconext }}:{{ loadbalancing.myconext.port }
 
     # Svelte resources
     <Location ~ "(.*)(eot|svg|ttf|woff2|woff|js|js\.map|css|css\.map|png|jpg|ico)$">
+      Require all granted
+    </Location>
+
+    <Location ~ "/.well-known/">
       Require all granted
     </Location>
 

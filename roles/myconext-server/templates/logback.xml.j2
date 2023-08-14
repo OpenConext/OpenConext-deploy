@@ -43,6 +43,7 @@
 
     <filter class="filter.CustomThresholdFilter">
         <clazz>myconext.exceptions.ExpiredAuthenticationException</clazz>
+        <clazz>myconext.exceptions.UserNotFoundException</clazz>
         <level>ERROR</level>
     </filter>
  </appender>
@@ -54,7 +55,7 @@
  <root level="WARN">
    <appender-ref ref="FILE" />
    <appender-ref ref="JSON_SYSLOG" />
-   <appender-ref ref="EMAIL" />
+   <!-- <appender-ref ref="EMAIL" /> -->
    <appender-ref ref="SYSLOG" />
  </root>
 

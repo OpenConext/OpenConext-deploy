@@ -28,3 +28,4 @@ teams_manage_provision_samlsp_metadata_url: "https://teams.{{ base_domain }}/Shi
 teams_manage_provision_samlsp_sp_cert: ""
 teams_manage_provision_samlsp_trusted_proxy: false
 teams_manage_provision_samlsp_sign: false
+teams_spring_flyway_enabled: true

@@ -1,0 +1,2 @@
+db = connect("mongodb://admin:{{ mongo_admin_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ mongod_port }}{% if not loop.last %},{% endif %}{% endfor %}?ssl=true&tlsCAFile=/etc/pki/mongo/mongoca.pem")
+

@@ -22,6 +22,8 @@
     mode: "0700"
     owner: root
     group: root
+  when: mongo_replication_role != 'arbiter'
+
 
 - name: Create cron symlink for backup script
   ansible.builtin.file:
@@ -30,3 +32,12 @@
     state: link
     mode: "0700"
     owner: root
+  when: mongo_replication_role != 'arbiter'
+
+- name: Create mongosh config file
+  ansible.builtin.template:
+    src: mongoshrc.js.j2
+    dest: /root/.mongoshrc.js
+    owner: root
+    group: root
+    mode: "0640"

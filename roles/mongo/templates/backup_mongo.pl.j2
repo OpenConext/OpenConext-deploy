@@ -17,7 +17,7 @@ if ( -e "$backupdir/mongo-dump-$day/") {
 }
 
 # Dump databases
-`mongodump --username $username --password $password --host {{replica_set_name }}/{% for host in groups["mongo_servers"] %}"{{hostvars[host].mongo_hostname }}:{{ mongod_port }}"{% if not loop.last %},{% endif %}{% endfor %} --authenticationDatabase admin --out $backupdir/mongo-dump-$day`;
+`mongodump --username $username --password $password --authenticationDatabase admin --out $backupdir/mongo-dump-$day`;
 
 # Gzip dumps
 opendir(BDIR, "$backupdir/mongo-dump-$day/");

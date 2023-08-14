@@ -42,6 +42,7 @@
     privatekey_path: "/etc/pki/mongo/mongo.key"
     subject_alt_name:
       - "DNS:{{ inventory_hostname }}"
+    organizational_unit_name: "{{ instance_name }}"
   register: csr
   changed_when: false
 
@@ -73,15 +74,11 @@
     mode: "0400"
   when: certificate is changed
 
-- name: Slurp the private key
-  ansible.builtin.slurp:
-    path: "/etc/pki/mongo/mongo.key"
-  register: mongo_key
-
-- name: Create combined key and certificate file
+- name: Install the CA certificate
   ansible.builtin.copy:
-    content: "{{ mongo_key['content'] | b64decode }}{{ certificate.certificate }}"
-    dest: "/etc/pki/mongo/keyandcert.pem"
+    src: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
+    dest: /etc/pki/mongo/mongoca.pem
     owner: root
     group: root
-    mode: "0400"
+    mode: "0644"
+  notify: restart mongod

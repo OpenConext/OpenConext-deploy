@@ -42,7 +42,8 @@
     "offline_access",
     "eduid.nl/eppn",
     "eduid.nl/eduid",
-    "eduid.nl/mobile"
+    "eduid.nl/mobile",
+    "edubadges.nl/sis"
   ],
   "token_endpoint_auth_methods_supported": [
     "client_secret_basic",
@@ -74,6 +75,7 @@
     "email_verified",
     "family_name",
     "given_name",
+    "locale",
     "name",
     "nickname",
     "preferred_username",
@@ -89,7 +91,7 @@
   "request_parameter_supported": true,
   "request_uri_parameter_supported": true,
   "acr_values_supported": [
-     {% for loa in oidcng.acr_values_supported %}
+     {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported + oidcng.acr_values_supported %}
         "{{ loa }}"{{ "," if not loop.last else ""}}
      {% endfor %}
   ],

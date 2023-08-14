@@ -1,6 +1,6 @@
 ---
 - name: copy virtual host config
-  template: 
-    src: account.conf.j2 
+  template:
+    src: account.conf.j2
     dest: /etc/httpd/conf.d/account.conf
-  notify: restart httpd
+  notify: reload httpd

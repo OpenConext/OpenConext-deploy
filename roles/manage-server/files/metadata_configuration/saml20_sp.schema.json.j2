@@ -133,14 +133,14 @@
     "arp": {
       "type": "object",
       "sources": [
+        "access",
         "eduid",
         "idp",
         "manage",
         "orcid",
-        "pseudo_email",
         "sab",
         "sbs",
-        "voot"
+        "voot",
       ],
       "properties": {
         "enabled": {
@@ -510,6 +510,18 @@
           "type": "string",
           "info": "Explains why the SP answered no on the subject of the SURFmarket DPA."
         },
+        "coin:privacy:dpa_type": {
+          "type": "string",
+          "enum": [
+            "dpa_not_applicable",
+            "dpa_in_surf_agreement",
+            "dpa_model_surf",
+            "dpa_supplied_by_service",
+            "other"
+           ],
+          "default" : "dpa_supplied_by_service",
+          "info": "Determines what DPA this service has to offer"
+        },
         "coin:privacy:privacy_policy": {
           "type": "boolean",
           "info": "Does the SP publish an applicable privacy policy on a web page?"
@@ -559,11 +571,11 @@
           "type": "string",
           "format": "url",
           "enum": [
-            {% for loa in manage.loa_values_supported %}
+            {% for loa in stepup_loa_values_supported %}
             "{{ loa }}"{{ "," if not loop.last else ""}}
             {% endfor %}
           ],
-          "default": "{{ manage.loa_values_supported[0] }}",
+          "default": "{{ stepup_loa_values_supported[0] }}",
           "info": "Set to require Stepup Authentication for this SP with the specified minimum Level of Assurance."
         },
         "coin:stepup:allow_no_token": {
@@ -587,7 +599,7 @@
           ],
           "default": "AO",
           "info": "Set the contractual base that underlies a production SP / RP entity."
-        }
+        },
       },
       "patternProperties": {
         "^name:({{ supported_language_codes | replace(',','|') }})$": {

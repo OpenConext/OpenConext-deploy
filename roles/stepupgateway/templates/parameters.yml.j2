@@ -100,7 +100,7 @@ parameters:
     gateway_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
     second_factor_only_loa_loa2: '{{ stepup_uri_sfo_loa2 }}'
     second_factor_only_loa_loa3: '{{ stepup_uri_sfo_loa3 }}'
-    second_factor_only_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
+    second_factor_only_loa_self_asserted: '{{ stepup_uri_sfo_self_asserted }}'
 
     second_factor_only: {{ gateway_second_factor_only | default(false) }}
 
@@ -113,3 +113,8 @@ parameters:
       {{ sf }}:
         loa: {{ stepup_enabled_generic_second_factors[sf].loa }}
 {% endfor %}
+
+    sso_cookie_lifetime: {{ gateway_sso_cookie_lifetime }}
+    sso_cookie_type: "{{ gateway_sso_cookie_type }}"
+    sso_cookie_name: "{{ gateway_sso_cookie_name }}"
+    sso_encryption_key: "{{ gateway_sso_encryption_key }}"

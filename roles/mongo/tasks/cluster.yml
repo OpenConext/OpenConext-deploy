@@ -50,6 +50,18 @@
   run_once: true
   when: mongo_replication_role == 'primary'
 
+- name: Wait until cluster health is ok
+  community.mongodb.mongodb_status:
+    login_user: admin
+    login_password: "{{ mongo_admin_password }}"
+    login_database: admin
+    login_port: "{{ mongod_port }}"
+    validate: default
+    poll: 5
+    interval: 12
+    replica_set: "{{ replica_set_name }}"
+  when: mongo_replication_role == 'primary'
+
 - name: Add the admin user
   community.mongodb.mongodb_user:
     database: admin

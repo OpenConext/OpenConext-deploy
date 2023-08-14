@@ -1,0 +1,139 @@
+---
+logging:
+  level:
+    org.springframework: WARN
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+    com.zaxxer.hikari: ERROR
+    access: DEBUG
+
+server:
+  error:
+    path: "/error"
+    include-message: always
+  forward-headers-strategy: framework
+
+spring:
+  session:
+    jdbc:
+      initialize-schema: always
+    store-type: jdbc
+    timeout: 8h
+  mvc:
+    log-request-details: false
+  security:
+    oauth2:
+      client:
+        registration:
+          oidcng:
+            client-id: "{{ access.oidc_client_id }}"
+            client-secret: "{{ access.oidc_secret }}"
+            redirect-uri: "https://{baseHost}{basePort}{basePath}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: "authorization_code"
+            scope: openid
+        provider:
+          oidcng:
+            authorization-uri: "https://connect.{{ base_domain }}/oidc/authorize"
+            token-uri: "https://connect.{{ base_domain }}/oidc/token"
+            user-info-uri: "https://connect.{{ base_domain }}/oidc/userinfo"
+            jwk-set-uri: "https://connect.{{ base_domain }}/oidc/certs"
+            user-name-attribute: sub
+            user-info-authentication-method: client_secret_basic
+  jpa:
+    properties:
+      hibernate:
+        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        dialect: org.hibernate.dialect.MariaDBDialect
+    open-in-view: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://{{ access.db_host }}/access
+    username: {{ access.db_user }}
+    password: {{ access.db_secret }}
+  flyway:
+    locations: classpath:db/{vendor}/migration
+    fail-on-missing-locations: true
+  mail:
+    host: {{ smtp_host }}
+
+cron:
+  node-cron-job-responsible: true
+  user-cleaner-expression: "0 0/30 * * * *"
+  last-activity-duration-days: 1000
+  role-expiration-notifier-expression: "0 0/30 * * * *"
+  # Set to -1 to suppress role expiry notifications
+  role-expiration-notifier-duration-days: 5
+
+oidcng:
+  discovery-url: "https://connect.{{ base_domain }}/oidc/.well-known/openid-configuration"
+  introspect-url: "https://connect.{{ base_domain }}/oidc/introspect"
+  resource-server-id: {{ access.resource_server_id }}
+  resource-server-secret: "{{ access.resource_server_secret }}"
+  base-url: https://access.{{ base_domain }}
+
+super-admin:
+  users:
+    - "urn:collab:person:example.com:admin"
+
+config:
+  client-url: "https://access.{{ base_domain}}"
+  welcome-url: "https://welcome.{{ base_domain}}"
+  server-url: "https://access.{{ base_domain }}"
+  server-welcome-url: "https://welcome.{{ base_domain }}"
+  eduid-entity-id: "https://login.{{ myconext_base_domain }}"
+  role-search-required: false
+  past-date-allowed: {{ access.past_date_allowed }}
+
+voot:
+  user: {{ access.vootuser}}
+  password: {{ access.vootsecret}}
+  group_urn_domain: urn:mace:surf.nl:test.surfaccess.nl
+
+attribute-aggregation:
+  user: {{ access.attribute_aggregation_user }}
+  password: {{ access.attribute_aggregation_secret }}
+
+email:
+  from: "{{ noreply_email }}"
+  contactEmail: "{{ support_email }}"
+  environment: "test2"
+  enabled: true
+
+manage:
+  enabled: true
+  url: "https://manage.{{ base_domain }}"
+  user: {{ access.manageuser }}
+  password: {{ access.managesecret }}
+
+springdoc:
+  pathsToMatch: "/api/external/v1/**"
+  api-docs:
+    path: "/ui/api-docs"
+  swagger-ui:
+    path: "/ui/api-ui.html"
+    operationsSorter: method
+    oauth:
+      client-id: ${spring.security.oauth2.client.registration.oidcng.client-id}
+      client-secret: ${spring.security.oauth2.client.registration.oidcng.client-secret}
+      use-basic-authentication-with-access-code-grant: true
+
+
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,mappings"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    mappings:
+      enabled: true
+  info:
+    git:
+      mode: full

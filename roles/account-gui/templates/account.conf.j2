@@ -38,6 +38,7 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
     RewriteCond %{REQUEST_URI} !^/actuator
     RewriteCond %{REQUEST_URI} !^/internal
     RewriteCond %{REQUEST_URI} !^/fonts
+    RewriteCond %{REQUEST_URI} !^/.well-known
     RewriteRule (.*) /index.html [L]
 
     ProxyPreserveHost On

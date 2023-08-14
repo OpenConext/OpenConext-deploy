@@ -6,6 +6,7 @@
     priv: "{{ item[0].db_name }}.*:{{item[0].privilege}}"
     state: present
     login_unix_socket: /var/lib/mysql/mysql.sock
+    append_privs: true
   with_nested:
     - "{{ databases.users }}"
     - "{{ database_clients }}"

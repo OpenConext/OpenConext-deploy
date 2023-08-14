@@ -37,6 +37,15 @@ Listen {{ apache_app_listen_address.manage }}:{{ loadbalancing.manage.port }}
     ProxyPass /manage/api http://localhost:{{ springapp_tcpport }} retry=0
     ProxyPassReverse /manage/api http://localhost:{{ springapp_tcpport }}
 
+###########################################################################
+# Backdoor instructions                                                   #
+# ------------------------------------------------------------------------#
+# Manage offers the ability to use basic authentication to login          #
+# In order to activate it, remove the <Location> </Location> block below  #
+# and restart httpd                                                       #
+# The username and password can be found in the manage application.yml    #
+# #########################################################################
+   
     <Location />
       AuthType shibboleth
       ShibUseHeaders On

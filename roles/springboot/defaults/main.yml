@@ -112,8 +112,8 @@ springboot_server_services:
     version: "{{ attribute_aggregation_server_version }}"
     type: server
     port: 9198
-    min_heapsize: "{{ pdp_min_heapsize | default('256m') }}"
-    max_heapsize: "{{ pdp_max_heapsize | default('256m') }}"
+    min_heapsize: "{{ attribute_aggregation_min_heapsize | default('256m') }}"
+    max_heapsize: "{{ attribute_aggregation_max_heapsize | default('256m') }}"
   - name: oidc-playground
     enabled: "{{ springboot_services_state.oidc_playground }}"
     version: "{{ oidc_playground_server_version }}"

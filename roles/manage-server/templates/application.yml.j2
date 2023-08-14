@@ -63,7 +63,8 @@ spring:
     port: 25
   data:
     mongodb:
-      uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{% if not mongo_cluster %}{{ mongo_hostname }}{% else %}{% for host in groups['mongo_servers'] %}{{ hostvars[host]['mongo_hostname'] }}:{{ manage.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}/{{ manage.mongo_database }}{% if mongo_tls %}?ssl=true{% endif %}
+      uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ manage.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ manage.mongo_database }}?ssl=true
+
 
   main:
     banner-mode: "off"

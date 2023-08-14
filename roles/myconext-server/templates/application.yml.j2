@@ -32,6 +32,7 @@ email:
   from: eduID <noreply@{{ myconext_base_domain }}>
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
+  idp-surfconext-url: https://login.{{ myconext_base_domain }}
 
 schac_home_organization: eduid.nl
 
@@ -64,6 +65,9 @@ guest_idp_entity_id: https://login.{{ myconext_base_domain }}
 my_conext_url: https://mijn.{{ myconext_base_domain }}
 domain: {{ myconext_base_domain }}
 mijn_eduid_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
+mobile_app_redirect: eduid:///client/mobile
+# For this RP we nudge the user to use the magic link
+mobile_app_rp_entity_id: {{ myconext.mobile_app_rp_entity_id }}
 
 feature:
   webauthn: {{ myconext.feature_webauthn }}
@@ -80,6 +84,8 @@ feature:
   create_eduid_institution_enabled: {{ myconext.feature_create_eduid_institution_enabled }}
   # Do we show the landing page for the create-from-institution flow
   create_eduid_institution_landing: {{ myconext.feature_create_eduid_institution_landing }}
+  # Do we default remember the user for a longer period
+  default_remember_me: True
 
 
 secure_cookie: true
@@ -88,6 +94,7 @@ private_key_path: file://{{ myconext_dir }}/myconext_saml.key
 certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
 
 remember_me_max_age_seconds: 15_768_000
+sso_mfa_duration_seconds: 3600
 nudge_eduid_app_days: {{ myconext.nudge_eduid_app_days }}
 remember_me_question_asked_days: {{ myconext.remember_me_question_asked_days }}
 email_guessing_sleep_millis: 500
@@ -119,6 +126,8 @@ oidc:
   secret: {{ myconext_client_secret }}
   idp-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/idp/oidc/redirect
   sp-flow-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
+  mobile-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/mobile/oidc/redirect
+
   sp-create-from-institution-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/create-from-institution/oidc-redirect
   base-url: https://connect.{{ base_domain }}
 
@@ -154,7 +163,7 @@ geo_location:
 spring:
   data:
     mongodb:
-      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% if not mongo_cluster %}{{ mongo_hostname }}{% else %}{% for host in groups['mongo_servers'] %}{{ hostvars[host]['mongo_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}/{{ myconext.mongo_database }}{% if mongo_tls %}?ssl=true{% endif %}
+      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl=true
 
   mail:
     host: localhost
