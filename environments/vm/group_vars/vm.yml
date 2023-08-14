@@ -628,12 +628,11 @@ springboot_services_state:
   pdp: true
   attribute_aggregation: true
   oidc_playground: true
-  myconext: true
-  account: true
-  eduid: true
+  myconext: false
+  account: false
+  eduid: false
   oidcng: true
   voot: true
   mujina_sp: true
   mujina_idp: true
   dashboard: false
-
