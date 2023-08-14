@@ -56,6 +56,7 @@ databases:
     - { name: development, password: development }
 
 mongo_port: 27017
+mongo_tls_host_altname_dnsorip: IP
 
 mongo:
   users:
