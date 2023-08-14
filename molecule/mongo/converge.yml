@@ -14,6 +14,7 @@
     - name: "Set some facts"
       set_fact:
         mongo_replication_role: primary
+        mongo_tls_host_altname_dnsorip: DNS
 
   roles:
     - role: mongo
