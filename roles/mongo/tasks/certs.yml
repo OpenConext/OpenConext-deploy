@@ -64,6 +64,7 @@
     ownca_not_before: "-1d"  # valid since yesterday
   delegate_to: localhost
   register: certificate
+  become: false
 
 - name: Write certificate file
   ansible.builtin.copy:
