@@ -143,6 +143,18 @@
           "type": "string",
           "info": "Explains why the SP answered no on the subject of the SURFmarket DPA."
         },
+        "coin:privacy:dpa_type": {
+          "type": "string",
+          "enum": [
+            "dpa_not_applicable",
+            "dpa_in_surf_agreement",
+            "dpa_model_surf",
+            "dpa_supplied_by_service",
+            "other"
+          ],
+          "default": "dpa_supplied_by_service",
+          "info": "Determines what DPA this service has to offer"
+        },
         "coin:privacy:privacy_policy": {
           "type": "boolean",
           "info": "Does the SP publish an applicable privacy policy on a web page?"
@@ -191,6 +203,11 @@
         "^OrganizationDisplayName:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string",
           "info": "The friendly name of the organization. e.g. University of Harderwijk."
+        },
+        "^mdui:PrivacyStatementURL:({{ supported_language_codes | replace(',','|') }})$": {
+          "type": "string",
+          "format": "url",
+          "info": "The URL to the Privacy Statement of the service."
         },
         "^contacts:([0-3]{1}):surName$": {
           "type": "string",
