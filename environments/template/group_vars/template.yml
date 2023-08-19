@@ -249,8 +249,8 @@ shibboleth_apps:
     baseurl: ""
 
 shib:
-  db_host: "127.0.0.1"
-shibboleth_database_backend: true
+  db_host: "{{ mysql_host }}"
+shibboleth_database_backend: false
 
 teams:
   db_name: "teams"
