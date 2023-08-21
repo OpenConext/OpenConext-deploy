@@ -28,7 +28,6 @@
 - name: Install pymongo
   ansible.builtin.pip:
     name: pymongo
-    version: '3.12.3'
 
 - name: Install kernel settings script
   ansible.builtin.copy:

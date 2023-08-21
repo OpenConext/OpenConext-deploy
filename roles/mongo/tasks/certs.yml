@@ -41,7 +41,7 @@
   community.crypto.openssl_csr_pipe:
     privatekey_path: "/etc/pki/mongo/mongo.key"
     subject_alt_name:
-      - "DNS:{{ inventory_hostname }}"
+      - "{{ mongo_tls_host_altname_dnsorip | default('DNS') }}:{{ inventory_hostname }}"
     organizational_unit_name: "{{ instance_name }}"
   register: csr
   changed_when: false
@@ -64,6 +64,7 @@
     ownca_not_before: "-1d"  # valid since yesterday
   delegate_to: localhost
   register: certificate
+  become: false
 
 - name: Write certificate file
   ansible.builtin.copy:

@@ -14,8 +14,8 @@ error_mail_to: devnull@example.org
 
 php_display_errors: 1
 
-attribute_aggregation_gui_version: "3.0.1"
-attribute_aggregation_server_version: "3.0.1"
+attribute_aggregation_gui_version: "3.0.6"
+attribute_aggregation_server_version: "3.0.6"
 oidc_playground_client_version: "3.0.0"
 oidc_playground_server_version: "3.0.0"
 engine_version: "6.9.1"
@@ -24,12 +24,12 @@ manage_server_version: "7.2.4"
 lifecycle_version: "0.1.1"
 monitoring_tests_version: "7.0.0"
 mujina_version: "8.0.2"
-oidcng_version: "6.1.3"
-pdp_server_version: "4.0.1"
-pdp_gui_version: "4.0.1"
+oidcng_version: "6.1.6"
+pdp_server_version: "4.0.2"
+pdp_gui_version: "4.0.2"
 profile_version: "3.1.4"
-teams_gui_version: "9.1.1"
-teams_server_version: "9.1.1"
+teams_gui_version: "9.1.3"
+teams_server_version: "9.1.3"
 voot_version: "5.0.0"
 myconext_server_version: "6.0.2"
 myconext_gui_version: "6.0.2"
@@ -56,6 +56,7 @@ databases:
     - { name: development, password: development }
 
 mongo_port: 27017
+mongo_tls_host_altname_dnsorip: IP
 
 mongo:
   users:
@@ -627,12 +628,11 @@ springboot_services_state:
   pdp: true
   attribute_aggregation: true
   oidc_playground: true
-  myconext: true
-  account: true
-  eduid: true
+  myconext: false
+  account: false
+  eduid: false
   oidcng: true
   voot: true
   mujina_sp: true
   mujina_idp: true
   dashboard: false
-
