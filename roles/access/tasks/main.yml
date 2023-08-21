@@ -25,7 +25,7 @@
 - name: Create the server container
   community.docker.docker_container:
     name: openconextaccessserver
-    image: ghcr.io/openconext/openconext-access/accessserver:latest
+    image: ghcr.io/openconext/openconext-access/accessserver:{{ access_server_version }}
     pull: true
     restart_policy: "always"
     networks:
@@ -43,7 +43,7 @@
 - name: Create the client container
   community.docker.docker_container:
     name: accessclient
-    image: ghcr.io/openconext/openconext-access/accessclient:latest
+    image: ghcr.io/openconext/openconext-access/accessclient:{{ access_client_version }}
     pull: true
     restart_policy: "always"
     published_ports:
@@ -54,7 +54,7 @@
 - name: Create the welcome container
   community.docker.docker_container:
     name: accesswelcome
-    image: ghcr.io/openconext/openconext-access/accessswelcome:latest
+    image: ghcr.io/openconext/openconext-access/accessswelcome:{{ access_welcome_version }}
     pull: true
     restart_policy: "always"
     published_ports:
@@ -65,7 +65,7 @@
 - name: Create the mock provisioning container
   community.docker.docker_container:
     name: accesssprovisioningmock
-    image: ghcr.io/openconext/openconext-access/accesssprovisioningmock:latest
+    image: ghcr.io/openconext/openconext-access/accesssprovisioningmock:{{ access_mock_version }}
     pull: true
     restart_policy: "always"
     command: '--spring.config.location=./'
