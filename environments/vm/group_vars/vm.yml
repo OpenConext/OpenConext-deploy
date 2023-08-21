@@ -36,6 +36,10 @@ myconext_gui_version: "6.0.2"
 account_gui_version: "6.0.2"
 dashboard_server_version: "12.3.4"
 dashboard_gui_version: "12.3.4"
+access_server_version: "0.0.1-SNAPSHOT"
+access_client_version: "0.0.1-SNAPSHOT"
+access_welcome_version: "0.0.1-SNAPSHOT"
+access_mock_version: "0.0.1-SNAPSHOT"
 
 databases:
   names:
