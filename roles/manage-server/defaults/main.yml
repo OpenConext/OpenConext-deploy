@@ -19,3 +19,10 @@ manage_manage_provision_samlsp_sp_cert: ""
 manage_manage_provision_samlsp_trusted_proxy: false
 manage_manage_provision_samlsp_sign: false
 manage_provision_push: false
+manage_tabs_enabled:
+  - saml20_idp
+  - saml20_sp
+  - oidc10_rp
+  - oauth20_rs
+  - single_tenant_template
+  - provisioning

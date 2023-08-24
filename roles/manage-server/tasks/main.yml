@@ -39,14 +39,27 @@
   notify:
     - "restart manage"
 
-- name: copy and template metadata configuration
+- name: copy metadata configuration
   template:
-    src: "{{ item }}"
-    dest: '{{ manage_dir }}/metadata_configuration/{{ item | basename | regex_replace("\.j2","") }}'
+    src: "metadata_configuration/{{ item }}.schema.json.j2"
+    dest: "{{ manage_dir }}/metadata_configuration/{{ item }}.schema.json"
     owner: manage
     group: manage
-    mode: 0640
-  with_fileglob: "metadata_configuration/*.j2"
+    mode: "0640"
+  with_items:
+    - "{{ manage_tabs_enabled }}"
+  notify:
+    - "restart manage"
+
+- name: copy metadata templates
+  copy:
+    src: "metadata_templates/{{ item }}.template.json"
+    dest: "{{ manage_dir }}/metadata_templates/{{ item }}.template.json"
+    owner: manage
+    group: manage
+    mode: "0640"
+  with_items: 
+    - "{{ manage_tabs_enabled }}"
   notify:
     - "restart manage"
 
@@ -56,10 +69,9 @@
     dest: "{{ manage_dir }}"
     owner: manage
     group: manage
-    mode: 0640
+    mode: "0640"
   with_items:
     - metadata_export
-    - metadata_templates
   notify:
     - "restart manage"
 
