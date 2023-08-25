@@ -1,0 +1,85 @@
+---
+- name: Add Docker GPG key.
+  ansible.builtin.rpm_key:
+    key: "https://download.docker.com/linux/centos/gpg"
+    state: present
+
+- name: Add Docker repository.
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: '/etc/yum.repos.d/docker-ce.repo'
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Install docker
+  ansible.builtin.package:
+    name: docker-ce
+    state: present
+
+- name: Start and enable the docker daemon
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Create the traefik configuration file directory
+  ansible.builtin.file:
+    state: directory
+    path: "/opt/openconext/traefik/{{ item }}"
+    owner: root
+    mode: "0755"
+  with_items:
+    - config
+    - certs
+
+- name: Place the dynamic configuration
+  ansible.builtin.copy:
+    src: router.yaml
+    dest: /opt/openconext/traefik/config/router.yaml
+    owner: root
+    mode: "0640"
+
+- name: Create Traefik backend key
+  ansible.builtin.copy:
+    content: "{{ backend_tls_key }}"
+    dest: "/opt/openconext/traefik/certs/backend.key"
+    mode: "0600"
+    owner: root
+
+- name: Create SSL certificate
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
+    dest: "/opt/openconext/traefik/certs/backend.crt"
+    owner: root
+    mode: "0644"
+
+- name: Create the Traefik loadbalancer network
+  community.docker.docker_network:
+    name: loadbalancer
+
+- name: Create the Traefik loadbalancer
+  community.docker.docker_container:
+    name: loadbalancer
+    image: traefik:latest
+    published_ports:
+      - "0.0.0.0:443:443"
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    command: "--providers.docker --providers.docker.network=loadbalancer --entrypoints.websecure.address=:443 --providers.file.directory=/config/config/ --providers.docker.exposedbydefault=false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/openconext/traefik/:/config/
+    comparisons:
+      published_ports: strict 
+      networks: strict
+
+- name: Place the iptables file
+  ansible.builtin.template:
+    src: ip4tables.sh.j2
+    dest: /usr/local/sbin/ipt4tables.sh 
+    mode: "0750"
+    owner: root
+
