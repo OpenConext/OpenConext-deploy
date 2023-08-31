@@ -69,7 +69,7 @@ Listen {{ apache_app_listen_address.account }}:{{ loadbalancing.account.port }}
       Options     -Indexes
     </Directory>
 
-    Header always set Content-Security-Policy "{{ httpd_csp.lenient_with_static_img_with_oidcng }}"
+    Header always set Content-Security-Policy "{{ httpd_csp.lenient_with_static_img_for_idp }}"
     Header always set X-Frame-Options "DENY"
     Header always set Referrer-Policy "same-origin"
     Header always set X-Content-Type-Options "nosniff"
