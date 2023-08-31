@@ -18,10 +18,6 @@
     - serverapplication.yml
     - mockapplication.yml
 
-- name: Create the access container network
-  community.docker.docker_network:
-    name: "access"
-
 - name: Create the server container
   community.docker.docker_container:
     name: openconextaccessserver
@@ -29,7 +25,7 @@
     pull: true
     restart_policy: "always"
     networks:
-      - name: "access"
+      - name: "loadbalancer"
     mounts:
       - source: /opt/openconext/access/serverapplication.yml
         target: /application.yml
@@ -39,17 +35,18 @@
     etc_hosts:
       host.docker.internal: host-gateway
 
-
 - name: Create the client container
   community.docker.docker_container:
     name: accessclient
     image: ghcr.io/openconext/openconext-access/accessclient:{{ access_client_version }}
     pull: true
     restart_policy: "always"
-    published_ports:
-      - 81:80
     networks:
-      - name: "access"
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.accessclient.rule: "Host(`access.{{ base_domain }}`)"
+      traefik.http.routers.accessclient.tls: "true"
+      traefik.enable: "true"
 
 - name: Create the welcome container
   community.docker.docker_container:
@@ -57,10 +54,12 @@
     image: ghcr.io/openconext/openconext-access/accessswelcome:{{ access_welcome_version }}
     pull: true
     restart_policy: "always"
-    published_ports:
-      - 82:80
     networks:
-      - name: "access"
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.accesswelcome.rule: "Host(`welcome.{{ base_domain }}`)"
+      traefik.http.routers.accesswelcome.tls: "true"
+      traefik.enable: "true"
 
 - name: Create the mock provisioning container
   community.docker.docker_container:
@@ -74,18 +73,20 @@
         target: /application.yml
         type: bind
     networks:
-      - name: "access"
-    published_ports:
-      - 83:8081
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.accessmock.rule: "Host(`mock.{{ base_domain }}`)"
+      traefik.http.routers.acceessmock.tls: "true"
+      traefik.enable: "true"
 
 - name: Include the role manage_provision_entities to provision access client to Manage
-  include_role:
+  ansible.builtin.include_role:
     name: manage_provision_entities
   vars:
     entity_type: oidc10_rp
 
 - name: Include the role manage_provision_entities to provision access client to Manage
-  include_role:
+  ansible.builtin.include_role:
     name: manage_provision_entities
   vars:
     entity_type: oauth20_rs
