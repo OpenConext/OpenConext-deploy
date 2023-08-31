@@ -76,7 +76,8 @@
       - name: "loadbalancer"
     labels:
       traefik.http.routers.accessmock.rule: "Host(`mock.{{ base_domain }}`)"
-      traefik.http.routers.acceessmock.tls: "true"
+      traefik.http.routers.accessmock.tls: "true"
+      traefik.http.services.accessmock.loadbalancer.server.port: "8081"
       traefik.enable: "true"
 
 - name: Include the role manage_provision_entities to provision access client to Manage
