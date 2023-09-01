@@ -79,7 +79,24 @@
 - name: Place the iptables file
   ansible.builtin.template:
     src: ip4tables.sh.j2
-    dest: /usr/local/sbin/ipt4tables.sh 
+    dest: /usr/local/sbin/ip4tables.sh 
     mode: "0750"
     owner: root
 
+- name: Disable the default iptables service
+  ansible.builtin.systemd:
+    service: iptables
+    enabled: false
+
+- name: Place the new systemd service file
+  ansible.builtin.copy:
+    src: iptablesdocker.service
+    dest: /etc/systemd/system/
+    owner: root
+    mode: "0755"
+
+- name: Enable and start the new firewall service
+  ansible.builtin.systemd:
+    service: iptablesdocker.service
+    enabled: true
+    state: started
