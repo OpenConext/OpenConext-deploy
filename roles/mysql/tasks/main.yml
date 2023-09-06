@@ -108,6 +108,7 @@
     password: "{{ item[0].password }}"
     priv: "{{ item[0].db_name }}.*:ALL"
     state: present
+  append_privs: true
   no_log: true
   with_nested:
     - "{{ databases.users }}"
