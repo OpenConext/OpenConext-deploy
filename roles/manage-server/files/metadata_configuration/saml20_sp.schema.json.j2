@@ -330,6 +330,11 @@
           "type": "boolean",
           "info": "Whether authentication requests from this SP must be signed. Enabling signed autentication requests for an SP enables this SP to specify its own Assertion Consumer Service URLs in the authentication request."
         },
+        "coin:uses_idp_entityid_for_identification": {
+          "type": "boolean",
+          "default": false,
+          "info": "This service provider uses the entityID of the user's IdP for identification or authorization purposes, so needs to be notified when a connected IdP's entityID changes (informational)"
+        },
         "coin:sp_specific_metadata": {
           "type": "boolean",
           "default": false,
