@@ -23,11 +23,16 @@
   docker_container:
     name: spdashboard_web
     image: ghcr.io/surfnet/sp-dashboard/spdashboard_web:{{ spd_docker_web_version }}
-    published_ports: 0.0.0.0:80:80
     pull: true
     restart_policy: "always"
     networks:
       - name: "spdashboard"
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.spdashboard.rule: "Host(`{{ spdashboard_domain }}`)"
+      traefik.http.routers.spdashboard.tls: "true"
+      traefik.enable: "true"
+
 
 - name: Create the php-fpm container
   docker_container:

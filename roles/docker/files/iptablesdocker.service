@@ -1,0 +1,11 @@
+[Unit]
+Description=Restore iptables firewall rules
+Before=network-pre.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/ip4tables.sh
+
+[Install]
+WantedBy=multi-user.target
+

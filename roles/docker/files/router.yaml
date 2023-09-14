@@ -1,0 +1,7 @@
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /config/certs/backend.crt
+        keyFile: /config/certs/backend.key
+
