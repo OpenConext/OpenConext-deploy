@@ -54,7 +54,7 @@ spring:
     locations: classpath:db/{vendor}/migration
     fail-on-missing-locations: true
   mail:
-    host: {{ smtp_host }}
+    host: {{ smtp_server }}
 
 cron:
   node-cron-job-responsible: true
