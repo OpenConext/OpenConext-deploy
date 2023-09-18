@@ -72,8 +72,7 @@ oidcng:
   base-url: https://access.{{ base_domain }}
 
 super-admin:
-  users:
-    - "urn:collab:person:example.com:admin"
+  users: {{ access.super_admins }}
 
 config:
   client-url: "https://access.{{ base_domain}}"
