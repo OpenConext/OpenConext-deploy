@@ -7,7 +7,7 @@
     group: root
     mode: "0770"
 
-- name: Place the server configfiles
+- name: Place the serverapplication configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: /opt/openconext/access/{{ item }}
@@ -16,14 +16,26 @@
     mode: "0644"
   with_items:
     - serverapplication.yml
-    - mockapplication.yml
+  register: serverconfigfiles
 
-- name: Create the server container
+- name: Place the mockapplication configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: /opt/openconext/access/{{ item }}
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - mockapplication.yml
+  register: mockconfigfiles
+
+- name: Create and start the server container
   community.docker.docker_container:
     name: openconextaccessserver
     image: ghcr.io/openconext/openconext-access/accessserver:{{ access_server_version }}
     pull: true
     restart_policy: "always"
+    state: started
     networks:
       - name: "loadbalancer"
     mounts:
@@ -34,6 +46,27 @@
     log_driver: local
     etc_hosts:
       host.docker.internal: host-gateway
+  when: not serverconfigfiles.changed
+
+- name: Create and (re)start the server container
+  community.docker.docker_container:
+    name: openconextaccessserver
+    image: ghcr.io/openconext/openconext-access/accessserver:{{ access_server_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    restart: true
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: /opt/openconext/access/serverapplication.yml
+        target: /application.yml
+        type: bind
+    command: '--spring.config.location=./'
+    log_driver: local
+    etc_hosts:
+      host.docker.internal: host-gateway
+  when: serverconfigfiles.changed
 
 - name: Create the client container
   community.docker.docker_container:
@@ -41,6 +74,7 @@
     image: ghcr.io/openconext/openconext-access/accessclient:{{ access_client_version }}
     pull: true
     restart_policy: "always"
+    state: started
     networks:
       - name: "loadbalancer"
     labels:
@@ -54,6 +88,7 @@
     image: ghcr.io/openconext/openconext-access/accessswelcome:{{ access_welcome_version }}
     pull: true
     restart_policy: "always"
+    state: started
     networks:
       - name: "loadbalancer"
     labels:
@@ -61,12 +96,13 @@
       traefik.http.routers.accesswelcome.tls: "true"
       traefik.enable: "true"
 
-- name: Create the mock provisioning container
+- name: Create and start the mock provisioning container
   community.docker.docker_container:
     name: accesssprovisioningmock
     image: ghcr.io/openconext/openconext-access/accesssprovisioningmock:{{ access_mock_version }}
     pull: true
     restart_policy: "always"
+    state: started
     command: '--spring.config.location=./'
     mounts:
       - source: /opt/openconext/access/mockapplication.yml
@@ -79,6 +115,29 @@
       traefik.http.routers.accessmock.tls: "true"
       traefik.http.services.accessmock.loadbalancer.server.port: "8081"
       traefik.enable: "true"
+  when: not mockconfigfiles.changed
+
+- name: Create and (re)start the mock provisioning container
+  community.docker.docker_container:
+    name: accesssprovisioningmock
+    image: ghcr.io/openconext/openconext-access/accesssprovisioningmock:{{ access_mock_version }}
+    pull: true
+    restart_policy: "always"
+    restart: true
+    state: started
+    command: '--spring.config.location=./'
+    mounts:
+      - source: /opt/openconext/access/mockapplication.yml
+        target: /application.yml
+        type: bind
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.accessmock.rule: "Host(`mock.{{ base_domain }}`)"
+      traefik.http.routers.accessmock.tls: "true"
+      traefik.http.services.accessmock.loadbalancer.server.port: "8081"
+      traefik.enable: "true"
+  when: mockconfigfiles.changed
 
 - name: Include the role manage_provision_entities to provision access client to Manage
   ansible.builtin.include_role:
