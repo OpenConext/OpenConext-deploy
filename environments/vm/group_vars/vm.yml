@@ -36,10 +36,10 @@ myconext_gui_version: "6.0.2"
 account_gui_version: "6.0.2"
 dashboard_server_version: "12.3.4"
 dashboard_gui_version: "12.3.4"
-access_server_version: "0.0.1-SNAPSHOT"
-access_client_version: "0.0.1-SNAPSHOT"
-access_welcome_version: "0.0.1-SNAPSHOT"
-access_mock_version: "0.0.1-SNAPSHOT"
+invite_server_version: "0.0.2-SNAPSHOT"
+invite_client_version: "0.0.2-SNAPSHOT"
+invite_welcome_version: "0.0.2-SNAPSHOT"
+invite_mock_version: "0.0.2-SNAPSHOT"
 
 databases:
   names:
@@ -260,9 +260,9 @@ aa:
   eduid_url: "https://login.{{ myconext_base_domain }}/myconext/api/attribute-aggregation"
   eduid_username: aa
   eduid_password: "{{ myconext_api_attribute_aggregation_password }}"
-  access_url: "https://access.{{ base_domain }}/api/aa/%s"
-  access_username: aa
-  access_password: "todo"
+  invite_url: "https://invite.{{ base_domain }}/api/aa/%s"
+  invite_username: aa
+  invite_password: "todo"
   aggregate_cache: 0
 
 oidcng:
@@ -361,8 +361,8 @@ manage:
         scopes: ["READ", "WRITE", "PUSH"]
       }
     - {
-        name: "access",
-        password: "{{ manage_access_secret }}",
+        name: "invite",
+        password: "{{ manage_invite_secret }}",
         scopes: ["READ"]
       }
     - {
