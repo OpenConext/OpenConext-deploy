@@ -75,6 +75,15 @@ oidcng:
 super-admin:
   users: {{ invite.super_admins }}
 
+institution-admin:
+  entitlement: "urn:mace:surfnet.nl:surfnet.nl:sab:role:SURFconextverantwoordelijke"
+  organization-guid-prefix: "urn:mace:surfnet.nl:surfnet.nl:sab:organizationGUID:"
+
+gui:
+  disclaimer:
+    background-color: {{ invite.disclaimer_background_color }}
+    content: {{ invite.disclaimer_content }}
+
 config:
   client-url: "https://invite.{{ base_domain}}"
   welcome-url: "https://welcome.{{ base_domain}}"
