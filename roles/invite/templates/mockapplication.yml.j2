@@ -14,9 +14,9 @@ spring:
     open-in-view: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://{{ access.db_host }}/access
-    username: {{ access.db_user }}
-    password: {{ access.db_secret }}
+    url: jdbc:mysql://{{ invite.db_host }}/invite
+    username: {{ invite.db_user }}
+    password: {{ invite.db_secret }}
 
 server:
   port: 8081

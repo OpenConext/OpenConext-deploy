@@ -26,8 +26,8 @@ spring:
       client:
         registration:
           oidcng:
-            client-id: "{{ access.oidc_client_id }}"
-            client-secret: "{{ access.oidc_secret }}"
+            client-id: "{{ invite.oidc_client_id }}"
+            client-secret: "{{ invite.oidc_secret }}"
             redirect-uri: "https://{baseHost}{basePort}{basePath}/login/oauth2/code/{registrationId}"
             authorization-grant-type: "authorization_code"
             scope: openid
@@ -47,9 +47,9 @@ spring:
     open-in-view: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://{{ access.db_host }}/access
-    username: {{ access.db_user }}
-    password: {{ access.db_secret }}
+    url: jdbc:mysql://{{ invite.db_host }}/invite
+    username: {{ invite.db_user }}
+    password: {{ invite.db_secret }}
   flyway:
     locations: classpath:db/{vendor}/migration
     fail-on-missing-locations: true
@@ -68,34 +68,34 @@ cron:
 oidcng:
   discovery-url: "https://connect.{{ base_domain }}/oidc/.well-known/openid-configuration"
   introspect-url: "https://connect.{{ base_domain }}/oidc/introspect"
-  resource-server-id: {{ access.resource_server_id }}
-  resource-server-secret: "{{ access.resource_server_secret }}"
-  base-url: https://access.{{ base_domain }}
+  resource-server-id: {{ invite.resource_server_id }}
+  resource-server-secret: "{{ invite.resource_server_secret }}"
+  base-url: https://invite.{{ base_domain }}
 
 super-admin:
-  users: {{ access.super_admins }}
+  users: {{ invite.super_admins }}
 
 config:
-  client-url: "https://access.{{ base_domain}}"
+  client-url: "https://invite.{{ base_domain}}"
   welcome-url: "https://welcome.{{ base_domain}}"
-  server-url: "https://access.{{ base_domain }}"
+  server-url: "https://invite.{{ base_domain }}"
   server-welcome-url: "https://welcome.{{ base_domain }}"
   eduid-entity-id: "https://login.{{ myconext_base_domain }}"
   role-search-required: false
-  past-date-allowed: {{ access.past_date_allowed }}
+  past-date-allowed: {{ invite.past_date_allowed }}
 
 voot:
-  user: {{ access.vootuser}}
-  password: {{ access.vootsecret}}
-  group_urn_domain: urn:mace:surf.nl:test.surfaccess.nl
+  user: {{ invite.vootuser}}
+  password: {{ invite.vootsecret}}
+  group_urn_domain: urn:mace:surf.nl:test.surfinvite.nl
 
 attribute-aggregation:
-  user: {{ access.attribute_aggregation_user }}
-  password: {{ access.attribute_aggregation_secret }}
+  user: {{ invite.attribute_aggregation_user }}
+  password: {{ invite.attribute_aggregation_secret }}
 
 lifecyle:
-  user: {{ access.lifecyle_user }}
-  password: {{ access.lifecyle_secret }}
+  user: {{ invite.lifecyle_user }}
+  password: {{ invite.lifecyle_secret }}
 
 email:
   from: "{{ noreply_email }}"
@@ -106,8 +106,8 @@ email:
 manage:
   enabled: true
   url: "https://manage.{{ base_domain }}"
-  user: {{ access.manageuser }}
-  password: {{ access.managesecret }}
+  user: {{ invite.manageuser }}
+  password: {{ invite.managesecret }}
 
 springdoc:
   pathsToMatch: "/api/external/v1/**"
