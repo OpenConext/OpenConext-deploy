@@ -25,6 +25,11 @@ oidcng_vhost: "connect.{{ base_domain }}"
 
 admin_email: "openconext-admin@example.edu"
 
+# Shown in banner on top right of UI in apps.
+# Colour can be: crimson, orange, hotpink or khaki
+environment_shortname: ""
+environment_ribbon_colour: ""
+
 httpd_csp:
   lenient: "default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:; form-action 'self'; base-uri 'none'"
   lenient_with_static_img: "default-src; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' {{ static_vhost }} data:; form-action 'self'; base-uri 'none'"
