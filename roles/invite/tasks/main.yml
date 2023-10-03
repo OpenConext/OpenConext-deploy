@@ -50,7 +50,7 @@
 
 - name: Create and (re)start the server container
   community.docker.docker_container:
-    name: openconextinviteserver
+    name: inviteserver
     image: ghcr.io/openconext/openconext-invite/inviteserver:{{ invite_server_version }}
     pull: true
     restart_policy: "always"
