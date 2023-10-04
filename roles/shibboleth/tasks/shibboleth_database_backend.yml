@@ -59,6 +59,7 @@
     login_host: "{{ shib.db_host }}"
     state: import
     target: /tmp/shibboleth_database.sql
+    config_file: ""
   changed_when: false
   run_once: true
 
