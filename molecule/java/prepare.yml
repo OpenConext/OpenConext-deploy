@@ -53,6 +53,8 @@
           - 192.168.1.1
           - 10.0.0.1
           - "{{ ansible_all_ipv4_addresses[0] }}"
+        mongo_replication_role: primary
+        mongo_tls_host_altname_dnsorip: DNS
 
   roles:
     - role: rsyslog
