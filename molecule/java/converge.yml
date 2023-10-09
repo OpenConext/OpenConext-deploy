@@ -30,6 +30,9 @@
           dashboard: false
           mujina_sp: true
           mujina_idp: true
+          mongo_replication_role: primary
+          mongo_tls_host_altname_dnsorip: DNS
+
 
   roles:
     - role: java
