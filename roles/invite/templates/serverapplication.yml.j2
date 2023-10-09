@@ -12,6 +12,10 @@ server:
     path: "/error"
     include-message: always
   forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        secure: true
 
 spring:
   main:
