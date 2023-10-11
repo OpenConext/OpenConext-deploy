@@ -49,6 +49,9 @@ manage:
   username: myconext
   password: "{{ manage_myconext_secret }}"
   base_url: "https://manage.{{ base_domain }}"
+  enabled: True
+  # Can also be a https url
+  fallback_url: "classpath:metadata/sp-names.json"
 
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
