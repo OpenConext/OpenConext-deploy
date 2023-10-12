@@ -152,6 +152,7 @@ account_linking:
 
 eduid_api:
   oidcng_introspection_uri: https://connect.{{ base_domain }}/oidc/introspect
+  oidcng_discovery_url: "https://connect.{{ base_domain }}/oidc/.well-known/openid-configuration"
   oidcng_client_id: {{ myconext.rs_client_id }}
   oidcng_secret: {{ myconext_rs_client_secret }}
   base_url: https://login.{{ myconext_base_domain }}
