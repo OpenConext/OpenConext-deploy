@@ -1,5 +1,0 @@
-# Add extra options to the haproxy daemon here. This can be useful for
-# specifying multiple configuration files with multiple -f options.
-# See haproxy(1) for a complete list of options.
-# This overrides the default haproxy.cfg config file
-CONFIG="/etc/haproxy/haproxy_global.cfg -f /etc/haproxy/haproxy_frontend.cfg -f /etc/haproxy/haproxy_backend.cfg -f /etc/haproxy/haproxy_stick_table_backend.cfg"

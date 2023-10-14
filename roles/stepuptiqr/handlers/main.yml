@@ -6,3 +6,8 @@
   service:
     name: php72-php-fpm
     state: reloaded
+
+- name: reload haproxy
+  service: 
+    name: haproxy
+    state: reloaded

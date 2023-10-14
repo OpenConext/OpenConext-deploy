@@ -19,8 +19,8 @@
   until: haproxy_package_installed is succeeded
 
 - name: Copy haproxy sysconfig file
-  copy:
-    src: sysconfig_haproxy 
+  template:
+    src: sysconfig_haproxy.j2
     dest: /etc/sysconfig/haproxy
   notify:
     - "restart haproxy"
@@ -131,6 +131,7 @@
     - haproxy_frontend.cfg
     - haproxy_backend.cfg
     - haproxy_stick_table_backend.cfg
+    - haproxy_proxy.cfg
   notify:
     - "reload haproxy"
 
