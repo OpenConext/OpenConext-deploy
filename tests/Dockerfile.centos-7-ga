@@ -16,7 +16,7 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN yum clean all && \
     yum -y update && \
-    yum -y install python3
+    yum -y install python3 
 
 VOLUME [ "/sys/fs/cgroup" ]
 

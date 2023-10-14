@@ -13,8 +13,9 @@ ANSIBLE_USER=root
 
 # start docker container
 docker run --detach                                         \
-	-v /sys/fs/cgroup:/sys/fs/cgroup:ro                     \
+	-v /sys/fs/cgroup:/sys/fs/cgroup:rw                     \
 	-t                                                      \
+	--cgroupns=host                                         \
 	--privileged                                            \
 	--publish 443:443                                       \
 	--name ansible-test-ga                                  \
@@ -57,7 +58,6 @@ mkdir -p environments-external
 /bin/mv environments-external/github/group_vars/vm.yml environments-external/github/group_vars/github.yml
 sed -i 's/192.168.66.98/0.0.0.0/g' environments-external/github/group_vars/github.yml
 sed -i 's/192.168.66.99/127.0.0.1/g' environments-external/github/group_vars/github.yml
-sed -i 's/oidc_push_enabled: true/oidc_push_enabled: false/g' environments-external/github/group_vars/github.yml
 # Change the hostname in the inventory
 /bin/cp environments/template/inventory environments-external/github/
 sed -i 's/%env%/github/g' environments-external/github/inventory
@@ -68,7 +68,6 @@ sed -i 's/%target_host%/ansible-test-ga ansible_connection=docker/g' environment
 
 # Remove ipv6 listening address in Haproxy
 sed -i '/haproxy_sni_ip\.ipv6/d' roles/haproxy/templates/haproxy_frontend.cfg.j2
-
 echo
 echo "================================================================="
 echo "================================================================="
@@ -77,13 +76,18 @@ echo "================================================================="
 echo "================================================================="
 echo
 
-./provision github $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=manage,mujina-sp,mujina-idp -e @tests/github.yml -t core
+./provision github $ANSIBLE_USER $ANSIBLE_SECRETS -e springboot_service_to_deploy=teams,voot,oidcng,manage,mujina-sp,mujina-idp -e @tests/github.yml -t core
 
 # Make the image a bit smaller
 docker exec ansible-test-ga systemctl stop mysql mongod
 docker exec ansible-test-ga yum -y remove mongodb-org-mongos mongodb-org-tools
 docker exec ansible-test-ga rm -rf /var/lib/mongo/journal/*
 docker exec ansible-test-ga rm -rf /var/lib/mysql/ib_logfile*
+
+# The latest systemd update breaks mongo on docker (systemd[1]: New main PID 951 does not belong to service, and PID file is not owned by root. Refusing)
+# dowgrading it fixes the issue
+docker exec ansible-test-ga yum -y downgrade http://vault.centos.org/7.6.1810/updates/x86_64/Packages/systemd-219-62.el7_6.9.x86_64.rpm http://vault.centos.org/7.6.1810/updates/x86_64/Packages/systemd-libs-219-62.el7_6.9.x86_64.rpm http://vault.centos.org/7.6.1810/updates/x86_64/Packages/systemd-sysv-219-62.el7_6.9.x86_64.rpm
+
 docker stop ansible-test-ga ansible-test-ga
 
 exit $status

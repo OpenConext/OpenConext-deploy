@@ -44,6 +44,7 @@ invite_welcome_version: "0.0.2-SNAPSHOT"
 invite_mock_version: "0.0.2-SNAPSHOT"
 
 
+
 statistics_version: "1.1.7"
 
 databases:
@@ -271,6 +272,8 @@ teams:
   super_admins_team_urns:
     - "nl:surfnet:diensten:teams_super_users"
     - "nl:surfnet:diensten:teams_super_admin_users"
+
+teams_allow_spd_api: '.'
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
