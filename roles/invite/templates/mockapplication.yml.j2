@@ -4,6 +4,8 @@ logging:
     org.springframework.security: INFO
 
 environment: {{ env }}
+mock-server-base-url: "https://mock.{{ base_domain }}"
+invite-server-ms-redirect-url: https://invite.{{ base_domain }}/api/v1/users/ms-accept-return
 
 spring:
   jpa:

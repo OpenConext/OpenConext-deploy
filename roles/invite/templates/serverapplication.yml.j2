@@ -91,13 +91,14 @@ gui:
     content: {{ environment_shortname }}
 
 config:
-  client-url: "https://invite.{{ base_domain}}"
-  welcome-url: "https://welcome.{{ base_domain}}"
+  client-url: "https://invite.{{ base_domain }}"
+  welcome-url: "https://welcome.{{ base_domain }}"
   server-url: "https://invite.{{ base_domain }}"
   server-welcome-url: "https://welcome.{{ base_domain }}"
   eduid-entity-id: "https://login.{{ myconext_base_domain }}"
   role-search-required: false
   past-date-allowed: {{ invite.past_date_allowed }}
+  eduid-idp-schac-home-organization: {{ invite.eduid_idp_schac_home_organization }}
 
 voot:
   user: {{ invite.vootuser}}
@@ -123,6 +124,7 @@ manage:
   url: "https://manage.{{ base_domain }}"
   user: {{ invite.manageuser }}
   password: {{ invite.managesecret }}
+  local: False
 
 springdoc:
   pathsToMatch: "/api/external/v1/**"
