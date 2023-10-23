@@ -289,6 +289,11 @@
           "info": "Select this option to force all claims to be included in the id_token.",
           "default": false
         },
+        "oidc:jwtRequestUri": {
+          "type": "string",
+          "format": "url",
+          "info": "Enter the URL that is allowed to use for this RP to host a JWT containing request parameters (when doing a request using a signed jwt)."
+        },
         "logo:0:url": {
           "type": "string",
           "format": "url",
