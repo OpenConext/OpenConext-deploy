@@ -88,5 +88,6 @@ mfa_values_supported:
  - "http://schemas.microsoft.com/claims/multipleauthn"
  - "https://refeds.org/profile/mfa"
  - "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorContract"
+ - "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorUnregistered"
  - "urn:oasis:names:tc:SAML:2.0:ac:classes:Password"
  - "transparent_authn_context"
