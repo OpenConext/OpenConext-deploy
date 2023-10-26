@@ -159,6 +159,7 @@
     mode: 0664
   with_items:
     - backends.map
+    - backendsstaging.map
     - redirects.map
     - ratelimits.map
   notify:

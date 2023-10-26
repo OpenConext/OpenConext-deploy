@@ -27,6 +27,7 @@ haproxy_applications:
     ha_url: "/health"
     port: "{{ loadbalancing.manage.port }}"
     servers: "{{ php_servers }}"
+    stagingservers: "{{ staging_servers }}"
     sslbackend: yes
     backend_vhost_name: backend.myapp.tld
     backend_ca_file: "/etc/pki/tls/certs/ca-bundle.crt"
@@ -43,6 +44,7 @@ port: This is the port that the backend server listens on.
 ha_url: The url used to check the health of the backend application. If it is not reachable, or it gives an HTTP error that backend will be marked down. For most applications that defaults to /health
 ha_method: The http method used in the health check. 
 servers: A list of the servers that is used for  this application. 
+stagingservers (optional): A list of the servers that is used for staging an application. If the cookie staging=true is present, this staging server is used as backend. 
 restricted: If it is present and set to "yes" the application will be served from te restricted IP address. 
 sslbackend: If it is present and set to "yes" the backend connection will be performed over https. 
 backend_vhost_name: If you have enabled "sslbackend" you need to configure the backend vhost name as well (which should also be present in the certificate on the backend"

@@ -1,0 +1,5 @@
+{% for application in haproxy_applications %}
+{% if application.stagingservers is defined %}
+{{ application.vhost_name }} {{ application.name }}_staging_be
+{% endif %}
+{% endfor %}
