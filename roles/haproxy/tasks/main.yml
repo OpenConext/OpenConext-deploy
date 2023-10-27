@@ -147,6 +147,7 @@
     - allowedips.acl
     - blockedips.acl
     - internalips.acl
+    - stagingips.acl
   notify:
     - "reload haproxy"
 
