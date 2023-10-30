@@ -78,6 +78,10 @@ done
 # Add your non docker rules here 
 
 /sbin/iptables -t filter -A INPUT -p icmp -j ACCEPT 
+# We open port 25 on docker hosts to allow containers to send emails to the docker host itself
+{% if 'docker' in group_names %}
+/sbin/iptables -t filter -A INPUT -p tcp -d {{ ansible_docker0.ipv4.address }} -m multiport --dports 25 -j ACCEPT
+{% endif %}
 
 {% if iptables_incoming is defined %}
 {% for service in iptables_incoming %}

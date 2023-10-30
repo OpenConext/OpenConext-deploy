@@ -1,16 +1,9 @@
 ---
-- name: Add Docker GPG key.
-  ansible.builtin.rpm_key:
-    key: "https://download.docker.com/linux/centos/gpg"
-    state: present
+- include_tasks: setup-rocky.yml
+  when: ansible_os_family == 'RedHat'
 
-- name: Add Docker repository.
-  ansible.builtin.get_url:
-    url: https://download.docker.com/linux/centos/docker-ce.repo
-    dest: '/etc/yum.repos.d/docker-ce.repo'
-    owner: root
-    group: root
-    mode: "0644"
+- include_tasks: setup-debian.yml
+  when: ansible_os_family == 'Debian'
 
 - name: Install docker
   ansible.builtin.package:
@@ -87,6 +80,13 @@
   ansible.builtin.systemd:
     service: iptables
     enabled: false
+  when: ansible_os_family == 'RedHat'
+
+- name: Disable the netfilter-persistent service
+  ansible.builtin.systemd:
+    service: netfilter-persistent
+    enabled: false
+  when: ansible_os_family == 'Debian'
 
 - name: Place the new systemd service file
   ansible.builtin.copy:
