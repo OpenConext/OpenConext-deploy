@@ -147,6 +147,7 @@
     - allowedips.acl
     - blockedips.acl
     - internalips.acl
+    - stagingips.acl
   notify:
     - "reload haproxy"
 
@@ -159,6 +160,7 @@
     mode: 0664
   with_items:
     - backends.map
+    - backendsstaging.map
     - redirects.map
     - ratelimits.map
   notify:

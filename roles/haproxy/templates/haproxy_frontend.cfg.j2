@@ -58,6 +58,10 @@ frontend internet_ip
 frontend local_ip
     bind 127.0.0.1:81 accept-proxy
     acl valid_vhost hdr(host) -f /etc/haproxy/acls/validvhostsunrestricted.acl
+    acl staging req.cook(staging) -m str true
+    acl staging src -f /etc/haproxy/acls/stagingips.acl
+    acl stagingvhost hdr(host) -i -M -f /etc/haproxy/maps/backendsstaging.map 
+    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backendsstaging.map)] if stagingvhost staging
     use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backends.map)]
     option httplog
     capture request header User-agent len 256
@@ -148,6 +152,10 @@ frontend internet_restricted_ip
 frontend localhost_restricted    
     bind 127.0.0.1:82 accept-proxy
     acl valid_vhost hdr(host) -f /etc/haproxy/acls/validvhostsrestricted.acl
+    acl staging req.cook(staging) -m str true
+    acl staging src -f /etc/haproxy/acls/stagingips.acl
+    acl stagingvhost hdr(host) -i -M -f /etc/haproxy/maps/backendsstaging.map 
+    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backendsstaging.map)] if stagingvhost staging
     use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backends.map)]
     option httplog
     capture request header User-agent len 256

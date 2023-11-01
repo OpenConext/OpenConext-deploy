@@ -21,3 +21,6 @@ haproxy_internalips:
   - 0.0.0.0/0
   - ::0/0
 haproxy_hsts_value: "max-age=34214400"
+# If you have a staging server you want to be accessed from certain ips, and them to this list
+haproxy_stagingips:
+  - ''

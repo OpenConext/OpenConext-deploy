@@ -40,3 +40,28 @@
 
 {% endfor %}
 
+{% for application in haproxy_applications %}
+{% if application.stagingservers is defined %}
+#---------------------------------------------------------------------
+# {{ application.name }} staging backend
+#---------------------------------------------------------------------
+#
+  backend {{ application.name }}_staging_be
+  option httpchk {{ application.ha_method }} {{ application.ha_url }} "HTTP/1.0\r\nHost: {{ application.vhost_name }}"
+
+  {%if application.x_forwarded_port is defined %}
+  http-request set-header X-Forwarded-Port {{ application.x_forwarded_port }}
+  {% endif %}
+  http-response del-header ^Strict-Transport-Security:.* #Remove hsts header from backend applications
+  mode http
+  balance roundrobin
+  option httpclose
+
+  cookie HTTPSERVERIDSTAGING insert nocache indirect httponly secure maxidle {{ haproxy_cookie_max_idle }}
+
+  {% for server in application.stagingservers %}
+  server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}{% endif %} weight 100
+    
+  {% endfor %}
+{% endif %}
+{% endfor %}
