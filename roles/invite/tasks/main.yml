@@ -46,6 +46,12 @@
     log_driver: local
     etc_hosts:
       host.docker.internal: host-gateway
+    healthcheck:
+      test: ["CMD", "wget", "-no-verbose",  "--tries=1",  "--spider", "http://localhost:8080/internal/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
   when: not serverconfigfiles.changed
 
 - name: Create and (re)start the server container
@@ -81,6 +87,14 @@
       traefik.http.routers.inviteclient.rule: "Host(`invite.{{ base_domain }}`)"
       traefik.http.routers.inviteclient.tls: "true"
       traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "--fail" , "http://localhost"  ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    env:
+      HTTPD_CSP: "{{ httpd_csp.strict_with_static_img }}"
 
 - name: Create the welcome container
   community.docker.docker_container:
@@ -95,6 +109,14 @@
       traefik.http.routers.invitewelcome.rule: "Host(`welcome.{{ base_domain }}`)"
       traefik.http.routers.invitewelcome.tls: "true"
       traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "--fail" , "http://localhost"  ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    env:
+      HTTPD_CSP: "{{ httpd_csp.strict_with_static_img }}"
 
 - name: Create and start the mock provisioning container
   community.docker.docker_container:
@@ -115,6 +137,12 @@
       traefik.http.routers.invitemock.tls: "true"
       traefik.http.services.invitemock.loadbalancer.server.port: "8081"
       traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "wget", "-no-verbose",  "--tries=1",  "--spider", "http://localhost:8081/internal/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
   when: not mockconfigfiles.changed
 
 - name: Create and (re)start the mock provisioning container
