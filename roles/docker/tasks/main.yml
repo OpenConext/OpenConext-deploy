@@ -61,7 +61,7 @@
     restart_policy: "always"
     networks:
       - name: "loadbalancer"
-    command: "--providers.docker --providers.docker.network=loadbalancer --entrypoints.websecure.address=:443 --providers.file.directory=/config/config/ --providers.docker.exposedbydefault=false --accesslog=true --ping"
+    command: "--providers.docker --providers.docker.network=loadbalancer --entrypoints.websecure.address=:443 --providers.file.directory=/config/config/ --providers.docker.exposedbydefault=false --accesslog=true --ping --serverstransport.insecureskipverify=true"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/openconext/traefik/:/config/
@@ -70,10 +70,10 @@
       networks: strict
     healthcheck:
       test: ["CMD", "traefik", "healthcheck", "--ping"]
-      interval: 1ms
+      interval: 1m
       timeout: 10s
       retries: 3
-      start_period: 30s
+      start_period: 10s
 
 - name: Place the iptables file
   ansible.builtin.template:
