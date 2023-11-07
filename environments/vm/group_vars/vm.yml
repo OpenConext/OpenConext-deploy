@@ -314,8 +314,6 @@ myconext:
     - { name: "privacy_policy" , url: "https://example.org/x/MIzaAQ" }
     - { name: "terms_of_service" , url: "https://example.org/x/LozaAQ"}
     - { name: "voorwaarden" , url: "https://example.org/x/HYzaAQ"}
-myconext_onegini_entity_id: http://mock-idp
-
 
 monitoring_tests:
   mujina_idp_entity_id: http://mock-idp
