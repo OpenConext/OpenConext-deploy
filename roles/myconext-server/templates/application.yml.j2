@@ -36,6 +36,12 @@ email:
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
   idp-surfconext-url: https://login.{{ myconext_base_domain }}
 
+identity-provider-meta-data:
+  single_sign_on_service_uri: "https://login.{{ myconext_base_domain }}/saml/guest-idp/SSO"
+  name: "eduID IdP"
+  description: "eduID IdP"
+  logo_uri: "https://static.surfconext.nl/media/idp/eduid.png"
+
 schac_home_organization: eduid.nl
 
 cron:
