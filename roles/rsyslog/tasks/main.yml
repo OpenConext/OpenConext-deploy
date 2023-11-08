@@ -1,5 +1,5 @@
 - name: install rsyslog
-  yum:
+  package:
     name:
       - rsyslog
       - rsyslog-gnutls
@@ -7,6 +7,14 @@
     state: present
   notify:
   - "restart rsyslog"
+
+- name: Create the pki directory if it does not exist
+  file:
+    path: /etc/pki/rsyslog
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 # We need a key and client certificate to when using RELP
 - name: put rsyslog client key
