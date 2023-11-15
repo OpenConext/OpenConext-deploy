@@ -1,0 +1,11 @@
+- name: restart inviteserver
+  community.docker.docker_container:
+    name: inviteserver
+    state: started
+    restart: true
+
+- name: restart inviteprovisioningmock
+  community.docker.docker_container:
+    name: inviteprovisioningmock
+    state: started
+    restart: true

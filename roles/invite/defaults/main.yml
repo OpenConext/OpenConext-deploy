@@ -12,3 +12,4 @@ invite_manage_provision_oauth_rs_description_en: "{{ instance_name }}  invite Re
 invite_manage_provision_oauth_rs_client_id: "{{ invite.resource_server_id }}"
 invite_manage_provision_oauth_rs_rp_secret: "{{ invite.resource_server_secret }}"
 invite_manage_provision_oauth_rs_scopes: "openid"
+invite_mock_install: false

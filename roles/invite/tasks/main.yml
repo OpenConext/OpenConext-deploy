@@ -16,7 +16,7 @@
     mode: "0644"
   with_items:
     - serverapplication.yml
-  register: serverconfigfiles
+  notify: restart inviteserver
 
 - name: Place the mockapplication configfiles
   ansible.builtin.template:
@@ -27,7 +27,8 @@
     mode: "0644"
   with_items:
     - mockapplication.yml
-  register: mockconfigfiles
+  when: invite_mock_install
+  notify: restart inviteprovisioningmock
 
 - name: Create and start the server container
   community.docker.docker_container:
@@ -52,27 +53,7 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-  when: not serverconfigfiles.changed
-
-- name: Create and (re)start the server container
-  community.docker.docker_container:
-    name: inviteserver
-    image: ghcr.io/openconext/openconext-invite/inviteserver:{{ invite_server_version }}
-    pull: true
-    restart_policy: "always"
-    state: started
-    restart: true
-    networks:
-      - name: "loadbalancer"
-    mounts:
-      - source: /opt/openconext/invite/serverapplication.yml
-        target: /application.yml
-        type: bind
-    command: '--spring.config.location=./'
-    log_driver: local
-    etc_hosts:
-      host.docker.internal: host-gateway
-  when: serverconfigfiles.changed
+  notify: restart inviteserver
 
 - name: Create the client container
   community.docker.docker_container:
@@ -143,29 +124,8 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-  when: not mockconfigfiles.changed
-
-- name: Create and (re)start the mock provisioning container
-  community.docker.docker_container:
-    name: inviteprovisioningmock
-    image: ghcr.io/openconext/openconext-invite/inviteprovisioningmock:{{ invite_mock_version }}
-    pull: true
-    restart_policy: "always"
-    restart: true
-    state: started
-    command: '--spring.config.location=./'
-    mounts:
-      - source: /opt/openconext/invite/mockapplication.yml
-        target: /application.yml
-        type: bind
-    networks:
-      - name: "loadbalancer"
-    labels:
-      traefik.http.routers.invitemock.rule: "Host(`mock.{{ base_domain }}`)"
-      traefik.http.routers.invitemock.tls: "true"
-      traefik.http.services.invitemock.loadbalancer.server.port: "8081"
-      traefik.enable: "true"
-  when: mockconfigfiles.changed
+  when: invite_mock_install
+  notify: restart inviteprovisioningmock
 
 - name: Include the role manage_provision_entities to provision invite client to Manage
   ansible.builtin.include_role:
