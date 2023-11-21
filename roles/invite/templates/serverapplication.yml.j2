@@ -106,7 +106,7 @@ config:
 voot:
   user: {{ invite.vootuser}}
   password: {{ invite.vootsecret}}
-  group_urn_domain: urn:mace:surf.nl:test.surfinvite.nl
+  group_urn_domain: "{{ invite.group_urn_domain }}"
 
 attribute-aggregation:
   user: {{ invite.attribute_aggregation_user }}
@@ -119,7 +119,7 @@ lifecyle:
 email:
   from: "{{ noreply_email }}"
   contactEmail: "{{ support_email }}"
-  environment: "test2"
+  environment: "{{ environment_shortname }}"
   enabled: true
 
 manage:
