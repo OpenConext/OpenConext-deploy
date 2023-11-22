@@ -8,7 +8,7 @@ Listen {{ apache_app_listen_address.static }}:{{ loadbalancing.static.port }}
 
     DocumentRoot {{ static_dir }}
 
-    Header always set Referrer-Policy "origin-when-cross-origin"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-XSS-Protection "1; mode=block"
 
