@@ -1,14 +1,25 @@
 ---
-- include_tasks: setup-rocky.yml
+- name: Include Rocky specific tasks
+  ansible.builtin.include_tasks: setup-rocky.yml
   when: ansible_os_family == 'RedHat'
 
-- include_tasks: setup-debian.yml
+- name: Include Debian specific tasks
+  ansible.builtin.include_tasks: setup-debian.yml
   when: ansible_os_family == 'Debian'
 
 - name: Install docker
   ansible.builtin.package:
     name: docker-ce
     state: present
+
+- name: Install docker config file
+  ansible.builtin.template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: "0744"
+  notify: "restart docker"
 
 - name: Start and enable the docker daemon
   ansible.builtin.systemd:
