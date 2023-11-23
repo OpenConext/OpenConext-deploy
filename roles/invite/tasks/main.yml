@@ -44,7 +44,6 @@
         target: /application.yml
         type: bind
     command: '--spring.config.location=./'
-    log_driver: local
     etc_hosts:
       host.docker.internal: host-gateway
     healthcheck:
