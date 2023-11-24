@@ -64,7 +64,6 @@
   template:
     src: "rsyslog_onlyforward.conf.j2"
     dest: "/etc/rsyslog.conf"
-  when: 
   notify:
     - "restart rsyslog"
   when: ansible_os_family == 'Debian'
