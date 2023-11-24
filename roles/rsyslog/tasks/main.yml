@@ -55,8 +55,19 @@
   template:
     src: "rsyslog.conf.j2"
     dest: "/etc/rsyslog.conf"
+  when: 
   notify:
     - "restart rsyslog"
+  when: ansible_os_family == 'RedHat'
+
+- name: put ryslog config file
+  template:
+    src: "rsyslog_onlyforward.conf.j2"
+    dest: "/etc/rsyslog.conf"
+  when: 
+  notify:
+    - "restart rsyslog"
+  when: ansible_os_family == 'Debian'
 
 - name: include tasks for central syslog server
   include_tasks: rsyslog_central.yml
