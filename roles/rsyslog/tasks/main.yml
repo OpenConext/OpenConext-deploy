@@ -55,7 +55,6 @@
   template:
     src: "rsyslog.conf.j2"
     dest: "/etc/rsyslog.conf"
-  when: 
   notify:
     - "restart rsyslog"
   when: ansible_os_family == 'RedHat'
