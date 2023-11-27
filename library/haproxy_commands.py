@@ -4,15 +4,14 @@ from ansible.module_utils.basic import *
 
 def _haproxy_weight(host, weight, app_name):
   return {
-    "host": host, "weight": str(weight) + "%", "backend": app_name + "_be",
-    "socket": "/var/lib/haproxy/" + app_name + ".stats"
+    "host": host, "weight": str(weight) + "%", "backend": app_name + "_be"
   }
 
 
 def _haproxy_state(host, state, app_name):
   return {
     "host": host, "state": state, "backend": app_name + "_be",
-    "socket": "/var/lib/haproxy/" + app_name + ".stats", "wait": "yes"
+    "wait": "yes"
   }
 
 
