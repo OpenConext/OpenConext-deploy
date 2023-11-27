@@ -1,8 +1,7 @@
 # This rsyslog configuration takes logs from journald and forwards them to a remote log serverad="imuxsock") # provides support for local system logging
+module(load="imuxsock") 
 module(load="imklog")   # provides kernel logging support
-module(load="immark" 
-             MarkMessagePeriod="600"
-            )  # provides --MARK-- message capability
+module(load="immark" interval="600" )  # provides --MARK-- message capability
 module(load="imjournal" 
        PersistStateInterval="100"
        StateFile="/var/spool/rsyslog/imjournal.state"
