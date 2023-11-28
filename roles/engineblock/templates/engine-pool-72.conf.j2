@@ -223,5 +223,5 @@ php_admin_value[post_max_size] = 16M
 
 ; Set session path to a directory owned by process user
 php_value[session.save_handler] = files
-php_value[session.save_path] = {{ php_session_dir}}/engine
-php_value[disable_functions] = exec,passthru,shell_exec,system,popen,curl_multi_exec,show_source,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,
+php_value[session.save_path] = {{ php_session_dir }}/engine
+php_value[disable_functions] = {{ php_disabled_functions }}
