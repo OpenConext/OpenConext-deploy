@@ -1,5 +1,5 @@
 [{{ appname }}]
-listen = /var/run/php-fpm/{{ appname  }}-pool-72.sock
+listen = /var/run/php-fpm/{{ appname }}-pool-72.sock
 listen.allowed_clients = 127.0.0.1
 listen.owner = apache
 listen.group = apache
@@ -15,8 +15,8 @@ pm.status_path = /status
 php_admin_flag[log_errors] = on
 php_admin_value[memory_limit] = {{ fpmmemory | default('128M') }}
 php_value[session.save_handler] = files
-php_value[session.save_path] = {{ php_session_dir}}/{{ appname }}
-php_value[disable_functions] = exec,passthru,shell_exec,system,popen,curl_multi_exec,show_source,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,
+php_value[session.save_path] = {{ php_session_dir }}/{{ appname }}
+php_value[disable_functions] = {{ php_disabled_functions }}
 php_value[session.cookie_domain] = {{ vhost_name }}
 php_value[session.cookie_lifetime] = 0
 php_value[session.gc_maxlifetime] = {{ app_session_expiry_time }}
