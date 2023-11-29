@@ -79,8 +79,8 @@
   copy:
     src: "{{ inventory_dir }}/files/certs/invite/public_key.pem"
     dest: "{{ manage_dir }}/public_invite_key.pem"
-    owner: "root"
-    group: root
+    owner: manage
+    group: manage
     mode: "0740"
   notify:
     - "restart manage"
