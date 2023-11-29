@@ -50,6 +50,7 @@
     dest: "/opt/openconext/traefik/certs/backend.key"
     mode: "0600"
     owner: root
+  when: docker_install_traefik
 
 - name: Create SSL certificate
   ansible.builtin.copy:
@@ -61,6 +62,7 @@
 - name: Create the Traefik loadbalancer network
   community.docker.docker_network:
     name: loadbalancer
+  when: docker_install_traefik | bool
 
 - name: Create the Traefik loadbalancer
   community.docker.docker_container:
@@ -84,7 +86,7 @@
       interval: 1m
       timeout: 10s
       retries: 3
-      start_period: 10s
+  when: docker_install_traefik | bool
 
 - name: Place the iptables file
   ansible.builtin.template:

@@ -6,3 +6,5 @@ docker_apt_ignore_key_error: true
 docker_apt_gpg_key: "{{ docker_repo_url }}/{{ ansible_distribution | lower }}/gpg"
 docker_apt_gpg_key_checksum: "sha256:1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570"
 docker_apt_filename: "docker"
+docker_install_traefik: true
+
