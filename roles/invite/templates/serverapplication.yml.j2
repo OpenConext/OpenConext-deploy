@@ -62,6 +62,9 @@ spring:
   mail:
     host: {{ smtp_host }}
 
+crypto:
+  development-mode: False
+  private-key-location: classpath:private_key_pkcs8.pem
 
 cron:
   node-cron-job-responsible: true

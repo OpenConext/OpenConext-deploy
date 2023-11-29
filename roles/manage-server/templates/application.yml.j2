@@ -57,6 +57,10 @@ security:
   backdoor_password: {{ manage_backdoor_api_password }}
   api_users_config_path: file://{{ manage_dir }}/manage-api-users.yml
 
+crypto:
+  development-mode: False
+  public-key-location: file://{{ manage_dir }}/public_invite_key.pem
+
 spring:
   mail:
     host: localhost

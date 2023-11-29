@@ -18,6 +18,24 @@
     - serverapplication.yml
   notify: restart inviteserver
 
+- name: Copy / create private key
+  copy:
+    content: "{{ invite_private_key_pkcs8 }}"
+    dest: /opt/openconext/invite/private_key_pkcs8.pem
+    owner: "root"
+    group: root
+    mode: 0740
+  notify: restart inviteserver
+
+- name: copy / create certificate
+  copy:
+    src: "{{ inventory_dir }}/files/certs/invite/public_key.pem"
+    dest: /opt/openconext/invite/public_key.pem
+    owner: "root"
+    group: root
+    mode: 0740
+  notify: restart inviteserver
+
 - name: Place the mockapplication configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
@@ -42,6 +60,12 @@
     mounts:
       - source: /opt/openconext/invite/serverapplication.yml
         target: /application.yml
+        type: bind
+      - source: /opt/openconext/invite/private_key_pkcs8.pem
+        target: /private_key_pkcs8.pem
+        type: bind
+      - source: /opt/openconext/invite/public_key.pem
+        target: /public_key.pem
         type: bind
     command: '--spring.config.location=./'
     etc_hosts:
