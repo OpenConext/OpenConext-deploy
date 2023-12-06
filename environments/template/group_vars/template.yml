@@ -451,7 +451,7 @@ manage:
   oidc_push_enabled: false
   run_migrations: false
   push_after_migration: false
-  features: push, validation, push_preview, orphans, find_my_data, edugain
+  features: push, validation, push_preview, orphans, find_my_data, edugain, auto_refresh
   apiUsers:
     - {
         name: "dashboard",

@@ -78,6 +78,10 @@ gui:
     background-color: {{ manage_disclaimer_background_color }}
     content: {{ manage_disclaimer_content }}
 
+metadata_import:
+  auto_refresh:
+    cronSchedule: "-"
+
 # We disable all endpoints except health for the load-balancer and info for git information.
 management:
   health:
