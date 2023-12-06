@@ -115,6 +115,31 @@
         }
       }
     },
+    "autoRefresh": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "allowAll": {
+          "type": "boolean"
+        },
+        "fields": {
+          "properties": {
+            "certData": {
+              "type": "boolean"
+            },
+            "certData2": {
+              "type": "boolean"
+            },
+            "certData3": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
     "stepupEntities": {
       "type": "array",
       "items": {

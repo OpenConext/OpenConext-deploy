@@ -10,5 +10,11 @@
     "OrganizationName:en": "",
     "SingleSignOnService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
     "SingleSignOnService:0:Location": ""
+  },
+  "autoRefresh": {
+    "enabled": false,
+    "allowAll": false,
+    "fields": {
+    }
   }
 }
