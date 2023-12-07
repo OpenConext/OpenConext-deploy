@@ -68,8 +68,6 @@ spring:
   data:
     mongodb:
       uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ manage.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ manage.mongo_database }}?ssl=true
-
-
   main:
     banner-mode: "off"
 
@@ -81,6 +79,10 @@ gui:
 metadata_import:
   auto_refresh:
     cronSchedule: "-"
+
+# Is this node in a load-balanced topology responsible for cleaning up resources
+cron:
+  node-cron-job-responsible: {{ manage_cronjobmaster }}
 
 # We disable all endpoints except health for the load-balancer and info for git information.
 management:
