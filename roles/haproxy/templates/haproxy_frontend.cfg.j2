@@ -1,6 +1,13 @@
 #jinja2: lstrip_blocks: True
 ## Frontend configuration
 
+# Stats frontend for exporting prometheus metrics
+frontend stats
+   bind 127.0.0.1:8404
+   option http-use-htx
+   http-request use-service prometheus-exporter if { path /metrics }
+
+
 #--------------------------------------------------------------------
 #  frontend public ips
 # -------------------------------------------------------------------
