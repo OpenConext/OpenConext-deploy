@@ -15,9 +15,10 @@
   yum:
     name: epel-release.noarch
     state: present
+  when: ansible_os_family == 'RedHat'
 
 - name: Install tools / clients
-  yum:
+  package:
     name: 
       - telnet
       - sudo
@@ -32,13 +33,16 @@
   yum:
     name: 
       - ntp
-  when: ansible_distribution_major_version == '7'
+  when: (ansible_distribution_major_version == '7') and (ansible_os_family == 'RedHat')
 
-- name: Install CentOS8 / Rocky 8 packages
-  yum:
+- name: Install Chrony
+  package:
     name: 
       - chrony
-  when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
+    state: present
+  when: 
+    - ansible_os_family == 'RedHat' and ansible_distribution_major_version >= '8' 
+    - ansible_os_family == 'Debian'
 
 - name: Install git on development vm
   yum:
@@ -103,17 +107,19 @@
     name: ntpd
     state: started
     enabled: yes
-  when: ansible_distribution_major_version == '7'
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
 
 - name: Start chrony
   service:
     name: chronyd
     state: started
     enabled: yes
-  when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
+  when: 
+    - ansible_os_family == 'RedHat' and ansible_distribution_major_version >= '8' 
+    - ansible_os_family == 'Debian'
 
 - name: Remove exim,sendmail when Postfix needs to be installed
-  yum:
+  package:
     name:
       - exim
       - sendmail
@@ -125,7 +131,7 @@
     - sendmail_smarthost is defined
 
 - name: Install Postfix
-  yum:
+  package:
     name:
       - postfix
     state: present
@@ -142,18 +148,6 @@
     - sendmail_smarthost is defined
   notify:
     - "reload postfix"
-
-- name: Copy Postfix pseudo-email config
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/postfix/{{ item }}"
-  when: sendmail_smarthost is defined and handle_pseudo_email
-  with_items:
-    - mysql-pseudo.cf
-    - header_checks
-  notify:
-    - "reload postfix"
-    - "rebuild header_checks"
 
 - name: start and enable Postfix
   service: 
