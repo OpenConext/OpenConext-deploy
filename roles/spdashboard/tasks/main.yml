@@ -26,12 +26,17 @@
     pull: true
     restart_policy: "always"
     networks:
-      - name: "spdashboard"
       - name: "loadbalancer"
     labels:
       traefik.http.routers.spdashboard.rule: "Host(`{{ spdashboard_domain }}`)"
       traefik.http.routers.spdashboard.tls: "true"
       traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "--fail" , "http://localhost"  ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 
 - name: Create the php-fpm container
@@ -42,4 +47,10 @@
     pull: true
     restart_policy: "always"
     networks:
-      - name: "spdashboard"
+      - name: "loadbalancer"
+    healthcheck:
+      test: ["CMD", "cgi-fcgi", "-bind" , "-connect", "127.0.0.1:9000"  ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
