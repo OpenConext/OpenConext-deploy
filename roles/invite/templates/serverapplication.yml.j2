@@ -76,7 +76,7 @@ cron:
   role-expiration-notifier-duration-days: 5
   metadata-resolver-initial-delay-milliseconds: 1
   metadata-resolver-fixed-rate-milliseconds: 86_400_000
-  metadata-resolver-url: "https://metadata.surfconext.nl/idps-metadata.xml"
+  metadata-resolver-url: "https://metadata.{{ base_domain }}/idps-metadata.xml"
 
 oidcng:
   discovery-url: "https://connect.{{ base_domain }}/oidc/.well-known/openid-configuration"
