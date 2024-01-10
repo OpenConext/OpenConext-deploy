@@ -84,6 +84,7 @@ stepup_loa_values_supported:
  - "http://{{ base_domain }}/assurance/loa2"
  - "http://{{ base_domain }}/assurance/loa3"
 
+# If values are added, please add them to the IdP-Dashboard locales
 mfa_values_supported:
  - "http://schemas.microsoft.com/claims/multipleauthn"
  - "https://refeds.org/profile/mfa"
