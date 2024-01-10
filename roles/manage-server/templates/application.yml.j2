@@ -78,7 +78,7 @@ gui:
 
 metadata_import:
   auto_refresh:
-    cronSchedule: "-"
+    cronSchedule: "{{ manage_metadata_refresh_cron_schedule }}"
 
 # Is this node in a load-balanced topology responsible for cleaning up resources
 cron:
