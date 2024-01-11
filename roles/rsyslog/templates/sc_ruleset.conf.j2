@@ -36,7 +36,14 @@ $RuleSet {{ item.name }}
 :programname, isequal, "Apache-myconext" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}") stop }
 :programname, isequal, "Apache-account" { action(type="omfile" DynaFile="apache-account-{{item.name }}") stop }
 :programname, isequal, "Apache-eduid" { action(type="omfile" DynaFile="apache-eduid-{{item.name }}") stop }
-:programname, isequal, "spdashboard" { action(type="omfile" DynaFile="spdashboard-{{ item.name }}") stop }
+:programname, isequal, "spdashboard_php-fpm" { action(type="omfile" DynaFile="spdashboard-{{ item.name }}") stop }
+:programname, isequal, "spdashboard_web" { action(type="omfile" DynaFile="apache-spdashboard-{{ item.name }}") stop }
+:programname, startswith, "inviteclient" { action(type="omfile" DynaFile="inviteclient-{{ item.name }}") stop }
+:programname, startswith, "invitewelcome" { action(type="omfile" DynaFile="invitewelcome-{{ item.name }}") stop }
+:programname, startswith, "inviteserver" { action(type="omfile" DynaFile="inviteserver-{{ item.name }}") stop }
+:programname, startswith, "inviteprovisioningmock" { action(type="omfile" DynaFile="inviteprovisioningmock-{{ item.name }}") stop }
+:programname, startswith, "loadbalancer" { action(type="omfile" DynaFile="loadbalancer-{{ item.name }}") stop }
+
 {% for stepupapp in stepupapps %}
 :programname, isequal, "stepup-{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
 :programname, isequal, "Apache-{{ stepupapp }}" { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
@@ -44,6 +51,7 @@ $RuleSet {{ item.name }}
 :programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
 {% endif %}
 :programname, isequal, "audispd" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
+:programname, isequal, "audit" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
 :programname, isequal, "audisp-syslog" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
 :programname, isequal, "-bash" { action(type="omfile" DynaFile="bash-{{ item.name }}") stop }
 :syslogfacility-text, isequal, "authpriv" { action(type="omfile" dynafile="secure-{{ item.name }}") stop }
