@@ -1,4 +1,11 @@
-# Valid scopes are manage.api.Scope.values(); =>  ["READ", "WRITE", "PUSH", "SYSTEM", "CHANGE_REQUEST"]
+# Valid scopes are manage.api.Scope.values(); =>
+#    CHANGE_REQUEST, //Allowed to create change requests
+#    PUSH, //Allowed to push changes to EB & OIDC-NG
+#    READ, //Allowed to read entities
+#    SYSTEM, //Allowed everything including Attribute Manipulation and updating / deleting Identity Providers
+#    WRITE, //Allowed to create (excluding Identity Providers) and update all entities
+#    DELETE //Allowed to delete entities (excluding Identity Providers)
+
 apiUsers:
   {% for user in manage.apiUsers %}
   - {
