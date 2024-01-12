@@ -338,6 +338,7 @@ manage:
   oidc_push_enabled: true
   features: push, validation, push_preview, orphans, find_my_data, edugain, auto_refresh
   environment: vm
+  super_user_team_names: "urn:collab:group:vm.surfteams.nl:nl:surfnet:diensten:surfconext_tpm_core"
   apiUsers:
     - {
         name: "dashboard",
