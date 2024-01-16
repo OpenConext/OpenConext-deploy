@@ -1,4 +1,10 @@
 parameters:
+{% if 'docker' in group_names %}
+    app_env: prod
+    app_debug: false 
+    app_secret: {{ selfservice_secret }}
+{% endif %}
+
     trusted_proxies:   [ {{ engine_trusted_proxy_ips|join(',') }} ]
 
     mailer_transport:  smtp
@@ -32,13 +38,13 @@ parameters:
     sms_otp_expiry_interval: {{ sms_otp_expiry_interval }}
     sms_maximum_otp_requests: {{ sms_maximum_otp_requests }}
 
-    saml_sp_publickey: {{ current_release_config_file_dir_name }}/sp.crt
+    saml_sp_publickey: {{ current_release_config_file_dir_name_in_config }}/sp.crt
 
-    saml_sp_privatekey: {{ current_release_config_file_dir_name }}/sp.key
+    saml_sp_privatekey: {{ current_release_config_file_dir_name_in_config }}/sp.key
 
-    saml_metadata_publickey: {{ current_release_config_file_dir_name }}/sp.crt
+    saml_metadata_publickey: {{ current_release_config_file_dir_name_in_config }}/sp.crt
 
-    saml_metadata_privatekey: {{ current_release_config_file_dir_name }}/sp.key
+    saml_metadata_privatekey: {{ current_release_config_file_dir_name_in_config }}/sp.key
 
     # Connect to remote IdP through Stepup Gateway
     saml_remote_idp_entity_id: https://{{ gateway_vhost_name }}/authentication/metadata
