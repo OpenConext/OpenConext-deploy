@@ -458,7 +458,7 @@ manage:
     - {
         name: "dashboard",
         password: "{{ manage_dashboard_secret }}",
-        scopes: ["READ", "WRITE"]
+        scopes: ["READ", "CHANGE_REQUEST"]
       }
     - {
         name: "myconext",
@@ -473,7 +473,7 @@ manage:
     - {
         name: "sysadmin",
         password: "{{ manage_sysadmin_secret }}",
-        scopes: [READ, WRITE, PUSH, SYSTEM]
+        scopes: ["READ", "WRITE", "PUSH", "SYSTEM"]
       }
     - {
         name: "invite",

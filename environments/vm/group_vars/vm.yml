@@ -343,7 +343,7 @@ manage:
     - {
         name: "dashboard",
         password: "{{ manage_dashboard_secret }}",
-        scopes: ["READ", "WRITE"]
+        scopes: ["READ", "CHANGE_REQUEST"]
       }
     - {
         name: "myconext",
@@ -358,7 +358,7 @@ manage:
     - {
         name: "sp-dashboard",
         password: "{{ manage_sp_dashboard_secret }}",
-        scopes: ["READ", "WRITE", "PUSH"]
+        scopes: ["READ", "WRITE", "PUSH", "DELETE"]
       }
     - {
         name: "invite",
