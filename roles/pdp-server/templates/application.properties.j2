@@ -56,6 +56,10 @@ manage.password={{ manage_pdp_secret }}
 period.manage.refresh.minutes=10
 manage.manageBaseUrl=https://manage.{{ base_domain }}
 
+# Basic authentication for push-policies endpoint
+push_endpoint.username=manage
+push_endpoint.password={{ pdp_push_endpoint_secret }}
+
 # Number of days how long the policy violations are retained
 policy.violation.retention.period.days=30
 
@@ -74,7 +78,7 @@ sab.userName={{ pdp.sab_username }}
 sab.password={{ pdp.sab_password }}
 sab.endpoint={{ pdp.sab_endpoint }}
 
-# Do not expose any of the Spring BOOT endpoints except the health and info for loadbalacer health check
+# Do not expose any of the Spring BOOT endpoints except the health and info for loadbalancer health check
 endpoints.enabled=false
 endpoints.health.enabled=true
 endpoints.info.enabled=true
@@ -82,7 +86,7 @@ endpoints.info.enabled=true
 # This is the internal logging of PDP. Leave this to DEBUG for now as it is not much overhead
 logging.level.pdp=DEBUG
 
-# In a multi master database setup toggle which machine is reponsible for cron jobs
+# In a multi master database setup toggle which machine is responsible for cron jobs
 pdpCronJobResponsible={{ pdp_cronjobmaster }}
 
 loa.levels={{ stepup_loa_values_supported | join(",") }}
