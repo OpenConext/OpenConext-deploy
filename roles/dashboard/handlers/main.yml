@@ -1,0 +1,5 @@
+- name: restart dashboardserver
+  community.docker.docker_container:
+    name: dashboardserver
+    state: started
+    restart: true
