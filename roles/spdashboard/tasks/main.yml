@@ -19,10 +19,11 @@
   docker_network:
     name: "spdashboard"
 
-- name: Create the web container
+- name: Create the container
   docker_container:
-    name: spdashboard_web
-    image: ghcr.io/surfnet/sp-dashboard/spdashboard_web:{{ spd_docker_web_version }}
+    name: spdashboard
+    image: ghcr.io/surfnet/sp-dashboard/spdashboard:{{ spdashboard_version }}
+    env_file: "/opt/openconext/spdashboard/env"
     pull: true
     restart_policy: "always"
     networks:
@@ -32,24 +33,7 @@
       traefik.http.routers.spdashboard.tls: "true"
       traefik.enable: "true"
     healthcheck:
-      test: ["CMD", "curl", "--fail" , "http://localhost"  ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-
-
-- name: Create the php-fpm container
-  docker_container:
-    name: spdashboard_php-fpm
-    image: ghcr.io/surfnet/sp-dashboard/spdashboard_php-fpm:{{ spd_docker_phpfpm_version }}
-    env_file: "/opt/openconext/spdashboard/env"
-    pull: true
-    restart_policy: "always"
-    networks:
-      - name: "loadbalancer"
-    healthcheck:
-      test: ["CMD", "cgi-fcgi", "-bind" , "-connect", "127.0.0.1:9000"  ]
+      test: ["CMD", "curl", "--fail" , "http://localhost"]
       interval: 10s
       timeout: 10s
       retries: 3
