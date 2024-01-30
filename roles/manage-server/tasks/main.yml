@@ -19,7 +19,6 @@
     mode: 0740
   with_items:
     - "{{ manage_dir }}/metadata_configuration"
-    - "{{ manage_dir }}/metadata_export"
     - "{{ manage_dir }}/metadata_templates"
 
 - name: copy application config
@@ -60,18 +59,6 @@
     mode: "0640"
   with_items:
     - "{{ manage_tabs_enabled }}"
-  notify:
-    - "restart manage"
-
-- name: copy metadata export
-  copy:
-    src: "{{ item }}"
-    dest: "{{ manage_dir }}"
-    owner: manage
-    group: manage
-    mode: "0640"
-  with_items:
-    - metadata_export
   notify:
     - "restart manage"
 
