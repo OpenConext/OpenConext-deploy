@@ -104,6 +104,7 @@ secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
 private_key_path: file://{{ myconext_dir }}/myconext_saml.key
 certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
+tiqr_hash_secret: "{{ myconext_tiqr_hash_secret }}"
 
 remember_me_max_age_seconds: 15_768_000
 sso_mfa_duration_seconds: 3600
