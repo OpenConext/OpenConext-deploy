@@ -55,6 +55,8 @@ manage.username=pdp
 manage.password={{ manage_pdp_secret }}
 period.manage.refresh.minutes=10
 manage.manageBaseUrl=https://manage.{{ base_domain }}
+# If true the manage push is done against the pdp_migrated_policies for testing purposes
+manage.pushTestMode=true
 
 # Basic authentication for push-policies endpoint
 push_endpoint.username=manage
