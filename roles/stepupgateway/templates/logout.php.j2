@@ -1,0 +1,45 @@
+<?php
+
+// This script removes the gateway session cookie and destroys the server-side gateway session data
+// It is a hotfix for https://www.pivotaltracker.com/story/show/186912795
+
+// The name of the session cookie
+$cookie_name='sess_gateway';
+
+// The domain used for the gateway session cookie, this is the gateway's vhost name
+$cookie_domain='.{{ gateway_vhost_name }}';
+
+// The URL to redirect the user to after logout
+$redirect_url='{{ gateway_logout_redirect_url }}';
+
+openlog("GW-LOGOUT", 0, LOG_LOCAL0);
+
+// Remove cookie and destroy the php session when present.
+if (isset($_COOKIE[$cookie_name])) {
+  syslog(LOG_NOTICE, "Cookie $cookie_name is present");
+  $id = $_COOKIE[$cookie_name];
+  syslog(LOG_NOTICE, "Destroying session $id");
+  session_name($cookie_name);
+  session_id($id);
+  session_start();
+  session_destroy();
+  session_commit();
+
+  syslog(LOG_NOTICE, "Removing session cookie");
+  setcookie(
+    $cookie_name, // name
+    "", // value
+    time() - 3600, // expire / options
+    "/", // path
+    $cookie_domain, // domain
+    true, // secure
+    true // httponly
+  );
+} else {
+  syslog(LOG_NOTICE, "Cookie $cookie_name is not present");
+}
+
+// Redirect to
+header("Location: $redirect_url", true, 302);
+
+closelog();

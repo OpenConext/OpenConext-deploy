@@ -111,6 +111,12 @@
     path: "/root/01-gateway-db_migrate.sh"
     state: absent
 
+- name: Put logout.php in public
+  template:
+    src: "logout.php.j2"
+    dest: "{{ current_release_appdir }}/public/logout.php"
+    mode: "444"
+
 - meta: flush_handlers
 
 - name: Include post installation tasks
