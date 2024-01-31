@@ -55,7 +55,7 @@ parameters:
     asset_version: {{ appversion_sha }}
 
     logout_redirect_url:
-{% for key, value in logout_redirect_url.items() %}
+{% for key, value in ra_logout_redirect_url.items() %}
       {{ key }}: {{ value }}
 {% endfor %}
 
