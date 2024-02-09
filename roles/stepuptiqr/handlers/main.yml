@@ -6,3 +6,10 @@
   service:
     name: php72-php-fpm
     state: reloaded
+
+- name: restart tiqr
+  community.docker.docker_container:
+    name: tiqr
+    state: started
+    restart: true
+
