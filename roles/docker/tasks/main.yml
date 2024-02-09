@@ -27,6 +27,10 @@
     state: started
     enabled: true
 
+- name: Gather some facts, as we want to need info on the docker network interface
+  ansible.builtin.setup:
+    gather_subset: network
+
 - name: Create the traefik configuration file directory
   ansible.builtin.file:
     state: directory
