@@ -19,21 +19,21 @@
   notify: restart inviteserver
 
 - name: Copy / create private key
-  copy:
+  ansible.builtin.copy:
     content: "{{ invite_private_key_pkcs8 }}"
     dest: /opt/openconext/invite/private_key_pkcs8.pem
     owner: "root"
     group: root
-    mode: 0740
+    mode: "0740"
   notify: restart inviteserver
 
-- name: copy / create certificate
-  copy:
+- name: Copy / create certificate
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/invite/public_key.pem"
     dest: /opt/openconext/invite/public_key.pem
     owner: "root"
     group: root
-    mode: 0740
+    mode: "0740"
   notify: restart inviteserver
 
 - name: Place the mockapplication configfiles
@@ -67,7 +67,7 @@
       - source: /opt/openconext/invite/public_key.pem
         target: /public_key.pem
         type: bind
-    command: '--spring.config.location=./'
+    command: '-Xmx256M --spring.config.location=./'
     etc_hosts:
       host.docker.internal: host-gateway
     healthcheck:
@@ -129,7 +129,7 @@
     pull: true
     restart_policy: "always"
     state: started
-    command: '--spring.config.location=./'
+    command: '-Xmx256m --spring.config.location=./'
     mounts:
       - source: /opt/openconext/invite/mockapplication.yml
         target: /application.yml
