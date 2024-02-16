@@ -1,0 +1,28 @@
+providers:
+  docker:
+    exposedByDefault: false
+    network: loadbalancer
+  # File provider configuration
+  file:
+    directory: /config/config/
+    watch: true
+# EntryPoints configuration
+entryPoints:
+  websecure:
+    address: ":443"
+    forwardedHeaders:
+      trustedIPs:
+{% for engine_trusted_proxy_ip in engine_trusted_proxy_ips %}
+        - {{ engine_trusted_proxy_ip }}
+{% endfor %}
+# Server transport configuration
+serversTransport:
+  insecureSkipVerify: true
+# Enable access log
+accessLog: {}
+# Enable ping
+ping: {}
+# Global configuration
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false

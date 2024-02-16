@@ -41,6 +41,13 @@
     - config
     - certs
 
+- name: Place the traefik configuration file
+  ansible.builtin.template:
+    src: traefik.yaml.j2
+    dest: /opt/openconext/traefik/config/traefik.yaml
+    owner: root
+    mode: "0640"
+
 - name: Place the dynamic configuration
   ansible.builtin.copy:
     src: router.yaml
@@ -78,7 +85,7 @@
     restart_policy: "always"
     networks:
       - name: "loadbalancer"
-    command: "--providers.docker --providers.docker.network=loadbalancer --entrypoints.websecure.address=:443 --providers.file.directory=/config/config/ --providers.docker.exposedbydefault=false --accesslog=true --ping --serverstransport.insecureskipverify=true"
+    command: "--configFile=/config/config/traefik.yaml"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/openconext/traefik/:/config/
