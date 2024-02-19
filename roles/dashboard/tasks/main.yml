@@ -36,7 +36,7 @@
       - source: /opt/openconext/dashboard/logback.xml
         target: /logback.xml
         type: bind
-    command: "--spring.config.location=./"
+    command: "-Xmx512m --spring.config.location=./"
     etc_hosts:
       host.docker.internal: host-gateway
     healthcheck:
