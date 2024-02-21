@@ -97,3 +97,10 @@ parameters:
     # Self-asserted token registration process.
     recovery_method_sms_enabled: true
     recovery_method_safe_store_code_enabled: true
+
+    # SAML Bundle SamlAuthenticator configuration
+    # The acs location that the SAML response must be posted to (used in SamlAuthenticator::supports)
+    acs_location_route_name: selfservice_serviceprovider_consume_assertion
+    # The relay state values that will cause the SamlAuthenticator from not handling the SAML response.
+    # Used for test and self asserted token registration authentications
+    rejected_relay_states: ['isTestRequest', 'isSatRequest', 'isGssfRequest']

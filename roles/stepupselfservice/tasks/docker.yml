@@ -72,7 +72,6 @@
       APACHE_UID: "#{{ selfservice_uid.uid }}"
       APACHE_GUID: "#{{ selfservice_guid.gid }}"
       APP_ENV: prod
-      HTTPD_CSP: "{{ httpd_csp.strict_with_report_uri }}"
     mounts:
       - source: /opt/openconext/selfservice/public/images/header-logo.png
         target: /var/www/html/public/images/header-logo.png
