@@ -74,7 +74,7 @@
       APP_ENV: prod
     mounts:
       - source: /opt/openconext/selfservice/public/images/header-logo.png
-        target: /var/www/html/public/images/header-logo.png
+        target: /var/www/html/public/build/images/logo/header-logo.png
         type: bind
       - source: /opt/openconext/selfservice
         target: /var/www/html/config/openconext

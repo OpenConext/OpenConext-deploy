@@ -43,8 +43,7 @@
     mode: "0640"
     owner: root
     group: "{{ appname }}"
-  notify:
-    restart azuremfa
+  notify: restart azuremfa
 
 - name: Put institutions.yaml from environment
   ansible.builtin.template:
@@ -53,8 +52,7 @@
     mode: "0640"
     owner: root
     group: "{{ appname }}"
-  notify:
-    restart azuremfa
+  notify: restart azuremfa
 
 - name: Create the container
   community.docker.docker_container:
@@ -72,8 +70,8 @@
       APACHE_UID: "#{{ azuremfa_uid.uid }}"
       APACHE_GUID: "#{{ azuremfa_guid.gid }}"
     mounts:
-      - source: /opt/openconext/azuremfa/public/images/
-        target: /var/www/html/public/images/
+      - source: /opt/openconext/azuremfa/public/images/header-logo.png
+        target: /var/www/html/public/build/images/header-logo.png
         type: bind
       - source: /opt/openconext/azuremfa
         target: /var/www/html/config/openconext

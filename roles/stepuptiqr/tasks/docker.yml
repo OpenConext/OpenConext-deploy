@@ -72,7 +72,7 @@
       APP_ENV: prod
     mounts:
       - source: /opt/openconext/tiqr/public/images/header-logo.png
-        target: /var/www/html/public/images/header-logo.png
+        target: /var/www/html/public/build/images/logo/header-logo.png
         type: bind
       - source: /opt/openconext/tiqr
         target: /var/www/html/config/openconext
