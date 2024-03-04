@@ -2,6 +2,6 @@
   ansible.builtin.include_tasks: docker.yml
   when: "'docker' in group_names"
 
-- name: Include docker tasks when running docker
+- name: Include vm tasks when running on a vm
   ansible.builtin.include_tasks: vm.yml
   when: "'docker' not in group_names"
