@@ -118,8 +118,8 @@ teams:
   group-name-context: "{{ invite.group_name_context }}"
 
 attribute-aggregation:
-  user: {{ invite.attribute_aggregation_user }}
-  password: {{ invite.attribute_aggregation_secret }}
+  user: {{ aa.invite_username }}
+  password: "{{ invite_api_attribute_aggregation_password }}"
 
 lifecycle:
   user: {{ invite.lifecycle_user }}
