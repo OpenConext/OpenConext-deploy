@@ -449,6 +449,7 @@ manage:
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
   oidc_push_enabled: false
+  pdp_name: "PdP"
   run_migrations: false
   push_after_migration: false
   features: push, validation, push_preview, orphans, find_my_data, edugain, auto_refresh

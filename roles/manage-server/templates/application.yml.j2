@@ -41,6 +41,12 @@ push:
     name: {{ manage.oidcng_name }}
     password: {{ oidcng_api_metadata_push_password }}
     enabled: {{ manage.oidc_push_enabled }}
+  pdp:
+    url: https://pdp.{{ base_domain }}/pdp/api/manage/push
+    policy_url: https://pdp.{{ base_domain }}/pdp/api/manage/policies
+    name: {{ manage.pdp_name }}
+    user: {{ pdp.username }}
+    password: {{ pdp.password }}
 
 product:
   name: Manage
@@ -69,6 +75,11 @@ spring:
   data:
     mongodb:
       uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ manage.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ manage.mongo_database }}?ssl=true
+  datasource:
+    url: jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}
+    username: {{ pdp.db_user }}
+    password: {{ pdp.db_password }}
+    driverClassName: org.mariadb.jdbc.Driver
   main:
     banner-mode: "off"
 
