@@ -55,9 +55,9 @@ Listen {{ apache_app_listen_address.pdp }}:{{ loadbalancing.pdp.port }}
       Options     -Indexes
     </Directory>
 
-    <Location ~ "/pdp/api/(protected/*|decide/policy|health|info)">
+    <Location ~ "/pdp/api/(protected/*|decide/policy|health|info|manage/*)">
       Require all granted
-    </Location>
+     </Location>
 
     <Location ~ "/internal/(health|info)">
       Require all granted
