@@ -11,6 +11,7 @@ engine_feature_block_user_on_violation: 0
 engine_feature_enable_sso_notification: 0
 engine_feature_enable_sso_session_cookie: 0
 engine_feature_enable_consent: 1
+engine_feature_stepup_override_entityid: 0
 
 engine_api_feature_metadata_push: 1
 engine_api_feature_consent_listing: 1
@@ -49,6 +50,7 @@ engine_profile_baseurl: "https://profile.{{ base_domain }}"
 # Required for Stepup authentication
 engine_stepup_base_domain: "stepup.{{ base_domain }}"
 engine_stepup_gateway_domain: "gateway.{{ engine_stepup_base_domain }}"
+engine_stepup_override_entityid: ""
 
 ## PDP endpoint
 engine_pdp_baseurl: https://pdp.{{ base_domain }}
