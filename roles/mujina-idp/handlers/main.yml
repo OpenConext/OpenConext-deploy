@@ -7,6 +7,6 @@
 
 - name: restart mujina-idp-docker
   community.docker.docker_container:
-    name: mujina_idp
+    name: mujina-idp
     state: started
     restart: true

@@ -62,12 +62,18 @@ spring:
   velocity:
     check-template-location: False
 
-# We disable all endpoints except health for the load-balancer and info for git information.
-endpoints:
-  enabled: false
-  jmx:
-    enabled: false
+management:
   health:
-    enabled: true
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
   info:
-    enabled: true
+    git:
+      mode: full
