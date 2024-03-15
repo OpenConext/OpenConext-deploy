@@ -173,8 +173,10 @@
 - hosts: docker
   become: true
   roles:
-    - { role: docker,                            tags: ['docker' ] }
-    - { role: invite,                            tags: ['invite' ] }
+    - { role: docker,     tags: ['docker' ] }
+    - { role: invite,     tags: ['invite' ] }
+    - { role: dashboard,  tags: ["dashboard"] }
+    - { role: mujina-idp, tags: ["mujina-idp"] }  
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 

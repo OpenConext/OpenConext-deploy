@@ -1,0 +1,62 @@
+---
+- name: Set the mujina_idp directory variable
+  ansible.builtin.set_fact:
+    mujina_idp_dir: "/"
+
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ mujina_idp_dir_docker }}"
+    mode: "0750"
+    state: directory
+    owner: root
+
+- name: Copy config
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ mujina_idp_dir_docker }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0640"
+  with_items:
+    - application.yml
+    - logback-docker.xml
+  notify:
+    - restart mujina-idp-docker
+
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: mujina_idp
+    image: ghcr.io/openconext/mujina/mujina-idp:{{ mujina_idp_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: "{{ mujina_idp_dir_docker }}/application.yml"
+        target: /application.yml
+        type: bind
+      - source: "{{ mujina_idp_dir_docker }}/logback-docker.xml"
+        target: /logback.xml
+        type: bind
+    command: "-Xmx128m --spring.config.location=./"
+    labels:
+      traefik.http.routers.mujina-idp.rule: "Host(`mujina-idp.{{ base_domain }}`)"
+      traefik.http.routers.mujina-idp.tls: "true"
+      traefik.http.services.mujina-idp.loadbalancer.server.port: "8080"
+      traefik.enable: "true"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/internal/health",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  notify: restart mujina-idp-docker
