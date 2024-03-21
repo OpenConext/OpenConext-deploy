@@ -1,16 +1,22 @@
 parameters:
+{% if 'docker' in group_names %}
+    app_env: prod
+    app_debug: false 
+    app_secret: {{ tiqr_secret }}
+{% endif %}
+    
     # All locales supported by the application
     locales: [{{ enabled_locales | join(",") }}]
 
     # SAML configuration
-    saml_idp_publickey: '{{ current_release_config_file_dir_name }}/cert.pem'
-    saml_idp_privatekey: '{{ current_release_config_file_dir_name }}/key.pem'
+    saml_idp_publickey: '{{ current_release_config_file_dir_name_in_config }}/cert.pem'
+    saml_idp_privatekey: '{{ current_release_config_file_dir_name_in_config }}/key.pem'
     # NOTE: same key used for metadata and response/assertion signing
-    saml_metadata_publickey: '{{ current_release_config_file_dir_name }}/cert.pem'
-    saml_metadata_privatekey: '{{ current_release_config_file_dir_name }}/key.pem'
+    saml_metadata_publickey: '{{ current_release_config_file_dir_name_in_config }}/cert.pem'
+    saml_metadata_privatekey: '{{ current_release_config_file_dir_name_in_config }}/key.pem'
 
     saml_remote_sp_entity_id: 'https://{{ gateway_vhost_name }}/gssp/tiqr/metadata'
-    saml_remote_sp_certificate: '{{ current_release_config_file_dir_name }}/gateway.crt'
+    saml_remote_sp_certificate: '{{ current_release_config_file_dir_name_in_config }}/gateway.crt'
     saml_remote_sp_acs: 'https://{{ gateway_vhost_name }}/gssp/tiqr/consume-assertion'
 
     base_url: 'https://{{ vhost_name }}'
@@ -50,7 +56,7 @@ parameters:
             apikey: '{{ tiqr_firebase_apikey }}'
 {% endif %}
           apns:
-            certificate: '{{ current_release_config_file_dir_name }}/apns.pem'
+            certificate: '{{ current_release_config_file_dir_name_in_config }}/apns.pem'
             environment: production
         accountblocking:
             maxAttempts: 5

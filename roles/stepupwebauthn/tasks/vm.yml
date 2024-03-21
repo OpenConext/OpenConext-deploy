@@ -1,0 +1,77 @@
+- name: Install Apache and FPM config
+  include_role:
+    name: apachefpm
+
+- name: Install the symfony app
+  include_role:
+    name: stepupapp
+
+- name: Install images
+  include_role:
+    name: stepupapp
+    tasks_from: copyimages
+
+- name: Install the GSSP certificates
+  include_role:
+    name: stepupapp
+    tasks_from: copygsspidpcerts
+
+- name: Create the trusted certificate dir
+  file:
+    state: directory
+    dest: "{{ item }}"
+  with_items:
+    - "{{ current_release_config_file_dir_name }}/trusted_certificates"
+
+- name: Place parameters.yml
+  template:
+    src: parameters.yml.j2
+    dest: "{{ current_release_config_dir_name }}/parameters.yml"
+    mode: 0640
+    owner: root
+    group: "{{ appname }}"
+  notify:
+    - clear cache {{ appname }}
+    - reload php72-fpm {{ appname }}
+
+- name: Place .env file
+  template:
+    src: env.j2
+    dest: "{{ current_release_appdir }}/.env.local"
+    mode: 0640
+    owner: root
+    group: "{{ appname }}"
+  notify:
+    - clear cache {{ appname }}
+    - reload php72-fpm {{ appname }}
+
+- name: Copy trusted certificates
+  copy:
+    src: "{{ item }}"
+    dest: "{{ current_release_config_file_dir_name }}/trusted_certificates/"
+    mode: "444"
+  with_fileglob:
+    - "{{ inventory_dir }}/files/stepup-webauthn/trusted_certificates/*"
+
+- name: Activate the symlink
+  file:
+    src: "{{ current_release_appdir }}"
+    dest: "{{ current_release_symlink }}"
+    state: link
+
+- name: Put webauthn configuration script in /root/
+  template: 
+    src: "{{ item }}.j2"
+    dest: "/root/{{ item }}"
+    group: root 
+    owner: root 
+    mode: "0500"
+  with_items:
+  - "01-webauthn-db_init.sh"
+
+- meta: flush_handlers
+
+- name: Include post installation tasks
+  include_role:
+    name: stepupapp
+    tasks_from: postinstall

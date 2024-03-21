@@ -5,12 +5,12 @@ parameters:
 
 {% for key, value in stepup_enabled_generic_second_factors.items() %}
     # GSSP Proxy SP used to authenticate to the Real GSSP IdP though GSSP IdP proxy in the gateway
-    gssp_{{ key }}_sp_publickey: '{{ current_release_config_file_dir_name }}/sp_gssp.crt'
-    gssp_{{ key }}_sp_privatekey: '{{ current_release_config_file_dir_name }}/sp_gssp.key'
+    gssp_{{ key }}_sp_publickey: '{{ current_release_config_file_dir_name_in_config }}/sp_gssp.crt'
+    gssp_{{ key }}_sp_privatekey: '{{ current_release_config_file_dir_name_in_config }}/sp_gssp.key'
 
     # Certificate used to sign metadata of the GSSP Proxy SP on the gateway
-    gssp_{{ key }}_metadata_publickey: '{{ current_release_config_file_dir_name }}/sp_gssp.crt'
-    gssp_{{ key }}_metadata_privatekey: '{{ current_release_config_file_dir_name }}/sp_gssp.key'
+    gssp_{{ key }}_metadata_publickey: '{{ current_release_config_file_dir_name_in_config }}/sp_gssp.crt'
+    gssp_{{ key }}_metadata_privatekey: '{{ current_release_config_file_dir_name_in_config }}/sp_gssp.key'
 
     # EntityID and SSO Location of the GSSP IdP Proxy on the Gateway
     gssp_{{ key }}_remote_entity_id: 'https://{{ gateway_vhost_name }}/gssp/{{ key }}/metadata'

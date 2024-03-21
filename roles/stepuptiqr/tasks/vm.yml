@@ -1,0 +1,85 @@
+- debug:
+    msg: "{{ tiqr_statestorage }}"
+
+- name: Install Apache and FPM config
+  include_role:
+    name: apachefpm
+
+- name: Install the symfony app
+  include_role:
+    name: stepupapp
+
+- name: Install images
+  include_role:
+    name: stepupapp
+    tasks_from: copyimages
+
+- name: Install the GSSP certificates
+  include_role:
+    name: stepupapp
+    tasks_from: copygsspidpcerts
+
+- name: Write tiqr APNS certificate
+  copy:
+    content: "{{ tiqr_apns_pemfile }}"
+    dest: "{{ current_release_config_file_dir_name }}/apns.pem"
+    owner: "{{ appname }}"
+    mode: 0400
+  when: tiqr_apns_pemfile is defined
+
+- name: Place parameters.yml
+  template:
+    src: parameters.yaml.j2
+    dest: "{{ current_release_config_dir_name }}/parameters.yaml"
+    mode: 0640
+    owner: root
+    group: "{{ appname }}"
+  notify:
+    - clear cache {{ appname }}
+    - reload php72-fpm {{ appname }}
+
+- name: Place .env file
+  template:
+    src: env.j2
+    dest: "{{ current_release_appdir }}/.env.local"
+    mode: 0640
+    owner: root
+    group: "{{ appname }}"
+  notify: clear cache {{ appname }}
+
+- name: Install assets
+  command: php72 {{ current_release_appdir }}/bin/console assets:install 
+
+- name: Activate the symlink
+  file:
+    src: "{{ current_release_appdir }}"
+    dest: "{{ current_release_symlink }}"
+    state: link
+
+- name: Put tiqr configuration script in /root/
+  template: 
+    src: "{{ item }}.j2"
+    dest: "/root/{{ item }}" 
+    group: root 
+    owner: root 
+    mode: "0500"
+  with_items:
+  - "01-tiqr-db_init.sh"
+
+- name: Put tiqr keyserver migration script in /root/
+  template: 
+    src: "{{ item }}.j2"
+    dest: "/root/{{ item }}" 
+    group: root 
+    owner: root 
+    mode: "500"
+  with_items:
+  - "02-tiqr-migrate-to-keyserver.php"
+  when: keyserver_consumerkey is defined
+
+- meta: flush_handlers
+
+- name: Include post installation tasks
+  include_role:
+    name: stepupapp
+    tasks_from: postinstall

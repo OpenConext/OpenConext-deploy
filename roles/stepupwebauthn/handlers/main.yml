@@ -6,3 +6,9 @@
   service:
     name: php72-php-fpm
     state: reloaded
+
+- name: restart webauthn
+  community.docker.docker_container:
+    name: webauthn
+    state: started
+    restart: true
