@@ -1,0 +1,53 @@
+logging:
+  config: file:///logback.xml
+  level:
+    org.springframework.data.mongodb: INFO
+
+server:
+  # The port to where this Spring Boot application listens to.
+  port: 8080
+  server-header:
+  servlet:
+    # We serve from the root. Do not change this
+    context-path:
+  max-http-header-size: 10000000
+  tomcat:
+    max-http-post-size: 10000000
+
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+oidc:
+  discovery_endpoint: "{{ oidc_playground.discovery_endpoint }}"
+  client_id: "{{ oidc_playground.client_id }}"
+  secret: "{{ oidc_playground.secret }}"
+  jwt_secret: "{{ oidc_playground.jwt_secret }}"
+  resource_server_id: "{{ oidc_playground.resource_server_id }}"
+  resource_server_secret: "{{ oidc_playground.resource_server_secret }}"
+  redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"
+  redirect_uri_form_post: "https://oidc-playground.{{ base_domain }}/oidc/api/redirect"
+  client_redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"
+
+gui:
+  disclaimer:
+    background-color: "{{ environment_ribbon_colour }}"
+    content: "{{ environment_shortname }}"
+
+acr:
+  values:
+  {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported + oidcng.acr_values_supported %}
+    - "{{ loa }}"
+  {% endfor %}

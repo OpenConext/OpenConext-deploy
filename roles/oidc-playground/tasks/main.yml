@@ -1,0 +1,89 @@
+---
+- name: Create oidc-playground directory
+  ansible.builtin.file:
+    dest: "{{ oidc_playground_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Copy config
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ oidc_playground_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0740"
+  with_items:
+    - logback.xml
+    - serverapplication.yml
+  notify:
+    - "restart oidc-playground-docker"
+
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: oidcplaygroundserver
+    image: ghcr.io/openconext/openconext-oidc-playground/oidc-playground-server:{{ oidc_playground_server_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: "{{ oidc_playground_dir }}/serverapplication.yml"
+        target: /application.yml
+        type: bind
+      - source: "{{ oidc_playground_dir }}/logback.xml"
+        target: /logback.xml
+        type: bind
+    command: "-Xmx128m --spring.config.location=./"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/internal/health",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  notify: restart oidc-playground-docker
+
+- name: Create the gui container
+  community.docker.docker_container:
+    name: oidcplaygroundgui
+    image: ghcr.io/openconext/openconext-oidc-playground/oidc-playground-gui:{{ oidc_playground_client_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.oidc-playgroundgui.rule: "Host(`oidc-playground.{{ base_domain }}`)"
+      traefik.http.routers.oidc-playgroundgui.tls: "true"
+      traefik.http.services.oidc-playgroundgui.loadbalancer.server.port: "80"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost/internal/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    env:
+      HTTPD_CSP: "{{ httpd_csp.lenient }}"
+
+# - name: Include the role manage_provision_entities to provision oidc-playground resource server to Manage
+#   include_role:
+#     name: manage_provision_entities
+#   vars:
+#     entity_type: oauth20_rs
+#
+# - name: Include the role manage_provision_entities to provision oidc-playground client to Manage
+#   include_role: 
+#     name: manage_provision_entities
+#   vars: 
+#     entity_type: oidc10_rp
