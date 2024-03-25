@@ -359,7 +359,7 @@ manage:
     - {
         name: "sp-dashboard",
         password: "{{ manage_sp_dashboard_secret }}",
-        scopes: [ "READ", "WRITE_SP", "CHANGE_REQUEST_SP", "PUSH", "DELETE" ]
+        scopes: [ "READ", "WRITE_SP", "CHANGE_REQUEST_SP", "PUSH"]
       }
     - {
         name: "invite",
