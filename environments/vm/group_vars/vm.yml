@@ -344,7 +344,7 @@ manage:
     - {
         name: "dashboard",
         password: "{{ manage_dashboard_secret }}",
-        scopes: [ "READ", "CHANGE_REQUEST_SP", "CHANGE_REQUEST_IDP" ]
+        scopes: [ "READ", "CHANGE_REQUEST_SP", "CHANGE_REQUEST_IDP", "POLICIES"]
       }
     - {
         name: "myconext",
