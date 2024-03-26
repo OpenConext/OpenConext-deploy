@@ -38,6 +38,8 @@ OIDCClientID {{ stats_oidc_client_id }}
 OIDCClientSecret {{ stats_oidc_client_secret }}
 OIDCCryptoPassphrase {{ stats_oidc_crypto_pass }}
 OIDCRedirectURI https://{{ stats_base_domain }}/redirect
+OIDCXForwardedHeaders X-Forwarded-Proto
+
 <Location />
     OIDCUnAuthAction pass
     AuthType openid-connect
