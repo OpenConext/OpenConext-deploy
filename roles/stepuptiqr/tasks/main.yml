@@ -27,6 +27,14 @@
     mode: 0400
   when: tiqr_apns_pemfile is defined
 
+- name: Write tiqr Firebase service json
+  copy:
+    src: "{{ inventory_dir }}/secrets/tiqr-demo.json"
+    dest: "{{ current_release_config_file_dir_name }}/tiqr-demo.json"
+    owner: "{{ appname }}"
+    mode: 0400
+  when: tiqr_firebase_credentialsfile is defined
+
 - name: Place parameters.yml
   template:
     src: parameters.yaml.j2
@@ -48,7 +56,7 @@
   notify: clear cache {{ appname }}
 
 - name: Install assets
-  command: php72 {{ current_release_appdir }}/bin/console assets:install 
+  command: php72 {{ current_release_appdir }}/bin/console assets:install
 
 - name: Activate the symlink
   file:
@@ -57,21 +65,21 @@
     state: link
 
 - name: Put tiqr configuration script in /root/
-  template: 
+  template:
     src: "{{ item }}.j2"
-    dest: "/root/{{ item }}" 
-    group: root 
-    owner: root 
+    dest: "/root/{{ item }}"
+    group: root
+    owner: root
     mode: "0500"
   with_items:
   - "01-tiqr-db_init.sh"
 
 - name: Put tiqr keyserver migration script in /root/
-  template: 
+  template:
     src: "{{ item }}.j2"
-    dest: "/root/{{ item }}" 
-    group: root 
-    owner: root 
+    dest: "/root/{{ item }}"
+    group: root
+    owner: root
     mode: "500"
   with_items:
   - "02-tiqr-migrate-to-keyserver.php"

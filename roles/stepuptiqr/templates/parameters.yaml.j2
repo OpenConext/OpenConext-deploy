@@ -49,6 +49,12 @@ parameters:
           firebase:
             apikey: '{{ tiqr_firebase_apikey }}'
 {% endif %}
+{% if tiqr_firebase_credentialsFile is defined %}
+          firebase:
+            projectId: '{{ tiqr_firebase_projectid }}'
+            credentialsFile: '{{ tiqr_firebase_credentialsfile }}'
+            cacheTokens: '{{ tiqr_firebase_cachetokens }}'
+{% endif %}  
           apns:
             certificate: '{{ current_release_config_file_dir_name }}/apns.pem'
             environment: production
