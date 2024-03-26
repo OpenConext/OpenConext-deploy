@@ -1,15 +1,12 @@
 database:
   name: {{ influx_stats_db }}
-  host: localhost
+  host: t02.ams.surfconext.nl
   port: 8086
   username: {{ influxdb_stats_user }}
   password: {{ influxdb_stats_password }}
 
 syslog:
   address: "/dev/log"
-# Use localhost and port if syslog listens on UDP
-#  host: localhost
-#  port: 514
 
 log:
   measurement: {{ influx_ebauth_measurement }} 
@@ -39,4 +36,3 @@ feature:
     True
 
 base_url: https://{{ stats_base_domain }}
-

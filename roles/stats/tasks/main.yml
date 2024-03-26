@@ -1,96 +1,54 @@
 ---
-- name: Install IUS repo
-  yum: 
-    name: 
-      - https://repo.ius.io/ius-release-el7.rpm
+- name: Create the directory the keep configfiles
+  ansible.builtin.file:
+    dest: /opt/openconext/stats
+    state: directory
+    owner: root
+    group: root
+    mode: "0770"
 
-- name: Install yarn repo file
-  copy: src=yarn.repo dest=/etc/yum.repos.d/
+- name: Install configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/opt/openconext/stats/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - stats.conf
+    - config.yml
 
-- name: Install some packages
-  yum:
-    name:
-      - yarn
-      - npm
-      - nodejs
-      - python36u
-      - python36u-pip
-      - python36u-mod_wsgi
-      - python-setuptools
-      - git
-      - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.0/cjose-0.5.1-1.el7.centos.x86_64.rpm
-      - https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.8/mod_auth_openidc-2.3.8-1.el7.x86_64.rpm
-    state: present
+- name: Create and start the servercontainer
+  community.docker.docker_container:
+    name: statsserver
+    image: ghcr.io/openconext/openconext-stats/stats-server:{{ stats_server_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: /opt/openconext/stats/config.yml
+        target: /app/server/config/config.yml
+        type: bind
+      - source: /dev/log
+        target: /dev/log
+        type: bind
 
-- name: Create stats Apache tls key
-  copy: content="{{ stats_tls_key }}" dest={{ tls.cert_private_path }}/stats.{{ base_domain }}.key mode=0600
-  when: stats_apache_standalone | bool
-
-- name: Copy stats Apache certificate
-  copy: src={{ inventory_dir }}/files/certs/stats.{{ base_domain }}.crt dest={{ tls.cert_path }}/stats.{{ base_domain }}.crt owner=root mode=0644
-  when: stats_apache_standalone | bool
-
-- name: Copy stats Apache intermediate
-  copy: src={{ inventory_dir }}/files/certs/stats.{{ base_domain }}.intermediate dest={{ tls.cert_path_ca }}/stats.{{ base_domain }}.intermediate owner=root mode=0644
-  when: stats_apache_standalone | bool
-
-- name: Create stats api wsgi user
-  user: name={{ stats_wsgi_user }} shell="/bin/false" state=present
-
-- name: Checkout OpenConext-statistics branch from Git
-  git:
-    repo: https://github.com/OpenConext/OpenConext-statistics.git
-    dest: "{{ stats_src_dir }}"
-    force: yes
-    version: "{{ statistics_version }}"
-  register: git_stats
-
-- name: Add git info to server
-  shell: git --git-dir {{ stats_src_dir }}/.git log -1 > {{ stats_src_dir }}/server/api/git.info
-  when: git_stats.changed
-
-- name: Add version info to server
-  shell: echo "{{ statistics_version }}" > {{ stats_src_dir }}/server/api/version.info
-  when: git_stats.changed
-
-- name: Install the virtualenv and requirements
-  pip: requirements={{ stats_src_dir }}/requirements/base.txt virtualenv={{ stats_api_env_dir }}  virtualenv_command="/bin/python3.6 -m venv" state=latest
-
-- name: Install stats server api from {{ stats_src_dir }} to {{ stats_api_env_dir }}
-  command: cp -r {{ stats_src_dir }}/server {{ stats_api_env_dir }}/
-  when: git_stats.changed
-
-- name: Create log directory
-  file: path={{ stats_api_env_dir }}/log owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }} mode=0755 state=directory
-
-- name: Create logfile
-  copy: content="" dest={{ stats_api_env_dir }}/log/stats.log owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }} mode=0755 force=no
-
-- name: Place wsgi for the server api
-  template: src=stats-api.wsgi.j2 dest={{ stats_api_env_dir }}/stats-api.wsgi mode=0550 owner={{ stats_wsgi_user }} group={{ stats_wsgi_user }}
-  notify: reload httpd
-
-- name: Install the api config file
-  template: src=config.yml.j2 dest={{ stats_api_env_dir }}/server/config/config.yml
-  notify: reload httpd
-
-- name: Install Apache config file
-  template: src=stats.conf.j2 dest=/etc/httpd/conf.d/stats.conf
-  notify: reload httpd
-
-- name: Create a gui build
-  shell: "yarn install && yarn build"
-  args:
-    chdir: "{{ stats_src_dir }}/client"
-  when: git_stats.changed
-
-- name: Delete current www directory
-  command: rm -fr {{ stats_api_env_dir }}/www
-  changed_when: false
-  when: git_stats.changed
-
-- name: Copy the build to the www directory
-  command: cp -r {{ stats_src_dir }}/client/build {{ stats_api_env_dir }}/www
-  changed_when: false
-  when: git_stats.changed
-
+- name: Create and start the guicontainer
+  community.docker.docker_container:
+    name: statsgui
+    image: ghcr.io/openconext/openconext-stats/stats-gui:{{ stats_server_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    labels:
+      traefik.http.routers.statsgui.rule: "Host(`stats.{{ base_domain }}`)"
+      traefik.http.routers.statsgui.tls: "true"
+      traefik.enable: "true"
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: /opt/openconext/stats/stats.conf
+        target: /etc/apache2/sites-enabled/000-default.conf
+        type: bind

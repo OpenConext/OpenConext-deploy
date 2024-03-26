@@ -1,13 +1,7 @@
 openconext_releases_dir:   "/opt/openconext"
-stats_api_env_dir: "{{ openconext_releases_dir }}/statsapi"
-stats_frontend_env_dir: "{{ openconext_releases_dir }}/statsfrontend"
-stats_src_dir: "{{ openconext_releases_dir }}/builds/stats"
-stats_wsgi_user: stats
 influx_ebauth_measurement: ebauth
-stats_apache_standalone: False
 stats_manage_url: https://manage.{{ base_domain }}
 stats_manage_api_user: stats
 stats_base_domain: stats.{{ base_domain }}
 stats_oidc_metadata_url: "https://connect.{{ base_domain }}/.well-known/openid-configuration"
 stats_oidc_client_id: "stats.{{ base_domain }}"
-statistics_version: master
