@@ -7,8 +7,8 @@ $RuleSet {{ item.name }}
 :programname, isequal, "aa" { action(type="omfile" DynaFile="aa-{{ item.name }}") stop }
 :programname, isequal, "Apache-AA" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}") stop }
 :programname, isequal, "Apache-AAlink" { action(type="omfile" DynaFile="apache-aalink-{{ item.name }}") stop }
-:programname, isequal, "Apache-dashboard" { action(type="omfile" DynaFile="apache-dashboard-{{ item.name }}") stop }
-:programname, isequal, "dashboard" { action(type="omfile" DynaFile="dashboard-{{ item.name }}") stop }
+:programname, isequal, "dashboardgui" { action(type="omfile" DynaFile="apache-dashboard-{{ item.name }}") stop }
+:programname, isequal, "dashboardserver" { action(type="omfile" DynaFile="dashboard-{{ item.name }}") stop }
 :programname, isequal, "Apache-EBAPI" { action(type="omfile" DynaFile="apache-eb-api-{{ item.name }}") stop }
 :programname, isequal, "manage" { action(type="omfile" DynaFile="manage-{{ item.name }}") stop }
 :programname, isequal, "Apache-Manage" { action(type="omfile" DynaFile="apache-manage-{{ item.name }}") stop }
@@ -29,8 +29,8 @@ $RuleSet {{ item.name }}
 :programname, isequal, "oidcng" { action(type="omfile" DynaFile="oidcng-{{ item.name }}") stop }
 :programname, isequal, "oidcngjson" { action(type="omfile" DynaFile="oidcngjson-{{ item.name }}") stop }
 :programname, isequal, "Apache-oidcng" { action(type="omfile" DynaFile="apache-oidcng-{{ item.name }}") stop }
-:programname, isequal, "oidc-playground" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}") stop }
-:programname, isequal, "Apache-Oidc-Playground" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}") stop }
+:programname, isequal, "oidcplaygroundserver" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}") stop }
+:programname, isequal, "oidcplaygroundgui" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}") stop }
 :programname, isequal, "myconext" { action(type="omfile" DynaFile="myconext-{{ item.name }}") stop }
 :programname, isequal, "myconextjson" { action(type="omfile" DynaFile="myconextjson-{{ item.name }}") stop }
 :programname, isequal, "Apache-myconext" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}") stop }
@@ -50,6 +50,10 @@ $RuleSet {{ item.name }}
 if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
 :programname, isequal, "{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
 {% endfor %}
+
+if $programname == "spdashboard" and $msg startswith " spdashboard" then { action(type="omfile" DynaFile="apache-spdashboard-{{item.name }}") stop }
+:programname, isequal, "spdashboard" { action(type="omfile" DynaFile="spdashboard-{{item.name }}") stop }
+
 :programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
 {% endif %}
 :programname, isequal, "audispd" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
