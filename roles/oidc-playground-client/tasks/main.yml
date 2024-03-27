@@ -1,7 +1,0 @@
----
-- name: copy virtual host config
-  template:
-    src: "oidc-playground.conf.j2"
-    dest: "/etc/httpd/conf.d/oidc-playground.conf"
-  notify:
-    - "restart httpd"

@@ -5,14 +5,11 @@ springboot_services_state:
   teams: true
   pdp: true
   attribute_aggregation: true
-  oidc_playground: true
   myconext: true
   account: true
   oidcng: true
   voot: true
   mujina_sp: true
-  mujina_idp: true
-  dashboard: true
 
 springboot_core_services:
   - manage
@@ -37,12 +34,6 @@ springboot_gui_services:
     alias: attribute-aggregation-gui
     enabled: "{{ springboot_services_state.attribute_aggregation }}"
     version: "{{ attribute_aggregation_gui_version }}"
-  - name: oidc-playground
-    alias: oidc-playground-gui
-    enabled: "{{ springboot_services_state.oidc_playground }}"
-    version: "{{ oidc_playground_client_version }}"
-    role: oidc-playground-client
-    artifactid: oidc-playground-client
   - name: myconext
     alias: myconext-gui
     enabled: "{{ springboot_services_state.myconext }}"
@@ -52,10 +43,6 @@ springboot_gui_services:
     group: myconext
     enabled: "{{ springboot_services_state.account }}"
     version: "{{ account_gui_version }}"
-  - name: dashboard
-    alias: dashboard-gui
-    enabled: "{{ springboot_services_state.dashboard }}"
-    version: "{{ dashboard_gui_version }}"
 
 springboot_server_services:
   - name: manage
@@ -114,15 +101,6 @@ springboot_server_services:
     port: 9198
     min_heapsize: "{{ attribute_aggregation_min_heapsize | default('256m') }}"
     max_heapsize: "{{ attribute_aggregation_max_heapsize | default('256m') }}"
-  - name: oidc-playground
-    enabled: "{{ springboot_services_state.oidc_playground }}"
-    version: "{{ oidc_playground_server_version }}"
-    type: server
-    port: 9399
-    min_heapsize: "{{ oidc_playground_min_heapsize | default('256m') }}"
-    max_heapsize: "{{ oidc_playground_max_heapsize | default('256m') }}"
-    config:
-      "{{ oidc_playground }}"
   - name: myconext
     alias: myconext
     enabled: "{{ springboot_services_state.myconext }}"
@@ -145,25 +123,6 @@ springboot_server_services:
     max_heapsize: "{{ mujina_sp_max_heapsize | default('128m') }}"
     config:
       "{{ mujina_sp }}"
-  - name: mujina-idp
-    alias: mujina
-    enabled: "{{ springboot_services_state.mujina_idp }}"
-    version: "{{ mujina_version }}"
-    role: mujina-idp
-    artifactid: mujina-idp
-    type: server
-    port: 9390
-    min_heapsize: "{{ mujina_idp_min_heapsize | default('128m') }}"
-    max_heapsize: "{{ mujina_idp_max_heapsize | default('128m') }}"
-    config:
-      "{{ mujina_idp }}"
-  - name: dashboard
-    enabled: "{{ springboot_services_state.dashboard }}"
-    version: "{{ dashboard_server_version }}"
-    type: server
-    port: 9394
-    min_heapsize: "{{ dashboard_min_heapsize | default('512m') }}"
-    max_heapsize: "{{ dashboard_max_heapsize | default('512m') }}"
 
 springboot_min_heapsize: "512m"
 springboot_max_heapsize: "512m"
