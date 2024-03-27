@@ -1,6 +1,6 @@
 database:
   name: {{ influx_stats_db }}
-  host: t02.ams.surfconext.nl
+  host: {{ influx_stats_dbhost }}
   port: 8086
   username: {{ influxdb_stats_user }}
   password: {{ influxdb_stats_password }}
