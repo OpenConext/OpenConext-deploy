@@ -6,3 +6,9 @@
   service:
     name: php72-php-fpm
     state: reloaded
+
+- name: restart ra
+  community.docker.docker_container:
+    name: ra
+    state: started
+    restart: true
