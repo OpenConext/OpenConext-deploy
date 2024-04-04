@@ -1,0 +1,6 @@
+- name: restart teamsserver
+  community.docker.docker_container:
+    name: teamsserver
+    state: started
+    restart: true
+

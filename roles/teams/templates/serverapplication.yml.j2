@@ -1,0 +1,129 @@
+# The logging configuration.
+logging:
+  config: file:///logback.xml
+  level:
+    org.hibernate.SQL: INFO
+
+api:
+  lifecycle:
+    username: {{ teams_api_lifecycle_username }}
+    password: {{ teams_api_lifecycle_password }}
+
+secure_cookie: true
+
+server:
+  port: 8080
+  error:
+    path: "/error"
+  servlet:
+    session:
+      timeout: 28800
+      cookie:
+        secure: true
+  server-header: no
+
+feature-toggles:
+  expiry-date-membership: false
+  person-email-picker: false
+
+config:
+  support-email: {{ support_email }}
+  help-link-en: {{ teams_help_link_en }}
+  help-link-nl: {{ teams_help_link_nl }}
+  help-link-pt: {{ teams_help_link_pt }}
+  help-tos-en: {{ teams_tos_en }}
+  help-tos-nl: {{ teams_tos_nl }}
+  help-tos-pt: {{ teams_tos_pt }}
+  main-link: {{ teams_main_link }}
+  organization: {{ teams_organization }}
+  sponsor: {{ sponsor_name }}
+  supported_language_codes: {{ supported_language_codes }}
+
+security:
+  user:
+    name: {{ teams.voot_api_user }}
+    password: {{ external_group_provider_secrets.teams }}
+
+sp_dashboard:
+  user-name: {{ teams.spdashboard_api_user }}
+  password: {{ teams_api_spdashboard_password }}
+  person-urn: "{{ teams.spdashboard_person_urn }}"
+  name: "SP Dashboard"
+  email: "{{ support_email }}"
+
+# Is this node in a load-balanced topology responsible for cleaning up resources (See ExpiredInvitationsRemover)
+cron:
+  node-cron-job-responsible: {{ teams_cronjobmaster }}
+  expression: "0 0/15 * * * ?"
+
+teams:
+  default-stem-name: "{{ teams.default_stem_name }}"
+  group-name-context: "{{ teams.group_name_context }}"
+  product-name: "{{ teams.product_name }}"
+  non-guest-member-of: "{{ guest_qualifier }}"
+
+super_admins_team:
+  urns:
+    {% for value in teams.super_admins_team_urns %}
+- "{{ value }}"
+    {% endfor %}
+
+voot:
+  serviceUrl: https://voot.{{ base_domain }}
+  accessTokenUri: "{{ teams_oauth2_token_url }}"
+  clientId: "{{ teams_authz_client_id }}"
+  clientSecret: "{{ teams_authz_client_secret }}"
+  scopes: "{{ teams_manage_provision_oidcrp_scopes }}"
+
+invite:
+  url: https://invite.{{ base_domain }}/api/teams
+  user: {{ invite.teamsuser}}
+  password: {{ invite.teamssecret }}
+
+spring:
+  session:
+    store-type: jdbc
+    jdbc:
+      schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
+      initialize-schema: always
+      cleanup-cron: "{% if teams_cronjobmaster %}0 13 * * * *{% else %}-{% endif %}"
+  jpa:
+    open-in-view: true
+    properties:
+      hibernate:
+        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        dialect: org.hibernate.dialect.MariaDB53Dialect
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}?useMysqlMetadata=true
+    username: {{ teams.db_user }}
+    password: {{ teams.db_password }}
+  mail:
+    host: {{ smtp_host }}
+    port: 25
+  main:
+    banner-mode: "off"
+  flyway:
+    enabled: {{ teams_spring_flyway_enabled }}
+    validate-on-migrate: false
+    table: schema_version
+
+management:
+  health:
+    mail:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+email:
+  from: {{ instance_name }} Teams <{{ noreply_email }}>
+  base-url: https://teams.{{ base_domain }}

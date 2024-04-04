@@ -2,7 +2,6 @@
 
 springboot_services_state:
   manage: true
-  teams: true
   pdp: true
   attribute_aggregation: true
   myconext: true
@@ -22,10 +21,6 @@ springboot_gui_services:
     alias: manage-gui
     enabled: "{{ springboot_services_state.manage }}"
     version: "{{ manage_gui_version }}"
-  - name: teams
-    alias: teams-gui
-    enabled: "{{ springboot_services_state.teams }}"
-    version: "{{ teams_gui_version }}"
   - name: pdp
     alias: pdp-gui
     enabled: "{{ springboot_services_state.pdp }}"
@@ -76,15 +71,6 @@ springboot_server_services:
     max_heapsize: "{{ voot_max_heapsize | default('128m') }}"
     config:
       "{{ voot }}"
-  - name: teams
-    enabled: "{{ springboot_services_state.teams }}"
-    version: "{{ teams_server_version }}"
-    type: server
-    port: 9197
-    min_heapsize: "{{ teams_min_heapsize | default('256m') }}"
-    max_heapsize: "{{ teams_max_heapsize | default('256m') }}"
-    config:
-      "{{ teams }}"
   - name: pdp
     enabled: "{{ springboot_services_state.pdp }}"
     version: "{{ pdp_server_version }}"
