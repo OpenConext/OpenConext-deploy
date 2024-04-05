@@ -1,8 +1,8 @@
 logging:
-  config: "file://{{ voot_dir }}/logback.xml"
+  config: "file:///logback.xml"
 
 server:
-  port: {{ springapp_tcpport }}
+  port: 8080
   server-header: no
   error:
     include-message: always
@@ -10,7 +10,7 @@ server:
 
 externalProviders:
   config:
-    path: "file://{{ voot_dir }}/externalProviders.yml"
+    path: "file:///externalProviders.yml"
 
 spring:
   mvc:
@@ -41,6 +41,7 @@ management:
     web:
       exposure:
         include: "health,info,mappings"
+      base-path: "/internal"
   endpoint:
     info:
       enabled: true
