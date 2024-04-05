@@ -1,12 +1,12 @@
 # The logging configuration.
 logging:
-  config: file://{{ attribute_aggregation_dir }}/logback.xml
+  config: file:///logback.xml
   level:
     aa: DEBUG
 
 server:
   # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
-  port: {{ springapp_tcpport }}
+  port: 8080
   servlet:
     context-path: /aa/api
     session:
@@ -16,7 +16,7 @@ server:
   server-header: no
 
 scim_server_environment: test.surfconext
-attribute_authorities_config_path: file:///opt/attribute-aggregation/attributeAuthorities.yml
+attribute_authorities_config_path: file:///attributeAuthorities.yml
 authorization_access_token_url: "{{ aa_oauth2_token_url }}"
 aggregate_cache_duration_milliseconds: -1
 
@@ -45,6 +45,7 @@ spring:
       hibernate:
         naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
         dialect: org.hibernate.dialect.MariaDB53Dialect
+    open-in-view: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mysql://{{ aa.db_host }}/{{ aa.db_name }}

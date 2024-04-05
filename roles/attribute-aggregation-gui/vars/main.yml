@@ -1,4 +1,0 @@
----
-springapp_tcpport: 9198
-springapp_artifact_id: attribute-aggregation-gui
-springapp_version: "{{ attribute_aggregation_gui_version }}"

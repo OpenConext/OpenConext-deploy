@@ -1,13 +1,3 @@
-springapp_artifact_id: attribute-aggregation-server
-springapp_artifact_type: jar
-springapp_artifact_group_dir: org.openconext
-springapp_version: "{{ attribute_aggregation_server_version }}"
-springapp_dir: "{{ attribute_aggregation_dir }}"
-springapp_user: attribute-aggregation
-springapp_service_name: attribute-aggregation
-springapp_jar: "{{ attribute_aggregation_jar }}"
-springapp_tcpport: 9198
-springapp_random_source: "file:///dev/urandom"
 manage_provision_oidcrp_client_id: "{{ aa.authz_client_id }}"
 manage_provision_oidcrp_secret: "{{ aa.authz_secret }}"
 manage_provision_oidcrp_name_en: "{{ aa_manage_provision_oidcrp_name_en }}"
