@@ -1,0 +1,5 @@
+- name: restart pdpserver
+  community.docker.docker_container:
+    name: pdpserver
+    state: started
+    restart: true

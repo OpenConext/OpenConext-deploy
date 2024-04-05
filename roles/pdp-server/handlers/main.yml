@@ -1,6 +1,0 @@
----
-- name: restart pdp
-  systemd:
-    name: pdp
-    state: restarted
-    daemon_reload: yes

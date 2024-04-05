@@ -1,7 +1,0 @@
----
-- name: copy virtual host config
-  template:
-    src: "pdp.conf.j2"
-    dest: "/etc/httpd/conf.d/pdp.conf"
-  notify:
-    - "reload httpd"

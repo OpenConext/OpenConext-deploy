@@ -1,0 +1,89 @@
+---
+- name: Create directory to keep configfile
+  ansible.builtin.file:
+    dest: "/opt/openconext/pdp"
+    state: directory
+    owner: root
+    group: root
+    mode: "0770"
+
+- name: Place the serverapplication configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: /opt/openconext/pdp/{{ item }}
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - serverapplication.properties
+    - logback.xml
+    - xacml.conext.properties
+  notify: restart pdpserver
+
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: pdpserver
+    image: ghcr.io/openconext/openconext-pdp/pdp-server:{{ pdp_server_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: /opt/openconext/pdp/serverapplication.properties
+        target: /application.properties
+        type: bind
+      - source: /opt/openconext/pdp/logback.xml
+        target: /logback.xml
+        type: bind
+      - source: /opt/openconext/pdp/xacml.conext.properties
+        target: /xacml.conext.properties
+        type: bind
+    command: "-Xmx512m --spring.config.location=./"
+    etc_hosts:
+      host.docker.internal: host-gateway
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/internal/health",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  notify: restart pdpserver
+
+- name: Create the gui container
+  community.docker.docker_container:
+    name: pdpgui
+    image: ghcr.io/openconext/openconext-pdp/pdp-gui:{{ pdp_gui_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.pdpgui.rule: "Host(`pdp.{{ base_domain }}`)"
+      traefik.http.routers.pdpgui.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost/internal/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    hostname: pdp.{{ base_domain }}
+    env:
+      HTTPD_CSP: "{{ httpd_csp.lenient }}"
+      HTTPD_SERVERNAME: "pdp.{{ base_domain }}"
+      OPENCONEXT_INSTANCENAME: "{{ instance_name }}"
+      OPENCONEXT_ENGINE_LOGOUT_URL: "https://engine.{{ base_domain }}/logout"
+      OPENCONEXT_HELP_EMAIL: "{{ support_email }}"
+      SHIB_ENTITYID: "https://pdp.{{ base_domain }}/shibboleth"
+      SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+      SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
