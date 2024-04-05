@@ -175,6 +175,9 @@
     - { role: invite,     tags: ['invite' ] }
     - { role: dashboard,  tags: ["dashboard"] }
     - { role: teams,      tags: ["teams"] }
+    - { role: pdp,        tags: ["pdp"] }
+    - { role: voot,       tags: ["voot"] }
+    - { role: attribute-aggregation, tags: ["aa"] }
     - { role: mujina-idp, tags: ["mujina-idp"] }  
     - { role: oidc-playground, tags: ["oidc-playground"] }  
     - { role: stats,      tags: ["stats"] }  

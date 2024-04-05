@@ -2,12 +2,9 @@
 
 springboot_services_state:
   manage: true
-  pdp: true
-  attribute_aggregation: true
   myconext: true
   account: true
   oidcng: true
-  voot: true
   mujina_sp: true
 
 springboot_core_services:
@@ -21,14 +18,6 @@ springboot_gui_services:
     alias: manage-gui
     enabled: "{{ springboot_services_state.manage }}"
     version: "{{ manage_gui_version }}"
-  - name: pdp
-    alias: pdp-gui
-    enabled: "{{ springboot_services_state.pdp }}"
-    version: "{{ pdp_gui_version }}"
-  - name: attribute-aggregation
-    alias: attribute-aggregation-gui
-    enabled: "{{ springboot_services_state.attribute_aggregation }}"
-    version: "{{ attribute_aggregation_gui_version }}"
   - name: myconext
     alias: myconext-gui
     enabled: "{{ springboot_services_state.myconext }}"
@@ -60,33 +49,6 @@ springboot_server_services:
     max_heapsize: "{{ oidcng_max_heapsize | default('512m')}}"
     config:
       "{{ oidcng }}"
-  - name: voot
-    enabled: "{{ springboot_services_state.voot }}"
-    version: "{{ voot_version }}"
-    role: voot
-    artifactid: voot-service
-    port: 9191
-    type: server
-    min_heapsize: "{{ voot_min_heapsize | default('128m') }}"
-    max_heapsize: "{{ voot_max_heapsize | default('128m') }}"
-    config:
-      "{{ voot }}"
-  - name: pdp
-    enabled: "{{ springboot_services_state.pdp }}"
-    version: "{{ pdp_server_version }}"
-    port: 9196
-    type: server
-    min_heapsize: "{{ pdp_min_heapsize | default('512m') }}"
-    max_heapsize: "{{ pdp_max_heapsize | default('512m') }}"
-    config:
-      "{{ pdp }}"
-  - name: attribute-aggregation
-    enabled: "{{ springboot_services_state.attribute_aggregation }}"
-    version: "{{ attribute_aggregation_server_version }}"
-    type: server
-    port: 9198
-    min_heapsize: "{{ attribute_aggregation_min_heapsize | default('256m') }}"
-    max_heapsize: "{{ attribute_aggregation_max_heapsize | default('256m') }}"
   - name: myconext
     alias: myconext
     enabled: "{{ springboot_services_state.myconext }}"
