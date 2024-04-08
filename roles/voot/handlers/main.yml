@@ -1,6 +1,6 @@
 ---
 - name: restart vootserver
   community.docker.docker_container:
-    name: dashboardserver
+    name: vootserver
     state: started
     restart: true
