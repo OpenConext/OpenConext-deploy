@@ -7,7 +7,18 @@
     group: root
     mode: "0770"
 
-- name: Install configfiles
+- name: Install server configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/opt/openconext/stats/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - config.yml
+  notify: "restart statsserver"
+
+- name: Install gui configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/stats/{{ item }}"
@@ -16,7 +27,7 @@
     mode: "0644"
   with_items:
     - stats.conf
-    - config.yml
+  notify: "restart statsgui"
 
 - name: Create and start the servercontainer
   community.docker.docker_container:
