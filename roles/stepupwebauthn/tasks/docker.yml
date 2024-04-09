@@ -50,7 +50,7 @@
     state: directory
     dest: "{{ item }}"
     owner: root
-    mode: "0755"
+    mode: "0744"
   with_items:
     - "{{ current_release_config_file_dir_name }}/mds"
 
@@ -58,13 +58,13 @@
   ansible.builtin.get_url:
     url: https://mds3.fidoalliance.org/
     dest: "{{ current_release_config_file_dir_name }}/mds/blob.jwt"
-    mode: '0440'
+    mode: '0744'
 
 - name: Download metadata service signing certificate
   ansible.builtin.get_url:
     url: http://secure.globalsign.com/cacert/root-r3.crt
     dest: "{{ current_release_config_file_dir_name }}/mds/fido2-mds.cer"
-    mode: '0440'
+    mode: '0744'
 
 - name: Place parameters.yml
   ansible.builtin.template:
