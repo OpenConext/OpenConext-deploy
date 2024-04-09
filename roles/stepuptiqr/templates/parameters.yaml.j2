@@ -55,7 +55,7 @@ parameters:
           firebase:
             projectId: '{{ tiqr_firebase_projectid }}'
             credentialsFile: '{{ tiqr_firebase_credentialsfile }}'
-            cacheTokens: '{{ tiqr_firebase_cachetokens }}'
+            cacheTokens: {{ tiqr_firebase_cachetokens }}
 {% else %}
   {% if tiqr_firebase_apikey is defined %}
           firebase:
