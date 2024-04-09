@@ -56,6 +56,7 @@ parameters:
             projectId: '{{ tiqr_firebase_projectid }}'
             credentialsFile: '{{ current_release_config_file_dir_name_in_config }}/{{ tiqr_firebase_credentialsfile }}'
             cacheTokens: {{ tiqr_firebase_cachetokens }}
+            tokenCacheDir: '/tmp'
 {% else %}
   {% if tiqr_firebase_apikey is defined %}
           firebase:
