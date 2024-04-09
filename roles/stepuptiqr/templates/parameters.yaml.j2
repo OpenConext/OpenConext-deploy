@@ -51,15 +51,16 @@ parameters:
             apikey: '{{ tiqr_gcm_apikey  }}'
             application: 'nl.surfnet.authenticator'
 {% endif %}
-{% if tiqr_firebase_apikey is defined %}
-          firebase:
-            apikey: '{{ tiqr_firebase_apikey }}'
-{% endif %}
 {% if tiqr_firebase_credentialsfile is defined %}
           firebase:
             projectId: '{{ tiqr_firebase_projectid }}'
             credentialsFile: '{{ tiqr_firebase_credentialsfile }}'
             cacheTokens: '{{ tiqr_firebase_cachetokens }}'
+{% else %}
+  {% if tiqr_firebase_apikey is defined %}
+          firebase:
+            apikey: '{{ tiqr_firebase_apikey }}'
+  {% endif %}
 {% endif %}
           apns:
             certificate: '{{ current_release_config_file_dir_name_in_config }}/apns.pem'
