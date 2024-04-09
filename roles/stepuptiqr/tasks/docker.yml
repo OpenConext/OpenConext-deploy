@@ -46,7 +46,7 @@
 
 - name: Write tiqr Firebase service json
   copy:
-    src: "{{ inventory_dir }}/secrets/tiqr-demo.json"
+    src: "{{ inventory_dir }}/secrets/stepup/tiqr-demo.json"
     dest: "{{ current_release_config_file_dir_name }}/tiqr-demo.json"
     owner: "{{ appname }}"
     mode: 0400
