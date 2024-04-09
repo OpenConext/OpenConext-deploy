@@ -1,10 +1,10 @@
 parameters:
 {% if 'docker' in group_names %}
     app_env: prod
-    app_debug: false 
+    app_debug: false
     app_secret: {{ tiqr_secret }}
 {% endif %}
-    
+
     # All locales supported by the application
     locales: [{{ enabled_locales | join(",") }}]
 
@@ -55,6 +55,12 @@ parameters:
           firebase:
             apikey: '{{ tiqr_firebase_apikey }}'
 {% endif %}
+{% if tiqr_firebase_credentialsFile is defined %}
+          firebase:
+            projectId: '{{ tiqr_firebase_projectid }}'
+            credentialsFile: '{{ tiqr_firebase_credentialsfile }}'
+            cacheTokens: '{{ tiqr_firebase_cachetokens }}'
+{% endif %}  
           apns:
             certificate: '{{ current_release_config_file_dir_name_in_config }}/apns.pem'
             environment: production

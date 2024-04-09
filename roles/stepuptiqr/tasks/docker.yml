@@ -44,6 +44,14 @@
     mode: "0400"
   when: tiqr_apns_pemfile is defined
 
+- name: Write tiqr Firebase service json
+  copy:
+    src: "{{ inventory_dir }}/secrets/tiqr-demo.json"
+    dest: "{{ current_release_config_file_dir_name }}/tiqr-demo.json"
+    owner: "{{ appname }}"
+    mode: 0400
+  when: tiqr_firebase_credentialsfile is defined
+
 - name: Place parameters.yml
   ansible.builtin.template:
     src: parameters.yaml.j2
