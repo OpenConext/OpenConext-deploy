@@ -77,7 +77,7 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-    hostname: attribute-aggregation.test2.surfconext.nl
+    hostname: attribute-aggregation
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img }}"
       HTTPD_SERVERNAME: "aa.{{ base_domain }}"

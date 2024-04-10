@@ -73,7 +73,7 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-    hostname: teams.{{ base_domain }}
+    hostname: teams
     env:
       HTTPD_CSP: "{{ httpd_csp.strict_with_static_img }}"
       HTTPD_SERVERNAME: "teams.{{ base_domain }}"
