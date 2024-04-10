@@ -54,6 +54,16 @@
   with_items:
     - "{{ current_release_config_file_dir_name }}/mds"
 
+- name: Create the metadata service cache dir
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ item }}"
+    owner: root
+    group: "{{ appname }}"
+    mode: "0774"
+  with_items:
+    - "{{ current_release_config_file_dir_name }}/var/mds/"
+
 - name: Download metadata service blob
   ansible.builtin.get_url:
     url: https://mds3.fidoalliance.org/
