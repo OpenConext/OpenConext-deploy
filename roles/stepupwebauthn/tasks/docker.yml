@@ -50,7 +50,7 @@
     state: directory
     dest: "{{ item }}"
     owner: root
-    mode: "0744"
+    mode: "0755"
   with_items:
     - "{{ current_release_config_file_dir_name }}/mds"
 
