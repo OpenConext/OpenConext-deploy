@@ -36,15 +36,6 @@
     name: stepupapp
     tasks_from: copygsspidpcerts
 
-# - name: Create the trusted certificate dir
-#   ansible.builtin.file:
-#     state: directory
-#     dest: "{{ item }}"
-#     owner: root
-#     mode: "0755"
-#   with_items:
-#     - "{{ current_release_config_file_dir_name }}/trusted_certificates"
-
 - name: Create the metadata service dir
   ansible.builtin.file:
     state: directory
@@ -54,27 +45,30 @@
   with_items:
     - "{{ current_release_config_file_dir_name }}/mds"
 
-- name: Create the metadata service cache dir
+- name: Create and empty the metadata service cache dir
   ansible.builtin.file:
-    state: directory
-    dest: "{{ item }}"
+    state: "{{ item }}"
+    path: "{{ current_release_config_file_dir_name }}/var/mds/"
     owner: root
     group: "{{ appname }}"
     mode: "0774"
   with_items:
-    - "{{ current_release_config_file_dir_name }}/var/mds/"
+    - absent
+    - directory
 
 - name: Download metadata service blob
   ansible.builtin.get_url:
     url: https://mds3.fidoalliance.org/
     dest: "{{ current_release_config_file_dir_name }}/mds/blob.jwt"
     mode: '0744'
+    force: true
 
 - name: Download metadata service signing certificate
   ansible.builtin.get_url:
     url: http://secure.globalsign.com/cacert/root-r3.crt
     dest: "{{ current_release_config_file_dir_name }}/mds/fido2-mds.cer"
     mode: '0744'
+    force: true
 
 - name: Place parameters.yml
   ansible.builtin.template:
