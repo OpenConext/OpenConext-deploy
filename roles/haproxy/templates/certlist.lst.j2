@@ -1,0 +1,8 @@
+{% if haproxy_acme | bool %}
+/etc/haproxy/certs/{{ base_domain }}.pem [ocsp-update on]
+{% endif %}
+{% if haproxy_sni_ip.certs is defined %}
+{% for cert in haproxy_sni_ip.certs %}
+/etc/haproxy/certs/{{ cert.name }}_haproxy.pem [ocsp-update on]
+{% endfor %}
+{% endif %}
