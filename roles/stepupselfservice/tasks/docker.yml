@@ -60,6 +60,8 @@
   community.docker.docker_container:
     name: "{{ appname }}"
     image: ghcr.io/openconext/stepup-selfservice/stepup-selfservice:{{ selfservice_version }}
+    etc_hosts:
+      host.docker.internal: host-gateway
     pull: true
     restart_policy: "always"
     networks:

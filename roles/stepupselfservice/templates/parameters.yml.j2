@@ -8,7 +8,7 @@ parameters:
     trusted_proxies:   [ {{ engine_trusted_proxy_ips|join(',') }} ]
 
     mailer_transport:  smtp
-    mailer_host:       127.0.0.1
+    mailer_host:       host.docker.internal
     mailer_user:       ~
     mailer_password:   ~
 
