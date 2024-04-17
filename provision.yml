@@ -181,6 +181,7 @@
     - { role: mujina-idp, tags: ["mujina-idp"] }  
     - { role: oidc-playground, tags: ["oidc-playground"] }  
     - { role: stats,      tags: ["stats"] }  
+    - { role: profile,      tags: ["profile"] }  
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 

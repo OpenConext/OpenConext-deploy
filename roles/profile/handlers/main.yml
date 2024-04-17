@@ -1,5 +1,6 @@
 ---
-- name: restart php72-fpm
-  service:
-    name: php72-php-fpm
-    state: restarted
+- name: restart profile
+  community.docker.docker_container:
+    name: profile
+    state: started
+    restart: true
