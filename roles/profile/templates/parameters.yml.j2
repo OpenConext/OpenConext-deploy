@@ -2,7 +2,7 @@ parameters:
     app_env: prod
     app_debug: false 
     app_secret: {{ profile_secret }}
-    secret: {{ profile_secret }}
+
     locales: [en, nl]
     default_locale: {{ profile_default_locale }}
     open_conext_locale_cookie_key: lang
@@ -58,3 +58,6 @@ parameters:
     session_handler: ~
     # Database settings when using a db to store sessions. Unused in the default setup
     dsn: mysql://profilerw:secret@localhost/profile?serverVersion=5.7
+
+    # which context class ref is used for the saml bundle
+    authentication_context_class_ref: ~

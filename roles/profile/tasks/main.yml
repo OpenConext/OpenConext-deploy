@@ -23,7 +23,7 @@
   with_items:
     - "{{ current_release_config_dir_name }}"
     - "{{ current_release_config_dir_name }}/certs"
-    - "{{ current_release_config_dir_name }}/translations/overrides"
+    - "{{ current_release_config_dir_name }}/translationoverrides"
 
 - name: Put parameters YAML config
   ansible.builtin.template:
@@ -55,7 +55,7 @@
 - name: Copy language specific overrides
   ansible.builtin.template:
     src: "{{ item }}"
-    dest: "{{ current_release_config_dir_name }}/translations/overrides/"
+    dest: "{{ current_release_config_dir_name }}/translationoverrides/"
   when: overrides_present.stat.exists
   with_fileglob:
     - "{{ inventory_dir }}/files/profile/overrides/*"
