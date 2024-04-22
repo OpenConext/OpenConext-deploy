@@ -5,7 +5,7 @@ RewriteCond %{REQUEST_URI} !^/aa/
 RewriteCond %{REQUEST_URI} !^/internal/
 RewriteCond %{REQUEST_URI} !^/redirect
 RewriteCond %{REQUEST_URI} !^/fonts/
-RewriteCond %{REQUEST_URI} !^/orcid/
+RewriteCond %{REQUEST_URI} !^/orcid
 RewriteRule (.*) /index.html [L]
 
 Redirect /orcid https://link.{{ base_domain }}/aa/api/client/information.html
