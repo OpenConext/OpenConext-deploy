@@ -27,7 +27,7 @@ spring:
 {% if invite_cronjobmaster is defined and invite_cronjobmaster == false  %}
       cleanup-cron: "-"
 {% else %}
-      cleanup-cron: "*/5 * * * *"
+      cleanup-cron: "*/5 * * * * *"
 {% endif %}
     store-type: jdbc
     timeout: 8h
