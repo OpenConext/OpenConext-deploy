@@ -24,7 +24,7 @@ spring:
   session:
     jdbc:
       initialize-schema: always
-{% if invite_cronjobmaster is defined and invite_cronjobmaster = false  %}
+{% if invite_cronjobmaster is defined and invite_cronjobmaster == false  %}
       cleanup-cron: "-"
 {% else %}
       cleanup-cron: "*/5 * * * *"
