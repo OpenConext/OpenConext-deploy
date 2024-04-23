@@ -1,18 +1,16 @@
 ---
-diyidp_fpm_user: diyidp
-simplesamlphp_version: 1.19.5
-diyidp_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-diyidp"
 diyidp_domain: diyidp."{{ base_domain }}"
 diyidp_cert: "diyidp.crt"
-diyidp_welcome_text: |
-  "<strong>Congratulations<\/strong>, you have successfully installed SimpleSAMLphp. This is the start page of your installation, where you will find links to test examples, diagnostics, metadata and even links to relevant documentation."
 diyidp:
   db_host: "{{ mysql_host }}"
   db_name: diyidp
   db_user: diyidprw
-  dp_password: "{{ mysql_passwords.diyidp }}"
+  db_password: "{{ mysql_passwords.diyidp }}"
+  secretsalt: "{{ diyidp_secret_salt }} "
+  admin_password: "{{ diyidp_secret }}"
+diyidp_secret_salt: secretsecret
+diyidp_secret: secret
 diyidp_remotesp:
   - name: "{{ instance_name }} SP metadata"
     metadataurl: "https://engine.{{ base_domain }}/authentication/sp/metadata"
     acslocation: "https://engine.{{ base_domain }}/authentication/sp/consume-assertion"
-
