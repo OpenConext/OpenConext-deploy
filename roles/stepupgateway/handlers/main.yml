@@ -6,3 +6,6 @@
   service:
     name: php72-php-fpm
     state: reloaded
+
+- name: restart gateway
+  command: docker restart gateway
