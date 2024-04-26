@@ -2,7 +2,7 @@ parameters:
 {% if 'docker' in group_names %}
     app_env: prod
     app_debug: false 
-    app_secret: {{ selfservice_secret }}
+    app_secret: {{ ra_secret }}
 {% endif %}
 
     trusted_proxies:   [ {{ engine_trusted_proxy_ips|join(',') }} ]
