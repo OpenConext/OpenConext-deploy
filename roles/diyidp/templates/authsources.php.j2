@@ -12,6 +12,9 @@ $config = array(
 
 	
 	'sql_user' => array(
+    'core:loginpage_links' => [
+            'users' => ['href' => '/showusers.php', 'text' => 'List of available users'],
+    ],
 		'sqlauth:SQL',
 		'dsn' => 'mysql:host={{ diyidp.db_host}};port=3306;dbname={{ diyidp.db_name }}',
 		'username' => '{{ diyidp.db_user}}',

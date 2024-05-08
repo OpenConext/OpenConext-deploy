@@ -1,127 +1,106 @@
 ---
-- name: Add group {{ diyidp_fpm_user }}
-  group:
-    name: "{{ diyidp_fpm_user }}"
-    state: present
-
-- name: Add user {{ diyidp_fpm_user }}
-  user:
-    name: "{{ diyidp_fpm_user }}"
-    group: "{{ diyidp_fpm_user }}"
-    createhome: no
-    state: present
-
-- name: Create directory for vhosts to store PHP sessions
-  file:
-    path: "{{ php_session_dir}}/diyidp"
-    state: directory
-    owner: "{{ diyidp_fpm_user }}"
-    group: root
-    mode: 0770
-
-- name: Download and unarchive the latest release
-  unarchive:
-    src: "https://github.com/simplesamlphp/simplesamlphp/releases/download/v{{ simplesamlphp_version }}/simplesamlphp-{{ simplesamlphp_version }}.tar.gz"
-    dest: "{{ openconext_releases_dir }}"
-    creates: "/opt/openconext/simplesamlphp-{{ simplesamlphp_version }}"
-    remote_src: yes
-
-- name: Install Apache vhost
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/httpd/conf.d/{{ item }}"
-  with_items:
-    - diyidp.conf
-  notify:
-    - "restart httpd"
-
-- name: Clean up old php-fpm 5.6 config
-  file:
-    path: "/etc/php-fpm.d/diyidp-pool.conf"
-    state: absent
-
-- name: php-fpm 72 config
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/opt/remi/php72/php-fpm.d/{{ item }}"
-  with_items:
-     - diyidp-pool-72.conf
-  notify:
-    - "restart php72-fpm"
-
-- name: Activate new DIY IDP release
-  file:
-    src: "{{ openconext_releases_dir }}/simplesamlphp-{{  simplesamlphp_version }}"
-    dest: "{{ diyidp_current_release_symlink }}"
-    state: link
-  notify:
-    - "restart httpd"
-
 - name: Create directories
-  file:
-    path: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/{{ item }}"
+  ansible.builtin.file:
+    path: "/opt/openconext/diyidp/{{ item }}"
     state: directory
     owner: root
     group: root
-    mode: 0775
+    mode: "0775"
   with_items:
-    - config
+    - www
     - metadata
-    - data
     - cert
 
 - name: Put metadata certificate in place
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/{{ diyidp_cert }}"
-    dest: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/cert/server.crt"
+    dest: "/opt/openconext/diyidp/cert/server.crt"
+    owner: root
+    group: root
+    mode: "0644"
 
 - name: Put metadata key in place
-  copy:
+  ansible.builtin.copy:
     content: "{{ diyidp_private_key }}"
-    dest: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/cert/server.key"
-    owner: "{{ diyidp_fpm_user }}"
-    mode: 0400
+    dest: "/opt/openconext/diyidp/cert/server.key"
+    owner: root
+    group: root
+    mode: "0444"
+  notify: restart diyidp
 
 - name: Copy simplesamlphp configuration files
-  template:
+  ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/config/{{ item }}"
+    dest: "/opt/openconext/diyidp/{{ item }}"
+    mode: "0644"
   with_items:
-    - config.php
+    - config-override.php
     - authsources.php
+  notify: restart diyidp
 
 - name: Copy simplesamlphp metadata files
-  template:
+  ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/metadata/{{ item }}"
+    dest: "/opt/openconext/diyidp/metadata/{{ item }}"
+    mode: "0644"
   with_items:
     - saml20-idp-hosted.php
     - saml20-sp-remote.php
+  notify: restart diyidp
 
 - name: Copy showusers php script
-  template:
+  ansible.builtin.template:
     src: "showusers.php.j2"
-    dest: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/www/showusers.php"
+    dest: "/opt/openconext/diyidp/www/showusers.php"
     owner: root
-    mode: 0644
+    mode: "0644"
+  notify: restart diyidp
 
-- name: Copy frontpage definitions
-  template:
-    src: "frontpage.definition.json.j2"
-    dest: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/modules/core/dictionaries/frontpage.definition.json"
+- name: Copy the apache config
+  ansible.builtin.template:
+    src: "000-default.conf.j2"
+    dest: "/opt/openconext/diyidp/000-default.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart diyidp
 
-- name: Copy login page definition
-  template:
-    src: "login.definition.json.j2"
-    dest: "{{ openconext_releases_dir }}/simplesamlphp-{{ simplesamlphp_version }}/dictionaries/login.definition.json"
-
-- name: Copy the database dump file
-  copy:
-    src: diyidp.sql
-    dest: "{{ openconext_releases_dir }}/builds/"
-  register: copy_diyidp_script
-
-- name: Import the database
-  shell: mysql -u {{ diyidp.db_user }} -p{{ diyidp.db_password }} -h {{ diyidp.db_host }} -D {{ diyidp.db_name }} < {{ openconext_releases_dir }}/builds/diyidp.sql
-  args:
-    creates: /var/lib/mysql/{{diyidp.db_name}}/users.frm
+- name: Create the container
+  community.docker.docker_container:
+    name: diyidp
+    image: cirrusid/simplesamlphp:v2.0.7
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.diyidp.rule: "Host(`diyidp.{{ base_domain }}`)"
+      traefik.http.routers.diyidp.tls: "true"
+      traefik.enable: "true"
+    hostname: diyidp
+    mounts:
+      - source: /opt/openconext/diyidp/config-override.php
+        target: /var/simplesamlphp/config/config-override.php
+        type: bind
+      - source: /opt/openconext/diyidp/authsources.php
+        target: /var/simplesamlphp/config/authsources.php
+        type: bind
+      - source: /opt/openconext/diyidp/metadata
+        target: /var/simplesamlphp/config/metadata
+        type: bind
+      - source: /opt/openconext/diyidp/cert
+        target: /var/simplesamlphp/config/cert
+        type: bind
+      - source: /opt/openconext/diyidp/www/showusers.php
+        target: /var/simplesamlphp/public/showusers.php
+        type: bind
+      - source: /opt/openconext/diyidp/000-default.conf
+        target: /etc/apache2/sites-enabled/000-default.conf
+        type: bind
+    env:
+      SSP_ENABLED_MODULES: "sqlauth themesurf"
+      SSP_LOG_HANDLER: stderr
+      COMPOSER_REQUIRE: "simplesamlphp/simplesamlphp-module-sqlauth surfnet/simplesamlphp-module-themesurf:dev-main"
+      SSP_ENABLE_IDP: "true"
+      SSP_SECRET_SALT: "{{ diyidp.secretsalt }}"

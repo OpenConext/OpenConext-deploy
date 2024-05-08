@@ -1,0 +1,7 @@
+<VirtualHost *:80>
+    DocumentRoot /var/simplesamlphp/public
+
+    <Directory /var/simplesamlphp/public>
+        Require all granted
+    </Directory>
+</VirtualHost>

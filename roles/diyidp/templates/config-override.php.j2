@@ -1,0 +1,6 @@
+<?php
+$config['certdir'] = 'config/cert/';
+$config['metadatadir'] = 'config/metadata/';
+$config['auth.adminpassword'] = '{{ diyidp.admin_password }}';
+$config['baseurlpath'] = 'https://diyidp.{{ base_domain }}/';
+$config['theme.use']   = '{{ diyidp.theme |default("default") }}';
