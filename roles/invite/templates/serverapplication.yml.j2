@@ -24,6 +24,11 @@ spring:
   session:
     jdbc:
       initialize-schema: always
+{% if invite_cronjobmaster is defined and invite_cronjobmaster == false  %}
+      cleanup-cron: "-"
+{% else %}
+      cleanup-cron: "0 */5 * * * *"
+{% endif %}
     store-type: jdbc
     timeout: 8h
   mvc:
@@ -61,14 +66,14 @@ spring:
     locations: classpath:db/{vendor}/migration
     fail-on-missing-locations: true
   mail:
-    host: {{ smtp_host }}
+    host: {{ smtp_server }}
 
 crypto:
   development-mode: False
   private-key-location: file:///private_key_pkcs8.pem
 
 cron:
-  node-cron-job-responsible: true
+  node-cron-job-responsible: {{ invite_cronjobmaster }}
   user-cleaner-expression: "0 0/30 * * * *"
   last-activity-duration-days: 1000
   role-expiration-notifier-expression: "0 0/30 * * * *"

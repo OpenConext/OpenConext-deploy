@@ -1,108 +1,67 @@
 - name: Add group {{ lifecycle_user }}
-  group:
+  ansible.builtin.group:
     name: "{{ lifecycle_user }}"
     state: present
+  register: lifecycle_guid
 
 - name: Add user {{ lifecycle_user }}
-  user:
+  ansible.builtin.user:
     name: "{{ lifecycle_user }}"
     group: "{{ lifecycle_user }}"
-    createhome: yes
+    createhome: true
     state: present
+  register: lifecycle_uid
 
-- name: Create php session dir for lifecycle
-  file:
-    path: "{{ php_session_dir }}/lifecycle"
+- name: Create config dirs sajsdjasjaksa
+  ansible.builtin.file:
     state: directory
-    owner: "{{ lifecycle_user }}"
+    dest: "{{ item }}"
+    owner: root
     group: root
-    mode: 0770
-
-- name: Install Apache vhost
-  template:
-    src: lifecycle.conf.j2
-    dest: /etc/httpd/conf.d/lifecycle.conf
-  notify: "reload httpd"
-
-- name: Clean up old php-fpm 5.6 config
-  file:
-    path: "/etc/php-fpm.d/lifecycle-pool.conf"
-    state: absent
-
-- name: php-fpm 72 config
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/opt/remi/php72/php-fpm.d/{{ item }}"
+    mode: "0755"
   with_items:
-     - lifecycle-pool-72.conf
-  notify:
-    - "restart php72-php-fpm"
+    - "{{ current_release_config_dir_name }}"
 
-- name: Include install-branch.yml
-  include_tasks: install-branch.yml
-  when: lifecycle_branch is defined and lifecycle_branch != ''
-
-- name: Include install-release.yml
-  include_tasks: install-release.yml
-  when: lifecycle_branch is not defined or lifecycle_branch == ''
-
-- name: Place parameters.yml
-  template:
-    src: "{{ item }}.j2"
-    dest: "{{ lifecycle_current_release_symlink }}/config/legacy/{{ item }}"
-    mode: 0644
+- name: Put parameters YAML config
+  ansible.builtin.template:
+    src: "{{ item }}.yml.j2"
+    dest: "{{ current_release_config_dir_name }}/{{ item }}.yaml"
+    mode: "0640"
+    group: "{{ appname }}"
   with_items:
-    - parameters.yml
+    - parameters
   notify:
-    - "restart php72-fpm"
+    - restart {{ appname }}
 
-- name: Place .envl file 
-  copy:
-    src: env
-    dest: "{{ lifecycle_current_release_symlink }}/.env"
-    mode: 0644
+- name: Create the container
+  community.docker.docker_container:
+    name: "{{ appname }}"
+    image: ghcr.io/openconext/openconext-user-lifecycle/user-lifecycle:{{ lifecycle_version }}
+    etc_hosts:
+      host.docker.internal: host-gateway
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.lifecycle.rule: "Host(`lifecycle.{{ base_domain }}`)"
+      traefik.http.routers.lifecycle.tls: "true"
+      traefik.enable: "true"
+    env:
+      APACHE_UID: "#{{ lifecycle_uid.uid }}"
+      APACHE_GUID: "#{{ lifecycle_guid.gid }}"
+      APP_ENV: prod
+      HTTPD_CSP: "{{ httpd_csp.strict }}"
+    mounts:
+      - source: /opt/openconext/lifecycle
+        target: /var/www/html/config/openconext
+        type: bind
 
-- name: Create the symfony cache
-  command: "/usr/bin/php72 bin/console cache:clear --env={{ lifecycle_apache_symfony_environment }} --no-debug"
-  args:
-    chdir: "{{ lifecycle_current_release_symlink }}/"
-  when:
-    - not develop
-  changed_when: false
-
-- name: Make sure cache dir has correct permissions
-  file:
-    path: "{{ lifecycle_current_release_symlink }}/var/cache"
-    owner: "{{ lifecycle_user }}"
-    group: "{{ lifecycle_user }}"
-    recurse: yes
-  changed_when: false
-
-- name: Make sure log dir has correct permissions
-  file:
-    path: "{{ lifecycle_current_release_symlink }}/var/logs" 
-    owner: "{{ lifecycle_user }}"
-    group: "{{ lifecycle_user }}"
-    recurse: yes
-  changed_when: false
-
-  # Remove all dirs, but keep the current version and from the rest the most recent one.
-- name: Clean up old releases
-  shell: ls -td {{ openconext_releases_dir }}/OpenConext-user-lifecycle-* | grep -v $(readlink {{ lifecycle_current_release_symlink }}) | tail -n +2 | xargs --no-run-if-empty rm -rv
-  register: clean_releases
-  changed_when: '"removed" in clean_releases.stdout'
-
-# Remove all tarballs, but keep the current version and from the rest the most recent one.
-- name: Clean up old builds
-  shell: ls -td {{ openconext_builds_dir }}/OpenConext-user-lifecycle-* {{ openconext_builds_dir }}/Releases/ | grep -v {{ lifecycle_build_path }} | tail -n +2 | xargs --no-run-if-empty rm -rv
-  register: clean_builds
-  changed_when: '"removed" in clean_builds.stdout'
-
-- name: Create daily cronjob
-  cron:
-    name: lifecycle run
-    minute: "8"
-    hour: "01"
-    user: "{{ lifecycle_user }}"
-    job: "/usr/bin/php72 {{ lifecycle_current_release_symlink }}/userlifecycle deprovision"
-    cron_file: user_lifecycle
+#- name: Create daily cronjob
+  #  cron:
+  #  name: lifecycle run
+  #  minute: "8"
+  #  hour: "01"
+  #  user: "{{ lifecycle_user }}"
+  #  job: "/usr/bin/php72 {{ lifecycle_current_release_symlink }}/userlifecycle deprovision"
+  #  cron_file: user_lifecycle

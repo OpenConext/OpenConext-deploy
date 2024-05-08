@@ -1,6 +1,6 @@
 ---
-- name: restart profile
+- name: restart lifecycle
   community.docker.docker_container:
-    name: profile
+    name: lifecycle
     state: started
     restart: true
