@@ -175,3 +175,37 @@ authorities:
     ],
     validationRegExp: "^urn:(collab:group|mace:surf.nl):.*$"
   }
+  - {
+    id: "sabrest",
+    description: "SURF Autorisatie Beheer - REST",
+    endpoint: "{{ aa.sab_rest_endpoint }}",
+    user: "{{ aa.sab_rest_username }}",
+    password: "{{ aa.sab_rest_password }}",
+    timeOut: 1000,
+    timeOut: 1000,
+    attributes: [
+      {
+        name: "urn:mace:dir:attribute-def:eduPersonEntitlement",
+        description: "URI (either URN or URL) that indicates a set of rights to specific resources.",
+        type: "string",
+        example: "urn:mace:surfnet.nl:surfnet.nl:sab:role:Instellingsbevoegde"
+      },
+      {
+        name: "urn:mace:surf.nl:attribute-def:surf-autorisaties",
+        description: "URI (either URN or URL) that indicates a set of rights to specific resources.",
+        type: "string",
+        example: "urn:mace:surfnet.nl:surfnet.nl:sab:role:Instellingsbevoegde"
+      }
+
+    ],
+    requiredInputAttributes: [
+      {
+        name: "urn:mace:dir:attribute-def:uid",
+      },
+      {
+        name: "urn:mace:terena.org:attribute-def:schacHomeOrganization",
+      }
+
+    ],
+    validationRegExp: "^urn:mace:surfnet.nl:(surfnet\\.nl|surf\\.nl):sab:(role|organizationCode|organizationGUID|mobile):[A-Z0-9_+-]+$"
+  }

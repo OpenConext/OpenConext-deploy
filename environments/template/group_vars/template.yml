@@ -359,6 +359,9 @@ aa:
   sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  sab_rest_username: surfconexttest
+  sab_rest_password: "{{ aa_sab_rest_password }}"
+  sab_rest_endpoint: https://sab-ng.surfnet.nl
   surfmarket_url: https://example.org
   surfmarket_username: example@example.org
   surfmarket_password: "{{ aa_surfmarket_password }}"
