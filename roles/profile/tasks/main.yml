@@ -102,9 +102,13 @@
       - source: /opt/openconext/profile
         target: /var/www/html/config/openconext
         type: bind
-      - source: /opt/openconext/profile/images/favicon.ico
+      - source: /opt/openconext/common/favicon.ico
         target: /var/www/html/public/favicon.ico
         type: bind
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+    
 
 - name: Include the role manage_provision_entities to provision profile to Manage
   ansible.builtin.include_role:

@@ -51,6 +51,8 @@
 - name: Create and start the server container
   community.docker.docker_container:
     name: inviteserver
+    env:
+      TZ: "{{ timezone }}"
     image: ghcr.io/openconext/openconext-invite/inviteserver:{{ invite_server_version }}
     pull: true
     restart_policy: "always"
@@ -97,6 +99,10 @@
       timeout: 10s
       retries: 3
       start_period: 10s
+    mounts:
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
     env:
       HTTPD_CSP: "{{ httpd_csp.strict_with_static_img }}"
 
@@ -119,6 +125,10 @@
       timeout: 10s
       retries: 3
       start_period: 10s
+    mounts:
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
     env:
       HTTPD_CSP: "{{ httpd_csp.strict_with_static_img }}"
 
@@ -147,6 +157,10 @@
       timeout: 10s
       retries: 3
       start_period: 10s
+    mounts:
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
   when: invite_mock_install
   notify: restart inviteprovisioningmock
 

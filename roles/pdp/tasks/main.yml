@@ -23,6 +23,8 @@
 - name: Create and start the server container
   community.docker.docker_container:
     name: pdpserver
+    env:
+      TZ: "{{ timezone }}"
     image: ghcr.io/openconext/openconext-pdp/pdp-server:{{ pdp_server_version }}
     pull: true
     restart_policy: "always"
@@ -77,6 +79,13 @@
       timeout: 10s
       retries: 3
       start_period: 10s
+    mounts:
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+      - source: /opt/openconext/common/favicon.ico
+        target: /var/www/favicon.ico
+        type: bind
     hostname: pdp
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient }}"
