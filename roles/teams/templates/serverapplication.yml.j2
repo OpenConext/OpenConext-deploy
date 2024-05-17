@@ -22,10 +22,6 @@ server:
         secure: true
   server-header: no
 
-feature-toggles:
-  expiry-date-membership: false
-  person-email-picker: false
-
 config:
   support-email: {{ support_email }}
   help-link-en: {{ teams_help_link_en }}
@@ -38,6 +34,9 @@ config:
   organization: {{ teams_organization }}
   sponsor: {{ sponsor_name }}
   supported_language_codes: {{ supported_language_codes }}
+
+features:
+  invite-migration-on: {{ teams.feature_invite_migration_on }}
 
 security:
   user:

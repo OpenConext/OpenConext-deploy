@@ -268,6 +268,7 @@ teams:
   spdashboard_person_urn: "urn:collab:person:surfnet.nl:sp-dashboard-C133A36F-CFCA-4F3D-87CE-7ECE29773FE0"
   product_name: "OpenConext Teams"
   default_stem_name: "demo:openconext:org"
+  feature_invite_migration_on: False
   super_admins_team_urns:
     - "nl:surfnet:diensten:teams_super_users"
     - "nl:surfnet:diensten:teams_super_admin_users"
