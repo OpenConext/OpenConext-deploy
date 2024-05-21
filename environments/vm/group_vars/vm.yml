@@ -280,6 +280,7 @@ oidcng:
   key_rollover_cron_expression: "0 0 0 * * *"
   acr_values_supported:
     - https://eduid.nl/trust/validate-names
+    - https://eduid.nl/trust/validate-names-external
     - https://eduid.nl/trust/linked-institution
     - https://eduid.nl/trust/affiliation-student
     - https://refeds.org/profile/mfa
