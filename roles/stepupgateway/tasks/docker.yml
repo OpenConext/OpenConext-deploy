@@ -128,7 +128,7 @@
       HTTPD_CSP: ""
     mounts:
       - source: /opt/openconext/gateway/public/images/header-logo.png
-        target: /var/www/html/public/build/images/header-logo.png
+        target: /var/www/html/public/images/header-logo.png
         type: bind
       - source: /opt/openconext/gateway/
         target: /var/www/html/config/openconext
