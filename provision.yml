@@ -171,18 +171,19 @@
 - hosts: docker
   become: true
   roles:
-    - { role: docker,     tags: ['docker' ] }
-    - { role: invite,     tags: ['invite' ] }
-    - { role: dashboard,  tags: ["dashboard"] }
-    - { role: teams,      tags: ["teams"] }
-    - { role: pdp,        tags: ["pdp"] }
-    - { role: voot,       tags: ["voot"] }
-    - { role: attribute-aggregation, tags: ["aa"] }
-    - { role: mujina-idp, tags: ["mujina-idp"] }  
-    - { role: oidc-playground, tags: ["oidc-playground"] }  
-    - { role: stats,      tags: ["stats"] }  
-    - { role: diyidp,      tags: ["diyidp"] }  
-    - { role: profile,      tags: ["profile"] }  
+    - { role: docker,                 tags: [ "docker" ] }
+    - { role: invite,                 tags: [ "invite" ] }
+    - { role: dashboard,              tags: [ "dashboard" ] }
+    - { role: teams,                  tags: [ "teams" ] }
+    - { role: pdp,                    tags: [ "pdp" ] }
+    - { role: voot,                   tags: [ "voot" ] }
+    - { role: attribute-aggregation,  tags: [ "aa", "attribute-aggregation" ] }
+    - { role: mujina-idp,             tags: [ "mujina-idp", "mujina" ] }
+    - { role: mujina-sp,              tags: [ "mujina-idp", "mujina" ] }
+    - { role: oidc-playground,        tags: [ "oidc-playground" ] }
+    - { role: stats,                  tags: [ "stats" ] }
+    - { role: diyidp,                 tags: [ "diyidp" ] }
+    - { role: profile,                tags: [ "profile" ] }
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 
