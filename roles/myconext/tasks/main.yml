@@ -148,8 +148,8 @@
       OPENCONEXT_ENGINE_LOGOUT_URL: "https://engine.{{ base_domain }}/logout"
       OPENCONEXT_HELP_EMAIL: "{{ support_email }}"
       SHIB_ENTITYID: "https://mijn.{{ myconext_base_domain }}/shibboleth"
-      SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
-      SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
+      SHIB_REMOTE_ENTITYID: "https://login.{{ myconext_base_domain }}"
+      SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.my_conext_idp }}"
 
 - name: Create the account gui
   community.docker.docker_container:
