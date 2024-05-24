@@ -84,7 +84,7 @@
         target: /etc/localtime
         type: bind
       - source: /opt/openconext/common/favicon.ico
-        target: /var/www/favicon.ico
+        target: /var/www/html/favicon.ico
         type: bind
     hostname: pdp
     env:
