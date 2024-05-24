@@ -185,7 +185,6 @@
     - { role: diyidp,      tags: ["diyidp"] }  
     - { role: profile,      tags: ["profile"] }  
     - { role: lifecycle,      tags: ["lifecycle"] }  
-    - { role: demosp,      tags: ["demosp"] }  
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 
