@@ -99,6 +99,8 @@ feature:
   default_remember_me: True
   # Does the SAMLIdpService expects authn requests to be signed
   requires_signed_authn_request: False
+  # Do we support ID verify
+  id_verify: True
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
@@ -157,7 +159,6 @@ account_linking_context_class_ref:
   profile_mfa: https://refeds.org/profile/mfa
 
 account_linking:
-  idp_external_validation_entity_id: {{ myconext.idp_external_validation_entity_id }}
   myconext_sp_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
 
 eduid_api:
@@ -171,6 +172,15 @@ geo_location:
   license_key: {{ myconext_geo2lite_license_key }}
   external_url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license_key}&suffix=tar.gz"
   download_directory: "/config/geo2lite"
+
+verify:
+  client_id: {{ myconext_verify_client_id }}
+  secret: {{ myconext_verify_secret }}
+  base_uri: {{ myconext.verify_base_uri }}
+  sp_verify_redirect_url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/verify/redirect
+  idp_verify_redirect_url: https://login.{{ myconext_base_domain }}/myconext/api/idp/verify/redirect
+  mobile_verify_redirect_url: https://mijn.{{ myconext_base_domain }}/myconext/api/mobile/verify/redirect
+  issuers_path: "classpath:idin/issuers.json"
 
 spring:
   data:
