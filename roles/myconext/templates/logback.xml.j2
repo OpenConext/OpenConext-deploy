@@ -1,0 +1,20 @@
+#jinja2:lstrip_blocks: True
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+ <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+  <encoder>
+     <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
+   </encoder>
+ </appender>
+
+ <logger name="myconext" level="INFO" />
+ <logger name="tiqr.org" level="INFO" />
+ <logger name="io.changock" level="INFO" />
+
+ <root level="WARN">
+   <appender-ref ref="STDOUT" />
+   <!-- <appender-ref ref="EMAIL" /> -->
+ </root>
+
+</configuration>

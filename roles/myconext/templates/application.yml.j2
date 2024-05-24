@@ -1,5 +1,5 @@
 logging:
-  config: file://{{ myconext_dir }}/logback.xml
+  config: file:///config/logback.xml
   level:
     org.springframework.data.mongodb: INFO
     org.springframework.data.convert: INFO
@@ -7,7 +7,7 @@ logging:
 
 server:
   # The port to where this Spring Boot application listens to.
-  port: {{ springapp_tcpport }}
+  port: 8080
   error:
     path: "/error"
   server-header:
@@ -35,6 +35,7 @@ email:
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
   idp-surfconext-url: https://login.{{ myconext_base_domain }}
+  mail-templates-directory: classpath:mail_templates
 
 identity-provider-meta-data:
   single_sign_on_service_uri: "https://login.{{ myconext_base_domain }}/saml/guest-idp/SSO"
@@ -99,11 +100,10 @@ feature:
   # Does the SAMLIdpService expects authn requests to be signed
   requires_signed_authn_request: False
 
-
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
-private_key_path: file://{{ myconext_dir }}/myconext_saml.key
-certificate_path: file://{{ myconext_dir }}/myconext_saml.crt
+private_key_path: file:///config/myconext_saml.key
+certificate_path: file:///config/myconext_saml.crt
 tiqr_hash_secret: "{{ myconext_tiqr_hash_secret }}"
 
 remember_me_max_age_seconds: 15_768_000
@@ -117,7 +117,7 @@ sms:
   url: "{{ myconext.sms_api_url}}"
   bearer: "{{ myconext_sms_bearer }}"
 
-tiqr_configuration: "file://{{ myconext_dir }}/tiqr.configuration.yml"
+tiqr_configuration: "file:///config/tiqr.configuration.yml"
 
 
 attribute_aggregation:
@@ -153,7 +153,6 @@ linked_accounts:
 account_linking_context_class_ref:
   linked_institution: https://eduid.nl/trust/linked-institution
   validate_names: https://eduid.nl/trust/validate-names
-  validate_names_external: https://eduid.nl/trust/validate-names-external
   affiliation_student: https://eduid.nl/trust/affiliation-student
   profile_mfa: https://refeds.org/profile/mfa
 
@@ -171,7 +170,7 @@ eduid_api:
 geo_location:
   license_key: {{ myconext_geo2lite_license_key }}
   external_url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license_key}&suffix=tar.gz"
-  download_directory: "{{ myconext_dir }}/geo2lite"
+  download_directory: "/config/geo2lite"
 
 spring:
   data:
@@ -179,7 +178,7 @@ spring:
       uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl=true
 
   mail:
-    host: localhost
+    host: {{ smtp_server }}
     port: 25
   main:
     banner-mode: "off"
@@ -191,6 +190,10 @@ management:
       enabled: true
   # We disable all endpoints except health for the load-balancer and info for git information.
   endpoints:
+    web:
+      exposure:
+        include: "health,info,mappings,metrics"
+      base-path: "/internal"
     enabled: false
     health:
       enabled: true

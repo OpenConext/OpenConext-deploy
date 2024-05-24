@@ -13,7 +13,7 @@ rateLimitResetMinutes: 30
 apns:
   serverHost: "api.push.apple.com"
   port: 443
-  signingKey: "file://{{ myconext_dir }}/apns.p8"
+  signingKey: "file:///config/apns.p8"
   # Leave empty for non-local development
   serverCertificateChain: ""
   topic: "nl.eduid"
@@ -21,5 +21,5 @@ apns:
   keyId: "{{ myconext.apns_keyid }}"
 
 gcm:
-  firebaseServiceAccount: "file://{{ myconext_dir }}/firebase.json"
+  firebaseServiceAccount: "file:///config/firebase.json"
   appName: "tiqr"

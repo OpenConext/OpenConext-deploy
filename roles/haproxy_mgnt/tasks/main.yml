@@ -5,11 +5,25 @@
   register: patch_process_started
 
 - block:
-     - name: End the play if the patchprocess is running
-       debug:
-         msg: "The patchprocess is running. No loadbalancer management allowed"
-     - meta: end_play
-  when: patch_process_started.stat.exists and skip_patch_check is not defined 
+    - name: End the play if the patchprocess is running
+      debug:
+        msg: "The patchprocess is running. No loadbalancer management allowed"
+    - meta: end_play
+  when: patch_process_started.stat.exists and skip_patch_check is not defined
+
+# Set the fact weight_blue as an integer. The value is the 100 minus value of the supplied
+# variable "weight_red".
+- set_fact:
+    weight_blue: "{{ 100 - weight_red }}"
+
+- name: Create list with labels and weights as dictionaries
+  set_fact:
+    server_labels_with_weights: "{{ server_labels_with_weights + [{ 'label': item.label, 'weight': (weight_red if item.color == 'red' else weight_blue) }] }}"
+  loop: "{{ docker_blauwrood_servers }}"
+
+- name: debug
+  debug:
+    msg: "{{server_labels_with_weights }}"
 
 - name: get new weight for haproxy hosts
   haproxy_commands:
@@ -41,12 +55,12 @@
 
 - name: dump weight output
   debug:
-    msg: '{{ haproxy_weights.haproxy_items }}'
+    msg: "{{ haproxy_weights.haproxy_items }}"
   when: weight is defined
 
 - name: dump state output
   debug:
-    msg: '{{ haproxy_states.haproxy_items }}'
+    msg: "{{ haproxy_states.haproxy_items }}"
   when: state is defined
 
 - name: set weights for haproxy hosts
