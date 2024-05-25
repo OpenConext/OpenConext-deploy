@@ -72,7 +72,7 @@ rp_origin: https://login.{{ myconext_base_domain }}
 sp_redirect_url: https://mijn.{{ myconext_base_domain }}
 sp_entity_id: {{ myconext.sp_entity_id }}
 sp_entity_metadata_url: {{ myconext.sp_entity_metadata_url }}
-guest_idp_entity_id: https://login.{{ myconext_base_domain }}
+guest_idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
 my_conext_url: https://mijn.{{ myconext_base_domain }}
 domain: {{ myconext_base_domain }}
 mijn_eduid_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
@@ -155,6 +155,7 @@ linked_accounts:
 account_linking_context_class_ref:
   linked_institution: https://eduid.nl/trust/linked-institution
   validate_names: https://eduid.nl/trust/validate-names
+  validate_names_external: https://eduid.nl/trust/validate-names-external
   affiliation_student: https://eduid.nl/trust/affiliation-student
   profile_mfa: https://refeds.org/profile/mfa
 
