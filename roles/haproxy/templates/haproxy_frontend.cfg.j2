@@ -103,7 +103,7 @@ frontend local_ip
     acl securitytxt path /.well-known/security.txt
     http-request redirect location {{ haproxy_securitytxt_target_url }} if securitytxt
     {% endif %}
-    http-request redirect location %[req.hdr(host),lower,map(/etc/haproxy/maps/redirects.map)] if { req.hdr(host),lower,map_str(/etc/haproxy/maps/redirects.map) -m found }
+    http-request redirect location %[base,map_reg(/etc/haproxy/maps/redirects.map)] if { base,map_reg(/etc/haproxy/maps/redirects.map) -m found }
 
 {% if haproxy_sni_ip_restricted is defined %}
 #--------------------------------------------------------------------
