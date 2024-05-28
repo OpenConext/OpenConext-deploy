@@ -130,6 +130,10 @@ lifecycle:
   user: {{ invite.lifecycle_user }}
   password: {{ invite.lifecycle_secret }}
 
+profile:
+  user: {{ invite.profile_user }}
+  password: {{ invite.profile_secret }}
+
 email:
   from: "{{ noreply_email }}"
   contactEmail: "{{ support_email }}"
