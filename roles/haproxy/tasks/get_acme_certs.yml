@@ -1,0 +1,12 @@
+---
+- name: Install the certificates using acme
+  ansible.builtin.shell:
+    cmd: "/home/acme/.acme.sh/acme.sh --issue --stateless -d {{ base_domain }} {% for application in haproxy_applications %} -d {{ application.vhost_name }}  {% endfor %} --server https://acme.sectigo.com/v2/GEANTOV"
+  become_user: acme
+  become: true
+
+- name: Deploy the certificates to haproxy
+  ansible.builtin.shell:
+    cmd: "DEPLOY_HAPROXY_HOT_UPDATE=yes   DEPLOY_HAPROXY_STATS_SOCKET=/var/lib/haproxy/haproxy.stats   DEPLOY_HAPROXY_PEM_PATH=/etc/haproxy/certs   /home/acme/.acme.sh/acme.sh --deploy -d {{ base_domain }} --deploy-hook haproxy"
+  become_user: acme
+  become: true

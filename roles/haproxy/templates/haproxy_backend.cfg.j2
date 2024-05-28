@@ -21,7 +21,8 @@
 #---------------------------------------------------------------------
 #
   backend {{ application.name }}_be
-  option httpchk {{ application.ha_method }} {{ application.ha_url }} "HTTP/1.0\r\nHost: {{ application.vhost_name }}"
+  option httpchk {{ application.ha_method }} {{ application.ha_url }} 
+  http-check send ver HTTP/1.1 hdr Host  {{ application.vhost_name }}
 
   {%if application.x_forwarded_port is defined %}
   http-request set-header X-Forwarded-Port {{ application.x_forwarded_port }}
@@ -47,7 +48,8 @@
 #---------------------------------------------------------------------
 #
   backend {{ application.name }}_staging_be
-  option httpchk {{ application.ha_method }} {{ application.ha_url }} "HTTP/1.0\r\nHost: {{ application.vhost_name }}"
+  option httpchk {{ application.ha_method }} {{ application.ha_url }} 
+  http-check send ver HTTP/1.1 hdr Host  {{ application.vhost_name }}
 
   {%if application.x_forwarded_port is defined %}
   http-request set-header X-Forwarded-Port {{ application.x_forwarded_port }}
