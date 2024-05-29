@@ -132,12 +132,12 @@ external-api-configuration:
         - system
     -
       username: oidcng
-      password: {{ myconext_api_attribute_manipulation_password }}
+      password: "{{ myconext_api_attribute_manipulation_password }}"
       scopes:
         - attribute-manipulation
     -
       username: studielink
-      password: {{ myconext_api_studielink_password }}
+      password: "{{ myconext_api_studielink_password }}"
       scopes:
         - remote-creation
       rp_client_id: rp.studielink.nl
