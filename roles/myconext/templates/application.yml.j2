@@ -21,12 +21,15 @@ server:
     max-http-header-size: 20000
 
 springdoc:
-  pathsToMatch: "/mobile/**"
+  pathsToMatch:
+    - "/remote-creation/**"
+    - "/mobile/**"
   api-docs:
-    path: "/myconext/api/mobile/api-docs"
+    path: "/myconext/api/api-docs"
     enabled: true
+    # resolves to https://login.test2.eduid.nl/myconext/api/swagger-ui/index.html
   swagger-ui:
-    path: "/myconext/api/mobile/api-ui.html"
+    path: "/myconext/api/"
     operationsSorter: method
     enabled: true
 
