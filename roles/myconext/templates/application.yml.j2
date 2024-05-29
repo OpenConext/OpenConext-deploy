@@ -121,14 +121,29 @@ sms:
 
 tiqr_configuration: "file:///config/tiqr.configuration.yml"
 
+# We don't encode in-memory passwords, so we need to prefix them with {noop}
+external-api-configuration:
+  remote-users:
+    -
+      username: aa
+      password: "{{ myconext_api_attribute_aggregation_password }}"
+      scopes:
+        - attribute-aggregation
+        - system
+    -
+      username: oidcng
+      password: {{ myconext_api_attribute_manipulation_password }}
+      scopes:
+        - attribute-manipulation
+    -
+      username: studielink
+      password: {{ myconext_api_studielink_password }}
+      scopes:
+        - remote-creation
+      rp_client_id: rp.studielink.nl
+      schac_home: studielink.nl
 
-attribute_aggregation:
-  user: aa
-  password:  {{ myconext_api_attribute_aggregation_password }}
 
-attribute_manipulation:
-  user: oidcng
-  password:  {{ myconext_api_attribute_manipulation_password }}
 
 oidc-token-api:
   token-url: https://connect.{{ base_domain }}/tokens
