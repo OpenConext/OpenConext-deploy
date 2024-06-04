@@ -414,7 +414,8 @@ myconext:
   feature_webauthn: false
   feature_warning_educational_email_domain: false
   feature_show_connections: false
-  feature_use_external_validation: false
+  feature_id_verify: true
+  feature_remote_creation_api: true
   feature_deny_disposable_email_providers: true
   feature_create_eduid_institution_enabled: true
   feature_create_eduid_institution_landing: true

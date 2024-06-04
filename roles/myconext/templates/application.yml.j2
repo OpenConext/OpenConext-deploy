@@ -51,19 +51,14 @@ schac_home_organization: eduid.nl
 cron:
   node-cron-job-responsible: {{ myconext_cronjobmaster }}
   token-cleaner-expression: "0 0/15 * * * *"
-  service-name-resolver-initial-delay-milliseconds: 120_000
-  service-name-resolver-fixed-rate-milliseconds: 43_200_000
-  metadata-resolver-initial-delay-milliseconds: 1
-  metadata-resolver-fixed-rate-milliseconds: 86_400_000
-  metadata-resolver-url: "https://metadata.surfconext.nl/idps-metadata.xml"
+  manage-initial-delay-milliseconds: 15000
+  manage-fixed-rate-milliseconds: 43_200_000
 
 manage:
   username: myconext
   password: "{{ manage_myconext_secret }}"
   base_url: "https://manage.{{ base_domain }}"
   enabled: True
-  # Can also be a https url
-  fallback_url: "classpath:metadata/sp-names.json"
 
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
@@ -87,8 +82,6 @@ feature:
   webauthn: {{ myconext.feature_webauthn }}
   warning_educational_email_domain: {{ myconext.feature_warning_educational_email_domain }}
   connections: {{ myconext.feature_show_connections }}
-  # Do we allow the account linking to take place with the accounting IdP, e.g. add extra button in IdP link screen
-  use_external_validation: {{ myconext.feature_use_external_validation }}
   # Do we deny emails that are known Disposable Email Providers
   deny_disposable_email_providers: {{ myconext.feature_deny_disposable_email_providers }}
   use_deny_allow_list:
@@ -103,7 +96,10 @@ feature:
   # Does the SAMLIdpService expects authn requests to be signed
   requires_signed_authn_request: False
   # Do we support ID verify
-  id_verify: True
+  id_verify: {{ myconext.feature_id_verify}}
+  # Do we support the remote creation API (e.g. for studielink)
+  remote_creation_api: {{ myconext.feature_remote_creation_api }}
+
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
