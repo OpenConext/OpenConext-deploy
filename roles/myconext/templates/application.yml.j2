@@ -145,7 +145,7 @@ external-api-configuration:
 oidc-token-api:
   token-url: https://connect.{{ base_domain }}/tokens
   user: eduid
-  password: {{ oidcng_api_tokens_eduid_password }}
+  password: "{{ oidcng_api_tokens_eduid_password }}"
   enabled: {{ oidcng.token_api_enabled }}
 
 oidc:

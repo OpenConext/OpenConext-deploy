@@ -39,7 +39,7 @@ push:
     url: https://connect.{{ base_domain }}/manage/connections
     user: manage
     name: {{ manage.oidcng_name }}
-    password: {{ oidcng_api_metadata_push_password }}
+    password: "{{ oidcng_api_metadata_push_password }}"
     enabled: {{ manage.oidc_push_enabled }}
   pdp:
     url: https://pdp.{{ base_domain }}/pdp/api/manage/push
@@ -47,7 +47,7 @@ push:
     decide_url: https://pdp.{{ base_domain }}/pdp/api/manage/decide
     name: {{ manage.pdp_name }}
     user: {{ pdp.username }}
-    password: {{ pdp.password }}
+    password: "{{ pdp.password }}"
 
 product:
   name: Manage
@@ -61,7 +61,7 @@ metadata_templates_path: file://{{ manage_dir }}/metadata_templates
 
 security:
   backdoor_user_name: {{ manage.backdoor_api_user }}
-  backdoor_password: {{ manage_backdoor_api_password }}
+  backdoor_password: "{{ manage_backdoor_api_password }}"
   api_users_config_path: file://{{ manage_dir }}/manage-api-users.yml
   super_user_team_names: {{ manage.super_user_team_names }}
 
@@ -79,7 +79,7 @@ spring:
   datasource:
     url: jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}?permitMysqlScheme
     username: {{ pdp.db_user }}
-    password: {{ pdp.db_password }}
+    password: "{{ pdp.db_password }}"
     driverClassName: org.mariadb.jdbc.Driver
   main:
     banner-mode: "off"

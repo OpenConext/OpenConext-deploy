@@ -34,7 +34,7 @@ security:
 api:
   lifecycle:
     username: {{ attribute_aggregator_api_lifecycle_username }}
-    password: {{ attribute_aggregator_api_lifecycle_password }}
+    password: "{{ attribute_aggregator_api_lifecycle_password }}"
 
 pseudo:
   mail_postfix: {{ attribute_aggregation_pseudo_mail_postfix }}

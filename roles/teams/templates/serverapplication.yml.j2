@@ -7,7 +7,7 @@ logging:
 api:
   lifecycle:
     username: {{ teams_api_lifecycle_username }}
-    password: {{ teams_api_lifecycle_password }}
+    password: "{{ teams_api_lifecycle_password }}"
 
 secure_cookie: true
 
@@ -41,7 +41,7 @@ features:
 security:
   user:
     name: {{ teams.voot_api_user }}
-    password: {{ external_group_provider_secrets.teams }}
+    password: "{{ external_group_provider_secrets.teams }}"
 
 sp_dashboard:
   user-name: {{ teams.spdashboard_api_user }}
