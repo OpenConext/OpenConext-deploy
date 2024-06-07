@@ -74,18 +74,18 @@ spring:
 
 manage:
   user: manage
-  password: {{ oidcng_api_metadata_push_password }}
+  password: "{{ oidcng_api_metadata_push_password }}"
 
 token-api:
   enabled: {{ oidcng.token_api_enabled }}
   users:
     - user: eduid
-      password: {{ oidcng_api_tokens_eduid_password }}
+      password: "{{ oidcng_api_tokens_eduid_password }}"
     - user: profile
-      password: {{ oidcng_api_tokens_profile_password }}
+      password: "{{ oidcng_api_tokens_profile_password }}"
 
 eduid:
   user: oidcng
-  password: {{ myconext_api_attribute_manipulation_password }}
-  uri: https://login.{{ myconext_base_domain }}/myconext/api/attribute-manipulation
+  password: "{{ myconext_api_attribute_manipulation_password }}"
+  uri: "https://login.{{ myconext_base_domain }}/myconext/api/attribute-manipulation"
   enabled: {{ oidcng.eduid_attribute_manipulation_enabled }}
