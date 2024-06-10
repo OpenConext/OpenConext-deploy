@@ -46,23 +46,14 @@ parameters:
             logoUrl: '%base_url%/images/header-logo.png'
             infoUrl: '{{ tiqr_info_url }}'
         library:
-{% if tiqr_gcm_apikey is defined %}
           gcm:
             apikey: '{{ tiqr_gcm_apikey  }}'
             application: 'nl.surfnet.authenticator'
-{% endif %}
-{% if tiqr_firebase_credentialsfile is defined %}
           firebase:
             projectId: '{{ tiqr_firebase_projectid }}'
             credentialsFile: '{{ current_release_config_file_dir_name_in_config }}/{{ tiqr_firebase_credentialsfile }}'
             cacheTokens: {{ tiqr_firebase_cachetokens }}
             tokenCacheDir: '/tmp'
-{% else %}
-{% if tiqr_firebase_apikey is defined %}
-          firebase:
-            apikey: '{{ tiqr_firebase_apikey }}'
-{% endif %}
-{% endif %}
           apns:
             certificate: '{{ current_release_config_file_dir_name_in_config }}/apns.pem'
             environment: production
