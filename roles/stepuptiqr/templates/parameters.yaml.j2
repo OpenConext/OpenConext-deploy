@@ -58,10 +58,10 @@ parameters:
             cacheTokens: {{ tiqr_firebase_cachetokens }}
             tokenCacheDir: '/tmp'
 {% else %}
-  {% if tiqr_firebase_apikey is defined %}
+{% if tiqr_firebase_apikey is defined %}
           firebase:
             apikey: '{{ tiqr_firebase_apikey }}'
-  {% endif %}
+{% endif %}
 {% endif %}
           apns:
             certificate: '{{ current_release_config_file_dir_name_in_config }}/apns.pem'
