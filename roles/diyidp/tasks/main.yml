@@ -1,4 +1,6 @@
 ---
+- debug:
+    msg: "{{ diyidp }}"
 - name: Create directories
   ansible.builtin.file:
     path: "/opt/openconext/diyidp/{{ item }}"
@@ -68,14 +70,14 @@
 - name: Create the container
   community.docker.docker_container:
     name: diyidp
-    image: cirrusid/simplesamlphp:v2.0.7
+    image: cirrusid/simplesamlphp:v2.2.2
     pull: true
     restart_policy: "always"
     state: started
     networks:
       - name: "loadbalancer"
     labels:
-      traefik.http.routers.diyidp.rule: "Host(`diyidp.{{ base_domain }}`)"
+      traefik.http.routers.diyidp.rule: "Host(`{{ diyidp_domain }}`)"
       traefik.http.routers.diyidp.tls: "true"
       traefik.enable: "true"
     hostname: diyidp

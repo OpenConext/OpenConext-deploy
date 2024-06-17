@@ -1,5 +1,5 @@
 ---
-diyidp_domain: diyidp."{{ base_domain }}"
+diyidp_domain: "diyidp.{{ base_domain }}"
 diyidp_cert: "diyidp.crt"
 diyidp:
   db_host: "{{ mysql_host }}"
