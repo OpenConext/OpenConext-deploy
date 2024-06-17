@@ -1,4 +1,27 @@
 ---
+- name: Download HAProxy GPG key
+  ansible.builtin.get_url:
+    url: https://haproxy.debian.net/bernat.debian.org.gpg
+    dest: /etc/apt/trusted.gpg.d/haproxy.asc
+    mode: '0644'
+
+- name: Add HAProxy repository to sources list
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/haproxy.list
+    content: |
+       deb http://haproxy.debian.net bookworm-backports-3.0 main
+    mode: '0644'
+
+- name: Install haproxy and socat
+  ansible.builtin.apt:
+    name:
+      - haproxy=3.0.*
+      - socat
+      - git
+    state: present
+  register: haproxy_package_installed
+  until: haproxy_package_installed is succeeded
+
 - name: Include acme installation
   ansible.builtin.include_tasks: acme.yml
   when: haproxy_acme | bool
@@ -7,15 +30,6 @@
   ansible.builtin.group:
     name: lbops
     state: present
-
-- name: Install haproxy and socat
-  ansible.builtin.apt:
-    name:
-      - haproxy
-      - socat
-    state: present
-  register: haproxy_package_installed
-  until: haproxy_package_installed is succeeded
 
 - name: Copy haproxy sysconfig file
   ansible.builtin.copy:
@@ -125,9 +139,6 @@
   notify:
     - "reload haproxy"
 
-- name: include get_acme_certs
-  include_tasks: get_acme_certs.yml
-  when: haproxy_acme | bool and vhost_acls.changed
 
 - name: Copy haproxy maps
   ansible.builtin.template:
@@ -154,6 +165,10 @@
     mode: "0664"
   notify:
     - "reload haproxy"
+
+- name: include get_acme_certs
+  include_tasks: get_acme_certs.yml
+  when: haproxy_acme | bool and vhost_acls.changed
 
 - name: Start and enable haproxy
   ansible.builtin.service:
