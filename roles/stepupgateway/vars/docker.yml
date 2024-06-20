@@ -1,0 +1,5 @@
+current_release_appdir: /opt/openconext/gateway
+current_release_config_file_dir_name: /opt/openconext/gateway
+current_release_config_file_dir_name_in_config: /var/www/html/config/openconext
+current_release_config_dir_name: /opt/openconext/gateway/
+

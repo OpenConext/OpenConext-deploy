@@ -5,11 +5,11 @@
     dest: "{{ current_release_config_file_dir_name }}/sp.key"
     owner: "{{ appname}}"
     group: "{{ appname }}"
-    mode: 400
+    mode: "0440"
 
 - name: Write SP certificate | {{ appname }}
   copy:
     src: "{{ inventory_dir }}/files/certs/stepup/{{ appname }}_saml_sp.crt"
     dest: "{{ current_release_config_file_dir_name }}/sp.crt"
     group: "{{ appname }}"
-    mode: 400
+    mode: "0440"

@@ -50,6 +50,8 @@ if $programname == "gateway" and $msg startswith ' {"message":"Intrinsic Loa Req
 
 {% for stepupapp in stepupapps %}
 :programname, isequal, "stepup-{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
+if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
+:programname, isequal, "{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
 :programname, isequal, "Apache-{{ stepupapp }}" { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
 if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
 :programname, isequal, "{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }

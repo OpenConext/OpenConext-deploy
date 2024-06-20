@@ -1,16 +1,22 @@
 parameters:
+{% if 'docker' in group_names %}
+    app_env: prod
+    app_debug: false
+    app_secret: {{ webauthn_secret }}
+    database_url: mysql://{{ database_webauthn_user }}:{{ mysql_passwords.webauthn }}@{{ webauthn_db_host }}:3306/{{ database_webauthn_name }}
+{% endif %}
     # All locales supported by the application
     locales: [{{ enabled_locales | join(",") }}]
 
     # SAML configuration
-    saml_idp_publickey: '{{ current_release_config_file_dir_name }}/cert.pem'
-    saml_idp_privatekey: '{{ current_release_config_file_dir_name }}/key.pem'
+    saml_idp_publickey: '{{ current_release_config_file_dir_name_in_config }}/cert.pem'
+    saml_idp_privatekey: '{{ current_release_config_file_dir_name_in_config }}/key.pem'
     # NOTE: same key used for metadata and response/assertion signing
-    saml_metadata_publickey: '{{ current_release_config_file_dir_name }}/cert.pem'
-    saml_metadata_privatekey: '{{ current_release_config_file_dir_name }}/key.pem'
+    saml_metadata_publickey: '{{ current_release_config_file_dir_name_in_config }}/cert.pem'
+    saml_metadata_privatekey: '{{ current_release_config_file_dir_name_in_config }}/key.pem'
 
     saml_remote_sp_entity_id: 'https://{{ gateway_vhost_name }}/gssp/webauthn/metadata'
-    saml_remote_sp_certificate: '{{ current_release_config_file_dir_name }}/gateway.crt'
+    saml_remote_sp_certificate: '{{ current_release_config_file_dir_name_in_config }}/gateway.crt'
     saml_remote_sp_acs: 'https://{{ gateway_vhost_name }}/gssp/webauthn/consume-assertion'
 
     # View parameters
@@ -24,4 +30,7 @@ parameters:
     webauthn_name: '{{ webauthn_user_display_name }}'
     webauthn_logo: 'https://{{ webauthn_vhost_name }}/images/header-logo.png'
 
-    trusted_certificates_directory: '{{ current_release_config_file_dir_name }}/trusted_certificates'
+    trusted_certificates_directory: '{{ current_release_config_file_dir_name_in_config }}/trusted_certificates'
+    fido2_jwt_mds_blob_file_name: '{{ current_release_config_file_dir_name_in_config }}/mds/blob.jwt'
+    fido2_jwt_mds_root_certificate_file_name: '{{ current_release_config_file_dir_name_in_config }}/mds/fido2-mds.cer'
+    fido2_mds_cache_dir: '{{ current_release_config_file_dir_name_in_config }}/var/mds/'

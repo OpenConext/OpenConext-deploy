@@ -1,4 +1,10 @@
 parameters:
+{% if 'docker' in group_names %}
+    app_env: prod
+    app_debug: false 
+    app_secret: {{ ra_secret }}
+{% endif %}
+
     trusted_proxies:   [ {{ engine_trusted_proxy_ips|join(',') }} ]
 
     mailer_transport:  smtp
@@ -34,18 +40,18 @@ parameters:
     sms_otp_expiry_interval: {{ sms_otp_expiry_interval }}
     sms_maximum_otp_requests: {{ sms_maximum_otp_requests }}
 
-    saml_sp_publickey: {{ current_release_config_file_dir_name }}/sp.crt
-    saml_sp_privatekey: {{ current_release_config_file_dir_name }}/sp.key
+    saml_sp_publickey: {{ current_release_config_file_dir_name_in_config }}/sp.crt
+    saml_sp_privatekey: {{ current_release_config_file_dir_name_in_config }}/sp.key
 
-    saml_metadata_publickey: {{ current_release_config_file_dir_name }}/sp.crt
-    saml_metadata_privatekey: {{ current_release_config_file_dir_name }}/sp.key
+    saml_metadata_publickey: {{ current_release_config_file_dir_name_in_config }}/sp.crt
+    saml_metadata_privatekey: {{ current_release_config_file_dir_name_in_config }}/sp.key
 
     saml_remote_idp_entity_id: https://{{ gateway_vhost_name }}/authentication/metadata
     saml_remote_idp_sso_url: https://{{ gateway_vhost_name }}/authentication/single-sign-on
     saml_remote_idp_certificate: {{ gateway_saml_idp_publickey | depem }}
 
     # Minimum LoA required for login to the RA interface
-    loa_required_for_login: '{{ stepup_uri_loa3 }}'
+    authentication_context_class_ref: '{{ stepup_uri_loa3 }}'
 
     stepup_loa_loa1: '{{ stepup_uri_loa1 }}'
     stepup_loa_loa2: '{{ stepup_uri_loa2 }}'

@@ -1,62 +1,78 @@
-- name: Install Apache and FPM config
-  include_role:
-    name: apachefpm
+- name: Include docker vars
+  ansible.builtin.include_vars: docker.yml
 
-- name: Install the symfony app
-  include_role:
-    name: stepupapp
+- name: Add group {{ appname }}
+  ansible.builtin.group:
+    name: "{{ appname }}"
+    state: present
+  register: azuremfa_guid
+
+- name: Add user {{ appname }}
+  ansible.builtin.user:
+    name: "{{ appname }}"
+    group: "{{ appname }}"
+    createhome: no
+    state: present
+  register: azuremfa_uid
+
+- name: Create some dirs
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{ current_release_config_dir_name }}"
+    - "{{ current_release_appdir }}/public/images"
 
 - name: Install images
-  include_role:
+  ansible.builtin.include_role:
     name: stepupapp
     tasks_from: copyimages
 
 - name: Install the GSSP certificates
-  include_role:
+  ansible.builtin.include_role:
     name: stepupapp
     tasks_from: copygsspidpcerts
 
 - name: Place parameters.yml
-  template:
+  ansible.builtin.template:
     src: parameters.yaml.j2
     dest: "{{ current_release_config_dir_name }}/parameters.yaml"
-    mode: 0640
+    mode: "0640"
     owner: root
     group: "{{ appname }}"
-  notify:
-    - clear cache {{ appname }}
-    - reload php72-fpm {{ appname }}
+  notify: restart azuremfa
 
 - name: Put institutions.yaml from environment
-  template:
+  ansible.builtin.template:
     src: "{{ inventory_dir }}/files/stepup-azuremfa/institutions.yaml.j2"
     dest: "{{ current_release_config_dir_name }}/institutions.yaml"
-    mode: 0640
-    group: "{{ appname }}"
-  notify:
-    - clear cache {{ appname }}
-    - reload php72-fpm {{ appname }}
-
-- name: Place .env file
-  template:
-    src: env.j2
-    dest: "{{ current_release_appdir }}/.env.local"
-    mode: 0640
+    mode: "0640"
     owner: root
     group: "{{ appname }}"
-  notify:
-    - clear cache {{ appname }}
-    - reload php72-fpm {{ appname }}
+  notify: restart azuremfa
 
-- name: Activate the symlink
-  file:
-    src: "{{ current_release_appdir }}/"
-    dest: "{{ current_release_symlink }}"
-    state: link
-
-- meta: flush_handlers
-
-- name: Include post installation tasks
-  include_role:
-    name: stepupapp
-    tasks_from: postinstall
+- name: Create the container
+  community.docker.docker_container:
+    name: "{{ appname }}"
+    image: ghcr.io/openconext/stepup-azuremfa/stepup-azuremfa:{{ azuremfa_version }}
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.azuremfa.rule: "Host(`azuremfa.{{ base_domain }}`)"
+      traefik.http.routers.azuremfa.tls: "true"
+      traefik.enable: "true"
+    env:
+      APACHE_UID: "#{{ azuremfa_uid.uid }}"
+      APACHE_GUID: "#{{ azuremfa_guid.gid }}"
+    mounts:
+      - source: /opt/openconext/azuremfa/public/images/header-logo.png
+        target: /var/www/html/public/build/images/header-logo.png
+        type: bind
+      - source: /opt/openconext/azuremfa
+        target: /var/www/html/config/openconext
+        type: bind
