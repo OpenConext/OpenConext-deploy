@@ -1,7 +1,81 @@
-- name: Include docker tasks when running docker
-  include_tasks: docker.yml
-  when: "'docker' in group_names"
+---
+- name: Include docker vars
+  ansible.builtin.include_vars: docker.yml
 
-- name: Include vm tasks when running on a vm
-  include_tasks: vm.yml
-  when: "'docker' not in group_names"
+- name: Add group {{ appname }}
+  ansible.builtin.group:
+    name: "{{ appname }}"
+    state: present
+  register: ra_guid
+
+- name: Add user {{ appname }}
+  ansible.builtin.user:
+    name: "{{ appname }}"
+    group: "{{ appname }}"
+    createhome: no
+    state: present
+  register: ra_uid
+
+- name: Create some dirs
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{ current_release_config_dir_name }}"
+    - "{{ current_release_appdir }}/public/images"
+
+- name: Install images
+  ansible.builtin.include_role:
+    name: stepupapp
+    tasks_from: copyimages
+
+- name: Install GSSP SP key and certificates
+  ansible.builtin.include_role:
+    name: stepupapp
+    tasks_from: copygsspspcerts
+
+- name: Install SAML SP key and certificates
+  ansible.builtin.include_role:
+    name: stepupapp
+    tasks_from: copyspcerts
+
+- name: Put parameters, samlstepupproviders, samlstepupproviders_parameters and global_view_parameters YAML config
+  ansible.builtin.template:
+    src: "{{ item }}.yml.j2"
+    dest: "{{ current_release_config_dir_name }}/{{ item }}.yaml"
+    mode: "0640"
+    group: "{{ appname }}"
+  with_items:
+    - parameters
+    - samlstepupproviders
+    - samlstepupproviders_parameters
+    - global_view_parameters
+  notify:
+    - restart {{ appname }}
+
+- name: Create the container
+  community.docker.docker_container:
+    name: "{{ appname }}"
+    image: ghcr.io/openconext/stepup-ra/stepup-ra:{{ ra_version }}
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.ra.rule: "Host(`{{ ra_vhost_name }}`)"
+      traefik.http.routers.ra.tls: "true"
+      traefik.enable: "true"
+    env:
+      APACHE_UID: "#{{ ra_uid.uid }}"
+      APACHE_GUID: "#{{ ra_guid.gid }}"
+      APP_ENV: prod
+    mounts:
+      - source: /opt/openconext/ra/public/images/header-logo.png
+        target: /var/www/html/public/build/images/header-logo.png
+        type: bind
+      - source: /opt/openconext/ra
+        target: /var/www/html/config/openconext
+        type: bind
