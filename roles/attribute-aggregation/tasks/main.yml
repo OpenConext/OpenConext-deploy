@@ -1,0 +1,137 @@
+---
+- name: Create directory to keep configfile
+  ansible.builtin.file:
+    dest: "/opt/openconext/attribute-aggregation"
+    state: directory
+    owner: root
+    group: root
+    mode: "0770"
+
+- name: Place the serverapplication configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: /opt/openconext/attribute-aggregation/{{ item }}
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - serverapplication.yml
+    - logback.xml
+    - attributeAuthorities.yml
+    - apachelink.conf
+  notify: restart attribute-aggregationserver
+
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: aaserver
+    image: ghcr.io/openconext/openconext-attribute-aggregation/aa-server:{{ attribute_aggregation_server_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: /opt/openconext/attribute-aggregation/serverapplication.yml
+        target: /application.yml
+        type: bind
+      - source: /opt/openconext/attribute-aggregation/logback.xml
+        target: /logback.xml
+        type: bind
+      - source: /opt/openconext/attribute-aggregation/attributeAuthorities.yml
+        target: /attributeAuthorities.yml
+        type: bind
+    command: "-Xmx128m --spring.config.location=./"
+    etc_hosts:
+      host.docker.internal: host-gateway
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/aa/api/internal/health",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  notify: restart attribute-aggregationserver
+
+- name: Create the gui container
+  community.docker.docker_container:
+    name: aagui
+    image: ghcr.io/openconext/openconext-attribute-aggregation/aa-gui:{{ attribute_aggregation_gui_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.attribute-aggregationgui.rule: "Host(`aa.{{ base_domain }}`)"
+      traefik.http.routers.attribute-aggregationgui.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost/internal/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    hostname: attribute-aggregation
+    mounts:
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+      - source: /opt/openconext/common/favicon.ico
+        target: /var/www/favicon.ico
+        type: bind
+    env:
+      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img }}"
+      HTTPD_SERVERNAME: "aa.{{ base_domain }}"
+      OPENCONEXT_INSTANCENAME: "{{ instance_name }}"
+      OPENCONEXT_ENGINE_LOGOUT_URL: "https://engine.{{ base_domain }}/logout"
+      OPENCONEXT_HELP_EMAIL: "{{ support_email }}"
+      SHIB_ENTITYID: "https://aa.{{ base_domain }}/shibboleth"
+      SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+      SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
+
+- name: Create the gui link container
+  community.docker.docker_container:
+    name: aalink
+    image: ghcr.io/openconext/openconext-basecontainers/apache2-shibboleth:latest
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.attribute-aggregationlink.rule: "Host(`link.{{ base_domain }}`)"
+      traefik.http.routers.attribute-aggregationlink.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost/internal/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    mounts:
+      - source: /opt/openconext/attribute-aggregation/apachelink.conf
+        target: /etc/apache2/sites-enabled/000-default.conf
+        type: bind
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+      - source: /opt/openconext/common/favicon.ico
+        target: /var/www/favicon.ico
+        type: bind
+    hostname: attribute-link
+    env:
+      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img }}"
+      HTTPD_SERVERNAME: "link.{{ base_domain }}"
+      OPENCONEXT_INSTANCENAME: "{{ instance_name }}"
+      OPENCONEXT_ENGINE_LOGOUT_URL: "https://engine.{{ base_domain }}/logout"
+      OPENCONEXT_HELP_EMAIL: "{{ support_email }}"
+      SHIB_ENTITYID: "https://link.{{ base_domain }}/shibboleth"
+      SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+      SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"

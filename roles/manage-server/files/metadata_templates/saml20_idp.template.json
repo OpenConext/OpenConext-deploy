@@ -12,8 +12,8 @@
     "SingleSignOnService:0:Location": ""
   },
   "autoRefresh": {
-    "enabled": false,
-    "allowAll": false,
+    "enabled": true,
+    "allowAll": true,
     "fields": {
     }
   }

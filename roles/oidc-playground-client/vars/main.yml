@@ -1,4 +1,0 @@
----
-springapp_tcpport: 9399
-springapp_artifact_id: oidc-playground-client
-springapp_version: "{{ oidc_playground_client_version }}"

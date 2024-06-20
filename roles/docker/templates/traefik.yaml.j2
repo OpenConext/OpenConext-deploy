@@ -10,11 +10,13 @@ providers:
 entryPoints:
   websecure:
     address: ":443"
+{% if engine_trusted_proxy_ips is defined %}
     forwardedHeaders:
       trustedIPs:
 {% for engine_trusted_proxy_ip in engine_trusted_proxy_ips %}
         - {{ engine_trusted_proxy_ip }}
 {% endfor %}
+{% endif %}
 # Server transport configuration
 serversTransport:
   insecureSkipVerify: true

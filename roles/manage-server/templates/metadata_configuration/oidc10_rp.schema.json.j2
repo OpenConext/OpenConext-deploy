@@ -23,8 +23,18 @@
           },
           "value": {
             "type": "string"
+          },
+          "motivation": {
+            "type": "string"
+          },
+          "release_as": {
+            "type": "string"
+          },
+          "use_as_nameid": {
+            "type": "boolean"
           }
-        }
+        },
+        "additionalProperties": false
       }
     }
   },
@@ -215,6 +225,10 @@
               "$ref": "#/definitions/ArpAttribute",
               "alias": "urn:oid:1.3.6.1.4.1.1076.20.100.10.50.2"
             },
+            "urn:mace:surf.nl:attribute-def:surf-autorisaties": {
+              "$ref": "#/definitions/ArpAttribute",
+              "alias": "urn:oid:1.3.6.1.4.1.1076.20.100.10.50.10"
+            },
             "urn:mace:dir:attribute-def:isMemberOf": {
               "$ref": "#/definitions/ArpAttribute",
               "alias": "urn:oid:1.3.6.1.4.1.5923.1.5.1.1",
@@ -293,6 +307,11 @@
           "type": "string",
           "format": "url",
           "info": "Enter the URL that is allowed to use for this RP to host a JWT containing request parameters (when doing a request using a signed jwt)."
+        },
+        "oidc:state_parameter_decoding_disabled": {
+          "type": "boolean",
+          "info": "Select this option to disable the default decoding of the state parameter in the authorization request.",
+          "default": false
         },
         "logo:0:url": {
           "type": "string",

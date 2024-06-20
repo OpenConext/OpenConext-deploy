@@ -18,7 +18,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://{{ invite.db_host }}/invite
     username: {{ invite.db_user }}
-    password: {{ invite.db_secret }}
+    password: "{{ invite.db_secret }}"
 
 server:
   port: 8081

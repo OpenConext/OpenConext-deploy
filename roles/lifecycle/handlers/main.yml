@@ -1,0 +1,6 @@
+---
+- name: restart lifecycle
+  community.docker.docker_container:
+    name: lifecycle
+    state: started
+    restart: true

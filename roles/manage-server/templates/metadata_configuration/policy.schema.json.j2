@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "policy",
+  "order": 6,
+  "type": "object",
+  "properties": {
+    "eid": {
+      "type": "number"
+    },
+    "entityid": {
+      "type": "string",
+      "minLength": 1
+    },
+    "policyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "reg",
+        "step"
+      ],
+      "default": "reg"
+    },
+    "revisionid": {
+      "type": "number"
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "revisionnote": {
+      "type": "string"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "serviceProviderIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "identityProviderIds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metaDataFields": {
+      "type": "object",
+      "properties": {},
+      "patternProperties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "attributes": {
+      "type": "array",
+      "required": ["name", "value"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "negated": {
+            "type": "boolean",
+            "default": "false"
+          }
+        }
+      }
+    },
+    "loas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "string"
+          },
+          "allAttributesMustMatch": {
+            "type": "boolean"
+          },
+          "negateCidrNotation": {
+            "type": "boolean"
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "negated": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "cidrNotations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ipAddress": {
+                  "type": "string"
+                },
+                "prefix": {
+                  "type": "integer"
+                },
+                "ipInfo": {
+                  "type": "object",
+                  "properties": {
+                    "networkAddress": {
+                      "type": "string"
+                    },
+                    "broadcastAddress": {
+                      "type": "string"
+                    },
+                    "capacity": {
+                      "type": "number"
+                    },
+                    "ipv4": {
+                      "type": "boolean"
+                    },
+                    "prefix": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "allAttributesMustMatch": {
+      "type": "boolean"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "denyRule": {
+      "type": "boolean"
+    },
+    "userDisplayName": {
+      "type": "string"
+    },
+    "authenticatingAuthorityName": {
+      "type": "string"
+    },
+    "denyAdvice": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "denyAdviceNl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "name",
+    "serviceProviderIds"
+  ],
+  "additionalProperties": false,
+  "indexes": []
+}

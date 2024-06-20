@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
+      </encoder>
+   </appender>
+   <appender name="STDOUT-DECISIONS" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>%logger{40}:%L %d{ISO8601} %5p [%t] - %m%n</pattern>
+      </encoder>
+   </appender>
+   <logger name="analytics" level="INFO" additivity="false">
+      <appender-ref ref="STDOUT-DECISIONS" />
+   </logger>
+   <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+      <smtpHost>{{ smtp_server }}</smtpHost>
+      <from>{{ noreply_email }}</from>
+      <to>{{ error_mail_to }}</to>
+      <subject>{{ error_subject_prefix }}Unexpected error pdp</subject>
+      <layout class="ch.qos.logback.classic.html.HTMLLayout" />
+      <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+         <level>ERROR</level>
+      </filter>
+   </appender>
+   <logger name="pdp" level="DEBUG" />
+   <root level="WARN">
+      <appender-ref ref="EMAIL" />
+      <appender-ref ref="STDOUT" />
+   </root>
+</configuration>

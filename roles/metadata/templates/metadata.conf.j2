@@ -18,8 +18,9 @@ Listen {{ apache_app_listen_address.metadata }}:{{ loadbalancing.metadata.port }
     Header always set X-XSS-Protection "1; mode=block"
 
     AddType application/x-pem-file .pem
+    AddType application/samlmetadata+xml .xml
     <Location "/sp/">
-        ForceType text/xml
+        ForceType application/samlmetadata+xml
     </Location>
 
     ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-METADATA'"

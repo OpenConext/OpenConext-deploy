@@ -1,4 +1,0 @@
----
-springapp_tcpport: 9189
-springapp_artifact_id: myconext-gui
-springapp_version: "{{ myconext_gui_version }}"

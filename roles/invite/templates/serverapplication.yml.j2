@@ -24,6 +24,11 @@ spring:
   session:
     jdbc:
       initialize-schema: always
+{% if invite_cronjobmaster is defined and invite_cronjobmaster == false  %}
+      cleanup-cron: "-"
+{% else %}
+      cleanup-cron: "0 */5 * * * *"
+{% endif %}
     store-type: jdbc
     timeout: 8h
   mvc:
@@ -61,14 +66,14 @@ spring:
     locations: classpath:db/{vendor}/migration
     fail-on-missing-locations: true
   mail:
-    host: {{ smtp_host }}
+    host: {{ smtp_server }}
 
 crypto:
   development-mode: False
   private-key-location: file:///private_key_pkcs8.pem
 
 cron:
-  node-cron-job-responsible: true
+  node-cron-job-responsible: {{ invite_cronjobmaster }}
   user-cleaner-expression: "0 0/30 * * * *"
   last-activity-duration-days: 1000
   role-expiration-notifier-expression: "0 0/30 * * * *"
@@ -107,23 +112,37 @@ config:
   past-date-allowed: {{ invite.past_date_allowed }}
   eduid-idp-schac-home-organization: {{ invite.eduid_idp_schac_home_organization }}
 
+# We don't encode in-memory passwords, so we need to prefix them with {noop}
+external-api-configuration:
+  remote-users:
+    -
+      username: {{ invite.vootuser }}
+      password: "{{ invite.vootsecret }}"
+      scopes:
+        - voot
+    -
+      username: {{ invite.teamsuser}}
+      password: "{{ invite.teamssecret }}"
+      scopes:
+        - teams
+    -
+      username: {{ aa.invite_username }}
+      password: "{{ invite_attribute_aggregation_secret }}"
+      scopes:
+        - attribute_aggregation
+    -
+      username: {{ invite.lifecycle_user }}
+      password: "{{ invite.lifecycle_secret }}"
+      scopes:
+        - lifecycle
+    -
+      username: {{ invite.profile_user }}
+      password: "{{ invite.profile_secret }}"
+      scopes:
+        - profile
+
 voot:
-  user: {{ invite.vootuser }}
-  password: {{ invite.vootsecret }}
   group_urn_domain: "{{ invite.group_urn_domain }}"
-
-teams:
-  user: {{ invite.teamsuser}}
-  password: {{ invite.teamssecret }}
-  group-name-context: "{{ invite.group_name_context }}"
-
-attribute-aggregation:
-  user: {{ invite.attribute_aggregation_user }}
-  password: {{ invite.attribute_aggregation_secret }}
-
-lifecycle:
-  user: {{ invite.lifecycle_user }}
-  password: {{ invite.lifecycle_secret }}
 
 email:
   from: "{{ noreply_email }}"

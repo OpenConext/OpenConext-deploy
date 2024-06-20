@@ -1,0 +1,5 @@
+- name: restart oidc-playground-docker
+  community.docker.docker_container:
+    name: dashboardserver
+    state: started
+    restart: true

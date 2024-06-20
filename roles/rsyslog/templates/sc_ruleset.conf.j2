@@ -4,23 +4,24 @@ $RuleSet {{ item.name }}
 :programname, isequal, "Apache-EB" { action(type="omfile" DynaFile="apache-eb-{{ item.name }}") stop }
 :programname, isequal, "EBAUTH" { action(type="omfile" DynaFile="ebauth-{{ item.name }}") stop }
 :programname, isequal, "haproxy" { action(type="omfile" DynaFile="haproxy-{{ item.name }}") stop }
-:programname, isequal, "aa" { action(type="omfile" DynaFile="aa-{{ item.name }}") stop }
-:programname, isequal, "Apache-AA" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}") stop }
-:programname, isequal, "Apache-AAlink" { action(type="omfile" DynaFile="apache-aalink-{{ item.name }}") stop }
-:programname, isequal, "Apache-dashboard" { action(type="omfile" DynaFile="apache-dashboard-{{ item.name }}") stop }
-:programname, isequal, "dashboard" { action(type="omfile" DynaFile="dashboard-{{ item.name }}") stop }
+:programname, isequal, "aaserver" { action(type="omfile" DynaFile="aa-{{ item.name }}") stop }
+:programname, isequal, "aagui" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}") stop }
+:programname, isequal, "aalink" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}") stop }
+:programname, isequal, "dashboardgui" { action(type="omfile" DynaFile="apache-dashboard-{{ item.name }}") stop }
+:programname, isequal, "dashboardserver" { action(type="omfile" DynaFile="dashboard-{{ item.name }}") stop }
 :programname, isequal, "Apache-EBAPI" { action(type="omfile" DynaFile="apache-eb-api-{{ item.name }}") stop }
 :programname, isequal, "manage" { action(type="omfile" DynaFile="manage-{{ item.name }}") stop }
 :programname, isequal, "Apache-Manage" { action(type="omfile" DynaFile="apache-manage-{{ item.name }}") stop }
-:programname, isequal, "PDPMAIN" { action(type="omfile" DynaFile="pdp-{{ item.name }}") stop }
 :programname, isequal, "PDPANALYTICS" { action(type="omfile" DynaFile="pdpanalytics-{{ item.name }}") stop }
-:programname, isequal, "Apache-PDP" { action(type="omfile" DynaFile="apache-pdp-{{ item.name }}") stop }
-:programname, isequal, "openconext-profile" { action(type="omfile" DynaFile="profile-{{ item.name }}") stop }
-:programname, isequal, "Apache-PROFILE" { action(type="omfile" DynaFile="apache-profile-{{ item.name }}") stop }
+:programname, isequal, "pdpserver" { action(type="omfile" DynaFile="pdp-{{ item.name }}") stop }
+:programname, isequal, "pdpgui" { action(type="omfile" DynaFile="apache-pdp-{{ item.name }}") stop }
+if $programname == "profile" and $msg startswith " {" then { action(type="omfile" DynaFile="profile-{{ item.name }}") stop }
+:programname, isequal, "profile" { action(type="omfile" DynaFile="apache-profile-{{ item.name }}") stop }
 :programname, isequal, "teams" { action(type="omfile" DynaFile="teams-{{ item.name }}") stop }
 :programname, isequal, "Apache-teams" { action(type="omfile" DynaFile="apache-teams-{{ item.name }}") stop }
-:programname, isequal, "VOOTMAIN" { action(type="omfile" DynaFile="voot-{{ item.name }}") stop }
-:programname, isequal, "Apache-VOOT" { action(type="omfile" DynaFile="apache-voot-{{ item.name }}") stop }
+:programname, isequal, "teamsserver" { action(type="omfile" DynaFile="teams-{{ item.name }}") stop }
+:programname, isequal, "teamsgui" { action(type="omfile" DynaFile="apache-teams-{{ item.name }}") stop }
+:programname, isequal, "vootserver" { action(type="omfile" DynaFile="voot-{{ item.name }}") stop }
 :programname, isequal, "mariadbd" { action(type="omfile" DynaFile="galera-{{ item.name }}") stop }
 :programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="haproxy-{{ item.name }}") stop }
 :programname, isequal, "Keepalived_vrrp" { action(type="omfile" DynaFile="keepalived-{{ item.name }}") stop }
@@ -29,8 +30,8 @@ $RuleSet {{ item.name }}
 :programname, isequal, "oidcng" { action(type="omfile" DynaFile="oidcng-{{ item.name }}") stop }
 :programname, isequal, "oidcngjson" { action(type="omfile" DynaFile="oidcngjson-{{ item.name }}") stop }
 :programname, isequal, "Apache-oidcng" { action(type="omfile" DynaFile="apache-oidcng-{{ item.name }}") stop }
-:programname, isequal, "oidc-playground" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}") stop }
-:programname, isequal, "Apache-Oidc-Playground" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}") stop }
+:programname, isequal, "oidcplaygroundserver" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}") stop }
+:programname, isequal, "oidcplaygroundgui" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}") stop }
 :programname, isequal, "myconext" { action(type="omfile" DynaFile="myconext-{{ item.name }}") stop }
 :programname, isequal, "myconextjson" { action(type="omfile" DynaFile="myconextjson-{{ item.name }}") stop }
 :programname, isequal, "Apache-myconext" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}") stop }
@@ -44,6 +45,9 @@ $RuleSet {{ item.name }}
 :programname, startswith, "inviteprovisioningmock" { action(type="omfile" DynaFile="inviteprovisioningmock-{{ item.name }}") stop }
 :programname, startswith, "loadbalancer" { action(type="omfile" DynaFile="loadbalancer-{{ item.name }}") stop }
 
+if $programname == "gateway" and $msg startswith ' {"message":"Second Factor Authenticated"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
+if $programname == "gateway" and $msg startswith ' {"message":"Intrinsic Loa Requested"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
+
 {% for stepupapp in stepupapps %}
 :programname, isequal, "stepup-{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
 if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
@@ -52,6 +56,10 @@ if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then
 if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
 :programname, isequal, "{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
 {% endfor %}
+
+if $programname == "spdashboard" and $msg startswith " spdashboard" then { action(type="omfile" DynaFile="apache-spdashboard-{{item.name }}") stop }
+:programname, isequal, "spdashboard" { action(type="omfile" DynaFile="spdashboard-{{item.name }}") stop }
+
 :programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
 {% endif %}
 :programname, isequal, "audispd" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }

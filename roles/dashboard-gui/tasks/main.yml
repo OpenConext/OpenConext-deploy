@@ -1,6 +1,0 @@
----
-- name: copy virtual host config
-  template:
-    src: dashboard.conf.j2
-    dest: /etc/httpd/conf.d/dashboard.conf
-  notify: restart httpd

@@ -152,8 +152,6 @@
   gather_facts: true
   become: true
   roles:
-    - role: stats
-      tags: ['stats' ]
     - role: influxdb
       tags: ['influxdb' ]
   handlers:
@@ -174,8 +172,20 @@
 - hosts: docker
   become: true
   roles:
-    - { role: docker,                            tags: ['docker' ] }
-    - { role: invite,                            tags: ['invite' ] }
+    - { role: docker,     tags: ['docker' ] }
+    - { role: invite,     tags: ['invite' ] }
+    - { role: dashboard,  tags: ["dashboard"] }
+    - { role: teams,      tags: ["teams"] }
+    - { role: pdp,        tags: ["pdp"] }
+    - { role: voot,       tags: ["voot"] }
+    - { role: attribute-aggregation, tags: ["aa", "attribute-aggregation"] }
+    - { role: mujina-idp, tags: ["mujina-idp"] }  
+    - { role: oidc-playground, tags: ["oidc-playground"] }  
+    - { role: myconext,    tags: ["myconext"] }  
+    - { role: stats,      tags: ["stats"] }  
+    - { role: diyidp,      tags: ["diyidp"] }  
+    - { role: profile,      tags: ["profile"] }  
+    - { role: lifecycle,      tags: ["lifecycle"] }  
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 

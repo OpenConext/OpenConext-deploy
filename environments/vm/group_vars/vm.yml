@@ -157,6 +157,7 @@ teams:
   spdashboard_person_urn: "urn:collab:person:surfnet.nl:sp-dashboard-C133A36F-CFCA-4F3D-87CE-7ECE29773FE0"
   product_name: "OpenConext Teams"
   default_stem_name: "demo:openconext:org"
+  feature_invite_migration_on: False
   super_admins_team_urns:
     - "nl:surfnet:diensten:teams_super_users"
     - "nl:surfnet:diensten:teams_super_admin_users"
@@ -249,6 +250,9 @@ aa:
   sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  sab_rest_username: surfconexttest
+  sab_rest_password: "{{ aa_sab_rest_password }}"
+  sab_rest_endpoint: https://sab-ng.surfnet.nl
   surfmarket_url: https://example.org
   surfmarket_username: example@example.org
   surfmarket_password: "{{ aa_surfmarket_password }}"
@@ -276,6 +280,7 @@ oidcng:
   key_rollover_cron_expression: "0 0 0 * * *"
   acr_values_supported:
     - https://eduid.nl/trust/validate-names
+    - https://eduid.nl/trust/validate-names-external
     - https://eduid.nl/trust/linked-institution
     - https://eduid.nl/trust/affiliation-student
     - https://refeds.org/profile/mfa
@@ -294,10 +299,11 @@ myconext:
   mongo_password: "{{ mongo_passwords.myconext }}"
   rp_client_id: myconext.ala.eduid
   rs_client_id: myconext.rs
-  idp_external_validation_entity_id: http://mock-idp
+  verify_base_uri: "https://validate.test.eduid.nl"
   feature_webauthn: false
   feature_warning_educational_email_domain: false
-  feature_use_external_validation: false
+  feature_id_verify: true
+  feature_remote_creation_api: true
   feature_deny_disposable_email_providers: true
   feature_create_eduid_institution_enabled: true
   feature_create_eduid_institution_landing: true
@@ -336,6 +342,7 @@ manage:
   backdoor_api_user: backdoor_api_user
   oidcng_name: "OpenConext OIDC-NG"
   oidc_push_enabled: true
+  pdp_name: "PdP"
   features: push, validation, push_preview, orphans, find_my_data, edugain, auto_refresh
   environment: vm
   super_user_team_names: "urn:collab:group:vm.surfteams.nl:nl:surfnet:diensten:surfconext_tpm_core"
@@ -343,7 +350,7 @@ manage:
     - {
         name: "dashboard",
         password: "{{ manage_dashboard_secret }}",
-        scopes: ["READ", "CHANGE_REQUEST"]
+        scopes: [ "READ", "CHANGE_REQUEST_SP", "CHANGE_REQUEST_IDP", "POLICIES"]
       }
     - {
         name: "myconext",
@@ -358,7 +365,7 @@ manage:
     - {
         name: "sp-dashboard",
         password: "{{ manage_sp_dashboard_secret }}",
-        scopes: ["READ", "WRITE", "PUSH", "DELETE"]
+        scopes: [ "READ", "WRITE_SP", "DELETE_SP", "CHANGE_REQUEST_SP", "PUSH"]
       }
     - {
         name: "invite",
@@ -368,7 +375,7 @@ manage:
     - {
         name: "sysadmin",
         password: "{{ manage_sysadmin_secret }}",
-        scopes: ["READ", "WRITE", "PUSH", "SYSTEM"]
+        scopes: ["READ", "WRITE_SP", "WRITE_IDP", "PUSH", "SYSTEM"]
       }
     - {
         name: "stats",

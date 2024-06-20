@@ -1,28 +1,71 @@
 ---
+- name: Create directory to keep configfile
+  ansible.builtin.file:
+    dest: "/opt/openconext/voot"
+    state: directory
+    owner: root
+    group: root
+    mode: "0770"
 
-- name: Copy logging config
-  template:
+- name: Place the serverapplication configfiles
+  ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: "{{ voot_dir }}/{{ item }}"
-    owner: voot
-    group: voot
-    mode: 0740
+    dest: /opt/openconext/voot/{{ item }}
+    owner: root
+    group: root
+    mode: "0644"
   with_items:
+    - serverapplication.yml
     - logback.xml
-    - application.yml
     - externalProviders.yml
-  notify:
-    - "restart voot"
+  notify: restart vootserver
 
-- name: copy apache config
-  template:
-    src: "voot.conf.j2"
-    dest: "/etc/httpd/conf.d/voot.conf"
-  notify:
-    - "reload httpd"
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: vootserver
+    env:
+      TZ: "{{ timezone }}"
+    image: ghcr.io/openconext/openconext-voot/voot:{{ voot_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: /opt/openconext/voot/serverapplication.yml
+        target: /application.yml
+        type: bind
+      - source: /opt/openconext/voot/externalProviders.yml
+        target: /externalProviders.yml
+        type: bind
+      - source: /opt/openconext/voot/logback.xml
+        target: /logback.xml
+        type: bind
+    command: "-Xmx128m --spring.config.location=./"
+    etc_hosts:
+      host.docker.internal: host-gateway
+    labels:
+      traefik.http.routers.voot.rule: "Host(`voot.{{ base_domain }}`)"
+      traefik.http.routers.voot.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/internal/health",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  notify: restart vootserver
 
 - name: Include the role manage_provision_entities to provision the client_credentials client
-  include_role: 
+  ansible.builtin.include_role:
     name: manage_provision_entities
-  vars: 
+  vars:
     entity_type: oauth20_rs

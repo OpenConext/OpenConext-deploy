@@ -1,83 +1,57 @@
-{% if apache_app_listen_address.stats is defined %}
-Listen {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}
-<Virtualhost {{ apache_app_listen_address.stats }}:{{ loadbalancing.stats.port }}>
-{% else %}
-<Virtualhost *:443 >
-{% endif %}
+ServerName https://stats.{{ base_domain }}
+ServerAdmin {{ admin_email }}
 
-    ServerName https://stats.{{ base_domain }}
-    ServerAdmin {{ admin_email }}
+DocumentRoot /var/www/html/public
 
-    DocumentRoot {{ stats_api_env_dir }}/www/
-    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-STATS'"
-    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-STATS'" combined
+RewriteEngine on
 
-    RewriteEngine on
+RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
+RewriteCond %{REQUEST_URI} !\.svg$
+RewriteCond %{REQUEST_URI} !\.png$
+RewriteCond %{REQUEST_URI} !\.ico$
+RewriteCond %{REQUEST_URI} !\.woff$
+RewriteCond %{REQUEST_URI} !\.woff2$
+RewriteCond %{REQUEST_URI} !\.ttf$
+RewriteCond %{REQUEST_URI} !\.eot$
+RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_URI} !^/health
+RewriteCond %{REQUEST_URI} !^/version
+RewriteCond %{REQUEST_URI} !^/info
+RewriteCond %{REQUEST_URI} !^/fonts
+RewriteRule (.*) /index.html [L]
 
-    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
-    RewriteCond %{REQUEST_URI} !\.svg$
-    RewriteCond %{REQUEST_URI} !\.png$
-    RewriteCond %{REQUEST_URI} !\.ico$
-    RewriteCond %{REQUEST_URI} !\.woff$
-    RewriteCond %{REQUEST_URI} !\.woff2$
-    RewriteCond %{REQUEST_URI} !\.ttf$
-    RewriteCond %{REQUEST_URI} !\.eot$
-    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
-    RewriteCond %{REQUEST_URI} !^/api/
-    RewriteCond %{REQUEST_URI} !^/health
-    RewriteCond %{REQUEST_URI} !^/version
-    RewriteCond %{REQUEST_URI} !^/info
-    RewriteCond %{REQUEST_URI} !^/fonts
-    RewriteRule (.*) /index.html [L]
-
-    RequestHeader set X-Forwarded-Port 443 early
-
-    WSGIDaemonProcess server user={{ stats_wsgi_user }} group={{ stats_wsgi_user }} threads=5 python-home={{ stats_api_env_dir }}
-    WSGIScriptAlias /health {{ stats_api_env_dir }}/stats-api.wsgi/health
-    WSGIScriptAlias /info {{ stats_api_env_dir }}/stats-api.wsgi/info
-    WSGIScriptAlias /version {{ stats_api_env_dir }}/stats-api.wsgi/version
-    WSGIScriptAlias /api {{ stats_api_env_dir }}/stats-api.wsgi/api
-    WSGIPassAuthorization On
-    <Directory {{ stats_api_env_dir }}>
-        WSGIProcessGroup server
-        WSGIApplicationGroup %{GLOBAL}
-        Require all granted
-    </Directory>
-    {% if stats_apache_standalone %}
-    SSLEngine on
-    SSLCertificateFile      {{ tls.cert_path }}/stats.{{ base_domain }}.crt
-    SSLCertificateKeyFile   {{ tls.cert_private_path }}/stats.{{ base_domain }}.key
-    SSLCertificateChainFile {{ tls.cert_path_ca }}/stats.{{ base_domain }}.intermediate
-    Include ssl_backend.conf
-    {% endif %}
-    {% if haproxy_backend_tls %}
-    SSLEngine on
-    SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
-    SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
-    Include ssl_backend.conf
-    {% endif %}
-    OIDCClaimPrefix OIDC-CLAIM-
-    OIDCProviderMetadataURL {{ stats_oidc_metadata_url }}
-    OIDCClientID {{ stats_oidc_client_id }}
-    OIDCClientSecret {{ stats_oidc_client_secret }}
-    OIDCCryptoPassphrase {{ stats_oidc_crypto_pass }}
-    OIDCRedirectURI https://{{ stats_base_domain }}/redirect
-    <Location />
-        OIDCUnAuthAction pass
-        AuthType openid-connect
-        Require valid-user
-    </Location>
-
-    <Location /login>
-      OIDCUnAuthAction auth
-      AuthType openid-connect
-      Require valid-user
-    </Location>
+ProxyPass /health http://statsserver:80/health
+ProxyPass /info http://statsserver:80/info
+ProxyPass /version http://statsserver:80/version
+ProxyPass /api http://statsserver:80/api
 
 
-    Header always set Content-Security-Policy "{{ httpd_csp.lenient }}"
-    Header always set X-Frame-Options "DENY"
-    Header always set Referrer-Policy "same-origin"
-    Header always set X-Content-Type-Options "nosniff"
 
-</VirtualHost>
+
+
+RequestHeader set X-Forwarded-Port 443 early
+
+OIDCClaimPrefix OIDC-CLAIM-
+OIDCProviderMetadataURL {{ stats_oidc_metadata_url }}
+OIDCClientID {{ stats_oidc_client_id }}
+OIDCClientSecret {{ stats_oidc_client_secret }}
+OIDCCryptoPassphrase {{ stats_oidc_crypto_pass }}
+OIDCRedirectURI https://{{ stats_base_domain }}/redirect
+OIDCXForwardedHeaders X-Forwarded-Proto
+
+<Location />
+    OIDCUnAuthAction pass
+    AuthType openid-connect
+    Require valid-user
+</Location>
+
+<Location /login>
+  OIDCUnAuthAction auth
+  AuthType openid-connect
+  Require valid-user
+</Location>
+
+Header always set X-Frame-Options "DENY"
+Header always set Referrer-Policy "same-origin"
+Header always set X-Content-Type-Options "nosniff"

@@ -1,0 +1,5 @@
+- name: restart attribute-aggregationserver
+  community.docker.docker_container:
+    name: aaserver
+    state: started
+    restart: true

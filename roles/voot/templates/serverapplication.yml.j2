@@ -1,0 +1,52 @@
+logging:
+  config: "file:///logback.xml"
+
+server:
+  port: 8080
+  server-header: no
+  error:
+    include-message: always
+    path: "/error"
+
+externalProviders:
+  config:
+    path: "file:///externalProviders.yml"
+
+spring:
+  mvc:
+    log-request-details: false
+  security:
+    user:
+      name: disabled
+      password: disabled
+
+oidcng:
+  checkToken:
+    endpoint_url: "{{ voot.oidcng_checkToken_endpoint_url }}"
+    clientId: "{{ voot.oidcng_checkToken_clientId }}"
+    secret: "{{ voot.oidcng_checkToken_secret }}"
+
+checkToken:
+  cache: true
+
+# Feature toggle for searching for linked GrouperGroups and ExternalGroups
+support:
+  linkedGrouperExternalGroups: true
+
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,mappings"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
+    mappings:
+      enabled: true
+  info:
+    git:
+      mode: full

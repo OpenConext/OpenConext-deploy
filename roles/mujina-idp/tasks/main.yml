@@ -1,26 +1,14 @@
 ---
+- name: Include docker tasks when running docker
+  ansible.builtin.include_tasks: docker.yml
+  when: "'docker' in group_names"
 
-- name: Copy config
-  template: 
-    src: "{{ item }}.j2"
-    dest: "{{ mujina_idp_dir }}/{{ item }}" 
-    owner: "{{ springapp_user }}" 
-    group: "{{ springapp_user }}" 
-    mode: 0740
-  with_items:
-    - logback.xml
-    - application.yml
-  notify:
-    - restart mujina-idp
-
-- name: copy apache config
-  template: 
-    src: mujina_idp.conf.j2 
-    dest: /etc/httpd/conf.d/mujina_idp.conf
-  notify: reload httpd
+- name: Include docker tasks when running docker
+  ansible.builtin.include_tasks: vm.yml
+  when: "'docker' not in group_names"
 
 - name: Include the role manage_provision_entities to provision the mujina IdP to Manage
-  include_role: 
+  ansible.builtin.include_role:
     name: manage_provision_entities
-  vars: 
+  vars:
     entity_type: saml20_idp

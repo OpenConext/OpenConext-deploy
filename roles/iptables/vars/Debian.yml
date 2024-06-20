@@ -1,0 +1,2 @@
+iptables_location: /etc/sysconfig/iptables
+iptables_location6: /etc/sysconfig/ip6tables

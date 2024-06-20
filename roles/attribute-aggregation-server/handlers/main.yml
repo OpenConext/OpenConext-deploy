@@ -1,6 +1,0 @@
----
-- name: restart attribute-aggregation
-  systemd:
-    name: attribute-aggregation
-    state: restarted
-    daemon_reload: yes

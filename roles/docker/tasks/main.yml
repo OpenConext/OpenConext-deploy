@@ -130,3 +130,25 @@
     service: iptablesdocker.service
     enabled: true
     state: started
+
+- name: Create OpenConext common files dir
+  ansible.builtin.file:
+    state: directory
+    path: "/opt/openconext/common/"
+    owner: root
+    mode: "0755"
+
+- name: Check if a favicon exists
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/favicon.ico"
+  delegate_to: localhost
+  register: favicon_present
+  become: false
+
+- name: Place the favicon file
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/favicon.ico"
+    dest: /opt/openconext/common/favicon.ico
+    owner: root
+    group: root
+    mode: "0644"

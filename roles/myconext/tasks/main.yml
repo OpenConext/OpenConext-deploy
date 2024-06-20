@@ -1,0 +1,184 @@
+---
+- name: Create common certs directory
+  ansible.builtin.file:
+    dest: /opt/openconext/certs/
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Install the Mongo CA certificate
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
+    dest: /opt/openconext/certs/mongoca.crt
+    owner: root
+    group: root
+    mode: "0644"
+    
+- name: Create directory to keep configfiles
+  ansible.builtin.file:
+    dest: "/opt/openconext/myconext"
+    state: directory
+    owner: root
+    group: root
+    mode: "0770"
+
+- name: Place the serverapplication configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: /opt/openconext/myconext/{{ item }}
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - application.yml
+    - logback.xml
+    - tiqr.configuration.yml
+  notify: restart myconextserver
+
+- name: Copy / create GCM config
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/myconext/firebase.json"
+    dest: "/opt/openconext/myconext/firebase.json"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+  notify:
+    - "restart myconextserver"
+
+- name: Copy / create APNS certificate
+  ansible.builtin.copy:
+    content: "{{ myconext_apns }}"
+    dest: "/opt/openconext/myconext/apns.p8"
+    owner: "root"
+    group: "root"
+    mode: "0740"
+  notify:
+    - "restart myconextserver"
+
+- name: copy / create private key
+  ansible.builtin.copy:
+    content: "{{ myconext_private_key }}"
+    dest: "/opt/openconext/myconext/myconext_saml.key"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+  notify:
+    - "restart myconextserver"
+
+- name: copy / create certificate
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/certs/myconext/myconext_saml.crt"
+    dest: "/opt/openconext/myconext/myconext_saml.crt"
+    owner: "root"
+    group: "root"
+    mode: "0740"
+  notify:
+    - "restart myconextserver"
+
+- name: Create geo download directory
+  ansible.builtin.file:
+    path: "/opt/openconext/myconext/geo2lite"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "0750"
+
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: myconextserver
+    image: ghcr.io/openconext/openconext-myconext/myconext-server:{{ myconext_server_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    env:
+      USE_SYSTEM_CA_CERTS: "true"
+      TZ: "{{ timezone }}"
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: /opt/openconext/myconext/
+        target: /config/
+        type: bind
+      - source: /opt/openconext/certs/mongoca.crt
+        target: /certificates/mongoca.crt
+        type: bind
+    entrypoint: /__cacert_entrypoint.sh
+    command: 'java -jar /app.jar -Xmx256M --spring.config.location=./config/'
+    etc_hosts:
+      host.docker.internal: host-gateway
+    healthcheck:
+      test: ["CMD", "wget", "-no-verbose",  "--tries=1",  "--spider", "http://localhost:8080/internal/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  notify: restart myconextserver
+
+- name: Create the client container
+  community.docker.docker_container:
+    name: myconextgui
+    image: ghcr.io/openconext/openconext-myconext/myconext-gui:{{ myconext_gui_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.myconextgui.rule: "Host(`mijn.{{ myconext_base_domain }}`)"
+      traefik.http.routers.myconextgui.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "--fail" , "http://localhost"  ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    mounts:
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+      - source: /opt/openconext/common/favicon.ico
+        target: /var/www/favicon.ico
+        type: bind
+    env:
+      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img }}"
+      HTTPD_SERVERNAME: "mijn.{{ myconext_base_domain }}"
+      OPENCONEXT_INSTANCENAME: "{{ instance_name }}"
+      OPENCONEXT_ENGINE_LOGOUT_URL: "https://engine.{{ base_domain }}/logout"
+      OPENCONEXT_HELP_EMAIL: "{{ support_email }}"
+      SHIB_ENTITYID: "https://mijn.{{ myconext_base_domain }}/shibboleth"
+      SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+      SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
+
+- name: Create the account gui
+  community.docker.docker_container:
+    name: accountgui
+    image: ghcr.io/openconext/openconext-myconext/account-gui:{{ account_gui_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.accountgui.rule: "Host(`login.{{ myconext_base_domain }}`)"
+      traefik.http.routers.accountgui.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "--fail" , "http://localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    mounts:
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+      - source: /opt/openconext/common/favicon.ico
+        target: /var/www/favicon.ico
+        type: bind
+
+    env:
+      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_for_idp }}"
+      HTTPD_SERVERNAME: "login.{{ myconext_base_domain }}"
+

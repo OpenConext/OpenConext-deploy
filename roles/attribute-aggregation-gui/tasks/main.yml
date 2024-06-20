@@ -1,7 +1,0 @@
----
-- name: copy virtual host config
-  template:
-    src: "attribute_aggregation.conf.j2"
-    dest: "/etc/httpd/conf.d/attribute_aggregation.conf"
-  notify:
-    - "restart httpd"

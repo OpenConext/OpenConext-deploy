@@ -1,5 +1,3 @@
 ---
-- name: restart apache
-  service:
-    name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
-    state: restarted
+- name: restart diyidp
+  command: docker restart diyidp

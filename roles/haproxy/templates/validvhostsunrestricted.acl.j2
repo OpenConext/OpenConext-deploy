@@ -5,6 +5,10 @@
 {% endfor %}
 {%if haproxy_redirects is defined %}
 {% for application in haproxy_redirects %}
+{%if application.hostname is defined %}
+{{ application.hostname }}
+{% else %}
 {{ application.url }}
+{% endif %}
 {% endfor %}
 {% endif %}

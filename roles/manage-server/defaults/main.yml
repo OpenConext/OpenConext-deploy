@@ -25,5 +25,6 @@ manage_tabs_enabled:
   - saml20_sp
   - oidc10_rp
   - oauth20_rs
+  - policy
   - single_tenant_template
   - provisioning
