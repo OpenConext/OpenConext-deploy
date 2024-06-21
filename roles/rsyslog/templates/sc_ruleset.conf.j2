@@ -17,8 +17,6 @@ $RuleSet {{ item.name }}
 :programname, isequal, "pdpgui" { action(type="omfile" DynaFile="apache-pdp-{{ item.name }}") stop }
 if $programname == "profile" and $msg startswith " {" then { action(type="omfile" DynaFile="profile-{{ item.name }}") stop }
 :programname, isequal, "profile" { action(type="omfile" DynaFile="apache-profile-{{ item.name }}") stop }
-:programname, isequal, "teams" { action(type="omfile" DynaFile="teams-{{ item.name }}") stop }
-:programname, isequal, "Apache-teams" { action(type="omfile" DynaFile="apache-teams-{{ item.name }}") stop }
 :programname, isequal, "teamsserver" { action(type="omfile" DynaFile="teams-{{ item.name }}") stop }
 :programname, isequal, "teamsgui" { action(type="omfile" DynaFile="apache-teams-{{ item.name }}") stop }
 :programname, isequal, "vootserver" { action(type="omfile" DynaFile="voot-{{ item.name }}") stop }
@@ -32,13 +30,10 @@ if $programname == "profile" and $msg startswith " {" then { action(type="omfile
 :programname, isequal, "Apache-oidcng" { action(type="omfile" DynaFile="apache-oidcng-{{ item.name }}") stop }
 :programname, isequal, "oidcplaygroundserver" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}") stop }
 :programname, isequal, "oidcplaygroundgui" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}") stop }
-:programname, isequal, "myconext" { action(type="omfile" DynaFile="myconext-{{ item.name }}") stop }
+:programname, isequal, "myconextserver" { action(type="omfile" DynaFile="myconext-{{ item.name }}") stop }
 :programname, isequal, "myconextjson" { action(type="omfile" DynaFile="myconextjson-{{ item.name }}") stop }
-:programname, isequal, "Apache-myconext" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}") stop }
-:programname, isequal, "Apache-account" { action(type="omfile" DynaFile="apache-account-{{item.name }}") stop }
-:programname, isequal, "Apache-eduid" { action(type="omfile" DynaFile="apache-eduid-{{item.name }}") stop }
-:programname, isequal, "spdashboard_php-fpm" { action(type="omfile" DynaFile="spdashboard-{{ item.name }}") stop }
-:programname, isequal, "spdashboard_web" { action(type="omfile" DynaFile="apache-spdashboard-{{ item.name }}") stop }
+:programname, isequal, "myconextgui" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}") stop }
+:programname, isequal, "accountgui" { action(type="omfile" DynaFile="apache-account-{{item.name }}") stop }
 :programname, startswith, "inviteclient" { action(type="omfile" DynaFile="inviteclient-{{ item.name }}") stop }
 :programname, startswith, "invitewelcome" { action(type="omfile" DynaFile="invitewelcome-{{ item.name }}") stop }
 :programname, startswith, "inviteserver" { action(type="omfile" DynaFile="inviteserver-{{ item.name }}") stop }
