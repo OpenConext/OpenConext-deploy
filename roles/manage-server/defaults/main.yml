@@ -28,3 +28,4 @@ manage_tabs_enabled:
   - policy
   - single_tenant_template
   - provisioning
+  - sram

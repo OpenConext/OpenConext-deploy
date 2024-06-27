@@ -488,6 +488,11 @@ manage:
         scopes: ["READ"]
       }
     - {
+        name: "sram",
+        password: "{{ manage_sram_secret }}",
+        scopes: ["WRITE_SP", "DELETE_SP"]
+      }
+    - {
         name: "attribute-aggregation",
         password: "{{ aa_manage_password }}",
         scopes: ["READ"]

@@ -373,6 +373,11 @@ manage:
         scopes: ["READ"]
       }
     - {
+        name: "sram",
+        password: "{{ manage_sram_secret }}",
+        scopes: ["WRITE_SP", "DELETE_SP"]
+      }
+    - {
         name: "sysadmin",
         password: "{{ manage_sysadmin_secret }}",
         scopes: ["READ", "WRITE_SP", "WRITE_IDP", "PUSH", "SYSTEM"]
