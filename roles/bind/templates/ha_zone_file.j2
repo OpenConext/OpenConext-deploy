@@ -1,14 +1,14 @@
 $TTL    4h
-$ORIGIN ha.{{ base_domain }}.
-@           IN      SOA     ns1ha.{{ base_domain }}.    {{ admin_email | replace('@', '.') }}. (
+$ORIGIN hb.{{ base_domain }}.
+@           IN      SOA     ns1hb.{{ base_domain }}.    {{ admin_email | replace('@', '.') }}. (
                             {{ ansible_date_time.epoch }}    ; Serial
                             1d            ; slave refresh (1 day)
                             2h            ; slave retry time in case of a problem (2 hours)
                             2w            ; slave expiration time (2 weeks)
                             2d            ; minimum caching time in case of failed lookups (2 days)
                             )
-            IN      NS      ns1ha.{{ base_domain }}.
-            IN      NS      ns2ha.{{ base_domain }}.
+            IN      NS      ns1hb.{{ base_domain }}.
+            IN      NS      ns2hb.{{ base_domain }}.
 restricted 300 IN A  {{haproxy_sni_ip_restricted.ipv4 }} 
 restricted 300 IN AAAA  {{haproxy_sni_ip_restricted.ipv6 }} 
 unrestricted 300 IN A  {{haproxy_sni_ip.ipv4 }} 

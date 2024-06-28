@@ -1,0 +1,6 @@
+zone "hb.{{ base_domain }}" { 
+        type master; 
+        file "master/hb.{{ base_domain }}.db"; 
+        dnssec-policy default; 
+        inline-signing yes; 
+}; 
