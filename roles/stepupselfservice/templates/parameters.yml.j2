@@ -1,7 +1,7 @@
 parameters:
 {% if 'docker' in group_names %}
     app_env: prod
-    app_debug: false 
+    app_debug: false
     app_secret: {{ selfservice_secret }}
 {% endif %}
 
@@ -61,8 +61,6 @@ parameters:
     second_factor_test_idp_entity_id: https://{{ gateway_vhost_name }}/authentication/metadata
     second_factor_test_idp_sso_url: https://{{ gateway_vhost_name }}/authentication/single-sign-on
     second_factor_test_idp_certificate: {{ gateway_saml_idp_publickey | depem }}
-
-    asset_version: {{ appversion_sha }}
 
     stepup_loa_loa1: {{ stepup_uri_loa1 }}
     stepup_loa_loa2: {{ stepup_uri_loa2 }}

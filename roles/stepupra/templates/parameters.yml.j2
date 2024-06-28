@@ -1,7 +1,7 @@
 parameters:
 {% if 'docker' in group_names %}
     app_env: prod
-    app_debug: false 
+    app_debug: false
     app_secret: {{ ra_secret }}
 {% endif %}
 
@@ -57,8 +57,6 @@ parameters:
     stepup_loa_loa2: '{{ stepup_uri_loa2 }}'
     stepup_loa_loa3: '{{ stepup_uri_loa3 }}'
     stepup_loa_self_asserted: '{{ stepup_uri_self_asserted }}'
-
-    asset_version: {{ appversion_sha }}
 
     logout_redirect_url:
 {% for key, value in ra_logout_redirect_url.items() %}

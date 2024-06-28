@@ -1,7 +1,7 @@
 parameters:
 {% if 'docker' in group_names %}
     app_env: prod
-    app_debug: false 
+    app_debug: false
     app_secret: {{ gateway_secret }}
 {% endif %}
 
@@ -109,8 +109,6 @@ parameters:
     second_factor_only_loa_self_asserted: '{{ stepup_uri_sfo_self_asserted }}'
 
     second_factor_only: {{ gateway_second_factor_only | default(false) }}
-
-    asset_version: {{ appversion_sha }}
 
     enabled_second_factors: [ {{ stepup_enabled_factors }} ]
 
