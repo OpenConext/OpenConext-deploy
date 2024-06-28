@@ -162,7 +162,6 @@
   roles:
     - { role: stepupwebauthn,                            tags: ['stepupwebauthn','stepup' ] }
     - { role: stepupazuremfa,                            tags: ['stepupazuremfa', 'stepup'] }
-    - { role: stepuptiqr,                                tags: ['stepuptiqr' , 'stepup'] }
     - { role: stepupmiddleware,                          tags: ['stepupmiddleware' , 'stepup'] }
     - { role: stepupgateway,                             tags: ['stepupgateway' , 'stepup'] }
     - { role: stepupselfservice,                         tags: ['stepupselfservice' , 'stepup'] }
@@ -186,6 +185,7 @@
     - { role: diyidp,      tags: ["diyidp"] }  
     - { role: profile,      tags: ["profile"] }  
     - { role: lifecycle,      tags: ["lifecycle"] }  
+    - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 
