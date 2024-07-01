@@ -10,5 +10,7 @@ options
         recursion       no;
         pid-file        "/run/named/named.pid";
         session-keyfile "/run/named/session.key";
-	      version		"{{ instance_name }} DNS server";
+        key-directory	"keys";
+        bindkeys-file   "/etc/bind/bind.keys";
+        version		"{{ instance_name }} DNS server";
 };
