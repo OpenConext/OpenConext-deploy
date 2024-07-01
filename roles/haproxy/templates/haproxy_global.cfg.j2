@@ -4,8 +4,7 @@
 #---------------------------------------------------------------------
 
 global
-  log         127.0.0.1 len 32768  local2
-  log-send-hostname
+  log         127.0.0.1 len 32768 format local local2
   chroot      /var/lib/haproxy
   maxconn     4000
   user        haproxy
