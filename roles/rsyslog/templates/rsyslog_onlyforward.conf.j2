@@ -11,7 +11,6 @@ module(load="imjournal"
 $PreserveFQDN on
 
 $WorkDirectory /var/spool/rsyslog
-$IncludeConfig /etc/rsyslog.d/*.conf
 *.emerg                         :omusrmsg:* 
 
 {% if rsyslog_remote_server_relp is defined and 'sysloghost' not in group_names %}
