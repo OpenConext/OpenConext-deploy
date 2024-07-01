@@ -9,4 +9,5 @@ dashboard_install: False
 update_hosts_file: False
 manage_show_oidc_rp_tab: true
 manage_exclude_oidc_rp_imports_in_push: true
+manage_exclude_sram_imports_in_push: true
 mongo_tls_host_altname_dnsorip: DNS

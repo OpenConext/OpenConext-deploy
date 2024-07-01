@@ -35,6 +35,7 @@ push:
     name: {{ instance_name }} EngineBlock
     exclude_edugain_imports: {{ manage_exclude_edugain_imports_in_push }}
     exclude_oidc_rp: {{ manage_exclude_oidc_rp_imports_in_push }}
+    exclude_sram: {{ manage_exclude_sram_imports_in_push }}
   oidc:
     url: https://connect.{{ base_domain }}/manage/connections
     user: manage

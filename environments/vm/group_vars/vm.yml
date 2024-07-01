@@ -396,6 +396,7 @@ manage:
 
 manage_show_oidc_rp_tab: true
 manage_exclude_oidc_rp_imports_in_push: false
+manage_exclude_sram_imports_in_push: false
 manage_mongo_db: metadata
 manage_mongo_user: managerw
 
