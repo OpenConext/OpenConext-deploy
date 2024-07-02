@@ -19,6 +19,7 @@
       - socat
       - git
     state: present
+    update_cache: true
   register: haproxy_package_installed
   until: haproxy_package_installed is succeeded
 
@@ -175,6 +176,12 @@
     name: haproxy
     state: started
     enabled: true
+
+- name: Deploy the certificates to haproxy while running, ensuring that when updating certs it will hot reload haproxy
+  ansible.builtin.shell:
+    cmd: "DEPLOY_HAPROXY_HOT_UPDATE=yes   DEPLOY_HAPROXY_STATS_SOCKET=/var/lib/haproxy/haproxy.stats   DEPLOY_HAPROXY_PEM_PATH=/etc/haproxy/certs   /home/acme/.acme.sh/acme.sh --deploy -d {{ base_domain }} --deploy-hook haproxy"
+  become_user: acme
+  become: true
 
 - name: Add lbops user to sudoers and let it reload haproxy
   ansible.builtin.copy:

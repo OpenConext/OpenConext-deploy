@@ -5,8 +5,8 @@
   become_user: acme
   become: true
 
-- name: Deploy the certificates to haproxy
+- name: Deploy the certificates to haproxy without the need for haproxy to run
   ansible.builtin.shell:
-    cmd: "DEPLOY_HAPROXY_HOT_UPDATE=yes   DEPLOY_HAPROXY_STATS_SOCKET=/var/lib/haproxy/haproxy.stats   DEPLOY_HAPROXY_PEM_PATH=/etc/haproxy/certs   /home/acme/.acme.sh/acme.sh --deploy -d {{ base_domain }} --deploy-hook haproxy"
+    cmd: "DEPLOY_HAPROXY_PEM_PATH=/etc/haproxy/certs   /home/acme/.acme.sh/acme.sh --deploy -d {{ base_domain }} --deploy-hook haproxy"
   become_user: acme
   become: true
