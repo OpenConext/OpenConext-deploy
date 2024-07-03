@@ -23,14 +23,14 @@
   register: haproxy_package_installed
   until: haproxy_package_installed is succeeded
 
-- name: Include acme installation
-  ansible.builtin.include_tasks: acme.yml
-  when: haproxy_acme | bool
-
 - name: Create lbops group
   ansible.builtin.group:
     name: lbops
     state: present
+
+- name: Include acme installation
+  ansible.builtin.include_tasks: acme.yml
+  when: haproxy_acme | bool
 
 - name: Copy haproxy sysconfig file
   ansible.builtin.copy:
@@ -167,6 +167,21 @@
   notify:
     - "reload haproxy"
 
+- name: Add lbops user to sudoers and let it reload haproxy
+  ansible.builtin.copy:
+    src: lbops
+    dest: /etc/sudoers.d/lbops
+    owner: root
+    mode: "0440"
+
+- name: Mount /dev/log into the haproxy chroot
+  ansible.posix.mount:
+    path: /var/lib/haproxy/dev/log
+    src: /dev/log
+    opts: bind
+    state: mounted
+    fstype: none
+
 - name: include get_acme_certs
   include_tasks: get_acme_certs.yml
   when: haproxy_acme | bool and vhost_acls.changed
@@ -176,16 +191,3 @@
     name: haproxy
     state: started
     enabled: true
-
-- name: Deploy the certificates to haproxy while running, ensuring that when updating certs it will hot reload haproxy
-  ansible.builtin.shell:
-    cmd: "DEPLOY_HAPROXY_HOT_UPDATE=yes   DEPLOY_HAPROXY_STATS_SOCKET=/var/lib/haproxy/haproxy.stats   DEPLOY_HAPROXY_PEM_PATH=/etc/haproxy/certs   /home/acme/.acme.sh/acme.sh --deploy -d {{ base_domain }} --deploy-hook haproxy"
-  become_user: acme
-  become: true
-
-- name: Add lbops user to sudoers and let it reload haproxy
-  ansible.builtin.copy:
-    src: lbops
-    dest: /etc/sudoers.d/lbops
-    owner: root
-    mode: "0440"
