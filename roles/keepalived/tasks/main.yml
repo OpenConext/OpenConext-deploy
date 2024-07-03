@@ -1,8 +1,4 @@
-- name: Install procps-ng
-  yum:
-    name: procps-ng
-    state: present
-
+---
 - name: Ensure nonlocal ipv4 bind kernel parameter is set
   sysctl:
     name: net.ipv4.ip_nonlocal_bind
@@ -14,9 +10,10 @@
   group:
     name: mysqlusers
     state: present
+  when: "'dbcluster_nodes' in group_names"
 
 - name: Install keepalived
-  yum:
+  package:
     name: keepalived
     state: present
   register: keepalived_package_installed
