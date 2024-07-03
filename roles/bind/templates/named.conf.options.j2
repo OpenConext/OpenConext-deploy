@@ -7,6 +7,7 @@ options
         listen-on       port 53 { any; };
         listen-on-v6    port 53 { any; };
         allow-query     { any; };
+        allow-transfer  { none; };
         recursion       no;
         pid-file        "/run/named/named.pid";
         session-keyfile "/run/named/session.key";
