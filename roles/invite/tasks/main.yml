@@ -78,7 +78,6 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-  notify: restart inviteserver
 
 - name: Create the client container
   community.docker.docker_container:
@@ -161,7 +160,6 @@
       retries: 3
       start_period: 10s
   when: invite_mock_install
-  notify: restart inviteprovisioningmock
 
 - name: Include the role manage_provision_entities to provision invite client to Manage
   ansible.builtin.include_role:
