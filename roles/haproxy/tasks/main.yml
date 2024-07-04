@@ -174,14 +174,6 @@
     owner: root
     mode: "0440"
 
-- name: Mount /dev/log into the haproxy chroot
-  ansible.posix.mount:
-    path: /var/lib/haproxy/dev/log
-    src: /dev/log
-    opts: bind
-    state: mounted
-    fstype: none
-
 - name: include get_acme_certs
   include_tasks: get_acme_certs.yml
   when: haproxy_acme | bool and vhost_acls.changed
