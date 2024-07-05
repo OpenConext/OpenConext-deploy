@@ -102,3 +102,5 @@ parameters:
     # The relay state values that will cause the SamlAuthenticator from not handling the SAML response.
     # Used for test and self asserted token registration authentications
     rejected_relay_states: ['isTestRequest', 'isSatRequest', 'isGssfRequest']
+
+    authentication_context_class_ref: {{ stepup_uri_loa1 }}
