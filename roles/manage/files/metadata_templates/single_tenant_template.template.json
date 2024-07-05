@@ -1,0 +1,14 @@
+{
+  "entityid": "",
+  "state": "testaccepted",
+  "allowedall": true,
+  "arp": {
+    "enabled": false,
+    "attributes": {}
+  },
+  "metaDataFields": {
+    "name:en": "Single Tenant Template for ....",
+    "OrganizationName:en": ""
+  },
+  "allowedEntities": []
+}

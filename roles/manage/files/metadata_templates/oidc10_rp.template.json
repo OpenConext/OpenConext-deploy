@@ -1,0 +1,19 @@
+{
+  "entityid": "",
+  "state": "testaccepted",
+  "allowedall": true,
+  "arp": {
+    "enabled": false,
+    "attributes": {}
+  },
+  "metaDataFields": {
+    "name:en": "",
+    "OrganizationName:en": "",
+    "secret": "",
+    "redirectUrls": [],
+    "grants": ["authorization_code"],
+    "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+  },
+  "allowedEntities": [],
+  "allowedResourceServers": []
+}

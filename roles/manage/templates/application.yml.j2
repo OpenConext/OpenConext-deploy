@@ -1,0 +1,121 @@
+logging:
+  config: file://{{ manage_dir }}/logback.xml
+  level:
+    org.springframework.data.mongodb: INFO
+
+cookie:
+  secure: true
+  # Options are 'Strict', 'Lax' or 'None'
+  same_site: None
+
+base_domain: {{ base_domain }}
+environment: {{ manage.environment }}
+
+server:
+  # The port to where this Spring Boot application listens to.
+  port: 8080
+  error:
+    path: "/error"
+  server-header:
+  servlet:
+    # We serve from the root. Do not change this
+    context-path:
+    session:
+      timeout: 28800
+      cookie:
+        secure: true
+
+features: {{ manage.features }}
+
+push:
+  eb:
+    url: https://{{ engine_api_domain }}/api/connections
+    user: {{ engine_api_metadata_push_user }}
+    password: {{ engine_api_metadata_push_password }}
+    name: {{ instance_name }} EngineBlock
+    exclude_edugain_imports: {{ manage_exclude_edugain_imports_in_push }}
+    exclude_oidc_rp: {{ manage_exclude_oidc_rp_imports_in_push }}
+    exclude_sram: {{ manage_exclude_sram_imports_in_push }}
+  oidc:
+    url: https://connect.{{ base_domain }}/manage/connections
+    user: manage
+    name: {{ manage.oidcng_name }}
+    password: "{{ oidcng_api_metadata_push_password }}"
+    enabled: {{ manage.oidc_push_enabled }}
+  pdp:
+    url: https://pdp.{{ base_domain }}/pdp/api/manage/push
+    policy_url: https://pdp.{{ base_domain }}/pdp/api/manage/policies
+    decide_url: https://pdp.{{ base_domain }}/pdp/api/manage/decide
+    name: {{ manage.pdp_name }}
+    user: {{ pdp.username }}
+    password: "{{ pdp.password }}"
+
+product:
+  name: Manage
+  organization: {{ instance_name }}
+  service_provider_feed_url: {{ manage_service_provider_feed_url }}
+  supported_languages: {{ supported_language_codes }}
+  show_oidc_rp: {{ manage_show_oidc_rp_tab }}
+
+metadata_configuration_path: file://{{ manage_dir }}/metadata_configuration
+metadata_templates_path: file://{{ manage_dir }}/metadata_templates
+metadata_export_path: classpath:/metadata_export
+
+security:
+  backdoor_user_name: {{ manage.backdoor_api_user }}
+  backdoor_password: "{{ manage_backdoor_api_password }}"
+  api_users_config_path: file://{{ manage_dir }}/manage-api-users.yml
+  super_user_team_names: {{ manage.super_user_team_names }}
+
+crypto:
+  development-mode: False
+  public-key-location: file://{{ manage_dir }}/public_invite_key.pem
+
+spring:
+  mail:
+    host: {{ smtp_server }}
+    port: 25
+  data:
+    mongodb:
+      uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ manage.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ manage.mongo_database }}?ssl=true
+  datasource:
+    url: jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}?permitMysqlScheme
+    username: {{ pdp.db_user }}
+    password: "{{ pdp.db_password }}"
+    driverClassName: org.mariadb.jdbc.Driver
+  main:
+    banner-mode: "off"
+  jpa:
+    open-in-view: false
+
+gui:
+  disclaimer:
+    background-color: {{ manage_disclaimer_background_color }}
+    content: {{ manage_disclaimer_content }}
+
+metadata_import:
+  auto_refresh:
+    cronSchedule: "{{ manage_metadata_refresh_cron_schedule }}"
+
+# Is this node in a load-balanced topology responsible for cleaning up resources
+cron:
+  node-cron-job-responsible: {{ manage_cronjobmaster }}
+
+# We disable all endpoints except health for the load-balancer and info for git information.
+management:
+  health:
+    mail:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+loa_levels: "http://localhost/assurance/loa1.5,http://localhost/assurance/loa2,http://localhost/assurance/loa3"
