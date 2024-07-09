@@ -5,7 +5,7 @@ parameters:
 
     database_driver:   pdo_mysql
 
-    database_host:     {{ database_lb_address }}
+    database_host:     {{ dbcluster_ip }}
     database_port:     3306
     # Enabling the STRICT_ALL_TABLES SQL mode. To prevent 'magic' truncation problems where string
     # values like the identity name id would be truncated after 255 characters without notice. Enabling

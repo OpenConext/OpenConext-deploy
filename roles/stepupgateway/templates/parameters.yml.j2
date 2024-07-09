@@ -8,7 +8,7 @@ parameters:
     trusted_proxies:   [ 127.0.0.1 ]
 
     database_driver:   pdo_mysql
-    database_host:     {{ database_lb_address }}
+    database_host:     {{ dbcluster_ip }}
     database_port:     3306
     database_gateway_name:     {{ database_gateway_name }}
     database_gateway_user:     {{ database_gateway_user }}
