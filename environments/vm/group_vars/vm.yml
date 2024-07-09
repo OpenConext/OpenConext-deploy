@@ -1,5 +1,11 @@
 ---
 env: vm
+
+base_domain: "{{ env }}.openconext.org"
+
+rsyslog_host: localhost
+mariadb_host: localhost
+database_clients: [ "{{ mariadb_host }}" ]
 use_selfsigned_certs: true
 update_hosts_file: true
 use_welcome_role: true
@@ -150,7 +156,7 @@ teams:
   db_name: "teams"
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
-  db_host: "{{ mysql_host }}"
+  db_host: "{{ mariadb_host }}"
   group_name_context: "urn:collab:group:{{ base_domain }}:"
   voot_api_user: "voot"
   spdashboard_api_user: "spdashboard"
@@ -221,7 +227,7 @@ pdp:
   password: "{{ pdp_password }}"
   db_user: pdp-serverrw
   db_password: "{{ mysql_passwords.pdp_server }}"
-  db_host: "{{ mysql_host }}"
+  db_host: "{{ mariadb_host }}"
   db_name: pdp-server
   spring_profiles_active: test
   cache_policies: false
@@ -235,7 +241,7 @@ aa:
   eb_password: "{{ aa_eb_password }}"
   db_user: aa-serverrw
   db_password: "{{ mysql_passwords.aa_server }}"
-  db_host: "{{ mysql_host }}"
+  db_host: "{{ mariadb_host }}"
   db_name: aaserver
   authz_client_id: "aa.{{ base_domain }}"
   authz_resource_server_id: aa
@@ -334,7 +340,7 @@ manage:
   eb_db_user: "{{ engine_database_user }}"
   eb_db_password: "{{ mysql_passwords.eb }}"
   eb_db_name: "{{ engine_database_name }}"
-  eb_db_host: "{{ mysql_host }}"
+  eb_db_host: "{{ mariadb_host }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: "{{ manage_mongo_user }}"
   mongo_password: "{{ mongo_passwords.manage }}"

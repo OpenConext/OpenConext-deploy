@@ -2,7 +2,7 @@
 diyidp_domain: "diyidp.{{ base_domain }}"
 diyidp_cert: "diyidp.crt"
 diyidp:
-  db_host: "{{ mysql_host }}"
+  db_host: "{{ mariadb_host }}"
   db_name: diyidp
   db_user: diyidprw
   db_password: "{{ mysql_passwords.diyidp }}"

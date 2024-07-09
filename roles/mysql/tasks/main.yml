@@ -47,7 +47,7 @@
     user: ""
     state: absent
     login_user: root
-    host: "{{ mysql_host }}"
+    host: "{{ mariadb_host }}"
     login_password: "{{ mysql_root_password }}"
   tags:
     - mysql
@@ -57,7 +57,7 @@
     user: ""
     state: absent
     login_user: root
-    host: "{{ mysql_host }}"
+    host: "{{ mariadb_host }}"
     login_password: "{{ mysql_root_password }}"
   tags:
     - mysql
