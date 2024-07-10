@@ -1,84 +1,135 @@
 ---
+- name: Create config dir
+  ansible.builtin.file:
+    path: "{{ oidcng_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
 
-- name: copy config
-  template:
+- name: Copy config
+  ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ oidcng_dir }}/{{ item }}"
     owner: root
-    group: oidcng
-    mode: 0740
+    group: root
+    mode: "0640"
   with_items:
     - logback.xml
     - application.yml
   notify:
     - "restart oidcng"
 
-- name: copy oidcng secret keyset configuration
-  template:
+- name: Copy oidcng secret keyset configuration
+  ansible.builtin.template:
     src: "secret_keyset.json.j2"
     dest: "{{ oidcng_dir }}/secret_keyset.json"
+    owner: root
+    group: root
+    mode: "0640"
   notify:
     - "restart oidcng"
 
-- name: copy oidcng well-known discovery configuration
-  template:
+- name: Copy oidcng well-known discovery configuration
+  ansible.builtin.template:
     src: "openid-configuration.json.j2"
     dest: "{{ oidcng_dir }}/openid-configuration.json"
+    owner: root
+    group: root
+    mode: "0640"
   notify:
     - "restart oidcng"
 
-- name: copy oidc saml mapping
-  copy:
+- name: Copy oidc saml mapping
+  ansible.builtin.copy:
     src: oidc_saml_mapping.json
     dest: "{{ oidcng_dir }}"
     owner: "root"
-    group: "oidcng"
-    mode: 0740
+    group: "root"  
+    mode: "0640"
   notify:
     - "restart oidcng"
 
-- name: copy / create private key
-  copy:
+- name: Copy / create SAML private key
+  ansible.builtin.copy:
     content: "{{ oidcng_private_key }}"
     dest: "{{ oidcng_dir }}/oidcsaml.key"
     owner: "root"
-    group: "oidcng"
-    mode: 0740
+    group: "root"
+    mode: "0640"
   notify:
     - "restart oidcng"
 
-- name: copy / create certificate
-  copy:
+- name: Copy / create SAML certificate
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/oidc/oidcsaml.crt"
     dest: "{{ oidcng_dir }}/oidcsaml.crt"
     owner: "root"
-    group: "oidcng"
-    mode: 0740
+    group: "root"
+    mode: "0640"
   notify:
     - "restart oidcng"
 
-- name: copy / create metatdata signing certificate
-  copy:
+- name: Copy engineblock signing certificate
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/oidcng/SURFconext-metadata-signer.pem"
     dest: "{{ oidcng_dir }}/SURFconext-metadata-signer.pem"
     owner: "root"
-    group: "oidcng"
-    mode: 0740
+    group: "root"
+    mode: "0640"
   notify:
     - "restart oidcng"
 
-- name: copy apache config
-  template:
-    src: "oidcng.conf.j2"
-    dest: "/etc/httpd/conf.d/oidcng.conf"
-  notify:
-    - "reload httpd"
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: oidcngserver
+    image: ghcr.io/openconext/openconext-oidcng/oidcng:{{ oidcng_version }}
+    entrypoint: /__cacert_entrypoint.sh
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: "{{ oidcng_dir }}"
+        target: /config/
+        type: bind
+      - source: /opt/openconext/manage/mongoca.pem
+        target: /certificates/mongoca.crt
+        type: bind
+    command: "java -jar /app.jar -Xmx512m --spring.config.location=./config/"
+    etc_hosts:
+      host.docker.internal: host-gateway
+    env:
+      USE_SYSTEM_CA_CERTS: "true"
+    hostname: manage
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/internal/health",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.oidcng.loadbalancer.server.port: "8080"
+      traefik.http.routers.oidcng.rule: "Host(`connect.{{ base_domain }}`)"
+      traefik.http.routers.oidcng.tls: "true"
+      traefik.http.routers.oidcng.middlewares: oidcngmw@docker
+      traefik.http.middlewares.oidcngmw.replacepathregex.regex: "^/.well-known/openid-configuration"
+      traefik.http.middlewares.oidcngmw.replacepathregex.replacement: "/oidc/.well-known/openid-configuration"
 
-- meta: flush_handlers
 
-- name: Include the role manage_provision_entities to provision oidncg to Manage
-  include_role:
-    name: manage_provision_entities
-  vars:
-    entity_type: saml20_sp
 
+#- name: Include the role manage_provision_entities to provision oidncg to Manage
+#  ansible.builtin.include_role:
+#    name: manage_provision_entities
+#  vars:
+#    entity_type: saml20_sp

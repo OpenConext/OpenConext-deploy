@@ -2,37 +2,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
 
- <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-   <file>/var/log/oidcng/oidcng.log</file>
-   <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-     <!-- daily rollover -->
-     <fileNamePattern>/var/log/oidcng/oidcng-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
-     <maxHistory>{{ logback_max_history }}</maxHistory>
-   </rollingPolicy>
-   <encoder>
+ <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+  <encoder>
      <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
    </encoder>
  </appender>
-
- <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
-   <syslogHost>{{ rsyslog_host }}</syslogHost>
-   <facility>DAEMON</facility>
-   <suffixPattern>oidcng: [%thread] %logger %msg</suffixPattern>
- </appender>
-
- <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashSocketAppender">
-    <host>{{ ansible_fqdn }}</host>
-    <port>514</port>
-      <customFields>{"app":"oidcng"}</customFields>
-        <fieldNames>
-            <thread>[ignore]</thread>
-            <version>[ignore]</version>
-            <levelValue>[ignore]</levelValue>
-       </fieldNames>
-             <prefix class="ch.qos.logback.classic.PatternLayout">
-        <pattern>oidcngjson:</pattern>
-      </prefix>
-  </appender>
 
  <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
    <smtpHost>{{ smtp_server }}</smtpHost>
@@ -41,30 +15,15 @@
    <subject>{{ error_subject_prefix }}Unexpected error oidcng</subject>
    <layout class="ch.qos.logback.classic.html.HTMLLayout"/>
 
-    <filter class="filter.CustomThresholdFilter">
-        <clazz>com.nimbusds.oauth2.sdk.ParseException</clazz>
-        <clazz>org.springframework.security.authentication.BadCredentialsException</clazz>
-        <clazz>oidc.exceptions.UnauthorizedException</clazz>
-        <clazz>oidc.exceptions.RedirectMismatchException</clazz>
-        <clazz>org.springframework.dao.EmptyResultDataAccessException</clazz>
-        <clazz>java.lang.IllegalArgumentException</clazz>
+   <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
      <level>ERROR</level>
    </filter>
  </appender>
 
- <logger name="oidc" level="WARN" />
- <logger name="org.springframework" level="WARN" />
+ <logger name="dashboard" level="DEBUG" />
  <root level="WARN">
-{%if oidcng_logback_file |bool  %}
-   <appender-ref ref="FILE" />
-{%endif%}
-{%if oidcng_logback_email |bool  %}
+   <appender-ref ref="STDOUT" />
    <appender-ref ref="EMAIL" />
-{%endif%}
-   <appender-ref ref="SYSLOG" />
-{%if oidcng_logback_json |bool  %}
-   <appender-ref ref="JSON_SYSLOG" />
-{%endif%}
  </root>
 
 </configuration>

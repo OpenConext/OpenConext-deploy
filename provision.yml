@@ -182,6 +182,7 @@
     - { role: oidc-playground, tags: ["oidc-playground"] }  
     - { role: myconext,    tags: ["myconext"] }  
     - { role: manage,    tags: ["manage"] }  
+    - { role: oidcng,    tags: ["oidcng"] }  
     - { role: stats,      tags: ["stats"] }  
     - { role: diyidp,      tags: ["diyidp"] }  
     - { role: profile,      tags: ["profile"] }  

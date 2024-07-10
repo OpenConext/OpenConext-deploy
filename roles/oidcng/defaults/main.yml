@@ -1,9 +1,8 @@
 ---
-oidcng_dir: /opt/oidcng
+oidcng_dir: /opt/openconext/oidcng
+oidcng_config_dir: /config
 oidcng_version: ''
 oidcng_snapshot_timestamp: ''
-oidcng_jar: oidcng-current.jar
-oidcng_random_source: 'file:///dev/urandom'
 oidcng_cronjobmaster: true
 oidcng_saml_sp_entityid: https://connect.{{ base_domain }}
 oidcng_idp_metadata_url: https://engine.{{ base_domain }}/authentication/idp/metadata
