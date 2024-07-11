@@ -102,6 +102,7 @@
       host.docker.internal: host-gateway
     env:
       USE_SYSTEM_CA_CERTS: "true"
+      TZ: "{{ timezone }}"
     hostname: manage
     healthcheck:
       test:
