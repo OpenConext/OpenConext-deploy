@@ -86,6 +86,7 @@
       host.docker.internal: host-gateway
     env:
       USE_SYSTEM_CA_CERTS: "true"
+      TZ: "{{ timezone }}"
     hostname: manage
     healthcheck:
       test:
@@ -131,3 +132,10 @@
       SHIB_ENTITYID: "https://manage.{{ base_domain }}/shibboleth"
       SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
       SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
+    mounts:
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+      - source: /opt/openconext/common/favicon.ico
+        target: /var/www/favicon.ico
+        type: bind
