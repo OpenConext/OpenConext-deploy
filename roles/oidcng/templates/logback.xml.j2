@@ -49,7 +49,7 @@
 {%if oidcng_logback_email |bool  %}
    <appender-ref ref="EMAIL" />
 {%endif%}
-   <appender-ref ref="SYSLOG" />
+   <appender-ref ref="STDOUT" />
 {%if oidcng_logback_json |bool  %}
    <appender-ref ref="JSON_SYSLOG" />
 {%endif%}
