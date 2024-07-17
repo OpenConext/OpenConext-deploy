@@ -1,7 +1,7 @@
 - name: Include docker tasks when running docker
-  include_tasks: docker.yml
+  import_tasks: docker.yml
   when: "'docker' in group_names"
 
 - name: Include vm tasks when running on a vm
-  include_tasks: vm.yml
+  import_tasks: vm.yml
   when: "'docker' not in group_names"
