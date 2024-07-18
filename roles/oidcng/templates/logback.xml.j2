@@ -43,9 +43,6 @@
  <logger name="oidc" level="WARN" />
  <logger name="org.springframework" level="WARN" />
  <root level="WARN">
-{%if oidcng_logback_file |bool  %}
-   <appender-ref ref="FILE" />
-{%endif%}
 {%if oidcng_logback_email |bool  %}
    <appender-ref ref="EMAIL" />
 {%endif%}
