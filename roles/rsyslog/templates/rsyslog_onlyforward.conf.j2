@@ -2,11 +2,6 @@
 module(load="imuxsock") 
 module(load="imklog")   # provides kernel logging support
 module(load="immark" interval="600" )  # provides --MARK-- message capability
-module(load="imjournal" 
-       PersistStateInterval="100"
-       StateFile="/var/spool/rsyslog/imjournal.state"
-       ratelimit.interval="30"
-       ratelimit.burst="20000" ) # Reads journald logs 
 
 $PreserveFQDN on
 

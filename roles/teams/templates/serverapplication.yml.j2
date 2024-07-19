@@ -7,7 +7,7 @@ logging:
 api:
   lifecycle:
     username: {{ teams_api_lifecycle_username }}
-    password: {{ teams_api_lifecycle_password }}
+    password: "{{ teams_api_lifecycle_password }}"
 
 secure_cookie: true
 
@@ -22,10 +22,6 @@ server:
         secure: true
   server-header: no
 
-feature-toggles:
-  expiry-date-membership: false
-  person-email-picker: false
-
 config:
   support-email: {{ support_email }}
   help-link-en: {{ teams_help_link_en }}
@@ -39,14 +35,17 @@ config:
   sponsor: {{ sponsor_name }}
   supported_language_codes: {{ supported_language_codes }}
 
+features:
+  invite-migration-on: {{ teams.feature_invite_migration_on }}
+
 security:
   user:
-    name: {{ teams.voot_api_user }}
-    password: {{ external_group_provider_secrets.teams }}
+    name: "{{ teams.voot_api_user }}"
+    password: "{{ external_group_provider_secrets.teams }}"
 
 sp_dashboard:
-  user-name: {{ teams.spdashboard_api_user }}
-  password: {{ teams_api_spdashboard_password }}
+  user-name: "{{ teams.spdashboard_api_user }}"
+  password: "{{ teams_api_spdashboard_password }}"
   person-urn: "{{ teams.spdashboard_person_urn }}"
   name: "SP Dashboard"
   email: "{{ support_email }}"
@@ -76,9 +75,9 @@ voot:
   scopes: "{{ teams_manage_provision_oidcrp_scopes }}"
 
 invite:
-  url: https://invite.{{ base_domain }}/api/teams
-  user: {{ invite.teamsuser}}
-  password: {{ invite.teamssecret }}
+  url: "https://invite.{{ base_domain }}/api/teams"
+  user: "{{ invite.teamsuser}}"
+  password: "{{ invite.teamssecret }}"
 
 spring:
   session:
@@ -97,9 +96,9 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}?useMysqlMetadata=true
     username: {{ teams.db_user }}
-    password: {{ teams.db_password }}
+    password: "{{ teams.db_password }}"
   mail:
-    host: {{ smtp_host }}
+    host: {{ smtp_server }}
     port: 25
   main:
     banner-mode: "off"

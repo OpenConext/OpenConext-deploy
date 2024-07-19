@@ -23,6 +23,8 @@
 - name: Create and start the server container
   community.docker.docker_container:
     name: vootserver
+    env:
+      TZ: "{{ timezone }}"
     image: ghcr.io/openconext/openconext-voot/voot:{{ voot_version }}
     pull: true
     restart_policy: "always"
@@ -63,7 +65,7 @@
   notify: restart vootserver
 
 - name: Include the role manage_provision_entities to provision the client_credentials client
-  include_role: 
+  ansible.builtin.include_role:
     name: manage_provision_entities
-  vars: 
+  vars:
     entity_type: oauth20_rs

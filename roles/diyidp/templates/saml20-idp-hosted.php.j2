@@ -5,7 +5,7 @@
  * See: https://rnd.feide.no/content/idp-hosted-metadata-reference
  */
 
-$metadata['__DYNAMIC:1__'] = array(
+$metadata['https://diyidp.{{ base_domain}}'] = array(
 	/*
 	 * The hostname of the server (VHOST) that will use this SAML entity.
 	 *
@@ -49,23 +49,6 @@ $metadata['__DYNAMIC:1__'] = array(
 		// Convert LDAP names to oids.
 		100 => array('class' => 'core:AttributeMap', 'name2oid'),
 		200 => array('class' => 'core:AttributeMap', 'name2urn'),
-		300 => array('class' => 'saml:PersistentNameID', 'attribute' => 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6' ),
+		300 => array('class' => 'saml:PersistentNameID', 'identifyingAttribute' => 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6' ),
 	),
-	
-	/*
-	 * Uncomment the following to specify the registration information in the
-	 * exported metadata. Refer to:
-     * http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/cs01/saml-metadata-rpi-v1.0-cs01.html
-	 * for more information.
-	 */
-	/*
-	'RegistrationInfo' => array(
-		'authority' => 'urn:mace:example.org',
-		'instant' => '2008-01-17T11:28:03Z',
-		'policies' => array(
-			'en' => 'http://example.org/policy',
-			'es' => 'http://example.org/politica',
-		),
-	),
-	*/
 );

@@ -1,7 +1,6 @@
 ---
 - name: "restart oidcng"
-  systemd:
-    name: oidcng
-    state: restarted
-    daemon-reload: yes
-
+  community.docker.docker_container:
+    name: dashboardserver
+    state: started
+    restart: true

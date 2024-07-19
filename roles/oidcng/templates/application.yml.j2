@@ -1,6 +1,6 @@
 # The logging configuration.
 logging:
-  config: file://{{ oidcng_dir }}/logback.xml
+  config: file://{{ oidcng_config_dir }}/logback.xml
   level:
     org.springframework: WARN
     oidc: WARN
@@ -14,10 +14,16 @@ cron:
   key-rollover-expression: {{ oidcng.key_rollover_cron_expression }}
   consent-expiry-duration-days: 90
 
+keys-cache:
+  # The max-age cache control for signing keys in seconds
+  cache-duration-seconds: 3600
+  # The time in seconds where new signing keys are published, but not used
+  idle-time-seconds: 7200
 
 server:
   # The port to where this Spring Boot application listens to.
-  port: {{ springapp_tcpport }}
+  port: 8080
+  forward-headers-strategy: native
   error:
     path: "/error"
   server-header:
@@ -34,13 +40,13 @@ server:
     max-swallow-size: 10000000
 
 mongodb_db: {{ oidcng.mongo_database }}
-oidc_saml_mapping_path: file://{{ oidcng_dir }}/oidc_saml_mapping.json
-openid_configuration_path: file://{{ oidcng_dir }}/openid-configuration.json
-secret_key_set_path: file://{{ oidcng_dir }}/secret_keyset.json
+oidc_saml_mapping_path: file://{{ oidcng_config_dir }}/oidc_saml_mapping.json
+openid_configuration_path: file://{{ oidcng_config_dir }}/openid-configuration.json
+secret_key_set_path: file://{{ oidcng_config_dir }}/secret_keyset.json
 associated_data: {{ oidcng_associated_data }}
 access_token_one_way_hash_salt: {{ oidcng_access_token_one_way_hash_salt }}
-private_key_path: file://{{ oidcng_dir }}/oidcsaml.key
-certificate_path: file://{{ oidcng_dir }}/oidcsaml.crt
+private_key_path: file://{{ oidcng_config_dir }}/oidcsaml.key
+certificate_path: file://{{ oidcng_config_dir }}/oidcsaml.crt
 default_acr_value: {{ oidcng.default_acr_value }}
 secure_cookie: true
 oidc_token_endpoint: https://connect.{{ base_domain }}/oidc/token
@@ -62,7 +68,7 @@ sp:
 idp:
   entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
   sso_location: {{ oidcng_idp_sso_location }}
-  saml_assertion_signing_key: file://{{ oidcng_dir }}/SURFconext-metadata-signer.pem
+  saml_assertion_signing_key: file://{{ oidcng_config_dir }}/SURFconext-metadata-signer.pem
 
 spring:
   data:
@@ -74,18 +80,43 @@ spring:
 
 manage:
   user: manage
-  password: {{ oidcng_api_metadata_push_password }}
+  password: "{{ oidcng_api_metadata_push_password }}"
 
 token-api:
   enabled: {{ oidcng.token_api_enabled }}
   users:
     - user: eduid
-      password: {{ oidcng_api_tokens_eduid_password }}
+      password: "{{ oidcng_api_tokens_eduid_password }}"
     - user: profile
-      password: {{ oidcng_api_tokens_profile_password }}
+      password: "{{ oidcng_api_tokens_profile_password }}"
 
 eduid:
   user: oidcng
-  password: {{ myconext_api_attribute_manipulation_password }}
-  uri: https://login.{{ myconext_base_domain }}/myconext/api/attribute-manipulation
+  password: "{{ myconext_api_attribute_manipulation_password }}"
+  uri: "https://login.{{ myconext_base_domain }}/myconext/api/attribute-manipulation"
   enabled: {{ oidcng.eduid_attribute_manipulation_enabled }}
+
+
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,mappings"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
+    mappings:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"

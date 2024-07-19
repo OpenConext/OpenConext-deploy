@@ -1,4 +1,0 @@
----
-springapp_tcpport: "{{ manage_springapp_tcpport }}"
-springapp_artifact_id: manage-gui
-springapp_version: "{{ manage_gui_version }}" 

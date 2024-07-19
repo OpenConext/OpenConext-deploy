@@ -1,26 +1,47 @@
-- name: Install Apache and FPM config
-  include_role:
-    name: apachefpm
+---
+- name: Include docker vars
+  ansible.builtin.include_vars: docker.yml
 
-- name: Install the symfony app
-  include_role:
-    name: stepupapp
+- name: Add group {{ appname }}
+  ansible.builtin.group:
+    name: "{{ appname }}"
+    state: present
+  register: gateway_guid
+
+- name: Add user {{ appname }}
+  ansible.builtin.user:
+    name: "{{ appname }}"
+    group: "{{ appname }}"
+    createhome: no
+    state: present
+  register: gateway_uid
+
+- name: Create some dirs
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{ current_release_config_dir_name }}"
+    - "{{ current_release_appdir }}/public/images"
 
 - name: Install images
-  include_role:
+  ansible.builtin.include_role:
     name: stepupapp
     tasks_from: copyimages
 
 - name: Install second factor images
-  include_role:
+  ansible.builtin.include_role:
     name: stepupapp
     tasks_from: copysfimages
 
 - name: Place config parameterfiles
-  template:
+  ansible.builtin.template:
     src: "{{ item }}.yml.j2"
     dest: "{{ current_release_config_dir_name }}/{{ item }}.yaml"
-    mode: 0640
+    mode: "0640"
     owner: root
     group: "{{ appname }}"
   with_items:
@@ -29,97 +50,86 @@
     - samlstepupproviders_parameters
     - global_view_parameters
   notify:
-    - clear cache {{ appname }}
-    - reload php72-fpm {{ appname }}
+    - restart {{ appname }}
 
-- name: Place .env file
-  template:
-    src: env.j2
-    dest: "{{ current_release_appdir }}/.env.local"
-    mode: 0640
-    owner: root
-    group: "{{ appname }}"
-  notify: 
-    - clear cache {{ appname }}
-    - reload php72-fpm {{ appname }}
-
-# Writing all the SAML keys and certificates. Since the gateway is special no need to include it from other roles
+    # Writing all the SAML keys and certificates. Since the gateway is special no need to include it from other roles
 - name: Write GateWay SAML SP private key
-  copy:
+  ansible.builtin.copy:
     content: "{{ gateway_saml_sp_privatekey }}"
     dest: "{{ current_release_config_file_dir_name }}/sp.key"
     owner: "{{ appname }}"
-    mode: 0400
+    mode: "0400"
 
 - name: Write SAML SP certificate
-  copy:
+  ansible.builtin.copy:
     src: "{{  inventory_dir }}/files/certs/stepup/gateway_saml_sp.crt"
     dest: "{{ current_release_config_file_dir_name }}/sp.crt"
     group: "{{ appname }}"
-    mode: 0640
+    mode: "0640"
 
 - name: Write GSSP SP private key
-  copy:
+  ansible.builtin.copy:
     content: "{{ gateway_gssp_sp_privatekey }}"
     dest: "{{ current_release_config_file_dir_name }}/sp_gssp.key"
     owner: "{{ appname }}"
-    mode: 0400
+    mode: "0400"
 
 - name: Write GSSP SP certificate
-  copy:
+  ansible.builtin.copy:
     src: "{{  inventory_dir }}/files/certs/stepup/gateway_gssp_sp.crt"
     dest: "{{ current_release_config_file_dir_name }}/sp_gssp.crt"
     group: "{{ appname }}"
-    mode: 0640
+    mode: "0640"
 
 - name: Write SAML IdP private key
-  copy:
+  ansible.builtin.copy:
     content: "{{ gateway_saml_idp_privatekey }}"
     dest: "{{ current_release_config_file_dir_name }}/idp.key"
     owner: "{{ appname }}"
-    mode: 0400
+    mode: "0400"
 
 - name: Write SAML IdP public key
-  copy:
+  ansible.builtin.copy:
     src: "{{  inventory_dir }}/files/certs/stepup/gateway_saml_idp.crt"
     dest: "{{ current_release_config_file_dir_name }}/idp.crt"
     group: "{{ appname }}"
-    mode: 0640
+    mode: "0640"
 
 - name: Write GSSP IdP cert
-  copy:
+  ansible.builtin.copy:
     src: "{{  inventory_dir }}/files/certs/stepup/gateway_gssp_idp.crt"
     dest: "{{ current_release_config_file_dir_name }}/idp_gssp.crt"
     owner: "{{ appname }}"
-    mode: 0600
+    mode: "0600"
 
 - name: Write GSSP IdP key
-  copy:
+  ansible.builtin.copy:
     content: "{{ gateway_gssp_idp_privatekey }}"
     dest: "{{ current_release_config_file_dir_name }}/idp_gssp.key"
     owner: "{{ appname }}"
-    mode: 0600
+    mode: "0600"
 
-- name: Activate the symlink
-  file:
-    src: "{{ current_release_appdir }}/"
-    dest: "{{ current_release_symlink }}"
-    state: link
-
-- name: Remove gateway database db_migrate script from /root/
-  file:
-    path: "/root/01-gateway-db_migrate.sh"
-    state: absent
-
-- name: Put logout.php in public
-  template:
-    src: "logout.php.j2"
-    dest: "{{ current_release_appdir }}/public/logout.php"
-    mode: "444"
-
-- meta: flush_handlers
-
-- name: Include post installation tasks
-  include_role:
-    name: stepupapp
-    tasks_from: postinstall
+- name: Create the container
+  community.docker.docker_container:
+    name: "{{ appname }}"
+    image: ghcr.io/openconext/stepup-gateway/stepup-gateway:{{ gateway_version }}
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.gateway.rule: "Host(`{{ gateway_vhost_name }}`)"
+      traefik.http.routers.gateway.tls: "true"
+      traefik.enable: "true"
+    env:
+      APACHE_UID: "#{{ gateway_uid.uid }}"
+      APACHE_GUID: "#{{ gateway_guid.gid }}"
+      APP_ENV: prod
+      HTTPD_CSP: ""
+    mounts:
+      - source: /opt/openconext/gateway/public/images/header-logo.png
+        target: /var/www/html/public/images/header-logo.png
+        type: bind
+      - source: /opt/openconext/gateway/
+        target: /var/www/html/config/openconext
+        type: bind

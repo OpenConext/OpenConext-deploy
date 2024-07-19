@@ -162,11 +162,11 @@
   roles:
     - { role: stepupwebauthn,                            tags: ['stepupwebauthn','stepup' ] }
     - { role: stepupazuremfa,                            tags: ['stepupazuremfa', 'stepup'] }
-    - { role: stepuptiqr,                                tags: ['stepuptiqr' , 'stepup'] }
     - { role: stepupmiddleware,                          tags: ['stepupmiddleware' , 'stepup'] }
     - { role: stepupgateway,                             tags: ['stepupgateway' , 'stepup'] }
     - { role: stepupselfservice,                         tags: ['stepupselfservice' , 'stepup'] }
     - { role: stepupra        ,                          tags: ['stepupra' , 'stepup'] }
+    - { role: stepupgateway        ,                     tags: ['stepupgateway' , 'stepup'] }
 
 - hosts: docker
   become: true
@@ -177,10 +177,17 @@
     - { role: teams,      tags: ["teams"] }
     - { role: pdp,        tags: ["pdp"] }
     - { role: voot,       tags: ["voot"] }
-    - { role: attribute-aggregation, tags: ["aa"] }
+    - { role: attribute-aggregation, tags: ["aa", "attribute-aggregation"] }
     - { role: mujina-idp, tags: ["mujina-idp"] }  
     - { role: oidc-playground, tags: ["oidc-playground"] }  
+    - { role: myconext,    tags: ["myconext"] }  
+    - { role: manage,    tags: ["manage"] }  
+    - { role: oidcng,    tags: ["oidcng"] }  
     - { role: stats,      tags: ["stats"] }  
+    - { role: diyidp,      tags: ["diyidp"] }  
+    - { role: profile,      tags: ["profile"] }  
+    - { role: lifecycle,      tags: ["lifecycle"] }  
+    - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 

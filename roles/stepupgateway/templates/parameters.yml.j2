@@ -1,8 +1,14 @@
 parameters:
+{% if 'docker' in group_names %}
+    app_env: prod
+    app_debug: false
+    app_secret: {{ gateway_secret }}
+{% endif %}
+
     trusted_proxies:   [ 127.0.0.1 ]
 
     database_driver:   pdo_mysql
-    database_host:     {{ database_lb_address }}
+    database_host:     {{ dbcluster_ip }}
     database_port:     3306
     database_gateway_name:     {{ database_gateway_name }}
     database_gateway_user:     {{ database_gateway_user }}
@@ -57,21 +63,21 @@ parameters:
 
     # The private key and certificate that are used by the Gateway SP to sign SAML AuthnRequests
     # Filename of the PEM CERTIFICATE
-    saml_sp_publickey: {{ current_release_config_file_dir_name }}/sp.crt
+    saml_sp_publickey: {{ current_release_config_file_dir_name_in_config }}/sp.crt
     # Filename of the PEM RSA PRIVATE KEY
-    saml_sp_privatekey: {{ current_release_config_file_dir_name }}/sp.key
+    saml_sp_privatekey: {{ current_release_config_file_dir_name_in_config }}/sp.key
 
     # The private key and certificate that are used by the Gateway IdP to sign SAML Responses/Assertions
     # Filename of the PEM CERTIFICATE
-    saml_idp_publickey: {{ current_release_config_file_dir_name }}/idp.crt
+    saml_idp_publickey: {{ current_release_config_file_dir_name_in_config }}/idp.crt
     # Filename of the PEM RSA PRIVATE KEY
-    saml_idp_privatekey: {{ current_release_config_file_dir_name }}/idp.key
+    saml_idp_privatekey: {{ current_release_config_file_dir_name_in_config }}/idp.key
 
     # The certificate and private key that are used by the Gateway to sign the metadata that it publishes
     # Filename of the PEM CERTIFICATE
-    saml_metadata_publickey: {{ current_release_config_file_dir_name }}/idp.crt
+    saml_metadata_publickey: {{ current_release_config_file_dir_name_in_config }}/idp.crt
     # Filename of the PEM RSA PRIVATE KEY
-    saml_metadata_privatekey: {{ current_release_config_file_dir_name }}/idp.key
+    saml_metadata_privatekey: {{ current_release_config_file_dir_name_in_config }}/idp.key
 
     # The remote IdP (i.e. not the local IdP that is part of the Gateway) is the IdP that provides the first
     # factor authentication of users to the Gateway.
@@ -103,8 +109,6 @@ parameters:
     second_factor_only_loa_self_asserted: '{{ stepup_uri_sfo_self_asserted }}'
 
     second_factor_only: {{ gateway_second_factor_only | default(false) }}
-
-    asset_version: {{ appversion_sha }}
 
     enabled_second_factors: [ {{ stepup_enabled_factors }} ]
 

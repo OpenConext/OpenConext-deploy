@@ -1,0 +1,5 @@
+- name: restart myconextserver
+  community.docker.docker_container:
+    name: myconextserver
+    state: started
+    restart: true

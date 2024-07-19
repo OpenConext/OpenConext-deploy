@@ -198,5 +198,6 @@ frontend localhost_restricted
     acl securitytxt path /.well-known/security.txt
     http-request redirect location {{ haproxy_securitytxt_target_url }} if securitytxt
     {% endif %}
+    http-request redirect location %[base,map_reg(/etc/haproxy/maps/redirects.map)] if { base,map_reg(/etc/haproxy/maps/redirects.map) -m found }
 
 {% endif %}

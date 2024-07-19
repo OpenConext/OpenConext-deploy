@@ -1,16 +1,21 @@
 parameters:
+{% if 'docker' in group_names %}
+    app_env: prod
+    app_debug: false 
+    app_secret: {{ azuremfa_secret }}
+{% endif %}
     # All locales supported by the application
     locales: [{{ enabled_locales | join(",") }}]
 
     # SAML configuration
-    saml_idp_publickey: '{{ current_release_config_file_dir_name }}/cert.pem'
-    saml_idp_privatekey: '{{ current_release_config_file_dir_name }}/key.pem'
+    saml_idp_publickey: '{{ current_release_config_file_dir_name_in_config }}/cert.pem'
+    saml_idp_privatekey: '{{ current_release_config_file_dir_name_in_config }}/key.pem'
     # NOTE: same key used for metadata and response/assertion signing
-    saml_metadata_publickey: '{{ current_release_config_file_dir_name }}/cert.pem'
-    saml_metadata_privatekey: '{{ current_release_config_file_dir_name }}/key.pem'
+    saml_metadata_publickey: '{{ current_release_config_file_dir_name_in_config }}/cert.pem'
+    saml_metadata_privatekey: '{{ current_release_config_file_dir_name_in_config }}/key.pem'
 
     saml_remote_sp_entity_id: 'https://{{ gateway_vhost_name }}/gssp/azuremfa/metadata'
-    saml_remote_sp_certificate: '{{ current_release_config_file_dir_name }}/gateway.crt'
+    saml_remote_sp_certificate: '{{ current_release_config_file_dir_name_in_config }}/gateway.crt'
     saml_remote_sp_acs: 'https://{{ gateway_vhost_name }}/gssp/azuremfa/consume-assertion'
 
     # View parameters

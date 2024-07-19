@@ -1,6 +1,0 @@
----
-- name: restart myconext
-  service:
-    name: myconext
-    state: restarted
-    daemon_reload: yes

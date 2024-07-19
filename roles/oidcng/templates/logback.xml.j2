@@ -2,22 +2,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
 
- <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-   <file>/var/log/oidcng/oidcng.log</file>
-   <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-     <!-- daily rollover -->
-     <fileNamePattern>/var/log/oidcng/oidcng-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
-     <maxHistory>{{ logback_max_history }}</maxHistory>
-   </rollingPolicy>
-   <encoder>
+ <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+  <encoder>
      <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
    </encoder>
- </appender>
-
- <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
-   <syslogHost>{{ rsyslog_host }}</syslogHost>
-   <facility>DAEMON</facility>
-   <suffixPattern>oidcng: [%thread] %logger %msg</suffixPattern>
  </appender>
 
  <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashSocketAppender">
@@ -55,13 +43,10 @@
  <logger name="oidc" level="WARN" />
  <logger name="org.springframework" level="WARN" />
  <root level="WARN">
-{%if oidcng_logback_file |bool  %}
-   <appender-ref ref="FILE" />
-{%endif%}
 {%if oidcng_logback_email |bool  %}
    <appender-ref ref="EMAIL" />
 {%endif%}
-   <appender-ref ref="SYSLOG" />
+   <appender-ref ref="STDOUT" />
 {%if oidcng_logback_json |bool  %}
    <appender-ref ref="JSON_SYSLOG" />
 {%endif%}

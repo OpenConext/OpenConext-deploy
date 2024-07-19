@@ -6,6 +6,7 @@ organization={{ dashboard_organization }}
 
 # 8 hours
 server.servlet.session.timeout=28800
+server.servlet.session.cookie.secure=true
 
 # An empty value will be replaced with the default
 server.server-header=no
@@ -48,7 +49,6 @@ spring.mail.host=host.docker.internal
 spring.mail.port=25
 
 coin-administrative-email={{ dashboard.administrative_mail }}
-administration.email.enabled={{ dashboard.administration_email_enabled }}
 mailBaseUrl=https://dashboard.{{ base_domain }}
 systemEmail=SURFconext <no-reply@surfconext.nl>
 
@@ -60,6 +60,8 @@ jiraDueDateWeeks=1
 jiraEnvironment={{ dashboard.jira_environment }}
 jiraApikey={{ dashboard_jira_apikey }}
 jiraUseApiKey={{ dashboard.jira_use_api_key }}
+# Timeout in milliseconds
+jiraConnectionTimeout=10000
 
 manage.username={{ dashboard.manage_username }}
 manage.password={{ manage_dashboard_secret }}
@@ -76,10 +78,11 @@ pdp.password={{ pdp_password }}
 dashboard.feature.shibboleth=true
 dashboard.feature.sab={{ dashboard.feature_sab }}
 dashboard.feature.manage=true
+# If feature.jira is set to false, then emails are send out when questions are asked or an entity is linked / unlinked
 dashboard.feature.jira={{ dashboard.feature_jira }}
 dashboard.feature.consent={{ dashboard.feature_consent }}
 # Valid choices are 'MOCK', 'PDP' or 'MANAGE', 'MOCK' is for local development
-dashboard.feature.pdpSource=MANAGE
+dashboard.feature.pdpSource={{ dashboard.pdp_source }}
 dashboard.feature.statistics=true
 dashboard.feature.mail={{ dashboard.feature_mail }}
 dashboard.feature.oidc={{ dashboard.feature_oidc }}

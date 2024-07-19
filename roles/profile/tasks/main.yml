@@ -1,170 +1,117 @@
 ---
-- name: Add group {{ profile_fpm_user }}
-  group:
-    name: "{{ profile_fpm_user }}"
+- name: Add group {{ appname }}
+  ansible.builtin.group:
+    name: "{{ appname }}"
     state: present
+  register: profile_guid
 
-- name: Add user {{ profile_fpm_user }}
-  user:
-    name: "{{ profile_fpm_user }}"
-    group: "{{ profile_fpm_user }}"
-    createhome: no
+- name: Add user {{ appname }}
+  ansible.builtin.user:
+    name: "{{ appname }}"
+    group: "{{ appname }}"
+    createhome: false
     state: present
+  register: profile_uid
 
-- name: Create directory for vhosts to store PHP sessions
-  file:
-    path: "{{ php_session_dir}}/profile"
+- name: Create some dirs
+  ansible.builtin.file:
     state: directory
-    owner: "{{ profile_fpm_user }}"
+    dest: "{{ item }}"
+    owner: root
     group: root
-    mode: 0770
-
-- name: Include install-release.yml
-  include_tasks: install-release.yml
-  when: profile_branch is not defined or profile_branch == ''
-
-- name: Include install-branch.yml
-  include_tasks: install-branch.yml
-  when: profile_branch is defined and profile_branch != ''
-
-- name: Create the cache dir for Symfony
-  file:
-    path: "{{ profile_symfony_cache_path }}"
-    state: directory
-    owner: "{{ profile_fpm_user }}"
-    group: "{{ profile_fpm_user }}"
-    recurse: yes
-
-- name: Create the log dir for Symfony
-  file:
-    path: "{{ profile_symfony_log_path }}"
-    state: directory
-    owner: "{{ profile_fpm_user }}"
-    group: '{{ profile_fpm_user }}'
-    recurse: yes
-
-- name: Place parameters.yaml
-  template:
-    src: "{{ item }}.j2"
-    dest: "{{ profile_current_release_symlink }}/config/legacy/{{ item }}"
-    mode: 0644
+    mode: "0755"
   with_items:
-    - parameters.yaml
-  notify:
-    - "restart php72-fpm"
+    - "{{ current_release_config_dir_name }}"
+    - "{{ current_release_config_dir_name }}/certs"
+    - "{{ current_release_config_dir_name }}/translationoverrides"
 
-- name: Instantiate global_view_parameters.yml.dist
-  command: mv global_view_parameters.yaml.dist global_view_parameters.yaml
-  args:
-    chdir: "{{ profile_current_release_symlink }}/config/legacy/"
-    creates: "{{ profile_current_release_symlink }}/config/legacy/global_view_parameters.yaml"
+- name: Put parameters YAML config
+  ansible.builtin.template:
+    src: "{{ item }}.yml.j2"
+    dest: "{{ current_release_config_dir_name }}/{{ item }}.yaml"
+    mode: "0640"
+    group: "{{ appname }}"
+  with_items:
+    - parameters
+    - global_view_parameters
+  notify:
+    - restart {{ appname }}
+
+- name: Install the engineblock certificate
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/certs/{{ profile_eb_saml_public_key }}"
+    dest: "{{ current_release_config_dir_name }}/certs/{{ profile_eb_saml_public_key }}"
+    mode: "0644"
+    owner: root
+    group: root
 
 - name: Check presence of language specific overrides
-  local_action: stat path="{{ inventory_dir }}/files/profile/overrides/"
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/profile/overrides/"
+  delegate_to: localhost
   register: overrides_present
   become: false
 
-# Can be removed after 2022-01-01
-- name: Check for wrongly created overrides file (not dir)
-  stat:
-    path: "{{ profile_current_release_symlink }}/translations/overrides"
-  register: overridesisfile
-
-# Can be removed after 2022-01-01
-- name: Clean up wrongly created overrides file (not dir)
-  file:
-    path: "{{ profile_current_release_symlink }}/translations/overrides"
-    state: absent
-  when: overrides_present.stat.exists and overridesisfile.stat.exists and overridesisfile.stat.isdir == False
-
 - name: Copy language specific overrides
-  template:
+  ansible.builtin.template:
     src: "{{ item }}"
-    dest: "{{ profile_current_release_symlink }}/translations/overrides/"
+    dest: "{{ current_release_config_dir_name }}/translationoverrides/"
   when: overrides_present.stat.exists
   with_fileglob:
     - "{{ inventory_dir }}/files/profile/overrides/*"
   notify:
-    - "restart php72-fpm"
+    - "restart {{ appname }}"
 
 - name: Check if we have a custom favicon
-  local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/favicon.ico"
+  delegate_to: localhost
   register: customfavicon
   become: false
 
 - name: Install environment specific favicon
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/favicon.ico"
-    dest: "{{ profile_current_release_symlink }}/public/"
+    dest: "{{ current_release_config_dir_name }}/images/"
+    owner: root
+    group: root
+    mode: "0644"
   when:
     customfavicon.stat.exists
 
-- name: Create the symfony cache
-  command: php72 bin/console cache:clear --env={{ profile_apache_symfony_environment }} --no-debug
-  args:
-    chdir: "{{ profile_current_release_symlink }}/"
-  when:
-    - not develop
-  changed_when: false
-
-- name: Make sure cache dir has correct permissions
-  file:
-    path: "{{ profile_current_release_symlink }}/var/cache"
-    owner: "{{ profile_fpm_user }}"
-    group: "{{ profile_fpm_user }}"
-    recurse: yes
-  changed_when: false
-
-- name: Make sure log dir has correct permissions
-  file:
-    path: "{{ profile_current_release_symlink }}/var/log"
-    owner: "{{ profile_fpm_user }}"
-    group: "{{ profile_fpm_user }}"
-    recurse: yes
-  changed_when: false
-
-- name: Install Apache vhost
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/httpd/conf.d/{{ item }}"
-  with_items:
-    - profile.conf
-  notify:
-    - "restart httpd"
-
-- name: clean up old php-fpm 5.6 config
-  file:
-    path: "/etc/php-fpm.d/profile-pool.conf"
-    state: absent
-
-- name: php-fpm 72 config
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/opt/remi/php72/php-fpm.d/{{ item }}"
-  with_items:
-     - profile-pool-72.conf
-  notify:
-    - "restart php72-fpm"
-
-- name: clean up profile <3.0 config
-  file:
-    path: "/etc/openconext/profile.yml"
-    state: absent
+- name: Create the container
+  community.docker.docker_container:
+    name: "{{ appname }}"
+    image: ghcr.io/openconext/openconext-profile/profile:{{ profile_version }}
+    etc_hosts:
+      host.docker.internal: host-gateway
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.profile.rule: "Host(`{{ profile_vhost_name }}`)"
+      traefik.http.routers.profile.tls: "true"
+      traefik.enable: "true"
+    env:
+      APACHE_UID: "#{{ profile_uid.uid }}"
+      APACHE_GUID: "#{{ profile_guid.gid }}"
+      APP_ENV: prod
+      HTTPD_CSP: "{{ httpd_csp.strict_with_static_img }}"
+    mounts:
+      - source: /opt/openconext/profile
+        target: /var/www/html/config/openconext
+        type: bind
+      - source: /opt/openconext/common/favicon.ico
+        target: /var/www/html/public/favicon.ico
+        type: bind
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+    
 
 - name: Include the role manage_provision_entities to provision profile to Manage
-  include_role: 
+  ansible.builtin.include_role:
     name: manage_provision_entities
-  vars: 
+  vars:
     entity_type: saml20_sp
-
-# Remove all dirs, but keep the current version and from the rest the most recent one.
-- name: Clean up old releases
-  shell: ls -td {{ openconext_releases_dir }}/OpenConext-profile-* | grep -v $(readlink {{ profile_current_release_symlink }}) | tail -n +2 | xargs --no-run-if-empty rm -rv
-  register: clean_releases
-  changed_when: '"removed" in clean_releases.stdout'
-
-# Remove all tarballs, but keep the current version and from the rest the most recent one.
-- name: Clean up old builds
-  shell: ls -td {{ openconext_builds_dir }}/OpenConext-profile-* {{ openconext_builds_dir }}/Releases/ | grep -v {{ profile_build_path }} | tail -n +2 | xargs --no-run-if-empty rm -rv
-  register: clean_builds
-  changed_when: '"removed" in clean_builds.stdout'

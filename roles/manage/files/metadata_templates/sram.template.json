@@ -1,0 +1,28 @@
+{
+  "entityid": "",
+  "state": "testaccepted",
+  "allowedall": true,
+  "arp": {
+    "enabled": false,
+    "attributes": {}
+  },
+  "metaDataFields": {
+    "name:en": "",
+    "OrganizationName:en": "",
+    "AssertionConsumerService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+    "AssertionConsumerService:0:Location": "https://trusted.proxy.acs.location.rules",
+    "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+    "coin:signature_method": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+    "connection_type": "oidc_rp",
+    "secret": "",
+    "redirectUrls": [],
+    "grants": ["authorization_code"]
+  },
+  "allowedEntities": [],
+  "autoRefresh": {
+    "enabled": false,
+    "allowAll": false,
+    "fields": {
+    }
+  }
+}

@@ -1,0 +1,25 @@
+encryptionSecret: "{{ myconext_tiqr_encryption }}"
+baseUrl: "https://login.{{ myconext_base_domain }}"
+identifier: "{{ myconext_base_domain }}"
+displayName: "{{ myconext_base_domain }}"
+version: "2"
+logoUrl: "https://static.surfconext.nl/media/idp/eduid.png"
+infoUrl: "https://{{ myconext_base_domain }}/help"
+pushNotificationsEnabled: true
+eduIdAppBaseUrl: "https://eduid.nl"
+rateLimitThreshold: 5
+rateLimitResetMinutes: 30
+
+apns:
+  serverHost: "api.push.apple.com"
+  port: 443
+  signingKey: "file:///config/apns.p8"
+  # Leave empty for non-local development
+  serverCertificateChain: ""
+  topic: "nl.eduid"
+  teamId: "{{ myconext.apns_teamid }}"
+  keyId: "{{ myconext.apns_keyid }}"
+
+gcm:
+  firebaseServiceAccount: "file:///config/firebase.json"
+  appName: "tiqr"

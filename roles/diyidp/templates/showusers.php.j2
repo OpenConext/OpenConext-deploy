@@ -4,17 +4,30 @@
 $dbuser = "{{ diyidp.db_user }}";
 $dbpass = "{{ diyidp.db_password }}";
 $dbhost = "{{ diyidp.db_host }}";
+$dbname = "{{ diyidp.db_name }}";
 
-function doQuery($qryString, $dbuser, $dbpass, $dbhost) {
-
-	// Make a MySQL Connection
-	mysql_connect($dbhost, $dbuser, $dbpass) or die(mysql_error());
-
-	// Retrieve the data
-	$setUTF8 = mysql_query("SET NAMES utf8");
-	$result = mysql_query($qryString) or die(mysql_error());
-	
-	return $result;
+function doQuery($qryString, $dbuser, $dbpass, $dbhost, $dbname) {
+    try {
+        // Create a new PDO connection
+        $dsn = "mysql:host=$dbhost;dbname=$dbname;charset=utf8";
+        $pdo = new PDO($dsn, $dbuser, $dbpass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        // Prepare and execute the query
+        $stmt = $pdo->prepare($qryString);
+        $stmt->execute();
+        // Return the rows
+        $rows = [];
+        while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $rows[] = $r;
+        }
+    
+        return $rows;
+ 
+    } 
+    catch (PDOException $e) {
+        die("PDO Error: " . $e->getMessage());
+    }
 }
 
 /**
@@ -206,14 +219,7 @@ GROUP BY diy.uid
 ORDER BY LPAD(lower(username), 2,0), LPAD(lower(username), 10,0)";
 	
 	// Run the query
-	$qryrset = doQuery($sqlString, $dbuser, $dbpass, $dbhost);
-
-	//var_dump($qryrset);
-	
-	$rows = array();
-	while($r = mysql_fetch_assoc($qryrset)) {
-		$rows[] = $r;
-	}
+	$rows = doQuery($sqlString, $dbuser, $dbpass, $dbhost, $dbname);
 	
 	$htmlTable = array2table($rows);
 	print_r($htmlTable);

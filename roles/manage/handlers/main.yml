@@ -1,0 +1,5 @@
+- name: restart manageserver
+  community.docker.docker_container:
+    name: manageserver
+    state: started
+    restart: true

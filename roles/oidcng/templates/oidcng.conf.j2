@@ -9,7 +9,7 @@ Listen {{ apache_app_listen_address.oidcng }}:{{ loadbalancing.oidcng.port }}
 
     ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-oidcng'"
     CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-oidcng'" combined
-
+    LimitRequestFieldSize 16384
     ProxyPass /.well-known/openid-configuration http://localhost:{{ springapp_tcpport}}/oidc/.well-known/openid-configuration retry=0
     ProxyPass /actuator http://localhost:{{ springapp_tcpport}}/internal retry=0
 

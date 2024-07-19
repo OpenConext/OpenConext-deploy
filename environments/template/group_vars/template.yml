@@ -1,5 +1,8 @@
 ---
 env: "%env%"
+mariadb_host: localhost
+rsyslog_host: localhost
+database_clients: [ "{{ mariadb_host }}" ]
 use_selfsigned_certs: true
 update_hosts_file: true
 use_welcome_role: true
@@ -207,7 +210,7 @@ springboot_server_services:
 guest_qualifier: "urn:collab:org:{{ base_domain }}"
 
 engine_database_name: eb
-engine_database_host: "{{ mysql_host }}"
+engine_database_host: "{{ mariadb_host }}"
 engine_database_port: 3306
 engine_database_user: ebrw
 engine_database_password: "{{ mysql_passwords.eb }}"
@@ -254,20 +257,21 @@ shibboleth_apps:
     baseurl: ""
 
 shib:
-  db_host: "{{ mysql_host }}"
+  db_host: "{{ mariadb_host }}"
 shibboleth_database_backend: false
 
 teams:
   db_name: "teams"
   db_user: "teamsrw"
   db_password: "{{ mysql_passwords.teams }}"
-  db_host: "{{ mysql_host }}"
+  db_host: "{{ mariadb_host }}"
   group_name_context: "urn:collab:group:{{ base_domain }}:"
   voot_api_user: "voot"
   spdashboard_api_user: "spdashboard"
   spdashboard_person_urn: "urn:collab:person:surfnet.nl:sp-dashboard-C133A36F-CFCA-4F3D-87CE-7ECE29773FE0"
   product_name: "OpenConext Teams"
   default_stem_name: "demo:openconext:org"
+  feature_invite_migration_on: False
   super_admins_team_urns:
     - "nl:surfnet:diensten:teams_super_users"
     - "nl:surfnet:diensten:teams_super_admin_users"
@@ -329,7 +333,7 @@ pdp:
   password: "{{ pdp_password }}"
   db_user: pdp-serverrw
   db_password: "{{ mysql_passwords.pdp_server }}"
-  db_host: "{{ mysql_host }}"
+  db_host: "{{ mariadb_host }}"
   db_name: pdp-server
   spring_profiles_active: test
   cache_policies: false
@@ -344,7 +348,7 @@ aa:
   eb_password: "{{ aa_eb_password }}"
   db_user: aa-serverrw
   db_password: "{{ mysql_passwords.aa_server }}"
-  db_host: "{{ mysql_host }}"
+  db_host: "{{ mariadb_host }}"
   db_name: aaserver
   authz_client_id: "aa.{{base_domain}}"
   authz_resource_server_id: aa
@@ -359,6 +363,9 @@ aa:
   sab_username: coin-test
   sab_password: "{{ aa_sab_password }}"
   sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
+  sab_rest_username: surfconexttest
+  sab_rest_password: "{{ aa_sab_rest_password }}"
+  sab_rest_endpoint: https://sab-ng.surfnet.nl
   surfmarket_url: https://example.org
   surfmarket_username: example@example.org
   surfmarket_password: "{{ aa_surfmarket_password }}"
@@ -386,6 +393,7 @@ oidcng:
   key_rollover_cron_expression: "0 0 0 * * *"
   acr_values_supported:
     - https://eduid.nl/trust/validate-names
+    - https://eduid.nl/trust/validate-names-external
     - https://eduid.nl/trust/linked-institution
     - https://eduid.nl/trust/affiliation-student
     - https://refeds.org/profile/mfa
@@ -405,11 +413,12 @@ myconext:
   mongo_password: "{{ mongo_passwords.myconext }}"
   rp_client_id: myconext.ala.eduid
   rs_client_id: myconext.rs
-  idp_external_validation_entity_id: http://mock-idp
+  verify_base_uri: "https://validate.test.eduid.nl"
   feature_webauthn: false
   feature_warning_educational_email_domain: false
   feature_show_connections: false
-  feature_use_external_validation: false
+  feature_id_verify: true
+  feature_remote_creation_api: true
   feature_deny_disposable_email_providers: true
   feature_create_eduid_institution_enabled: true
   feature_create_eduid_institution_landing: true
@@ -441,7 +450,7 @@ manage:
   eb_db_user: "{{ engine_database_user }}"
   eb_db_password: "{{ mysql_passwords.eb }}"
   eb_db_name: "{{ engine_database_name }}"
-  eb_db_host: "{{ mysql_host }}"
+  eb_db_host: "{{ mariadb_host }}"
   mongo_port: "{{ mongo_port }}"
   mongo_user: managerw
   mongo_password: "{{ mongo_passwords.manage }}"
@@ -480,6 +489,11 @@ manage:
         name: "invite",
         password: "{{ manage_invite_secret }}",
         scopes: ["READ"]
+      }
+    - {
+        name: "sram",
+        password: "{{ manage_sram_secret }}",
+        scopes: ["READ", "WRITE_SP", "DELETE_SP"]
       }
     - {
         name: "attribute-aggregation",

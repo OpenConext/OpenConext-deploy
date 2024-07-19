@@ -54,7 +54,7 @@
     restart_policy: "always"
     state: started
     labels:
-      traefik.http.routers.statsgui.rule: "Host(`stats.{{ base_domain }}`)"
+      traefik.http.routers.statsgui.rule: "Host(`{{ stats_domain }}`)"
       traefik.http.routers.statsgui.tls: "true"
       traefik.enable: "true"
     networks:

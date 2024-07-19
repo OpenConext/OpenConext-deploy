@@ -30,6 +30,8 @@
     pull: true
     restart_policy: "always"
     state: started
+    env:
+      TZ: "{{ timezone }}"
     networks:
       - name: "loadbalancer"
     mounts:

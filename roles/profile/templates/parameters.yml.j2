@@ -1,0 +1,63 @@
+parameters:
+    app_env: prod
+    app_debug: false 
+    app_secret: {{ profile_secret }}
+
+    locales: [en, nl]
+    default_locale: {{ profile_default_locale }}
+    open_conext_locale_cookie_key: lang
+    open_conext_locale_cookie_domain: .{{ base_domain }}
+    open_conext_locale_cookie_expires_in: "+2 months"
+    open_conext_locale_cookie_http_only: false
+    open_conext_locale_cookie_secure: true
+
+    saml_sp_publickey: '{{ profile_saml_sp_publickey }}'
+    saml_sp_privatekey: '{{ profile_saml_sp_privatekey }}'
+    saml_metadata_publickey: '{{ profile_saml_metadata_publickey }}'
+    saml_metadata_privatekey: '{{ profile_saml_metadata_privatekey }}'
+
+    saml_remote_idp_entity_id: '{{ engine_profile_idp_entityid }}'
+    saml_remote_idp_sso_url: '{{ engine_profile_idp_sso_url }}'
+    saml_remote_idp_host: '{{ engine_domain }}'
+    saml_remote_idp_certificate_file: '{{ engine_profile_idp_certificate }}'
+
+    engineblock_api_base_url: 'https://{{ engine_api_domain }}/'
+    engineblock_api_username: '{{ engine_api_profile_user }}'
+    engineblock_api_password: '{{ engine_api_profile_password }}'
+    engineblock_api_verify_ssl: {{ engine_api_verify_ssl }}
+
+    user_lifecycle_enabled: {{ profile_lifecycle_enabled }}
+    user_lifecycle_api_base_url: '{{ lifecycle_url }}'
+    user_lifecycle_api_username: '{{ lifecycle_api_username }}'
+    user_lifecycle_api_password: '{{ lifecycle_api_password }}'
+    user_lifecycle_api_verify_ssl: true
+
+    attribute_aggregation_api_base_url: 'https://aa.{{ base_domain }}/aa/api/internal/'
+    attribute_aggregation_api_username: '{{ engine_attribute_aggregation_username }}'
+    attribute_aggregation_api_password: '{{ engine_attribute_aggregation_password }}'
+    attribute_aggregation_api_verify_ssl: true
+
+    # orcid aa attribute settings for orcid
+    attribute_aggregation_orcid_logo_path: 'build/images/orcid.png'
+    attribute_aggregation_orcid_connect_url: 'https://link.{{ base_domain }}/orcid?redirectUrl=https://profile.{{ base_domain }}/my-connections'
+
+    mailer_url: 'smtp://{{ smtp_server }}:25'
+
+    attribute_support_email_from: '{{ noreply_email }}'
+    attribute_support_email_to: '{{ engine_idp_debugging_email_address }}'
+
+    # The email addresses used for sending the information request email message
+    information_request_email_from: '{{ noreply_email }}'
+    information_request_email_to: '{{ profile_info_request_email }}'
+
+    remove_consent_enabled: false
+
+    # Session handler override
+    # Change to the following to use the database to store sessions:
+    #session_handler: 'Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler'
+    session_handler: ~
+    # Database settings when using a db to store sessions. Unused in the default setup
+    dsn: mysql://profilerw:secret@localhost/profile?serverVersion=5.7
+
+    # which context class ref is used for the saml bundle
+    authentication_context_class_ref: ~

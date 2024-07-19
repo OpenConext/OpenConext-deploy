@@ -1,9 +1,0 @@
----
-- name: restart manage
-  systemd:
-    name: manage
-    state: restarted
-    daemon_reload: yes
-
-- name: update_ca_trust
-  command: update-ca-trust

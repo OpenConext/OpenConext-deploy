@@ -1,93 +1,87 @@
-- debug:
-    msg: "{{ tiqr_statestorage }}"
+- name: Include docker vars
+  ansible.builtin.include_vars: docker.yml
 
-- name: Install Apache and FPM config
-  include_role:
-    name: apachefpm
+- name: Add group {{ appname }}
+  ansible.builtin.group:
+    name: "{{ appname }}"
+    state: present
+  register: tiqr_guid
 
-- name: Install the symfony app
-  include_role:
-    name: stepupapp
+- name: Add user {{ appname }}
+  ansible.builtin.user:
+    name: "{{ appname }}"
+    group: "{{ appname }}"
+    createhome: no
+    state: present
+  register: tiqr_uid
+
+- name: Create some dirs
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{ current_release_config_dir_name }}"
+    - "{{ current_release_appdir }}/public/images"
 
 - name: Install images
-  include_role:
+  ansible.builtin.include_role:
     name: stepupapp
     tasks_from: copyimages
 
-- name: Install the GSSP certificates
-  include_role:
+- name: Install GSSP IdP key and certificates
+  ansible.builtin.include_role:
     name: stepupapp
     tasks_from: copygsspidpcerts
 
 - name: Write tiqr APNS certificate
-  copy:
+  ansible.builtin.copy:
     content: "{{ tiqr_apns_pemfile }}"
     dest: "{{ current_release_config_file_dir_name }}/apns.pem"
     owner: "{{ appname }}"
-    mode: 0400
+    mode: "0400"
   when: tiqr_apns_pemfile is defined
 
 - name: Write tiqr Firebase service json
   copy:
-    src: "{{ inventory_dir }}/secrets/tiqr-demo.json"
+    src: "{{ inventory_dir }}/secrets/stepup/tiqr-demo.json"
     dest: "{{ current_release_config_file_dir_name }}/tiqr-demo.json"
     owner: "{{ appname }}"
     mode: 0400
   when: tiqr_firebase_credentialsfile is defined
 
 - name: Place parameters.yml
-  template:
+  ansible.builtin.template:
     src: parameters.yaml.j2
     dest: "{{ current_release_config_dir_name }}/parameters.yaml"
-    mode: 0640
+    mode: "0640"
     owner: root
     group: "{{ appname }}"
   notify:
-    - clear cache {{ appname }}
-    - reload php72-fpm {{ appname }}
+    - restart tiqr
 
-- name: Place .env file
-  template:
-    src: env.j2
-    dest: "{{ current_release_appdir }}/.env.local"
-    mode: 0640
-    owner: root
-    group: "{{ appname }}"
-  notify: clear cache {{ appname }}
-
-- name: Install assets
-  command: php72 {{ current_release_appdir }}/bin/console assets:install
-
-- name: Activate the symlink
-  file:
-    src: "{{ current_release_appdir }}"
-    dest: "{{ current_release_symlink }}"
-    state: link
-
-- name: Put tiqr configuration script in /root/
-  template:
-    src: "{{ item }}.j2"
-    dest: "/root/{{ item }}"
-    group: root
-    owner: root
-    mode: "0500"
-  with_items:
-  - "01-tiqr-db_init.sh"
-
-- name: Put tiqr keyserver migration script in /root/
-  template:
-    src: "{{ item }}.j2"
-    dest: "/root/{{ item }}"
-    group: root
-    owner: root
-    mode: "500"
-  with_items:
-  - "02-tiqr-migrate-to-keyserver.php"
-  when: keyserver_consumerkey is defined
-
-- meta: flush_handlers
-
-- name: Include post installation tasks
-  include_role:
-    name: stepupapp
-    tasks_from: postinstall
+- name: Create the container
+  community.docker.docker_container:
+    name: "{{ appname }}"
+    image: ghcr.io/openconext/stepup-tiqr/stepup-tiqr:{{ tiqr_version }}
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.tiqr.rule: "Host(`tiqr.{{ base_domain }}`)"
+      traefik.http.routers.tiqr.tls: "true"
+      traefik.enable: "true"
+    env:
+      APACHE_UID: "#{{ tiqr_uid.uid }}"
+      APACHE_GUID: "#{{ tiqr_guid.gid }}"
+      APP_ENV: prod
+    mounts:
+      - source: /opt/openconext/tiqr/public/images/header-logo.png
+        target: /var/www/html/public/build/images/logo/header-logo.png
+        type: bind
+      - source: /opt/openconext/tiqr
+        target: /var/www/html/config/openconext
+        type: bind
