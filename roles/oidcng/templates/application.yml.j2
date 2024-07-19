@@ -23,6 +23,7 @@ keys-cache:
 server:
   # The port to where this Spring Boot application listens to.
   port: 8080
+  forward-headers-strategy: native
   error:
     path: "/error"
   server-header:
