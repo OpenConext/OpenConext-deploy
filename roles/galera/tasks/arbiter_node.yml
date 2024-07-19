@@ -10,13 +10,21 @@
   template:
     src: "mariadb.repo.j2"
     dest: "/etc/yum.repos.d/mariadb.repo"
+  when: ansible_os_family == 'RedHat'
 
 - name: Install Galera, rsync
-  yum:
+  ansible.builtin.package:
     name:
       - galera
-      - rsync         # For galera sync
     state: installed
+  when: ansible_os_family == 'RedHat'
+
+- name: Install galera and rsync
+  ansible.builtin.package:
+    name:
+      - galera-arbitrator-4
+    state: present
+  when: ansible_os_family == 'Debian'
 
 - name: Create directory to keep Galera key material
   file:
