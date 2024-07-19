@@ -32,8 +32,9 @@
       traefik.http.routers.spdashboard.rule: "Host(`{{ spdashboard_domain }}`)"
       traefik.http.routers.spdashboard.tls: "true"
       traefik.enable: "true"
+      traefik.port: "8080"
     healthcheck:
-      test: ["CMD", "curl", "--fail" , "http://localhost"]
+      test: ["CMD", "curl", "--fail", "http://localhost"]
       interval: 10s
       timeout: 10s
       retries: 3
