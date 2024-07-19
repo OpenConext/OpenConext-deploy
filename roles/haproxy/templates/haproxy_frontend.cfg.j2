@@ -4,7 +4,6 @@
 # Stats frontend for exporting prometheus metrics
 frontend stats
    bind 127.0.0.1:8404
-   option http-use-htx
    http-request use-service prometheus-exporter if { path /metrics }
 
 
@@ -13,8 +12,8 @@ frontend stats
 # -------------------------------------------------------------------
 frontend internet_ip
 
-    bind {{ haproxy_sni_ip.ipv4 }}:443 ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(True) %} no-tlsv10 no-tlsv11 {% endif %} alpn h2,http/1.1 transparent 
-    bind {{ haproxy_sni_ip.ipv6 }}:443 ssl{% for certs in haproxy_sni_ip.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3{% if haproxy_disable_tls10_and_11 | default(True) %} no-tlsv10 no-tlsv11 {% endif %} alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip.ipv4 }}:443 ssl crt-list /etc/haproxy/maps/certlist.lst ssl crt /etc/haproxy/certs/ no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip.ipv6 }}:443 ssl crt-list /etc/haproxy/maps/certlist.lst ssl crt /etc/haproxy/certs/  no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
     bind {{ haproxy_sni_ip.ipv4 }}:80 transparent
     bind {{ haproxy_sni_ip.ipv6 }}:80 transparent
     # Logging is done in the local_ip backend, otherwise all requests are logged twice
@@ -112,8 +111,8 @@ frontend local_ip
 ## -------------------------------------------------------------------
 frontend internet_restricted_ip
 
-    bind {{ haproxy_sni_ip_restricted.ipv4 }}:443 ssl {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
-    bind {{ haproxy_sni_ip_restricted.ipv6 }}:443 ssl  {% for certs in haproxy_sni_ip_restricted.certs %} crt /etc/pki/haproxy/{{ certs.name }}_haproxy.pem {% endfor %} no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip_restricted.ipv4 }}:443 ssl crt-list /etc/haproxy/maps/certlist.lst ssl crt /etc/haproxy/certs/ no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
+    bind {{ haproxy_sni_ip_restricted.ipv6 }}:443 ssl crt-list /etc/haproxy/maps/certlist.lst ssl crt /etc/haproxy/certs/ no-sslv3 no-tlsv10 no-tlsv11 alpn h2,http/1.1 transparent 
     bind {{ haproxy_sni_ip_restricted.ipv4 }}:80 transparent
     bind {{ haproxy_sni_ip_restricted.ipv6 }}:80 transparent
     # Logging is done in the local_ip_restriced backend, otherwise all requests are logged twice

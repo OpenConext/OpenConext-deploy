@@ -4,21 +4,17 @@
 #---------------------------------------------------------------------
 
 global
-  log         127.0.0.1 len 32768  local2
-  log-send-hostname
+  log         /dev/log len 32768 format local local2
   chroot      /var/lib/haproxy
-  pidfile     /var/run/haproxy.pid
   maxconn     4000
   user        haproxy
   group       haproxy
-  nbproc      1
   ulimit-n    9000
   daemon
   ssl-default-bind-options no-sslv3 no-tls-tickets
-  ssl-default-bind-ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+AESGCM:DH+AES256:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS 
+  ssl-default-bind-ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128
   ssl-default-server-options no-sslv3 no-tls-tickets
-  ssl-default-server-ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+AESGCM:DH+AES256:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS 
-  ssl-dh-param-file /etc/pki/haproxy/ffdhe3072.pem
+  ssl-default-server-ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128
 {% if haproxy_metricbeat %}
   stats socket 127.0.0.1:14567
 {% endif %}

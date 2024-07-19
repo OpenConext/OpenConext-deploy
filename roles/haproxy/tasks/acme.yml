@@ -1,0 +1,33 @@
+---
+- name: Create acme user
+  ansible.builtin.user:
+    name: acme
+    state: present
+    groups: lbops,haproxy
+    append: yes
+
+- name: Install acl package so ansible can run as an unprivilegd user
+  ansible.builtin.package:
+    name: acl
+    state: present
+
+- name: Clone the acme.sh repo
+  ansible.builtin.git:
+    repo: https://github.com/acmesh-official/acme.sh.git
+    dest: /opt/acmesh/
+    update: false
+
+- name: Install the acme.sh script
+  ansible.builtin.shell:
+    cmd: sh /opt/acmesh/acme.sh --install
+    chdir: /opt/acmesh
+    creates: /home/acme/.acme.sh/acme.sh
+  become: true
+  become_user: acme
+
+- name: Create the acme account
+  ansible.builtin.shell:
+    cmd: /home/acme/.acme.sh/acme.sh --register-account  --eab-kid {{ haproxy_acme_eab_kid }} --eab-hmac-key {{ haproxy_acme_eab_hmac_key }} --server https://acme.sectigo.com/v2/GEANTOV
+    creates: /home/acme/.acme.sh/ca/acme.sectigo.com/v2/GEANTOV/account.key
+  become: true
+  become_user: acme
