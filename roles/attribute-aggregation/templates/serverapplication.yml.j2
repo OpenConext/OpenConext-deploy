@@ -48,7 +48,7 @@ spring:
     open-in-view: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://{{ aa.db_host }}/{{ aa.db_name }}
+    url: jdbc:mariadb://{{ aa.db_host }}/{{ aa.db_name }}?socketTimeout=30000
     username: {{ aa.db_user }}
     password: {{ aa.db_password }}
   main:

@@ -19,7 +19,7 @@ server.session-timeout=28800
 
 # PDP database settings
 spring.datasource.driverClassName=org.mariadb.jdbc.Driver
-spring.datasource.url=jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}
+spring.datasource.url=jdbc:mariadb://{{ pdp.db_host }}/{{ pdp.db_name }}?socketTimeout=30000
 spring.datasource.username={{ pdp.db_user }}
 spring.datasource.password={{ pdp.db_password }}
 spring.jpa.open-in-view=True

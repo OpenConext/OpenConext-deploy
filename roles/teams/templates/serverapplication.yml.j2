@@ -94,7 +94,7 @@ spring:
         dialect: org.hibernate.dialect.MariaDB53Dialect
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://{{ teams.db_host }}/{{ teams.db_name }}?useMysqlMetadata=true
+    url: jdbc:mariadb://{{ teams.db_host }}/{{ teams.db_name }}?socketTimeout=30000
     username: {{ teams.db_user }}
     password: "{{ teams.db_password }}"
   mail:
@@ -106,9 +106,10 @@ spring:
     enabled: {{ teams_spring_flyway_enabled }}
     validate-on-migrate: false
     table: schema_version
-  user:
-    name: na
-    password: na
+  security:
+    user:
+      name: na
+      password: na
 
 management:
   health:
