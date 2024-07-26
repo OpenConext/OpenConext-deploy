@@ -1,3 +1,169 @@
 ---
-- name: Exiting since there is no docker support yet
-  meta: end_play
+- name: Include docker vars
+  ansible.builtin.include_vars: docker.yml
+
+- name: Add group {{ appname }}
+  ansible.builtin.group:
+    name: "{{ appname }}"
+    state: present
+  register: middleware_guid
+
+- name: Add user {{ appname }}
+  ansible.builtin.user:
+    name: "{{ appname }}"
+    group: "{{ appname }}"
+    createhome: false
+    state: present
+  register: middleware_uid
+
+- name: Create some dirs
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{ current_release_config_dir_name }}"
+
+- name: Place parameters.yml
+  ansible.builtin.template:
+    src: parameters.yaml.j2
+    dest: "{{ current_release_config_dir_name }}/parameters.yaml"
+    mode: "0640"
+    owner: root
+    group: "{{ appname }}"
+  notify:
+    - restart {{ appname }}
+
+- name: Create the container
+  community.docker.docker_container:
+    name: "{{ appname }}"
+    image: ghcr.io/openconext/stepup-middleware/stepup-middleware:{{ middleware_version }}
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.middleware.rule: "Host(`{{ middleware_vhost_name }}`)"
+      traefik.http.routers.middleware.tls: "true"
+      traefik.enable: "true"
+    env:
+      APACHE_UID: "#{{ middleware_uid.uid }}"
+      APACHE_GUID: "#{{ middleware_guid.gid }}"
+      APP_ENV: prod
+      HTTPD_CSP: ""
+    mounts:
+      - source: /opt/openconext/middleware/parameters.yaml
+        target: /var/www/html/config/legacy/parameters.yaml
+        type: bind
+    healthcheck:
+      test: ["CMD", "curl", "--fail" , "http://localhost/health"  ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    etc_hosts:
+      host.docker.internal: host-gateway
+
+- name: Put middleware configuration scripts in /root/
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/root/{{ item }}"
+    group: "root"
+    owner: "root"
+    mode: "0500"
+  with_items:
+  - "01-middleware-db_migrate.sh"
+  - "06-middleware-bootstrap-sraa-users.sh"
+
+- name: Create /opt/scripts
+  ansible.builtin.file:
+    path: /opt/scripts
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Put middleware config from environment in /opt/scripts
+  ansible.builtin.template:
+    src: "{{ inventory_dir }}/templates/middleware/{{ item }}.j2"
+    dest: "/opt/scripts/{{ item }}"
+    group: "{{ appname }}"
+    owner: "{{ appname }}"
+    mode: "0400"
+  with_items:
+  - "middleware-config.json"
+  - "middleware-whitelist.json"
+  - "middleware-institution.json"
+  tags: 
+    - push_mw_config
+    - push_mw_institution
+    - push_mw_whitelist
+
+- name: Put middleware configuration scripts in /opt/scripts
+  ansible.builtin.template:
+    src: "{{ item}}.j2"
+    dest: "/opt/scripts/{{ item }}"
+    group: "{{ appname }}"
+    owner: root
+    mode: "0550"
+  with_items:
+  - "middleware-push-config.sh"
+  - "middleware-push-whitelist.sh"
+  - "middleware-push-institution.sh"
+
+- name: Create symlinks to middleware configuration scripts in /root
+  ansible.builtin.file:
+    src: "/opt/scripts/{{ item.key }}"
+    dest: "/root/{{ item.value }}"
+    group: "{{ appname }}"
+    owner: root
+    state: link
+    force: true
+  with_dict:
+    "middleware-push-config.sh": "02-middleware-config.sh"
+    "middleware-push-whitelist.sh": "04-middleware-whitelist.sh"
+    "middleware-push-institution.sh": "05-middleware-institution.sh"
+
+# The following push scripts have an additional conditional check on the presence of
+# a tag, so these are only ran when explicitly called. 
+
+- name: Push middleware configuration
+  ansible.builtin.command: /opt/scripts/middleware-push-config.sh
+  run_once: true
+  when:
+    - "'push_mw_config' in ansible_run_tags"
+  tags: 
+    - push_mw_config
+
+- name: Push middleware whitelist
+  ansible.builtin.command: /opt/scripts/middleware-push-whitelist.sh
+  run_once: True
+  when: 
+    - "'push_mw_whitelist' in ansible_run_tags"
+  tags:
+    - push_mw_whitelist
+
+- name: Push middleware institution configuration
+  ansible.builtin.command: /opt/scripts/middleware-push-institution.sh
+  run_once: True
+  when:
+    - "'push_mw_institution' in ansible_run_tags"
+  tags:
+    - push_mw_institution
+
+
+# Middleware migrate identities from CSV
+
+- name: Migrate middleware identities from CSV
+  ansible.builtin.include_tasks: migrate_identities.yml
+  args:
+    apply:
+      tags:
+        - mw_migrate_identities
+  run_once: True
+  when:
+    - "'mw_migrate_identities' in ansible_run_tags"
+  tags:
+    - mw_migrate_identities
