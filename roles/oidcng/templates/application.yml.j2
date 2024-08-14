@@ -50,6 +50,7 @@ certificate_path: file://{{ oidcng_config_dir }}/oidcsaml.crt
 default_acr_value: {{ oidcng.default_acr_value }}
 secure_cookie: true
 oidc_token_endpoint: https://connect.{{ base_domain }}/oidc/token
+device_verification_url: https://connect.{{ base_domain }}/oidc/verify
 environment: {{ oidcng.environment }}
 
 features:
