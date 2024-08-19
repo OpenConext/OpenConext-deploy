@@ -84,6 +84,14 @@
     group: "root"
     mode: "0750"
 
+- name: Place old __cacert_entrypoint.sh script
+  ansible.builtin.copy:
+    src: "__cacert_entrypoint.sh"
+    dest: "/opt/openconext/myconext"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
 - name: Create and start the server container
   community.docker.docker_container:
     name: myconextserver
@@ -92,7 +100,7 @@
     restart_policy: "always"
     state: started
     env:
-      USE_SYSTEM_CA_CERTS: "true"
+      USE_SYSTEM_CA_CERTS: "1"
       TZ: "{{ timezone }}"
     networks:
       - name: "loadbalancer"
@@ -103,8 +111,11 @@
       - source: /opt/openconext/certs/mongoca.crt
         target: /certificates/mongoca.crt
         type: bind
-    entrypoint: /__cacert_entrypoint.sh
-    command: 'java -jar /app.jar -Xmx256M --spring.config.location=./config/'
+      - source: /opt/openconext/myconext/__cacert_entrypoint.sh
+        target: /__cacert_entrypoint.sh
+        type: bind
+    entrypoint: ["sh","/__cacert_entrypoint.sh"]
+    command: ["java" , "-jar" , "/app.jar" , "-Xmx256M" , "--spring.config.location=./config/"]
     etc_hosts:
       host.docker.internal: host-gateway
     healthcheck:
@@ -113,7 +124,6 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-  notify: restart myconextserver
 
 - name: Create the client container
   community.docker.docker_container:
