@@ -80,6 +80,14 @@
   notify:
     - "restart oidcng"
 
+- name: Place old __cacert_entrypoint.sh script
+  ansible.builtin.copy:
+    src: "__cacert_entrypoint.sh"
+    dest: "/opt/openconext/oidcng"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
 - name: Create and start the server container
   community.docker.docker_container:
     name: oidcngserver
@@ -94,8 +102,11 @@
       - source: "{{ oidcng_dir }}"
         target: /config/
         type: bind
-      - source: /opt/openconext/manage/mongoca.pem
+      - source: /opt/openconext/certs/mongoca.crt
         target: /certificates/mongoca.crt
+        type: bind
+      - source: /opt/openconext/oidcng/__cacert_entrypoint.sh
+        target: /__cacert_entrypoint.sh
         type: bind
     command: "java -jar /app.jar -Xmx512m --spring.config.location=./config/"
     etc_hosts:
