@@ -52,6 +52,12 @@ parameters:
 
     remove_consent_enabled: false
 
+    invite_roles_enabled: true
+    invite_api_base_url: 'https://invite.{{ base_domain }}/api/external/'
+    invite_api_username: '{{ invite.profile_user }}'
+    invite_api_password: '{{ invite.profile_secret }}'
+    invite_api_verify_ssl: true
+
     # Session handler override
     # Change to the following to use the database to store sessions:
     #session_handler: 'Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler'
