@@ -17,6 +17,10 @@ entryPoints:
         - {{ engine_trusted_proxy_ip }}
 {% endfor %}
 {% endif %}
+{% if docker_traefik_ldaps %}
+  ldaps:
+    address: ":636"
+{% endif %}
 # Server transport configuration
 serversTransport:
   insecureSkipVerify: true

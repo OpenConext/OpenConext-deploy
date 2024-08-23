@@ -79,8 +79,7 @@
   community.docker.docker_container:
     name: loadbalancer
     image: traefik:latest
-    published_ports:
-      - "0.0.0.0:443:443"
+    published_ports: "{{ docker_traefik_ports }}"
     pull: true
     restart_policy: "always"
     networks:
