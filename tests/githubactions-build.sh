@@ -51,17 +51,18 @@ cat <<-'EOF' > ansible.cfg
 EOF
 
 # Prepare the environment
-echo "Prepping the environment" 
+echo "Prepping the environment"
 mkdir -p environments-external
 /bin/cp -r environments/vm/ environments-external/github
 /bin/mv environments-external/github/group_vars/vm.yml environments-external/github/group_vars/github.yml
 sed -i 's/192.168.66.98/0.0.0.0/g' environments-external/github/group_vars/github.yml
 sed -i 's/192.168.66.99/127.0.0.1/g' environments-external/github/group_vars/github.yml
 sed -i 's/oidc_push_enabled: true/oidc_push_enabled: false/g' environments-external/github/group_vars/github.yml
+sed -i 's/pdp_push_enabled: true/pdp_push_enabled: false/g' environments-external/github/group_vars/github.yml
 # Change the hostname in the inventory
 /bin/cp environments/template/inventory environments-external/github/
 sed -i 's/%env%/github/g' environments-external/github/inventory
-sed -i 's/%target_host%/ansible-test-ga ansible_connection=docker/g' environments-external/github/inventory 
+sed -i 's/%target_host%/ansible-test-ga ansible_connection=docker/g' environments-external/github/inventory
 
 # Create the proper host_vars file
 /bin/cp environments/template/host_vars/template.yml environments-external/github/host_vars/ansible-test-ga.yml
