@@ -85,10 +85,14 @@ spring:
     username: {{ pdp.db_user }}
     password: "{{ pdp.db_password }}"
     driverClassName: org.mariadb.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDB53Dialect
+    open-in-view: false
+  sql:
+    init:
+      continue-on-error: true
   main:
     banner-mode: "off"
-  jpa:
-    open-in-view: false
 
 gui:
   disclaimer:
@@ -108,6 +112,8 @@ management:
   health:
     mail:
       enabled: true
+    db:
+      enabled: {{ manage.pdp_push_enabled }}
   endpoints:
     web:
       exposure:
