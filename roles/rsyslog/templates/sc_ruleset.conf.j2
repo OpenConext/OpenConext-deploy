@@ -10,8 +10,8 @@ $RuleSet {{ item.name }}
 :programname, isequal, "dashboardgui" { action(type="omfile" DynaFile="apache-dashboard-{{ item.name }}") stop }
 :programname, isequal, "dashboardserver" { action(type="omfile" DynaFile="dashboard-{{ item.name }}") stop }
 :programname, isequal, "Apache-EBAPI" { action(type="omfile" DynaFile="apache-eb-api-{{ item.name }}") stop }
-:programname, isequal, "manage" { action(type="omfile" DynaFile="manage-{{ item.name }}") stop }
-:programname, isequal, "Apache-Manage" { action(type="omfile" DynaFile="apache-manage-{{ item.name }}") stop }
+:programname, isequal, "manageserver" { action(type="omfile" DynaFile="manage-{{ item.name }}") stop }
+:programname, isequal, "managegui" { action(type="omfile" DynaFile="apache-manage-{{ item.name }}") stop }
 :programname, isequal, "PDPANALYTICS" { action(type="omfile" DynaFile="pdpanalytics-{{ item.name }}") stop }
 :programname, isequal, "pdpserver" { action(type="omfile" DynaFile="pdp-{{ item.name }}") stop }
 :programname, isequal, "pdpgui" { action(type="omfile" DynaFile="apache-pdp-{{ item.name }}") stop }
@@ -25,9 +25,8 @@ if $programname == "profile" and $msg startswith " {" then { action(type="omfile
 :programname, isequal, "Keepalived_vrrp" { action(type="omfile" DynaFile="keepalived-{{ item.name }}") stop }
 :programname, isequal, "Apache-STATIC" { action(type="omfile" DynaFile="apache-static-{{ item.name }}") stop }
 :programname, isequal, "Apache-METADATA" { action(type="omfile" DynaFile="apache-metadata-{{ item.name }}") stop }
-:programname, isequal, "oidcng" { action(type="omfile" DynaFile="oidcng-{{ item.name }}") stop }
+:programname, isequal, "oidcngserver" { action(type="omfile" DynaFile="oidcng-{{ item.name }}") stop }
 :programname, isequal, "oidcngjson" { action(type="omfile" DynaFile="oidcngjson-{{ item.name }}") stop }
-:programname, isequal, "Apache-oidcng" { action(type="omfile" DynaFile="apache-oidcng-{{ item.name }}") stop }
 :programname, isequal, "oidcplaygroundserver" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}") stop }
 :programname, isequal, "oidcplaygroundgui" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}") stop }
 :programname, isequal, "myconextserver" { action(type="omfile" DynaFile="myconext-{{ item.name }}") stop }
