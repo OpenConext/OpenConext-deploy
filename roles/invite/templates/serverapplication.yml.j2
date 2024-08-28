@@ -156,6 +156,10 @@ manage:
   user: {{ invite.manageuser }}
   password: {{ invite.managesecret }}
   local: False
+  # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
+  # are located. This can also be an absolute file path, e.g. file:///opt/openconext/oidc-playground/manage
+  staticManageDirectory: classpath:/manage
+  #  staticManageDirectory: file:///usr/local/etc/manage
 
 springdoc:
   pathsToMatch: "/api/external/v1/**"
