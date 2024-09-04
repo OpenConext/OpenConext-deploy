@@ -140,6 +140,11 @@ external-api-configuration:
       password: "{{ invite.profile_secret }}"
       scopes:
         - profile
+    -
+      username: {{ invite.sp_dashboard_user }}
+      password: "{{ invite.sp_dashboard_secret }}"
+      scopes:
+        - sp_dashboard
 
 voot:
   group_urn_domain: "{{ invite.group_urn_domain }}"
