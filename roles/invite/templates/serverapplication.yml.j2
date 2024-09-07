@@ -112,7 +112,7 @@ config:
   past-date-allowed: {{ invite.past_date_allowed }}
   eduid-idp-schac-home-organization: {{ invite.eduid_idp_schac_home_organization }}
 
-# We don't encode in-memory passwords, so we need to prefix them with {noop}
+# We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
 external-api-configuration:
   remote-users:
     -

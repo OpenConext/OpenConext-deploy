@@ -120,7 +120,7 @@ sms:
 
 tiqr_configuration: "file:///config/tiqr.configuration.yml"
 
-# We don't encode in-memory passwords, so we need to prefix them with {noop}
+# We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
 external-api-configuration:
   remote-users:
     -
