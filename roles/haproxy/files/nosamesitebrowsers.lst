@@ -1,8 +1,8 @@
-Version\/.* Safari\/
 Chrom(e|ium)\/(5[1-9]|6[0-6])
 UCBrowser
 iPhone OS 12_
 iPad; CPU OS 12_
 Outlook-iOS
 \(Macintosh; Intel Mac OS X 10_14(_\d|)\) AppleWebKit\/[\.\d]+ \(KHTML, like Gecko\)$
+\(Macintosh; Intel Mac OS X 10_14(_\d+|)\) AppleWebKit/[.\d]+ \(KHTML, like Gecko\) Version\/.* Safari\/
 ownCloud-iOS
