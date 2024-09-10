@@ -82,18 +82,35 @@ then
   ENV=dev vagrant up
 fi
 
-
 # run ansible
 if [ $env = "vm" ] || [ $env = "template" ]
 then
-        echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=$environment_dir\" $@"
-        ansible-playbook -i "$inventory" -u "$user" "$playbook" --extra-vars="secrets_file=$secret" -e environment_dir="$environment_dir" $@
+        cmd=$(cat <<-EOF
+	  ansible-playbook -i "$inventory" -u "$user" "$playbook"
+                           --extra-vars="secrets_file=$secret"
+                           --extra-vars="environment_dir=$environment_dir"
+                           $@
+	EOF
+)
 elif [ $env = "devvm" ]
 then
-	echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret environment_dir=\$environment_dir @environments/vm/group_vars/dev.yml\" $@"
-        ansible-playbook -i "$inventory" -u "$user" "$playbook" --extra-vars="secrets_file=$secret" -e environment_dir="$environment_dir" -e "@environments/vm/group_vars/dev.yml" $@
+        cmd=$(cat <<-EOF
+          ansible-playbook -i "$inventory" -u "$user" "$playbook"
+	                   --extra-vars="secrets_file=$secret"
+                           --extra-vars="environment_dir=$environment_dir"
+	                   --extra-vars="@environments/vm/group_vars/dev.yml"
+                           $@
+	EOF
+	)
 else
-	echo "executing: ansible-playbook -i \"$inventory\" -u \"$user\"  \"$playbook\" --extra-vars=\"secrets_file=$secret\" environment_dir=\"$environment_dir\" $@"
-        ansible-playbook -i "$inventory" -u "$user"  "$playbook" --extra-vars=secrets_file="$secret" -e environment_dir="$environment_dir" $@
+        cmd=$(cat <<-EOF
+	  ansible-playbook -i $inventory -u $user  $playbook
+                           --extra-vars=secrets_file=$secret
+                           --extra-vars=environment_dir=$environment_dir
+                           $@
+	EOF
+	)
 fi
+echo "executing $cmd" | tr -d "\n" | tr -s ' '
+$cmd
 
