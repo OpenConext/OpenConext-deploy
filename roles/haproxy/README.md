@@ -87,6 +87,12 @@ certs: A list of certificates that you use for https. That list contains these p
  key_content: You can add your https key in this parameter, and add it to your secrets. See environments/vm/secrets/vm.yml for an example
  crt_name: The certificate is placed in your environments directory: In files/certs/. The filename should match "crt_name"
 
+## Sectigo ACME certificates
+Certificates can also be automatically obtained and renewed using the ACME protocol. Currently Sectigo is hardcoded. The method used to authenticate is external account binding. For it to work you need to create a Sectigo EAB account, and assign the domains that you need in the certificate.
+This roles installs acme.sh, which takes care of the certificate process. acme.sh is chosen since it has native Haproxy support: It will automatically add the certificate to haproxy and loads it into Haproxy using the admin socket. 
+The SAN domains that are added to the certificate are automatically resolved from the haproxy_applications configurable parameter. For each backend it finds the vhost_name and adds it to the list. The "hostname" attribute in the haproxy_redirects configurable parameter is also added to the list. acme.sh installs a cronjob that checks every day if the certificate needs to be renewed. The default period after which the certificate is renewed is 60 days.  
+
+
 ## Rate limiting
 The frontend has a limit that is configurable for the amount of requests per 10s. The rationale is that you want to stop sudden bursts of requests fired by clients, and you want to be quick enough to block it, before your backends are saturated. The default is 1000 requests per 10s. In our logs, we observed some NAT gateways of larger instutitions that were able to generate more than 500 legitimate requests per 10s. All rates above 1000 per 10s seemed to be coming from bots, scrapers, or misbehaving clients.
 If you want to exclude ip's (either in cidr notation, or single ip addresses) from the limit, you can add them to your configuration under ```haproxy_allowlistips```. Suppose you want to put the ip address 1.1.1.1 and the ip addres 2.2.2.2 to the allowlist, you can do so by putting the following in your environment:
