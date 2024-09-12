@@ -1,7 +1,11 @@
 ---
+- name: 
+  ansible.builtin.set_fact:
+    haproxy_ssl_hosts: "{{ (((haproxy_applications | map(attribute='vhost_name') | list) + (haproxy_redirects | map(attribute='hostname') | list)) | unique) | join (' -d ') }}"
+
 - name: Install the certificates using acme
   ansible.builtin.shell:
-    cmd: "/home/acme/.acme.sh/acme.sh --issue --stateless --keylength 2048  -d {{ base_domain }} {% for application in haproxy_applications %} -d {{ application.vhost_name }}  {% endfor %} --server https://acme.sectigo.com/v2/GEANTOV"
+    cmd: "/home/acme/.acme.sh/acme.sh --issue --stateless --keylength 2048  -d {{ base_domain }} -d {{ haproxy_ssl_hosts }} --server https://acme.sectigo.com/v2/GEANTOV"
   become_user: acme
   become: true
 
@@ -21,7 +25,7 @@
   ansible.builtin.wait_for:
     port: 443
     delay: 5      
-    host: "{{ haproxy_sni_ip_ipv4 }}"
+    host: "{{ haproxy_sni_ip.ipv4 }}"
 
 - name: Deploy the certificates to haproxy while running, ensuring that when updating certs it will hot reload haproxy
   ansible.builtin.shell:
