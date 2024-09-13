@@ -83,6 +83,11 @@ cron:
   metadata-resolver-fixed-rate-milliseconds: 86_400_000
   metadata-resolver-url: "https://metadata.{{ base_domain }}/idps-metadata.xml"
 
+myconext:
+  uri: "https://login.{{ myconext_base_domain }}/myconext/api/invite/provision-eduid"
+  username: invite
+  password: "{{ myconext_api_invite_password }}"
+
 oidcng:
   discovery-url: "https://connect.{{ base_domain }}/oidc/.well-known/openid-configuration"
   introspect-url: "https://connect.{{ base_domain }}/oidc/introspect"
