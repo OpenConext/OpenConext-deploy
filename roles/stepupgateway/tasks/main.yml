@@ -133,3 +133,4 @@
       - source: /opt/openconext/gateway/
         target: /var/www/html/config/openconext
         type: bind
+  register: gatewaycontainer

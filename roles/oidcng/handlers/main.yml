@@ -1,6 +1,7 @@
 ---
 - name: "restart oidcng"
   community.docker.docker_container:
-    name: dashboardserver
+    name: oidcngserver
     state: started
     restart: true
+  when: oidcngservercontainer is success and oidcngservercontainer is not change

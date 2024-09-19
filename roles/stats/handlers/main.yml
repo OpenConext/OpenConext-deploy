@@ -3,10 +3,11 @@
     name: statsserver
     state: started
     restart: true
+  when: statsservercontainer is success and statsservercontainer is not change
+
 
 - name: restart statsgui
   community.docker.docker_container:
     name: statsgui
     state: started
     restart: true
-

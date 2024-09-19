@@ -8,4 +8,8 @@
     state: reloaded
 
 - name: restart gateway
-  command: docker restart gateway
+  community.docker.docker_container:
+    name: gateway
+    state: started
+    restart: true
+  when: gatewaycontainer is success and gatewaycontainer is not change

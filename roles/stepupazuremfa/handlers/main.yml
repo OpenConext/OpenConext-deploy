@@ -12,3 +12,4 @@
     name: azuremfa
     state: started
     restart: true
+  when: azuremfacontainer is success and azuremfacontainer is not change

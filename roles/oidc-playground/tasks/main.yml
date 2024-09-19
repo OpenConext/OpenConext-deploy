@@ -53,7 +53,7 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-  notify: restart oidc-playground-docker
+  register: oidcplaygroundservercontainer
 
 - name: Create the gui container
   community.docker.docker_container:
@@ -92,7 +92,7 @@
 #     entity_type: oauth20_rs
 #
 # - name: Include the role manage_provision_entities to provision oidc-playground client to Manage
-#   include_role: 
+#   include_role:
 #     name: manage_provision_entities
-#   vars: 
+#   vars:
 #     entity_type: oidc10_rp

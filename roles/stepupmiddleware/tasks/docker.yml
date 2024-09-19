@@ -65,6 +65,7 @@
       start_period: 10s
     etc_hosts:
       host.docker.internal: host-gateway
+  register: middlewarecontainer
 
 - name: Put middleware configuration scripts in /root/
   ansible.builtin.template:
@@ -96,7 +97,7 @@
   - "middleware-config.json"
   - "middleware-whitelist.json"
   - "middleware-institution.json"
-  tags: 
+  tags:
     - push_mw_config
     - push_mw_institution
     - push_mw_whitelist
@@ -127,20 +128,20 @@
     "middleware-push-institution.sh": "05-middleware-institution.sh"
 
 # The following push scripts have an additional conditional check on the presence of
-# a tag, so these are only ran when explicitly called. 
+# a tag, so these are only ran when explicitly called.
 
 - name: Push middleware configuration
   ansible.builtin.command: /opt/scripts/middleware-push-config.sh
   run_once: true
   when:
     - "'push_mw_config' in ansible_run_tags"
-  tags: 
+  tags:
     - push_mw_config
 
 - name: Push middleware whitelist
   ansible.builtin.command: /opt/scripts/middleware-push-whitelist.sh
   run_once: True
-  when: 
+  when:
     - "'push_mw_whitelist' in ansible_run_tags"
   tags:
     - push_mw_whitelist

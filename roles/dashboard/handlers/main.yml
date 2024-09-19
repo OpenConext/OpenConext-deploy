@@ -3,3 +3,4 @@
     name: dashboardserver
     state: started
     restart: true
+  when: dashboardservercontainer is success and dashboardservercontainer is not change

@@ -3,4 +3,4 @@
     name: teamsserver
     state: started
     restart: true
-
+  when: teamsserverontainer is success and teamsserverontainer is not change

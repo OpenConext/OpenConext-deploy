@@ -56,6 +56,8 @@
       - source: /opt/openconext/lifecycle
         target: /var/www/html/config/openconext
         type: bind
+  register: lifecyclecontainer
+
 
 #- name: Create daily cronjob
   #  cron:

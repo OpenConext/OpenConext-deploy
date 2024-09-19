@@ -12,3 +12,4 @@
     name: selfservice
     state: started
     restart: true
+  when: selfservicecontainer is success and selfservicecontainer is not change

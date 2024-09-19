@@ -58,8 +58,8 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-  notify: restart pdpserver
-
+  register: pdpservercontainer
+    
 - name: Create the gui container
   community.docker.docker_container:
     name: pdpgui

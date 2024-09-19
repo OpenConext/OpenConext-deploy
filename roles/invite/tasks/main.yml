@@ -78,6 +78,8 @@
       timeout: 10s
       retries: 3
       start_period: 10s
+  register: inviteservercontainer
+
 
 - name: Create the client container
   community.docker.docker_container:
