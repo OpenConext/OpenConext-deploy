@@ -21,16 +21,12 @@ server:
     max-http-header-size: 20000
 
 springdoc:
-  pathsToMatch:
-    - "/api/remote-creation/**"
-    - "/myconext/api/invite/**"
-    - "/mobile/**"
+  pathsToMatch: "/mobile/**"
   api-docs:
-    path: "/myconext/api/api-docs"
+    path: "/myconext/api/mobile/api-docs"
     enabled: true
-    # resolves to https://login.test2.eduid.nl/myconext/api/swagger-ui/index.html
   swagger-ui:
-    path: "/myconext/api/"
+    path: "/myconext/api/mobile/api-ui.html"
     operationsSorter: method
     enabled: true
 
@@ -52,14 +48,19 @@ schac_home_organization: eduid.nl
 cron:
   node-cron-job-responsible: {{ myconext_cronjobmaster }}
   token-cleaner-expression: "0 0/15 * * * *"
-  manage-initial-delay-milliseconds: 15000
-  manage-fixed-rate-milliseconds: 300_000
+  service-name-resolver-initial-delay-milliseconds: 120_000
+  service-name-resolver-fixed-rate-milliseconds: 43_200_000
+  metadata-resolver-initial-delay-milliseconds: 1
+  metadata-resolver-fixed-rate-milliseconds: 86_400_000
+  metadata-resolver-url: "https://metadata.surfconext.nl/idps-metadata.xml"
 
 manage:
   username: myconext
   password: "{{ manage_myconext_secret }}"
   base_url: "https://manage.{{ base_domain }}"
   enabled: True
+  # Can also be a https url
+  fallback_url: "classpath:metadata/sp-names.json"
 
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
@@ -83,6 +84,8 @@ feature:
   webauthn: {{ myconext.feature_webauthn }}
   warning_educational_email_domain: {{ myconext.feature_warning_educational_email_domain }}
   connections: {{ myconext.feature_show_connections }}
+  # Do we allow the account linking to take place with the accounting IdP, e.g. add extra button in IdP link screen
+  use_external_validation: {{ myconext.feature_use_external_validation }}
   # Do we deny emails that are known Disposable Email Providers
   deny_disposable_email_providers: {{ myconext.feature_deny_disposable_email_providers }}
   use_deny_allow_list:
@@ -96,11 +99,6 @@ feature:
   default_remember_me: True
   # Does the SAMLIdpService expects authn requests to be signed
   requires_signed_authn_request: False
-  # Do we support ID verify
-  id_verify: {{ myconext.feature_id_verify}}
-  # Do we support the remote creation API (e.g. for studielink)
-  remote_creation_api: {{ myconext.feature_remote_creation_api }}
-
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
@@ -121,37 +119,19 @@ sms:
 
 tiqr_configuration: "file:///config/tiqr.configuration.yml"
 
-# We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
-external-api-configuration:
-  remote-users:
-    -
-      username: aa
-      password: "{{ myconext_api_attribute_aggregation_password }}"
-      scopes:
-        - attribute-aggregation
-        - system
-    -
-      username: oidcng
-      password: "{{ myconext_api_attribute_manipulation_password }}"
-      scopes:
-        - attribute-manipulation
-    -
-      username: studielink
-      password: "{{ myconext_api_studielink_password }}"
-      scopes:
-        - remote-creation
-      institutionGUID: ec9d6d75-0d11-e511-80d0-005056956c1a
-      schac_home: studielink.nl
-    -
-      username: invite
-      password: "{{ myconext_api_invite_password }}"
-      scopes:
-        - invite
+
+attribute_aggregation:
+  user: aa
+  password:  {{ myconext_api_attribute_aggregation_password }}
+
+attribute_manipulation:
+  user: oidcng
+  password:  {{ myconext_api_attribute_manipulation_password }}
 
 oidc-token-api:
   token-url: https://connect.{{ base_domain }}/tokens
   user: eduid
-  password: "{{ oidcng_api_tokens_eduid_password }}"
+  password: {{ oidcng_api_tokens_eduid_password }}
   enabled: {{ oidcng.token_api_enabled }}
 
 oidc:
@@ -173,11 +153,11 @@ linked_accounts:
 account_linking_context_class_ref:
   linked_institution: https://eduid.nl/trust/linked-institution
   validate_names: https://eduid.nl/trust/validate-names
-  validate_names_external: https://eduid.nl/trust/validate-names-external
   affiliation_student: https://eduid.nl/trust/affiliation-student
   profile_mfa: https://refeds.org/profile/mfa
 
 account_linking:
+  idp_external_validation_entity_id: {{ myconext.idp_external_validation_entity_id }}
   myconext_sp_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
 
 eduid_api:
@@ -192,16 +172,6 @@ geo_location:
   external_url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license_key}&suffix=tar.gz"
   download_directory: "/config/geo2lite"
 
-# Signicat configuration
-verify:
-  client_id: {{ myconext_verify_client_id }}
-  secret: {{ myconext_verify_secret }}
-  base_uri: {{ myconext.verify_base_uri }}
-  sp_verify_redirect_url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/verify/redirect
-  idp_verify_redirect_url: https://login.{{ myconext_base_domain }}/myconext/api/idp/verify/redirect
-  mobile_verify_redirect_url: https://mijn.{{ myconext_base_domain }}/myconext/api/mobile/verify/redirect
-  issuers_path: "classpath:idin/issuers.json"
-
 spring:
   data:
     mongodb:
@@ -213,17 +183,14 @@ spring:
   main:
     banner-mode: "off"
 
-# We disable all endpoints except health for the load-balancer and info for git information.
 management:
   health:
     mail:
       enabled: true
-      show-details: always
   info:
     enabled: true
     git:
       mode: full
-  # We disable all endpoints except health for the load-balancer and info for git information.
   endpoints:
     web:
       exposure:
