@@ -12,3 +12,4 @@
     name: ra
     state: started
     restart: true
+  when: racontainer is success and racontainer is not change

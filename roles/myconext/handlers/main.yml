@@ -3,3 +3,4 @@
     name: myconextserver
     state: started
     restart: true
+  when: myconextservercontainer is success and myconextservercontainer is not change

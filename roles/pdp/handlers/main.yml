@@ -3,3 +3,4 @@
     name: pdpserver
     state: started
     restart: true
+  when: pdpservercontainer is success and pdpservercontainer is not change

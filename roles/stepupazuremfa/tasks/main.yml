@@ -76,3 +76,4 @@
       - source: /opt/openconext/azuremfa
         target: /var/www/html/config/openconext
         type: bind
+  register: azuremfacontainer

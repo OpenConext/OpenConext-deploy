@@ -12,3 +12,4 @@
     name: middleware
     state: started
     restart: true
+  when: middlewarecontainer is success and middlewarecontainer is not change

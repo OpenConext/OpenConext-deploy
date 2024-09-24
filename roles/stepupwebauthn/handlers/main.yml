@@ -12,3 +12,4 @@
     name: webauthn
     state: started
     restart: true
+  when: webauthncontainer is success and webauthncontainer is not change

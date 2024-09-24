@@ -3,6 +3,7 @@
     name: inviteserver
     state: started
     restart: true
+  when: inviteservercontainer is success and inviteservercontainer is not change
 
 - name: restart inviteprovisioningmock
   community.docker.docker_container:

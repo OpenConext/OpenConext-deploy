@@ -3,3 +3,4 @@
     name: manageserver
     state: started
     restart: true
+  when: manageservercontainer is success and manageservercontainer is not change

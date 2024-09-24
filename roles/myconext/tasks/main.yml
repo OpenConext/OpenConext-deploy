@@ -14,7 +14,7 @@
     owner: root
     group: root
     mode: "0644"
-    
+
 - name: Create directory to keep configfiles
   ansible.builtin.file:
     dest: "/opt/openconext/myconext"
@@ -124,6 +124,8 @@
       timeout: 10s
       retries: 3
       start_period: 10s
+  register: myconextservercontainer
+
 
 - name: Create the client container
   community.docker.docker_container:
@@ -191,4 +193,3 @@
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_for_idp }}"
       HTTPD_SERVERNAME: "login.{{ myconext_base_domain }}"
-

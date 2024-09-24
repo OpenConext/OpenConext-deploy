@@ -85,3 +85,4 @@
       - source: /opt/openconext/tiqr
         target: /var/www/html/config/openconext
         type: bind
+  register: tiqrcontainer

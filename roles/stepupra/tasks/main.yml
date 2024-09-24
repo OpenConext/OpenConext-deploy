@@ -79,3 +79,4 @@
       - source: /opt/openconext/ra
         target: /var/www/html/config/openconext
         type: bind
+  register: racontainer

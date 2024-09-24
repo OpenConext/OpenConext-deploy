@@ -3,3 +3,4 @@
     name: oidcplaygroundserver
     state: started
     restart: true
+  when: oidcplaygroundservercontainer is success and oidcplaygroundservercontainer is not change

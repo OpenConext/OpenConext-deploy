@@ -5,7 +5,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0750
+    mode: "0750"
   with_items:
     - "/opt/openconext/manage/metadata_configuration"
     - "/opt/openconext/manage/metadata_templates"
@@ -92,7 +92,6 @@
       - source: /opt/openconext/manage/__cacert_entrypoint.sh
         target: /__cacert_entrypoint.sh
         type: bind
-
     command: "java -jar /app.jar -Xmx512m --spring.config.location=./config/"
     etc_hosts:
       host.docker.internal: host-gateway
@@ -114,6 +113,7 @@
       timeout: 10s
       retries: 3
       start_period: 10s
+  register: manageservercontainer
 
 - name: Create the gui container
   community.docker.docker_container:

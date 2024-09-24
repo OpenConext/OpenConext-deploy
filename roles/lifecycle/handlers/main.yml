@@ -4,3 +4,4 @@
     name: lifecycle
     state: started
     restart: true
+  when: lifecycleservercontainer is success and lifecycleservercontainer is not change

@@ -45,6 +45,7 @@
       - source: /dev/log
         target: /dev/log
         type: bind
+  register: statsservercontainer
 
 - name: Create and start the guicontainer
   community.docker.docker_container:

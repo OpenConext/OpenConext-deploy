@@ -45,7 +45,7 @@
     src: oidc_saml_mapping.json
     dest: "{{ oidcng_dir }}"
     owner: "root"
-    group: "root"  
+    group: "root"
     mode: "0640"
   notify:
     - "restart oidcng"
@@ -136,6 +136,7 @@
       traefik.http.routers.oidcng.middlewares: oidcngmw@docker
       traefik.http.middlewares.oidcngmw.replacepathregex.regex: "^/.well-known/openid-configuration"
       traefik.http.middlewares.oidcngmw.replacepathregex.replacement: "/oidc/.well-known/openid-configuration"
+  register: oidcngservercontainer
 
 
 
