@@ -3,4 +3,4 @@
     name: aaserver
     state: started
     restart: true
-  when: attribute-aggregationservercontainer is success and attribute-aggregationservercontainer is not change
+  when: aaservercontainer is success and attribute-aggregationservercontainer is not change
