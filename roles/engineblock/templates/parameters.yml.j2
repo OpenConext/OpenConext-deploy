@@ -230,6 +230,8 @@ parameters:
     feature_enable_sso_session_cookie: {{ engine_feature_enable_sso_session_cookie | bool | to_json }}
     feature_enable_consent: {{ engine_feature_enable_consent | bool | to_json }}
     feature_stepup_sfo_override_engine_entityid: {{ engine_feature_stepup_override_entityid | bool | to_json }}
+    feature_enable_idp_initiated_flow: {{ engine_feature_idp_initiated_flow | bool | to_json }}
+
     ##########################################################################################
     ## PROFILE SETTINGS
     ##########################################################################################
@@ -297,3 +299,13 @@ parameters:
     # The time the cookie expires. This is a timestamp in number of seconds since the authentication.
     # If set to 0 the cookie will expire at the end of the session (when the browser closes).
     sso_session_cookie_max_age: 0
+
+    ##########################################################################################
+    ## Authentication log enrichment
+    ##########################################################################################
+    # When a user successfully authenticates and additional logging to the authentication log is desired, the following
+    # parameter can be used to define a mapping of attributes that will be used to enrich the authentication log.
+    # A (list) mapping is for example <attributeLabel>: <attributeName> where the label represents the label that is
+    # used in the authentication log record. The attributeName will be searched in the response attributes and if present
+    # the log data will be enriched. The values of the response attributes are the final values after ARP and Attribute Manipulation.
+    auth.log.attributes: []

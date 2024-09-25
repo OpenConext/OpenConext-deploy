@@ -12,6 +12,7 @@ engine_feature_enable_sso_notification: 0
 engine_feature_enable_sso_session_cookie: 0
 engine_feature_enable_consent: 1
 engine_feature_stepup_override_entityid: 0
+engine_feature_idp_initiated_flow: 1
 
 engine_api_feature_metadata_push: 1
 engine_api_feature_consent_listing: 1
