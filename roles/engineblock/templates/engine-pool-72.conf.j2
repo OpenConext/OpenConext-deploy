@@ -219,7 +219,7 @@ slowlog = /var/log/php-fpm/www-slow.log
 php_admin_value[error_log] = /var/log/php-fpm/engine-error.log
 php_admin_flag[log_errors] = on
 php_admin_value[memory_limit] = {{ engine_fpm_memory }}
-php_admin_value[post_max_size] = 16M
+php_admin_value[post_max_size] = 25M
 
 ; Set session path to a directory owned by process user
 php_value[session.save_handler] = files
