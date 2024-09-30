@@ -126,4 +126,4 @@ management:
     git:
       mode: full
 
-loa_levels: "http://localhost/assurance/loa1.5,http://localhost/assurance/loa2,http://localhost/assurance/loa3"
+loa_levels: {% for loa in stepup_loa_values_supported %}{{ loa }}{{ "," if not loop.last  }}{% endfor %}
