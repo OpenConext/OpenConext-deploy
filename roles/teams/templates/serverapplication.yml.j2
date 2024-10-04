@@ -75,8 +75,8 @@ voot:
   scopes: "{{ teams_manage_provision_oidcrp_scopes }}"
 
 invite:
-  url: "https://invite.{{ base_domain }}/api/teams"
-  user: "{{ invite.teamsuser}}"
+  url: "https://invite.{{ base_domain }}/api/external/v1/teams"
+  user: "{{ invite.teamsuser }}"
   password: "{{ invite.teamssecret }}"
 
 spring:
