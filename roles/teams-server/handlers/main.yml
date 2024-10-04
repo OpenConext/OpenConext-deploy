@@ -1,6 +1,0 @@
----
-- name: restart teams
-  systemd:
-    name: teams
-    state: restarted
-    daemon-reload: yes

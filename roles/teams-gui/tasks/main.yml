@@ -1,7 +1,0 @@
----
-- name: copy virtual host config
-  template:
-    src: "teams.conf.j2"
-    dest: "/etc/httpd/conf.d/teams.conf"
-  notify:
-    - "restart httpd"

@@ -1,4 +1,0 @@
----
-springapp_tcpport: 9197
-springapp_artifact_id: teams-gui
-springapp_version: "{{ teams_gui_version }}"
