@@ -151,3 +151,4 @@
     owner: root
     group: root
     mode: "0644"
+  when: "favicon_present | bool"
