@@ -226,7 +226,7 @@
   mysql_user:
     name: "{{ mariadb_backup_user }}"
     password: "{{ mariadb_backup_password  }}"
-    priv: "*.*:RELOAD,PROCESS,LOCK TABLES,BINLOG MONITOR,CONNECTION ADMIN"
+    priv: "*.*:SELECT,RELOAD,PROCESS,LOCK TABLES,BINLOG MONITOR,CONNECTION ADMIN,SHOW VIEW"
     state: present
     login_user: root
     login_password: "{{ mariadb_root_password }}"
