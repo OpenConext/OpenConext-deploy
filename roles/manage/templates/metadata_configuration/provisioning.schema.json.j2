@@ -137,6 +137,11 @@
           "type": "string",
           "format": "uuid",
           "info": "The institution_guid of a connected IdP for eduID scim provisioning."
+        },
+        "user_wait_time": {
+          "type": "number",
+          "default": 0,
+          "info": "The number of seconds that it takes to create the user account after provisioning."
         }
       },
       "patternProperties": {
