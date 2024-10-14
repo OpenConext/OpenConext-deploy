@@ -108,7 +108,7 @@
       - source: /opt/openconext/oidcng/__cacert_entrypoint.sh
         target: /__cacert_entrypoint.sh
         type: bind
-    command: "java -jar /app.jar -Xmx512m --spring.config.location=./config/"
+    command: "java -jar /app.jar -Xmx{{ oidcng_max_heapsize |default('512m')}} --spring.config.location=./config/"
     etc_hosts:
       host.docker.internal: host-gateway
     env:
