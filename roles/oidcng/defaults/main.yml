@@ -9,6 +9,7 @@ oidcng_idp_metadata_url: https://engine.{{ base_domain }}/authentication/idp/met
 oidcng_base_hostname: connect.{{ base_domain }}
 oidcng_logback_email: true
 oidcng_logback_json: true
+oidcng_device_flow: false
 oidcng_idp_sso_location: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
 oidcng_manage_provision_samlsp_client_id: "https://connect.{{ base_domain }}"
 oidcng_manage_provision_samlsp_name_en: "{{ instance_name }} OIDC Gateway"
@@ -18,3 +19,4 @@ oidcng_manage_provision_samlsp_metadata_url: "https://connect.{{ base_domain }}/
 oidcng_manage_provision_samlsp_sp_cert: "{{ lookup('file', '{{ inventory_dir }}/files/certs/oidc/oidcsaml.crt') | depem }}"
 oidcng_manage_provision_samlsp_sign: "True"
 oidcng_manage_provision_samlsp_trusted_proxy: "True"
+
