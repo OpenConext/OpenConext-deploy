@@ -222,6 +222,18 @@
   changed_when: False
   run_once: True
 
+- name: Check doctrine migrations status
+  shell: php72 app/console doctrine:migrations:status --env={{ engine_apache_symfony_environment }}
+  args:
+    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
+  register: eb_database_migration_status
+  changed_when: False
+  run_once: True
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: eb_database_migration_status
+
 - name: Create the database schema
   command: "php72 app/console doctrine:schema:create -n --env={{ engine_apache_symfony_environment }}"
   args:
