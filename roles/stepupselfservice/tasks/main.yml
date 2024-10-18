@@ -81,4 +81,4 @@
       - source: /opt/openconext/selfservice
         target: /var/www/html/config/openconext
         type: bind
-    register: selfservicecontainer
+  register: selfservicecontainer
