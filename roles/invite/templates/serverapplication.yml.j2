@@ -153,6 +153,10 @@ external-api-configuration:
       password: "{{ invite.sp_dashboard_secret }}"
       scopes:
         - sp_dashboard
+      applications:
+        - manageId: {{ invite.sp_dashboard_manage_id }}
+          manageType: SAML20_SP
+
 
 voot:
   group_urn_domain: "{{ invite.group_urn_domain }}"
