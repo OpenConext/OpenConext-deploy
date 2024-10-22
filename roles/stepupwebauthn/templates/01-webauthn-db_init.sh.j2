@@ -1,7 +1,13 @@
 #!/bin/bash
+#
+#### To run the database init inside the docker :
+# sudo docker cp /root/01-webauthn-db_init.sh webauthn:/
+# sudo docker exec -it webauthn /bin/bash /01-webauthn-db_init.sh
+####
+#
 #overwrite database settings for deploy
 export DATABASE_URL=mysql://{{ database_webauthn_deploy_user }}:{{  mysql_passwords.webauthndeploy }}@{{ webauthn_db_host }}:3306/{{ database_webauthn_name }}
-cd {{ current_release_symlink }}
+cd /var/www/html
 echo "Create database if not exists"
 {{ php_cli }} bin/console doctrine:database:create --if-not-exists
 echo "Create or migrate schema"
