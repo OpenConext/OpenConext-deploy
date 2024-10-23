@@ -16,6 +16,7 @@ else
 fi
 echo "Create or migrate schema"
 /var/www/html/bin/console doctrine:migrations:migrate
+if [ $? -eq 0 ]
 then
     echo "Done!"
 else
