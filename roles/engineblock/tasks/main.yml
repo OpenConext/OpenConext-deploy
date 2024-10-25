@@ -1,300 +1,223 @@
----
-- name: Add group {{ engine_fpm_user }}
-  group:
-    name: "{{ engine_fpm_user }}"
-    state: present
+- name: Include docker vars
+  ansible.builtin.include_vars: docker.yml
 
-- name: Add user {{ engine_fpm_user }}
-  user:
-    name: "{{ engine_fpm_user }}"
-    group: "{{ engine_fpm_user }}"
-    createhome: no
+- name: Add group engine
+  ansible.builtin.group:
+    name: "engine"
     state: present
+  register: engine_guid
 
-- name: Create directory for vhosts to store PHP sessions
-  file:
-    path: "{{ php_session_dir}}/engine"
+- name: Add user engine
+  ansible.builtin.user:
+    name: "engine"
+    group: "engine"
+    createhome: false
+    state: present
+  register: engine_uid
+
+- name: Create some dirs
+  ansible.builtin.file:
     state: directory
-    owner: "{{ engine_fpm_user }}"
+    dest: "{{ item }}"
+    owner: root
     group: root
-    mode: 0770
-
-- name: Install build tools (npm, composer)
-  include_tasks: build.yml
-  when:
-    - "(engine_branch is defined and engine_branch != '') or develop"
-
-- name: Include install-release.yml
-  include_tasks: install-release.yml
-  when:
-    - "(engine_branch is not defined or engine_branch == '') and not develop"
-
-- name: Include install-branch.yml
-  include_tasks: install-branch.yml
-  when:
-    - "(engine_branch is defined and engine_branch != '') and not develop"
-
-- name: Include develop.yml
-  include_tasks: develop.yml
-  when:
-    - develop | bool
-
-- name: Include test.yml
-  include_tasks: test.yml
-  when:
-    - develop | bool
+    mode: "0755"
+  with_items:
+    - "{{ current_release_config_dir_name }}"
+    - "{{ current_release_config_dir_name }}/certs"
+    - "{{ current_release_config_dir_name }}/configs"
+    - "{{ current_release_config_dir_name }}/images"
+    - "{{ current_release_config_dir_name }}/languages"
 
 - name: Place parameters.yml
-  template:
-    src: "{{ item }}.j2"
-    dest: "{{ engine_current_release_symlink }}/app/config/{{ item }}"
-    mode: 0644
-  with_items:
-    - parameters.yml
-  notify:
-    - "restart php72-fpm"
+  ansible.builtin.template:
+    src: parameters.yml.j2
+    dest: "{{ current_release_config_dir_name }}/configs/parameters.yml"
+    mode: "0640"
+    owner: root
+    group: engine
+  notify: restart engine
 
 - name: Check presence of environment specific attributes.json
-  local_action: stat path="{{ inventory_dir }}/files/eb/attributes.json"
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/eb/attributes.json"
   register: attributes_json_present
   become: false
+  delegate_to: localhost
 
 - name: Copy environment specific attributes.json
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/eb/attributes.json"
-    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/application/configs/"
+    dest: "{{ current_release_config_dir_name }}/configs/"
+    mode: "0644"
+    owner: root
+    group: engine
   when:
     attributes_json_present.stat.exists
 
 - name: Check presence of language specific overrides
-  local_action: stat path="{{ inventory_dir }}/files/eb/languages/"
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/eb/languages/"
   register: overrides_present
   become: false
+  delegate_to: localhost
 
 - name: Copy language specific overrides
-  template:
+  ansible.builtin.template:
     src: "{{ item }}"
-    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/languages"
+    dest: "{{ current_release_config_dir_name }}/languages/"
+    owner: root
+    group: engine
+    mode: "0644"
   when: overrides_present.stat.exists
   with_fileglob:
     - "{{ inventory_dir }}/files/eb/languages/*"
   notify:
-    - "restart php72-fpm"
+    - "restart engine"
 
 - name: Check if we have a custom logo
-  local_action: stat path="{{ inventory_dir }}/files/logo.png"
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/logo.png"
   register: customlogo
   become: false
+  delegate_to: localhost
 
 - name: Install environment specific logo
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/logo.png"
-    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/web/images/"
+    dest: "{{ current_release_config_dir_name }}/images/"
+    owner: root
+    group: engine
+    mode: "0644"
   when:
     customlogo.stat.exists
 
 - name: Check if we have a custom favicon
-  local_action: stat path="{{ inventory_dir }}/files/favicon.ico"
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/favicon.ico"
   register: customfavicon
   become: false
+  delegate_to: localhost
 
 - name: Install environment specific favicon
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/favicon.ico"
-    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/web/"
+    dest: "/opt/openconext/common/"
+    owner: root
+    group: root
+    mode: "0644"
   when:
     customfavicon.stat.exists
 
 - name: Check if we have a custom background back image for the feedback page
-  local_action: stat path="{{ inventory_dir }}/files/eb/background-back.svg"
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/eb/background-back.svg"
   register: eb_customfeedbackbackground
   become: false
+  delegate_to: localhost
 
 - name: Install environment specific background back image
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/eb/background-back.svg"
-    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/web/images/"
+    dest: "{{ current_release_config_dir_name }}/images/"
+    owner: root
+    group: engine
+    mode: "0644"
   when:
     eb_customfeedbackbackground.stat.exists
 
 - name: Check if we have a custom background front image for the feedback page
-  local_action: stat path="{{ inventory_dir }}/files/eb/background-front.svg"
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/eb/background-front.svg"
   register: eb_customfeedbackforeground
   become: false
+  delegate_to: localhost
 
 - name: Install environment specific background front image
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/eb/background-front.svg"
-    dest: "{{ openconext_releases_dir }}/OpenConext-engineblock/web/images/"
+    dest: "{{ current_release_config_dir_name }}/images/"
+    owner: root
+    group: engine
+    mode: "0644"
   when:
     eb_customfeedbackforeground.stat.exists
 
 - name: Check if we have a Stepup GW certificate
-  local_action: stat path="{{ inventory_dir }}/files/certs/stepup_gateway.pem"
+  ansible.builtin.stat:
+    path: "{{ inventory_dir }}/files/certs/stepup_gateway.pem"
   register: eb_stepupgwcert
   become: false
+  delegate_to: localhost
 
 - name: Install Stepup GW certificate
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/stepup_gateway.pem"
-    dest: "{{ engine_stepup_gateway_sfo_public_key_file }}"
+    dest: "{{ current_release_config_dir_name }}/certs/"
+    owner: root
+    group: engine
+    mode: "0644"
   when:
     eb_stepupgwcert.stat.exists
 
-- name: Install Apache vhost
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/httpd/conf.d/{{ item }}"
-  with_items:
-    - engine.conf
-    - engine-api.conf
-  notify:
-    - "restart httpd"
+- name: Copy over the engineblock keys
+  ansible.builtin.copy:
+    content: "{{ item.private_key }}"
+    dest: "{{ current_release_config_dir_name }}/certs/{{ item.name }}.key"
+    owner: root
+    group: engine
+    mode: "0440"
+  loop: "{{ engine_key_and_certs }}"
 
-- name: clean up old php-fpm 5.6 config
-  file:
-    path: "/etc/php-fpm.d/engine-pool.conf"
-    state: absent
+- name: Copy engineblock certificates to correct location
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/certs/{{ item.crt_name }}"
+    dest: "{{ current_release_config_dir_name }}/certs/{{ item.name }}.crt"
+    owner: root
+    group: engine
+    mode: "0644"
+  loop: "{{ engine_key_and_certs }}"
 
-- name: php-fpm 72 config
-  template:
-    src: "{{ item }}.j2"
-    dest: "/etc/opt/remi/php72/php-fpm.d/{{ item }}"
-  with_items:
-     - engine-pool-72.conf
-  notify:
-    - "restart php72-fpm"
-
-- name: copy over the engineblock keys
-  copy:
-    content: "{{ engineblock_private_keys[item.key] }}"
-    dest: "{{ item.value.privateFile }}"
-    owner: "{{ engine_fpm_user }}"
-    group: root
-    mode: 0440
-  with_dict: "{{ engine_keys }}"
-
-- name: copy engineblock certificates to correct location
-  copy:
-    src: "{{ inventory_dir }}/files/certs/{{ item.value.publicKey }}"
-    dest: "{{ item.value.publicFile }}"
-  with_dict: "{{ engine_keys }}"
-  when:
-    - not engine_crt_not_in_inventory
-
-- name: copy engineblock certificates to correct location when not located in the inventory dir
-  copy:
-    src: "files/certs/{{ item.value.publicKey }}"
-    dest: "{{ item.value.publicFile }}"
-  with_dict: "{{ engine_keys }}"
-  when:
-    - engine_crt_not_in_inventory | bool
-
-- name: Make the SYMFONY_ENV var available for scripts
-  become: yes
-  lineinfile:
-    dest: "/etc/environment"
-    state: present
-    line: "SYMFONY_ENV={{ engine_apache_symfony_environment }}"
-
-- name: Create EngineBlock test database
-  mysql_db:
-    name: "{{ engine_test_database_name }}"
-    state: present
-  when:
-    - develop | bool
-
-- name: Create EngineBlock test database user
-  mysql_user:
-    name: "{{ engine_test_database_user }}"
-    host: "{{ engine_test_database_host }}"
-    password: "{{ engine_test_database_password }}"
-    priv: "{{ engine_test_database_name }}.*:ALL"
-    state: present
-  when:
-    - develop | bool
-
-- name: Check existence of the eb database
-  shell: php72 app/console doctrine:migrations:status --env={{ engine_apache_symfony_environment }} | grep  "Current Version"  | awk '{print $4 }'
-  args:
-    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  register: eb_database_version
-  changed_when: False
-  run_once: True
-
-- name: Check doctrine migrations status
-  shell: php72 app/console doctrine:migrations:status --env={{ engine_apache_symfony_environment }}
-  args:
-    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  register: eb_database_migration_status
-  changed_when: False
-  run_once: True
-
-- name: Print return information from the previous task
-  ansible.builtin.debug:
-    var: eb_database_migration_status
-
-- name: Create the database schema
-  command: "php72 app/console doctrine:schema:create -n --env={{ engine_apache_symfony_environment }}"
-  args:
-    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  when:
-    - eb_database_version.stdout == '0'
-  run_once: True
-
-- name: Add migration versions to the database
-  command: "php72 app/console doctrine:migrations:version -n --add --all --env={{ engine_apache_symfony_environment }}"
-  args:
-    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  when:
-    - eb_database_version.stdout == '0'
-  run_once: True
-
-- name: Run EngineBlock Doctrine migrations
-  command: "php72 app/console doctrine:migrations:migrate -n --env={{ engine_apache_symfony_environment }}"
-  args:
-    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  register: doctrine_migrations_output
-  changed_when: "'No migrations to execute' not in doctrine_migrations_output.stdout"
-  tags: enginemigrations
-  when:
-    - engine_skip_db_migration is undefined
-  run_once: true
-
-- name: Clear the symfony cache
-  command: "php72 app/console cache:clear --env={{ engine_apache_symfony_environment }} --no-debug"
-  args:
-    chdir: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-  when:
-    - not develop
-  changed_when: false
-
-- name: Make sure cache dir has correct permissions
-  file:
-    path: "{{engine_current_release_symlink}}/app/cache"
-    owner: "{{ engine_fpm_user }}"
-    group: "{{ engine_fpm_user }}"
-    recurse: yes
-  when:
-    - not develop
-  changed_when: False
-
-- name: Make sure log dir has correct permissions
-  file:
-    path: "{{engine_current_release_symlink}}/app/logs"
-    owner: "{{ engine_fpm_user }}"
-    group: "{{ engine_fpm_user }}"
-    recurse: yes
-  when: not develop
-
-# Remove all dirs, but keep the current version and from the rest the most recent one.
-- name: Clean up old releases
-  shell: ls -td {{ openconext_releases_dir }}/OpenConext-engineblock-* | grep -v $(readlink {{ engine_current_release_symlink }}) | tail -n +2 | xargs --no-run-if-empty rm -rv
-  register: clean_engine_releases
-  changed_when: '"removed" in clean_engine_releases.stdout'
-
-# Remove all tarballs, but keep the current version and from the rest the most recent one.
-- name: Clean up old builds
-  shell: ls -td {{ openconext_builds_dir }}/OpenConext-engineblock-* {{ openconext_builds_dir }}/Releases/ | grep -v {{ engine_build_path }} | tail -n +2 | xargs --no-run-if-empty rm -rv
-  register: clean_engine_builds
-  changed_when: '"removed" in clean_engine_builds.stdout'
+- name: Create the container
+  community.docker.docker_container:
+    name: "engineblock"
+    image: ghcr.io/openconext/openconext-engineblock/openconext-engineblock:{{ engine_version }}
+    pull: true
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.engine.rule: "Host(`engine.{{ base_domain }}`)"
+      traefik.http.routers.engine.service: "engineblock"
+      traefik.http.routers.engine.tls: "true"
+      traefik.http.routers.engineapi.rule: "Host(`engine-api.{{ base_domain }}`)"
+      traefik.http.routers.engineapi.service: "engineblock"
+      traefik.http.routers.engineapi.tls: "true"
+      traefik.enable: "true"
+    env:
+      APACHE_UID: "#{{ engine_uid.uid }}"
+      APACHE_GUID: "#{{ engine_guid.gid }}"
+    etc_hosts:
+      host.docker.internal: host-gateway
+    mounts:
+      - source: "{{ current_release_config_dir_name }}/configs/parameters.yml"
+        target: "/var/www/html/app/config/parameters.yml"
+        type: bind
+      - source: "{{ current_release_config_dir_name }}/configs/attributes.json"
+        target: "/var/www/html/app/config/attributes.json"
+        type: bind
+      - source: "{{ current_release_config_dir_name }}/images/background-back.svg"
+        target: "/var/www/html/web/images/background-back.svg"
+        type: bind
+      - source: "{{ current_release_config_dir_name }}/images/background-front.svg"
+        target: "/var/www/html/web/images/background-front.svg"
+        type: bind
+      - source: "{{ current_release_config_dir_name }}/images/logo.png"
+        target: "/var/www/html/web/images/logo.png"
+        type: bind
+      - source: "{{ current_release_config_dir_name }}/certs/"
+        target: "/var/www/html/certs/"
+        type: bind
+      - source: "/opt/openconext/common/favicon.ico"
+        target: "/var/www/html/web/favicon.ico"
+        type: bind

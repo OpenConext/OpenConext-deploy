@@ -1,0 +1,3 @@
+current_release_config_dir_name: /opt/openconext/engine
+engine_config_dir: /var/www/html/app/config
+engine_certs_dir: /var/www/html/certs
