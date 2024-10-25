@@ -98,10 +98,6 @@
       tags: ['app_php', 'static']
     - role: openconext-common
       tags: ['core', 'app_php', 'eb', 'profile']
-    - role: engineblock
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['core', 'app_php', 'eb']
     - role: lifecycle
       when:
         - inventory_hostname in groups['lifecycle']
@@ -187,6 +183,7 @@
     - { role: diyidp,      tags: ["diyidp"] }  
     - { role: profile,      tags: ["profile"] }  
     - { role: lifecycle,      tags: ["lifecycle"] }  
+    - { role: engineblock,      tags: ["eb"] }  
     - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"

@@ -1,4 +1,3 @@
-#---
 ## Version of EngineBlock that is installable by this role
 engine_version: ''
 # Be aware that if you enable this option that NPM, Node.js and Composer are installed
@@ -13,7 +12,6 @@ engine_feature_enable_sso_session_cookie: 0
 engine_feature_enable_consent: 1
 engine_feature_stepup_override_entityid: 0
 engine_feature_idp_initiated_flow: 1
-
 engine_api_feature_metadata_push: 1
 engine_api_feature_consent_listing: 1
 engine_api_feature_consent_remove: 0
@@ -128,3 +126,5 @@ engineblock_selenium_install_dir: /opt
 
 # Composer
 composer_path: /usr/local/bin/composer
+
+engineblock_log_attributes: [] 
