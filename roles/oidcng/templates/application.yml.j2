@@ -50,9 +50,7 @@ certificate_path: file://{{ oidcng_config_dir }}/oidcsaml.crt
 default_acr_value: {{ oidcng.default_acr_value }}
 secure_cookie: true
 oidc_token_endpoint: https://connect.{{ base_domain }}/oidc/token
-{% if oidcng_device_flow | bool %}
 device_verification_url: https://connect.{{ base_domain }}/oidc/verify
-{% endif %}
 environment: {{ oidcng.environment }}
 
 features:
@@ -63,6 +61,8 @@ features:
   enforce-scope-resource-server: false
   # Do we show consent if configured for a RP in manage
   consent-enabled: {{ oidcng.consent_enabled }}
+  # Do we allow for Device Authorization flow
+  oidcng_device_flow: {{ oidcng_device_flow }}
 
 sp:
   entity_id: {{ oidcng_saml_sp_entityid }}
