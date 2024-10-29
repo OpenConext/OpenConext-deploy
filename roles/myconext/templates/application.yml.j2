@@ -164,6 +164,12 @@ oidc:
   sp-create-from-institution-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/create-from-institution/oidc-redirect
   base-url: https://connect.{{ base_domain }}
 
+
+services-configuration:
+  # All entity identifiers from services we want to hide in the data & activity overview
+  hide_in_overview:
+    - playground_client
+
 linked_accounts:
   # The duration that non validated-name linked accounts are valid - note that they are not removed and will still be used for EPPN Pseudonymisation
   expiry-duration-days-non-validated: 180
