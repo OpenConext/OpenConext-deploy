@@ -203,6 +203,12 @@
       - source: "{{ current_release_config_dir_name }}/configs/parameters.yml"
         target: "/var/www/html/app/config/parameters.yml"
         type: bind
+      - source: "{{ current_release_config_dir_name }}/languages/overrides.en.php"
+        target: "/var/www/html/languages/overrides.en.php"
+        type: bind
+      - source: "{{ current_release_config_dir_name }}/languages/overrides.nl.php"
+        target: "/var/www/html/languages/overrides.nl.php"
+        type: bind
       - source: "{{ current_release_config_dir_name }}/configs/attributes.json"
         target: "/var/www/html/app/config/attributes.json"
         type: bind
