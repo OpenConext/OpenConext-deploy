@@ -36,6 +36,7 @@ springdoc:
 
 email:
   from: eduID <noreply@{{ myconext_base_domain }}>
+  error_mail: info@surfconext.nl
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
   idp-surfconext-url: https://login.{{ myconext_base_domain }}
@@ -100,6 +101,8 @@ feature:
   id_verify: {{ myconext.feature_id_verify}}
   # Do we support the remote creation API (e.g. for studielink)
   remote_creation_api: {{ myconext.feature_remote_creation_api }}
+  # Do we send error mails for reported errors by the JS UI
+  send_js_exceptions: {{ myconext.feature_send_js_exceptions }}
 
 
 secure_cookie: true
