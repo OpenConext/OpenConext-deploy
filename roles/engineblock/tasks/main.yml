@@ -178,6 +178,11 @@
     mode: "0644"
   loop: "{{ engine_key_and_certs }}"
 
+- name: Create Docker volume to contain the sessions
+  community.docker.docker_volume:
+    name: engineblock_sessions
+    state: present
+
 - name: Create the container
   community.docker.docker_container:
     name: "engineblock"
@@ -197,6 +202,7 @@
     env:
       APACHE_UID: "#{{ engine_uid.uid }}"
       APACHE_GUID: "#{{ engine_guid.gid }}"
+      TZ: "{{ timezone }}"
     etc_hosts:
       host.docker.internal: host-gateway
     mounts:
@@ -227,3 +233,6 @@
       - source: "/opt/openconext/common/favicon.ico"
         target: "/var/www/html/web/favicon.ico"
         type: bind
+      - source: engineblock_sessions
+        target: /tmp/
+        type: volume
