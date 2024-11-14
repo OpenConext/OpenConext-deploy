@@ -1,0 +1,96 @@
+---
+- name: Create MariaDB volume
+  community.docker.docker_volume:
+    name: openconext_mariadb
+    state: present
+
+- name: Create MariaDB network
+  community.docker.docker_network:
+    name: openconext_mariadb
+    state: present
+    internal: false
+    ipam_config:
+      - subnet: "{{ docker_mariadb_network_range }}"
+
+- name: Create the MariaDB container
+  community.docker.docker_container:
+    name: openconext_mariadb
+    image: mariadb:10.6
+    state: started
+    pull: true
+    restart_policy: "always"
+    ports: "127.0.0.1:3306:3306"
+    networks:
+      - name: "openconext_mariadb"
+    mounts:
+      - type: volume
+        source: openconext_mariadb
+        target: /var/lib/mysql
+    env:
+      MARIADB_ROOT_PASSWORD: "{{ mariadb_root_password }}"
+
+- name: Create database
+  community.mysql.mysql_db:
+    name: "{{ item }}"
+    state: present
+    login_user: root
+    login_host: localhost
+    login_password: "{{ mariadb_root_password }}"
+  with_items:
+    - "{{ databases.names }}"
+
+- name: Create database user
+  community.mysql.mysql_user:
+    name: "{{ item[0].name }}"
+    host: "{{ item[1] }}"
+    password: "{{ item[0].password }}"
+    priv: "{{ item[0].db_name }}.*:{{ item[0].privilege }}"
+    state: present
+    append_privs: true
+    login_user: root
+    login_host: localhost
+    login_password: "{{ mariadb_root_password }}"
+  #  no_log: true
+  with_nested:
+    - "{{ databases.users }}"
+    - "{{ database_clients }}"
+
+- name: Add mariadb backup user
+  community.mysql.mysql_user:
+    name: "{{ mysql_backup_user }}"
+    password: "{{ mysql_backup_password }}"
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
+    login_host: localhost
+    priv: "*.*:SELECT,RELOAD,PROCESS,LOCK TABLES,BINLOG MONITOR,CONNECTION ADMIN,SHOW VIEW"
+    state: present
+  #  no_log: true
+
+- name: Create the backup directory
+  ansible.builtin.file:
+    path: /home/backup
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+  when:
+    - backup_node | bool
+
+- name: Put mariadb_backup script
+  ansible.builtin.template:
+    src: "mariadb_backup.sh.j2"
+    dest: "/usr/local/sbin/mariadb_backup.sh"
+    mode: "0700"
+    owner: root
+  when:
+    - backup_node | bool
+
+- name: Create cron symlink for backup script
+  file:
+    src: /usr/local/sbin/mariadb_backup.sh
+    dest: /etc/cron.daily/db_backup
+    state: link
+    mode: 0700
+    owner: root
+  when:
+    - backup_node | bool
