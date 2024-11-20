@@ -102,10 +102,6 @@
       when:
         - inventory_hostname not in groups['lifecycle']
       tags: ['core', 'app_php', 'eb']
-    - role: lifecycle
-      when:
-        - inventory_hostname in groups['lifecycle']
-      tags: ['app_php', 'lifecycle']
   handlers:
     - import_tasks: roles/httpd/handlers/main.yml
 
@@ -189,5 +185,7 @@
     - { role: lifecycle,      tags: ["lifecycle"] }  
     - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
 
-- import_playbook: "{{ environment_dir }}/playbook.yml"
-
+- hosts: localhost
+  become: false
+  tasks:
+    - import_playbook: "{{ inventory_dir }}/playbook.yml" 
