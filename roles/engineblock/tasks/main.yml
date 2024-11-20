@@ -1,6 +1,3 @@
-- name: Include docker vars
-  ansible.builtin.include_vars: docker.yml
-
 - name: Add group engine
   ansible.builtin.group:
     name: "engine"
@@ -52,8 +49,7 @@
     mode: "0644"
     owner: root
     group: engine
-  when:
-    attributes_json_present.stat.exists
+  when: attributes_json_present.stat.exists
 
 - name: Check presence of language specific overrides
   ansible.builtin.stat:
@@ -89,8 +85,7 @@
     owner: root
     group: engine
     mode: "0644"
-  when:
-    customlogo.stat.exists
+  when: customlogo.stat.exists
 
 - name: Check if we have a custom favicon
   ansible.builtin.stat:
@@ -106,8 +101,7 @@
     owner: root
     group: root
     mode: "0644"
-  when:
-    customfavicon.stat.exists
+  when: customfavicon.stat.exists
 
 - name: Check if we have a custom background back image for the feedback page
   ansible.builtin.stat:
@@ -123,8 +117,7 @@
     owner: root
     group: engine
     mode: "0644"
-  when:
-    eb_customfeedbackbackground.stat.exists
+  when: eb_customfeedbackbackground.stat.exists
 
 - name: Check if we have a custom background front image for the feedback page
   ansible.builtin.stat:
@@ -140,8 +133,7 @@
     owner: root
     group: engine
     mode: "0644"
-  when:
-    eb_customfeedbackforeground.stat.exists
+  when: eb_customfeedbackforeground.stat.exists
 
 - name: Check if we have a Stepup GW certificate
   ansible.builtin.stat:
@@ -157,8 +149,7 @@
     owner: root
     group: engine
     mode: "0644"
-  when:
-    eb_stepupgwcert.stat.exists
+  when: eb_stepupgwcert.stat.exists
 
 - name: Copy over the engineblock keys
   ansible.builtin.copy:
