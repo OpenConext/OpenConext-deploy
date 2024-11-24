@@ -105,3 +105,5 @@ eb_tos_url: "https://example.org"
 engine_site_notice_show: false
 
 engineblock_log_attributes: []
+
+engine_php_memory: 256M
