@@ -1,8 +1,8 @@
 ---
 oidcng_dir: /opt/openconext/oidcng
 oidcng_config_dir: /config
-oidcng_version: ''
-oidcng_snapshot_timestamp: ''
+oidcng_version: ""
+oidcng_snapshot_timestamp: ""
 oidcng_cronjobmaster: true
 oidcng_saml_sp_entityid: https://connect.{{ base_domain }}
 oidcng_idp_metadata_url: https://engine.{{ base_domain }}/authentication/idp/metadata
@@ -19,4 +19,5 @@ oidcng_manage_provision_samlsp_metadata_url: "https://connect.{{ base_domain }}/
 oidcng_manage_provision_samlsp_sp_cert: "{{ lookup('file', '{{ inventory_dir }}/files/certs/oidc/oidcsaml.crt') | depem }}"
 oidcng_manage_provision_samlsp_sign: "True"
 oidcng_manage_provision_samlsp_trusted_proxy: "True"
-
+oidcng_docker_networks:
+  - name: loadbalancer

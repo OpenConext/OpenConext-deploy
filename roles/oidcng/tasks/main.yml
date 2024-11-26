@@ -88,6 +88,13 @@
     group: "root"
     mode: "0755"
 
+- name: Add the mongodb docker network to the list of networks when MongoDB runs in Docker
+  ansible.builtin.set_fact:
+    oidcng_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mongodb
+  when: mongodb_in_docker | default(false) | bool
+
 - name: Create and start the server container
   community.docker.docker_container:
     name: oidcngserver
@@ -96,8 +103,7 @@
     pull: true
     restart_policy: "always"
     state: started
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ oidcng_docker_networks }}"
     mounts:
       - source: "{{ oidcng_dir }}"
         target: /config/
@@ -137,9 +143,6 @@
       traefik.http.middlewares.oidcngmw.replacepathregex.regex: "^/.well-known/openid-configuration"
       traefik.http.middlewares.oidcngmw.replacepathregex.replacement: "/oidc/.well-known/openid-configuration"
   register: oidcngservercontainer
-
-
-
 #- name: Include the role manage_provision_entities to provision oidncg to Manage
 #  ansible.builtin.include_role:
 #    name: manage_provision_entities
