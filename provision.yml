@@ -168,6 +168,10 @@
   become: true
   roles:
     - { role: docker,     tags: ['docker' ] }
+
+- hosts: docker_apps1
+  become: true
+  roles:
     - { role: invite,     tags: ['invite' ] }
     - { role: dashboard,  tags: ["dashboard"] }
     - { role: teams,      tags: ["teams"] }
@@ -183,8 +187,12 @@
     - { role: diyidp,      tags: ["diyidp"] }  
     - { role: profile,      tags: ["profile"] }  
     - { role: lifecycle,      tags: ["lifecycle"] }  
-    - { role: engineblock,      tags: ["eb"] }  
     - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
+
+- hosts: docker_apps2
+  become: true
+  roles: 
+    - { role: engineblock,      tags: ["eb"] }  
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 
