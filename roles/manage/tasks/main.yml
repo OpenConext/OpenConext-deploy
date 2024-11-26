@@ -72,6 +72,13 @@
   notify:
     - "restart manageserver"
 
+- name: Add the mongodb docker network to the list of networks when MongoDB runs in Docker
+  ansible.builtin.set_fact:
+    manage_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mongodb
+  when: mongodb_in_docker | default(false) | bool
+
 - name: Create and start the server container
   community.docker.docker_container:
     name: manageserver
@@ -80,8 +87,7 @@
     pull: true
     restart_policy: "always"
     state: started
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ manage_docker_networks }}"
     mounts:
       - source: /opt/openconext/manage/
         target: /config/

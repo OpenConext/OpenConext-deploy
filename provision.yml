@@ -189,5 +189,11 @@
     - { role: lifecycle,      tags: ["lifecycle"] }  
     - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
 
+- hosts: docker_mariadb
+  become: true
+  roles:
+    - { role: mariadbdocker, tags: ['mariadbdocker']}
+    - { role: mongodbdocker, tags: ['mongodbdocker']}
+
 - import_playbook: "{{ environment_dir }}/playbook.yml"
 

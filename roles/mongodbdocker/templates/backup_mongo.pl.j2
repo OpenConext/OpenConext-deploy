@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+# Variables
+
+$backupdir = "/home/backup";
+$username = "admin";
+$password = "{{ mongo_admin_password }}";
+
+umask 0077;
+
+# Determine current day
+$day = `/bin/date +'%a'`;
+chomp($day);
+
+# Remove old backups if exists
+if ( -e "$backupdir/mongo-dump-$day/") {
+`rm -rf $backupdir/mongo-dump-$day/`;
+}
+
+# Dump databases
+`docker exec openconext_mongodb mongodump --username $username --password $password --authenticationDatabase admin --out $backupdir/mongo-dump-$day`;
+
+# Gzip dumps
+opendir(BDIR, "$backupdir/mongo-dump-$day/");
+my @files = readdir(BDIR);
+closedir(BDIR);
+chdir("$backupdir/mongo-dump-$day/");
+foreach $dir (@files) {
+if ($dir !~ /^\.+$/) {
+if ($dir !~ /\.\./g) {
+if ( -d "$backupdir/mongo-dump-$day/$dir") {
+`tar -cvzf $backupdir/mongo-dump-$day/$dir.tar.gz $dir/`;
+`rm -rf $backupdir/mongo-dump-$day/$dir/`;
+}
+}
+}
+}
+umask 0022; 

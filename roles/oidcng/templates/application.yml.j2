@@ -76,7 +76,7 @@ idp:
 spring:
   data:
     mongodb:
-      uri: "mongodb://{{ oidcng.mongo_user }}:{{ oidcng.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ oidcng.mongo_port }}{% if not loop.last %},{% endif %}{%endfor %}/{{ oidcng.mongo_database }}?ssl=true"
+      uri: "mongodb://{{ oidcng.mongo_user }}:{{ oidcng.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ oidcng.mongo_port }}{% if not loop.last %},{% endif %}{%endfor %}/{{ oidcng.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}"
 
   thymeleaf:
     cache: true
