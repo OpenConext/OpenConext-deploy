@@ -1,8 +1,6 @@
-#---
 ## Version of EngineBlock that is installable by this role
-engine_version: ''
+engine_version: ""
 # Be aware that if you enable this option that NPM, Node.js and Composer are installed
-#engine_branch: "develop"
 # Feature toggles
 engine_feature_encrypted_assertions: 1
 engine_feature_encrypted_assertions_require_outer_signature: 1
@@ -13,7 +11,6 @@ engine_feature_enable_sso_session_cookie: 0
 engine_feature_enable_consent: 1
 engine_feature_stepup_override_entityid: 0
 engine_feature_idp_initiated_flow: 1
-
 engine_api_feature_metadata_push: 1
 engine_api_feature_consent_listing: 1
 engine_api_feature_consent_remove: 0
@@ -44,7 +41,7 @@ engine_domain: engine.{{ base_domain }}
 engine_debug: false
 
 engine_theme: "skeune"
-#engine_theme: openconext
+# engine_theme: openconext
 
 engine_profile_baseurl: "https://profile.{{ base_domain }}"
 
@@ -92,17 +89,6 @@ engine_stepup_gateway_sfo_public_key_file: "{{ engine_keys.default.publicFile }}
 ## The minimum priority of messages that will be logged
 engine_logging_passthru_level: NOTICE
 
-#engine_initial_sql: ''
-
-engineblock_symfony_cache_path: "/tmp/engineblock/cache"
-engineblock_symfony_log_path: "{{ engine_current_release_symlink }}/var/logs"
-
-engine_fpm_user: engine
-engine_fpm_port: 801
-engine_fpm_memory: 128M
-# When using vagrant for provisioning, it's not possible to put something in the inventory dir
-engine_crt_not_in_inventory: false
-
 # The memory limit used for the metadata push
 engine_metadata_push_memory_limit: 256M
 
@@ -118,13 +104,6 @@ eb_tos_url: "https://example.org"
 
 engine_site_notice_show: false
 
-# Backwards compatibility with older secrets files
-engineblock_private_keys:
-  default: "{{ engineblock_private_key }}"
+engineblock_log_attributes: []
 
-# Webdriver test settings
-engineblock_selenium_version: 2.53.1
-engineblock_selenium_install_dir: /opt
-
-# Composer
-composer_path: /usr/local/bin/composer
+engine_php_memory: 256M
