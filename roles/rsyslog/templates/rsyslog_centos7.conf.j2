@@ -101,3 +101,25 @@ $IncludeConfig /etc/rsyslog.d/listeners/*.conf
 # Remote Logging (we use TCP for reliable delivery)
 #
 
+{% for syslogserver in relp_remote %}
+# Logs are forwarded to {{ syslogserver.name }}
+module(load="omrelp")
+action(type="omrelp"
+target="{{ syslogserver.host }}"
+port="{{ syslogserver.port }}"
+tls="on"
+tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt"
+tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
+tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
+tls.authmode="name"
+tls.permittedpeer=["{{ syslogserver.peer }}"]
+queue.type="LinkedList"
+queue.filename="{{ syslogserver.name }}"
+queue.spoolDirectory="/var/spool/rsyslog"
+queue.maxdiskspace="1G"
+queue.saveonshutdown="on"
+action.resumeRetryCount="-1"
+action.resumeInterval="5"
+action.writeAllMarkMessages="on")
+{% endfor %}
+

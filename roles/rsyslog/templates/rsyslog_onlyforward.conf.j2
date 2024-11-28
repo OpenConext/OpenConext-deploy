@@ -7,23 +7,24 @@ $PreserveFQDN on
 
 *.emerg                         :omusrmsg:* 
 
-{% if rsyslog_remote_server_relp is defined and 'sysloghost' not in group_names %}
-# Forward all logs to the central logging server using relp
+{% for syslogserver in relp_remote %}
+# Logs are forwarded to {{ syslogserver.name }}
 module(load="omrelp")
 action(type="omrelp" 
-target="{{ rsyslog_remote_server_relp }}" 
-port="{{ rsyslog_remote_relp_port }}" 
+target="{{ syslogserver.host }}" 
+port="{{ syslogserver.port }}" 
 tls="on" 
 tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt" 
 tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
 tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
 tls.authmode="name" 
-tls.permittedpeer=["{{ rsyslog_remote_server_relp }}"]
+tls.permittedpeer=["{{ syslogserver.peer }}"]
 queue.type="LinkedList" 
-queue.filename="rsyslog_relp_q"
+queue.filename="{{ syslogserver.name }}"
+queue.spoolDirectory="/var/spool/rsyslog"
 queue.maxdiskspace="1G"
 queue.saveonshutdown="on" 
 action.resumeRetryCount="-1"
 action.resumeInterval="5"
 action.writeAllMarkMessages="on")
-{% endif %}
+{% endfor %}
