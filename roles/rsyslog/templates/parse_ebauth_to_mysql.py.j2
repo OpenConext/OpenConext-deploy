@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 # This script parses the files produced by engineblock and inserts them into a mySQL table where the SURFconext stats module will analyse the data further
 # This script is intended to be used during logrotate
 # It picks up all files starting with ebauth- (all rotated files) and parses them
@@ -18,6 +18,15 @@ workdir="{{ rsyslog_dir }}/log_logins/{{ item.name}}/"
 
 db = MySQLdb.connect(mysql_host,mysql_user,mysql_password,mysql_db )
 cursor = db.cursor()
+
+def update_lastseen(user_id, date):
+    query = """
+    REPLACE INTO last_login (userid, lastseen)
+    VALUES (%s, %s)
+    """
+    cursor.execute(query, (user_id, date))
+    db.commit()
+
 def load_in_mysql(a,b,c,d,e,f,g,h):
     sql = """insert into log_logins(idpentityid,spentityid,loginstamp,userid,keyid,sessionid,requestid,trustedproxyentityid) values(%s,%s,%s,%s,%s,%s,%s,%s)"""
     try:
@@ -46,11 +55,13 @@ def parse_lines(a):
      proxied_sp_entity_ids_list = data["context"]["proxied_sp_entity_ids"]
      proxied_sp_entity_ids = ''.join(proxied_sp_entity_ids_list)
      loginstamp=parse(timestamp).strftime("%Y-%m-%d %H:%M:%S")
+     last_login_date = parse(timestamp).strftime("%Y-%m-%d")
      null = 'NULL'
      if proxied_sp_entity_ids:
         load_in_mysql(idp,proxied_sp_entity_ids,loginstamp,user_id,key_id,session_id,request_id,sp)
      else:
         load_in_mysql(idp,sp,loginstamp,user_id,key_id,session_id,request_id,null)
+     update_lastseen(user_id, last_login_date)
 
 ## Loop over the files and parse them one by one
 for filename in os.listdir(workdir):
