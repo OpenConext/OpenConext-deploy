@@ -52,7 +52,7 @@
     dest: "/opt/openconext/myconext/apple-app-site-association"
     owner: "root"
     group: "root"
-    mode: "0640"
+    mode: "0644"
 
 - name: Copy / create APNS certificate
   ansible.builtin.copy:
