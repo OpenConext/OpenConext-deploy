@@ -196,7 +196,7 @@
       APACHE_UID: "#{{ engine_uid.uid }}"
       APACHE_GUID: "#{{ engine_guid.gid }}"
       TZ: "{{ timezone }}"
-      PHP_MEMORY_LIMIT: "{{ engine_php_memory }}" 
+      PHP_MEMORY_LIMIT: "{{ engine_php_memory }}"
     etc_hosts:
       host.docker.internal: host-gateway
     mounts:
@@ -230,3 +230,4 @@
       - source: engineblock_sessions
         target: /tmp/
         type: volume
+  register: ebcontainer

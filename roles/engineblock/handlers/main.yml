@@ -4,3 +4,4 @@
     name: engine
     state: started
     restart: true
+  when: ebcontainer is success and ebcontainer is not change
