@@ -15,9 +15,12 @@
     group: root
     mode: 0644
 
-- name: Create the spdashboard container network
-  docker_network:
-    name: "spdashboard"
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    spdashboard_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
 
 - name: Create the container
   docker_container:
@@ -26,8 +29,7 @@
     env_file: "/opt/openconext/spdashboard/env"
     pull: true
     restart_policy: "always"
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ spdashboard_docker_networks }}"
     labels:
       traefik.http.routers.spdashboard.rule: "Host(`{{ spdashboard_domain }}`)"
       traefik.http.routers.spdashboard.tls: "true"

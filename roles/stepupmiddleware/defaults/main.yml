@@ -1,0 +1,2 @@
+middelware_docker_networks:
+  - name: loadbalancer

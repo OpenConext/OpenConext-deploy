@@ -107,3 +107,5 @@ engine_site_notice_show: false
 engineblock_log_attributes: []
 
 engine_php_memory: 256M
+engine_docker_networks:
+  - name: loadbalancer

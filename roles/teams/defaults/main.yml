@@ -8,7 +8,7 @@ teams_tos_en: https://example.org
 teams_tos_nl: https://example.org
 teams_tos_pt: https://example.org
 teams_main_link: https://www.openconext.org
-teams_organization: "{{ instance_name}}"
+teams_organization: "{{ instance_name }}"
 teams_api_lifecycle_username: teams_api_lifecycle_user
 teams_oauth2_token_url: "https://connect.{{ base_domain }}/oidc/token"
 teams_authz_client_id: "teams.{{ base_domain }}"
@@ -27,3 +27,5 @@ teams_manage_provision_samlsp_sp_cert: ""
 teams_manage_provision_samlsp_trusted_proxy: false
 teams_manage_provision_samlsp_sign: false
 teams_spring_flyway_enabled: true
+teams_docker_networks: 
+  - name: "loadbalancer"

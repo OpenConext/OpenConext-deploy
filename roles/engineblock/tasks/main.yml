@@ -176,14 +176,20 @@
     name: engineblock_sessions
     state: present
 
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    engine_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create the container
   community.docker.docker_container:
     name: "engineblock"
     image: ghcr.io/openconext/openconext-engineblock/openconext-engineblock:{{ engine_version }}
     pull: true
     restart_policy: "always"
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ engine_docker_networks}}"
     labels:
       traefik.http.routers.engine.rule: "Host(`engine.{{ base_domain }}`)"
       traefik.http.routers.engine.service: "engineblock"

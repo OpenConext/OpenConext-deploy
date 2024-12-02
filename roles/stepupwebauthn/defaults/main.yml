@@ -1,0 +1,2 @@
+webauthn_docker_networks:
+  - name: loadbalancer
