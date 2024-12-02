@@ -9,3 +9,5 @@ aa_manage_provision_oidcrp_description_en: "OAuth client to access VOOT for grou
 aa_manage_provision_oidcrp_grants: "client_credentials"
 aa_manage_provision_oidcrp_allowed_resource_servers: '{"name": "{{ voot.oidcng_checkToken_clientId }}"}'
 aa_spring_flyway_enabled: true
+aa_docker_networks:
+  - name: loadbalancer

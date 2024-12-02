@@ -45,11 +45,11 @@
   when: tiqr_apns_pemfile is defined
 
 - name: Write tiqr Firebase service json
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/secrets/stepup/tiqr-demo.json"
     dest: "{{ current_release_config_file_dir_name }}/tiqr-demo.json"
     owner: "{{ appname }}"
-    mode: 0400
+    mode: "0400"
   when: tiqr_firebase_credentialsfile is defined
 
 - name: Place parameters.yml
@@ -62,14 +62,20 @@
   notify:
     - restart tiqr
 
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    tiqr_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create the container
   community.docker.docker_container:
     name: "{{ appname }}"
     image: ghcr.io/openconext/stepup-tiqr/stepup-tiqr:{{ tiqr_version }}
     pull: true
     restart_policy: "always"
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ tiqr_docker_networks }}"
     labels:
       traefik.http.routers.tiqr.rule: "Host(`tiqr.{{ base_domain }}`)"
       traefik.http.routers.tiqr.tls: "true"

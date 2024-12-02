@@ -11,3 +11,5 @@ lifecycle_api_enabled: true
 lifecycle_api_password: secret
 lifecycle_api_username: lifecycle
 current_release_config_dir_name: /opt/openconext/{{ appname }}
+lifecycle_docker_networks:
+  - name: loadbalancer

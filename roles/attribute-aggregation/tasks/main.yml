@@ -21,6 +21,13 @@
     - apachelink.conf
   notify: restart attribute-aggregationserver
 
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    aa_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create and start the server container
   community.docker.docker_container:
     name: aaserver
@@ -28,8 +35,7 @@
     pull: true
     restart_policy: "always"
     state: started
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ aa_docker_networks }}"
     mounts:
       - source: /opt/openconext/attribute-aggregation/serverapplication.yml
         target: /application.yml
