@@ -3,6 +3,21 @@
   community.docker.docker_volume:
     name: openconext_mariadb
     state: present
+- name: Create MariaDB config dir
+  ansible.builtin.file:
+    path: /opt/openconext/mariadb/
+    owner: root
+    group: root
+    mode: "0755"
+    state: directory
+
+- name: Copy mariadb config file
+  ansible.builtin.copy:
+    src: settings.cnf
+    dest: /opt/openconext/mariadb/settings.cnf
+    owner: root
+    group: root
+    mode: "0644"
 
 - name: Create MariaDB network
   community.docker.docker_network:
@@ -26,6 +41,9 @@
       - type: volume
         source: openconext_mariadb
         target: /var/lib/mysql
+      - type: bind
+        source: /opt/openconext/mariadb/settings.cnf
+        target: /etc/mysql/conf.d/settings.cnf
     env:
       MARIADB_ROOT_PASSWORD: "{{ mariadb_root_password }}"
 
