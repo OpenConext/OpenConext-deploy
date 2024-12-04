@@ -55,6 +55,8 @@ cron:
   token-cleaner-expression: "0 0/15 * * * *"
   manage-initial-delay-milliseconds: 15000
   manage-fixed-rate-milliseconds: 300_000
+  # Runs on the first day of February, May, August, and November.
+  mail-institution-mail-usage-expression: "0 0 0 1 2,5,8,11 *"
 
 manage:
   username: myconext
@@ -103,7 +105,8 @@ feature:
   remote_creation_api: {{ myconext.feature_remote_creation_api }}
   # Do we send error mails for reported errors by the JS UI
   send_js_exceptions: {{ myconext.feature_send_js_exceptions }}
-
+  # Do we periodically mail users who have used their institution account
+  mail_institution_mail_usage: {{ myconext.feature_mail_institution_mail_usage }}
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}

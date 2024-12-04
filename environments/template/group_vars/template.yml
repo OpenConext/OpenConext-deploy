@@ -419,6 +419,7 @@ myconext:
   feature_show_connections: false
   feature_id_verify: true
   feature_remote_creation_api: true
+  feature_mail_institution_mail_usage: true
   feature_send_js_exceptions: true
   feature_deny_disposable_email_providers: true
   feature_create_eduid_institution_enabled: true
