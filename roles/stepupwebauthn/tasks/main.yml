@@ -119,8 +119,8 @@
       APACHE_UID: "#{{ webauthn_uid.uid }}"
       APACHE_GUID: "#{{ webauthn_guid.gid }}"
     mounts:
-      - source: /opt/openconext/webauthn/public/images/header-logo.png
-        target: /var/www/html/public/build/images/logo/header-logo.png
+      - source: /opt/openconext/azuremfa/public/images/header-logo.png
+        target: /var/www/html/public/build/images/header-logo.png
         type: bind
       - source: /opt/openconext/webauthn
         target: /var/www/html/config/openconext
