@@ -57,6 +57,10 @@ cron:
   manage-fixed-rate-milliseconds: 300_000
   # Runs on the first day of February, May, August, and November.
   mail-institution-mail-usage-expression: "0 0 0 1 2,5,8,11 *"
+  # Every day at 6:30AM
+  nudge-app-mail-expression: "0 30 6 * * ?"
+  # Number of days after creation of the eduID account which the nudge mail is send
+  nudge-app-mail-days-after-creation: 14
 
 manage:
   username: myconext
@@ -107,6 +111,8 @@ feature:
   send_js_exceptions: {{ myconext.feature_send_js_exceptions }}
   # Do we periodically mail users who have used their institution account
   mail_institution_mail_usage: {{ myconext.feature_mail_institution_mail_usage }}
+  # Do we mail users who have not installed the eduID app
+  nudge_app_mail: {{ myconext.feature_nudge_app_mail }}
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
