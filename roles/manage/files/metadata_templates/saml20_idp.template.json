@@ -9,7 +9,8 @@
     "name:en": "",
     "OrganizationName:en": "",
     "SingleSignOnService:0:Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-    "SingleSignOnService:0:Location": ""
+    "SingleSignOnService:0:Location": "",
+    "coin:disable_scoping": true
   },
   "autoRefresh": {
     "enabled": true,
