@@ -2,22 +2,12 @@
 set -e
 export ANSIBLE_ROLES_PATH="roles:roles-external"
 
-
-# helper function: check if a specified value is present in a space-separated list
-listcontains() {
-	match=$1
-	shift
-	for word in $@
-	do
-		[[ $word = $match ]] && return 0
-	done
-	return 1
-}
-
 # parse parameters
-help="Usage: $0 vm    [ANSIBLE_OPT]\n       $0 <ENV> <SSH_USERNAME> <SECRET_FILE> [ANSIBLE_OPT]"
-if [ "$#" -eq 0 ]
-then
+help="Usage: $0 <ENV> [ANSIBLE_OPT]
+eg $0 acc --tags eb 
+will provision the tag eb on acc"
+
+if [ "$#" -eq 0 ]; then
   echo -e "$help"
   exit 1
 fi
@@ -25,92 +15,31 @@ fi
 env=$1
 shift
 
-if [ "$env" = "vm" ] || [ $env = "devvm" ]
-then
-	user="vagrant"
-	secret="environments/vm/secrets/vm.yml"
-	environment_dir="environments/vm/"
-elif [ $# -lt 2 ]
-then
-	echo -e "$help"
-	exit 1
-else
-	user=$1
-	secret=$2
-	environment_dir="environments-external/$env/"
-	shift; shift
+# Set some variables
+environment_dir="environments-external/$env/"
+inventory="environments-external/$env/inventory"
+playbook="provision.yml"
+
+if ! [ -e "$inventory" ]; then
+  echo "Inventory file '$inventory' for environment '$env' not found."
+  exit 1
 fi
 
 # Download extra roles when requirements.yml is present
-if [ -f "$environment_dir"/requirements.yml ]
-then
-	echo "Downloading roles to roles-external"
-	ansible-galaxy install -r "$environment_dir"/requirements.yml -f -p .
+if [ -f "$environment_dir"/requirements.yml ]; then
+  echo "Downloading roles to roles-external"
+  ansible-galaxy install -r "$environment_dir"/requirements.yml -f -p .
 else
-	echo "No extra roles found to be downloaded"
+  echo "No extra roles found to be downloaded"
 fi
 
-
-# find matching playbook
-playbook="provision.yml"
-#listcontains "$env" "vm" &&  playbook="provision-vm.yml"
-
-# find inventory
-if [ $env = "vm" ] || [ $env = "template" ]
-then
-	inventory="environments/$env/inventory"
-elif [ $env = "devvm" ]
-then
-	inventory="environments/vm/inventory"
-else
-	inventory="environments-external/$env/inventory"
-fi
-
-if ! [ -e $inventory ]
-then
-	echo "Inventory file '$inventory' for environment '$env' not found."
-	exit 1
-fi
-
-# run vm
-if [ "$env" = "vm" ]
-then
-  vagrant up
-fi
-if [ "$env" = "devvm" ]
-then
-  ENV=dev vagrant up
-fi
-
-# run ansible
-if [ $env = "vm" ] || [ $env = "template" ]
-then
-        cmd=$(cat <<-EOF
-	  ansible-playbook -i "$inventory" -u "$user" "$playbook"
-                           --extra-vars="secrets_file=$secret"
-                           --extra-vars="environment_dir=$environment_dir"
-                           $@
-	EOF
+cmd=$(
+  cat <<-EOF
+ansible-playbook -i $inventory $playbook $@
+EOF
 )
-elif [ $env = "devvm" ]
-then
-        cmd=$(cat <<-EOF
-          ansible-playbook -i "$inventory" -u "$user" "$playbook"
-	                   --extra-vars="secrets_file=$secret"
-                           --extra-vars="environment_dir=$environment_dir"
-	                   --extra-vars="@environments/vm/group_vars/dev.yml"
-                           $@
-	EOF
-	)
-else
-        cmd=$(cat <<-EOF
-	  ansible-playbook -i $inventory -u $user  $playbook
-                           --extra-vars=secrets_file=$secret
-                           --extra-vars=environment_dir=$environment_dir
-                           $@
-	EOF
-	)
-fi
 echo "executing $cmd" | tr -d "\n" | tr -s ' '
-$cmd
 
+echo $cmd
+
+$cmd

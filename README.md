@@ -1,157 +1,98 @@
 Ansible-driven provisioning of the OpenConext platform.
 ==============================
 
-# Getting started
+# Introduction
 
-# Deploy to a remote machine
+This repository contains everything you need if you want to use Ansible for deployment of OpenConext applications, including the Stepup suite. It does currently not provide you with a step by step manual to get the whole OpenConext suite installed and working. With some Ansible experience and some work, you will be able to use this repository to deploy the OpenConext applications however. The document will provide information on how to do that.
 
-A manual to run the deploy to a single target machine (e.g. a hosted VM) is in the wiki:
-[Installation steps to deploy OpenConext on a single system](https://github.com/OpenConext/OpenConext-deploy/wiki/Installation-steps-to-deploy-OpenConext-on-a-single-system-other-than-the-Vagrant-VM-centOS7).
+If you want to get started with OpenConext, or with OpenConext development you can use our Docker compose based environment to get up and running quickly on a VM or your local laptop. Please refer to the devconf project that can be found here: https://github.com/OpenConext/OpenConext-devconf
 
-# Deploy with Vagrant
+# Contents of this repository
 
-To run a development instance on your local machine with Vagrant and VirtualBox, follow these steps.
-They are based on Mac OS X and the Open Source [Homebrew](http://brew.sh) package manager. 
+## Application roles
+Every application has a seperate role to install it. The following roles can be found:
 
-It is also possible to deploy using Vagrant and libvirt/qemu (on Linux).
-Instructions are provided below.
+| name                  | function                       |
+| ---                   | ---                            |
+| engine                | Engineblock, the SAML proxy    |
+| oidcng                | OpenID connect proxy           |
+| myconext              | eduID                          |
+| profile               | Profile page                   |
+| manage                | Entity registration            |
+| teams                 | Group membership app           |
+| mujina                | Mujina IdP                     |
+| voot                  | Voot membership API            |
+| pdp                   | Policy Decicions API           |
+| attribute-aggregation | Attribute aggregation API      |
+| invite                | Invite based groups            |
+| welcome               | Invite UI                      |
+| dashboard             | IdP dashboard                  |
+| lifecycle             | User lifecycle                 |
+| stats                 | Statistics                 |
+| monitoring-tests      | end2end monitoring app         |
+| diyidp                | A SimpleSAMLphp based test IdP |
+| stepupazuremfa        | Stepup AzureMFA GSSP           |
+| stepuptiqr            | Stepup TIQR GSSP               |
+| stepupwebauthn        | Stepup Webauthn GSSP           |
+| stepupgateway         | Stepup SAML gateway            |
+| stepupmiddleware      | Stepup middleware              |
+| stepupra              | Stepup ra interface            |
+| stepupselfservice     | Stepup selfservice interface   |
 
-## Install Vagrant and VirtualBox
+All these applications run in Docker. You can use the "docker" role to install docker and Traefik. The result is a Docker application server, with port 443 open. Applications are served by Traefik and recognized on basis of a Host: header. If you run a small installation, you can add a https certificate to Traefik and run a single node application server. 
 
-VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product, downloads and user manual can be found on the [VirtualBox website](https://www.virtualbox.org/wiki/Downloads).
-> Vagrant provides easy to configure, reproducible, and portable work environments built on top of industry-standard technology and controlled by a single consistent workflow to help maximize the productivity and flexibility of you and your team.
+For a fully functioning environment you also need a MariaDB database server and a Mongo database server. 
 
-For installation instructions see [the website](https://docs.vagrantup.com/v2/installation/index.html).
+## Infra roles
+This repository is used for deployment of SURFconext, and several roles that the SURFconext teams uses to provision our infrastructure are provided here as well. You can use them for your own infrastructure or use them as inspiration. 
+| name         | remarks                                                                      |
+| ---          | ---                                                                          |
+| bind         | DNS server for high availability. Very specific for SURFconext               |
+| docker       | To deploy Docker and Traefik application servers                             |
+| elk          | Not maintained Elasticsearch, Logstash and Kibana role. For inspiration only |
+| haproxy      | Loadbalancer configuration. The role has its' own README                     |
+| haproxy_mgnt | For red / blue deployments using haproxy                                     |
+| iptables     | Manage your iptables based firewall                                          |
+| keepalived   | VRRP config for HA between loadbalancers and database nodes                  |
+| rsyslog      | For central logging and parsing login statistics for stats                   |
+| galera       | Install multi master MariaDB database with galera. Runs on Rocky 9           |
+| mongo        | Install a mongo cluster  (has its own README)                                |
+| manage_provision_entities|Provision entities to Manage                                      |
 
-You will need at least Vagrant 1.7. Do not use Vagrant 1.8.5, which contains a bug that makes that the provisioning fails with the message "Warning: Authentication failure. Retrying...".  Also, more recent versions (around 1.9.1) have problems detecting the network devices inside the VM, causing vagrant to fail to connect using ssh.
+# Environment specific variables
+Many variables can be overridden to create a setup suitable for your needs. The environment should be placed in the directory environments_external. 
 
-To install both with Homebrew:
+A script is available to provision a new environment. It will create a new environment directory under environments-external/ and it will create all necessary passwords and (self-signed) certificates. Replace <environment> with the name of the target. Replace <domain> with the domain of the target.
 
-    brew cask install vagrant
-    brew cask install virtualbox
-
-With the above commands you get the latest versions. There might be incompatibilities. Vagrant will tell you and if you need a different version install cask versions and install the correct version of virtualbox and / or vagrant:
-
-    brew tap homebrew/cask-versions
-    brew cask install virtualbox4330101610
-
-## Install Ansible
-
-Ansible is the configuration tool we use to describe our servers.
-Installation instruction can be found on the [Ansible website](http://docs.ansible.com/intro_installation.html).
-The minimum required version of Ansible is 2.4.
-To install for development with Homebrew:
-
-    brew install python
-    pip install --upgrade setuptools
-    pip install --upgrade pip
-    brew install ansible
-
-## Run playbooks
-
-The VM will install everything on a two boxes for demo purposes.
-
-To provision the VM please run:
-
-```bash
-Clone the repository:
-git clone https://github.com/OpenConext/OpenConext-deploy.git
-cd OpenConext-deploy
-./provision vm
-```
-
-When the script is done, wait a little while to let all services come up and initialize themselves. Then point your browser to [https://welcome.vm.openconext.org](https://welcome.vm.openconext.org)
-
-These are the steps the above script performs:
-
-1. Setup a Vagrant VM and will make sure the HOSTS file is able to handle the defined base_domain
-2. Setup a MariaDB server.
-3. Inserts entities and metadata in Manage and initial load of engineblock to bootstrap.
-4. Install all Java apps for the openconext platform.
-5. Install all PHP apps for the openconext platform.
-6. Install Haproxy for loadbalacing and SSL termination on the loadbalancer machine
-7. Install [mujina](https://github.com/OpenConext/Mujina) as IDP and SP for the VM environment.
-
-## Add hostname entries to your own /etc/hosts file
-
-We need pseudo-DNS entries so that your browser can reach the VM-platform we just installed. So, add this very long line to your `/etc/hosts` file:
 
 ```
-192.168.66.98  welcome.vm.openconext.org static.vm.openconext.org metadata.vm.openconext.org db.vm.openconext.org engine.vm.openconext.org  profile.vm.openconext.org mujina-sp.vm.openconext.org mujina-idp.vm.openconext.org teams.vm.openconext.org voot.vm.openconext.org pdp.vm.openconext.org engine-api.vm.openconext.org aa.vm.openconext.org link.vm.openconext.org manage.vm.openconext.org connect.vm.openconext.org
+/prep-env <environment> <domain>
 ```
-
-Here, the ip-address `192.168.66.98` refers to the address that is mentioned in ./Vagrantfile.
-
-## Enjoy your new VM!
-
-Go to [https://welcome.vm.openconext.org](https://welcome.vm.openconext.org). To ssh to the machines use the following:
-
+Then run
 ```
-vagrant ssh lb_centos7
-vagrant ssh apps_centos7
+cp environments-external/<environment>/host_vars/template.yml environments-external/<environment>/host_vars/<target_ip>.yml
 ```
+(where <target_ip> is the ip address or hostname of your target machine, whatever is set in your inventory file)
 
-(using `vagrant ssh` without a VM specified leads to the Apps VM)
-
-The lb vm contains haproxy. The apps vm contains all the applications, apache and database.
-
-## Deploy using libvirt/qemu
-
-Instead of using Virtualbox as described above, it is also possible to use libvirt/qemu on Linux
-machines.  This requires a number of additional steps.
-
-1. Make sure you have a recent version of vagrant, and that libvirt/qemu is
-   working as expected for normal VMs (e.g., check if virt-manager works
-   correctly to create a new VM).
-2. Install the `vagrant-libvirt` and `vagrant-mutate` plugins:
+Change in environments-external/<environment>/inventory:
+Change all references from %target_host% to <target_ip>
 
 ```
-╰─▶ vagrant plugin install vagrant-libvirt
-╰─▶ vagrant plugin install vagrant-mutate
+Please note that this has not been tested in quite a while. You will need a lot of manual work to get this environment working
 ```
-   (or use the version provided by your distribution).
-3. Download the Openconext base CentOS7 image.  This is a Virtualbox-image, so
-   it needs to be converted to a libvirt-image using `vagrant mutate`:
-```
-╰─▶ vagrant box add https://build.openconext.org/vagrant_boxes/virtualbox-centos7.box --name CentOS-7.0
-╰─▶ vagrant mutate CentOS-7.0 libvirt --force-virtio
-```
-4. Vagrant should now have two variants of the CentOS-7.0 image:
-```
-╰─▶ vagrant box list
-CentOS-7.0 (libvirt, 0)
-CentOS-7.0 (virtualbox, 0)
-```
-5. From a checked-out version of the OpenConext-deploy repository, run the
-   following command to check if the boxes come up:
-```
-╰─▶ vagrant up --provider libvirt lb_centos7
-╰─▶ vagrant up --provider libvirt apps_centos7
-```
-(set the environment variable `VAGRANT_LOG=debug` to increase verbosity of
-anything goes wrong.
-6. You should be set to run the `./provision vm` command.
 
 
+# Playbooks, tags and the provision wrapper script
 
-# Releases to vm, test, acc, prod
+Two playbooks exist in this repository: provision.yml and playbook_haproxy.yml. The latter can be used to do red/blue deployments if you also use our haproxy role.
+The main playbook is provision.yml. It contains series of plays to install every role on the right node. All roles are tagged, so you can use the [Ansible tag mechanism](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html) to deploy a specific role. 
 
-To update single applications - e.g. release - use tags:
-
+If you would like to deploy manage to your test environment, you would run:
 ```
-./provision $env $remote_user path/to/your/secrets.yml --tags eb
+ansible-playbook -i environments-external/test/inventory --tags manage -u THE_REMOTE_SSH_USER_WITH_SUDO_PERMISSIONS
 ```
-Where:
-$env: Your environment. The vm is located in environments/vm. If you use your own repository you'll have to place it in environments_external
-$remote_user: The remote user with sudo permissions
-path/to/your/secrets.yml: The secrets used by Ansible are externalized. For the VM the secrets are in this GitHub repo. For other environments (your installation) they can be located in a separate repository. 
 
-# Making changes
-
-When making changes, please consider that people are continuously deploying
-vm's from master. Therefore, please do your best to keep HEAD in a working
-state, and make any invasive changes like adding new components or refactoring
-on a separate branch.
+A wrapper script which enables you to use your own roles can be used as well. That is documented here: https://github.com/OpenConext/OpenConext-deploy/wiki/Add-your-own-roles-and-playbooks 
 
 # License
 
@@ -161,18 +102,4 @@ These files are licensed under version 2.0 of the Apache License, as described i
 
 * You can ask questions on the [OpenConext mailing list](https://openconext.org/get-involved/mailing-lists/) 
 * Or you can join our [Slack Workspace](https://edu.nl/ocslk)
-
-# VM
-
-To provision the VM use the following (password is vagrant and sudo password is <enter>
-
-```
-ansible-playbook -u vagrant -i ./environments/vm/inventory -K --e secrets_file=./environments/vm/secrets/vm.yml provision-vm.yml
-```
-To provision a certain role use tags:
-```
-ansible-playbook -u vagrant -i ./environments/vm/inventory -K --e secrets_file=./environments/vm/secrets/vm.yml provision-vm.yml --tags vm_only_provision_manage_eb
-```
-
-Setting up a development environment is described in the file [DEVELOPMENT](DEVELOPMENT.md).
 

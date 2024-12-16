@@ -2,7 +2,7 @@
 # The develop flag is used for development-specific tasks/roles and is set to true via --extra-vars
 # By default, these should not be run
 develop: false
-
+secrets_file: "{{ inventory_dir }}/secrets/secrets.yml"
 # To enable a minimal installation the following variable should be enabled:
 minimal_install: false
 
