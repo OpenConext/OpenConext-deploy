@@ -58,7 +58,7 @@ manage.password={{ manage_pdp_secret }}
 period.manage.refresh.minutes=10
 manage.manageBaseUrl=https://manage.{{ base_domain }}
 # If true the manage push is done against the pdp_migrated_policies for testing purposes
-manage.pushTestMode=true
+manage.pushTestMode={{ pdp_manage_push_testmode }}
 
 # Number of days how long the policy violations are retained
 policy.violation.retention.period.days=30

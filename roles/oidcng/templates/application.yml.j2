@@ -3,7 +3,7 @@ logging:
   config: file://{{ oidcng_config_dir }}/logback.xml
   level:
     org.springframework: WARN
-    oidc: WARN
+    oidc: INFO
 
 # Is this node in a load-balanced topology responsible for cleaning up resources
 cron:
@@ -61,6 +61,8 @@ features:
   enforce-scope-resource-server: false
   # Do we show consent if configured for a RP in manage
   consent-enabled: {{ oidcng.consent_enabled }}
+  # Do we allow for Device Authorization flow
+  oidcng_device_flow: {{ oidcng_device_flow }}
 
 sp:
   entity_id: {{ oidcng_saml_sp_entityid }}
@@ -74,7 +76,7 @@ idp:
 spring:
   data:
     mongodb:
-      uri: "mongodb://{{ oidcng.mongo_user }}:{{ oidcng.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ oidcng.mongo_port }}{% if not loop.last %},{% endif %}{%endfor %}/{{ oidcng.mongo_database }}?ssl=true"
+      uri: "mongodb://{{ oidcng.mongo_user }}:{{ oidcng.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ oidcng.mongo_port }}{% if not loop.last %},{% endif %}{%endfor %}/{{ oidcng.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}"
 
   thymeleaf:
     cache: true

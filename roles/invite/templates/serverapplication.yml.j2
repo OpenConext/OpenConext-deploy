@@ -115,7 +115,12 @@ config:
   eduid-entity-id: "https://login.{{ myconext_base_domain }}"
   role-search-required: false
   past-date-allowed: {{ invite.past_date_allowed }}
+  performance-seed-allowed: {{ invite.performance_seed_allowed }}
   eduid-idp-schac-home-organization: {{ invite.eduid_idp_schac_home_organization }}
+
+feature:
+  limit-institution-admin-role-visibility: {{ invite.limit_institution_admin_role_visibility }}
+  enable-performance-seed: False
 
 # We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
 external-api-configuration:
@@ -150,6 +155,10 @@ external-api-configuration:
       password: "{{ invite.sp_dashboard_secret }}"
       scopes:
         - sp_dashboard
+      applications:
+        - manageId: {{ invite.sp_dashboard_manage_id }}
+          manageType: SAML20_SP
+
 
 voot:
   group_urn_domain: "{{ invite.group_urn_domain }}"

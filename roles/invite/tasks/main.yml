@@ -48,6 +48,13 @@
   when: invite_mock_install
   notify: restart inviteprovisioningmock
 
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    invite_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create and start the server container
   community.docker.docker_container:
     name: inviteserver
@@ -57,8 +64,7 @@
     pull: true
     restart_policy: "always"
     state: started
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ invite_docker_networks }}"
     mounts:
       - source: /opt/openconext/invite/serverapplication.yml
         target: /application.yml
@@ -79,7 +85,6 @@
       retries: 3
       start_period: 10s
   register: inviteservercontainer
-
 
 - name: Create the client container
   community.docker.docker_container:
@@ -133,6 +138,7 @@
     env:
       HTTPD_CSP: "{{ httpd_csp.strict_with_static_img }}"
 
+
 - name: Create and start the mock provisioning container
   community.docker.docker_container:
     name: inviteprovisioningmock
@@ -148,8 +154,7 @@
       - source: /etc/localtime
         target: /etc/localtime
         type: bind
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ invite_docker_networks }}"
     labels:
       traefik.http.routers.invitemock.rule: "Host(`mock.{{ base_domain }}`)"
       traefik.http.routers.invitemock.tls: "true"

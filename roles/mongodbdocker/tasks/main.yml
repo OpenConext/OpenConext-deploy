@@ -1,0 +1,87 @@
+---
+- name: Install required packages
+  ansible.builtin.apt:
+    name: "python3-pymongo"
+    state: present
+
+- name: Create MongoDB volume
+  community.docker.docker_volume:
+    name: openconext_mongodb
+    state: present
+
+- name: Create MongoDB network
+  community.docker.docker_network:
+    name: openconext_mongodb
+    state: present
+    internal: false
+    ipam_config:
+      - subnet: "{{ docker_mongodb_network_range }}"
+
+- name: Create the MongoDB container
+  community.docker.docker_container:
+    name: openconext_mongodb
+    image: bitnami/mongodb:7.0
+    state: started
+    pull: true
+    restart_policy: "always"
+    ports: "127.0.0.1:27017:27017"
+    networks:
+      - name: "openconext_mongodb"
+    mounts:
+      - type: volume
+        source: openconext_mongodb
+        target: /var/lib/mysql
+      - type: bind
+        source: /home/backup/mongo/
+        target: /home/backup
+    env:
+      MONGODB_ROOT_USER: admin
+      MONGODB_ROOT_PASSWORD: "{{ mongo_admin_password }}"
+      MONGODB_REPLICA_SET_NAME: "{{ replica_set_name }}"
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_REPLICA_SET_KEY: "{{ mongodb_replicateset_key }}"
+      MONGODB_ADVERTISED_HOSTNAME: openconext_mongodb
+    volumes:
+      - openconext_mongodb:/bitnami/mongodb
+    hostname: openconext_mongodb
+
+- name: Create mongo database users
+  community.mongodb.mongodb_user:
+    login_database: admin
+    database: "{{ item.db_name }}"
+    login_user: admin
+    login_password: "{{ mongo_admin_password }}"
+    login_host: 127.0.0.1
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    roles: readWrite
+    replica_set: "{{ replica_set_name }}"
+    strict_compatibility: false
+  no_log: false
+  run_once: true
+  with_items: "{{ mongo.users }}"
+  changed_when: false
+  tags: mongo_users
+
+- name: Create the backupdir
+  ansible.builtin.file:
+    path: /home/backup/mongo
+    owner: 1001
+    group: 1001
+    mode: "0700"
+
+- name: Install the backup script
+  ansible.builtin.template:
+    src: "backup_mongo.pl.j2"
+    dest: "/usr/local/sbin/backup_mongo.pl"
+    mode: "0700"
+    owner: root
+    group: root
+
+- name: Create cron symlink for backup script
+  ansible.builtin.file:
+    src: "/usr/local/sbin/backup_mongo.pl"
+    dest: "/etc/cron.daily/mongodb_backup"
+    state: link
+    mode: "0700"
+    owner: root

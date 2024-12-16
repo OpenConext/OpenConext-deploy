@@ -82,29 +82,6 @@
     - role: mongo
       tags: ['core', 'mongo']
 
-- hosts: app_php
-  gather_facts: no
-  become: true
-  roles:
-    - role: php
-      tags: ['core', 'app_php', 'php']
-    - role: static
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['app_php', 'static']
-    - role: metadata
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['app_php', 'static']
-    - role: openconext-common
-      tags: ['core', 'app_php', 'eb', 'profile']
-    - role: engineblock
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['core', 'app_php', 'eb']
-  handlers:
-    - import_tasks: roles/httpd/handlers/main.yml
-
 - hosts: app_java
   gather_facts: true
   become: true
@@ -164,10 +141,14 @@
     - { role: stepupra        ,                          tags: ['stepupra' , 'stepup'] }
     - { role: stepupgateway        ,                     tags: ['stepupgateway' , 'stepup'] }
 
-- hosts: docker
+- hosts: docker_apps1,docker_apps2
   become: true
   roles:
     - { role: docker,     tags: ['docker' ] }
+
+- hosts: docker_apps1
+  become: true
+  roles:
     - { role: invite,     tags: ['invite' ] }
     - { role: dashboard,  tags: ["dashboard"] }
     - { role: teams,      tags: ["teams"] }
@@ -184,6 +165,17 @@
     - { role: profile,      tags: ["profile"] }  
     - { role: lifecycle,      tags: ["lifecycle"] }  
     - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
+
+- hosts: docker_apps2
+  become: true
+  roles: 
+    - { role: engineblock,      tags: ["eb"] }  
+    
+- hosts: docker_mariadb
+  become: true
+  roles:
+    - { role: mariadbdocker, tags: ['mariadbdocker']}
+    - { role: mongodbdocker, tags: ['mongodbdocker']}
 
 - hosts: localhost
   become: false

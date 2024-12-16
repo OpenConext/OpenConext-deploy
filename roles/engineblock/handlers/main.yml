@@ -1,5 +1,7 @@
 ---
-- name: restart php72-fpm
-  service:
-    name: php72-php-fpm
-    state: restarted
+- name: restart engine
+  community.docker.docker_container:
+    name: engine
+    state: started
+    restart: true
+  when: ebcontainer is success and ebcontainer is not change

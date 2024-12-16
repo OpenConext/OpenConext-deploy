@@ -33,6 +33,13 @@
   notify:
     - restart {{ appname }}
 
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    lifecycle_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create the container
   community.docker.docker_container:
     name: "{{ appname }}"
@@ -41,8 +48,7 @@
       host.docker.internal: host-gateway
     pull: true
     restart_policy: "always"
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ lifecycle_docker_networks }}"
     labels:
       traefik.http.routers.lifecycle.rule: "Host(`lifecycle.{{ base_domain }}`)"
       traefik.http.routers.lifecycle.tls: "true"

@@ -37,3 +37,5 @@ spdashboard_oidcng_playground_uri_test: https://oidc-playground.dev.support.surf
 spdashboard_oidcng_playground_uri_prod: https://oidc-playground.dev.support.surfconext.nl/redirect
 spdashboard_show_global_notice: False
 spdashboard_global_notice_date: "01-01-2020"
+spdashboard_docker_networks: 
+  - name: loadbalancer

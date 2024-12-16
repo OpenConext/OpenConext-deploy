@@ -10,3 +10,4 @@ stepupapps:
   - webauthn
   - tiqr
   - azure-mfa
+  - azuremfa

@@ -1,0 +1,3 @@
+docker_mariadb_network_range: "172.21.21.0/24"
+mysql_backup_user: backup_user
+backup_node: True

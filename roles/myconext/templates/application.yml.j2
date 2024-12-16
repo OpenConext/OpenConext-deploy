@@ -36,6 +36,7 @@ springdoc:
 
 email:
   from: eduID <noreply@{{ myconext_base_domain }}>
+  error_mail: info@surfconext.nl
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
   idp-surfconext-url: https://login.{{ myconext_base_domain }}
@@ -54,6 +55,14 @@ cron:
   token-cleaner-expression: "0 0/15 * * * *"
   manage-initial-delay-milliseconds: 15000
   manage-fixed-rate-milliseconds: 300_000
+  # Runs on the first day of February, May, August, and November.
+  mail-institution-mail-usage-expression: "0 0 0 1 2,5,8,11 *"
+  # Every day at 6:30AM
+  nudge-app-mail-expression: "0 30 6 * * ?"
+  # Number of days after creation of the eduID account which the nudge mail is send
+  nudge-app-mail-days-after-creation: 14
+  # Every day at 7:30AM
+  inactivity-users-expression: "0 30 7 * * ?"
 
 manage:
   username: myconext
@@ -100,7 +109,14 @@ feature:
   id_verify: {{ myconext.feature_id_verify}}
   # Do we support the remote creation API (e.g. for studielink)
   remote_creation_api: {{ myconext.feature_remote_creation_api }}
-
+  # Do we send error mails for reported errors by the JS UI
+  send_js_exceptions: {{ myconext.feature_send_js_exceptions }}
+  # Do we periodically mail users who have used their institution account
+  mail_institution_mail_usage: {{ myconext.feature_mail_institution_mail_usage }}
+  # Do we periodically mail users who are inactive and might have their account deleted
+  mail_inactivity_mails: {{ myconext.feature_mail_inactivity_mails }}
+  # Do we mail users who have not installed the eduID app
+  nudge_app_mail: {{ myconext.feature_nudge_app_mail }}
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
@@ -110,7 +126,8 @@ tiqr_hash_secret: "{{ myconext_tiqr_hash_secret }}"
 
 remember_me_max_age_seconds: 15_768_000
 sso_mfa_duration_seconds: 3600
-nudge_eduid_app_days: {{ myconext.nudge_eduid_app_days }}
+nudge_eduid_app_login_days: {{ myconext.nudge_eduid_app_login_days }}
+nudge_eduid_app_pause_days: {{ myconext.nudge_eduid_app_pause_days }}
 remember_me_question_asked_days: {{ myconext.remember_me_question_asked_days }}
 email_guessing_sleep_millis: 500
 email_spam_threshold_seconds: 15
@@ -164,6 +181,12 @@ oidc:
   sp-create-from-institution-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/create-from-institution/oidc-redirect
   base-url: https://connect.{{ base_domain }}
 
+
+services-configuration:
+  # All entity identifiers from services we want to hide in the data & activity overview
+  hide_in_overview:
+    - playground_client
+
 linked_accounts:
   # The duration that non validated-name linked accounts are valid - note that they are not removed and will still be used for EPPN Pseudonymisation
   expiry-duration-days-non-validated: 180
@@ -205,13 +228,18 @@ verify:
 spring:
   data:
     mongodb:
-      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl=true
+      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}
 
   mail:
     host: {{ smtp_server }}
     port: 25
   main:
     banner-mode: "off"
+
+gui:
+  disclaimer:
+    background-color: {{ environment_ribbon_colour }}
+    content: {{ environment_shortname }}
 
 # We disable all endpoints except health for the load-balancer and info for git information.
 management:

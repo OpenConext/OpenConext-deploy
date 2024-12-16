@@ -89,6 +89,11 @@ parameters:
     preferred_activation_flow_name: activate
     preferred_activation_flow_options: [ra, self]
 
+    activation_flow_attribute_name: urn:mace:dir:attribute-def:eduPersonEntitlement
+    activation_flow_attributes:
+        ra:   urn:mace:surf.nl:surfsecureid:activation:ra
+        self: urn:mace:surf.nl:surfsecureid:activation:self
+
     # Self-asserted tokens: enable/disable recovery methods
     #
     # One of the two options should be enabled to have a fully functioning

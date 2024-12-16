@@ -36,14 +36,20 @@
   notify:
     - restart {{ appname }}
 
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    middelware_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create the container
   community.docker.docker_container:
     name: "{{ appname }}"
     image: ghcr.io/openconext/stepup-middleware/stepup-middleware:{{ middleware_version }}
     pull: true
     restart_policy: "always"
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ middelware_docker_networks }}"
     labels:
       traefik.http.routers.middleware.rule: "Host(`{{ middleware_vhost_name }}`)"
       traefik.http.routers.middleware.tls: "true"

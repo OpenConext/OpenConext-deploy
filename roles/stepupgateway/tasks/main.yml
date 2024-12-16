@@ -109,14 +109,20 @@
     owner: "{{ appname }}"
     mode: "0600"
 
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    gateway_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create the container
   community.docker.docker_container:
     name: "{{ appname }}"
     image: ghcr.io/openconext/stepup-gateway/stepup-gateway:{{ gateway_version }}
     pull: true
     restart_policy: "always"
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ gateway_docker_networks }}"
     labels:
       traefik.http.routers.gateway.rule: "Host(`{{ gateway_vhost_name }}`)"
       traefik.http.routers.gateway.tls: "true"
