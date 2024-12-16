@@ -30,6 +30,5 @@ manage_tabs_enabled:
   - single_tenant_template
   - provisioning
   - sram
-
 manage_docker_networks:
   - name: loadbalancer

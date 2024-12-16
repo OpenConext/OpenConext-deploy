@@ -98,10 +98,6 @@
       tags: ['app_php', 'static']
     - role: openconext-common
       tags: ['core', 'app_php', 'eb', 'profile']
-    - role: engineblock
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['core', 'app_php', 'eb']
     - role: lifecycle
       when:
         - inventory_hostname in groups['lifecycle']
@@ -168,10 +164,14 @@
     - { role: stepupra        ,                          tags: ['stepupra' , 'stepup'] }
     - { role: stepupgateway        ,                     tags: ['stepupgateway' , 'stepup'] }
 
-- hosts: docker
+- hosts: docker_apps1,docker_apps2
   become: true
   roles:
     - { role: docker,     tags: ['docker' ] }
+
+- hosts: docker_apps1
+  become: true
+  roles:
     - { role: invite,     tags: ['invite' ] }
     - { role: dashboard,  tags: ["dashboard"] }
     - { role: teams,      tags: ["teams"] }
@@ -189,6 +189,11 @@
     - { role: lifecycle,      tags: ["lifecycle"] }  
     - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
 
+- hosts: docker_apps2
+  become: true
+  roles: 
+    - { role: engineblock,      tags: ["eb"] }  
+    
 - hosts: docker_mariadb
   become: true
   roles:
@@ -196,4 +201,3 @@
     - { role: mongodbdocker, tags: ['mongodbdocker']}
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
-

@@ -20,6 +20,13 @@
     - xacml.conext.properties
   notify: restart pdpserver
 
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    pdp_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create and start the server container
   community.docker.docker_container:
     name: pdpserver
@@ -29,8 +36,7 @@
     pull: true
     restart_policy: "always"
     state: started
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ pdp_docker_networks }}"
     mounts:
       - source: /opt/openconext/pdp/serverapplication.properties
         target: /application.properties
@@ -59,7 +65,7 @@
       retries: 3
       start_period: 10s
   register: pdpservercontainer
-    
+ 
 - name: Create the gui container
   community.docker.docker_container:
     name: pdpgui

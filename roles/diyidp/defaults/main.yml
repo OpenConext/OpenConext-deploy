@@ -14,3 +14,5 @@ diyidp_remotesp:
   - name: "{{ instance_name }} SP metadata"
     metadataurl: "https://engine.{{ base_domain }}/authentication/sp/metadata"
     acslocation: "https://engine.{{ base_domain }}/authentication/sp/consume-assertion"
+diyidp_docker_networks:
+  - name: "loadbalancer"

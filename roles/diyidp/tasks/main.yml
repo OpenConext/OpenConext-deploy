@@ -67,6 +67,13 @@
     mode: "0644"
   notify: restart diyidp
 
+- name: Add the mariadb docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    diyidp_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create the container
   community.docker.docker_container:
     name: diyidp
@@ -74,8 +81,7 @@
     pull: true
     restart_policy: "always"
     state: started
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ diyidp_docker_networks }}"
     labels:
       traefik.http.routers.diyidp.rule: "Host(`{{ diyidp_domain }}`)"
       traefik.http.routers.diyidp.tls: "true"
