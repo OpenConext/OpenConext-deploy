@@ -193,6 +193,11 @@
   become: true
   roles: 
     - { role: engineblock,      tags: ["eb"] }  
+    
+- hosts: docker_mariadb
+  become: true
+  roles:
+    - { role: mariadbdocker, tags: ['mariadbdocker']}
+    - { role: mongodbdocker, tags: ['mongodbdocker']}
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
-
