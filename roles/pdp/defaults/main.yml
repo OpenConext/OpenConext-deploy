@@ -22,4 +22,4 @@ pdp_manage_provision_samlsp_sign: false
 pdp_spring_flyway_enabled: true
 pdp_manage_push_testmode: true
 pdp_docker_networks:
-  -name: loadbalancer
+  - name: loadbalancer

@@ -74,9 +74,9 @@ voot.clientSecret={{ pdp_client_secret }}
 voot.scopes ={{ pdp_manage_provision_oidcrp_scopes }}
 
 # SAB configuration
-sab.userName="{{ aa.sab_rest_username }}"
-sab.password="{{ aa.sab_rest_password }}"
-sab.endpoint="{{ aa.sab_rest_endpoint }}"
+sab.userName={{ aa.sab_rest_username }}
+sab.password={{ aa.sab_rest_password }}
+sab.endpoint={{ aa.sab_rest_endpoint }}
 
 # Do not expose any of the Spring BOOT endpoints except the health and info for loadbalancer health check
 endpoints.enabled=false
