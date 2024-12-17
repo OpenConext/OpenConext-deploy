@@ -10,7 +10,7 @@ cron:
   node-cron-job-responsible: {{ oidcng_cronjobmaster }}
   # Every 15 minutes
   token-cleaner-expression: "0 0/15 * * * *"
-  # Differs per env: see https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
+  # Differs per env: see https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronExpression.html
   key-rollover-expression: {{ oidcng.key_rollover_cron_expression }}
   consent-expiry-duration-days: 90
 
