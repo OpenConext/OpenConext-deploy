@@ -177,7 +177,4 @@
     - { role: mariadbdocker, tags: ['mariadbdocker']}
     - { role: mongodbdocker, tags: ['mongodbdocker']}
 
-- hosts: localhost
-  become: false
-  tasks:
-    - import_playbook: "{{ inventory_dir }}/playbook.yml" 
+- import_playbook: "{{ environment_dir }}/playbook.yml"

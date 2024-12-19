@@ -35,7 +35,7 @@ fi
 
 cmd=$(
   cat <<-EOF
-ansible-playbook -i $inventory $playbook $@
+ansible-playbook -i $inventory $playbook -e environment_dir=$environment_dir $@
 EOF
 )
 echo "executing $cmd" | tr -d "\n" | tr -s ' '
