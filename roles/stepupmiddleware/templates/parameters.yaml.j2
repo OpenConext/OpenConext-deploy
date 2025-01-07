@@ -1,4 +1,9 @@
 parameters:
+{% if 'docker' in group_names %}
+    app_env: prod
+    app_debug: false
+    app_secret: {{ middleware_secret }}
+{% endif %}
     # Name of the application, used in lifecycle API
     application_name: "{{ lifecycle_application_name }}"
     trusted_proxies:   [ {{ engine_trusted_proxy_ips|join(',') }} ]
