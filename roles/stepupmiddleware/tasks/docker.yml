@@ -63,6 +63,9 @@
       - source: /opt/openconext/middleware/parameters.yaml
         target: /var/www/html/config/parameters.yaml
         type: bind
+      - source: /opt/openconext/middleware
+        target: /var/www/html/config/openconext
+        type: bind
     healthcheck:
       test: ["CMD", "curl", "--fail" , "http://localhost/health"  ]
       interval: 10s
