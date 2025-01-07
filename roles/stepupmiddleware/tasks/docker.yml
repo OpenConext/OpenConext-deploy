@@ -61,7 +61,7 @@
       HTTPD_CSP: ""
     mounts:
       - source: /opt/openconext/middleware/parameters.yaml
-        target: /var/www/html/config/legacy/parameters.yaml
+        target: /var/www/html/config/parameters.yaml
         type: bind
     healthcheck:
       test: ["CMD", "curl", "--fail" , "http://localhost/health"  ]
