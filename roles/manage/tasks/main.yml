@@ -72,12 +72,13 @@
   notify:
     - "restart manageserver"
 
-- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+- name: Add the mongodb and mariadb  docker network to the list of networks when MongoDB runs in Docker
   ansible.builtin.set_fact:
     manage_docker_networks:
       - name: loadbalancer
+      - name: openconext_mongodb
       - name: openconext_mariadb
-  when: mariadb_in_docker | default(false) | bool
+  when: mongodb_in_docker | default(false) | bool
 
 - name: Create and start the server container
   community.docker.docker_container:
@@ -87,7 +88,7 @@
     pull: true
     restart_policy: "always"
     state: started
-    networks: "{{ manage_docker_networks}}"
+    networks: "{{ manage_docker_networks }}"
     mounts:
       - source: /opt/openconext/manage/
         target: /config/

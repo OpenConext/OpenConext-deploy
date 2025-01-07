@@ -82,29 +82,6 @@
     - role: mongo
       tags: ['core', 'mongo']
 
-- hosts: app_php
-  gather_facts: no
-  become: true
-  roles:
-    - role: php
-      tags: ['core', 'app_php', 'php']
-    - role: static
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['app_php', 'static']
-    - role: metadata
-      when:
-        - inventory_hostname not in groups['lifecycle']
-      tags: ['app_php', 'static']
-    - role: openconext-common
-      tags: ['core', 'app_php', 'eb', 'profile']
-    - role: lifecycle
-      when:
-        - inventory_hostname in groups['lifecycle']
-      tags: ['app_php', 'lifecycle']
-  handlers:
-    - import_tasks: roles/httpd/handlers/main.yml
-
 - hosts: app_java
   gather_facts: true
   become: true
@@ -193,6 +170,11 @@
   become: true
   roles: 
     - { role: engineblock,      tags: ["eb"] }  
+    
+- hosts: docker_mariadb
+  become: true
+  roles:
+    - { role: mariadbdocker, tags: ['mariadbdocker']}
+    - { role: mongodbdocker, tags: ['mongodbdocker']}
 
 - import_playbook: "{{ environment_dir }}/playbook.yml"
-

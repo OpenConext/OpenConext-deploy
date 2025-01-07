@@ -61,6 +61,8 @@ cron:
   nudge-app-mail-expression: "0 30 6 * * ?"
   # Number of days after creation of the eduID account which the nudge mail is send
   nudge-app-mail-days-after-creation: 14
+  # Every day at 7:30AM
+  inactivity-users-expression: "0 30 7 * * ?"
 
 manage:
   username: myconext
@@ -111,6 +113,8 @@ feature:
   send_js_exceptions: {{ myconext.feature_send_js_exceptions }}
   # Do we periodically mail users who have used their institution account
   mail_institution_mail_usage: {{ myconext.feature_mail_institution_mail_usage }}
+  # Do we periodically mail users who are inactive and might have their account deleted
+  mail_inactivity_mails: {{ myconext.feature_mail_inactivity_mails }}
   # Do we mail users who have not installed the eduID app
   nudge_app_mail: {{ myconext.feature_nudge_app_mail }}
 
@@ -224,7 +228,7 @@ verify:
 spring:
   data:
     mongodb:
-      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl=true
+      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}
 
   mail:
     host: {{ smtp_server }}

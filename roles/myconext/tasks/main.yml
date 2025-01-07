@@ -64,7 +64,7 @@
   notify:
     - "restart myconextserver"
 
-- name: copy / create private key
+- name: Copy / create private key
   ansible.builtin.copy:
     content: "{{ myconext_private_key }}"
     dest: "/opt/openconext/myconext/myconext_saml.key"
@@ -74,7 +74,7 @@
   notify:
     - "restart myconextserver"
 
-- name: copy / create certificate
+- name: Copy / create certificate
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/myconext/myconext_saml.crt"
     dest: "/opt/openconext/myconext/myconext_saml.crt"
@@ -100,6 +100,13 @@
     group: "root"
     mode: "0755"
 
+- name: Add the mongodb docker network to the list of networks when MongoDB runs in Docker
+  ansible.builtin.set_fact:
+    myconext_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mongodb
+  when: mongodb_in_docker | default(false) | bool
+
 - name: Create and start the server container
   community.docker.docker_container:
     name: myconextserver
@@ -110,8 +117,7 @@
     env:
       USE_SYSTEM_CA_CERTS: "1"
       TZ: "{{ timezone }}"
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ myconext_docker_networks }}"
     mounts:
       - source: /opt/openconext/myconext/
         target: /config/
