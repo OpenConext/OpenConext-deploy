@@ -34,6 +34,26 @@ parameters:
 
     mobile_app_user_agent_pattern: "/^.*$/"
 
+    # The lifetime of the trusted device in seconds
+    # For example, 30 days is 2592000 seconds
+    trusted_device_cookie_lifetime: 2592000
+
+    # The name used for the trusted-device cookies
+    trusted_device_cookie_name: tiqr-trusted-device
+
+    # The same_site attribute of the trusted-device cookies
+    # Should be one of the strings in: \Surfnet\Tiqr\Service\TrustedDevice\Http\CookieSameSite: 'none', 'lax', 'strict'
+    trusted_device_cookie_same_site: 'strict'
+
+    # The secret key is used for the authenticated encryption (AE) of the trusted-device cookies, it is stored in the
+    # parameters.yaml of Stepup-Tiqr. This secret may only be used for the AE of the trusted device cookies.
+    #   The secret key size is fixed, it must be 256 bits (32 bytes (64 hex digits))
+    #   We use hex encoding to store the key in the configuration, so the key will be 64 hex digits long
+    # Please use this encryption key only for this purpose, do not re-use it for other crypto work.
+    #
+    # Example value: 000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+    trusted_device_encryption_key: {{ tiqr_trusted_device_encryption_key }}
+
     # Options for the tiqr library
     tiqr_library_options:
         general:
