@@ -5,6 +5,8 @@ parameters:
     app_secret: {{ tiqr_secret }}
 {% endif %}
 
+    correlation_id_salt: {{ tiqr_correlation_id_salt }}
+
     # All locales supported by the application
     locales: [{{ enabled_locales | join(",") }}]
 
