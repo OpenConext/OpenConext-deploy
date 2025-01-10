@@ -243,17 +243,21 @@ gui:
 
 # We disable all endpoints except health for the load-balancer and info for git information.
 management:
-  health:
-    mail:
-      access: unrestricted
-      show-details: always
-  info:
-    access: unrestricted
-    git:
-      mode: full
-  # We disable all endpoints except health for the load-balancer and info for git information.
   endpoints:
     web:
       exposure:
         include: "health,info"
       base-path: "/internal"
+  endpoint:
+    info:
+      access: unrestricted
+    health:
+      access: unrestricted
+      show-details: always
+    mappings:
+      access: none
+    metrics:
+      access: none
+  info:
+    git:
+      mode: full
