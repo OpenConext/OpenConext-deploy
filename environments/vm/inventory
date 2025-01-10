@@ -7,21 +7,6 @@
 [storage_vm:children]
 storage
 
-[java_apps]
-192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
-
-[java_apps_common]
-192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
-
-[java_apps_vm:children]
-java_apps
-
-[php_apps]
-192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
-
-[php_apps_vm:children]
-php_apps
-
 [mongo_servers]
 192.168.66.99 ansible_ssh_private_key_file=./.vagrant/machines/apps_centos7/virtualbox/private_key
 
@@ -37,8 +22,6 @@ php_apps
 
 [vm:children]
 storage
-java_apps_vm
-php_apps
 mongo_servers
 logstash
 selfsigned_certs
@@ -47,7 +30,6 @@ loadbalancer_ha
 loadbalancer
 elk
 lifecycle
-oidc
 dbcluster
 dbcluster_nodes
 stats
@@ -56,7 +38,6 @@ stats
 [loadbalancer_ha]
 [elk]
 [lifecycle]
-[oidc]
 [dbcluster]
 [dbcluster_nodes]
 [stats]
@@ -65,8 +46,6 @@ stats
 
 [base:children]
 loadbalancer
-php_apps
-java_apps
 storage
 dbcluster
 sysloghost
@@ -78,24 +57,9 @@ selfsigned_certs
 loadbalancer_ha
 
 [frontend:children]
-php_apps_vm
-java_apps_vm
-oidc
 lifecycle
 
 [db_mysql:children]
 storage
 dbcluster
 dbcluster_nodes
-
-[app_php:children]
-php_apps
-php_apps_vm
-lifecycle
-
-[app_java:children]
-java_apps
-java_apps_vm
-
-[app_oidc:children]
-oidc

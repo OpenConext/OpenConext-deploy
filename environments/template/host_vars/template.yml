@@ -1,22 +1,2 @@
 myconext_cronjobmaster: false
-apache_app_listen_address:
-  welcome: 127.0.0.1
-  engine: 127.0.0.1
-  engine_api: 127.0.0.1
-  profile: 127.0.0.1
-  mujina_idp: 127.0.0.1
-  mujina_sp: 127.0.0.1
-  static: 127.0.0.1
-  metadata: 127.0.0.1
-  oidc_playground: 127.0.0.1
-  teams: 127.0.0.1
-  voot: 127.0.0.1
-  pdp: 127.0.0.1
-  oidcng: 127.0.0.1
-  aa: 127.0.0.1
-  manage: 127.0.0.1
-  myconext: 127.0.0.1
-  account: 127.0.0.1
-  eduid: 127.0.0.1
-
 mongo_replication_role: primary

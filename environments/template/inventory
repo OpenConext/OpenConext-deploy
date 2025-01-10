@@ -1,18 +1,6 @@
 [storage]
 %target_host%
 
-[java_apps]
-%target_host%
-
-[java_apps_vm]
-%target_host%
-
-[java_apps_common]
-%target_host%
-
-[php_apps]
-%target_host%
-
 [mongo_servers]
 %target_host%
 
@@ -24,9 +12,6 @@
 
 [%env%:children]
 storage
-java_apps
-java_apps_vm
-php_apps
 mongo_servers
 selfsigned_certs
 sysloghost
@@ -34,7 +19,6 @@ loadbalancer_ha
 loadbalancer
 elk
 lifecycle
-oidc
 dbcluster
 dbcluster_nodes
 stats
@@ -43,18 +27,12 @@ stats
 [loadbalancer_ha]
 [elk]
 [lifecycle]
-[oidc]
 [dbcluster]
 [dbcluster_nodes]
 [stats]
-[php_apps_vm]
-
-# Overview of "services"
 
 [base:children]
 loadbalancer
-php_apps
-java_apps
 storage
 dbcluster
 sysloghost
@@ -66,9 +44,6 @@ selfsigned_certs
 loadbalancer_ha
 
 [frontend:children]
-php_apps_vm
-java_apps_vm
-oidc
 lifecycle
 
 [db_mysql:children]
@@ -77,16 +52,7 @@ dbcluster
 dbcluster_nodes
 
 [app_php:children]
-php_apps
-php_apps_vm
 lifecycle
-
-[app_java:children]
-java_apps
-java_apps_vm
-
-[app_oidc:children]
-oidc
 
 [local]
 localhost ansible_connection=local
