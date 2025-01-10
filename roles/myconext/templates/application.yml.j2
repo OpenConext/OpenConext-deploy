@@ -245,15 +245,15 @@ gui:
 management:
   health:
     mail:
-      enabled: true
+      access: unrestricted
       show-details: always
   info:
-    enabled: true
+    access: unrestricted
     git:
       mode: full
   # We disable all endpoints except health for the load-balancer and info for git information.
   endpoints:
     web:
       exposure:
-        include: "health,info,mappings,metrics"
+        include: "health,info"
       base-path: "/internal"
