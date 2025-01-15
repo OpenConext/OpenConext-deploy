@@ -236,6 +236,9 @@ spring:
   main:
     banner-mode: "off"
 
+service_desk_role_auto_provisioning: False
+service_desk_roles: {{ myconext.service_desk_roles | join(",") }}
+
 gui:
   disclaimer:
     background-color: {{ environment_ribbon_colour }}
