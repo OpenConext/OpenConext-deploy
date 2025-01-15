@@ -25,20 +25,6 @@
         - use_selfsigned_certs
       tags: ['core', 'base', 'selfsigned_certs']
 
-- hosts: frontend
-  become: true
-  roles:
-    - role: hosts
-      when:
-        - update_hosts_file
-      tags: ['core', 'frontend', 'hosts']
-    - role: httpd
-      tags: ['core', 'frontend', 'httpd']
-    - role: welcome
-      when:
-        - use_welcome_role
-      tags: ['core', 'frontend', 'welcome']
-
 - hosts: loadbalancer
   gather_facts: true
   become: true
@@ -82,38 +68,6 @@
     - role: mongo
       tags: ['core', 'mongo']
 
-- hosts: app_java
-  gather_facts: true
-  become: true
-  roles:
-    - role: java
-      tags: ['core', 'app_java', 'java']
-    - role: shibboleth
-      tags: ['core', 'app_java', 'shib']
-  handlers:
-    - import_tasks: roles/httpd/handlers/main.yml
-
-# run -t springboot -e springboot_service_to_deploy=manage,voot to only install
-# the manage and voot app. Both GUI as servers will be installed.
-- hosts: java_apps
-  become: true
-  roles:
-    - { role: springboot,       tags: ['core', 'springboot'] }
-
-  handlers:
-    - import_tasks: roles/httpd/handlers/main.yml
-
-- hosts: app_php
-  gather_facts: no
-  become: true
-  roles:
-   - role: profile
-     when:
-       - inventory_hostname not in groups['lifecycle']
-     tags: ['core', 'app_php', 'profile']
-  handlers:
-    - import_tasks: roles/httpd/handlers/main.yml
-
 - hosts: elk
   gather_facts: true
   become: true
@@ -127,8 +81,6 @@
   roles:
     - role: influxdb
       tags: ['influxdb' ]
-  handlers:
-    - include_tasks: roles/httpd/handlers/main.yml
 
 - hosts: stepuppapp
   become: true

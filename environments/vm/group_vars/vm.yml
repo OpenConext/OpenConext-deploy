@@ -120,35 +120,6 @@ profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate (fixme: make variable?):
 engine_profile_idp_certificate: /etc/openconext/engineblock.crt
 
-# shibboleth
-shibboleth_apps:
-  teams:
-    entityID: "https://teams.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  pdp:
-    entityID: "https://pdp.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "attribute-aggregation":
-    entityID: "https://aa.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "attribute-aggregation-link":
-    entityID: "https://link.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "manage":
-    entityID: "https://manage.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "myconext":
-    entityID: "https://my.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "dashboard":
-    entityID: "https://dashboard.{{ base_domain }}/shibboleth"
-    baseurl: ""
-
-shib:
-  db_host: "127.0.0.1"
-shibboleth_database_backend: true
-
-
 ##
 # VM config for the teams app
 ##
@@ -483,154 +454,154 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.engine.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: profile
     vhost_name: profile.{{ base_domain }}
     ha_method: "HEAD"
     ha_url: "/health"
     port: "{{ loadbalancing.profile.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: static
     vhost_name: static.{{ base_domain }}
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
     port: "{{ loadbalancing.static.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: engine_api
     vhost_name: engine-api.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.engine_api.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: metadata
     vhost_name: metadata.{{ base_domain }}
     ha_method: "HEAD"
     ha_url: "/alive.txt"
     port: "{{ loadbalancing.metadata.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: teams
     vhost_name: teams.{{ base_domain }}
     ha_method: GET
     ha_url: "/api/teams/health"
     port: "{{ loadbalancing.teams.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: oidc_playground
     vhost_name: "oidc-playground.{{base_domain }}"
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.oidc_playground.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: voot
     vhost_name: voot.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.voot.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: pdp
     vhost_name: pdp.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/pdp/api/health"
     port: "{{ loadbalancing.pdp.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: aa
     vhost_name: aa.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/aa/api/health"
     port: "{{ loadbalancing.aa.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: link
     vhost_name: link.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/aa/api/health"
     port: "{{ loadbalancing.aa.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: manage
     vhost_name: manage.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.manage.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: oidcng
     vhost_name: connect.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.oidcng.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: myconext
     vhost_name: my.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.myconext.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: account
     vhost_name: account.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.account.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: eduid
     vhost_name: eduid.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.eduid.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: mujina-sp
     vhost_name: mujina-sp.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.mujina_sp.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: mujina-idp
     vhost_name: mujina-idp.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.mujina_idp.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: welcome
     vhost_name: welcome.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.welcome.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: kibana
     vhost_name: kibana.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.kibana.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: stats
     vhost_name: stats.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.stats.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: dashboard
     vhost_name: dashboard.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.dashboard.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
 haproxy_sni_ip:
   ipv4: 192.168.66.98
@@ -642,26 +613,8 @@ haproxy_sni_ip:
 
 haproxy_backend_tls: False
 
-php_servers:
-   - { ip: "192.168.66.99", label: "phpapps"}
-
-java_servers:
-   - { ip: "192.168.66.99", label: "javapps"}
+docker_servers:
+   - { ip: "192.168.66.99", label: "docker"}
 
 dashboard_install: false
 iptables_enable: False
-
-springboot_services_state:
-  manage: true
-  teams: true
-  pdp: true
-  attribute_aggregation: true
-  oidc_playground: true
-  myconext: false
-  account: false
-  eduid: false
-  oidcng: true
-  voot: true
-  mujina_sp: true
-  mujina_idp: true
-  dashboard: false
