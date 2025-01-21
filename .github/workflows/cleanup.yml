@@ -3,12 +3,12 @@ on:
   workflow_dispatch:
     inputs:
       package_name:
-        description: 'The name of the package to delete'     
+        description: 'The name of the package to delete'
         required: true
 
 jobs:
   remove-package-versions:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: purge packages
         uses: dylanratcliffe/delete-untagged-containers@main

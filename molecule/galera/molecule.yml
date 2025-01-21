@@ -12,8 +12,10 @@ platforms:
     privileged: True
     networks:
       - name: mariadb
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - "/tmp"
+      - "/run"
+      - "/sys/fs/cgroup"
     groups:
       - storage
       - dbcluster

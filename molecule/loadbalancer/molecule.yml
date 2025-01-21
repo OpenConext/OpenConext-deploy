@@ -10,13 +10,15 @@ platforms:
     dockerfile: ../Dockerfile-Rocky9.j2
     command: /usr/sbin/init
     privileged: true
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - "/tmp"
+      - "/run"
+      - "/sys/fs/cgroup"
     groups:
       - "loadbalancer-vm"
-      - loadbalancer_ha
-      - selfsigned_certs
-      - loadbalancer
+      - "loadbalancer_ha"
+      - "selfsigned_certs"
+      - "loadbalancer"
 
 provisioner:
   name: ansible

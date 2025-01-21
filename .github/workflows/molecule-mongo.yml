@@ -15,17 +15,19 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+      - name: "Set up Python 3.12"
+        uses: "actions/setup-python@v5"
         with:
-          python-version: 3.8
+          python-version: "3.12"
 
       - name: Installing dependencies
-        run: pip install jinja2 ansible molecule molecule-docker pytest-testinfra pytest setuptools
+        run: |
+          pip install jinja2 ansible molecule molecule-docker pytest-testinfra pytest setuptools
 
       - name: Run role tests
-        run: molecule test -s mongo
+        run: |
+          molecule test -s mongo
