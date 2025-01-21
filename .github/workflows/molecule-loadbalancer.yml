@@ -37,7 +37,3 @@ jobs:
       - name: "Run role tests"
         run: |
           molecule test -s loadbalancer
-
-      - name: "debug"
-        run: |
-          docker ps -a
