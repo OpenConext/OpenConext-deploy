@@ -36,6 +36,10 @@ jobs:
 
       - name: "Run role tests"
         env:
-          ANSIBLE_VERBOSITY: 2
+          ANSIBLE_VERBOSITY: 3
         run: |
           molecule test -s loadbalancer
+
+      - name: debug
+        run: |
+          cat /home/runner/.cache/molecule/OpenConext-deploy/loadbalancer/ansible.cfg
