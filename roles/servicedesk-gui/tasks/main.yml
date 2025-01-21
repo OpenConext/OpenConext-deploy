@@ -1,6 +1,0 @@
----
-- name: copy virtual host config
-  template:
-    src: servicedesk.conf.j2
-    dest: /etc/httpd/conf.d/servicedesk.conf
-  notify: reload httpd
