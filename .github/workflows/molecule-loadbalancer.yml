@@ -43,3 +43,7 @@ jobs:
       - name: debug
         run: |
           cat /home/runner/.cache/molecule/OpenConext-deploy/loadbalancer/ansible.cfg
+
+      - name: debug
+        run: |
+          docker run -ti penconext-rocky9-loadbalancer ls -lad /tmp/
