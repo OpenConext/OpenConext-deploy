@@ -48,4 +48,4 @@ jobs:
       - name: debug
         if: failure()
         run: |
-          docker run -t openconext-rocky9-loadbalancer ls -la /
+          docker exec -t openconext-rocky9-loadbalancer ls -la /
