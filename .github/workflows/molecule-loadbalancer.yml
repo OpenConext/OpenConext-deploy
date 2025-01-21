@@ -41,11 +41,11 @@ jobs:
           molecule test -s loadbalancer
 
       - name: debug
-        if: failure()
+        if: always()
         run: |
           cat /home/runner/.cache/molecule/OpenConext-deploy/loadbalancer/ansible.cfg
 
       - name: debug
-        if: failure()
+        if: always()
         run: |
           docker exec -t openconext-rocky9-loadbalancer ls -la /
