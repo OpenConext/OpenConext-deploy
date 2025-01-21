@@ -5,9 +5,9 @@ driver:
   name: docker
 
 platforms:
-  - name: openconext-centos7-loadbalancer
-    image: centos7-ansible
-    dockerfile: ../Dockerfile.j2
+  - name: openconext-rocky9-loadbalancer
+    image: rocky9-ansible
+    dockerfile: ../Dockerfile-Rocky9.j2
     command: /usr/sbin/init
     privileged: true
     volumes:
