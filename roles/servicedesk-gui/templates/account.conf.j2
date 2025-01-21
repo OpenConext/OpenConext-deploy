@@ -1,0 +1,74 @@
+{% if apache_app_listen_address.servicedesk is defined %}
+Listen {{ apache_app_listen_address.servicedesk }}:{{ loadbalancing.servicedesk.port }}
+<Virtualhost {{ apache_app_listen_address.servicedesk }}:{{ loadbalancing.servicedesk.port }}>
+{% else %}
+<Virtualhost *:443 >
+{% endif %}
+    # General setup for the virtual host, inherited from global configuration
+    ServerName https://login.{{ myconext_base_domain }}
+
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-servicedesk'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-servicedesk'" combined
+
+    RewriteEngine on
+
+    {% for links in myconext.links %}
+    RewriteRule   "^/{{ links.name }}(/|$)"			"{{ links.url }}"  [R,L]
+    {% endfor %}
+
+    RewriteCond %{REQUEST_URI} !\.html$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
+    RewriteCond %{REQUEST_URI} !\.svg$
+    RewriteCond %{REQUEST_URI} !\.png$
+    RewriteCond %{REQUEST_URI} !\.ico$
+    RewriteCond %{REQUEST_URI} !\.woff$
+    RewriteCond %{REQUEST_URI} !\.woff2$
+    RewriteCond %{REQUEST_URI} !\.ttf$
+    RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
+    RewriteCond %{REQUEST_URI} !^/myconext
+    RewriteCond %{REQUEST_URI} !^/tiqr
+    RewriteCond %{REQUEST_URI} !^/config
+    RewriteCond %{REQUEST_URI} !^/saml
+    RewriteCond %{REQUEST_URI} !^/actuator
+    RewriteCond %{REQUEST_URI} !^/internal
+    RewriteCond %{REQUEST_URI} !^/fonts
+    RewriteCond %{REQUEST_URI} !^/.well-known
+    RewriteRule (.*) /index.html [L]
+
+    ProxyPreserveHost On
+    ProxyPass /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api retry=0
+    ProxyPassReverse /myconext/api http://localhost:{{ springapp_tcpport }}/myconext/api
+
+    ProxyPass /actuator http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPass /internal http://localhost:{{ springapp_tcpport }}/internal retry=0
+    ProxyPass /config http://localhost:{{ springapp_tcpport }}/config retry=0
+
+    DocumentRoot "{{ _springapp_dir }}/current"
+
+    <Directory "{{ _springapp_dir }}/current">
+      Require all granted
+      Options     -Indexes
+    </Directory>
+
+    Header always set Content-Security-Policy "{{ httpd_csp.lenient_with_static_img_for_idp }}"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "same-origin"
+    Header always set X-Content-Type-Options "nosniff"
+
+    {% if haproxy_backend_tls %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/backend.{{ base_domain }}.pem
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/backend.{{ base_domain }}.key
+    Include ssl_backend.conf
+    {% endif %}
+
+    {% if apache_app_listen_address.all is defined %}
+    SSLEngine on
+    SSLCertificateFile      {{ tls.cert_path }}/{{ tls_star_cert }}
+    SSLCertificateKeyFile   {{ tls.cert_private_path }}/{{ tls_star_cert_key }}
+    SSLCertificateChainFile {{ tls.cert_path_ca }}/{{ tls_ca }}
+    Include ssl_backend.conf
+    {% endif %}
+
+</VirtualHost>

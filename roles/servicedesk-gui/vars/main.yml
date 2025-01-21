@@ -1,0 +1,4 @@
+---
+springapp_tcpport: 9189
+springapp_artifact_id: servicedesk-gui
+springapp_version: "{{ servicedesk_gui_version }}"
