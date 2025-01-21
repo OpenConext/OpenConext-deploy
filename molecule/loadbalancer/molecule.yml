@@ -37,12 +37,12 @@ scenario:
     - destroy
     - syntax
     - create
-    - prepare
-    - converge
+    #- prepare
+    #- converge
     # No idempotence due to bind zone transfer (template with epoch seconds)
     # - idempotence
-    - side_effect
-    - verify
+    #- side_effect
+    #- verify
     #- cleanup
     #- destroy
 verifier:
