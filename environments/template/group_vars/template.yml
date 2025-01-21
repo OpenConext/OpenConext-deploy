@@ -82,130 +82,6 @@ tls_star_cert: star.{{ base_domain }}.pem
 tls_star_cert_key: star.{{ base_domain }}.key
 tls_ca: star.{{ base_domain }}_ca.pem
 
-springboot_service_to_deploy: all
-springboot_gui_services:
-  - name: manage
-    enabled: true
-    version: "{{ manage_gui_version }}"
-  - name: teams
-    enabled: true
-    version: "{{ teams_gui_version }}"
-  - name: pdp
-    enabled: true
-    version: "{{ pdp_gui_version }}"
-  - name: attribute-aggregation
-    enabled: true
-    version: "{{ attribute_aggregation_gui_version }}"
-  - name: dashboard
-    enabled: "{{ dashboard_install }}"
-    version: "{{ dashboard_gui_version | default('SNAPSHOT') }}"
-  - name: oidc-playground
-    enabled: true
-    version: "{{ oidc_playground_client_version }}"
-    role: oidc-playground-client
-    artifactid: oidc-playground-client
-  - name: myconext
-    enabled: true
-    version: "{{ myconext_gui_version }}"
-  - name: account
-    enabled: true
-    version: "{{ account_gui_version }}"
-
-springboot_server_services:
-  - name: manage
-    enabled: true
-    version: "{{ manage_server_version }}"
-    type: server
-    port: "{{ manage_springapp_tcpport }}"
-    config:
-      "{{ manage }}"
-  - name: oidcng
-    enabled: true
-    role: oidcng
-    version: "{{ oidcng_version }}"
-    artifactid: oidcng
-    port: 9195
-    type: server
-    config:
-      "{{ oidcng }}"
-  - name: teams
-    enabled: true
-    version: "{{ teams_server_version }}"
-    min_heapsize: '256m'
-    max_heapsize: '256m'
-    type: server
-    port: 9197
-    config:
-      "{{ teams }}"
-  - name: voot
-    enabled: true
-    version: "{{ voot_version }}"
-    min_heapsize: '128m'
-    max_heapsize: '128m'
-    role: voot
-    artifactid: voot-service
-    port: 9191
-    type: server
-    config:
-      "{{ voot }}"
-  - name: pdp
-    enabled: true
-    version: "{{ pdp_server_version }}"
-    port: 9196
-    type: server
-    config:
-      "{{ pdp }}"
-  - name: attribute-aggregation
-    enabled: true
-    min_heapsize: '256m'
-    max_heapsize: '256m'
-    version: "{{ attribute_aggregation_server_version }}"
-    type: server
-    port: 9198
-  - name: dashboard
-    enabled: "{{ dashboard_install }}"
-    version: "{{ dashboard_server_version | default('SNAPSHOT') }}"
-    type: server
-    port: 9394
-  - name: oidc-playground
-    enabled: true
-    min_heapsize: '256m'
-    max_heapsize: '256m'
-    version: "{{ oidc_playground_server_version }}"
-    type: server
-    port: 9399
-    config:
-      "{{ oidc_playground }}"
-  - name: myconext
-    enabled: true
-    version: "{{ myconext_server_version }}"
-    type: server
-    port: 9189
-    config:
-      "{{ myconext }}"
-  - name: mujina-sp
-    enabled: true
-    min_heapsize: '128m'
-    max_heapsize: '128m'
-    version: "{{ mujina_version }}"
-    role: mujina-sp
-    artifactid: mujina-sp
-    type: server
-    port: 9391
-    config:
-      "{{ mujina_sp }}"
-  - name: mujina-idp
-    enabled: true
-    min_heapsize: '128m'
-    max_heapsize: '128m'
-    version: "{{ mujina_version }}"
-    role: mujina-idp
-    artifactid: mujina-idp
-    type: server
-    port: 9390
-    config:
-      "{{ mujina_idp }}"
-
 # Value for the isMemberOf attribute for users from IdPs that are marked as 'guest'.
 guest_qualifier: "urn:collab:org:{{ base_domain }}"
 
@@ -231,34 +107,6 @@ engine_keys:
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:
 engine_profile_idp_certificate: /etc/openconext/engineblock.crt
-
-# shibboleth
-shibboleth_apps:
-  teams:
-    entityID: "https://teams.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  pdp:
-    entityID: "https://pdp.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "attribute-aggregation":
-    entityID: "https://aa.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "attribute-aggregation-link":
-    entityID: "https://link.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "manage":
-    entityID: "https://manage.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "myconext":
-    entityID: "https://my.{{ base_domain }}/shibboleth"
-    baseurl: ""
-  "dashboard":
-    entityID: "https://dashboard.{{ base_domain }}/shibboleth"
-    baseurl: ""
-
-shib:
-  db_host: "{{ mariadb_host }}"
-shibboleth_database_backend: false
 
 teams:
   db_name: "teams"
@@ -574,35 +422,35 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.engine.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: profile
     vhost_name: profile.{{ base_domain }}
     ha_method: "HEAD"
     ha_url: "/health"
     port: "{{ loadbalancing.profile.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: static
     vhost_name: static.{{ base_domain }}
     ha_method: "HEAD"
     ha_url: "/media/alive.txt"
     port: "{{ loadbalancing.static.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: metadata
     vhost_name: metadata.{{ base_domain }}
     ha_method: "HEAD"
     ha_url: "/alive.txt"
     port: "{{ loadbalancing.metadata.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: engine_api
     vhost_name: engine-api.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
     port: "{{ loadbalancing.engine_api.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
     restricted: yes
 
   - name: teams
@@ -610,105 +458,105 @@ haproxy_applications:
     ha_method: "GET"
     ha_url: "/api/teams/health"
     port: "{{ loadbalancing.teams.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: oidc_playground
     vhost_name: "oidc-playground.{{ base_domain }}"
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.oidc_playground.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: voot
     vhost_name: voot.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.voot.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: pdp
     vhost_name: pdp.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/pdp/api/health"
     port: "{{ loadbalancing.pdp.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: aa
     vhost_name: aa.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/aa/api/health"
     port: "{{ loadbalancing.aa.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: link
     vhost_name: link.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/aa/api/health"
     port: "{{ loadbalancing.aa.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: manage
     vhost_name: manage.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.manage.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: mujina-sp
     vhost_name: mujina-sp.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.mujina_sp.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: mujina-idp
     vhost_name: mujina-idp.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.mujina_idp.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: welcome
     vhost_name: welcome.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/"
     port: "{{ loadbalancing.welcome.port }}"
-    servers: "{{php_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: oidcng
     vhost_name: connect.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.oidcng.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: myconext
     vhost_name: my.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.myconext.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: account
     vhost_name: account.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.account.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: eduid
     vhost_name: eduid.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.eduid.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
   - name: dashboard
     vhost_name: dashboard.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/internal/health"
     port: "{{ loadbalancing.dashboard.port }}"
-    servers: "{{java_servers}}"
+    servers: "{{docker_servers}}"
 
 haproxy_backend_tls: False
 
@@ -728,27 +576,8 @@ haproxy_sni_ip_restricted:
        key_content: "{{ https_star_private_key }}"
        crt_name: star.{{ base_domain }}.pem
 
-php_servers:
-   - { ip: "127.0.0.1", label: "php"}
-
-java_servers:
-   - { ip: "127.0.0.1", label: "java"}
+docker_servers:
+   - { ip: "127.0.0.1", label: "docker"}
 
 iptables_enable: false
 dashboard_install: false
-
-springboot_services_state:
-  manage: true
-  teams: true
-  pdp: true
-  attribute_aggregation: true
-  oidc_playground: true
-  myconext: true
-  account: true
-  eduid: true
-  oidcng: true
-  voot: true
-  mujina_sp: true
-  mujina_idp: true
-  dashboard: false
-
