@@ -275,6 +275,7 @@ myconext:
   feature_create_eduid_institution_enabled: true
   feature_create_eduid_institution_landing: true
   feature_allowlist: false
+  feature_dry_run_email_cron: true
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
   sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
   oidcng_rs_client_id: myconext.rs.{{ base_domain }}
