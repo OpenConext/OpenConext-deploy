@@ -86,7 +86,7 @@ tls_star_cert_key: star.{{ base_domain }}.key
 
 guest_qualifier: "urn:collab:org:{{ base_domain }}"
 
-engine_idp_debugging_email_address: coin-logs-dev@list.surfnet.nl
+engine_idp_debugging_email_address: conext-logs-dev@surf.nl
 
 # when using multiple certificates list them all (and their bundles) under tls.certificates
 
