@@ -249,3 +249,4 @@
       SHIB_ENTITYID: "https://servicedesk.{{ myconext_base_domain }}/shibboleth"
       SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
       SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
+    when: myconext.feature_servicedesk | default(false) | bool
