@@ -4,4 +4,4 @@
     name: profile
     state: started
     restart: true
-  when: profileservercontainer is success and profileservercontainer is not change
+  when: profilecontainer is success and profilecontainer is not change
