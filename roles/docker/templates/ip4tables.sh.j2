@@ -90,6 +90,13 @@ done
 /sbin/iptables -t filter -A INPUT -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }} -j ACCEPT
 {% endfor %}
 {% endif %}
+{% if iptables_hostspecific is defined %}
+{% for service in iptables_hostspecific %}
+{{'##'|e }} {{ service.name }}
+{{'##'|e }} {{'=' * service.name|length }}
+/sbin/iptables -t filter -A INPUT -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }} -j ACCEPT
+{% endfor %}
+{% endif %}
 
 /sbin/iptables -t filter -A INPUT -m state --state ESTABLISHED -j ACCEPT
 /sbin/iptables -t filter -A INPUT -j DROP
