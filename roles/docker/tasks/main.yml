@@ -40,6 +40,7 @@
   with_items:
     - config
     - certs
+  when: docker_install_traefik | bool
 
 - name: Place the traefik configuration file
   ansible.builtin.template:
@@ -47,6 +48,7 @@
     dest: /opt/openconext/traefik/config/traefik.yaml
     owner: root
     mode: "0640"
+  when: docker_install_traefik | bool
 
 - name: Place the dynamic configuration
   ansible.builtin.copy:
@@ -54,6 +56,7 @@
     dest: /opt/openconext/traefik/config/router.yaml
     owner: root
     mode: "0640"
+  when: docker_install_traefik | bool
 
 - name: Create Traefik backend key
   ansible.builtin.copy:
@@ -61,7 +64,7 @@
     dest: "/opt/openconext/traefik/certs/backend.key"
     mode: "0600"
     owner: root
-  when: docker_install_traefik
+  when: docker_install_traefik | bool
 
 - name: Create SSL certificate
   ansible.builtin.copy:
@@ -69,6 +72,7 @@
     dest: "/opt/openconext/traefik/certs/backend.crt"
     owner: root
     mode: "0644"
+  when: docker_install_traefik | bool
 
 - name: Create the Traefik loadbalancer network
   community.docker.docker_network:
