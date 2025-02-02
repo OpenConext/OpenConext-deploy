@@ -11,6 +11,7 @@
     name:
       - apt-transport-https
       - ca-certificates
+      - python3-requests
     state: present
 
 - name: Add Docker apt key.
