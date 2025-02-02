@@ -172,3 +172,12 @@
     group: root
     mode: "0644"
   when: "favicon_eduid_present | bool"
+
+- name: Create docker prune job
+  ansible.builtin.cron:
+    name: "docker prune"
+    user: "root"
+    minute: "23"
+    hour: "03"
+    job: "docker system prune -a -f"
+    cron_file: "docker_prune"
