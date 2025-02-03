@@ -119,6 +119,8 @@ feature:
   mail_inactivity_mails: {{ myconext.feature_mail_inactivity_mails }}
   # Do we mail users who have not installed the eduID app
   nudge_app_mail: {{ myconext.feature_nudge_app_mail }}
+  # Set to true if the servicedesk is fully operational (e.g. show the user the control-code option)
+  service_desk_active: {{ myconext.feature_service_desk_active }}
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
