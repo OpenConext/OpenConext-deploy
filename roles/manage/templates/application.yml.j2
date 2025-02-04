@@ -80,6 +80,17 @@ spring:
   data:
     mongodb:
       uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ manage.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ manage.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}
+  datasource:
+    url: jdbc:mysql://{{ pdp.db_host }}/{{ pdp.db_name }}?permitMysqlScheme
+    username: {{ pdp.db_user }}
+    password: "{{ pdp.db_password }}"
+    driverClassName: org.mariadb.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDB53Dialect
+    open-in-view: false
+  sql:
+    init:
+      continue-on-error: true
   main:
     banner-mode: "off"
 
