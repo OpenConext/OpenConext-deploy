@@ -18,7 +18,7 @@
     - serverapplication.yml
   notify: restart inviteserver
 
-- name: Copy / create private key
+- name: Copy private key for manage secrets encryption
   ansible.builtin.copy:
     content: "{{ invite_private_key_pkcs8 }}"
     dest: /opt/openconext/invite/private_key_pkcs8.pem
@@ -27,7 +27,7 @@
     mode: "0740"
   notify: restart inviteserver
 
-- name: Copy / create certificate
+- name: Copy certificate for manage secrets encryption
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/invite/public_key.pem"
     dest: /opt/openconext/invite/public_key.pem

@@ -17,7 +17,7 @@
     owner: root
     mode: "0644"
 
-- name: copy invite certificate
+- name: Copy certificate for invite secrets encryption
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/invite/public_key.pem"
     dest: "/opt/openconext/manage/public_invite_key.pem"
