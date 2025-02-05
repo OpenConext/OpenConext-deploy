@@ -54,6 +54,8 @@
     weight: "{{ item.weight }}%"
     backend: "{{ app_name }}_be"
   with_items: "{{ server_labels_with_weights }}"
+  register: "haproxy_weights"
 
 - name: Write the state to the correct state file
   ansible.builtin.shell: echo "show servers state" | socat /var/lib/haproxy/haproxy.stats - > /var/lib/haproxy/state
+  when: "haproxy_weights.changed"
