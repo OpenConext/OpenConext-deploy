@@ -157,22 +157,6 @@
     mode: "0644"
   when: "favicon_present | bool"
 
-- name: Check if an eduid favicon exists
-  ansible.builtin.stat:
-    path: "{{ inventory_dir }}/files/favicon-eduid.ico"
-  delegate_to: localhost
-  register: favicon_eduid_present
-  become: false
-
-- name: Place the eduid favicon file
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/favicon-eduid.ico"
-    dest: /opt/openconext/common/favicon-eduid.ico
-    owner: root
-    group: root
-    mode: "0644"
-  when: "favicon_eduid_present | bool"
-
 - name: Create docker prune job
   ansible.builtin.cron:
     name: "docker prune"

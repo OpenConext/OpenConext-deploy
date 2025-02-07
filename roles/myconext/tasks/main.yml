@@ -164,9 +164,6 @@
       - source: /etc/localtime
         target: /etc/localtime
         type: bind
-      - source: /opt/openconext/common/favicon-eduid.ico
-        target: /var/www/favicon.ico
-        type: bind
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img }}"
       HTTPD_SERVERNAME: "mijn.{{ myconext_base_domain }}"
@@ -200,9 +197,6 @@
       - source: /etc/localtime
         target: /etc/localtime
         type: bind
-      - source: /opt/openconext/common/favicon-eduid.ico
-        target: /var/www/favicon.ico
-        type: bind
       - source: /opt/openconext/myconext/apple-app-site-association
         target: /var/www/.well-known/apple-app-site-association
         type: bind
@@ -232,9 +226,6 @@
     mounts:
       - source: /etc/localtime
         target: /etc/localtime
-        type: bind
-      - source: /opt/openconext/common/favicon-eduid.ico
-        target: /var/www/favicon.ico
         type: bind
       - source: /opt/openconext/myconext/apple-app-site-association
         target: /var/www/.well-known/apple-app-site-association
