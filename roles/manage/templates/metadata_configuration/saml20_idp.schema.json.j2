@@ -272,19 +272,6 @@
           "type": "string",
           "info": "The name of the authority that can register a service provider or identity provider."
         },
-        "logo:0:url": {
-          "type": "string",
-          "format": "url",
-          "info": "Enter the URL to the logo used for this service. e.g. https://static.example-logo.nl/media/sp/logo.png."
-        },
-        "logo:0:width": {
-          "type": "number",
-          "info": "The width of the logo found at logo:0:url in pixels."
-        },
-        "logo:0:height": {
-          "type": "number",
-          "info": "The height of the logo found at logo:0:url in pixels."
-        },
         "redirect.sign": {
           "type": "boolean",
           "info": "Whether authentication requests to this IdP will be signed by Engineblock."
@@ -436,6 +423,33 @@
           "sibblingIndependent": true,
           "info": "From the pull down, select the type of contact."
         },
+        "^logo:([0-9]{1}):url$": {
+          "type": "string",
+          "format": "url",
+          "multiplicity": 9,
+          "sibblingIndependent": true,
+          "info": "Enter the URL to the logo used for this service. e.g. https://static.example-logo.nl/media/sp/logo.png."
+        },
+        "^logo:([0-9]{1}):width$": {
+          "type": "number",
+          "multiplicity": 9,
+          "sibblingIndependent": true,
+          "info": "The width of the logo found at logo:x:url in pixels."
+        },
+        "^logo:([0-9]{1}):height$": {
+          "type": "number",
+          "multiplicity": 9,
+          "sibblingIndependent": true,
+          "info": "The height of the logo found at logo:x:url in pixels."
+        },
+{% for lang in supported_language_codes.split(',') %}
+        "^DiscoveryName:([0-9]{1}):{{ lang }}$": {
+          "type": "string",
+          "multiplicity": 9,
+          "sibblingIndependent": false,
+          "info": "The discovery name(s) of the Identity Provider as displayed in applications."
+        },
+{% endfor %}
         "^OrganizationName:({{ supported_language_codes | replace(',','|') }})$": {
           "type": "string"
         },
@@ -476,10 +490,14 @@
           "multiplicity": 10,
           "info": "The URL to the a SAML protocol endpoint at an IdP that a client can contact to obtain a SAML authentication assertion for use at an SP. e.g. https://idp.example.org/idp/profile/SAML2/Redirect/SSO"
         },
-        "^keywords:({{ supported_language_codes | replace(',','|') }})$": {
+{% for lang in supported_language_codes.split(',') %}
+        "^keywords:([0-9]{1}):{{ lang }}": {
           "type": "string",
+          "multiplicity": 10,
           "info": "This field defines searchable words in the WAYF dialogue for this Identity Provider."
         },
+{% endfor %}
+
         "^shibmd:scope:([0-9]{1}):allowed$": {
           "type": "string",
           "multiplicity": 10,
@@ -495,7 +513,8 @@
         "name:en",
         "OrganizationName:en",
         "SingleSignOnService:0:Binding",
-        "SingleSignOnService:0:Location"
+        "SingleSignOnService:0:Location",
+        "DiscoveryName:0:en"
       ],
       "additionalProperties": false
     }
