@@ -19,3 +19,4 @@ provision*.retry
 roles-external
 environments-external
 TODO.txt
+playbook_local.yml
