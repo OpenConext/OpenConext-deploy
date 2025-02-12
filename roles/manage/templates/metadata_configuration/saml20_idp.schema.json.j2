@@ -491,7 +491,7 @@
           "info": "The URL to the a SAML protocol endpoint at an IdP that a client can contact to obtain a SAML authentication assertion for use at an SP. e.g. https://idp.example.org/idp/profile/SAML2/Redirect/SSO"
         },
 {% for lang in supported_language_codes.split(',') %}
-        "^keywords:([0-9]{1}):{{ lang }}": {
+        "^keywords:([0-9]{1}):{{ lang }}$": {
           "type": "string",
           "multiplicity": 10,
           "info": "This field defines searchable words in the WAYF dialogue for this Identity Provider."
