@@ -22,7 +22,7 @@
       tags: ['core', 'base', 'iptables']
     - role: selfsigned_certs
       when:
-        - use_selfsigned_certs
+        - "{{ use_selfsigned_certs | default(false) | bool }}"
       tags: ['core', 'base', 'selfsigned_certs']
 
 - hosts: loadbalancer
@@ -107,22 +107,22 @@
     - { role: pdp,        tags: ["pdp"] }
     - { role: voot,       tags: ["voot"] }
     - { role: attribute-aggregation, tags: ["aa", "attribute-aggregation"] }
-    - { role: mujina-idp, tags: ["mujina-idp"] }  
-    - { role: oidc-playground, tags: ["oidc-playground"] }  
-    - { role: myconext,    tags: ["myconext"] }  
-    - { role: manage,    tags: ["manage"] }  
-    - { role: oidcng,    tags: ["oidcng"] }  
-    - { role: stats,      tags: ["stats"] }  
-    - { role: diyidp,      tags: ["diyidp"] }  
-    - { role: profile,      tags: ["profile"] }  
-    - { role: lifecycle,      tags: ["lifecycle"] }  
+    - { role: mujina-idp, tags: ["mujina-idp"] }
+    - { role: oidc-playground, tags: ["oidc-playground"] }
+    - { role: myconext,    tags: ["myconext"] }
+    - { role: manage,    tags: ["manage"] }
+    - { role: oidcng,    tags: ["oidcng"] }
+    - { role: stats,      tags: ["stats"] }
+    - { role: diyidp,      tags: ["diyidp"] }
+    - { role: profile,      tags: ["profile"] }
+    - { role: lifecycle,      tags: ["lifecycle"] }
     - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
 
 - hosts: docker_apps2
   become: true
-  roles: 
-    - { role: engineblock,      tags: ["eb"] }  
-    
+  roles:
+    - { role: engineblock,      tags: ["eb"] }
+
 - hosts: docker_mariadb
   become: true
   roles:
