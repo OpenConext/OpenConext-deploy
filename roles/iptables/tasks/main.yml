@@ -4,13 +4,16 @@
     name: firewalld
     state: absent
 
-- name: Make sure /etc/sysconfig exists
+- name: Make sure directories exists
   ansible.builtin.file:
-    path: "/etc/sysconfig"
+    path: "{{ item }}"
     state: "directory"
     owner: "root"
     group: "root"
     mode: "0755"
+  loop:
+    - "/etc/iptables"
+    - "/etc/sysconfig"
 
 - name: Put iptables
   ansible.builtin.template:
