@@ -19,6 +19,14 @@
     state: present
   when: ansible_os_family == 'Debian'
 
+- name: Make sure /etc/sysconfig exists
+  ansible.builtin.file:
+    path: "/etc/sysconfig"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
 - name: Put iptables
   ansible.builtin.template:
     src: "iptables.j2"
@@ -38,6 +46,16 @@
     mode: "0644"
   notify:
     - "restart ip6tables"
+
+- name: Create symlinks for iptables and ip6tables
+  ansible.builtin.file:
+    src: "{{ item.file }}"
+    dest: "{{ item.link }}"
+    state: "link"
+  loop:
+    - { file: "/etc/sysconfig/iptables",  link: "/etc/iptables/rules.v4" }
+    - { file: "/etc/sysconfig/ip6tables", link: "/etc/iptables/rules.v6" }
+  when: ansible_os_family == 'Debian'
 
 - name: Start and enable services iptables and iptables6
   ansible.builtin.service:
