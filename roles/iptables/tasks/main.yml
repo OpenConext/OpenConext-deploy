@@ -49,8 +49,8 @@
 
 - name: Create symlinks for iptables and ip6tables
   ansible.builtin.file:
-    src: "{{ item.link }}"
-    dest: "{{ item.file }}"
+    path: "{{ item.link }}"
+    src: "{{ item.file }}"
     state: "link"
   loop:
     - { file: "/etc/sysconfig/iptables",  link: "/etc/iptables/rules.v4" }
