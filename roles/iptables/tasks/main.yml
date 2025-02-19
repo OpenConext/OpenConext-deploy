@@ -4,21 +4,6 @@
     name: firewalld
     state: absent
 
-- name: Install iptables and ip6tables on CentOS
-  ansible.builtin.yum:
-    name:
-      - iptables-services
-    state: present
-  when: ansible_os_family == 'RedHat'
-
-- name: Install iptables on debian system
-  ansible.builtin.apt:
-    name:
-      - iptables
-      - iptables-persistent
-    state: present
-  when: ansible_os_family == 'Debian'
-
 - name: Make sure /etc/sysconfig exists
   ansible.builtin.file:
     path: "/etc/sysconfig"
@@ -52,9 +37,25 @@
     path: "{{ item.link }}"
     src: "{{ item.file }}"
     state: "link"
+    force: true
   loop:
     - { file: "/etc/sysconfig/iptables",  link: "/etc/iptables/rules.v4" }
     - { file: "/etc/sysconfig/ip6tables", link: "/etc/iptables/rules.v6" }
+  when: ansible_os_family == 'Debian'
+
+- name: Install iptables and ip6tables on CentOS
+  ansible.builtin.yum:
+    name:
+      - iptables-services
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- name: Install iptables on debian system
+  ansible.builtin.apt:
+    name:
+      - iptables
+      - iptables-persistent
+    state: present
   when: ansible_os_family == 'Debian'
 
 - name: Start and enable services iptables and iptables6
