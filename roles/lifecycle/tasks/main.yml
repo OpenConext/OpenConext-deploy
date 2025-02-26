@@ -12,7 +12,7 @@
     state: present
   register: lifecycle_uid
 
-- name: Create config dirs sajsdjasjaksa
+- name: Create config dirs
   ansible.builtin.file:
     state: directory
     dest: "{{ item }}"
@@ -43,7 +43,7 @@
 - name: Create the container
   community.docker.docker_container:
     name: "{{ appname }}"
-    image: ghcr.io/openconext/openconext-user-lifecycle/user-lifecycle:{{ lifecycle_version }}
+    image: "ghcr.io/openconext/openconext-user-lifecycle/user-lifecycle:{{ lifecycle_version }}"
     etc_hosts:
       host.docker.internal: host-gateway
     pull: true
