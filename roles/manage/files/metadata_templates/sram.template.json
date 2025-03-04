@@ -16,7 +16,8 @@
     "connection_type": "oidc_rp",
     "secret": "",
     "redirectUrls": [],
-    "grants": ["authorization_code"]
+    "grants": ["authorization_code"],
+    "coin:collab_enabled": true
   },
   "allowedEntities": [],
   "autoRefresh": {
