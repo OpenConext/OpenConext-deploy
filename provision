@@ -4,7 +4,7 @@ export ANSIBLE_ROLES_PATH="roles:roles-external"
 
 # parse parameters
 help="Usage: $0 <ENV> [ANSIBLE_OPT]
-eg $0 acc --tags eb 
+eg $0 acc --tags eb
 will provision the tag eb on acc"
 
 if [ "$#" -eq 0 ]; then
@@ -39,7 +39,5 @@ ansible-playbook -i $inventory $playbook -e environment_dir=$environment_dir $@
 EOF
 )
 echo "executing $cmd" | tr -d "\n" | tr -s ' '
-
-echo $cmd
 
 $cmd
