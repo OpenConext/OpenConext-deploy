@@ -1,0 +1,45 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+ENV=$1
+shift
+if [ -z "$ENV" ]
+then
+    echo "Please specify environment"
+    exit 1
+fi
+
+
+SECRET=
+if [ -n "$1" ]
+then
+    SECRET=$1
+    shift
+fi
+
+# aliases
+if [ "$ENV" = "prod" ]
+then
+    ENV=prd
+fi
+
+# check if env is correct
+if [ "$ENV" != "acc" ] && [ "$ENV" != "prd" ] && [ "$ENV" != "test" ] && [ "$ENV" != "test2" ]
+then
+    echo "Unknown environment '$ENV'"
+    echo "Acceptable are: acc, prd, test, test2"
+    exit 1
+fi
+
+CMD="ansible-vault encrypt_string --encrypt-vault-id=$ENV"
+if [ -n "$SECRET" ]
+then
+    CMD="$CMD $SECRET"
+fi
+
+$CMD | sed 's/^ \+/  /'
+echo
+
+exit 0
