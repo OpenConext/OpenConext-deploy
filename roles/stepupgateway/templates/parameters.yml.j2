@@ -22,6 +22,9 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
+    # Cookie domain for storing the session
+    cookie_domain: ".{{ gateway_vhost_name }}"
+
     default_locale:       {{ default_locale }}
     locales:              [{{ enabled_locales | join(",") }}]
     locale_cookie_domain: {{ locale_cookie_domain }}
