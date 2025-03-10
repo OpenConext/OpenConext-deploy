@@ -12,9 +12,9 @@ vrrp_script chk_maint {
 }
 
 vrrp_instance ipv4 {
-   interface {{ ansible_default_ipv4.interface }}       # interface to monitor
+   interface {{ ansible_default_ipv4.interface }}        # interface to monitor
    state {{ keepalived.state_master }}
-   virtual_router_id {{ vrrp_id_ipv4 }}                 # Assign one ID for this route
+   virtual_router_id {{ vrrp_id_ipv4 }}                  # Assign one ID for this route
    priority {{ keepalived.masterprio }}                 # 101 on master, 100 on backup
    advert_int 1
    authentication {
@@ -30,10 +30,10 @@ vrrp_instance ipv4 {
    track_script {
         chk_maint
    }
-   notify /usr/local/bin/keepalived_notify   
+   notify /usr/local/bin/keepalived_notify
 }
-vrrp_instance ipv6 {        
-   interface {{ ansible_default_ipv4.interface }} 
+vrrp_instance ipv6 {
+   interface {{ ansible_default_ipv4.interface }}
    state {{ keepalived.state_backup }}
    virtual_router_id {{ vrrp_id_ipv6 }}
    priority {{ keepalived.backupprio }}

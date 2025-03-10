@@ -13,7 +13,7 @@ haproxy_max_request_rate_ip_path_exceptions: 500
 # You can create an allowlist of ips that are allowed to go over the configured ratelimit
 haproxy_allowlistips:
   - ''
-# You can create a blocklist of ips that are blocked. 
+# You can create a blocklist of ips that are blocked.
 haproxy_blocklistips:
   - ''
 # You can protect internal api to allow access from trusted ip's only. Open to the world by default
@@ -24,5 +24,11 @@ haproxy_hsts_value: "max-age=34214400"
 # If you have a staging server you want to be accessed from certain ips, and them to this list
 haproxy_stagingips:
   - ''
+
+haproxy_redirects:
+  - name: "redirect.example.org"
+    url: "redirect.example.org"
+    redirecturl: "https://www.openconext.org"
+    hostname: "redirect.example.org"
 
 haproxy_acme: true
