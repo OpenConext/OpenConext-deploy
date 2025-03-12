@@ -2,20 +2,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
 
- <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-  <encoder>
-     <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
-   </encoder>
- </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+            <jsonFormatter
+                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                <prettyPrint>false</prettyPrint>
+            </jsonFormatter>
+            <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+        </layout>
+    </appender>
 
  <logger name="myconext" level="INFO" />
- <logger name="org.springframework.security" level="DEBUG" />
+ <logger name="org.springframework.security" level="WARN" />
  <logger name="tiqr.org" level="INFO" />
  <logger name="io.changock" level="INFO" />
 
  <root level="WARN">
    <appender-ref ref="STDOUT" />
-   <!-- <appender-ref ref="EMAIL" /> -->
  </root>
 
 </configuration>
