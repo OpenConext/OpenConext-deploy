@@ -1,8 +1,8 @@
 ---
 - name: Download HAProxy GPG key
   ansible.builtin.get_url:
-    url: https://haproxy.debian.net/bernat.debian.org.gpg
-    dest: /etc/apt/trusted.gpg.d/haproxy.asc
+    url: "https://haproxy.debian.net/bernat.debian.org.gpg"
+    dest: "/etc/apt/trusted.gpg.d/haproxy.asc"
     mode: '0644'
 
 - name: Add HAProxy repository to sources list
@@ -15,10 +15,10 @@
 - name: Install haproxy and socat
   ansible.builtin.apt:
     name:
-      - haproxy=3.0.*
-      - socat
-      - git
-    state: present
+      - "haproxy=3.0.*"
+      - "socat"
+      - "git"
+    state: "present"
     update_cache: true
   register: haproxy_package_installed
   until: haproxy_package_installed is succeeded
@@ -88,13 +88,14 @@
 
 - name: Create combined key and certificate file for HAproxy
   ansible.builtin.copy:
-    content: "{{ item.key_content }}{{ lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
+    content: >
+      {{ item.key_content }}{{ lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}') }}
     dest: "/etc/haproxy/certs/{{ item.name }}_haproxy.pem"
     mode: "0600"
   with_items: "{{ haproxy_sni_ip.certs }}"
   when: haproxy_sni_ip.certs is defined
   notify:
-    - "reload haproxy"
+    - "Reload haproxy"
 
 - name: Create backend CA directory
   ansible.builtin.file:
@@ -126,7 +127,7 @@
     - haproxy_backend.cfg
     - haproxy_stick_table_backend.cfg
   notify:
-    - "reload haproxy"
+    - "Reload haproxy"
 
 - name: Copy haproxy acls
   ansible.builtin.template:
@@ -141,7 +142,7 @@
     - internalips.acl
     - stagingips.acl
   notify:
-    - "reload haproxy"
+    - "Reload haproxy"
 
 - name: Copy haproxy vhost acls
   ansible.builtin.template:
@@ -155,7 +156,7 @@
     - validvhostsunrestricted.acl
   register: vhost_acls
   notify:
-    - "reload haproxy"
+    - "Reload haproxy"
 
 
 - name: Copy haproxy maps
@@ -172,7 +173,7 @@
     - ratelimits.map
     - certlist.lst
   notify:
-    - "reload haproxy"
+    - "Reload haproxy"
 
 - name: Place file with list of browsers that do not accept samesite=none cookies
   ansible.builtin.copy:
@@ -182,7 +183,7 @@
     group: lbops
     mode: "0664"
   notify:
-    - "reload haproxy"
+    - "Reload haproxy"
 
 - name: Add lbops user to sudoers and let it reload haproxy
   ansible.builtin.copy:

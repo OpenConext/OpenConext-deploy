@@ -1,21 +1,24 @@
 ---
 - name: Create acme user
   ansible.builtin.user:
-    name: acme
-    state: present
-    groups: lbops,haproxy
-    append: yes
+    name: "acme"
+    state: "present"
+    groups:
+      - "lbops"
+      - "haproxy"
+    append: true
 
 - name: Install acl package so ansible can run as an unprivilegd user
   ansible.builtin.package:
-    name: acl
-    state: present
+    name: "acl"
+    state: "present"
 
 - name: Clone the acme.sh repo
   ansible.builtin.git:
-    repo: https://github.com/acmesh-official/acme.sh.git
-    dest: /opt/acmesh/
-    update: false
+    repo: "https://github.com/acmesh-official/acme.sh.git"
+    dest: "/opt/acmesh/"
+    version: "3.1.0"
+    update: true
 
 - name: Install the acme.sh script
   ansible.builtin.shell:
