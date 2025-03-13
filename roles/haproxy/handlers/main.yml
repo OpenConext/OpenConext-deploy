@@ -1,21 +1,21 @@
 ---
-- name: restart haproxy
-  service:
+- name: Restart haproxy
+  ansible.builtin.service:
     name: haproxy
     state: restarted
 
-- name: reload haproxy
-  service:
+- name: Reload haproxy
+  ansible.builtin.service:
     name: haproxy
     state: reloaded
 
-- name: restart rsyslog
-  service:
+- name: Restart rsyslog
+  ansible.builtin.service:
     name: rsyslog
     state: restarted
 
-- name: restart haproxy instances with changed configs
-  service:
+- name: Restart haproxy instances with changed configs
+  ansible.builtin.service:
     name: haproxy_{{ item.item.name }}
     state: restarted
   when:
@@ -23,14 +23,13 @@
   with_items:
     - "{{ configs_changed.results }}"
 
-- name: restart haproxy redirects instance
-  service:
+- name: Restart haproxy redirects instance
+  ansible.builtin.service:
     name: haproxy_redirects
     state: restarted
 
-
-- name: restart haproxy instances with changed keys
-  service:
+- name: Restart haproxy instances with changed keys
+  ansible.builtin.service:
     name: haproxy_{{ item.item.name }}
     state: restarted
   when:
@@ -38,6 +37,6 @@
   with_items:
     - "{{ keys_changed.results }}"
 
-- name: reload systemd
-  systemd:
-    daemon_reload: yes
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true

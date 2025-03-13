@@ -1,15 +1,18 @@
 ---
 - name: create KSK
-  command: dnssec-keygen -K /var/named/keys -f KSK -3 -a RSASHA256 -b 2048 -r /dev/random -n ZONE ha.{{ base_domain }}
+  ansible.builtin.command: |
+    dnssec-keygen -K {{ dns_work_dir }}/keys -f KSK -3 -a RSASHA256 -b 2048  -n ZONE "hb.{{ base_domain }}"
+  creates: "{{ dns_work_dir }}/keys/Khb.{{ base_domain }}.+*"
 
 - name: create ZSK
-  command: dnssec-keygen -K /var/named/keys -3 -a RSASHA256 -b 1024 -r /dev/random -n ZONE ha.{{ base_domain }}
+  ansible.builtin.command: |
+    dnssec-keygen -K {{ dns_work_dir }}/keys -3 -a RSASHA256 -b 1024 -n ZONE "hb.{{ base_domain }}"
+  creates: "{{ dns_work_dir }}/keys/Khb.{{ base_domain }}.+*"
 
 - name: chown the keys
-  file:
-    dest: "/var/named/keys"
-    stat: directory
-    owner: named
-    group: named
-    mode: 0700
-    recurse: yes
+  ansible.builtin.file:
+    dest: "{{ dns_work_dir }}/keys"
+    owner: "named"
+    group: "named"
+    mode: "u=rwX,go="
+    recurse: true

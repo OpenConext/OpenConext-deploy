@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+CMD="ansible-vault decrypt"
+
+cat | sed 's/^\s*//' | grep -v '!vault' | $CMD
+echo
+
+exit 0

@@ -1,2 +1,3 @@
 ---
 dns_create_keys: False
+dns_work_dir: "/var/cache/bind"

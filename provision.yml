@@ -2,11 +2,11 @@
 - hosts: all
   gather_facts: no
   tasks:
-  - name: Read vars from secrets file
-    include_vars: "{{ secrets_file }}"
-    no_log: true
-    tags:
-     - always
+    - name: Read vars from secrets file
+      include_vars: "{{ secrets_file }}"
+      no_log: true
+      tags:
+       - always
 
 - hosts: base
   gather_facts: yes

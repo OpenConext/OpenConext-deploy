@@ -1,33 +1,55 @@
 ---
 - name: Create acme user
   ansible.builtin.user:
-    name: acme
-    state: present
-    groups: lbops,haproxy
-    append: yes
+    name: "acme"
+    state: "present"
+    groups:
+      - "lbops"
+      - "haproxy"
+    append: true
 
 - name: Install acl package so ansible can run as an unprivilegd user
   ansible.builtin.package:
-    name: acl
-    state: present
+    name: "acl"
+    state: "present"
 
 - name: Clone the acme.sh repo
   ansible.builtin.git:
-    repo: https://github.com/acmesh-official/acme.sh.git
-    dest: /opt/acmesh/
-    update: false
+    repo: "https://github.com/acmesh-official/acme.sh.git"
+    dest: "/opt/acmesh/"
+    version: "3.1.0"
+    update: true
 
 - name: Install the acme.sh script
   ansible.builtin.shell:
-    cmd: sh /opt/acmesh/acme.sh --install
-    chdir: /opt/acmesh
-    creates: /home/acme/.acme.sh/acme.sh
+    cmd: |
+      sh /opt/acmesh/acme.sh --install --accountemail "{{ admin_email }}"
+    chdir: "/opt/acmesh"
+    creates: "/home/acme/.acme.sh/acme.sh"
   become: true
-  become_user: acme
+  become_user: "acme"
+
+- name: Set email address in acme config
+  ansible.builtin.lineinfile:
+    path: "/home/acme/.acme.sh/account.conf"
+    line: "ACCOUNT_EMAIL='{{ admin_email }}'"
+    create: true
+    owner: "acme"
+    group: "acme"
+    mode: "0600"
+
+- name: Find CA account dir
+  ansible.builtin.set_fact:
+    haproxy_acme_ca_dir: "/home/acme/.acme.sh/ca/{{ haproxy_acme_server | replace('https://', '') }}"
 
 - name: Create the acme account
-  ansible.builtin.shell:
-    cmd: /home/acme/.acme.sh/acme.sh --register-account  --eab-kid {{ haproxy_acme_eab_kid }} --eab-hmac-key {{ haproxy_acme_eab_hmac_key }} --server https://acme.sectigo.com/v2/GEANTOV
-    creates: /home/acme/.acme.sh/ca/acme.sectigo.com/v2/GEANTOV/account.key
+  ansible.builtin.command:
+    cmd: |
+      /home/acme/.acme.sh/acme.sh
+          --register-account
+          --eab-kid "{{ haproxy_acme_eab_kid }}"
+          --eab-hmac-key "{{ haproxy_acme_eab_hmac_key }}"
+          --server "{{ haproxy_acme_server }}"
+    creates: "{{ haproxy_acme_ca_dir }}/account.json"
   become: true
-  become_user: acme
+  become_user: "acme"
