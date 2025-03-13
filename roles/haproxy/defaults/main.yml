@@ -32,3 +32,15 @@ haproxy_redirects:
     hostname: "redirect.example.org"
 
 haproxy_acme: true
+haproxy_acme_renewal_days: 60
+
+haproxy_acme_server: "not_defined"
+haproxy_acme_eab_kid: "key_id"
+haproxy_acme_eab_hmac_key: "secret"
+
+haproxy_acmedns:
+  baseurl: "https://acme-dns.example.org/api"
+  username: "username"
+  password: "password"
+  subdomain: "a_subdomain"
+  fulldomain: "a_subdomain.acme-dns.example.org"

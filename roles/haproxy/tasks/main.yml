@@ -32,6 +32,23 @@
   ansible.builtin.include_tasks: acme.yml
   when: haproxy_acme | bool
 
+- name: Include get_acme_certs
+  ansible.builtin.include_tasks: get_acme_certs.yml
+  when: haproxy_acme | bool
+
+- name: Check if we need to load additional certificates for migration
+  ansible.builtin.find:
+    paths: "/etc/haproxy/certs"
+    patterns: "{{ base_domain }}.pem"
+  register: haproxy_extra_certs_found
+  when: "base_domain not in haproxy_ssl_hosts"
+
+- name: Set additional certificates to load
+  ansible.builtin.set_fact:
+    haproxy_extra_certs: |
+        {{ haproxy_extra_certs_found.files | map(attribute='path') | list }}
+  when: "base_domain not in haproxy_ssl_hosts"
+
 - name: Copy haproxy sysconfig file
   ansible.builtin.copy:
     src: sysconfig_haproxy
@@ -173,10 +190,6 @@
     dest: /etc/sudoers.d/lbops
     owner: root
     mode: "0440"
-
-- name: include get_acme_certs
-  include_tasks: get_acme_certs.yml
-  when: haproxy_acme | bool and vhost_acls.changed
 
 - name: Start and enable haproxy
   ansible.builtin.service:
