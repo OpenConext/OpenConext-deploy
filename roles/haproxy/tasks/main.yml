@@ -158,7 +158,6 @@
   notify:
     - "Reload haproxy"
 
-
 - name: Copy haproxy maps
   ansible.builtin.template:
     src: "{{ item }}.j2"

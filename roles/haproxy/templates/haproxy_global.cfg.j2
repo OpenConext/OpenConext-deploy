@@ -28,18 +28,18 @@ global
 #---------------------------------------------------------------------
 
 defaults
-    mode                        http
-    log                         global
-    option                      http-ignore-probes
-    option                      http-server-close
-    option                      redispatch
-    retries                     3
-    timeout http-request        10s
-    timeout queue               1m
-    timeout connect             10s
-    timeout client              1m
-    timeout server              1m
-    timeout http-keep-alive     10s
-    timeout check               10s
-    maxconn                     3000
-    load-server-state-from-file global
+  mode                        http
+  log                         global
+  option                      http-ignore-probes
+  option                      http-server-close
+  option                      redispatch
+  retries                     3
+  timeout http-request        10s
+  timeout queue               1m
+  timeout connect             10s
+  timeout client              1m
+  timeout server              1m
+  timeout http-keep-alive     10s
+  timeout check               10s
+  maxconn                     3000
+  load-server-state-from-file global
