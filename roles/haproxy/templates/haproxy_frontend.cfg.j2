@@ -57,6 +57,27 @@ frontend internet_ip
     # We need a dummy backend in order to be able to rewrite the loadbalancer cookies
     use_backend dummy_backend
 
+{% set ldap_host = haproxy_applications | selectattr("name", "==", "ldap") | first %}
+{% if ldap_host is defined %}
+#--------------------------------------------------------------------
+#  frontend public ldap
+# -------------------------------------------------------------------
+frontend internet_ip_ldap
+    # Note: ldap frontend needs a specific cert because ancient (MacOS) ldap tools don't understand SNI
+    bind {{ haproxy_sni_ip.ipv4 }}:636 ssl crt /etc/haproxy/certs/{{ ldap_host.vhost_name }}.pem no-sslv3 no-tlsv10 no-tlsv11 transparent
+    bind {{ haproxy_sni_ip.ipv6 }}:636 ssl crt /etc/haproxy/certs/{{ldap_host.vhost_name }}.pem no-sslv3 no-tlsv10 no-tlsv11 transparent
+    # Logging is done in the local_ip backend, otherwise all requests are logged twice
+    no log
+    # ACL to protect APIs of public vhosts
+    acl internal src -f /etc/haproxy/acls/internalips.acl
+    timeout client 900s
+    mode    tcp
+    option  tcpka
+    option  tcplog
+    default_backend ldap_be
+
+{% endif %}
+
 #--------------------------------------------------------------------
 #  frontend public ips localhost
 #  traffic coming back from the dummy backend ends up here
