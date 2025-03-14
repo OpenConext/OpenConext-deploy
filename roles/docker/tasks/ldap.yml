@@ -1,0 +1,17 @@
+---
+# Set up ldap-related settings for docker hosts
+
+- name: Install ldap tools
+  ansible.builtin.package:
+    name: "ldap-utils"
+    state: "present"
+
+- name: Create ldap.conf
+  ansible.builtin.copy:
+    content: |
+      TLS_CACERT      /opt/openconext/traefik/certs/backend.crt
+      TLS_REQCERT     allow
+    dest: "/etc/ldap/ldap.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"

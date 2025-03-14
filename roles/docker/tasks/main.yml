@@ -181,3 +181,6 @@
     hour: "03"
     job: "docker system prune -a -f"
     cron_file: "docker_prune"
+
+- name: Set up ldap-related settings for docker hosts
+  ansible.builtin.include_tasks: "ldap.yml"
