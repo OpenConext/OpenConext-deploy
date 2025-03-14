@@ -67,8 +67,6 @@ frontend local_ip
     acl staging req.cook(staging) -m str true
     acl staging src -f /etc/haproxy/acls/stagingips.acl
     acl stagingvhost hdr(host) -i -M -f /etc/haproxy/maps/backendsstaging.map 
-    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backendsstaging.map)] if stagingvhost staging
-    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backends.map)]
     option httplog
     capture request header User-agent len 256
     capture request header X-TLS-Client len 256
@@ -104,6 +102,8 @@ frontend local_ip
     http-request redirect location {{ haproxy_securitytxt_target_url }} if securitytxt
     {% endif %}
     http-request redirect location %[base,map_reg(/etc/haproxy/maps/redirects.map)] if { base,map_reg(/etc/haproxy/maps/redirects.map) -m found }
+    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backendsstaging.map)] if stagingvhost staging
+    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backends.map)]
 
 {% if haproxy_sni_ip_restricted is defined %}
 #--------------------------------------------------------------------
@@ -161,8 +161,6 @@ frontend localhost_restricted
     acl staging req.cook(staging) -m str true
     acl staging src -f /etc/haproxy/acls/stagingips.acl
     acl stagingvhost hdr(host) -i -M -f /etc/haproxy/maps/backendsstaging.map 
-    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backendsstaging.map)] if stagingvhost staging
-    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backends.map)]
     option httplog
     capture request header User-agent len 256
     capture request header X-TLS-Client len 256
@@ -199,5 +197,7 @@ frontend localhost_restricted
     http-request redirect location {{ haproxy_securitytxt_target_url }} if securitytxt
     {% endif %}
     http-request redirect location %[base,map_reg(/etc/haproxy/maps/redirects.map)] if { base,map_reg(/etc/haproxy/maps/redirects.map) -m found }
+    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backendsstaging.map)] if stagingvhost staging
+    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/backends.map)]
 
 {% endif %}
