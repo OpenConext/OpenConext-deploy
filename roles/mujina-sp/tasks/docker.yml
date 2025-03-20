@@ -1,0 +1,64 @@
+---
+- name: Set the mujina_sp directory variable
+  ansible.builtin.set_fact:
+    mujina_sp_dir: "/"
+
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ mujina_sp_dir_docker }}"
+    mode: "0750"
+    state: directory
+    owner: root
+
+- name: Copy config
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ mujina_sp_dir_docker }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0640"
+  with_items:
+    - application.yml
+    - logback-docker.xml
+  notify:
+    - Restart mujina-sp-docker
+
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: mujina-sp
+    image: ghcr.io/openconext/mujina/mujina-sp:{{ mujina_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    env:
+      TZ: "{{ timezone }}"
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: "{{ mujina_sp_dir_docker }}/application.yml"
+        target: /application.yml
+        type: bind
+      - source: "{{ mujina_sp_dir_docker }}/logback-docker.xml"
+        target: /logback.xml
+        type: bind
+    command: "-Xmx128m --spring.config.location=./"
+    labels:
+      traefik.http.routers.mujina-sp.rule: "Host(`mujina-sp.{{ base_domain }}`)"
+      traefik.http.routers.mujina-sp.tls: "true"
+      traefik.http.services.mujina-sp.loadbalancer.server.port: "9090"
+      traefik.enable: "true"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9090/internal/health",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  notify: Restart mujina-sp-docker
