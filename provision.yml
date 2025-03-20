@@ -122,6 +122,7 @@
   become: true
   roles:
     - { role: engineblock,      tags: ["eb"] }
+    - { role: stepupgateway,    tags: [ 'stepupgateway' , 'stepup' ] }
 
 - hosts: docker_mariadb
   become: true
