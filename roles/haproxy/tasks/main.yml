@@ -95,7 +95,7 @@
   with_items: "{{ haproxy_sni_ip.certs }}"
   when: haproxy_sni_ip.certs is defined
   notify:
-    - "Reload haproxy"
+    - "reload haproxy"
 
 - name: Create backend CA directory
   ansible.builtin.file:
@@ -127,7 +127,7 @@
     - haproxy_backend.cfg
     - haproxy_stick_table_backend.cfg
   notify:
-    - "Reload haproxy"
+    - "reload haproxy"
 
 - name: Copy haproxy acls
   ansible.builtin.template:
@@ -142,7 +142,7 @@
     - internalips.acl
     - stagingips.acl
   notify:
-    - "Reload haproxy"
+    - "reload haproxy"
 
 - name: Copy haproxy vhost acls
   ansible.builtin.template:
@@ -156,7 +156,7 @@
     - validvhostsunrestricted.acl
   register: vhost_acls
   notify:
-    - "Reload haproxy"
+    - "reload haproxy"
 
 
 - name: Copy haproxy maps
@@ -173,7 +173,7 @@
     - ratelimits.map
     - certlist.lst
   notify:
-    - "Reload haproxy"
+    - "reload haproxy"
 
 - name: Place file with list of browsers that do not accept samesite=none cookies
   ansible.builtin.copy:
@@ -183,7 +183,7 @@
     group: lbops
     mode: "0664"
   notify:
-    - "Reload haproxy"
+    - "reload haproxy"
 
 - name: Add lbops user to sudoers and let it reload haproxy
   ansible.builtin.copy:

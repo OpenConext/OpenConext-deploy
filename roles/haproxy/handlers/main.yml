@@ -1,19 +1,19 @@
 ---
-- name: Restart haproxy
+- name: restart haproxy
   ansible.builtin.service:
     name: haproxy
     state: restarted
 
-- name: Reload haproxy
+- name: reload haproxy
   ansible.builtin.service:
     name: haproxy
     state: reloaded
 
-- name: Restart rsyslog
+- name: restart rsyslog
   ansible.builtin.service:
     name: rsyslog
     state: restarted
 
-- name: Reload systemd
+- name: reload systemd
   ansible.builtin.systemd:
     daemon_reload: true
