@@ -1,8 +1,8 @@
 ---
 - name: Download HAProxy GPG key
   ansible.builtin.get_url:
-    url: https://haproxy.debian.net/bernat.debian.org.gpg
-    dest: /etc/apt/trusted.gpg.d/haproxy.asc
+    url: "https://haproxy.debian.net/bernat.debian.org.gpg"
+    dest: "/etc/apt/trusted.gpg.d/haproxy.asc"
     mode: '0644'
 
 - name: Add HAProxy repository to sources list
@@ -15,10 +15,10 @@
 - name: Install haproxy and socat
   ansible.builtin.apt:
     name:
-      - haproxy=3.0.*
-      - socat
-      - git
-    state: present
+      - "haproxy=3.0.*"
+      - "socat"
+      - "git"
+    state: "present"
     update_cache: true
   register: haproxy_package_installed
   until: haproxy_package_installed is succeeded
@@ -31,6 +31,23 @@
 - name: Include acme installation
   ansible.builtin.include_tasks: acme.yml
   when: haproxy_acme | bool
+
+- name: Include get_acme_certs
+  ansible.builtin.include_tasks: get_acme_certs.yml
+  when: haproxy_acme | bool
+
+- name: Check if we need to load additional certificates for migration
+  ansible.builtin.find:
+    paths: "/etc/haproxy/certs"
+    patterns: "{{ base_domain }}.pem"
+  register: haproxy_extra_certs_found
+  when: "base_domain not in haproxy_ssl_hosts"
+
+- name: Set additional certificates to load
+  ansible.builtin.set_fact:
+    haproxy_extra_certs: |
+        {{ haproxy_extra_certs_found.files | map(attribute='path') | list }}
+  when: "base_domain not in haproxy_ssl_hosts"
 
 - name: Copy haproxy sysconfig file
   ansible.builtin.copy:
@@ -71,7 +88,8 @@
 
 - name: Create combined key and certificate file for HAproxy
   ansible.builtin.copy:
-    content: "{{ item.key_content }}{{ lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}')}}"
+    content: >
+      {{ item.key_content }}{{ lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}') }}
     dest: "/etc/haproxy/certs/{{ item.name }}_haproxy.pem"
     mode: "0600"
   with_items: "{{ haproxy_sni_ip.certs }}"
@@ -173,10 +191,6 @@
     dest: /etc/sudoers.d/lbops
     owner: root
     mode: "0440"
-
-- name: include get_acme_certs
-  include_tasks: get_acme_certs.yml
-  when: haproxy_acme | bool and vhost_acls.changed
 
 - name: Start and enable haproxy
   ansible.builtin.service:

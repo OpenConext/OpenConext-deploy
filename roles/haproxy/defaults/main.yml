@@ -1,6 +1,7 @@
+---
 tls_backend_ca: /etc/pki/haproxy/backend.{{ base_domain }}.pem
 haproxy_cookie_max_idle: 3600
-haproxy_metricbeat: False
+haproxy_metricbeat: false
 # The default http methods whitelist is meant to disable methods like TRACE or DEBUG.
 # OPTIONS is mainly used for CORS requests in OIDC-NG (like SPA apps)
 haproxy_supported_http_methods: "GET HEAD OPTIONS POST PUT DELETE"
@@ -13,7 +14,7 @@ haproxy_max_request_rate_ip_path_exceptions: 500
 # You can create an allowlist of ips that are allowed to go over the configured ratelimit
 haproxy_allowlistips:
   - ''
-# You can create a blocklist of ips that are blocked. 
+# You can create a blocklist of ips that are blocked.
 haproxy_blocklistips:
   - ''
 # You can protect internal api to allow access from trusted ip's only. Open to the world by default
@@ -25,4 +26,22 @@ haproxy_hsts_value: "max-age=34214400"
 haproxy_stagingips:
   - ''
 
+haproxy_redirects:
+  - name: "redirect.example.org"
+    url: "redirect.example.org"
+    redirecturl: "https://www.openconext.org"
+    hostname: "redirect.example.org"
+
 haproxy_acme: true
+haproxy_acme_renewal_days: 60
+
+haproxy_acme_server: "not_defined"
+haproxy_acme_eab_kid: "key_id"
+haproxy_acme_eab_hmac_key: "secret"
+
+haproxy_acmedns:
+  baseurl: "https://acme-dns.example.org/api"
+  username: "username"
+  password: "password"
+  subdomain: "a_subdomain"
+  fulldomain: "a_subdomain.acme-dns.example.org"
