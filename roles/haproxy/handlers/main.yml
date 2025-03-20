@@ -14,15 +14,6 @@
     name: rsyslog
     state: restarted
 
-- name: Restart haproxy instances with changed configs
-  ansible.builtin.service:
-    name: haproxy_{{ item.item.name }}
-    state: restarted
-  when:
-    - item.changed
-  with_items:
-    - "{{ configs_changed.results }}"
-
 - name: Restart haproxy redirects instance
   ansible.builtin.service:
     name: haproxy_redirects
