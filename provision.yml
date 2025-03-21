@@ -108,6 +108,7 @@
     - { role: voot,       tags: ["voot"] }
     - { role: attribute-aggregation, tags: ["aa", "attribute-aggregation"] }
     - { role: mujina-idp, tags: ["mujina-idp"] }
+    - { role: mujina-sp, tags: ["mujina-sp"] }
     - { role: oidc-playground, tags: ["oidc-playground"] }
     - { role: myconext,    tags: ["myconext"] }
     - { role: manage,    tags: ["manage"] }
