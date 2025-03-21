@@ -4,3 +4,4 @@
     name: mujina-sp
     state: started
     restart: true
+  when: mujinaspcontainer is success and mujinaspcontainer is not change
