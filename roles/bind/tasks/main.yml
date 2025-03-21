@@ -1,42 +1,46 @@
 ---
 - name: install bind packages
-  yum:
+  ansible.builtin.apt:
     name:
-      - bind
-    state: present
+      - "bind9"
+    state: "present"
 
 - name: create bind directories
-  file:
-    dest: "/var/named/{{ item }}"
-    state: directory
-    owner: named
-    group: named
-    mode: 0750
-  with_items:
-   - master
-   - keys
+  ansible.builtin.file:
+    dest: "{{ dns_work_dir }}/{{ item }}"
+    state: "directory"
+    owner: "bind"
+    group: "bind"
+    mode: "0750"
+  loop:
+    - "master"
+    - "keys"
 
 - name: configure bind
-  template:
-    src: "named.conf.j2"
-    dest: "/etc/named.conf"
-    owner: root
-    group: named
-    mode: 0640
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/bind/{{ item }}"
+    owner: "root"
+    group: "bind"
+    mode: "0640"
+  loop:
+    - "named.conf.options"
+    - "named.conf.local"
   notify:
     - "restart bind"
 
 - name: copy ha zone file
-  template:
+  ansible.builtin.template:
     src: "ha_zone_file.j2"
-    dest: "/var/named/master/ha.{{ base_domain }}.db"
-    owner: named
-    group: named
+    dest: "{{ dns_work_dir }}/master/hb.{{ base_domain }}.db"
+    owner: "bind"
+    group: "bind"
+    mode: "0640"
   notify:
     - "reload bind"
 
 - name: enable bind service
-  service:
-    name: named
-    state: started
-    enabled: yes
+  ansible.builtin.service:
+    name: "named"
+    state: "started"
+    enabled: true

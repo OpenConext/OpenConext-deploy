@@ -1,43 +1,19 @@
 ---
 - name: restart haproxy
-  service:
+  ansible.builtin.service:
     name: haproxy
     state: restarted
 
 - name: reload haproxy
-  service:
+  ansible.builtin.service:
     name: haproxy
     state: reloaded
 
 - name: restart rsyslog
-  service:
+  ansible.builtin.service:
     name: rsyslog
     state: restarted
 
-- name: restart haproxy instances with changed configs
-  service:
-    name: haproxy_{{ item.item.name }}
-    state: restarted
-  when:
-    - item.changed
-  with_items:
-    - "{{ configs_changed.results }}"
-
-- name: restart haproxy redirects instance
-  service:
-    name: haproxy_redirects
-    state: restarted
-
-
-- name: restart haproxy instances with changed keys
-  service:
-    name: haproxy_{{ item.item.name }}
-    state: restarted
-  when:
-    - item.changed
-  with_items:
-    - "{{ keys_changed.results }}"
-
 - name: reload systemd
-  systemd:
-    daemon_reload: yes
+  ansible.builtin.systemd:
+    daemon_reload: true
