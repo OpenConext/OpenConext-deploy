@@ -52,7 +52,7 @@
     state: directory
     owner: root
     group: root
-    mode: "0770"
+    mode: "0755"
 
 - name: Copy apple-app-site-association from inventory
   ansible.builtin.copy:
