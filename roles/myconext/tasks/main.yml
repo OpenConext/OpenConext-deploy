@@ -46,10 +46,18 @@
   notify:
     - "restart myconextserver"
 
+- name: Create directory to keep .wellknown files
+  ansible.builtin.file:
+    dest: "/opt/openconext/myconext/wellknown"
+    state: directory
+    owner: root
+    group: root
+    mode: "0770"
+
 - name: Copy apple-app-site-association from inventory
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/myconext/apple-app-site-association"
-    dest: "/opt/openconext/myconext/apple-app-site-association"
+    dest: "/opt/openconext/myconext/wellknown/apple-app-site-association"
     owner: "root"
     group: "root"
     mode: "0644"
@@ -57,7 +65,7 @@
 - name: Copy Android assetlinks.json from inventory
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/myconext/assetlinks.json"
-    dest: "/opt/openconext/myconext/assetlinks.json"
+    dest: "/opt/openconext/myconext/wellknown/assetlinks.json"
     owner: "root"
     group: "root"
     mode: "0644"
@@ -172,11 +180,8 @@
       - source: /etc/localtime
         target: /etc/localtime
         type: bind
-      - source: /opt/openconext/myconext/apple-app-site-association
-        target: /var/www/.well-known/apple-app-site-association
-        type: bind
-      - source: /opt/openconext/myconext/assetlinks.json
-        target: /var/www/.well-known/assetlinks.json
+      - source: /opt/openconext/myconext/wellknown
+        target: /var/www/.well-known
         type: bind
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img }}"
@@ -211,11 +216,8 @@
       - source: /etc/localtime
         target: /etc/localtime
         type: bind
-      - source: /opt/openconext/myconext/apple-app-site-association
-        target: /var/www/.well-known/apple-app-site-association
-        type: bind
-      - source: /opt/openconext/myconext/assetlinks.json
-        target: /var/www/.well-known/assetlinks.json
+      - source: /opt/openconext/myconext/wellknown
+        target: /var/www/.well-known
         type: bind
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_for_idp }}"
