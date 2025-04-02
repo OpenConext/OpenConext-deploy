@@ -3,6 +3,9 @@
     name: statsserver
     state: started
     restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
   when: statsservercontainer is success and statsservercontainer is not change
 
 

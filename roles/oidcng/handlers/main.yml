@@ -4,4 +4,7 @@
     name: oidcngserver
     state: started
     restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
   when: oidcngservercontainer is success and oidcngservercontainer is not change

@@ -12,4 +12,7 @@
     name: webauthn
     state: started
     restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
   when: webauthncontainer is success and webauthncontainer is not change
