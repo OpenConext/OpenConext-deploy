@@ -33,11 +33,11 @@
       tags: ['core', 'loadbalancer', 'lb']
     - role: keepalived
       when:
-        - inventory_hostname in groups['loadbalancer_ha']
+        - "loadbalancer_ha" in groups and inventory_hostname in groups['loadbalancer_ha']
       tags: ['core', 'loadbalancer', 'keepalived']
     - role: bind
       when:
-        - inventory_hostname in groups['loadbalancer_ha']
+        - "loadbalancer_ha" in groups and inventory_hostname in groups['loadbalancer_ha']
       tags: ['core', 'loadbalancer', 'bind']
 
 - hosts: db_mysql
