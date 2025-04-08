@@ -21,78 +21,82 @@
   delegate_to: "localhost"
   run_once: true
 
-- name: Issue the certificates using acme
-  ansible.builtin.command:
-    cmd: |
-      /home/acme/.acme.sh/acme.sh
-        --issue
-        --keylength 2048
-        --days "{{ haproxy_acme_renewal_days }}"
-        --dns dns_acmedns
-        --stateless
-        --dnssleep 3
-        --server "{{ haproxy_acme_server }}"
-        --domain "{{ item }}"
-  environment:
-    ACMEDNS_BASE_URL: "{{ haproxy_acmedns.baseurl }}"
-    ACMEDNS_USERNAME: "{{ haproxy_acmedns.username }}"
-    ACMEDNS_PASSWORD: "{{ haproxy_acmedns.password }}"
-    ACMEDNS_SUBDOMAIN: "{{ haproxy_acmedns.subdomain }}"
-  loop: "{{ haproxy_ssl_hosts }}"
-  register: "acme_issue"
-  changed_when: "acme_issue.rc == 0"
-  failed_when: 'acme_issue.rc != 0 and acme_issue.rc != 2'
-  become_user: "acme"
-  become: true
+- name: Update certificates on one host at a time
+  throttle: 1
+  block:
+    - name: Issue the certificates using acme
+      ansible.builtin.command:
+        cmd: |
+          /home/acme/.acme.sh/acme.sh
+            --issue
+            --keylength 2048
+            --days "{{ haproxy_acme_renewal_days }}"
+            --dns dns_acmedns
+            --stateless
+            --dnssleep 3
+            --server "{{ haproxy_acme_server }}"
+            --domain "{{ item }}"
+      environment:
+        ACMEDNS_BASE_URL: "{{ haproxy_acmedns.baseurl }}"
+        ACMEDNS_USERNAME: "{{ haproxy_acmedns.username }}"
+        ACMEDNS_PASSWORD: "{{ haproxy_acmedns.password }}"
+        ACMEDNS_SUBDOMAIN: "{{ haproxy_acmedns.subdomain }}"
+      loop: "{{ haproxy_ssl_hosts }}"
+      throttle: 1
+      register: "acme_issue"
+      changed_when: "acme_issue.rc == 0"
+      failed_when: 'acme_issue.rc != 0 and acme_issue.rc != 2'
+      become_user: "acme"
+      become: true
 
-# Now deploy the certificates to haproxy
-# We do this in two steps:
-# 1. Cold-deploy the certificates to haproxy's certs directory
-# 2. Make sure haproxy is started, and hot-deploy the certificates to haproxy though the socket API
+    # Now deploy the certificates to haproxy
+    # We do this in two steps:
+    # 1. Cold-deploy the certificates to haproxy's certs directory
+    # 2. Make sure haproxy is started, and hot-deploy the certificates to haproxy though the socket API
 
-- name: Cold-deploy the certificates to haproxy  # noqa: no-handler
-  ansible.builtin.command:
-    cmd: |
-      /home/acme/.acme.sh/acme.sh
-        --deploy
-        --deploy-hook haproxy
-        --domain "{{ item }}"
-  environment:
-    DEPLOY_HAPROXY_PEM_PATH: "/etc/haproxy/certs"
-  loop: "{{ haproxy_ssl_hosts }}"
-  register: "result"
-  changed_when: "result.rc == 0"
-  when: "acme_issue.changed"
-  become_user: "acme"
-  become: true
+    - name: Cold-deploy the certificates to haproxy  # noqa: no-handler
+      ansible.builtin.command:
+        cmd: |
+          /home/acme/.acme.sh/acme.sh
+            --deploy
+            --deploy-hook haproxy
+            --domain "{{ item }}"
+      environment:
+        DEPLOY_HAPROXY_PEM_PATH: "/etc/haproxy/certs"
+      loop: "{{ haproxy_ssl_hosts }}"
+      register: "result"
+      changed_when: "result.rc == 0"
+      when: "acme_issue.changed"
+      become_user: "acme"
+      become: true
 
-- name: Start and enable haproxy
-  ansible.builtin.service:
-    name: "haproxy"
-    state: "started"
-    enabled: true
+    - name: Start and enable haproxy
+      ansible.builtin.service:
+        name: "haproxy"
+        state: "started"
+        enabled: true
 
-- name: Wait for port 443 to become open  # noqa: no-handler
-  ansible.builtin.wait_for:
-    port: 443
-    delay: 5
-    host: "{{ haproxy_sni_ip.ipv4 }}"
-  when: "acme_issue.changed"
+    - name: Wait for port 443 to become open  # noqa: no-handler
+      ansible.builtin.wait_for:
+        port: 443
+        delay: 5
+        host: "{{ haproxy_sni_ip.ipv4 }}"
+      when: "acme_issue.changed"
 
-- name: Hot-deploy the certificates to haproxy  # noqa: no-handler
-  ansible.builtin.command:
-    cmd: |
-      /home/acme/.acme.sh/acme.sh
-        --deploy
-        --deploy-hook haproxy
-        --domain "{{ item }}"
-  environment:
-    DEPLOY_HAPROXY_HOT_UPDATE: "yes"
-    DEPLOY_HAPROXY_STATS_SOCKET: "/var/lib/haproxy/haproxy.stats"
-    DEPLOY_HAPROXY_PEM_PATH: "/etc/haproxy/certs"
-  loop: "{{ haproxy_ssl_hosts }}"
-  when: "acme_issue.changed"
-  register: "result"
-  changed_when: "result.changed"
-  become_user: "acme"
-  become: true
+    - name: Hot-deploy the certificates to haproxy  # noqa: no-handler
+      ansible.builtin.command:
+        cmd: |
+          /home/acme/.acme.sh/acme.sh
+            --deploy
+            --deploy-hook haproxy
+            --domain "{{ item }}"
+      environment:
+        DEPLOY_HAPROXY_HOT_UPDATE: "yes"
+        DEPLOY_HAPROXY_STATS_SOCKET: "/var/lib/haproxy/haproxy.stats"
+        DEPLOY_HAPROXY_PEM_PATH: "/etc/haproxy/certs"
+      loop: "{{ haproxy_ssl_hosts }}"
+      when: "acme_issue.changed"
+      register: "result"
+      changed_when: "result.changed"
+      become_user: "acme"
+      become: true
