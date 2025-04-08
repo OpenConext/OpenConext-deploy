@@ -235,6 +235,7 @@ parameters:
     feature_enable_consent: {{ engine_feature_enable_consent | bool | to_json }}
     feature_stepup_sfo_override_engine_entityid: {{ engine_feature_stepup_override_entityid | bool | to_json }}
     feature_enable_idp_initiated_flow: {{ engine_feature_idp_initiated_flow | bool | to_json }}
+    feature_enable_sram_interrupt: {{ engine_feature_enable_sbs_interrupt | bool | to_json }}
     ##########################################################################################
     ## PROFILE SETTINGS
     ##########################################################################################
@@ -312,3 +313,13 @@ parameters:
     # used in the authentication log record. The attributeName will be searched in the response attributes and if present
     # the log data will be enriched. The values of the response attributes are the final values after ARP and Attribute Manipulation.
     auth.log.attributes: {{ engineblock_log_attributes }}
+
+    ##########################################################################################
+    ## SBS external authorization/attribute enrichtment
+    ##########################################################################################
+    sram.api_token: "{{ engine_sbs_api_token | default('') }}"
+    sram.base_url: "{{ engine_sbs_base_url }}"
+    sram.authz_location: "authz_eb"
+    sram.interrupt_location: "interrupt"
+    sram.verify_peer: true
+    sram.allowed_attributes: "{{ engine_sbs_attributes_allowed }}"
