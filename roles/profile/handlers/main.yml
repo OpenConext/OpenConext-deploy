@@ -4,4 +4,7 @@
     name: profile
     state: started
     restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
   when: profilecontainer is success and profilecontainer is not change

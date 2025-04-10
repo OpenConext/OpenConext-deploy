@@ -12,4 +12,7 @@
     name: middleware
     state: started
     restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
   when: middlewarecontainer is success and middlewarecontainer is not change
