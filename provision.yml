@@ -30,15 +30,15 @@
   become: true
   roles:
     - role: haproxy
-      tags: ['core', 'loadbalancer', 'lb']
+      tags: ['core', 'loadbalancer_ha', 'loadbalancer', 'lb']
     - role: keepalived
       when:
-        - inventory_hostname in groups['loadbalancer_ha']
-      tags: ['core', 'loadbalancer', 'keepalived']
+        - "'loadbalancer_ha' in groups and inventory_hostname in groups['loadbalancer_ha']"
+      tags: ['core', 'loadbalancer_ha', 'keepalived']
     - role: bind
       when:
-        - inventory_hostname in groups['loadbalancer_ha']
-      tags: ['core', 'loadbalancer', 'bind']
+        - "'loadbalancer_ha' in groups and inventory_hostname in groups['loadbalancer_ha']"
+      tags: ['core', 'loadbalancer_ha', 'bind']
 
 - hosts: db_mysql
   gather_facts: no
