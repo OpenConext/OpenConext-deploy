@@ -22,6 +22,26 @@
   check_mode: false  # this is safe run run, even in check mode
   run_once: true
 
+- name: Create dir to store old keys
+  ansible.builtin.file:
+    path: "/home/acme/old_keys/"
+    state: "directory"
+    owner: "acme"
+    group: "acme"
+    mode: "0700"
+
+- name: Check which vhosts still uses an RSA key
+  ansible.builtin.stat:
+    path: "/home/acme/.acme.sh/{{item}}"
+  register: rsa_dirs
+  loop: "{{ haproxy_ssl_hosts }}"
+
+- name: Move old RSA keys
+  ansible.builtin.command:
+    cmd: "mv '/home/acme/.acme.sh/{{ item }}' /home/acme/old_keys/{{ item }}.rsa.{{ ansible_date_time.date }}"
+  loop: |
+    {{ rsa_dirs.results | selectattr('stat.exists', 'equalto', true) | map(attribute='item') | list }}
+
 - name: Issue the certificates using acme
   ansible.builtin.command:
     cmd: |
