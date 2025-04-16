@@ -28,7 +28,7 @@
       /home/acme/.acme.sh/acme.sh
         --issue
         --ecc
-        --keylength ec-384
+        --keylength ec-256
         --days "{{ haproxy_acme_renewal_days }}"
         --dns dns_acmedns
         --stateless
