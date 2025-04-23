@@ -4,4 +4,7 @@
     name: lifecycle
     state: started
     restart: true
-  when: lifecycleservercontainer is success and lifecycleservercontainer is not change
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
+  when: lifecyclecontainer is success and lifecyclecontainer is not change
