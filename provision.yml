@@ -99,8 +99,8 @@
 - hosts: mujina
   become: true
   roles:
-    - { role: mujina-idp, tags: ["mujina-idp"] }
-    - { role: mujina-sp, tags: ["mujina-sp"] }
+    - { role: mujina-idp, tags: ["mujina-idp", "mujina"] }
+    - { role: mujina-sp, tags: ["mujina-sp", "mujina"] }
 
 - hosts: docker_apps1
   become: true
