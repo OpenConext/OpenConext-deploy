@@ -223,39 +223,39 @@
       HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_for_idp }}"
       HTTPD_SERVERNAME: "login.{{ myconext_base_domain }}"
 
-- name: Create the servicedesk gui
-  community.docker.docker_container:
-    name: servicedeskgui
-    image: ghcr.io/openconext/openconext-myconext/servicedesk-gui:{{ servicedesk_gui_version }}
-    pull: true
-    restart_policy: "always"
-    state: started
-    networks:
-      - name: "loadbalancer"
-    labels:
-      traefik.http.routers.servicedeskgui.rule: "Host(`servicedesk.{{ myconext_base_domain }}`)"
-      traefik.http.routers.servicedeskgui.tls: "true"
-      traefik.enable: "true"
-    healthcheck:
-      test: ["CMD", "curl", "--fail" , "http://localhost"]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-    mounts:
-      - source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - source: /opt/openconext/myconext/apple-app-site-association
-        target: /var/www/.well-known/apple-app-site-association
-        type: bind
-    env:
-      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_for_idp }}"
-      HTTPD_SERVERNAME: "servicedesk.{{ myconext_base_domain }}"
-      OPENCONEXT_INSTANCENAME: "{{ instance_name }}"
-      OPENCONEXT_ENGINE_LOGOUT_URL: "https://engine.{{ base_domain }}/logout"
-      OPENCONEXT_HELP_EMAIL: "{{ support_email }}"
-      SHIB_ENTITYID: "https://servicedesk.{{ myconext_base_domain }}/shibboleth"
-      SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
-      SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
-  when: myconext.deploy_servicedesk | default(false) | bool
+#- name: Create the servicedesk gui
+#  community.docker.docker_container:
+#    name: servicedeskgui
+#    image: ghcr.io/openconext/openconext-myconext/servicedesk-gui:{{ servicedesk_gui_version }}
+#    pull: true
+#    restart_policy: "always"
+#    state: started
+#    networks:
+#      - name: "loadbalancer"
+#    labels:
+#      traefik.http.routers.servicedeskgui.rule: "Host(`servicedesk.{{ myconext_base_domain }}`)"
+#      traefik.http.routers.servicedeskgui.tls: "true"
+#      traefik.enable: "true"
+#    healthcheck:
+#      test: ["CMD", "curl", "--fail" , "http://localhost"]
+#      interval: 10s
+#      timeout: 10s
+#      retries: 3
+#      start_period: 10s
+#    mounts:
+#      - source: /etc/localtime
+#        target: /etc/localtime
+#        type: bind
+#      - source: /opt/openconext/myconext/apple-app-site-association
+#        target: /var/www/.well-known/apple-app-site-association
+#        type: bind
+#    env:
+#      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_for_idp }}"
+#      HTTPD_SERVERNAME: "servicedesk.{{ myconext_base_domain }}"
+#      OPENCONEXT_INSTANCENAME: "{{ instance_name }}"
+#      OPENCONEXT_ENGINE_LOGOUT_URL: "https://engine.{{ base_domain }}/logout"
+#      OPENCONEXT_HELP_EMAIL: "{{ support_email }}"
+#      SHIB_ENTITYID: "https://servicedesk.{{ myconext_base_domain }}/shibboleth"
+#      SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+#      SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
+#  when: myconext.deploy_servicedesk | default(false) | bool
