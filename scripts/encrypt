@@ -22,14 +22,14 @@ fi
 # aliases
 if [ "$ENV" = "prod" ]
 then
-    ENV=prd
+    ENV=prod
 fi
 
 # check if env is correct
-if [ "$ENV" != "acc" ] && [ "$ENV" != "prd" ] && [ "$ENV" != "test" ] && [ "$ENV" != "test2" ]
+if [ "$ENV" != "acc" ] && [ "$ENV" != "prod" ] && [ "$ENV" != "test" ] && [ "$ENV" != "test2" ]
 then
     echo "Unknown environment '$ENV'"
-    echo "Acceptable are: acc, prd, test, test2"
+    echo "Acceptable are: acc, prod, test, test2"
     exit 1
 fi
 
