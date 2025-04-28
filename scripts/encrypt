@@ -29,7 +29,7 @@ fi
 if [ "$ENV" != "acc" ] && [ "$ENV" != "prod" ] && [ "$ENV" != "test" ] && [ "$ENV" != "test2" ]
 then
     echo "Unknown environment '$ENV'"
-    echo "Acceptable are: acc, pro?d, test, test2"
+    echo "Acceptable are: acc, prod, test, test2"
     exit 1
 fi
 
