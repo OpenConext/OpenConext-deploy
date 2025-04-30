@@ -4,6 +4,7 @@ parameters:
     app_debug: false
     app_secret: {{ webauthn_secret }}
     database_url: mysql://{{ database_webauthn_user }}:{{ mysql_passwords.webauthn }}@{{ webauthn_db_host }}:3306/{{ database_webauthn_name }}
+    database_migration_url: 'mysql://{{ database_webauthn_deploy_user }}:{{ mysql_passwords.webauthndeploy }}@{{ webauthn_db_host }}:3306/{{ database_webauthn_name }}'
 {% endif %}
     # All locales supported by the application
     locales: [{{ enabled_locales | join(",") }}]

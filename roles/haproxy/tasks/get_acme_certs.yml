@@ -19,6 +19,7 @@
   changed_when: false
   loop: "{{ haproxy_ssl_hosts }}"
   delegate_to: "localhost"
+  check_mode: false  # this is safe run run, even in check mode
   run_once: true
 
 - name: Update certificates on one host at a time
@@ -29,7 +30,8 @@
         cmd: |
           /home/acme/.acme.sh/acme.sh
             --issue
-            --keylength 2048
+            --ecc
+            --keylength ec-384
             --days "{{ haproxy_acme_renewal_days }}"
             --dns dns_acmedns
             --stateless

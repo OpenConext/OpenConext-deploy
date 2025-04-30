@@ -91,7 +91,6 @@ spring:
     properties:
       hibernate:
         naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-        dialect: org.hibernate.dialect.MariaDB53Dialect
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://{{ teams.db_host }}/{{ teams.db_name }}?socketTimeout=30000

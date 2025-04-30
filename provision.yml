@@ -57,8 +57,6 @@
         - inventory_hostname in groups['dbcluster_nodes']
       tags: ['core', 'db_mysql', 'keepalived']
     - role: galera_create_users
-      when:
-        - inventory_hostname in groups['dbcluster']
       tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
 
 - hosts: mongo_servers
@@ -122,6 +120,7 @@
   become: true
   roles:
     - { role: engineblock,      tags: ["eb"] }
+    - { role: stepupgateway,    tags: [ 'stepupgateway' , 'stepup' ] }
 
 - hosts: docker_mariadb
   become: true

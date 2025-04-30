@@ -3,4 +3,7 @@
     name: dashboardserver
     state: started
     restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
   when: dashboardservercontainer is success and dashboardservercontainer is not change
