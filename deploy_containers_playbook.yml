@@ -24,4 +24,3 @@
   become: true
   roles:
     - { role: dashboard, tags: ['dashboard'] }
-
