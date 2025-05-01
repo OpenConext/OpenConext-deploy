@@ -1,13 +1,14 @@
 ---
-- hosts: base
-  gather_facts: yes
+- name: Common configuration
+  hosts: base
+  gather_facts: true
   become: true
   tasks:
-  - name: Read vars from secrets file
-    include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
-    no_log: true
-    tags:
-      - always
+    - name: Read vars from secrets file
+      ansible.builtin.include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
+      no_log: true
+      tags:
+        - always
   roles:
     - role: common
       tags: ['core', 'base', 'common']
@@ -22,5 +23,5 @@
       # at the moment it only is enabled for the vm inventory so maybe it is not necessary at all
     - role: selfsigned_certs
       when:
-        - "{{ use_selfsigned_certs | default(false) | bool }}"
+        - "use_selfsigned_certs | default(false) | bool"
       tags: ['core', 'base', 'selfsigned_certs']
