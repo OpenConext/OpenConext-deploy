@@ -20,7 +20,7 @@ then
 fi
 
 # aliases
-if [ "$ENV" = "prod" ]
+if [ "$ENV" = "prd" ]
 then
     ENV=prod
 fi
