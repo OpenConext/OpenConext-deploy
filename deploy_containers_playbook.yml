@@ -18,3 +18,10 @@
   become: true
   roles:
     - { role: invite, tags: ['invite'] }
+
+- name: Deploy dashboard app
+  hosts: docker_dashboard
+  become: true
+  roles:
+    - { role: dashboard, tags: ['dashboard'] }
+
