@@ -1,5 +1,4 @@
 ---
-# Include secrets
 - name: Deploy containerized applications
   hosts: docker_servers
   become: true
@@ -9,8 +8,6 @@
       no_log: true
       tags:
         - always
-  roles:
-    - { role: docker, tags: ['docker'] } # TODO move to a config docker playbook?
 
 # Separate grouos for all containerized apps
 # Dividing apps across the container services should be set in
