@@ -1,5 +1,5 @@
 ---
-- name: Common configuration
+- name: Read inventory secrets
   hosts: base
   gather_facts: true
   become: true
@@ -9,6 +9,10 @@
       no_log: true
       tags:
         - always
+
+- name: Common configuration
+  hosts: base
+  become: true
   roles:
     - role: common
       tags: ['core', 'base', 'common']
