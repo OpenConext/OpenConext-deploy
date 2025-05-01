@@ -94,6 +94,11 @@
           "default": false,
           "info": "If checked then we use the PUT method for Group updates thus sending all information (e.g. all members), otherwise PATCH with only the added or removed member."
         },
+        "scim_user_provisioning_only": {
+          "type": "boolean",
+          "default": false,
+          "info": "If checked then we only provision SCIM users and not groups. Only applicable for SCIM provisioning"
+        },
         "scim_user_identifier": {
           "type": "string",
           "enum": [
