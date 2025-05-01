@@ -1,0 +1,21 @@
+---
+# Include secrets
+- hosts: docker_servers
+  become: true
+  tasks:
+    - name: Read vars from secrets file
+      include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
+      no_log: true
+      tags:
+       - always
+  roles:
+    - { role: docker,     tags: ['docker' ] }
+
+# Separate grouos for all containerized apps
+# Dividing apps across the container services should be set in
+# the inventory not in the playbook, this way you can easily change
+# it for different environments
+- hosts: docker_invite
+  become: true
+  roles:
+    - { role: invite,     tags: ['invite' ] }

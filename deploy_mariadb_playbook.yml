@@ -1,0 +1,3 @@
+---
+- name: Include some basic roles and read secrets
+  ansible.builtin.import_playbook: base_inc_playbook.yml
