@@ -36,6 +36,7 @@
   ansible.builtin.include_tasks: get_acme_certs.yml
   when: haproxy_acme | bool
 
+
 - name: Check if we need to load additional certificates for migration
   ansible.builtin.find:
     paths: "/etc/haproxy/certs"
