@@ -1,33 +1,33 @@
 ---
 # This playbook causes a lot of unexpected changes but so does provision.yml
 # with the base tag, TODO fix configuration drift or remove some roles
-- name: Read inventory secrets
-  hosts: base
-  gather_facts: true
-  become: true
-  tasks:
-    - name: Read vars from secrets file
-      ansible.builtin.include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
-      no_log: true
-      tags:
-        - always
+# - name: Read inventory secrets
+#   hosts: base
+#   gather_facts: true
+#   become: true
+#   tasks:
+#     - name: Read vars from secrets file
+#       ansible.builtin.include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
+#       no_log: true
+#       tags:
+#         - always
 
-- name: Common configuration
-  hosts: base
-  become: true
-  roles:
-    - role: common
-      tags: ['core', 'base', 'common']
-    - role: rsyslog
-      tags: ['core', 'base', 'rsyslog']
-    - role: iptables # TODO: the when should be in the role
-      when:
-        - iptables_enable | bool
-      tags: ['core', 'base', 'iptables']
-      # TODO: the role has a lot of when host is in loadbalancer group statements so it makes more sense to move this
-      # to a load balancer playbook that is ,imited to the loadbalancer group
-      # at the moment it only is enabled for the vm inventory so maybe it is not necessary at all
-    - role: selfsigned_certs
-      when:
-        - "use_selfsigned_certs | default(false) | bool"
-      tags: ['core', 'base', 'selfsigned_certs']
+# - name: Common configuration
+#   hosts: base
+#   become: true
+#   roles:
+#     - role: common
+#       tags: ['core', 'base', 'common']
+#     - role: rsyslog
+#       tags: ['core', 'base', 'rsyslog']
+#     - role: iptables # TODO: the when should be in the role
+#       when:
+#         - iptables_enable | bool
+#       tags: ['core', 'base', 'iptables']
+#       # TODO: the role has a lot of when host is in loadbalancer group statements so it makes more sense to move this
+#       # to a load balancer playbook that is ,imited to the loadbalancer group
+#       # at the moment it only is enabled for the vm inventory so maybe it is not necessary at all
+#     - role: selfsigned_certs
+#       when:
+#         - "use_selfsigned_certs | default(false) | bool"
+#       tags: ['core', 'base', 'selfsigned_certs']
