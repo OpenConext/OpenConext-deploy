@@ -126,3 +126,33 @@
   become: true
   roles:
     - { role: stepupgateway, tags: ['stepupgateway', 'stepup'] }
+
+- name: Deploy stepupwebauthn app
+  hosts: docker_stepupwebauthn
+  become: true
+  roles:
+    - { role: stepupwebauthn, tags: ['stepupwebauthn', 'stepup'] }
+
+- name: Deploy stepupazuremfa app
+  hosts: docker_stepupazuremfa
+  become: true
+  roles:
+    - { role: stepupazuremfa, tags: ['stepupazuremfa', 'stepup'] }
+
+- name: Deploy stepupmiddleware app
+  hosts: docker_stepupmiddleware
+  become: true
+  roles:
+    - { role: stepupmiddleware, tags: ['stepupmiddleware', 'stepup'] }
+
+- name: Deploy stepupselfservice app
+  hosts: docker_stepupselfservice
+  become: true
+  roles:
+    - { role: stepupselfservice, tags: ['stepupselfservice', 'stepup'] }
+
+- name: Deploy stepupra app
+  hosts: docker_stepupra
+  become: true
+  roles:
+    - { role: stepupra, tags: ['stepupra', 'stepup'] }
