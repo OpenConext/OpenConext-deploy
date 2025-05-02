@@ -114,3 +114,15 @@
   become: true
   roles:
     - { role: mujina-sp, tags: ['mujina-sp', 'mujina'] }
+
+- name: Deploy engineblock app
+  hosts: docker_engineblock
+  become: true
+  roles:
+    - { role: engineblock, tags: ['engineblock', 'eb'] }
+
+- name: Deploy stepupgateway app
+  hosts: docker_stepupgateway
+  become: true
+  roles:
+    - { role: stepupgateway, tags: ['stepupgateway', 'stepup'] }
