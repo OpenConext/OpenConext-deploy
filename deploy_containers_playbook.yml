@@ -24,3 +24,93 @@
   become: true
   roles:
     - { role: dashboard, tags: ['dashboard'] }
+
+- name: Deploy teams app
+  hosts: docker_teams
+  become: true
+  roles:
+    - { role: teams, tags: ['teams'] }
+
+- name: Deploy pdp app
+  hosts: docker_pdp
+  become: true
+  roles:
+    - { role: pdp, tags: ['pdp'] }
+
+- name: Deploy voot app
+  hosts: docker_voot
+  become: true
+  roles:
+    - { role: voot, tags: ['voot'] }
+
+- name: Deploy attribute-aggregation app
+  hosts: docker_attribute_aggregation
+  become: true
+  roles:
+    - { role: attribute-aggregation, tags: ['aa', 'attribute-aggregation'] }
+
+- name: Deploy oidc-playground app
+  hosts: docker_oidc-playground
+  become: true
+  roles:
+    - { role: oidc-playground, tags: ['oidc-playground'] }
+
+- name: Deploy myconext app
+  hosts: docker_myconext
+  become: true
+  roles:
+    - { role: myconext, tags: ['myconext'] }
+
+- name: Deploy manage app
+  hosts: docker_manage
+  become: true
+  roles:
+    - { role: manage, tags: ['manage'] }
+
+- name: Deploy oidcng app
+  hosts: docker_oidcng
+  become: true
+  roles:
+    - { role: oidcng, tags: ['oidcng'] }
+
+- name: Deploy stats app
+  hosts: docker_stats
+  become: true
+  roles:
+    - { role: stats, tags: ['stats'] }
+
+- name: Deploy diyidp app
+  hosts: docker_diyidp
+  become: true
+  roles:
+    - { role: diyidp, tags: ['diyidp'] }
+
+- name: Deploy profile app
+  hosts: docker_profile
+  become: true
+  roles:
+    - { role: profile, tags: ['profile'] }
+
+- name: Deploy lifecycle app
+  hosts: docker_lifecycle
+  become: true
+  roles:
+    - { role: lifecycle, tags: ['lifecycle'] }
+
+- name: Deploy stepuptiqr app
+  hosts: docker_stepuptiqr
+  become: true
+  roles:
+    - { role: stepuptiqr, tags: ['stepuptiqr', 'stepup'] }
+
+- name: Deploy mujina-idp app
+  hosts: docker_mujina_idp
+  become: true
+  roles:
+    - { role: mujina-idp, tags: ['mujina-idp', 'mujina'] }
+
+- name: Deploy mujina-sp app
+  hosts: docker_mujina_sp
+  become: true
+  roles:
+    - { role: mujina-sp, tags: ['mujina-sp', 'mujina'] }
