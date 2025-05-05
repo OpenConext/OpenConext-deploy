@@ -1,33 +1,70 @@
 ---
+- name: Set the mujina_sp directory variable
+  ansible.builtin.set_fact:
+    mujina_sp_dir: "/"
 
-- name: Copy logging config
-  template: 
-    src: logback.xml.j2 
-    dest: "{{ mujina_sp_dir }}/logback.xml"
-    owner: "{{ springapp_user }}" 
-    group: "{{ springapp_user }}" 
-    mode: 0740
-  notify: restart mujina-sp
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ mujina_sp_dir_docker }}"
+    mode: "0750"
+    state: directory
+    owner: root
 
-- name: Copy application config
-  template:
-    src: "application.yml.j2"
-    dest: "{{ mujina_sp_dir }}/application.yml"
-    owner: "{{ springapp_user }}"
-    group: "{{ springapp_user }}"
-    mode: 0740
+- name: Copy config
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ mujina_sp_dir_docker }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0640"
+  with_items:
+    - application.yml
+    - logback.xml
   notify:
-    - "restart mujina-sp"
+    - Restart mujina-sp-docker
 
-- name: copy apache config
-  template:
-    src: "mujina_sp.conf.j2"
-    dest: "/etc/httpd/conf.d/mujina_sp.conf"
-  notify:
-    - "reload httpd"
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: mujina-sp
+    image: ghcr.io/openconext/mujina/mujina-sp:{{ mujina_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    env:
+      TZ: "{{ timezone }}"
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: "{{ mujina_sp_dir_docker }}/application.yml"
+        target: /application.yml
+        type: bind
+      - source: "{{ mujina_sp_dir_docker }}/logback.xml"
+        target: /logback.xml
+        type: bind
+    command: "-Xmx128m --spring.config.location=./"
+    labels:
+      traefik.http.routers.mujina-sp.rule: "Host(`mujina-sp.{{ base_domain }}`)"
+      traefik.http.routers.mujina-sp.tls: "true"
+      traefik.http.services.mujina-sp.loadbalancer.server.port: "9090"
+      traefik.enable: "true"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9090/internal/health",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  register: mujinaspcontainer
 
 - name: Include the role manage_provision_entities to provision the Mujina sp to Manage
-  include_role: 
+  ansible.builtin.include_role:
     name: manage_provision_entities
-  vars: 
-    entity_type: saml20_sp
+  vars:
+    entity_type: saml20_sp # noqa: var-naming[no-role-prefix] variable is used in several roles

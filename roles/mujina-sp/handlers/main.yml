@@ -1,6 +1,7 @@
 ---
-- name: restart mujina-sp
-  systemd:
-    name: "{{ springapp_service_name }}"
-    state: restarted
-    daemon_reload: yes
+- name: Restart mujina-sp-docker
+  community.docker.docker_container:
+    name: mujina-sp
+    state: started
+    restart: true
+  when: mujinaspcontainer is success and mujinaspcontainer is not change
