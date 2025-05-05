@@ -360,7 +360,7 @@ manage:
     - {
         name: "sram",
         password: "{{ manage_sram_secret }}",
-        scopes: ["READ", "WRITE_SP", "DELETE_SP"]
+        scopes: ["READ", "WRITE_SP", "DELETE_SP", "PUSH"]
       }
     - {
         name: "sysadmin",
