@@ -234,7 +234,7 @@ verify:
 spring:
   data:
     mongodb:
-      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for {% for mongo_server in myconext.mongo_servers %}{{ mongo_server }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}
+      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for mongo_server in myconext.mongo_servers %}{{ mongo_server }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}
 
   mail:
     host: {{ smtp_server }}
