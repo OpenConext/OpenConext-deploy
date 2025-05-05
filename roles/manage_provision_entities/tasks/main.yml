@@ -34,6 +34,7 @@
     body:
       entityid: "{{ manage_provision_client_id }}"
   run_once: true
+  check_mode: false # This can safely run in check mode because it is not changing anything
   register: manage_test_entity
   until: manage_test_entity is succeeded
   retries: 15
