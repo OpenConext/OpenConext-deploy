@@ -1,12 +1,7 @@
 ---
-- name: restart mujina-idp
-  service:
-    name: "{{ springapp_service_name }}"
-    state: restarted
-    daemon_reload: yes
-
-- name: restart mujina-idp-docker
+- name: Restart mujina-idp-docker
   community.docker.docker_container:
     name: mujina-idp
     state: started
     restart: true
+  when: mujinaidpcontainer is success and mujinaidpcontainer is not change
