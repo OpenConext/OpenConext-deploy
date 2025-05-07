@@ -18,6 +18,7 @@
     - serverapplication.yml
     - logback.xml
     - attributeAuthorities.yml
+    - serviceProviderConfig.json
     - apachelink.conf
   notify: restart attribute-aggregationserver
 
@@ -45,6 +46,9 @@
         type: bind
       - source: /opt/openconext/attribute-aggregation/attributeAuthorities.yml
         target: /attributeAuthorities.yml
+        type: bind
+      - source: /opt/openconext/attribute-aggregation/serviceProviderConfig.json
+        target: /serviceProviderConfig.json
         type: bind
     command: "-Xmx128m --spring.config.location=./"
     etc_hosts:
