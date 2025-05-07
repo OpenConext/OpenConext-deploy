@@ -182,7 +182,6 @@ authorities:
     user: "{{ aa.sab_rest_username }}",
     password: "{{ aa.sab_rest_password }}",
     timeOut: 1000,
-    timeOut: 1000,
     attributes: [
       {
         name: "urn:mace:dir:attribute-def:eduPersonEntitlement",
@@ -208,4 +207,18 @@ authorities:
 
     ],
     validationRegExp: "^urn:mace:surfnet.nl:(surfnet\\.nl|surf\\.nl):sab:(role|organizationCode|organizationGUID|mobile):[A-Z0-9_+-]+$"
+  }
+  - {
+    id: "institution",
+    timeOut: 100,
+    attributes: [ ],
+    requiredInputAttributes: [
+      {
+        name: "SPentityID"
+      },
+      {
+        name: "urn:mace:eduid.nl:1.1"
+      }
+    ],
+    validationRegExp: ".*"
   }
