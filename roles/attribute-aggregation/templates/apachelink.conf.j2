@@ -13,28 +13,11 @@ ProxyPass /Shibboleth.sso !
 
 ProxyPass /redirect http://aaserver:8080/aa/api/redirect
 ProxyPass /internal/health http://aaserver:8080/aa/api/internal/health
-ProxyPass /internal/info http://aaserver:8080/aa/api/internal/info 
+ProxyPass /internal/info http://aaserver:8080/aa/api/internal/info
 
-ProxyPass /aa/api http://aaserver:8080/aa/api 
+ProxyPass /aa/api http://aaserver:8080/aa/api
 ProxyPassReverse /aa/api http://aaserver:8080/aa/api
 ProxyPassReverse /aa/api/client http://aaserver:8080/aa/api/client
-
-
-<Location />
-  AuthType shibboleth
-  ShibUseHeaders On
-  ShibRequireSession On
-  Require valid-user
-</Location>
-
-<Location ~ "/internal/(health|info)">
-Require all granted
-</Location>
-
-# The EB endpoints are secured with basic auth
-<Location ~ "/aa/api/internal/">
-  Require all granted
-</Location>
 
 Header always set X-Frame-Options "DENY"
 Header always set Referrer-Policy "strict-origin-when-cross-origin"
