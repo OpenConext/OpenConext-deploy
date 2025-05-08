@@ -1,13 +1,19 @@
 # The global variable file mongodb installation
 
+# In the current mongo role only one cluster per environments
+# is possible, that works for now.
+mongo_servers: [] # Set this in group_vars
+#  - mongo1.example.com
+#  - mongo2.example.com
+
 # The port for mongo server
 mongod_port: 27017
 
 # The password for admin user
-mongo_admin_pass: "{{ mongo_admin_password }}"
+mongo_admin_pass: "{{ mongo_admin_password }}" # Set this in secrets
 
 # The name of the replication set
-replica_set_name: "{{ instance_name }}"
+replica_set_name: "{{ instance_name }}" # Set this in group_vars
 
 # Add a database
 mongo:

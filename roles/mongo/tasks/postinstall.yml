@@ -34,6 +34,10 @@
     owner: root
   when: mongo_replication_role != 'arbiter'
 
+# TODO: this template gets mongo_servers from
+# the inventory, maybe change that to group vars
+# this is not on an per app basis. These are mongoservers
+# in the same cluster.
 - name: Create mongosh config file
   ansible.builtin.template:
     src: mongoshrc.js.j2
