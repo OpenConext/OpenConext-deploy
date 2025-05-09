@@ -318,7 +318,7 @@ parameters:
     ## SBS external authorization/attribute enrichtment
     ##########################################################################################
     sram.api_token: "{{ engine_sbs_api_token | default('') }}"
-    sram.base_url: "https://{{ engine_sbs_base_url }}/api/users"
+    sram.base_url: "https://{{ engine_sbs_base_url }}/api/users/"
     sram.authz_location: "authz_eb"
     sram.attributes_location: "attributes_eb"
     sram.interrupt_location: "interrupt"
