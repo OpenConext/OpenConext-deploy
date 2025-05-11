@@ -66,8 +66,9 @@ security:
   backdoor_user_name: {{ manage.backdoor_api_user }}
   backdoor_password: "{{ manage_backdoor_api_password }}"
   api_users_config_path: file://{{ manage_dir }}/manage-api-users.yml
-  super_user_team_names: {{ manage.super_user_team_names }}
-
+  super_user_attribute_name: {{ manage_super_user_attribute_name }}
+  super_user_values: {{ manage.super_user_team_names }}
+ 
 crypto:
   development-mode: False
   public-key-location: file://{{ manage_dir }}/public_invite_key.pem
