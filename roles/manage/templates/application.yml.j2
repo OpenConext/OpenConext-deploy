@@ -68,11 +68,16 @@ security:
   api_users_config_path: file://{{ manage_dir }}/manage-api-users.yml
   super_user_attribute_name: {{ manage_super_user_attribute_name }}
   super_user_values: {{ manage.super_user_team_names }}
- 
+
 crypto:
   development-mode: False
   public-key-location: file://{{ manage_dir }}/public_invite_key.pem
   enabled: {{ manage.crypto_enabled }}
+
+# Can also be a file system resource like file://{{ manage_dir }}/policies/allowed_attributes.json
+policies:
+  allowed_attributes: file://{{ manage_dir }}/policies/allowed_attributes.json
+  extra_saml_attributes: file://{{ manage_dir }}/policies/extra_saml_attributes.json
 
 spring:
   mail:

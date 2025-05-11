@@ -9,6 +9,7 @@
   with_items:
     - "/opt/openconext/manage/metadata_configuration"
     - "/opt/openconext/manage/metadata_templates"
+    - "/opt/openconext/manage/policies"
 
 - name: Import the mongo CA file
   ansible.builtin.copy:
@@ -69,6 +70,19 @@
     mode: "0640"
   with_items:
     - "{{ manage_tabs_enabled }}"
+  notify:
+    - "restart manageserver"
+
+- name: copy policies configuration
+  copy:
+    src: "policies/{{ item }}"
+    dest: "/opt/openconext/manage/policies/{{ item }}"
+    owner: root
+    group: root
+    mode: "0640"
+  with_items:
+    - allowed_attributes.json
+    - extra_saml_attributes.json
   notify:
     - "restart manageserver"
 
