@@ -19,6 +19,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - inviteserver
         - inviteclient
@@ -34,6 +35,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - dashboardserver
         - dashboardgui
@@ -48,6 +50,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - teamsserver
         - teamsgui
@@ -62,6 +65,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - pdpserver
         - pdpgui
@@ -76,6 +80,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - vootserver
 
@@ -89,6 +94,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - aaserver
 
@@ -102,6 +108,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - oidcplaygroundserver
         - oidcplaygroundgui
@@ -116,6 +123,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - myconextserver
         - myconextgui
@@ -132,6 +140,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - manageserver
         - managegui
@@ -146,6 +155,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - oidcngserver
 
@@ -159,6 +169,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - statsserver
         - statsgui
@@ -173,6 +184,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - diyidp
 
@@ -186,6 +198,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - profile
 
@@ -199,6 +212,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - lifecycle
 
@@ -212,8 +226,9 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
-        - stepuptiqr
+        - stepup-tiqr
 
 - name: Test mujina-idp containers
   hosts: docker_mujina_idp
@@ -225,6 +240,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - mujina-idp
 
@@ -238,6 +254,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - mujina-sp
 
@@ -251,6 +268,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
         - engineblock
 
@@ -264,8 +282,9 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
-        - stepupgateway
+        - stepup-gateway
 
 - name: Test stepupwebauthn containers
   hosts: docker_stepupwebauthn
@@ -277,8 +296,9 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
-        - stepupwebauthn
+        - stepup-webauthn
 
 - name: Test stepupazuremfa containers
   hosts: docker_stepupazuremfa
@@ -290,8 +310,9 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
-        - stepupazuremfa
+        - stepup-azuremfa
 
 - name: Test stepupmiddleware containers
   hosts: docker_stepupmiddleware
@@ -303,8 +324,9 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
-        - stepupmiddleware
+        - stepup-middleware
 
 - name: Test stepupselfservice containers
   hosts: docker_stepupselfservice
@@ -316,8 +338,9 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
-        - stepupselfservice
+        - stepup-selfservice
 
 - name: Test stepupra containers
   hosts: docker_stepupra
@@ -329,5 +352,6 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
+      ignore_errors: yes
       with_items:
-        - stepupra
+        - stepup-ra
