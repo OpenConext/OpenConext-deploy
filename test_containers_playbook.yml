@@ -1,0 +1,20 @@
+---
+- name: Test containerized applications
+  hosts: docker_servers
+  become: true
+  tasks:
+    - name: Read vars from secrets file
+      ansible.builtin.include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
+      no_log: true
+      tags:
+        - always
+
+- name: Test invite app
+  hosts: docker_invite
+  become: true
+  tasks:
+    - name: Check invite app containers state
+      ansible.builtin.command:
+        cmd: docker inspect -f '{{.State.Status}}' "inviteserver"
+      register: inviteserver_state
+      failed_when: inviteserver_state != "running"
