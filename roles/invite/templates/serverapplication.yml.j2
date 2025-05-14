@@ -158,6 +158,14 @@ external-api-configuration:
       applications:
         - manageId: {{ invite.sp_dashboard_manage_id }}
           manageType: SAML20_SP
+    -
+      username: {{ invite.access_user }}
+      password: "{{ invite.access_secret }}"
+      scopes:
+        - access
+      applications:
+        - manageId: {{ invite.access_manage_id }}
+          manageType: OIDC10_RP
 
 
 voot:

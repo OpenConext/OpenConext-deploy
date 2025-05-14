@@ -128,7 +128,14 @@
     owner: root
     mode: "0755"
 
+<<<<<<< HEAD
 # TODO only start this when configuration changes
+=======
+# This is at the moment the best way to get iptables right for
+# docker and the host (docker tends to destroy the host iptables rules and vice
+# versa), maybe move this to the iptables role later and make it idempotent
+# ( do not run when nothing changes )
+>>>>>>> main
 - name: Enable and start the new firewall service
   ansible.builtin.systemd:
     service: iptablesdocker.service

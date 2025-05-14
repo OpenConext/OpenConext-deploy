@@ -51,8 +51,5 @@ storage
 dbcluster
 dbcluster_nodes
 
-[app_php:children]
-lifecycle
-
 [local]
 localhost ansible_connection=local

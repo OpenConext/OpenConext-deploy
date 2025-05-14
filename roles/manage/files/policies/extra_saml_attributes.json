@@ -1,0 +1,11 @@
+[
+  {
+    "value": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+    "label": "Unspecified name ID"
+  },
+  {
+    "value": "urn:mace:surfnet.nl:collab:xacml-attribute:ip-address",
+    "label": "IP Address"
+  }
+
+]

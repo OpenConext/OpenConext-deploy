@@ -34,7 +34,11 @@
     body:
       entityid: "{{ manage_provision_client_id }}"
   run_once: true
+<<<<<<< HEAD
   check_mode: false # This task does not make changes to the system and can be safely run in check mode
+=======
+  check_mode: false # This can safely run in check mode because it is not changing anything
+>>>>>>> main
   register: manage_test_entity
   until: manage_test_entity is succeeded
   retries: 15

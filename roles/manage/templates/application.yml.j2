@@ -66,12 +66,18 @@ security:
   backdoor_user_name: {{ manage.backdoor_api_user }}
   backdoor_password: "{{ manage_backdoor_api_password }}"
   api_users_config_path: file://{{ manage_dir }}/manage-api-users.yml
-  super_user_team_names: {{ manage.super_user_team_names }}
+  super_user_attribute_name: {{ manage_super_user_attribute_name }}
+  super_user_values: {{ manage.super_user_team_names }}
 
 crypto:
   development-mode: False
   public-key-location: file://{{ manage_dir }}/public_invite_key.pem
   enabled: {{ manage.crypto_enabled }}
+
+# Can also be a file system resource like file://{{ manage_dir }}/policies/allowed_attributes.json
+policies:
+  allowed_attributes: file://{{ manage_dir }}/policies/allowed_attributes.json
+  extra_saml_attributes: file://{{ manage_dir }}/policies/extra_saml_attributes.json
 
 spring:
   mail:
@@ -79,7 +85,7 @@ spring:
     port: 25
   data:
     mongodb:
-      uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{% for host in groups['mongo_servers'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ manage.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ manage.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}
+      uri: mongodb://{{ manage.mongo_user }}:{{ manage.mongo_password }}@{% for mongo_server in manage.mongo_servers %}{{ mongo_server }}:{{ manage.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ manage.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}
   main:
     banner-mode: "off"
 

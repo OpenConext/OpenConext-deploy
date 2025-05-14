@@ -20,6 +20,9 @@ attribute_authorities_config_path: file:///attributeAuthorities.yml
 authorization_access_token_url: "{{ aa_oauth2_token_url }}"
 aggregate_cache_duration_milliseconds: -1
 
+institution:
+  service_provider_config_path: file:///serviceProviderConfig.json
+
 orcid:
   authorization_uri: "{{ aa.orcid_authorization_uri }}"
   access_token_uri: "{{ aa.access_token_uri }}"
