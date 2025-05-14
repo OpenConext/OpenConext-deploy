@@ -30,7 +30,7 @@
   tasks:
     - name: Check dashboard containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -44,7 +44,7 @@
   tasks:
     - name: Check teams containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -58,7 +58,7 @@
   tasks:
     - name: Check pdp containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -72,7 +72,7 @@
   tasks:
     - name: Check voot containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -85,7 +85,7 @@
   tasks:
     - name: Check attribite-aggregation containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -98,7 +98,7 @@
   tasks:
     - name: Check playground containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -112,7 +112,7 @@
   tasks:
     - name: Check myconext containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -128,7 +128,7 @@
   tasks:
     - name: Check manage containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -142,7 +142,7 @@
   tasks:
     - name: Check oidcng containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -155,7 +155,7 @@
   tasks:
     - name: Check stats containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -169,7 +169,7 @@
   tasks:
     - name: Check diyidp containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -182,7 +182,7 @@
   tasks:
     - name: Check profile containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -195,7 +195,7 @@
   tasks:
     - name: Check invite app containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -208,7 +208,7 @@
   tasks:
     - name: Check stepuptiqr containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -221,7 +221,7 @@
   tasks:
     - name: Check mujina-idp containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -234,7 +234,7 @@
   tasks:
     - name: Check mujina-sp containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -247,7 +247,7 @@
   tasks:
     - name: Check engineblock containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -260,7 +260,7 @@
   tasks:
     - name: Check stepupgateway containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -273,7 +273,7 @@
   tasks:
     - name: Check stepupwebauthn containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -286,12 +286,12 @@
   tasks:
     - name: Check stepupazuremfa containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
       with_items:
-        stepupazuremfa
+        - stepupazuremfa
 
 - name: Test stepupmiddleware containers
   hosts: docker_stepupmiddleware
@@ -299,7 +299,7 @@
   tasks:
     - name: Check stepupmiddleware containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -312,7 +312,7 @@
   tasks:
     - name: Check stepupselfservice containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
@@ -325,7 +325,7 @@
   tasks:
     - name: Check stepupra containers state
       ansible.builtin.command:
-        cmd: docker inspect -f {{ '{{' }} .State.Status {{ '}}' }} {{ item  }}
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
