@@ -1,14 +1,4 @@
 ---
-- name: Test containerized applications
-  hosts: docker_servers
-  become: true
-  tasks:
-    - name: Read vars from secrets file
-      ansible.builtin.include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
-      no_log: true
-      tags:
-        - always
-
 - name: Test invite containers
   hosts: docker_invite
   become: true
