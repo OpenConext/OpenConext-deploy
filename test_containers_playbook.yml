@@ -15,6 +15,7 @@
   tasks:
     - name: Check invite app containers state
       ansible.builtin.command:
-        cmd: docker inspect -f '{{.State.Status}}' "inviteserver"
+        cmd: docker inspect -f '{{ '{{' }} .State.Status{{ '}}' }}' "inviteserver"
       register: inviteserver_state
-      failed_when: inviteserver_state != "running"
+      failed_when: inviteserver_state.stdout != "running"
+      changed_when: inviteserver_state.rc != 0
