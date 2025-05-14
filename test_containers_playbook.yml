@@ -19,7 +19,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - inviteserver
         - inviteclient
@@ -35,7 +35,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - dashboardserver
         - dashboardgui
@@ -50,7 +50,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - teamsserver
         - teamsgui
@@ -65,7 +65,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - pdpserver
         - pdpgui
@@ -80,7 +80,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - vootserver
 
@@ -94,7 +94,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - aaserver
 
@@ -108,7 +108,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - oidcplaygroundserver
         - oidcplaygroundgui
@@ -123,7 +123,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - myconextserver
         - myconextgui
@@ -140,7 +140,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - manageserver
         - managegui
@@ -155,7 +155,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - oidcngserver
 
@@ -169,7 +169,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - statsserver
         - statsgui
@@ -184,7 +184,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - diyidp
 
@@ -198,7 +198,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - profile
 
@@ -212,7 +212,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - lifecycle
 
@@ -226,7 +226,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - stepup-tiqr
 
@@ -240,7 +240,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - mujina-idp
 
@@ -254,7 +254,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - mujina-sp
 
@@ -268,7 +268,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - engineblock
 
@@ -282,7 +282,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - stepup-gateway
 
@@ -296,7 +296,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - stepup-webauthn
 
@@ -310,7 +310,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - stepup-azuremfa
 
@@ -324,7 +324,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - stepup-middleware
 
@@ -338,7 +338,7 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - stepup-selfservice
 
@@ -352,6 +352,6 @@
       register: container_state
       failed_when: container_state.stdout != "running"
       changed_when: false
-      continue_on_error: true
+      ignore_errors: true
       with_items:
         - stepup-ra
