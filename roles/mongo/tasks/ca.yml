@@ -15,6 +15,7 @@
     path: "{{ inventory_dir }}/secrets/mongo/mongoca.key"
     passphrase: "{{ mongo_ca_passphrase }}"
     cipher: auto
+  when: not mongo_ca_key.stat.exists
 
 - name: Create certificate signing request (CSR) for CA certificate
   community.crypto.openssl_csr_pipe:
