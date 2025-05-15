@@ -1,4 +1,9 @@
 ---
+# In this task file a ca key and certificate are created 
+# and saved on localhost. These are used for signing certificates for
+# each individual mongo server in the cluster (in certs.yml)
+# This works for new mongo servers, changing the ca and certificates 
+# on mongoservers with this role is not tested.
 - name: Create mongo key dir in the environment repo
   ansible.builtin.file:
     path: "{{ inventory_dir }}/secrets/mongo/"
