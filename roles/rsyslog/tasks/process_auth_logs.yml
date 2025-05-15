@@ -1,12 +1,4 @@
 ---
-- name: Install PHP
-  yum:
-    name:
-      - php
-      - php-pdo
-      - php-mysql
-    state: present
-
 - name: Copy the log_logins and lastseen database table definitions
   copy:
     src: "{{ item }}"
@@ -49,36 +41,6 @@
     owner: root
     group: root
   with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Create last_login PHP script
-  template:
-    src: process_lastseen.php.j2
-    dest: /usr/local/sbin/process_lastseen_{{ item.name }}.php
-    mode: 0740
-    owner: root
-    group: root
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Create logdir for lastseen cronjob output
-  file:
-    path: "{{ rsyslog_dir }}/apps/{{ item.name }}/lastseen"
-    state: directory
-    owner: root
-    group: root
-    mode: 0775
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Create cronjobs for proecessing lastseen script
-  template:
-    src: cron_update_lastseen.j2
-    dest: /etc/cron.daily/update_lastseen_{{ item.name }}
-    owner: root
-    group: root
-    mode: 0774
-  with_items: "{{ rsyslog_environments }}" 
   when: item.db_loglogins_name is defined
 
 - name: Put log_logins logrotate scripts
