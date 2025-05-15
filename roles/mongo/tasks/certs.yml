@@ -62,7 +62,7 @@
     ownca_path: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
     ownca_privatekey_path: "{{ inventory_dir }}/secrets/mongo/mongoca.key"
     ownca_privatekey_passphrase: "{{ mongo_ca_passphrase }}"
-    ownca_not_after: +365d  # valid for one year
+    ownca_not_after: +3650d  # valid for ten years
     ownca_not_before: "-1d"  # valid since yesterday
   delegate_to: localhost
   register: certificate
