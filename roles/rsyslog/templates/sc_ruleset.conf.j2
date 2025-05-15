@@ -1,65 +1,68 @@
 $RuleSet {{ item.name }}
 {% if item.name != "mgnt_sc" %}
-:programname, isequal, "EBLOG" { action(type="omfile" DynaFile="eblog-{{ item.name }}") stop }
-:programname, isequal, "Apache-EB" { action(type="omfile" DynaFile="apache-eb-{{ item.name }}") stop }
-:programname, isequal, "EBAUTH" { action(type="omfile" DynaFile="ebauth-{{ item.name }}") stop }
-:programname, isequal, "haproxy" { action(type="omfile" DynaFile="haproxy-{{ item.name }}") stop }
-:programname, isequal, "aaserver" { action(type="omfile" DynaFile="aa-{{ item.name }}") stop }
-:programname, isequal, "aagui" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}") stop }
-:programname, isequal, "aalink" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}") stop }
-:programname, isequal, "dashboardgui" { action(type="omfile" DynaFile="apache-dashboard-{{ item.name }}") stop }
-:programname, isequal, "dashboardserver" { action(type="omfile" DynaFile="dashboard-{{ item.name }}") stop }
-:programname, isequal, "Apache-EBAPI" { action(type="omfile" DynaFile="apache-eb-api-{{ item.name }}") stop }
-:programname, isequal, "manageserver" { action(type="omfile" DynaFile="manage-{{ item.name }}") stop }
-:programname, isequal, "managegui" { action(type="omfile" DynaFile="apache-manage-{{ item.name }}") stop }
-:programname, isequal, "PDPANALYTICS" { action(type="omfile" DynaFile="pdpanalytics-{{ item.name }}") stop }
-:programname, isequal, "pdpserver" { action(type="omfile" DynaFile="pdp-{{ item.name }}") stop }
-:programname, isequal, "pdpgui" { action(type="omfile" DynaFile="apache-pdp-{{ item.name }}") stop }
-if $programname == "profile" and $msg startswith " {" then { action(type="omfile" DynaFile="profile-{{ item.name }}") stop }
-:programname, isequal, "profile" { action(type="omfile" DynaFile="apache-profile-{{ item.name }}") stop }
-:programname, isequal, "teamsserver" { action(type="omfile" DynaFile="teams-{{ item.name }}") stop }
-:programname, isequal, "teamsgui" { action(type="omfile" DynaFile="apache-teams-{{ item.name }}") stop }
-:programname, isequal, "vootserver" { action(type="omfile" DynaFile="voot-{{ item.name }}") stop }
-:programname, isequal, "mariadbd" { action(type="omfile" DynaFile="galera-{{ item.name }}") stop }
-:programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="haproxy-{{ item.name }}") stop }
-:programname, isequal, "Keepalived_vrrp" { action(type="omfile" DynaFile="keepalived-{{ item.name }}") stop }
-:programname, isequal, "Apache-STATIC" { action(type="omfile" DynaFile="apache-static-{{ item.name }}") stop }
-:programname, isequal, "Apache-METADATA" { action(type="omfile" DynaFile="apache-metadata-{{ item.name }}") stop }
-:programname, isequal, "oidcngserver" { action(type="omfile" DynaFile="oidcng-{{ item.name }}") stop }
-:programname, isequal, "oidcngjson" { action(type="omfile" DynaFile="oidcngjson-{{ item.name }}") stop }
-:programname, isequal, "oidcplaygroundserver" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}") stop }
-:programname, isequal, "oidcplaygroundgui" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}") stop }
-:programname, isequal, "myconextserver" { action(type="omfile" DynaFile="myconext-{{ item.name }}") stop }
-:programname, isequal, "myconextjson" { action(type="omfile" DynaFile="myconextjson-{{ item.name }}") stop }
-:programname, isequal, "myconextgui" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}") stop }
-:programname, isequal, "accountgui" { action(type="omfile" DynaFile="apache-account-{{item.name }}") stop }
-:programname, startswith, "inviteclient" { action(type="omfile" DynaFile="inviteclient-{{ item.name }}") stop }
-:programname, startswith, "invitewelcome" { action(type="omfile" DynaFile="invitewelcome-{{ item.name }}") stop }
-:programname, startswith, "inviteserver" { action(type="omfile" DynaFile="inviteserver-{{ item.name }}") stop }
-:programname, startswith, "inviteprovisioningmock" { action(type="omfile" DynaFile="inviteprovisioningmock-{{ item.name }}") stop }
-:programname, startswith, "loadbalancer" { action(type="omfile" DynaFile="loadbalancer-{{ item.name }}") stop }
+if $programname == "engineblock" and $msg startswith " engine" then { action(type="omfile" DynaFile="apache-eb-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+if $programname == "engineblock" and $msg startswith ' {"channel":"authentication"' then { action(type="omfile" DynaFile="ebauth-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop  }
+:programname, isequal, "engineblock" { action(type="omfile" DynaFile="eblog-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "EBLOG" { action(type="omfile" DynaFile="eblog-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "Apache-EB" { action(type="omfile" DynaFile="apache-eb-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "EBAUTH" { action(type="omfile" DynaFile="ebauth-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "haproxy" { action(type="omfile" DynaFile="haproxy-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "aaserver" { action(type="omfile" DynaFile="aa-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "aagui" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "aalink" { action(type="omfile" DynaFile="apache-aa-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "dashboardgui" { action(type="omfile" DynaFile="apache-dashboard-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "dashboardserver" { action(type="omfile" DynaFile="dashboard-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "Apache-EBAPI" { action(type="omfile" DynaFile="apache-eb-api-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "manageserver" { action(type="omfile" DynaFile="manage-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "managegui" { action(type="omfile" DynaFile="apache-manage-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "PDPANALYTICS" { action(type="omfile" DynaFile="pdpanalytics-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "pdpserver" { action(type="omfile" DynaFile="pdp-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "pdpgui" { action(type="omfile" DynaFile="apache-pdp-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+if $programname == "profile" and $msg startswith " {" then { action(type="omfile" DynaFile="profile-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "profile" { action(type="omfile" DynaFile="apache-profile-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "teamsserver" { action(type="omfile" DynaFile="teams-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "teamsgui" { action(type="omfile" DynaFile="apache-teams-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "vootserver" { action(type="omfile" DynaFile="voot-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "mariadbd" { action(type="omfile" DynaFile="galera-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="haproxy-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "Keepalived_vrrp" { action(type="omfile" DynaFile="keepalived-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "Apache-STATIC" { action(type="omfile" DynaFile="apache-static-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "Apache-METADATA" { action(type="omfile" DynaFile="apache-metadata-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "oidcngserver" { action(type="omfile" DynaFile="oidcng-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "oidcngjson" { action(type="omfile" DynaFile="oidcngjson-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "oidcplaygroundserver" { action(type="omfile" DynaFile="oidc-playground-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "oidcplaygroundgui" { action(type="omfile" DynaFile="apache-oidcplayground-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "myconextserver" { action(type="omfile" DynaFile="myconext-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "myconextjson" { action(type="omfile" DynaFile="myconextjson-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "myconextgui" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "accountgui" { action(type="omfile" DynaFile="apache-account-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, startswith, "inviteclient" { action(type="omfile" DynaFile="inviteclient-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, startswith, "invitewelcome" { action(type="omfile" DynaFile="invitewelcome-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, startswith, "inviteserver" { action(type="omfile" DynaFile="inviteserver-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, startswith, "inviteprovisioningmock" { action(type="omfile" DynaFile="inviteprovisioningmock-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, startswith, "loadbalancer" { action(type="omfile" DynaFile="loadbalancer-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 
-if $programname == "gateway" and $msg startswith ' {"message":"Second Factor Authenticated"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
-if $programname == "gateway" and $msg startswith ' {"message":"Intrinsic Loa Requested"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
+if $programname == "gateway" and $msg startswith ' {"message":"Second Factor Authenticated"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+if $programname == "gateway" and $msg startswith ' {"message":"Intrinsic Loa Requested"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 
 {% for stepupapp in stepupapps %}
-:programname, isequal, "stepup-{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
-if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
-:programname, isequal, "{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
-:programname, isequal, "Apache-{{ stepupapp }}" { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
-if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
-:programname, isequal, "{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
+:programname, isequal, "stepup-{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "Apache-{{ stepupapp }}" { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+if $programname == "{{ stepupapp }}" and $msg startswith " {{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 {% endfor %}
+:programname, isequal, "Apache-azuremfa" { action(type="omfile" DynaFile="apache-azure-mfa-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+if $programname == "spdashboard" and $msg startswith " spdashboard" then { action(type="omfile" DynaFile="apache-spdashboard-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "spdashboard" { action(type="omfile" DynaFile="spdashboard-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 
-if $programname == "spdashboard" and $msg startswith " spdashboard" then { action(type="omfile" DynaFile="apache-spdashboard-{{item.name }}") stop }
-:programname, isequal, "spdashboard" { action(type="omfile" DynaFile="spdashboard-{{item.name }}") stop }
-
-:programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}") stop }
+:programname, isequal, "stepup-authentication" { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 {% endif %}
-:programname, isequal, "audispd" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
-:programname, isequal, "audit" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
-:programname, isequal, "audisp-syslog" { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
-:programname, isequal, "-bash" { action(type="omfile" DynaFile="bash-{{ item.name }}") stop }
-:syslogfacility-text, isequal, "authpriv" { action(type="omfile" dynafile="secure-{{ item.name }}") stop }
-:msg, contains, "-- MARK --" { action(type="omfile" DynaFile="MARK-{{ item.name }}") stop }
+:programname, isequal, "audispd" { action(type="omfile" DynaFile="auditd-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "audit" { action(type="omfile" DynaFile="auditd-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "audisp-syslog" { action(type="omfile" DynaFile="auditd-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "-bash" { action(type="omfile" DynaFile="bash-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:syslogfacility-text, isequal, "authpriv" { action(type="omfile" dynafile="secure-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:msg, contains, "-- MARK --" { action(type="omfile" DynaFile="MARK-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 *.* ?hostleft-{{ item.name }}
