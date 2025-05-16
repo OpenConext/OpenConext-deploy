@@ -66,6 +66,7 @@
     ownca_not_before: "-1d"  # valid since yesterday
   delegate_to: localhost
   register: certificate
+  check_mode: false  # this is safe run run, even in check mode
   become: false
 
 - name: Write certificate file
