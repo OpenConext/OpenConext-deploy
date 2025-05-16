@@ -85,11 +85,8 @@
   roles:
     - { role: stepupwebauthn,                            tags: ['stepupwebauthn','stepup' ] }
     - { role: stepupazuremfa,                            tags: ['stepupazuremfa', 'stepup'] }
-    - { role: stepupmiddleware,                          tags: ['stepupmiddleware' , 'stepup'] }
-    - { role: stepupgateway,                             tags: ['stepupgateway' , 'stepup'] }
     - { role: stepupselfservice,                         tags: ['stepupselfservice' , 'stepup'] }
     - { role: stepupra        ,                          tags: ['stepupra' , 'stepup'] }
-    - { role: stepupgateway        ,                     tags: ['stepupgateway' , 'stepup'] }
 
 - hosts: docker_apps1,docker_apps2
   become: true
@@ -124,8 +121,9 @@
 - hosts: docker_apps2
   become: true
   roles:
-    - { role: engineblock,      tags: ["eb"] }
-    - { role: stepupgateway,    tags: [ 'stepupgateway' , 'stepup' ] }
+    - { role: engineblock,         tags: ["eb"] }
+    - { role: stepupgateway,       tags: [ 'stepupgateway' , 'stepup' ] }
+    - { role: stepupmiddleware,    tags: [ 'stepupgateway' , 'stepup' ] }
 
 - hosts: docker_mariadb
   become: true
