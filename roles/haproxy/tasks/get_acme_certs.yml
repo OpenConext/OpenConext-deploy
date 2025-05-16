@@ -22,99 +22,103 @@
   check_mode: false  # this is safe run run, even in check mode
   run_once: true
 
-- name: Create dir to store old keys
-  ansible.builtin.file:
-    path: "/home/acme/old_keys/"
-    state: "directory"
-    owner: "acme"
-    group: "acme"
-    mode: "0700"
+- name: Update certificates on one host at a time
+  throttle: 1
+  block:
 
-- name: Check which vhosts still uses an RSA key
-  ansible.builtin.stat:
-    path: "/home/acme/.acme.sh/{{item}}"
-  register: rsa_dirs
-  loop: "{{ haproxy_ssl_hosts }}"
+    - name: Create dir to store old keys
+      ansible.builtin.file:
+      path: "/home/acme/old_keys/"
+      state: "directory"
+      owner: "acme"
+      group: "acme"
+      mode: "0700"
 
-- name: Move old RSA keys
-  ansible.builtin.command:
-    cmd: "mv '/home/acme/.acme.sh/{{ item }}' /home/acme/old_keys/{{ item }}.rsa.{{ ansible_date_time.date }}"
-  loop: |
-    {{ rsa_dirs.results | selectattr('stat.exists', 'equalto', true) | map(attribute='item') | list }}
+    - name: Check which vhosts still uses an RSA key
+      ansible.builtin.stat:
+        path: "/home/acme/.acme.sh/{{item}}"
+      register: rsa_dirs
+      loop: "{{ haproxy_ssl_hosts }}"
 
-- name: Issue the certificates using acme
-  ansible.builtin.command:
-    cmd: |
-      /home/acme/.acme.sh/acme.sh
-        --issue
-        --ecc
-        --keylength ec-256
-        --days "{{ haproxy_acme_renewal_days }}"
-        --dns dns_acmedns
-        --stateless
-        --dnssleep 3
-        --server "{{ haproxy_acme_server }}"
-        --domain "{{ item }}"
-  environment:
-    ACMEDNS_BASE_URL: "{{ haproxy_acmedns.baseurl }}"
-    ACMEDNS_USERNAME: "{{ haproxy_acmedns.username }}"
-    ACMEDNS_PASSWORD: "{{ haproxy_acmedns.password }}"
-    ACMEDNS_SUBDOMAIN: "{{ haproxy_acmedns.subdomain }}"
-  loop: "{{ haproxy_ssl_hosts }}"
-  register: "acme_issue"
-  changed_when: "acme_issue.rc == 0"
-  failed_when: 'acme_issue.rc != 0 and acme_issue.rc != 2'
-  become_user: "acme"
-  become: true
+    - name: Move old RSA keys
+      ansible.builtin.command:
+      cmd: "mv '/home/acme/.acme.sh/{{ item }}' /home/acme/old_keys/{{ item }}.rsa.{{ ansible_date_time.date }}"
+      loop: |
+        {{ rsa_dirs.results | selectattr('stat.exists', 'equalto', true) | map(attribute='item') | list }}
 
-# Now deploy the certificates to haproxy
-# We do this in two steps:
-# 1. Cold-deploy the certificates to haproxy's certs directory
-# 2. Make sure haproxy is started, and hot-deploy the certificates to haproxy though the socket API
+    - name: Issue the certificates using acme
+      ansible.builtin.command:
+        cmd: |
+          /home/acme/.acme.sh/acme.sh
+            --issue
+            --ecc
+            --keylength ec-384
+            --days "{{ haproxy_acme_renewal_days }}"
+            --dns dns_acmedns
+            --stateless
+            --dnssleep 3
+            --server "{{ haproxy_acme_server }}"
+            --domain "{{ item }}"
+      environment:
+        ACMEDNS_BASE_URL: "{{ haproxy_acmedns.baseurl }}"
+        ACMEDNS_USERNAME: "{{ haproxy_acmedns.username }}"
+        ACMEDNS_PASSWORD: "{{ haproxy_acmedns.password }}"
+        ACMEDNS_SUBDOMAIN: "{{ haproxy_acmedns.subdomain }}"
+      loop: "{{ haproxy_ssl_hosts }}"
+      register: "acme_issue"
+      changed_when: "acme_issue.rc == 0"
+      failed_when: 'acme_issue.rc != 0 and acme_issue.rc != 2'
+      become_user: "acme"
+      become: true
 
-- name: Cold-deploy the certificates to haproxy  # noqa: no-handler
-  ansible.builtin.command:
-    cmd: |
-      /home/acme/.acme.sh/acme.sh
-        --deploy
-        --deploy-hook haproxy
-        --domain "{{ item }}"
-  environment:
-    DEPLOY_HAPROXY_PEM_PATH: "/etc/haproxy/certs"
-  loop: "{{ haproxy_ssl_hosts }}"
-  register: "result"
-  changed_when: "result.rc == 0"
-  when: "acme_issue.changed"
-  become_user: "acme"
-  become: true
+    # Now deploy the certificates to haproxy
+    # We do this in two steps:
+    # 1. Cold-deploy the certificates to haproxy's certs directory
+    # 2. Make sure haproxy is started, and hot-deploy the certificates to haproxy though the socket API
 
-- name: Start and enable haproxy
-  ansible.builtin.service:
-    name: "haproxy"
-    state: "started"
-    enabled: true
+    - name: Cold-deploy the certificates to haproxy  # noqa: no-handler
+      ansible.builtin.command:
+        cmd: |
+          /home/acme/.acme.sh/acme.sh
+            --deploy
+            --deploy-hook haproxy
+            --domain "{{ item }}"
+      environment:
+        DEPLOY_HAPROXY_PEM_PATH: "/etc/haproxy/certs"
+      loop: "{{ haproxy_ssl_hosts }}"
+      register: "result"
+      changed_when: "result.rc == 0"
+      when: "acme_issue.changed"
+      become_user: "acme"
+      become: true
 
-- name: Wait for port 443 to become open  # noqa: no-handler
-  ansible.builtin.wait_for:
-    port: 443
-    delay: 5
-    host: "{{ haproxy_sni_ip.ipv4 }}"
-  when: "acme_issue.changed"
+    - name: Start and enable haproxy
+      ansible.builtin.service:
+        name: "haproxy"
+        state: "started"
+        enabled: true
 
-- name: Hot-deploy the certificates to haproxy  # noqa: no-handler
-  ansible.builtin.command:
-    cmd: |
-      /home/acme/.acme.sh/acme.sh
-        --deploy
-        --deploy-hook haproxy
-        --domain "{{ item }}"
-  environment:
-    DEPLOY_HAPROXY_HOT_UPDATE: "yes"
-    DEPLOY_HAPROXY_STATS_SOCKET: "/var/lib/haproxy/haproxy.stats"
-    DEPLOY_HAPROXY_PEM_PATH: "/etc/haproxy/certs"
-  loop: "{{ haproxy_ssl_hosts }}"
-  when: "acme_issue.changed"
-  register: "result"
-  changed_when: "result.changed"
-  become_user: "acme"
-  become: true
+    - name: Wait for port 443 to become open  # noqa: no-handler
+      ansible.builtin.wait_for:
+        port: 443
+        delay: 5
+        host: "{{ haproxy_sni_ip.ipv4 }}"
+      when: "acme_issue.changed"
+
+    - name: Hot-deploy the certificates to haproxy  # noqa: no-handler
+      ansible.builtin.command:
+        cmd: |
+          /home/acme/.acme.sh/acme.sh
+            --deploy
+            --deploy-hook haproxy
+            --domain "{{ item }}"
+      environment:
+        DEPLOY_HAPROXY_HOT_UPDATE: "yes"
+        DEPLOY_HAPROXY_STATS_SOCKET: "/var/lib/haproxy/haproxy.stats"
+        DEPLOY_HAPROXY_PEM_PATH: "/etc/haproxy/certs"
+      loop: "{{ haproxy_ssl_hosts }}"
+      when: "acme_issue.changed"
+      register: "result"
+      changed_when: "result.changed"
+      become_user: "acme"
+      become: true

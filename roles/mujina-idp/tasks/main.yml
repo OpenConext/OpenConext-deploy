@@ -1,14 +1,70 @@
 ---
-- name: Include docker tasks when running docker
-  ansible.builtin.include_tasks: docker.yml
-  when: "'docker' in group_names"
+- name: Set the mujina_idp directory variable
+  ansible.builtin.set_fact:
+    mujina_idp_dir: "/"
 
-- name: Include docker tasks when running docker
-  ansible.builtin.include_tasks: vm.yml
-  when: "'docker' not in group_names"
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ mujina_idp_dir_docker }}"
+    mode: "0750"
+    state: directory
+    owner: root
+
+- name: Copy config
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ mujina_idp_dir_docker }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0640"
+  with_items:
+    - application.yml
+    - logback.xml
+  notify:
+    - Restart mujina-idp-docker
+
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: mujina-idp
+    image: ghcr.io/openconext/mujina/mujina-idp:{{ mujina_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    env:
+      TZ: "{{ timezone }}"
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: "{{ mujina_idp_dir_docker }}/application.yml"
+        target: /application.yml
+        type: bind
+      - source: "{{ mujina_idp_dir_docker }}/logback.xml"
+        target: /logback.xml
+        type: bind
+    command: "-Xmx128m --spring.config.location=./"
+    labels:
+      traefik.http.routers.mujina-idp.rule: "Host(`mujina-idp.{{ base_domain }}`)"
+      traefik.http.routers.mujina-idp.tls: "true"
+      traefik.http.services.mujina-idp.loadbalancer.server.port: "8080"
+      traefik.enable: "true"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/internal/health",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  register: mujinaidpcontainer
 
 - name: Include the role manage_provision_entities to provision the mujina IdP to Manage
   ansible.builtin.include_role:
     name: manage_provision_entities
   vars:
-    entity_type: saml20_idp
+    entity_type: saml20_idp  # noqa: var-naming[no-role-prefix] variable is used in several roles

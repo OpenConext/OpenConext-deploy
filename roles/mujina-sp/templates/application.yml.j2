@@ -5,8 +5,8 @@ logging:
     mujina: DEBUG
 
 server:
-  # The port to where this Spring Boot application listens to. e.g. http://localhost:{{ springapp_tcpport }}
-  port: {{ springapp_tcpport }}
+  # The port to where this Spring Boot application listens to. e.g. http://localhost:80
+  port: 9090
   # The context path of the server. You can skip this value in the overriding application.properties on the classpath
   contextPath:
   session:
@@ -38,6 +38,7 @@ sp:
   protocol_binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
   # Do we sign the authnRequest
   needs_signing: true
+  compare_endpoints: true
 
 spring:
   mvc:
@@ -55,3 +56,20 @@ endpoints:
     enabled: true
   info:
     enabled: true
+
+# We disable all endpoints except health for the load-balancer and info for git information.
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      enabled: true
+  info:
+    git:
+      mode: full

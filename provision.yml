@@ -30,15 +30,15 @@
   become: true
   roles:
     - role: haproxy
-      tags: ['core', 'loadbalancer', 'lb']
+      tags: ['core', 'loadbalancer_ha', 'loadbalancer', 'lb']
     - role: keepalived
       when:
-        - inventory_hostname in groups['loadbalancer_ha']
-      tags: ['core', 'loadbalancer', 'keepalived']
+        - "'loadbalancer_ha' in groups and inventory_hostname in groups['loadbalancer_ha']"
+      tags: ['core', 'loadbalancer_ha', 'keepalived']
     - role: bind
       when:
-        - inventory_hostname in groups['loadbalancer_ha']
-      tags: ['core', 'loadbalancer', 'bind']
+        - "'loadbalancer_ha' in groups and inventory_hostname in groups['loadbalancer_ha']"
+      tags: ['core', 'loadbalancer_ha', 'bind']
 
 - hosts: db_mysql
   gather_facts: no
@@ -96,6 +96,12 @@
   roles:
     - { role: docker,     tags: ['docker' ] }
 
+- hosts: mujina
+  become: true
+  roles:
+    - { role: mujina-idp, tags: ["mujina-idp", "mujina"] }
+    - { role: mujina-sp, tags: ["mujina-sp", "mujina"] }
+
 - hosts: docker_apps1
   become: true
   roles:
@@ -105,7 +111,6 @@
     - { role: pdp,        tags: ["pdp"] }
     - { role: voot,       tags: ["voot"] }
     - { role: attribute-aggregation, tags: ["aa", "attribute-aggregation"] }
-    - { role: mujina-idp, tags: ["mujina-idp"] }
     - { role: oidc-playground, tags: ["oidc-playground"] }
     - { role: myconext,    tags: ["myconext"] }
     - { role: manage,    tags: ["manage"] }
