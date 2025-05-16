@@ -24,6 +24,7 @@
     owner: root
     group: mongod
     mode: "0440"
+  ignore_errors: '{{ ansible_check_mode }}'
 
 - name: Install pymongo
   ansible.builtin.pip:
