@@ -76,6 +76,7 @@
     owner: root
     group: root
     mode: "0400"
+  ignore_errors: '{{ ansible_check_mode }}'
   when: certificate is changed
 
 - name: Install the CA certificate
