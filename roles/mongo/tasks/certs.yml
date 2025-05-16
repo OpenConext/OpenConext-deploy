@@ -1,4 +1,6 @@
 ---
+# In this task file keys and certificates for the
+# mongo servers are created and signed with the ca from ca.yml
 - name: Install some packages
   ansible.builtin.yum:
     name:
@@ -64,6 +66,7 @@
     ownca_not_before: "-1d"  # valid since yesterday
   delegate_to: localhost
   register: certificate
+  ignore_errors: '{{ ansible_check_mode }}'
   become: false
 
 - name: Write certificate file
