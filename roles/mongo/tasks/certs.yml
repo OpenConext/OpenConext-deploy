@@ -1,6 +1,6 @@
 ---
 # In this task file keys and certificates for the
-# mongo servers are cretae dand signed with the ca from ca.yml
+# mongo servers are created and signed with the ca from ca.yml
 - name: Install some packages
   ansible.builtin.yum:
     name:
