@@ -53,3 +53,14 @@ dbcluster_nodes
 
 [local]
 localhost ansible_connection=local
+
+# for refactored playbooks
+[base:children]
+docker_servers
+
+[docker_servers]
+docker1.example.com
+docker2.example.com
+
+[docker_invite]
+docker2.example.com
