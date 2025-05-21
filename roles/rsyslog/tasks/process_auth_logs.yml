@@ -33,6 +33,12 @@
   with_items: "{{ rsyslog_environments }}"
   when: item.db_loglogins_name is defined
 
+- name: add python mysql module for parse_ebauth_to_mysql script
+  apt:
+    name: python3-mysqldb
+    state: present
+  when: ansible_os_family == "Debian"
+
 - name: Create a python script that parses log_logins per environment
   template: 
     src: parse_ebauth_to_mysql.py.j2
