@@ -1,6 +1,6 @@
 ---
 - name: Read secrets
-  hosts: loadbalancers
+  hosts: loadbalancer
   become: true
   tasks:
     - name: Read vars from secrets file
