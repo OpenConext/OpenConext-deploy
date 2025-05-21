@@ -13,35 +13,6 @@
 # Dividing apps across the container services should be set in
 # the inventory not in the playbook, this way you can easily change
 # it for different environments
-- name: Deploy invite app
-  hosts: docker_invite
-  become: true
-  roles:
-    - { role: invite, tags: ['invite'] }
-
-- name: Deploy dashboard app
-  hosts: docker_dashboard
-  become: true
-  roles:
-    - { role: dashboard, tags: ['dashboard'] }
-
-- name: Deploy teams app
-  hosts: docker_teams
-  become: true
-  roles:
-    - { role: teams, tags: ['teams'] }
-
-- name: Deploy pdp app
-  hosts: docker_pdp
-  become: true
-  roles:
-    - { role: pdp, tags: ['pdp'] }
-
-- name: Deploy voot app
-  hosts: docker_voot
-  become: true
-  roles:
-    - { role: voot, tags: ['voot'] }
 
 - name: Deploy attribute-aggregation app
   hosts: docker_attribute_aggregation
@@ -49,35 +20,11 @@
   roles:
     - { role: attribute-aggregation, tags: ['aa', 'attribute-aggregation'] }
 
-- name: Deploy oidc-playground app
-  hosts: docker_oidc-playground
+- name: Deploy dashboard app
+  hosts: docker_dashboard
   become: true
   roles:
-    - { role: oidc-playground, tags: ['oidc-playground'] }
-
-- name: Deploy myconext app
-  hosts: docker_myconext
-  become: true
-  roles:
-    - { role: myconext, tags: ['myconext'] }
-
-- name: Deploy manage app
-  hosts: docker_manage
-  become: true
-  roles:
-    - { role: manage, tags: ['manage'] }
-
-- name: Deploy oidcng app
-  hosts: docker_oidcng
-  become: true
-  roles:
-    - { role: oidcng, tags: ['oidcng'] }
-
-- name: Deploy stats app
-  hosts: docker_stats
-  become: true
-  roles:
-    - { role: stats, tags: ['stats'] }
+    - { role: dashboard, tags: ['dashboard'] }
 
 - name: Deploy diyidp app
   hosts: docker_diyidp
@@ -85,11 +32,17 @@
   roles:
     - { role: diyidp, tags: ['diyidp'] }
 
-- name: Deploy profile app
-  hosts: docker_profile
+- name: Deploy engineblock app
+  hosts: docker_engineblock
   become: true
   roles:
-    - { role: profile, tags: ['profile'] }
+    - { role: engineblock, tags: ['engineblock', 'eb'] }
+
+- name: Deploy invite app
+  hosts: docker_invite
+  become: true
+  roles:
+    - { role: invite, tags: ['invite'] }
 
 - name: Deploy lifecycle app
   hosts: docker_lifecycle
@@ -97,11 +50,11 @@
   roles:
     - { role: lifecycle, tags: ['lifecycle'] }
 
-- name: Deploy stepuptiqr app
-  hosts: docker_stepuptiqr
+- name: Deploy manage app
+  hosts: docker_manage
   become: true
   roles:
-    - { role: stepuptiqr, tags: ['stepuptiqr', 'stepup'] }
+    - { role: manage, tags: ['manage'] }
 
 - name: Deploy mujina-idp app
   hosts: docker_mujina_idp
@@ -115,23 +68,41 @@
   roles:
     - { role: mujina-sp, tags: ['mujina-sp', 'mujina'] }
 
-- name: Deploy engineblock app
-  hosts: docker_engineblock
+- name: Deploy myconext app
+  hosts: docker_myconext
   become: true
   roles:
-    - { role: engineblock, tags: ['engineblock', 'eb'] }
+    - { role: myconext, tags: ['myconext'] }
 
-- name: Deploy stepupgateway app
-  hosts: docker_stepupgateway
+- name: Deploy oidcng app
+  hosts: docker_oidcng
   become: true
   roles:
-    - { role: stepupgateway, tags: ['stepupgateway', 'stepup'] }
+    - { role: oidcng, tags: ['oidcng'] }
 
-- name: Deploy stepupwebauthn app
-  hosts: docker_stepupwebauthn
+- name: Deploy oidc-playground app
+  hosts: docker_oidc-playground
   become: true
   roles:
-    - { role: stepupwebauthn, tags: ['stepupwebauthn', 'stepup'] }
+    - { role: oidc-playground, tags: ['oidc-playground'] }
+
+- name: Deploy pdp app
+  hosts: docker_pdp
+  become: true
+  roles:
+    - { role: pdp, tags: ['pdp'] }
+
+- name: Deploy profile app
+  hosts: docker_profile
+  become: true
+  roles:
+    - { role: profile, tags: ['profile'] }
+
+- name: Deploy stats app
+  hosts: docker_stats
+  become: true
+  roles:
+    - { role: stats, tags: ['stats'] }
 
 - name: Deploy stepupazuremfa app
   hosts: docker_stepupazuremfa
@@ -139,11 +110,23 @@
   roles:
     - { role: stepupazuremfa, tags: ['stepupazuremfa', 'stepup'] }
 
+- name: Deploy stepupgateway app
+  hosts: docker_stepupgateway
+  become: true
+  roles:
+    - { role: stepupgateway, tags: ['stepupgateway', 'stepup'] }
+
 - name: Deploy stepupmiddleware app
   hosts: docker_stepupmiddleware
   become: true
   roles:
     - { role: stepupmiddleware, tags: ['stepupmiddleware', 'stepup'] }
+
+- name: Deploy stepupra app
+  hosts: docker_stepupra
+  become: true
+  roles:
+    - { role: stepupra, tags: ['stepupra', 'stepup'] }
 
 - name: Deploy stepupselfservice app
   hosts: docker_stepupselfservice
@@ -151,8 +134,26 @@
   roles:
     - { role: stepupselfservice, tags: ['stepupselfservice', 'stepup'] }
 
-- name: Deploy stepupra app
-  hosts: docker_stepupra
+- name: Deploy stepuptiqr app
+  hosts: docker_stepuptiqr
   become: true
   roles:
-    - { role: stepupra, tags: ['stepupra', 'stepup'] }
+    - { role: stepuptiqr, tags: ['stepuptiqr', 'stepup'] }
+
+- name: Deploy stepupwebauthn app
+  hosts: docker_stepupwebauthn
+  become: true
+  roles:
+    - { role: stepupwebauthn, tags: ['stepupwebauthn', 'stepup'] }
+
+- name: Deploy teams app
+  hosts: docker_teams
+  become: true
+  roles:
+    - { role: teams, tags: ['teams'] }
+
+- name: Deploy voot app
+  hosts: docker_voot
+  become: true
+  roles:
+    - { role: voot, tags: ['voot'] }
