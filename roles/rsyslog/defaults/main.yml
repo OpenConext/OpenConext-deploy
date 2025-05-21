@@ -11,3 +11,4 @@ stepupapps:
   - tiqr
   - azure-mfa
   - azuremfa
+rsyslog_dir_file_modes: 'dirCreateMode="0755" fileCreateMode="0640" FileGroup="surfsudo"'

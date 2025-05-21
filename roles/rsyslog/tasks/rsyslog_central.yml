@@ -6,7 +6,6 @@
     dest: "/etc/pki/rsyslog/rsyslogserver.key"
     mode: 0400
     owner: root
-  no_log: true
 
 - name: Create the group that is allowed to read the logs
   group: 
@@ -18,7 +17,8 @@
     path: "{{rsyslog_dir }}"
     owner: root
     group: "{{ rsyslog_read_group }}"
-    mode: 0750
+    mode: "0750"
+    recurse: true
 
 - name: put rsyslog client certificate
   copy:
@@ -67,3 +67,10 @@
   template:
     src: centralsyslog.j2
     dest: /etc/logrotate.d/centralsyslog
+
+- name: put ryslog config file
+  template:
+    src: "rsyslog.conf.j2"
+    dest: "/etc/rsyslog.conf"
+  notify:
+    - "restart rsyslog"
