@@ -2,7 +2,7 @@
 - name: Try to reach {{ item.vhost_name }} via https://{{ haproxy_sni_ip_restricted_ipv4 }}:443
   when: item.restricted is defined and item.restricted and 'amsterdam' in group_names
   ansible.builtin.uri:
-    url: "https://{{ haproxy_sni_ip_restricted_ipv4 }}:443"
+    url: "https://{{ haproxy_sni_ip_restricted_ipv4 }}:443/internal/health"
     method: GET
     status_code: [200, 302]
     return_content: no
