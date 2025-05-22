@@ -3,9 +3,7 @@
   hosts: loadbalancer
   become: false
   vars:
-    locations: 
-      - amsterdam
-      - utrecht
+    location: amsterdam
     results: []
   tasks:
 
