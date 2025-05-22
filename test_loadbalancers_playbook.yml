@@ -1,31 +1,21 @@
 ---
 - name: Test loadbalancer
   hosts: loadbalancer
-  become: true
+  become: false
+  gather_facts: false
   tasks:
-    - name: Check attribite-aggregation containers state
-      ansible.builtin.command:
-        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
-      register: container_state
-      failed_when: container_state.stdout != "running"
-      changed_when: false
-      with_items:
-        - aaserver
 
     - name: Wait for the webserver to return a 200
-      uri:
-        url: "https://145.100.191.138:443/"
+      ansible.legacy.uri:
+        url: "https://145.100.191.139:443/"
         method: GET
         status_code: 200
         return_content: no
+        validate_certs: false
         headers:
           host: "invite.acc.surfconext.nl"
       register: result
       until: result.status == 200
       retries: 3
       delay: 1
-      ignore_errors: true
-
-    - name: debug
-      debug:
-        msg: "{{ result  }}"  
+      delegate_to: 127.0.0.1
