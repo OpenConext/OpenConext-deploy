@@ -24,3 +24,8 @@
       until: result.status == 200
       retries: 3
       delay: 1
+      continue_on_error: true
+
+    - name: debug
+      debug:
+        msg: "{{ result  }}"  
