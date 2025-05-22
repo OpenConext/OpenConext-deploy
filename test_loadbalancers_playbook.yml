@@ -3,6 +3,22 @@
   hosts: loadbalancer:&amsterdam
   become: false
   vars:
+    location: "amsterdam"
+    results: []
+  tasks:
+
+  - name: Include task list in play
+    ansible.builtin.include_tasks:
+      file: inc_test_loadbalancer_tasklist.yml
+    with_items: "{{ haproxy_applications }}"
+
+  - debug: var=results
+
+- name: Test loadbalancer
+  hosts: loadbalancer:&utrecht
+  become: false
+  vars:
+    location: "utrecht"
     results: []
   tasks:
 
