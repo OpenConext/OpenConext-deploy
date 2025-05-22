@@ -1,21 +1,14 @@
 ---
 - name: Test loadbalancer
-  hosts: loadbalancer
+  hosts: loadbalancer:&amsterdam
   become: false
-  gather_facts: false
+  vars:
+    results: []
   tasks:
 
-    - name: Wait for the webserver to return a 200
-      ansible.legacy.uri:
-        url: "https://145.100.191.139:443/"
-        method: GET
-        status_code: 200
-        return_content: no
-        validate_certs: false
-        headers:
-          host: "invite.acc.surfconext.nl"
-      register: result
-      until: result.status == 200
-      retries: 3
-      delay: 1
-      delegate_to: 127.0.0.1
+  - name: Include task list in play
+    ansible.builtin.include_tasks:
+      file: inc_test_loadbalancer_tasklist.yml
+    with_items: "{{ haproxy_applications }}"
+
+  - debug: var=results
