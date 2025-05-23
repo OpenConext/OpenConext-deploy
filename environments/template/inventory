@@ -55,6 +55,19 @@ dbcluster_nodes
 localhost ansible_connection=local
 
 # for refactored playbooks
+
+[%location%:children] # create one or more groups here for your chosen location(s)
+storage
+mongo_servers
+sysloghost
+loadbalancer_ha
+loadbalancer
+lifecycle
+dbcluster
+dbcluster_nodes
+stats
+docker_servers
+
 [base:children]
 docker_servers
 
