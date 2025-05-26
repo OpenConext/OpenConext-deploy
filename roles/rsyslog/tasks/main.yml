@@ -78,3 +78,11 @@
 - name: Include tasks for authentication log processing 
   include_tasks: process_auth_logs.yml
   when: "'auth_processor' in group_names"
+
+- name: Create rsyslog work directory "/var/lib/rsyslog"
+  ansible.builtin.file:
+    dest: "/var/lib/rsyslog"
+    state: "directory"
+    owner: "root" # rsyslog runs as root
+    group: "root"
+    mode: "0700"
