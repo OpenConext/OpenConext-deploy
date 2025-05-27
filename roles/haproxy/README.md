@@ -16,7 +16,7 @@ haproxy_applications:
 
   - name: engine
     vhost_name: engine.{{ base_domain }}
-    port: "{{ loadbalancing.engine.port }}"
+    port: "443"
     ha_method: "GET"
     ha_url: "/health"
     servers: "{{ php_servers }}"
@@ -25,7 +25,7 @@ haproxy_applications:
     vhost_name: manage.{{ base_domain }}
     ha_method: "GET"
     ha_url: "/health"
-    port: "{{ loadbalancing.manage.port }}"
+    port: "443"
     servers: "{{ php_servers }}"
     stagingservers: "{{ staging_servers }}"
     sslbackend: yes
