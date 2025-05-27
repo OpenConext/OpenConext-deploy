@@ -6,12 +6,3 @@
     or 'push_mw_whitelist' in ansible_run_tags
     or 'stepupmiddleware' in ansible_run_tags
     or 'stepup' in ansible_run_tags)"
-
-- name: Include vm tasks when running on a vm
-  import_tasks: vm.yml
-  when: "'docker' not in group_names
-    and ('push_mw_config' in ansible_run_tags
-    or 'push_mw_institution' in ansible_run_tags
-    or 'push_mw_whitelist' in ansible_run_tags
-    or 'stepupmiddleware' in ansible_run_tags
-    or 'stepup' in ansible_run_tags)"
