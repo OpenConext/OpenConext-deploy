@@ -1,7 +1,6 @@
 ---
 appname: "tiqr"
 vhost_name: "{{ appname }}.{{ base_domain }}"
-loadbalancingport: "412"
 appversion: "{{ tiqr_version }}"
 appversion_sha: "{{ tiqr_version_sha }}"
 stepup_gh_appname: tiqr

@@ -1,6 +1,5 @@
 appname: "azuremfa"
 vhost_name: "{{ appname }}.{{ base_domain }}"
-loadbalancingport: "411"
 appversion: "{{ azuremfa_version }}"
 appversion_sha: "{{ azuremfa_version_sha }}"
 stepup_gh_appname: "Azure-MFA"

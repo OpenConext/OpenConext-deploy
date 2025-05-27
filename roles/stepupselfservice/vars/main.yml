@@ -1,7 +1,6 @@
 ---
 appname: "selfservice"
 vhost_name: "sa.{{ base_domain }}"
-loadbalancingport: "415"
 appversion: "{{ selfservice_version }}"
 appversion_sha: "{{ selfservice_version_sha }}"
 stepup_gh_appname: "SelfService"
