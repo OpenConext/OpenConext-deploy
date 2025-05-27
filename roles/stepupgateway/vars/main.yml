@@ -1,6 +1,5 @@
 appname: "gateway"
 vhost_name: "sa-gw.{{ base_domain }}"
-loadbalancingport: "414"
 appversion: "{{ gateway_version }}"
 appversion_sha: "{{ gateway_version_sha }}"
 stepup_gh_appname: "Gateway"
