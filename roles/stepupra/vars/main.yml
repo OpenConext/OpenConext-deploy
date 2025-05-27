@@ -1,7 +1,6 @@
 ---
 appname: "ra"
 vhost_name: "{{ appname }}.{{ base_domain }}"
-loadbalancingport: "416"
 appversion: "{{ ra_version }}"
 appversion_sha: "{{ ra_version_sha }}"
 stepup_gh_appname: "RA"
