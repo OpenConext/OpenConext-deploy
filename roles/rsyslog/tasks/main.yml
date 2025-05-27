@@ -23,8 +23,8 @@
     dest: "/etc/pki/rsyslog/rsyslogclient.key"
     mode: 0400
     owner: root
-  when: 
-    - rsyslog_remote_server_relp is defined
+  when:
+    - "'sysloghost' not in group_names"
   no_log: true
   notify:
     - "restart rsyslog"
@@ -36,46 +36,35 @@
     mode: 0744
     owner: root
     group: adm
-  when: 
-    - rsyslog_remote_server_relp is defined
+  when:
+    - "'sysloghost' not in group_names"
   notify:
     - "restart rsyslog"
 
-- name: put rsyslog CA file (new location) 
-  copy: 
+- name: put rsyslog CA file (new location)
+  copy:
     src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclientca.crt"
     dest: "/etc/pki/rsyslog/rsyslogclientca.crt"
     mode: 0744
     owner: root
     group: adm
-  when: 
-    - rsyslog_remote_server_relp is defined
-
-- name: put Redhat ryslog config file
-  template:
-    src: "rsyslog.conf.j2"
-    dest: "/etc/rsyslog.conf"
-  notify:
-    - "restart rsyslog"
   when:
-    - ansible_os_family == 'RedHat' 
     - "'sysloghost' not in group_names"
 
-- name: put Debian ryslog config file
+- name: put ryslog config file for logforwarding
   template:
     src: "rsyslog_onlyforward.conf.j2"
     dest: "/etc/rsyslog.conf"
   notify:
     - "restart rsyslog"
   when:
-    - ansible_os_family == 'Debian'
     - "'sysloghost' not in group_names"
 
 - name: include tasks for central syslog server
   include_tasks: rsyslog_central.yml
   when:  "'sysloghost' in group_names"
 
-- name: Include tasks for authentication log processing 
+- name: Include tasks for authentication log processing
   include_tasks: process_auth_logs.yml
   when: "'auth_processor' in group_names"
 
