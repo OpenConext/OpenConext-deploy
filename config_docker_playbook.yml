@@ -1,0 +1,16 @@
+---
+- name: Read inventory secrets
+  hosts: docker_servers
+  become: true
+  tasks:
+    - name: Read vars from secrets file
+      ansible.builtin.include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
+      no_log: true
+      tags:
+        - always
+
+- name: Configure docker servers
+  hosts: docker_servers
+  become: true
+  roles:
+    - { role: docker, tags: ['docker'] }
