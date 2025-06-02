@@ -8,18 +8,17 @@
    </encoder>
  </appender>
 
- <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashSocketAppender">
-    <host>{{ ansible_fqdn }}</host>
-    <port>514</port>
-      <customFields>{"app":"oidcng"}</customFields>
+ <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+    <destination>{{ ansible_fqdn }}:514</destination>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        <customFields>{"app":"oidcng"}</customFields>
+        <includeCallerData>true</includeCallerData>
         <fieldNames>
             <thread>[ignore]</thread>
             <version>[ignore]</version>
             <levelValue>[ignore]</levelValue>
        </fieldNames>
-             <prefix class="ch.qos.logback.classic.PatternLayout">
-        <pattern>oidcngjson:</pattern>
-      </prefix>
+     </encoder>
   </appender>
 
  <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
