@@ -1,2 +1,3 @@
 middelware_docker_networks:
   - name: loadbalancer
+middleware_mem_limit: "256M"
