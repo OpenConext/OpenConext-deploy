@@ -18,6 +18,13 @@ admin_email: admin@{{ base_domain }}
 smtp_server: localhost
 error_mail_to: "{{ support_email }}"
 
+# Remote logging
+relp_remote:
+  - name: '' # name of the central syslog server
+    host: '' # central syslog server
+    port: '' # syslog port
+    peer: '' # CN of the certificate of the central syslog server
+
 php_display_errors: 1
 
 attribute_aggregation_gui_version: "3.0.6"
