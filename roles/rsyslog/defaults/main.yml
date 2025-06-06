@@ -12,3 +12,8 @@ stepupapps:
   - azure-mfa
   - azuremfa
 rsyslog_dir_file_modes: 'dirCreateMode="0755" fileCreateMode="0640" FileGroup="surfsudo"'
+relp_remote:
+  - name: '' # name of the central syslog server
+    host: '' # central syslog server
+    port: '' # syslog port
+    peer: '' # CN of the certificate of the central syslog server
