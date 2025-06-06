@@ -1,4 +1,6 @@
 ---
+
+locations: ['amsterdam'] # add at least one location, for example the city where your datacentre is located
 env: "%env%"
 mariadb_host: localhost
 rsyslog_host: localhost
