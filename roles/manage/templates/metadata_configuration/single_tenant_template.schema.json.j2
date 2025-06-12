@@ -133,6 +133,16 @@
         "motivation": {
           "type": "string"
         },
+        "profile": {
+          "type": "string",
+          "enum": [
+            "anonymous",
+            "pseudonymized",
+            "personalized",
+            "uidOnly"
+          ],
+          "default": "pseudonymized"
+        },
         "attributes": {
           "type": "object",
           "properties": {
