@@ -358,6 +358,11 @@
           "default": false,
           "info": "Must be set for this Identity Provider to be excluded in the EB push."
         },
+        "coin:is_test_idp": {
+          "type": "boolean",
+          "default": false,
+          "info": "if set for this Identity Provider, then this Identity Provider is listed as test IdP in Access."
+        }
       },
       "patternProperties": {
         "^name:({{ supported_language_codes | replace(',','|') }})$": {
