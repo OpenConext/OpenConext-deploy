@@ -1,7 +1,6 @@
 ---
 appname: "webauthn"
 vhost_name: "{{ appname }}.{{ base_domain }}"
-loadbalancingport: "410"
 appversion: "{{ webauthn_version }}"
 appversion_sha: "{{ webauthn_version_sha }}"
 stepup_gh_appname: Webauthn
