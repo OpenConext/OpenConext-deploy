@@ -353,6 +353,11 @@ manage:
         scopes: [ "READ", "WRITE_SP", "DELETE_SP", "CHANGE_REQUEST_SP", "PUSH"]
       }
     - {
+        name: "access",
+        password: "{{ manage_access_secret }}",
+        scopes: ["READ", "WRITE_SP", "PUSH", "CHANGE_REQUEST_SP", "DELETE_SP"]
+      }
+    - {
         name: "invite",
         password: "{{ manage_invite_secret }}",
         scopes: ["READ"]
