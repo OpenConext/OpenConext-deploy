@@ -25,7 +25,7 @@ fi
 if [[ $keepalived_status = "backup" ]]
 	echo "This is the keepalived backup node, continuing to backup"
 then
-	
+
 echo "-- Remove old backups --"
 find $FOLDER -type f -ctime +2 -delete
 
