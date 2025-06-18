@@ -1,14 +1,15 @@
+---
 - name: Disable redirects of traffic when VPN gateway is unreachable
   sysctl:
     name: net.ipv4.conf.all.accept_redirects
-    value: 0
+    value: "0"
     state: present
     ignoreerrors: yes
 
 - name: Lower swappiness
   sysctl:
     name: vm.swappiness
-    value: 10
+    value: "10"
     state: present
     ignoreerrors: yes
 
@@ -44,9 +45,9 @@
     mode: 0770
 
 - name: Create mysqlusers group
-  group: 
+  group:
     name: mysqlusers
-    state: present 
+    state: present
 
 - name: Create directory to keep Galera key material
   file:
@@ -75,7 +76,7 @@
     owner: mysql
     mode: 0400
   with_items:
-     - "{{ galera_tls }}"
+    - "{{ galera_tls }}"
   no_log: true
   when:
     - galera_ssl | bool
@@ -88,7 +89,7 @@
     mode: 0400
     owner: mysql
   with_items:
-     - "{{ galera_tls }}"
+    - "{{ galera_tls }}"
   no_log: true
   when:
     - galera_ssl | bool
@@ -102,7 +103,7 @@
     group: mysqlusers
     mode: 0440
   with_items:
-     - "{{ galera_tls }}"
+    - "{{ galera_tls }}"
   no_log: true
   when:
     - galera_ssl | bool
@@ -116,7 +117,7 @@
     owner: mysql
     group: mysqlusers
   with_items:
-     - "{{ galera_tls }}"
+    - "{{ galera_tls }}"
   no_log: true
   when:
     - galera_ssl | bool
@@ -293,8 +294,8 @@
     login_password: "{{ mariadb_root_password }}"
     login_unix_socket: /var/lib/mysql/mysql.sock
   with_subelements:
-     - "{{ galera_root_users }}"
-     - hosts
+    - "{{ galera_root_users }}"
+    - hosts
   run_once: true
   tags: galera_create_db
 
@@ -318,4 +319,3 @@
 - name: "Reload systemd config with new TimeoutStartSec value"
   systemd:
     daemon_reload: yes
-
