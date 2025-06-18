@@ -25,14 +25,14 @@ fi
 if [[ $keepalived_status = "backup" ]]
 	echo "This is the keepalived backup node, continuing to backup"
 then
-	
+
 echo "-- Remove old backups --"
 find $FOLDER -type f -ctime +2 -delete
 
 echo "-- START new backups --"
 
-echo "SET autocommit=0;SET unique_checks=0;SET foreign_key_checks=0;" > tmp_sqlhead.sql
-echo "SET autocommit=1;SET unique_checks=1;SET foreign_key_checks=1;" > tmp_sqlend.sql
+echo "SET autocommit=0; SET unique_checks=0; SET foreign_key_checks=0; SET SESSION wsrep_trx_fragment_size=5;" > tmp_sqlhead.sql
+echo "SET autocommit=1; SET unique_checks=1; SET foreign_key_checks=1;" > tmp_sqlend.sql
 
 if [ -z "$1" ]
   then

@@ -14,9 +14,9 @@ sql_mode=NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
 userstat = ON
 log_slave_updates = ON
 tmpdir = /var/lib/mysqltemp
-ssl-ca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }} 
+ssl-ca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }}
 ssl-key = {{ galera_tls_cert_path }}/{{ galera_server_key_name }}
-ssl-cert = {{ galera_tls_cert_path }}/{{ galera_server_crt_name }} 
+ssl-cert = {{ galera_tls_cert_path }}/{{ galera_server_crt_name }}
 binlog_format=ROW
 default_storage_engine=innodb
 innodb_autoinc_lock_mode=2
@@ -94,4 +94,4 @@ wsrep_log_conflicts=ON
 
 [sst]
 tca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }}
-tcert = {{ galera_tls_cert_path }}/{{ galera_sst_crt_name }} 
+tcert = {{ galera_tls_cert_path }}/{{ galera_sst_crt_name }}
