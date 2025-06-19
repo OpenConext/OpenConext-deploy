@@ -29,7 +29,7 @@
 - name: Create and start the server container
   community.docker.docker_container:
     name: minio
-    image: quay.io/minio/minio:"{{ minio_version }}"
+    image: quay.io/minio/minio:{{ minio_version }}
     pull: true
     restart_policy: "always"
     state: started
