@@ -24,7 +24,7 @@
     mode: "0644"
   with_items:
     - config.env
-  notify: restart minio
+  notify: Restart minio
 
 - name: Create and start the server container
   community.docker.docker_container:
