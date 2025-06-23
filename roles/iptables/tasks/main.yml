@@ -80,7 +80,7 @@
 
     - name: Place the iptables file
       ansible.builtin.template:
-        src: ip4tables.sh.j2
+        src: ip4dockertables.sh.j2
         dest: /usr/local/sbin/ip4tables.sh
         mode: "0750"
         owner: root
