@@ -53,7 +53,13 @@ elif [ "$LENGTH" -gt "0" ]; then
   # Remove any characters not in the specified set: tr -dc "${SET}"
   # Use /dev/urandom as a source for randomness
   # Emit specifier number of characters head -c "$1"
-  secret=$(env LC_CTYPE=C LC_ALL=C tr -dc "${SET}" </dev/urandom | head -c "${LENGTH}")
+
+  secret=$(env LC_CTYPE=C LC_ALL=C tr -dc "${SET}" < /dev/urandom | head -c "${LENGTH}")
+  if [ ${#secret} -ne "${LENGTH}" ]; then
+    echo "Error: Generated secret length (${#secret}) does not match requested length (${LENGTH})"
+    exit 1
+  fi
+
 else
   echo "password length must be >= 0"
   exit 1
