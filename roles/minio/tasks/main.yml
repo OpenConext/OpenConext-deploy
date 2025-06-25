@@ -29,39 +29,40 @@
 - name: Create and start the server container
   community.docker.docker_container:
     name: minio
-    image: quay.io/minio/minio:{{ minio_version }}
+    # image: quay.io/minio/minio:{{ minio_version }}
+    image: nginx
     pull: true
     restart_policy: "always"
     state: started
-    env:
-      MINIO_CONFIG_ENV_FILE: "/etc/config.env"
+    # env:
+    #   MINIO_CONFIG_ENV_FILE: "/etc/config.env"
     networks:
       - name: "loadbalancer"
-    mounts:
-      - source: "{{ minio_data_dir }}"
-        target: "{{ minio_data_dir_oncontainer }}"
-        type: bind
-      - source: "{{ minio_dir }}/config.env"
-        target: /etc/config.env
-        type: bind
-    command: server --console-address ":9000" {{ minio_data_dir_oncontainer }}
+    # mounts:
+    #   - source: "{{ minio_data_dir }}"
+    #     target: "{{ minio_data_dir_oncontainer }}"
+    #     type: bind
+    #   - source: "{{ minio_dir }}/config.env"
+    #     target: /etc/config.env
+    #     type: bind
+    # command: server --console-address ":9000" {{ minio_data_dir_oncontainer }}
     labels:
       traefik.http.routers.minio.rule: "Host(`minio.{{ base_domain }}`)"
       traefik.http.routers.minio.tls: "true"
-      traefik.http.services.minio.loadbalancer.server.port: "9000"
+    #  traefik.http.services.minio.loadbalancer.server.port: "9000"
       traefik.enable: "true"
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "-no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:9000/minio/health/live",
-        ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD",
+    #       "wget",
+    #       "-no-verbose",
+    #       "--tries=1",
+    #       "--spider",
+    #       "http://localhost:9000/minio/health/live",
+    #     ]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 10s
   register: miniocontainer
