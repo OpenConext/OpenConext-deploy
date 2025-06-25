@@ -70,7 +70,7 @@
 {% endif %}
 
 {% if ip6tables_incoming_sab is defined %}
-### Galera rules
+### SAB rules
 {% for service in ip6tables_incoming_sab %}
 {{'##'|e }} {{ service.name }}
 {{'##'|e }} {{'=' * service.name|length }}
