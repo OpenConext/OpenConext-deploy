@@ -53,18 +53,18 @@
       traefik.http.routers.minio.tls: "true"
       traefik.http.services.minio.loadbalancer.server.port: "9090"
       traefik.enable: "true"
-      # healthcheck:
-      #   test:
-      #     [
-      #       "CMD",
-      #       "wget",
-      #       "-no-verbose",
-      #       "--tries=1",
-      #       "--spider",
-      #       "http://localhost:9000/minio/health/live",
-      #     ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD",
+    #       "wget",
+    #       "-no-verbose",
+    #       "--tries=1",
+    #       "--spider",
+    #       "http://localhost:9000/minio/health/live",
+    #     ]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 10s
   register: miniocontainer
