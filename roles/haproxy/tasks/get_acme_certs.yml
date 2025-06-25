@@ -50,6 +50,7 @@
       failed_when: 'acme_issue.rc != 0 and acme_issue.rc != 2'
       become_user: "acme"
       become: true
+      ignore_errors: true
 
     # Now deploy the certificates to haproxy
     # We do this in two steps:
