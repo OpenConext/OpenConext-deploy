@@ -30,7 +30,7 @@
   community.docker.docker_container:
     name: minio
     # image: quay.io/minio/minio:{{ minio_version }}
-    image: nginx
+    image: nginx:latest
     pull: true
     restart_policy: "always"
     state: started
