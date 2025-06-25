@@ -102,42 +102,6 @@
       retries: 3
   when: docker_install_traefik | bool
 
-- name: Place the iptables file
-  ansible.builtin.template:
-    src: ip4tables.sh.j2
-    dest: /usr/local/sbin/ip4tables.sh
-    mode: "0750"
-    owner: root
-
-- name: Disable the default iptables service
-  ansible.builtin.systemd:
-    service: iptables
-    enabled: false
-  when: ansible_os_family == 'RedHat'
-
-- name: Disable the netfilter-persistent service
-  ansible.builtin.systemd:
-    service: netfilter-persistent
-    enabled: false
-  when: ansible_os_family == 'Debian'
-
-- name: Place the new systemd service file
-  ansible.builtin.copy:
-    src: iptablesdocker.service
-    dest: /etc/systemd/system/
-    owner: root
-    mode: "0755"
-
-# This is at the moment the best way to get iptables right for
-# docker and the host (docker tends to destroy the host iptables rules and vice
-# versa), maybe move this to the iptables role later and make it idempotent
-# ( do not run when nothing changes )
-- name: Enable and start the new firewall service
-  ansible.builtin.systemd:
-    service: iptablesdocker.service
-    enabled: true
-    state: started
-
 - name: Create OpenConext common files dir
   ansible.builtin.file:
     state: directory
