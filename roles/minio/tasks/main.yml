@@ -44,11 +44,11 @@
       - source: "{{ minio_dir }}/config.env"
         target: /etc/config.env
         type: bind
-    command: server --console-address ":9090" {{ minio_data_dir_oncontainer }}
+    command: server --console-address ":9000" {{ minio_data_dir_oncontainer }}
     labels:
       traefik.http.routers.minio.rule: "Host(`minio.{{ base_domain }}`)"
       traefik.http.routers.minio.tls: "true"
-      # traefik.http.services.minio.loadbalancer.server.port: "9090"
+      traefik.http.services.minio.loadbalancer.server.port: "9000"
       traefik.enable: "true"
     healthcheck:
       test:
