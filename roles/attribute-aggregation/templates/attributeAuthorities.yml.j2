@@ -47,28 +47,6 @@ authorities:
       validationRegExp: "^(https?://orcid\\.org/|)([0-9]{4}-){3}[0-9]{3}[0-9X]$"
     }
   - {
-      id: "sab",
-      description: "SURF Autorisatie Beheer",
-      endpoint: "{{ aa.sab_endpoint }}",
-      user: "{{ aa.sab_username }}",
-      password: "{{ aa.sab_password }}",
-      timeOut: 1000,
-      attributes: [
-        {
-          name: "urn:mace:dir:attribute-def:eduPersonEntitlement",
-          description: "URI (either URN or URL) that indicates a set of rights to specific resources.",
-          type: "string",
-          example: "urn:mace:surfnet.nl:surfnet.nl:sab:role:Instellingsbevoegde"
-        }
-      ],
-      requiredInputAttributes: [
-        {
-        name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-        }
-      ],
-      validationRegExp: "^urn:mace:surfnet.nl:(surfnet\\.nl|surf\\.nl):sab:(role|organizationCode|organizationGUID|mobile):[A-Z0-9_+-]+$"
-    }
-  - {
       id: "voot",
       description: "An extensible protocol for dynamic exchange of group and authorization data",
       endpoint: "https://voot.{{ base_domain }}",
