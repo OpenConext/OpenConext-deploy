@@ -11,9 +11,9 @@
     headers:
       host: "{{ item.0.vhost_name }}"
   register: result
-  until: result.status == 200 or result.status == 302
-  retries: 3
-  delay: 2
+  #until: result.status == 200 or result.status == 302
+  #retries: 3
+  #delay: 2
   delegate_to: 127.0.0.1
   ignore_errors: true # remove this when all apps have internal/health endpoint
 
@@ -33,9 +33,9 @@
     headers:
       host: "{{ item.0.vhost_name }}"
   register: result
-  until: result.status == 200 or result.status == 302
-  retries: 3
-  delay: 2
+  #until: result.status == 200 or result.status == 302
+  #retries: 3
+  #delay: 2
   delegate_to: 127.0.0.1
   ignore_errors: true # remove this when all apps have internal/health endpoint
 
