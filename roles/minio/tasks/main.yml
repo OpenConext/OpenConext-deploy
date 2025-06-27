@@ -50,19 +50,15 @@
       traefik.http.routers.minio.tls: "true"
       traefik.http.routers.minio.service: "minio"
       traefik.http.services.minio.loadbalancer.server.port: "9090"
-      traefik.http.routers.minioapi.rule: "Host(`minioapi.{{ base_domain }}`)"
-      traefik.http.routers.minioapi.tls: "true"
-      traefik.http.routers.minioapi.service: "minioapi"
-      traefik.http.services.minioapi.loadbalancer.server.port: "9000"
       traefik.enable: "true"
     healthcheck:
-       test: 
-         [
-            "CMD", 
-            "curl", 
-            "--fail", 
-            "http://localhost:9000/minio/health/live"
-         ]
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "http://localhost:9000/minio/health/live"
+        ]
        interval: 10s
        timeout: 10s
        retries: 3
