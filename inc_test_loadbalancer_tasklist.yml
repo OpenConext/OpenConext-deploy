@@ -1,9 +1,9 @@
 ---
 # Try to reach applications via loadbalancer with restricted ip v4
 - name: Try to reach {{ item.0.vhost_name }} via https://{{ haproxy_sni_ip_restricted.ipv4 }}:443 # noqa: name[template] jinja template helps with debugging
-  when: item.0.restricted is defined and item.0.restricted and item.1 in group_names
+  when: item.0.restricted is defined and item.0.restricted and item.1 in group_names # item.1 is the location
   ansible.builtin.uri:
-    url: "https://{{ haproxy_sni_ip_restricted.ipv4 }}:443/internal/health"
+    url: "https://{{ haproxy_sni_ip_restricted.ipv4 }}:443/{{ item.0.ha_url }}"
     method: GET
     status_code: [200, 302]
     return_content: false
@@ -15,13 +15,13 @@
   retries: 3
   delay: 2
   delegate_to: 127.0.0.1
-  ignore_errors: true # remove this when all apps have internal/health endpoint
+  #ignore_errors: true # remove this when all apps have internal/health endpoint
 
 # Try to reach applications via loadbalancer without restricted ip v4
 - name: Try to reach {{ item.0.vhost_name }} via https://{{ haproxy_sni_ip.ipv4 }}:443 # noqa: name[template] jinja template helps with debugging
-  when: item.0.restricted is undefined and item.1 in group_names
+  when: item.0.restricted is undefined and item.1 in group_names # item.1 is the location
   ansible.builtin.uri:
-    url: "https://{{ haproxy_sni_ip.ipv4 }}:443/internal/health"
+    url: "https://{{ haproxy_sni_ip.ipv4 }}:443/{{ item.0.ha_url }}"
     method: GET
     status_code: [200, 302]
     return_content: false
@@ -33,4 +33,4 @@
   retries: 3
   delay: 2
   delegate_to: 127.0.0.1
-  ignore_errors: true # remove this when all apps have internal/health endpoint
+  #ignore_errors: true # remove this when all apps have internal/health endpoint
