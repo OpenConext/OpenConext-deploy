@@ -157,3 +157,9 @@
   become: true
   roles:
     - { role: voot, tags: ['voot'] }
+
+- name: Deploy minio app
+  hosts: docker_minio
+  become: true
+  roles:
+    - { role: minio, tags: ['minio'] }
