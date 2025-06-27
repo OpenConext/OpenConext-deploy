@@ -19,7 +19,7 @@
 
 - name: debugging
   debug:
-    msg: {{ result }}
+    msg: "{{ result }}"
 
 # Try to reach applications via loadbalancer without restricted ip v4
 - name: Try to reach {{ item.0.vhost_name }} via https://{{ haproxy_sni_ip.ipv4 }}:443 # noqa: name[template] jinja template helps with debugging
@@ -41,4 +41,4 @@
 
 - name: debugging
   debug:
-    msg: {{ result }}
+    msg: "{{ result }}"
