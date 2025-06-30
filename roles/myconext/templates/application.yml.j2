@@ -91,6 +91,11 @@ mobile_app_redirect: eduid:///client/mobile
 # For this RP we nudge the user to use the magic link
 mobile_app_rp_entity_id: {{ myconext.mobile_app_rp_entity_id }}
 
+# The host headers to identify the service the user is logged in
+host_headers:
+  service_desk: servicedesk.{{ myconext_base_domain }}
+  mijn_ediuid: mijn.{{ myconext_base_domain }}
+
 feature:
   webauthn: {{ myconext.feature_webauthn }}
   warning_educational_email_domain: {{ myconext.feature_warning_educational_email_domain }}
