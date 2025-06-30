@@ -14,4 +14,4 @@
     - name: Include task list in play
       ansible.builtin.include_tasks:
         file: inc_test_loadbalancer_tasklist.yml
-      loop: "{{ haproxy_applications | product(locations) }}" # add locations to the array
+      with_items: "{{ haproxy_applications }}"
