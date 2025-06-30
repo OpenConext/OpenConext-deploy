@@ -94,6 +94,19 @@
         - manageserver
         - managegui
 
+- name: Test minio containers
+  hosts: docker_minio
+  become: true
+  tasks:
+    - name: Check minio containers state
+      ansible.builtin.command:
+        cmd: docker inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' "{{ item  }}"
+      register: container_state
+      failed_when: container_state.stdout != "running"
+      changed_when: false
+      with_items:
+        - minio
+
 - name: Test mujina-idp containers
   hosts: docker_mujina_idp
   become: true
