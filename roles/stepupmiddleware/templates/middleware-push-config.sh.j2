@@ -21,6 +21,7 @@ fi
 echo "Pushing new config to: https://{{ middleware_vhost_name }}/management/configuration"
 
 http_response=`curl --write-out %{http_code} --output ${TMP_FILE} -XPOST -s \
+    --resolve {{ middleware_vhost_name }}:443:{{ ansible_default_ipv4.address }} -k \
     -u management:{{ management_password }} \
     -H "Accept: application/json" \
     -H "Content-type: application/json" \

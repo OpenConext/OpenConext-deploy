@@ -1,0 +1,11 @@
+---
+- name: Restart minio
+  community.docker.docker_container:
+    name: minio
+    state: started
+    restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#notes
+    comparisons:
+      '*': ignore
+  when: miniocontainer is success and miniocontainer is not change

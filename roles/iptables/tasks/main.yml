@@ -15,57 +15,101 @@
     - "/etc/iptables"
     - "/etc/sysconfig"
 
-- name: Put iptables
-  ansible.builtin.template:
-    src: "iptables.j2"
-    dest: /etc/sysconfig/iptables
-    owner: root
-    group: root
-    mode: "0644"
-  notify:
-    - "restart iptables"
+- name: Install, configure, and start iptables for non docker hosts
+  when: "'docker' not in group_names"
+  block:
 
-- name: Put ip6tables
-  ansible.builtin.template:
-    src: "ip6tables.j2"
-    dest: /etc/sysconfig/ip6tables
-    owner: root
-    group: root
-    mode: "0644"
-  notify:
-    - "restart ip6tables"
+    - name: Put iptables
+      ansible.builtin.template:
+        src: "iptables.j2"
+        dest: /etc/sysconfig/iptables
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - "restart iptables"
 
-- name: Create symlinks for iptables and ip6tables
-  ansible.builtin.file:
-    path: "{{ item.link }}"
-    src: "{{ item.file }}"
-    state: "link"
-    force: true
-  loop:
-    - { file: "/etc/sysconfig/iptables",  link: "/etc/iptables/rules.v4" }
-    - { file: "/etc/sysconfig/ip6tables", link: "/etc/iptables/rules.v6" }
-  when: ansible_os_family == 'Debian'
+    - name: Put ip6tables
+      ansible.builtin.template:
+        src: "ip6tables.j2"
+        dest: /etc/sysconfig/ip6tables
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - "restart ip6tables"
 
-- name: Install iptables and ip6tables on CentOS
-  ansible.builtin.yum:
-    name:
-      - iptables-services
-    state: present
-  when: ansible_os_family == 'RedHat'
+    - name: Create symlinks for iptables and ip6tables
+      ansible.builtin.file:
+        path: "{{ item.link }}"
+        src: "{{ item.file }}"
+        state: "link"
+        force: true
+      loop:
+        - { file: "/etc/sysconfig/iptables", link: "/etc/iptables/rules.v4" }
+        - { file: "/etc/sysconfig/ip6tables", link: "/etc/iptables/rules.v6" }
+      when: ansible_os_family == 'Debian'
 
-- name: Install iptables on debian system
-  ansible.builtin.apt:
-    name:
-      - iptables
-      - iptables-persistent
-    state: present
-  when: ansible_os_family == 'Debian'
+    - name: Install iptables and ip6tables on CentOS
+      ansible.builtin.yum:
+        name:
+          - iptables-services
+        state: present
+      when: ansible_os_family == 'RedHat'
 
-- name: Start and enable services iptables and iptables6
-  ansible.builtin.service:
-    name: "{{ item }}"
-    state: started
-    enabled: true
-  with_items:
-    - iptables
-    - ip6tables
+    - name: Install iptables on debian system
+      ansible.builtin.apt:
+        name:
+          - iptables
+          - iptables-persistent
+        state: present
+      when: ansible_os_family == 'Debian'
+
+    - name: Start and enable services iptables and iptables6
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: started
+        enabled: true
+      with_items:
+        - iptables
+        - ip6tables
+
+- name: Install, configure, and start iptables for docker hosts
+  when: "'docker' in group_names"
+  block:
+
+    - name: Place the iptables file
+      ansible.builtin.template:
+        src: ip4dockertables.sh.j2
+        dest: /usr/local/sbin/ip4tables.sh
+        mode: "0750"
+        owner: root
+
+    - name: Disable the default iptables service
+      ansible.builtin.systemd:
+        service: iptables
+        enabled: false
+      when: ansible_os_family == 'RedHat'
+
+    - name: Disable the netfilter-persistent service
+      ansible.builtin.systemd:
+        service: netfilter-persistent
+        enabled: false
+      when: ansible_os_family == 'Debian'
+
+    - name: Place the new systemd service file
+      ansible.builtin.copy:
+        src: iptablesdocker.service
+        dest: /etc/systemd/system/
+        owner: root
+        mode: "0755"
+
+    # This is at the moment the best way to get iptables right for
+    # docker and the host (docker tends to destroy the host iptables rules and vice
+    # versa), maybe move this to the iptables role later and make it idempotent
+    # ( do not run when nothing changes )
+    - name: Enable and start the new firewall service
+      ansible.builtin.systemd:
+        service: iptablesdocker.service
+        enabled: true
+        state: started
