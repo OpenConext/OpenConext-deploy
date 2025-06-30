@@ -91,7 +91,7 @@
       failed_when: container_state.stdout != "running"
       changed_when: false
       with_items:
-        - manageserverminio
+        - manageserver
         - managegui
 
 - name: Test minio containers
