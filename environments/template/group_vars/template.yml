@@ -1,4 +1,5 @@
 ---
+
 env: "%env%"
 mariadb_host: localhost
 rsyslog_host: localhost

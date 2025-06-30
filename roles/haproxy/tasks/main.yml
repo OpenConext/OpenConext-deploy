@@ -4,6 +4,7 @@
     url: "https://haproxy.debian.net/bernat.debian.org.gpg"
     dest: "/etc/apt/trusted.gpg.d/haproxy.asc"
     mode: '0644'
+  when: not ansible_check_mode # task reports change in check mode when there is none
 
 - name: Add HAProxy repository to sources list
   ansible.builtin.copy:
