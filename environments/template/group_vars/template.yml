@@ -230,6 +230,15 @@ aa:
   invite_username: aa
   invite_password: "todo"
   aggregate_cache: 0
+  institutions:
+    "https://mock-sp":
+      baseUrl: "http://localhost:8989/"
+      userName: "api-user"
+      password: "secret"
+    "https://mock-rp":
+      baseUrl: "http://localhost:8989"
+      userName: "api-user"
+      password: "secret"
 
 oidcng:
   issuer: https://connect.{{ base_domain }}/

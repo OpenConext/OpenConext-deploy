@@ -1,12 +1,9 @@
 {
-  "https://mock-sp": {
-    "baseUrl": "http://localhost:8989/",
-    "userName": "api-user",
-    "password": "secret"
-  },
-  "https://mock-rp": {
-    "baseUrl": "http://localhost:8989",
-    "userName": "api-user",
-    "password": "secret"
-  }
+{% for institution_key, institution in aa.institutions.items() %}
+  "{{ institution_key }}": {
+    "baseUrl": "{{ institution.baseUrl }}",
+    "userName": "{{ institution.userName }}",
+    "password": "{{ institution.password }}"
+  }{% if not loop.last %},{% endif %}
+{% endfor %}
 }
