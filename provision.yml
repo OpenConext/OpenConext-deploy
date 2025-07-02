@@ -12,8 +12,6 @@
   gather_facts: yes
   become: true
   roles:
-    - role: common
-      tags: ['core', 'base', 'common']
     - role: rsyslog
       tags: ['core', 'base', 'rsyslog']
     - role: iptables
