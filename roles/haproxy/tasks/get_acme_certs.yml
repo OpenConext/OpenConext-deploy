@@ -25,6 +25,27 @@
 - name: Update certificates on one host at a time
   throttle: 1
   block:
+
+    - name: Create dir to store old keys
+      ansible.builtin.file:
+      path: "/home/acme/old_keys/"
+      state: "directory"
+      owner: "acme"
+      group: "acme"
+      mode: "0700"
+
+    - name: Check which vhosts still uses an RSA key
+      ansible.builtin.stat:
+        path: "/home/acme/.acme.sh/{{item}}"
+      register: rsa_dirs
+      loop: "{{ haproxy_ssl_hosts }}"
+
+    - name: Move old RSA keys
+      ansible.builtin.command:
+      cmd: "mv '/home/acme/.acme.sh/{{ item }}' /home/acme/old_keys/{{ item }}.rsa.{{ ansible_date_time.date }}"
+      loop: |
+        {{ rsa_dirs.results | selectattr('stat.exists', 'equalto', true) | map(attribute='item') | list }}
+
     - name: Issue the certificates using acme
       ansible.builtin.command:
         cmd: |
@@ -44,7 +65,6 @@
         ACMEDNS_PASSWORD: "{{ haproxy_acmedns.password }}"
         ACMEDNS_SUBDOMAIN: "{{ haproxy_acmedns.subdomain }}"
       loop: "{{ haproxy_ssl_hosts }}"
-      throttle: 1
       register: "acme_issue"
       changed_when: "acme_issue.rc == 0"
       failed_when: 'acme_issue.rc != 0 and acme_issue.rc != 2'
