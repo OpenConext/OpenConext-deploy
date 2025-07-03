@@ -145,8 +145,9 @@ email_guessing_sleep_millis: 500
 email_spam_threshold_seconds: 15
 
 sms:
-  url: "{{ myconext.sms_api_url}}"
+  url: "{{ myconext.sms_api_url }}"
   bearer: "{{ myconext_sms_bearer }}"
+  route: "{{ myconext.sms_api_route }}"
 
 tiqr_configuration: "file:///config/tiqr.configuration.yml"
 
