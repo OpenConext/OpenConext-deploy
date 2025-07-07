@@ -10,7 +10,7 @@
         - always
 
 - name: Install and configure mariadb
-  hosts: db_mysql
+  hosts: mysql_standalone
   gather_facts: true
   become: true
   roles:
@@ -39,6 +39,6 @@
 
 # todo: rename and reconfigure groups
 # this means also changing group vars
-# mysql - mysqlonly roles: mysql
+# mysql - mysql_standalone roles: mysql
 #       - galera_arbiter roles: galera
 #       - galera_full roles: mysql galera keepalived
