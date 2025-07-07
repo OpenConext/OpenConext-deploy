@@ -1,1 +1,44 @@
 ---
+- name: Read secrets
+  hosts: db_mysql
+  become: true
+  tasks:
+    - name: Read vars from secrets file
+      ansible.builtin.include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
+      no_log: true
+      tags:
+        - always
+
+- name: Install and configure mariadb
+  hosts: db_mysql
+  gather_facts: true
+  become: true
+  roles:
+    - role: mysql
+      tags: ['core', 'db_mysql', 'mysql']
+
+- name: Install and configure galera
+  hosts: dbcluster
+  gather_facts: true
+  become: true
+  roles:
+    - role: galera
+      tags: ['core', 'db_mysql', 'galera']
+    - role: galera_create_users
+      tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
+
+- name: Install and configure galera full nodes
+  hosts: dbcluster_nodes
+  gather_facts: true
+  become: true
+  roles:
+    - role: galera_create_users
+      tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
+    - role: keepalived
+      tags: ['core', 'db_mysql', 'keepalived']
+
+# todo: rename and reconfigure groups
+# this means also changing group vars
+# mysql - mysqlonly roles: mysql
+#       - galera_arbiter roles: galera
+#       - galera_full roles: mysql galera keepalived
