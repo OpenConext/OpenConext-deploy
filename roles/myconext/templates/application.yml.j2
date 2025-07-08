@@ -130,6 +130,13 @@ feature:
   nudge_app_mail: {{ myconext.feature_nudge_app_mail }}
   # Set to true if the servicedesk is fully operational (e.g. show the user the control-code option)
   service_desk_active: {{ myconext.feature_service_desk_active }}
+  # Set to true to enable captcha in the account creation
+  captcha_enabled: True
+
+captcha:
+  sitekey: {{ myconext.captcha_sitekey }}
+  apikey: {{ myconext.captcha_apikey }}
+  host: https://global.frcapi.com/api/v2/captcha/siteverify
 
 secure_cookie: true
 idp_entity_id: https://login.{{ myconext_base_domain }}
