@@ -220,7 +220,7 @@
         target: /var/www/.well-known
         type: bind
     env:
-      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_for_idp }}"
+      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_for_idp_frcapi }}"
       HTTPD_SERVERNAME: "login.{{ myconext_base_domain }}"
 
 - name: Create the servicedesk gui
