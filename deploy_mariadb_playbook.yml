@@ -24,8 +24,6 @@
   roles:
     - role: galera
       tags: ['core', 'db_mysql', 'galera']
-    - role: galera_create_users
-      tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
 
 - name: Install and configure galera full nodes
   hosts: dbcluster_nodes
