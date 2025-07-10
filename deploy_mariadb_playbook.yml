@@ -11,6 +11,7 @@
 
 - name: Install and configure mariadb
   hosts: mysql_standalone
+  serial: 1
   gather_facts: true
   become: true
   roles:
@@ -19,6 +20,7 @@
 
 - name: Install and configure galera
   hosts: dbcluster
+  serial: 1 # galera does not like it when we simultaneously restart mysql service on all nodes
   gather_facts: true
   become: true
   roles:
@@ -27,6 +29,7 @@
 
 - name: Install and configure galera full nodes
   hosts: dbcluster_nodes
+  serial: 1 # galera does not like it when we simultaneously restart mysql service on all nodes
   gather_facts: true
   become: true
   roles:
