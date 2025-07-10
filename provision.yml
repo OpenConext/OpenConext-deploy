@@ -41,6 +41,7 @@
 - hosts: db_mysql
   gather_facts: no
   become: true
+  serial: 1
   roles:
     - role: mysql
       when:
