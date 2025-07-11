@@ -15,7 +15,7 @@
     group: root
     mode: "0644"
   with_items:
-    - serverapplication.properties
+    - serverapplication.yml
     - logback.xml
     - xacml.conext.properties
   notify: restart pdpserver
@@ -38,8 +38,8 @@
     state: started
     networks: "{{ pdp_docker_networks }}"
     mounts:
-      - source: /opt/openconext/pdp/serverapplication.properties
-        target: /application.properties
+      - source: /opt/openconext/pdp/serverapplication.yml
+        target: /application.yml
         type: bind
       - source: /opt/openconext/pdp/logback.xml
         target: /logback.xml
