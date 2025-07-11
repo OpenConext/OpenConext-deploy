@@ -49,6 +49,7 @@
     src: "{{ inventory_dir }}/files/certs/galera/{{ item.crt_name }}"
     dest: "{{ galera_tls_cert_path }}/{{ item.crt_name }}"
     owner: root
+    mode: '0644'
   with_items:
     - "{{ galera_tls }}"
   no_log: true
