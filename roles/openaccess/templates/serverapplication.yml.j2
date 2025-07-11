@@ -1,0 +1,191 @@
+---
+logging:
+  config: classpath:/logback-spring.xml
+
+server:
+  port: 8886
+  error:
+    path: "/error"
+    include-message: always
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        secure: false
+
+spring:
+  main:
+    banner-mode: "off"
+  session:
+    jdbc:
+      cleanup-cron: "-"
+      initialize-schema: always
+    store-type: jdbc
+    timeout: 8h
+  mvc:
+    log-request-details: false
+  security:
+    oauth2:
+      client:
+        registration:
+          oidcng:
+            client-id: playground_client
+            client-secret: secret
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: "authorization_code"
+            scope: openid
+        provider:
+          oidcng:
+            authorization-uri: "https://connect.test2.surfconext.nl/oidc/authorize"
+            token-uri: "https://connect.test2.surfconext.nl/oidc/token"
+            user-info-uri: "https://connect.test2.surfconext.nl/oidc/userinfo"
+            jwk-set-uri: "https://connect.test2.surfconext.nl/oidc/certs"
+            user-name-attribute: sub
+            user-info-authentication-method: client_secret_basic
+  jpa:
+    properties:
+      hibernate:
+        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        format_sql: false
+        show_sql: false
+    open-in-view: false
+    show-sql: false
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://localhost/access?autoReconnect=true&useSSL=false&permitMysqlScheme=true&allowPublicKeyRetrieval=true
+    username: access
+    password: secret
+  flyway:
+    locations: classpath:db/mysql/migration
+    fail-on-missing-locations: true
+  mail:
+    host: localhost
+    port: 1025
+
+oidcng:
+  discovery-url: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
+  introspect-url: "https://connect.test2.surfconext.nl/oidc/introspect"
+  resource-server-id: myconext.rs
+  resource-server-secret: secret
+  base-url: http://localhost:8888
+
+invite:
+  user: access
+  password: secret
+  base-url: "http://localhost:8099"
+  manage-identifier: "9940c56f-b834-4ea8-aceb-74352bb4a390"
+  manage-type: oidc10_rp
+
+jira:
+  enabled: false
+  base-url: "http://localhost:8081/"
+  user-name: "test-beheer-rpc"
+  project-key: CXT
+  environment: test
+  api-key: secret
+  # Timeout in milliseconds
+  connection-timeout: 20
+
+
+config:
+  client-url: "http://localhost:3002"
+  base-url: "test2.surfconext.nl"
+  edu_id_schac_home_organization: "eduid.nl"
+  discovery: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
+
+super-admin:
+  users:
+    - "urn:collab:person:example.com:admin"
+
+gui:
+  disclaimer:
+    background-color: red
+    content: LOCAL
+
+feature:
+  enable-performance-seed: False
+
+email:
+  from: "no-reply@surf.nl"
+  contactEmail: "access@surf.nl"
+  environment: "local"
+
+# The manage section determines if an external Manage is used to integrate with, or that a predefined, static list
+# of applications is loaded to populate the application dropdown in the JS forms.
+# To disable the integration with an external Manage instance, set enabled to False. When enabled is False the url is
+# ignored then and the different manage entities are loaded from json files in `server/src/main/resources/manage`.
+# Each *.json file in this directory corresponds with the contents of that specific entity_type.
+# To test the provisioning (e.g. SCIM, EVA, Graphp) with real endpoints you can set the manage.local property below to
+# True and then the provisioning.local.json file is used which is not in git as it is in .gitignore. You can safely
+# configure real users / passwords and test against those. See server/src/main/java/access/manage/ManageConf.java
+# and server/src/main/java/access/manage/LocalManage.java to see how it works.
+manage:
+#  enabled: True
+  enabled: True
+  test:
+    url: "https://manage.test2.surfconext.nl"
+  #  url: "http://localhost:8081"
+    user: access
+    password: secret
+    defaultState: prodaccepted
+  prod:
+    url: "https://manage.test2.surfconext.nl"
+    #  url: "http://localhost:8081"
+    user: access
+    password: secret
+    defaultState: testaccepted
+  # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
+  # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
+  staticManageDirectory: classpath:/manage
+#  staticManageDirectory: file:///usr/local/etc/manage
+
+s3storage:
+  url: "https://minioapi.test2.surfconext.nl"
+  key: "minioadmin"
+  secret: "jippie123"
+  bucket: "s3-images"
+#  url: http://localhost:9000
+#  key: "minioadmin"
+#  secret: "minioadmin"
+#  bucket: "s3-images"
+
+springdoc:
+  pathsToMatch: "/access/api/v1/**"
+  api-docs:
+    path: "/ui/api-docs"
+  swagger-ui:
+    path: "/ui/api-ui.html"
+    operationsSorter: method
+    oauth:
+      client-id: ${spring.security.oauth2.client.registration.oidcng.client-id}
+      client-secret: ${spring.security.oauth2.client.registration.oidcng.client-secret}
+      use-basic-authentication-with-access-code-grant: true
+
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,mappings,metrics"
+      base-path: "/internal"
+  endpoint:
+    info:
+      access: unrestricted
+    health:
+      access: unrestricted
+      show-details: always
+    mappings:
+      access: none
+    metrics:
+      access: none
+  info:
+    git:
+      mode: full
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"
