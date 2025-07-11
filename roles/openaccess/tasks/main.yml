@@ -84,7 +84,7 @@
         target: /var/www/favicon.ico
         type: bind
     env:
-      : {{ openaccess: s3_storage_url }}
-      : {{ openaccess: s3_storage_key }}
-      : {{ openaccess: s3_storage_secret }}
-      : {{ openaccess: s3_storage_bucket }}
+      S3_STORAGE_URL : {{ openaccess: s3_storage_url }}
+      S3_STORAGE_KEY : {{ openaccess: s3_storage_key }}
+      S3_STORAGE_SECRET : {{ openaccess: s3_storage_secret }}
+      S3_STORAGE_BUCKET : {{ openaccess: s3_storage_bucket }}
