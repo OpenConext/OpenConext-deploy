@@ -214,9 +214,8 @@
 # todo: this task shows a change in --check mode although it is not necessarily 
 # changing anything for real, skipping in check mode is also not ideal
 # maybe add a task that runs in check mode that only checks for presence of the user
-# also, run_once can break things if there are multiple clusters in an environment 
-# for example: user is added on server1 in utrecht, it automatically syncs with server2 in utrecht
-# amsterdam cluster is skipped
+# also, run_once could break things if there would be multiple galera clusters
+# not sure whether its important though..
 - name: add mariadb cluster sst user
   mysql_user:
     name: "{{ mariadb_cluster_user }}"
