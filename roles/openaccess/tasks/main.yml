@@ -16,7 +16,7 @@
     mode: "0644"
   with_items:
     - logback.xml
-    - openaccess.conf
+    - serverapplication.yml
   notify: restart accessserver
 
 - name: Create and start the access server container
