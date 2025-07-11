@@ -86,6 +86,12 @@
   roles:
     - { role: oidc-playground, tags: ['oidc-playground'] }
 
+- name: Deploy openaccess app & server
+  hosts: docker_openaccess
+  become: true
+  roles:
+    - { role: openaccess, tags: ['openaccess'] }
+
 - name: Deploy pdp app
   hosts: docker_pdp
   become: true
