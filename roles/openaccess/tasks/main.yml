@@ -24,7 +24,7 @@
     name: accessserver
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-access/access-server:{{ access_server_version }}
+    image: ghcr.io/openconext/openconext-access/access-server:{{ openaccess_server_version }}
     pull: true
     restart_policy: "always"
     state: started
@@ -59,7 +59,7 @@
 - name: Create the access client container
   community.docker.docker_container:
     name: accessgui
-    image: ghcr.io/openconext/openconext-access/access-client:{{ access_client_version }}
+    image: ghcr.io/openconext/openconext-access/access-client:{{ openaccess_client_version }}
     pull: true
     restart_policy: "always"
     state: started
@@ -84,7 +84,7 @@
         target: /var/www/favicon.ico
         type: bind
     env:
-      S3_STORAGE_URL : "{{ openaccess: s3_storage_url }}"
-      S3_STORAGE_KEY : "{{ openaccess: s3_storage_key }}"
-      S3_STORAGE_SECRET : "{{ openaccess: s3_storage_secret }}"
-      S3_STORAGE_BUCKET : "{{ openaccess: s3_storage_bucket }}"
+      S3_STORAGE_URL : "{{ openaccess.s3_storage_url }}"
+      S3_STORAGE_KEY : "{{ openaccess.s3_storage_key }}"
+      S3_STORAGE_SECRET : "{{ openaccess.s3_storage_secret }}"
+      S3_STORAGE_BUCKET : "{{ openaccess.s3_storage_bucket }}"
