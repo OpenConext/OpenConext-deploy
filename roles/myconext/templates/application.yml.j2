@@ -185,6 +185,11 @@ external-api-configuration:
       password: "{{ myconext_api_invite_password }}"
       scopes:
         - invite
+    -
+      username: internal
+      password: "{{ myconext_api_internal_password }}"
+      scopes:
+        - actuator
 
 oidc-token-api:
   token-url: https://connect.{{ base_domain }}/tokens
