@@ -38,6 +38,7 @@
             --dnssleep 3
             --server "{{ haproxy_acme_server }}"
             --domain "{{ item }}"
+            {{ acme_account.changed | ternary('--force', '') }}
       environment:
         ACMEDNS_BASE_URL: "{{ haproxy_acmedns.baseurl }}"
         ACMEDNS_USERNAME: "{{ haproxy_acmedns.username }}"
