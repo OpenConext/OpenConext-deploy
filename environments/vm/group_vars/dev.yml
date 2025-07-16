@@ -1,3 +1,0 @@
-php_opcode_validate_timestamps: 1
-engine_apache_symfony_environment: dev
-develop: true

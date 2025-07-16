@@ -12,8 +12,6 @@
   gather_facts: yes
   become: true
   roles:
-    - role: common
-      tags: ['core', 'base', 'common']
     - role: rsyslog
       tags: ['core', 'base', 'rsyslog']
     - role: iptables
@@ -43,6 +41,7 @@
 - hosts: db_mysql
   gather_facts: no
   become: true
+  serial: 1
   roles:
     - role: mysql
       when:

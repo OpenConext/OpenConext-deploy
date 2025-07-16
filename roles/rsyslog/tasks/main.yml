@@ -51,7 +51,7 @@
   when:
     - "'sysloghost' not in group_names"
 
-- name: put ryslog config file for logforwarding
+- name: put rsyslog config file for logforwarding
   template:
     src: "rsyslog_onlyforward.conf.j2"
     dest: "/etc/rsyslog.conf"
