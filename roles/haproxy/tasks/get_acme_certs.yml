@@ -18,6 +18,7 @@
   failed_when: "haproxy_acme_cname.stdout == ''"
   changed_when: false
   loop: "{{ haproxy_ssl_hosts }}"
+  become: false
   delegate_to: "localhost"
   check_mode: false  # this is safe run run, even in check mode
   run_once: true
