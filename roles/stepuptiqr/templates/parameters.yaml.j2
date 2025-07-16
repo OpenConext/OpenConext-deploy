@@ -34,6 +34,10 @@ parameters:
 
     mobile_app_user_agent_pattern: "/^.*$/"
 
+    # Whether the trusted_device cookie is checked
+    # The cookies is always set when appropriate
+    trusted_device_enforcement_enabled: false
+
     # The lifetime of the trusted device in seconds
     # For example, 30 days is 2592000 seconds
     trusted_device_cookie_lifetime: 2592000
