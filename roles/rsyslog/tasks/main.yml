@@ -8,7 +8,7 @@
   notify:
     - "restart rsyslog"
 
-- name: forwarding journalctl to rsyslog forward syslog to central logserver
+- name: Forwarding journalctl to rsyslog forward syslog to central logserver
   # forwarding journalctl to rsyslog https://access.redhat.com/articles/4058681
   when: "'sysloghost' not in group_names"
   block:
@@ -22,79 +22,82 @@
       notify:
         - "Restart journald"
 
-# Ensure socket creation and linking
-- name: Create the rsyslog service dropin directory if it does not exist
-  ansible.builtin.file:
-    path: /etc/systemd/system/rsyslog.service.d
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
+    # Ensure socket creation and linking
+    - name: Create the rsyslog service dropin directory if it does not exist
+      ansible.builtin.file:
+        path: {{ rsyslog_service_dropindir }}
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
 
-- name: Create the rsyslog service dropin directory if it does not exist
-  ansible.builtin.template:
-    dst: /etc/systemd/system/rsyslog.service.d/logging.conf
-    src: logging.conf.j2
-    owner: root
-    group: root
-    mode: "0644"
+    - name: Create the rsyslog service dropin directory if it does not exist
+      ansible.builtin.template:
+        dest: "{{ rsyslog_service_dropindir }}/logging.conf"
+        src: logging.conf.j2
+        owner: root
+        group: root
+        mode: "0644"
 
-# rsyslog certificates for relp
+    # Sometimes this link is missing
+    # https://access.redhat.com/solutions/7035509
+    - name: Create a symbolic link to /dev/log
+      ansible.builtin.file:
+        src: /run/systemd/journal/dev-log
+        dest: /dve/log
+        owner: root
+        group: root
+        state: link
 
-- name: Create the pki directory if it does not exist
-  ansible.builtin.file:
-    path: /etc/pki/rsyslog
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
+    # rsyslog certificates for relp
+    - name: Create the pki directory if it does not exist
+      ansible.builtin.file:
+        path: /etc/pki/rsyslog
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
 
-# We need a key and client certificate to when using RELP
-- name: Put rsyslog client key
-  ansible.builtin.copy:
-    content: "{{ rsyslogclientkey }}"
-    dest: "/etc/pki/rsyslog/rsyslogclient.key"
-    mode: "0400"
-    owner: root
-  when:
-    - "'sysloghost' not in group_names"
-  no_log: true
-  notify:
-    - "restart rsyslog"
+    # We need a key and client certificate to when using RELP
+    - name: Put rsyslog client key
+      ansible.builtin.copy:
+        content: "{{ rsyslogclientkey }}"
+        dest: "/etc/pki/rsyslog/rsyslogclient.key"
+        mode: "0400"
+        owner: root
+      no_log: true
+      notify:
+        - "restart rsyslog"
 
-- name: Put rsyslog client certificate
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclient.crt"
-    dest: "/etc/pki/rsyslog/rsyslogclient.crt"
-    mode: "0744"
-    owner: root
-    group: adm
-  when:
-    - "'sysloghost' not in group_names"
-  notify:
-    - "restart rsyslog"
+    - name: Put rsyslog client certificate
+      ansible.builtin.copy:
+        src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclient.crt"
+        dest: "/etc/pki/rsyslog/rsyslogclient.crt"
+        mode: "0744"
+        owner: root
+        group: adm
+      notify:
+        - "restart rsyslog"
 
-- name: Put rsyslog CA file (new location)
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclientca.crt"
-    dest: "/etc/pki/rsyslog/rsyslogclientca.crt"
-    mode: "0744"
-    owner: root
-    group: adm
-  when:
-    - "'sysloghost' not in group_names"
+    - name: Put rsyslog CA file (new location)
+      ansible.builtin.copy:
+        src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclientca.crt"
+        dest: "/etc/pki/rsyslog/rsyslogclientca.crt"
+        mode: "0744"
+        owner: root
+        group: adm
 
-- name: Put rsyslog config file for logforwarding
-  ansible.builtin.template:
-    src: "rsyslog_onlyforward.conf.j2"
-    dest: "/etc/rsyslog.conf"
-    mode: "0644"
-    owner: root
-    group: root
-  notify:
-    - "restart rsyslog"
-  when:
-    - "'sysloghost' not in group_names"
+    - name: Put rsyslog config file for logforwarding
+      ansible.builtin.template:
+        src: "rsyslog_onlyforward.conf.j2"
+        dest: "/etc/rsyslog.conf"
+        mode: "0644"
+        owner: root
+        group: root
+      notify:
+        - "restart rsyslog"
+
+# central logserver
 
 - name: Include tasks for central syslog server
   ansible.builtin.include_tasks: rsyslog_central.yml
