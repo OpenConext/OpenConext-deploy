@@ -39,16 +39,6 @@
         group: root
         mode: "0644"
 
-    # Sometimes this link is missing
-    # https://access.redhat.com/solutions/7035509
-    - name: Create a symbolic link to /dev/log
-      ansible.builtin.file:
-        src: /run/systemd/journal/dev-log
-        dest: /dev/log
-        owner: root
-        group: root
-        state: link
-
     # Since we specify queue.spoolDirectory, lets make sure it exists
     - name: Create queue dir
       ansible.builtin.file:
