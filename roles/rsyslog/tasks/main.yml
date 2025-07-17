@@ -35,6 +35,7 @@
         owner: root
         group: root
         mode: "0755"
+      notify: "Reload systemd"
 
     - name: Create the rsyslog service dropin directory if it does not exist
       ansible.builtin.template:
