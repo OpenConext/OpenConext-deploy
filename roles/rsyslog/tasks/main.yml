@@ -35,15 +35,15 @@
         owner: root
         group: root
         mode: "0755"
-      notify: "Reload systemd"
 
-    - name: Create the rsyslog service dropin directory if it does not exist
+    - name: Put logging dropin
       ansible.builtin.template:
         dest: "{{ rsyslog_service_dropindir }}/logging.conf"
         src: logging.conf.j2
         owner: root
         group: root
         mode: "0644"
+      notify: "Reload systemd"
 
     # Since we specify queue.spoolDirectory, lets make sure it exists
     - name: Create queue dir
