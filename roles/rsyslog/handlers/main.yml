@@ -11,4 +11,3 @@
 
 - name: Reload systemd
   ansible.builtin.command: "systemctl daemon-reload" # noqa command-instead-of-module
-  changed_when: my_output.rc != 0 # <- Uses the return code to define when the task has changed.
