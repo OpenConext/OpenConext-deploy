@@ -1,32 +1,33 @@
 # This rsyslog configuration takes logs from journald and forwards them to a remote log serverad="imuxsock") # provides support for local system logging
-module(load="imuxsock") 
+module(load="imuxsock" SysSock.Use="on")
 module(load="imklog")   # provides kernel logging support
 module(load="immark" interval="600" )  # provides --MARK-- message capability
 
 $PreserveFQDN on
 
-*.emerg                         :omusrmsg:* 
+*.emerg                         :omusrmsg:*
 
 {% if  'sysloghost' not in group_names %}
 {% for relp_host in relp_remote %}
 # Logs are forwarded to {{ relp_host.name }}
 module(load="omrelp")
-action(type="omrelp" 
-target="{{ relp_host.host }}" 
-port="{{ relp_host.port }}" 
-tls="on" 
-tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt" 
+action(type="omrelp"
+target="{{ relp_host.host }}"
+port="{{ relp_host.port }}"
+tls="on"
+tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt"
 tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
 tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
-tls.authmode="name" 
+tls.authmode="name"
 tls.permittedpeer=["{{ relp_host.peer }}"]
-queue.type="LinkedList" 
+queue.type="LinkedList"
 queue.filename="{{ relp_host.name }}"
 queue.spoolDirectory="/var/spool/rsyslog"
 queue.maxdiskspace="1G"
-queue.saveonshutdown="on" 
+queue.saveonshutdown="on"
 action.resumeRetryCount="-1"
 action.resumeInterval="5"
 action.writeAllMarkMessages="on")
 {% endfor %}
 {% endif %}
+
