@@ -25,7 +25,7 @@
     # Ensure socket creation and linking
     - name: Create the rsyslog service dropin directory if it does not exist
       ansible.builtin.file:
-        path: {{ rsyslog_service_dropindir }}
+        path: "{{ rsyslog_service_dropindir }}"
         state: directory
         owner: root
         group: root
@@ -52,7 +52,7 @@
     # rsyslog certificates for relp
     - name: Create the pki directory if it does not exist
       ansible.builtin.file:
-        path: /etc/pki/rsyslog
+        path: "{{ rsyslog_certifcate_dir }}"
         state: directory
         owner: root
         group: root
@@ -62,7 +62,7 @@
     - name: Put rsyslog client key
       ansible.builtin.copy:
         content: "{{ rsyslogclientkey }}"
-        dest: "/etc/pki/rsyslog/rsyslogclient.key"
+        dest: "{{ rsyslog_certifcate_dir }}/rsyslogclient.key"
         mode: "0400"
         owner: root
       no_log: true
@@ -72,7 +72,7 @@
     - name: Put rsyslog client certificate
       ansible.builtin.copy:
         src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclient.crt"
-        dest: "/etc/pki/rsyslog/rsyslogclient.crt"
+        dest: "{{ rsyslog_certifcate_dir }}/rsyslogclient.crt"
         mode: "0744"
         owner: root
         group: adm
@@ -82,7 +82,7 @@
     - name: Put rsyslog CA file (new location)
       ansible.builtin.copy:
         src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclientca.crt"
-        dest: "/etc/pki/rsyslog/rsyslogclientca.crt"
+        dest: "{{ rsyslog_certifcate_dir }}/rsyslogclientca.crt"
         mode: "0744"
         owner: root
         group: adm
