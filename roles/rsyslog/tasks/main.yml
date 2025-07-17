@@ -49,6 +49,15 @@
         group: root
         state: link
 
+    # Since we specify queue.spoolDirectory, lets make sure it exists
+    - name: Create queue dir
+      ansible.builtin.file:
+        path: "{{ rsyslog_queue_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0700"
+
     # rsyslog certificates for relp
     - name: Create the pki directory if it does not exist
       ansible.builtin.file:
