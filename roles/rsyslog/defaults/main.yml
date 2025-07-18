@@ -18,3 +18,7 @@ rsyslog_dir_file_modes: 'dirCreateMode="0755" fileCreateMode="0640" FileGroup="s
 #     host: '' # central syslog server
 #     port: '' # syslog port
 #     peer: '' # CN of the certificate of the central syslog server
+
+rsyslog_service_dropindir: "/etc/systemd/system/rsyslog.service.d"
+rsyslog_certifcate_dir: "/etc/pki/rsyslog"
+rsyslog_queue_dir: "/var/spool/rsyslog"
