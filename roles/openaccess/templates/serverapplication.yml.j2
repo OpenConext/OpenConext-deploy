@@ -58,6 +58,8 @@ spring:
   flyway:
     locations: classpath:db/mysql/migration
     fail-on-missing-locations: true
+  mail:
+    host: {{ smtp_server }}
 
 #oidcng:
   #discovery-url: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
@@ -179,5 +181,3 @@ info:
     artifact: "@project.artifactId@"
     version: "@project.version@"
 
-  mail:
-    host: {{ smtp_server }}
