@@ -61,7 +61,7 @@
         state: directory
         owner: root
         group: root
-        mode: "0755"
+        mode: "0700"
 
     # We need a key and client certificate to when using RELP
     - name: Put rsyslog client key
