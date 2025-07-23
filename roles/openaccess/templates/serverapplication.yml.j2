@@ -52,7 +52,7 @@ spring:
     show-sql: false
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: mysql://spdrw:{{ mysql_passwords.openconextaccess }}@{{ mariadb_host }}/{{ openconextaccess_db_name | default('openconextaccess') }}
+    url: jdbc:mariadb://{{ invite.db_host }}/surfaccess?autoReconnect=true
     username: openconextaccess
     password: secret
   flyway:
