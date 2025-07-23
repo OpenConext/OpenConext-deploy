@@ -24,7 +24,7 @@
     name: accessserver
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconextaccess/accessserver:{{ openconextaccess_server_version }}
+    image: ghcr.io/openconext/openaccess/accessserver:{{ openconextaccess_server_version }}
     pull: true
     restart_policy: "always"
     state: started
