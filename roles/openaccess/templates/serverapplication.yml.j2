@@ -52,8 +52,8 @@ spring:
     show-sql: false
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://localhost/access?autoReconnect=true&useSSL=false&permitMysqlScheme=true&allowPublicKeyRetrieval=true
-    username: access
+    url: mysql://spdrw:{{ mysql_passwords.openconextaccess }}@{{ mariadb_host }}/{{ openconextaccess_db_name | default('openconextaccess') }}
+    username: openconextaccess
     password: secret
   flyway:
     locations: classpath:db/mysql/migration
@@ -148,18 +148,6 @@ s3storage:
 #  key: "minioadmin"
 #  secret: "minioadmin"
 #  bucket: "s3-images"
-
-springdoc:
-  pathsToMatch: "/access/api/v1/**"
-  api-docs:
-    path: "/ui/api-docs"
-  swagger-ui:
-    path: "/ui/api-ui.html"
-    operationsSorter: method
-    oauth:
-      client-id: ${spring.security.oauth2.client.registration.oidcng.client-id}
-      client-secret: ${spring.security.oauth2.client.registration.oidcng.client-secret}
-      use-basic-authentication-with-access-code-grant: true
 
 management:
   health:
