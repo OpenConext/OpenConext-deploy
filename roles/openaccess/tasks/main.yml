@@ -1,7 +1,7 @@
 ---
 - name: Create directory to keep configfile
   ansible.builtin.file:
-    dest: "/opt/openconext/openaccess"
+    dest: "/opt/openconext/openconextaccess"
     state: directory
     owner: root
     group: root
@@ -10,7 +10,7 @@
 - name: Place the serverapplication configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: /opt/openconext/openaccess/{{ item }}
+    dest: /opt/openconext/openconextaccess/{{ item }}
     owner: root
     group: root
     mode: "0644"
@@ -24,17 +24,17 @@
     name: accessserver
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-access/accessserver:{{ openaccess_server_version }}
+    image: ghcr.io/openconext/openconextaccess/accessserver:{{ openconextaccess_server_version }}
     pull: true
     restart_policy: "always"
     state: started
     networks:
       - name: "loadbalancer"
     mounts:
-      - source: /opt/openconext/openaccess/serverapplication.yml
+      - source: /opt/openconext/openconextaccess/serverapplication.yml
         target: /application.properties
         type: bind
-      - source: /opt/openconext/openaccess/logback.xml
+      - source: /opt/openconext/openconextaccess/logback.xml
         target: /logback.xml
         type: bind
     command: "-Xmx512m --spring.config.location=./"
@@ -59,7 +59,7 @@
 - name: Create the access client container
   community.docker.docker_container:
     name: accessgui
-    image: ghcr.io/openconext/openconext-access/accessclient:{{ openaccess_client_version }}
+    image: ghcr.io/openconext/openconextaccess/accessclient:{{ openconextaccess_client_version }}
     pull: true
     restart_policy: "always"
     state: started

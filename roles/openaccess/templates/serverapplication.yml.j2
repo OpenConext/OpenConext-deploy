@@ -31,7 +31,7 @@ spring:
           oidcng:
             client-id: playground_client
             client-secret: secret
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri: "{base_domain}/login/oauth2/code/{registrationId}"
             authorization-grant-type: "authorization_code"
             scope: openid
         provider:
@@ -58,30 +58,27 @@ spring:
   flyway:
     locations: classpath:db/mysql/migration
     fail-on-missing-locations: true
-  mail:
-    host: localhost
-    port: 1025
 
-oidcng:
-  discovery-url: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
-  introspect-url: "https://connect.test2.surfconext.nl/oidc/introspect"
-  resource-server-id: myconext.rs
-  resource-server-secret: secret
-  base-url: http://localhost:8888
+#oidcng:
+  #discovery-url: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
+  #introspect-url: "https://connect.test2.surfconext.nl/oidc/introspect"
+  #resource-server-id: myconext.rs
+  #resource-server-secret: secret
+  #base-url: http://localhost:8888
 
 invite:
-  user: access
-  password: secret
-  base-url: "http://localhost:8099"
-  manage-identifier: "9940c56f-b834-4ea8-aceb-74352bb4a390"
+  user: access #{{openconextaccess.openconextaccess_invite_api_username}}
+  password: secret #{{openconextaccess.openconextaccess_invite_api_password}}
+  base-url: {{openconextaccess.openconextaccess_invite_host}}
+  manage-identifier: "9940c56f-b834-4ea8-aceb-74352bb4a390" #{{openconextaccess.openconextaccess_invite_manage_identifier}}
   manage-type: oidc10_rp
 
 jira:
   enabled: false
-  base-url: "http://localhost:8081/"
-  user-name: "test-beheer-rpc"
-  project-key: CXT
-  environment: test
+  base-url: {{ openconextaccess.jira_base_url }}
+  user-name: {{ openconextaccess.jira_username }}
+  project-key: {{ openconextaccess.jira_project_key }}
+  environment: {{ openconextaccess.jira_environment }}
   api-key: secret
   # Timeout in milliseconds
   connection-timeout: 20
@@ -125,7 +122,7 @@ manage:
   test:
     url: "https://manage.test2.surfconext.nl"
   #  url: "http://localhost:8081"
-    user: access
+    user: openconextaccess
     password: secret
     defaultState: prodaccepted
   prod:
@@ -142,12 +139,16 @@ manage:
 s3storage:
   url: "https://minioapi.test2.surfconext.nl"
   key: "minioadmin"
-  secret: "jippie123"
+  secret: {{openconextaccess.s3_storage_secret}}
   bucket: "s3-images"
 #  url: http://localhost:9000
 #  key: "minioadmin"
 #  secret: "minioadmin"
 #  bucket: "s3-images"
+#  url: {{openconextaccess.s3_storage_url}}
+#  key: {{openconextaccess.s3_storage_key}}
+#  secret: {{openconextaccess.s3_storage_secret}}
+#  bucket: {{openconextaccess.s3_storage_bucket}}
 
 management:
   health:
