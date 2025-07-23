@@ -19,6 +19,13 @@
     - serverapplication.yml
   notify: restart accessserver
 
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    invite_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
+
 - name: Create and start the access server container
   community.docker.docker_container:
     name: accessserver
