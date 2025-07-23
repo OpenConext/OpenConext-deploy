@@ -24,7 +24,7 @@
     name: accessserver
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openaccess/accessserver:{{ openconextaccess_server_version }}
+    image: ghcr.io/openconext/openconext-access/accessserver:{{ openaccess_server_version }}
     pull: true
     restart_policy: "always"
     state: started
@@ -59,7 +59,7 @@
 - name: Create the access client container
   community.docker.docker_container:
     name: accessgui
-    image: ghcr.io/openconext/openconextaccess/accessclient:{{ openconextaccess_client_version }}
+    image: ghcr.io/openconext/openconext-access/accessclient:{{ openaccess_client_version }}
     pull: true
     restart_policy: "always"
     state: started
