@@ -125,3 +125,14 @@ parameters:
     sso_cookie_type: "{{ gateway_sso_cookie_type }}"
     sso_cookie_name: "{{ gateway_sso_cookie_name }}"
     sso_encryption_key: "{{ gateway_sso_encryption_key }}"
+
+    # The GSSP ID from samlstepupproviders.yaml to use as fallback GSSP
+    # Set fallback_gssp to false to disable the fallback_gssp functionality
+    # fallback_gssp: false
+    fallback_gssp: {{ gateway_fallback_gssp | default('false') }}
+
+    # The user attribute to use in the Subject of the AuthnRequest to the fallback GSSP
+    fallback_gssp_subject_attribute: 'urn:mace:dir:attribute-def:mail'
+
+    # The user attribute to use to determine the user's home institution
+    fallback_gssp_institution_attribute: 'urn:mace:terena.org:attribute-def:schacHomeOrganization'
