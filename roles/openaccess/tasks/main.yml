@@ -1,7 +1,7 @@
 ---
 - name: Create directory to keep configfile
   ansible.builtin.file:
-    dest: "/opt/openconext/openconextaccess"
+    dest: "/opt/openconext/openaccess"
     state: directory
     owner: root
     group: root
@@ -10,7 +10,7 @@
 - name: Place the serverapplication configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: /opt/openconext/openconextaccess/{{ item }}
+    dest: /opt/openconext/openaccess/{{ item }}
     owner: root
     group: root
     mode: "0644"
@@ -31,10 +31,10 @@
     networks:
       - name: "loadbalancer"
     mounts:
-      - source: /opt/openconext/openconextaccess/serverapplication.yml
+      - source: /opt/openconext/openaccess/serverapplication.yml
         target: /application.properties
         type: bind
-      - source: /opt/openconext/openconextaccess/logback.xml
+      - source: /opt/openconext/openaccess/logback.xml
         target: /logback.xml
         type: bind
     command: "-Xmx512m --spring.config.location=./"
