@@ -39,7 +39,7 @@
       - name: "loadbalancer"
     mounts:
       - source: /opt/openconext/openaccess/serverapplication.yml
-        target: /application.properties
+        target: /application.yml
         type: bind
       - source: /opt/openconext/openaccess/logback.xml
         target: /logback.xml
