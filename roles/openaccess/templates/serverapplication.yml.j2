@@ -53,7 +53,7 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://{{ invite.db_host }}/openaccess?autoReconnect=true
-    username: openconextaccess
+    username: openconextaccessrw
     password: secret
   flyway:
     locations: classpath:db/mysql/migration
