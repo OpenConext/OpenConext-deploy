@@ -1,1 +1,18 @@
 ---
+- name: Read secrets
+  hosts: all
+  become: true
+  tasks:
+    - name: Read vars from secrets file
+      ansible.builtin.include_vars: "{{ inventory_dir }}/secrets/secrets.yml"
+      no_log: true
+      tags:
+        - always
+
+- name: Install and configure mongo servers
+  hosts: mongo_servers
+  gather_facts: true
+  become: true
+  roles:
+    - role: mongo
+      tags: ['mongo']

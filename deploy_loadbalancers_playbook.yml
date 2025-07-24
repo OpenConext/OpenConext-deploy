@@ -15,7 +15,7 @@
   become: true
   roles:
     - role: haproxy
-      tags: ['core', 'loadbalancer', 'lb']
+      tags: ['loadbalancer', 'lb']
 
 - name: Deploy keepalived and bind for clustered loadbalancers
   hosts: loadbalancer_ha
@@ -23,6 +23,6 @@
   become: true
   roles:
     - role: keepalived
-      tags: ['core', 'loadbalancer_ha', 'keepalived']
+      tags: ['loadbalancer_ha', 'keepalived']
     - role: bind
-      tags: ['core', 'loadbalancer_ha', 'bind']
+      tags: ['loadbalancer_ha', 'bind']

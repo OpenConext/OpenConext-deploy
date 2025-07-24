@@ -16,7 +16,7 @@
   become: true
   roles:
     - role: mysql
-      tags: ['core', 'db_mysql', 'mysql']
+      tags: ['db_mysql', 'mysql']
 
 - name: Install and configure galera
   hosts: dbcluster
@@ -25,7 +25,7 @@
   become: true
   roles:
     - role: galera
-      tags: ['core', 'db_mysql', 'galera']
+      tags: ['db_mysql', 'galera']
 
 - name: Install and configure galera full nodes
   hosts: dbcluster_nodes
@@ -34,9 +34,9 @@
   become: true
   roles:
     - role: galera_create_users
-      tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
+      tags: ['db_mysql', 'galera', 'galera_create_users']
     - role: keepalived
-      tags: ['core', 'db_mysql', 'keepalived']
+      tags: ['db_mysql', 'keepalived']
 
 # todo: rename and reconfigure groups
 # this means also changing group vars
