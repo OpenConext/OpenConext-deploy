@@ -21,7 +21,7 @@
           'priority': member_weight[hostvars[item].mongo_replication_role]
         }]
       }}
-  loop: "{{ groups[mongo_servers] }}"
+  loop: "{{ mongo_servers }}"
 
   run_once: true
   vars:
@@ -34,15 +34,15 @@
   ansible.builtin.debug:
     msg: "{{ members }}"
 
-- name: Debug ansible_play_hosts
+- name: Debug mongo_servers
   ansible.builtin.debug:
-    msg: "{{ ansible_play_hosts_all }}"
+    msg: "{{ mongo_servers }}"
 
 - name: Set fact for arbiter index number
   ansible.builtin.set_fact:
     arbiter_index: "{{ hostid }}"
   when: hostvars[item].mongo_arbiter
-  loop: "{{ ansible_play_hosts }}"
+  loop: "{{ mongo_servers }}"
   loop_control:
     index_var: hostid
 
