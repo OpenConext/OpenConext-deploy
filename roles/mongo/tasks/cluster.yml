@@ -22,7 +22,7 @@
         }]
       }}
   loop: "{{ groups[mongo_servers] }}"
-"
+
   run_once: true
   vars:
     member_weight:
