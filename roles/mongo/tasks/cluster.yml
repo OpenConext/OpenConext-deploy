@@ -41,10 +41,14 @@
 - name: Set fact for arbiter index number
   ansible.builtin.set_fact:
     arbiter_index: "{{ hostid }}"
-  when: hostvars[item].mongo_arbiter
+  when: hostvars[item].mongo_arbiter is defined and hostvars[item].mongo_arbiter
   loop: "{{ mongo_servers }}"
   loop_control:
     index_var: hostid
+
+- name: Debug host_id
+  ansible.builtin.debug:
+    msg: "{{ hostid }}"
 
 - name: Initial cluster initialisation
   community.mongodb.mongodb_replicaset:
