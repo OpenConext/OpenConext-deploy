@@ -21,7 +21,8 @@
           'priority': member_weight[hostvars[item].mongo_replication_role]
         }]
       }}
-  loop: "{{ ansible_play_hosts_all }}"
+  loop: "{{ groups[mongo_servers] }}"
+"
   run_once: true
   vars:
     member_weight:
