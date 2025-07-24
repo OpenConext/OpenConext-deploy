@@ -29,6 +29,14 @@
       secondary: 2
       arbiter: 1
 
+- name: Debug cluster members
+  ansible.builtin.debug:
+    msg: "{{ members }}"
+
+- name: Debug ansible_play_hosts
+  ansible.builtin.debug:
+    msg: "{{ ansible_play_hosts }}"
+
 - name: Set fact for arbiter index number
   ansible.builtin.set_fact:
     arbiter_index: "{{ hostid }}"
