@@ -21,7 +21,7 @@
           'priority': member_weight[hostvars[item].mongo_replication_role]
         }]
       }}
-  loop: "{{ ansible_play_hosts }}"
+  loop: "{{ ansible_play_hosts_all }}"
   run_once: true
   vars:
     member_weight:
@@ -35,7 +35,7 @@
 
 - name: Debug ansible_play_hosts
   ansible.builtin.debug:
-    msg: "{{ ansible_play_hosts }}"
+    msg: "{{ ansible_play_hosts_all }}"
 
 - name: Set fact for arbiter index number
   ansible.builtin.set_fact:
