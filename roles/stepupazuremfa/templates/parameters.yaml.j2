@@ -26,4 +26,10 @@ parameters:
 {% endfor %}
 
     support_email: support@surfconext.nl
+
+    # Authentication issuers matching this regex will send ForceAuthn to the Azure MFA. The at sign is used as a
+    # delimiter, be sure to escape the first sign as Symfony would see it as a reference to a service.
     ra_issuer_entity_id_regex: '@@^https://(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/vetting-procedure/gssf/azuremfa/metadata$@'
+
+    # Metadata cache settings
+    federation_metadata_cache_location: '/var/www/html/federation-metadata'
