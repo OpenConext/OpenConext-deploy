@@ -427,6 +427,28 @@
             ]
           },
           "info": "The authorisation grant type's of this Relying Party."
+        },
+        "application_tags": {
+          "type": "array",
+          "max": 3,
+          "items": {
+            "type": "string",
+            "enum": [
+              "education",
+              "research",
+              "privacy",
+              "content",
+              "repository",
+              "company",
+              "recommended",
+              "productivity",
+              "organization",
+              "cooperation",
+              "video",
+              "surf"
+            ]
+          },
+          "info": "The types of service used in the facet search in dashboard (max 3)."
         }
       },
       "patternProperties": {

@@ -600,6 +600,28 @@
           "default": 3600,
           "info": "The number of seconds that a new refresh token is valid for this Relying Party."
         },
+        "application_tags": {
+          "type": "array",
+          "max": 3,
+          "items": {
+            "type": "string",
+            "enum": [
+              "education",
+              "research",
+              "privacy",
+              "content",
+              "repository",
+              "company",
+              "recommended",
+              "productivity",
+              "organization",
+              "cooperation",
+              "video",
+              "surf"
+            ]
+          },
+          "info": "The types of service used in the facet search in dashboard (max 3)."
+        }
       },
       "patternProperties": {
         "^name:({{ supported_language_codes | replace(',','|') }})$": {

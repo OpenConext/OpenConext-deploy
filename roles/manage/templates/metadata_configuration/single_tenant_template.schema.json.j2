@@ -540,6 +540,28 @@
           ],
           "default": "AO",
           "info": "Set the contractual base that underlies a production SP / RP entity."
+        },
+        "application_tags": {
+          "type": "array",
+          "max": 3,
+          "items": {
+            "type": "string",
+            "enum": [
+              "education",
+              "research",
+              "privacy",
+              "content",
+              "repository",
+              "company",
+              "recommended",
+              "productivity",
+              "organization",
+              "cooperation",
+              "video",
+              "surf"
+            ]
+          },
+          "info": "The types of service used in the facet search in dashboard (max 3)."
         }
       },
       "patternProperties": {
