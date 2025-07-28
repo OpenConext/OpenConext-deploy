@@ -69,10 +69,10 @@ oidcng:
   base-url: {{ openconextaccess_base_domain }}
 
 invite:
-  user: access #{{openconextaccess.openconextaccess_invite_api_username}}
-  password: secret #{{openconextaccess.openconextaccess_invite_api_password}}
-  base-url: {{openconextaccess.openconextaccess_invite_host}}
-  manage-identifier: "9940c56f-b834-4ea8-aceb-74352bb4a390" #{{openconextaccess.openconextaccess_invite_manage_identifier}}
+  user: {{ openconextaccess.openconextaccess_invite_api_username }}
+  password: {{ openconextaccess.openconextaccess_invite_api_password }}
+  base-url: {{ openconextaccess.openconextaccess_invite_host }}
+  manage-identifier: {{ openconextaccess.openconextaccess_invite_manage_identifier }}
   manage-type: oidc10_rp
 
 jira:
@@ -139,18 +139,10 @@ manage:
 #  staticManageDirectory: file:///usr/local/etc/manage
 
 s3storage:
-  url: "https://minioapi.test2.surfconext.nl"
-  key: "minioadmin"
-  secret: {{openconextaccess.s3_storage_secret}}
-  bucket: "s3-images"
-#  url: http://localhost:9000
-#  key: "minioadmin"
-#  secret: "minioadmin"
-#  bucket: "s3-images"
-#  url: {{openconextaccess.s3_storage_url}}
-#  key: {{openconextaccess.s3_storage_key}}
-#  secret: {{openconextaccess.s3_storage_secret}}
-#  bucket: {{openconextaccess.s3_storage_bucket}}
+  url: {{ openconextaccess.s3_storage_url }}
+  key: {{ openconextaccess.s3_storage_key }}
+  secret: {{ openconextaccess.s3_storage_secret }}
+  bucket: {{ openconextaccess.s3_storage_bucket }}
 
 management:
   health:
