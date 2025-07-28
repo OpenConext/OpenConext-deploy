@@ -66,7 +66,7 @@ oidcng:
   introspect-url: "https://connect.test2.surfconext.nl/oidc/introspect"
   resource-server-id: myconext.rs
   resource-server-secret: secret
-  base-url: http://localhost:8888
+  base-url: {{ openconextaccess_base_domain }}
 
 invite:
   user: access #{{openconextaccess.openconextaccess_invite_api_username}}

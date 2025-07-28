@@ -73,7 +73,7 @@
     networks:
       - name: "loadbalancer"
     labels:
-      traefik.http.routers.accessclient.rule: "Host(`access.{{ base_domain }}`)"
+      traefik.http.routers.accessclient.rule: "Host(`{{ openconextaccess_base_domain }}`)"
       traefik.http.routers.accessclient.tls: "true"
       traefik.enable: "true"
     healthcheck:
