@@ -52,9 +52,9 @@ spring:
     show-sql: false
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://{{ invite.db_host }}/openconextaccess?autoReconnect=true
-    username: openconextaccessrw
-    password: secret
+    url: jdbc:mariadb://{{ openconextaccess.db_host }}/openconextaccess?autoReconnect=true
+    username: {{ openconextaccess.db_user }}
+    password: {{ openconextaccess.db_secret }}
   flyway:
     locations: classpath:db/mysql/migration
     fail-on-missing-locations: true
@@ -103,7 +103,7 @@ institution-admin:
 gui:
   disclaimer:
     background-color: red
-    content: LOCAL
+    content: {{ environment_shortname }}
 
 feature:
   enable-performance-seed: False
