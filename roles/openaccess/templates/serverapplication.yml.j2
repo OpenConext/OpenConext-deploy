@@ -68,15 +68,8 @@ oidcng:
   resource-server-secret: secret
   base-url: {{ openconextaccess_base_domain }}
 
-invite:
-  user: {{ openconextaccess.invite.api_username }}
-  password: {{ openconextaccess.invite.api_password }}
-  base-url: {{ openconextaccess.invite.host }}
-  manage-identifier: {{ openconextaccess.invite.manage_identifier }}
-  manage-type: oidc10_rp
-
 jira:
-  enabled: false
+  enabled: true
   base-url: {{ openconextaccess.jira.base_url }}
   user-name: {{ openconextaccess.jira.username }}
   project-key: {{ openconextaccess.jira.project_key }}
