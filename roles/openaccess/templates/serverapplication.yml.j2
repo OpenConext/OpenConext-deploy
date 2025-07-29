@@ -29,9 +29,9 @@ spring:
       client:
         registration:
           oidcng:
-            client-id: playground_client
-            client-secret: secret
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-id: {{ oidc_playground.client_id }}
+            client-secret: {{ oidc_playground.secret }}
+            redirect-uri: {{ oidc_playground.discovery_endpoint }}
             authorization-grant-type: "authorization_code"
             scope: openid
         provider:
