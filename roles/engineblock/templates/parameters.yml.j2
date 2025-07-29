@@ -83,6 +83,11 @@ parameters:
     api.users.deprovision.username: {{ engine_api_deprovision_user }}
     api.users.deprovision.password: {{ engine_api_deprovision_password | replace("%","%%") }}
 
+    ##########################################################################################
+    ## CLIENT SETTINGS
+    ##########################################################################################
+    ## Currently this is used for the outgoing requests with the PDP and AA client
+    http_client.timeout: {{ engine_http_client_timeout | int }}
 
     ##########################################################################################
     ## PDP SETTINGS

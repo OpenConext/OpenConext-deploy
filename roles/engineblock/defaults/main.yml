@@ -63,6 +63,9 @@ engine_api_deprovision_user: lifecycle
 # Minimum execution time in milliseconds when a received response is deemed invalid
 engine_minimum_execution_time_on_invalid_received_response: 5000
 
+# the timeout used when querying external sources (PDP, AA, etc)
+engine_http_client_timeout: 10
+
 # Settings for detecting whether the user is stuck in a authentication loop within his session:
 # within a certain time frame in seconds, how many authentication procedures for the same SP are allowed
 engine_time_frame_for_authentication_loop_in_seconds: 60
