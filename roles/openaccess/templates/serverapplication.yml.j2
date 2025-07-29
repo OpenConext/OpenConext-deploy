@@ -81,7 +81,7 @@ jira:
   user-name: {{ openconextaccess.jira.username }}
   project-key: {{ openconextaccess.jira.project_key }}
   environment: {{ openconextaccess.jira.environment }}
-  api-key: secret
+  api-key: {{ openconextaccess.jira.api_key }}
   # Timeout in milliseconds
   connection-timeout: 20
 
@@ -118,12 +118,12 @@ manage:
   test:
     url: {{ openconextaccess.managetest.url }}
     user: {{ openconextaccess.managetest.user }}
-    password: {{ openconextaccess.managetest.secret }}
+    password: {{ openconextaccess.managetest.password }}
     defaultState: prodaccepted
   prod:
     url: {{ openconextaccess.manageprod.url }}
     user: {{ openconextaccess.manageprod.user }}
-    password: {{ openconextaccess.managetest.secret }}
+    password: {{ openconextaccess.managetest.password }}
     defaultState: testaccepted
   # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
   # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
