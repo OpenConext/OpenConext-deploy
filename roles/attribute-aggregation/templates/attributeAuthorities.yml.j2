@@ -1,30 +1,5 @@
 authorities:
   - {
-      id: "pseudo_email",
-      description: "Pseudo email provides a pseudo email address to be used by Service Providers. Mails sent to this pseudo email address will be delivered to the real email address",
-      endpoint: "",
-      user: "",
-      password: "",
-      timeOut: 1000,
-      attributes: [
-        {
-          name: "urn:mace:dir:attribute-def:mail",
-          description: "The pseudo email address of the user.",
-          type: "string",
-          example: "8d6a9e55-8824-4cf5-b2eb-f877f11f4e5f@surfconext.nl"
-        }
-      ],
-      requiredInputAttributes: [
-        {
-        name: "urn:mace:dir:attribute-def:mail",
-        },
-        {
-        name: "SPentityID"
-        }
-      ],
-      validationRegExp: "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$"
-    }
-  - {
       id: "orcid",
       description: "ORCID provides a persistent digital identifier that distinguishes you from every other researcher and, through integration in key research workflows such as manuscript and grant submission, supports automated linkages between you and your professional activities ensuring that your work is recognized",
       endpoint: "",
@@ -45,28 +20,6 @@ authorities:
         }
       ],
       validationRegExp: "^(https?://orcid\\.org/|)([0-9]{4}-){3}[0-9]{3}[0-9X]$"
-    }
-  - {
-      id: "sab",
-      description: "SURF Autorisatie Beheer",
-      endpoint: "{{ aa.sab_endpoint }}",
-      user: "{{ aa.sab_username }}",
-      password: "{{ aa.sab_password }}",
-      timeOut: 1000,
-      attributes: [
-        {
-          name: "urn:mace:dir:attribute-def:eduPersonEntitlement",
-          description: "URI (either URN or URL) that indicates a set of rights to specific resources.",
-          type: "string",
-          example: "urn:mace:surfnet.nl:surfnet.nl:sab:role:Instellingsbevoegde"
-        }
-      ],
-      requiredInputAttributes: [
-        {
-        name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-        }
-      ],
-      validationRegExp: "^urn:mace:surfnet.nl:(surfnet\\.nl|surf\\.nl):sab:(role|organizationCode|organizationGUID|mobile):[A-Z0-9_+-]+$"
     }
   - {
       id: "voot",

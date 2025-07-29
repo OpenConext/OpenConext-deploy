@@ -195,9 +195,6 @@ pdp:
   cache_policies: false
   cache_policies_period: 10
   include_inactive_policies: true
-  sab_username: coin-test
-  sab_password: "{{ pdp_sab_password }}"
-  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
 
 aa:
   eb_username: "eb"
@@ -217,11 +214,9 @@ aa:
   access_token_uri: "https://sandbox.orcid.org/oauth/token"
   spring_profiles_active: acc
   sab_username: coin-test
-  sab_password: "{{ aa_sab_password }}"
-  sab_endpoint: https://sab-ng.surfnet.nl/simplesaml/module.php/attributes/server.php
   sab_rest_username: surfconexttest
   sab_rest_password: "{{ aa_sab_rest_password }}"
-  sab_rest_endpoint: https://sab-ng.surfnet.nl
+  sab_rest_endpoint: https://sab.acc.surfaccess.nl
   surfmarket_url: https://example.org
   surfmarket_username: example@example.org
   surfmarket_password: "{{ aa_surfmarket_password }}"
@@ -294,6 +289,8 @@ myconext:
   feature_create_eduid_institution_landing: true
   feature_allowlist: false
   feature_dry_run_email_cron: true
+  sms_api_url: "https://rest.spryngsms.com/v1/messages"
+  sms_api_route: "default"
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
   sp_entity_metadata_url: https://engine.{{ base_domain }}/authentication/sp/metadata
   oidcng_rs_client_id: myconext.rs.{{ base_domain }}

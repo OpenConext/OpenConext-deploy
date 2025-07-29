@@ -185,6 +185,11 @@ external-api-configuration:
       password: "{{ myconext_api_invite_password }}"
       scopes:
         - invite
+    -
+      username: internal
+      password: "{{ myconext_api_internal_password }}"
+      scopes:
+        - actuator
 
 oidc-token-api:
   token-url: https://connect.{{ base_domain }}/tokens
@@ -267,23 +272,25 @@ gui:
     background-color: {{ environment_ribbon_colour }}
     content: {{ environment_shortname }}
 
-# We disable all endpoints except health for the load-balancer and info for git information.
+# We disable all endpoints except health for the load-balancer and info for git information and prometheus.
 management:
   endpoints:
     web:
       exposure:
-        include: "health,info"
+        include: "health,info,prometheus"
       base-path: "/internal"
   endpoint:
     info:
       access: unrestricted
     health:
       access: unrestricted
-      show-details: never
+      show-details: when_authorized
+    prometheus:
+      access: read_only
     mappings:
       access: none
     metrics:
-      access: none
+      access: unrestricted
   info:
     git:
       mode: full

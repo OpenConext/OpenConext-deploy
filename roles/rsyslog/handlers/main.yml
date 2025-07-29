@@ -3,3 +3,11 @@
   service:
     name: rsyslog
     state: restarted
+
+- name: Restart journald
+  ansible.builtin.systemd_service:
+    name: systemd-journald
+    state: restarted
+
+- name: Reload systemd
+  ansible.builtin.command: "systemctl daemon-reload" # noqa command-instead-of-module
