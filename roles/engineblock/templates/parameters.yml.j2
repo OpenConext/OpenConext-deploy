@@ -195,6 +195,7 @@ parameters:
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: {{ engine_time_frame_for_authentication_loop_in_seconds | int }}
     maximum_authentication_procedures_allowed: {{ engine_maximum_authentication_procedures_allowed | int }}
+    maximum_authentications_per_session:  {{ engine_maximum_authentications_per_session | int }}
 
     ## Store attributes with their values, meaning that if an Idp suddenly
     ## sends a new value (like a new e-mail address) consent has to be

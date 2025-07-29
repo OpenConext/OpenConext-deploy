@@ -70,6 +70,7 @@ engine_http_client_timeout: 10
 # within a certain time frame in seconds, how many authentication procedures for the same SP are allowed
 engine_time_frame_for_authentication_loop_in_seconds: 60
 engine_maximum_authentication_procedures_allowed: 5
+engine_maximum_authentications_per_session: 30
 
 # This PCRE regex is used to blacklist incoming AuthnContextClassRef attributes on. If an empty string is used
 # the validation is skipped. The validator will throw an exception if the used regex is invalid.
