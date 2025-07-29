@@ -52,9 +52,9 @@ spring:
     show-sql: false
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://{{ openconextaccess.db_host }}/openconextaccess?autoReconnect=true
-    username: {{ openconextaccess.db_user }}
-    password: {{ openconextaccess.db_secret }}
+    url: jdbc:mariadb://{{ openconextaccess.db.host }}/openconextaccess?autoReconnect=true
+    username: {{ openconextaccess.db.user }}
+    password: {{ openconextaccess.db.secret }}
   flyway:
     locations: classpath:db/mysql/migration
     fail-on-missing-locations: true
@@ -69,26 +69,26 @@ oidcng:
   base-url: {{ openconextaccess_base_domain }}
 
 invite:
-  user: {{ openconextaccess.openconextaccess_invite_api_username }}
-  password: {{ openconextaccess.openconextaccess_invite_api_password }}
-  base-url: {{ openconextaccess.openconextaccess_invite_host }}
-  manage-identifier: {{ openconextaccess.openconextaccess_invite_manage_identifier }}
+  user: {{ openconextaccess.invite.api_username }}
+  password: {{ openconextaccess.invite.api_password }}
+  base-url: {{ openconextaccess.invite.host }}
+  manage-identifier: {{ openconextaccess.invite.manage_identifier }}
   manage-type: oidc10_rp
 
 jira:
   enabled: false
-  base-url: {{ openconextaccess.jira_base_url }}
-  user-name: {{ openconextaccess.jira_username }}
-  project-key: {{ openconextaccess.jira_project_key }}
-  environment: {{ openconextaccess.jira_environment }}
+  base-url: {{ openconextaccess.jira.base_url }}
+  user-name: {{ openconextaccess.jira.username }}
+  project-key: {{ openconextaccess.jira.project_key }}
+  environment: {{ openconextaccess.jira.environment }}
   api-key: secret
   # Timeout in milliseconds
   connection-timeout: 20
 
 
 config:
-  client-url: "http:test2.surfaccess.nl"
-  base-url: "test2.surfconext.nl"
+  client-url: "https://{{ openconextaccess_base_domain }}"
+  base-url: "{{ openconextaccess_base_domain }}"
   edu_id_schac_home_organization: "eduid.nl"
   discovery: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
 
@@ -102,51 +102,39 @@ institution-admin:
 
 gui:
   disclaimer:
-    background-color: red
+    background-color: {{ environment_ribbon_colour }}
     content: {{ environment_shortname }}
 
 feature:
   enable-performance-seed: False
 
 email:
-  from: "no-reply@surf.nl"
-  contactEmail: "access@surf.nl"
-  environment: "local"
+  from: "{{ noreply_email }}"
+  contactEmail: "{{ support_email }}"
+  environment: "{{ environment_shortname }}"
 
-# The manage section determines if an external Manage is used to integrate with, or that a predefined, static list
-# of applications is loaded to populate the application dropdown in the JS forms.
-# To disable the integration with an external Manage instance, set enabled to False. When enabled is False the url is
-# ignored then and the different manage entities are loaded from json files in `server/src/main/resources/manage`.
-# Each *.json file in this directory corresponds with the contents of that specific entity_type.
-# To test the provisioning (e.g. SCIM, EVA, Graphp) with real endpoints you can set the manage.local property below to
-# True and then the provisioning.local.json file is used which is not in git as it is in .gitignore. You can safely
-# configure real users / passwords and test against those. See server/src/main/java/access/manage/ManageConf.java
-# and server/src/main/java/access/manage/LocalManage.java to see how it works.
 manage:
-#  enabled: True
   enabled: True
   test:
-    url: "https://manage.test2.surfconext.nl"
-  #  url: "http://localhost:8081"
-    user: openconextaccess
-    password: secret
+    url: {{ openconextaccess.managetest.url }}
+    user: {{ openconextaccess.managetest.user }}
+    password: {{ openconextaccess.managetest.secret }}
     defaultState: prodaccepted
   prod:
-    url: "https://manage.test2.surfconext.nl"
-    #  url: "http://localhost:8081"
-    user: access
-    password: secret
+    url: {{ openconextaccess.manageprod.url }}
+    user: {{ openconextaccess.manageprod.user }}
+    password: {{ openconextaccess.managetest.secret }}
     defaultState: testaccepted
   # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
   # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
   staticManageDirectory: classpath:/manage
-#  staticManageDirectory: file:///usr/local/etc/manage
+  #  staticManageDirectory: file:///usr/local/etc/manage
 
 s3storage:
-  url: {{ openconextaccess.s3_storage_url }}
-  key: {{ openconextaccess.s3_storage_key }}
-  secret: {{ openconextaccess.s3_storage_secret }}
-  bucket: {{ openconextaccess.s3_storage_bucket }}
+  url: {{ openconextaccess.s3_storage.url }}
+  key: {{ openconextaccess.s3_storage.key }}
+  secret: {{ openconextaccess.s3_storage.secret }}
+  bucket: {{ openconextaccess.s3_storage.bucket }}
 
 management:
   health:
