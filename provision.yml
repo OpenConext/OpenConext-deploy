@@ -8,12 +8,17 @@
       tags:
        - always
 
-- hosts: base
+- hosts: rsyslog
   gather_facts: yes
   become: true
   roles:
     - role: rsyslog
       tags: ['core', 'base', 'rsyslog']
+
+- hosts: base
+  gather_facts: yes
+  become: true
+  roles:
     - role: iptables
       when:
         - iptables_enable | bool
