@@ -68,8 +68,8 @@
 
     - name: Create a symbolic link to /run/systemd/journal/dev-log
       ansible.builtin.file:
-        src: /dev/log
-        dest: /run/systemd/journal/dev-log
+        src: /run/systemd/journal/dev-log
+        dest: /dev/log
         owner: root
         group: root
         state: link
