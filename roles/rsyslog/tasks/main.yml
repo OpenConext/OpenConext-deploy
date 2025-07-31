@@ -69,11 +69,16 @@
     - name: Remove /dev/log if it exists and is not a symlink
       ansible.builtin.stat:
         path: /dev/log
-      register: statresult
+      register: devlog_statresult
 
     - name: Show stat
       ansible.builtin.debug:
-        msg: "{{ statresult }}"
+        msg: "{{ devlog_statresult }}"
+
+    - name: Remove /dev/log file
+      ansible.builtin.file:
+        path: /dev/log
+      when: devlog_statresult.exists and not devlog_statresult.islnk
 
     - name: Create a symbolic link to /run/systemd/journal/dev-log
       ansible.builtin.file:
