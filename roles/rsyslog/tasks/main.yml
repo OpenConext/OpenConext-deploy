@@ -74,6 +74,7 @@
     - name: Show stat
       ansible.builtin.debug:
         msg: "{{ devlog_statresult }}"
+      when: devlog_statresult.stat.exists and not devlog_statresult.stat.islnk
 
     - name: Remove /dev/log file
       ansible.builtin.file:
@@ -87,6 +88,7 @@
         owner: root
         group: root
         state: link
+      ignore_errors: '{{ ansible_check_mode }}'
       notify:
         - "restart rsyslog"
         - "Restart journald"
