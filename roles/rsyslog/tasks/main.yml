@@ -66,13 +66,13 @@
     # https://github.com/rsyslog/rsyslog-doc/issues/397
     # https://unix.stackexchange.com/questions/317064/how-do-i-restore-dev-log-in-systemdrsyslog-host
 
-    - name: Remove /de/vlog if it exists and is not a symlink
+    - name: Remove /dev/log if it exists and is not a symlink
       ansible.builtin.file:
         path: /dev/log
         state: absent
       when: >
-        ansible_facts['files']['/path/to/target/link'] is defined and
-        ansible_facts['files']['/path/to/target/link'].islnk is not defined
+        ansible_facts['files']['/dev/log'] is defined and
+        ansible_facts['files']['/dev/log'].islnk is not defined
 
     - name: Create a symbolic link to /run/systemd/journal/dev-log
       ansible.builtin.file:
