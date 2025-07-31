@@ -73,6 +73,9 @@
         owner: root
         group: root
         state: link
+      notify:
+        - "restart rsyslog"
+        - "Restart journald"
 
     # rsyslog certificates for relp
     - name: Create the pki directory if it does not exist
