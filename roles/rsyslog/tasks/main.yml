@@ -78,7 +78,7 @@
     - name: Remove /dev/log file
       ansible.builtin.file:
         path: /dev/log
-      when: devlog_statresult.exists and not devlog_statresult.islnk
+      when: devlog_statresult.stat.exists and not devlog_statresult.stat.islnk
 
     - name: Create a symbolic link to /run/systemd/journal/dev-log
       ansible.builtin.file:
