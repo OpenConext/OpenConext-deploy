@@ -54,6 +54,26 @@
         group: root
         mode: "0700"
 
+    # Lets make a link from /dev/log to /run/systemd/journal/dev-log
+    # For some reason, sometimes the link exists, sometimes /dev/log is a socket, sometimes /dev/log is missing
+    # Rsyslog creates and deletes the /dev/log socket depending on imuxsock settings, journald wants to create the symlink
+    # and sometimes they get in each others way
+    # option syssock.name =  /run/systemd/journal/dev-log results in a missing /dev/log and although logging seems
+    # to keep working, the logger command complains
+    # Creating the link if it is not there seems to be the best option
+    # More info:
+    # https://askubuntu.com/questions/861227/dev-log-is-missing-how-do-i-fix
+    # https://github.com/rsyslog/rsyslog-doc/issues/397
+    # https://unix.stackexchange.com/questions/317064/how-do-i-restore-dev-log-in-systemdrsyslog-host
+
+    - name: Create a symbolic link to /run/systemd/journal/dev-log
+      ansible.builtin.file:
+        src: /dev/log
+        dest: /run/systemd/journal/dev-log
+        owner: root
+        group: root
+        state: link
+
     # rsyslog certificates for relp
     - name: Create the pki directory if it does not exist
       ansible.builtin.file:
