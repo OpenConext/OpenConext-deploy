@@ -27,22 +27,10 @@
       notify:
         - "Restart journald"
 
-    # Ensure socket creation and linking
-    - name: Create the rsyslog service dropin directory if it does not exist
+    - name: Remove logging dropin
       ansible.builtin.file:
-        path: "{{ rsyslog_service_dropindir }}"
-        state: directory
-        owner: root
-        group: root
-        mode: "0755"
-
-    - name: Put logging dropin
-      ansible.builtin.template:
-        dest: "{{ rsyslog_service_dropindir }}/logging.conf"
-        src: logging.conf.j2
-        owner: root
-        group: root
-        mode: "0644"
+        path: "{{ rsyslog_service_dropindir }}/logging.conf"
+        state: absent
       notify: "Reload systemd"
 
     # Since we specify queue.spoolDirectory, lets make sure it exists
