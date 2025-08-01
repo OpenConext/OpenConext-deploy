@@ -14,7 +14,6 @@
     enabled: true
 
 - name: Forwarding journalctl to rsyslog forward syslog to central logserver
-  # forwarding journalctl to rsyslog https://access.redhat.com/articles/4058681
   when: "'sysloghost' not in group_names"
   block:
 
