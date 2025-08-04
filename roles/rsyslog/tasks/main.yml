@@ -30,7 +30,7 @@
       ansible.builtin.file:
         path: "{{ rsyslog_service_dropindir }}/logging.conf"
         state: absent
-      notify: "Reload systemd"
+      notify: "Restart journald"
 
     # Since we specify queue.spoolDirectory, lets make sure it exists
     - name: Create queue dir
