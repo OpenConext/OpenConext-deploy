@@ -1,7 +1,8 @@
 # This rsyslog configuration takes logs from journald and forwards them to a remote log serverad="imuxsock") # provides support for local system logging
 module(load="imuxsock" SysSock.Use="on")
 module(load="imklog")   # provides kernel logging support
-module(load="immark" interval="600" )  # provides --MARK-- message capability
+module(load="immark" interval="300" )  # provides --MARK-- message capability
+module(load="omrelp")
 
 $PreserveFQDN on
 
@@ -10,7 +11,6 @@ $PreserveFQDN on
 {% if  'sysloghost' not in group_names %}
 {% for relp_host in relp_remote %}
 # Logs are forwarded to {{ relp_host.name }}
-module(load="omrelp")
 action(type="omrelp"
 target="{{ relp_host.host }}"
 port="{{ relp_host.port }}"
@@ -30,4 +30,3 @@ action.resumeInterval="5"
 action.writeAllMarkMessages="on")
 {% endfor %}
 {% endif %}
-
