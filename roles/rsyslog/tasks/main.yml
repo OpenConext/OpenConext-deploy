@@ -95,7 +95,7 @@
       community.general.seport:
         ports: "{{ rsyslog_remote_relp_port }}"
         proto: tcp
-        setype: rsyslog_tls_port_t
+        setype: syslog_tls_port_t
         state: present
       when: ansible_selinux.mode is defined and ansible_selinux.mode  == "enforcing"
 
