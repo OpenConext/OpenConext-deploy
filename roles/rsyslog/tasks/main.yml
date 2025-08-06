@@ -93,7 +93,7 @@
 # but seems to work
 - name: Allow extra port rsyslog_tls_port_t
   community.general.seport:
-    ports: {{ rsyslog_remote_relp_port }}
+    ports: "{{ rsyslog_remote_relp_port }}"
     proto: tcp
     setype: rsyslog_tls_port_t
     state: present
