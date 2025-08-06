@@ -89,6 +89,16 @@
       notify:
         - "restart rsyslog"
 
+    # Not sure why this is necessary on the forwarding server
+    # but seems to work
+    - name: Allow extra port rsyslog_tls_port_t
+      community.general.seport:
+        ports: "{{ rsyslog_remote_relp_port }}"
+        proto: tcp
+        setype: syslog_tls_port_t
+        state: present
+      when: ansible_selinux.mode is defined and ansible_selinux.mode  == "enforcing"
+
 # central logserver
 
 - name: Include tasks for central syslog server
