@@ -97,7 +97,7 @@
         proto: tcp
         setype: rsyslog_tls_port_t
         state: present
-      when: ansible_selinux.mode  == "enforcing"
+      when: ansible_selinux.mode is defined and ansible_selinux.mode  == "enforcing"
 
 # central logserver
 
