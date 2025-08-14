@@ -32,7 +32,7 @@
 - name: Create and start the servercontainer
   community.docker.docker_container:
     name: statsserver
-    image: ghcr.io/openconext/openconext-stats/stats-server:{{ stats_server_version }}
+    image: ghcr.io/openconext/openconext-stats/stats-server:{{ stats_version }}
     pull: true
     restart_policy: "always"
     state: started
@@ -50,7 +50,7 @@
 - name: Create and start the guicontainer
   community.docker.docker_container:
     name: statsgui
-    image: ghcr.io/openconext/openconext-stats/stats-gui:{{ stats_server_version }}
+    image: ghcr.io/openconext/openconext-stats/stats-gui:{{ stats_version }}
     pull: true
     restart_policy: "always"
     state: started
