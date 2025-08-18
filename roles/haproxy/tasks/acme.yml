@@ -51,5 +51,6 @@
           --eab-hmac-key "{{ haproxy_acme_eab_hmac_key }}"
           --server "{{ haproxy_acme_server }}"
     creates: "{{ haproxy_acme_ca_dir }}/account.json"
+  register: "acme_account"
   become: true
   become_user: "acme"

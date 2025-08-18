@@ -5,7 +5,7 @@ logging:
     org.springframework.web: WARN
     org.springframework.security: WARN
     com.zaxxer.hikari: ERROR
-    access: DEBUG
+    invite: DEBUG
 
 server:
   port: 8080
@@ -145,6 +145,11 @@ external-api-configuration:
       password: "{{ invite.lifecycle_secret }}"
       scopes:
         - lifecycle
+    -
+      username: internal
+      password: "{{ invite.internal_secret }}"
+      scopes:
+        - actuator
     -
       username: {{ invite.profile_user }}
       password: "{{ invite.profile_secret }}"

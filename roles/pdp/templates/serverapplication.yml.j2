@@ -1,0 +1,128 @@
+spring:
+  flyway:
+    enabled: {{ pdp_spring_flyway_enabled }}
+    table: schema_version
+    validate-on-migrate: 'false'
+  mail:
+    host: {{ smtp_server }}
+    port: 25
+  profiles:
+    active: {{ pdp.spring_profiles_active }}
+  datasource:
+    password: {{ pdp.db_password }}
+    url: jdbc:mariadb://{{ pdp.db_host }}/{{ pdp.db_name }}?socketTimeout=30000
+    driverClassName: org.mariadb.jdbc.Driver
+    username: {{ pdp.db_user }}
+  mvc:
+    dispatch-options-request: 'true'
+  security:
+    oauth2:
+      client:
+        registration:
+          voot:
+            client-id: {{ pdp_oauth2_clientid }}
+            client-secret: {{ pdp_client_secret }}
+            authorization-grant-type: client_credentials
+            scope: {{ pdp_manage_provision_oidcrp_scopes }}
+        provider:
+          voot:
+            token-uri: {{ pdp_oauth2_token_url }}
+invalid:
+  policies:
+    email:
+      to: {{ pdp_invalid_policies_error_mail_to }}
+xacml:
+  properties:
+    path: file:///xacml.conext.properties
+email:
+  base_url: https://pdp.{{ base_domain }}/conflicts
+  to: {{ error_mail_to }}
+  from: {{ pdp_email_from }}
+voot:
+  serviceUrl: https://voot.{{ base_domain }}
+sab:
+  password: {{ aa.sab_rest_password }}
+  userName: {{ aa.sab_rest_username }}
+  endpoint: {{ aa.sab_rest_endpoint }}
+policies:
+  cachePolicies: {{ pdp.cache_policies }}
+manage:
+  pushTestMode: {{ pdp_manage_push_testmode }}
+  username: pdp
+  password: {{ manage_pdp_secret }}
+  manageBaseUrl: https://manage.{{ base_domain }}
+policy:
+  enforcement:
+    point:
+      user:
+        password: {{ pdp.password }}
+        name: {{ pdp.username }}
+  include:
+    aggregated:
+      attributes: 'true'
+  base:
+    dir: file:///xacml-policies
+  violation:
+    retention:
+      period:
+        days: '30'
+session-timeout: '28800'
+# Log configuration
+logging:
+  config: "file:///logback.xml"
+endpoints:
+  health:
+    sensitive: 'false'
+    enabled: 'true'
+  enabled: 'false'
+  info:
+    enabled: 'true'
+pdpCronJobResponsible: {{ pdp_cronjobmaster }}
+server:
+  error:
+    path: /error
+  port: '8080'
+  servlet:
+    context-path:
+performance:
+  pre:
+    policy:
+      loader:
+        count: '0'
+period:
+  policies:
+    refresh:
+      minutes: '1'
+loa:
+  levels: {{ stepup_loa_values_supported | join(",") }}
+provision:
+  policies:
+    directory: provision-policies
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus"
+      base-path: "/internal"
+  endpoint:
+    info:
+      access: unrestricted
+    health:
+      access: unrestricted
+      show-details: when_authorized
+    prometheus:
+      access: unrestricted
+      show-details: always
+    mappings:
+      access: none
+    metrics:
+      access: unrestricted
+  info:
+    git:
+      mode: full
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"

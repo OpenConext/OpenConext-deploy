@@ -8,14 +8,17 @@
       tags:
        - always
 
+- hosts: rsyslog
+  gather_facts: yes
+  become: true
+  roles:
+    - role: rsyslog
+      tags: ['core', 'base', 'rsyslog']
+
 - hosts: base
   gather_facts: yes
   become: true
   roles:
-    - role: common
-      tags: ['core', 'base', 'common']
-    - role: rsyslog
-      tags: ['core', 'base', 'rsyslog']
     - role: iptables
       when:
         - iptables_enable | bool
@@ -43,6 +46,7 @@
 - hosts: db_mysql
   gather_facts: no
   become: true
+  serial: 1
   roles:
     - role: mysql
       when:
@@ -120,6 +124,7 @@
     - { role: profile,      tags: ["profile"] }
     - { role: lifecycle,      tags: ["lifecycle"] }
     - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
+    - { role: openaccess, tags: ['openaccess' ] }
 
 - hosts: docker_apps2
   become: true

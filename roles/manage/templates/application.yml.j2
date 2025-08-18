@@ -27,6 +27,9 @@ server:
 
 features: {{ manage.features }}
 
+feature_toggles:
+    allow_secret_public_rp: True
+
 push:
   eb:
     url: https://{{ engine_api_domain }}/api/connections
