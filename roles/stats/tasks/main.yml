@@ -29,9 +29,9 @@
 
 - name: Create the directory the keep configfiles
   ansible.builtin.file:
-    dest: /opt/openconext/stats
-    state: directory
-    owner: root
+    dest: "/opt/openconext/stats"
+    state: "directory"
+    owner: "root"
     group: "{{  stats_group }}"
     mode: "0750"
 
@@ -39,11 +39,11 @@
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/stats/{{ item }}"
-    owner: root
+    owner: "root"
     group: "{{ stats_group }}"
     mode: "0640"
   with_items:
-    - config.yml
+    - "config.yml"
   notify: "restart statsserver"
 
 - name: Install gui configfiles
@@ -54,37 +54,42 @@
     group: "{{ stats_group }}"
     mode: "0640"
   with_items:
-    - stats.conf
+    - "stats.conf"
   notify: "restart statsgui"
 
-- name: Create and start the servercontainer
+
+#######################################
+## Create containers
+#######################################
+
+- name: "Create and start the servercontainer"
   community.docker.docker_container:
-    name: statsserver
-    image: ghcr.io/openconext/openconext-stats/stats-server:{{ stats_version }}
+    name: "statsserver"
+    image: "ghcr.io/openconext/openconext-stats/stats-server:{{ stats_version }}"
     pull: true
     restart_policy: "always"
-    state: started
+    state: "started"
     env:
       RUNAS_UID: "{{ stats_uid.uid }}"
       RUNAS_GID: "{{ stats_gid.gid }}"
     networks:
       - name: "loadbalancer"
     mounts:
-      - source: /opt/openconext/stats/config.yml
-        target: /app/server/config/config.yml
-        type: bind
-      - source: /dev/log
-        target: /dev/log
-        type: bind
-  register: statsservercontainer
+      - source: "/opt/openconext/stats/config.yml"
+        target: "/app/server/config/config.yml"
+        type: "bind"
+      - source: "/dev/log"
+        target: "/dev/log"
+        type: "bind"
+  register: "statsservercontainer"
 
-- name: Create and start the guicontainer
+- name: "Create and start the guicontainer"
   community.docker.docker_container:
-    name: statsgui
-    image: ghcr.io/openconext/openconext-stats/stats-gui:{{ stats_version }}
+    name: "statsgui"
+    image: "ghcr.io/openconext/openconext-stats/stats-gui:{{ stats_version }}"
     pull: true
     restart_policy: "always"
-    state: started
+    state: "started"
     env:
       APACHE_UID: "#{{ stats_uid.uid }}"
       APACHE_GUID: "#{{ stats_gid.gid }}"
@@ -95,6 +100,6 @@
     networks:
       - name: "loadbalancer"
     mounts:
-      - source: /opt/openconext/stats/stats.conf
-        target: /etc/apache2/sites-enabled/000-default.conf
-        type: bind
+      - source: "/opt/openconext/stats/stats.conf"
+        target: "/etc/apache2/sites-enabled/000-default.conf"
+        type: "bind"
