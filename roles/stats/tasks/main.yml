@@ -1,19 +1,47 @@
 ---
+
+
+#######################################
+## Create user
+#######################################
+
+- name: "Create Stats group"
+  group:
+    name: "{{ stats_group }}"
+    state: "present"
+  register: "stats_gid"
+
+- name: "Create Stats user"
+  user:
+    name: "{{ stats_user }}"
+    group: "{{ stats_group }}"
+    comment: "User to run OpenConext Stats service"
+    shell: "/bin/false"
+    password: "!"
+    home: "/opt/openconext/stats"
+    create_home: false
+    state: "present"
+  register: "stats_uid"
+
+#######################################
+## Create dirs and files
+#######################################
+
 - name: Create the directory the keep configfiles
   ansible.builtin.file:
     dest: /opt/openconext/stats
     state: directory
     owner: root
-    group: root
-    mode: "0770"
+    group: "{{  stats_group }}"
+    mode: "0750"
 
 - name: Install server configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/stats/{{ item }}"
     owner: root
-    group: root
-    mode: "0644"
+    group: "{{ stats_group }}"
+    mode: "0640"
   with_items:
     - config.yml
   notify: "restart statsserver"
@@ -23,8 +51,8 @@
     src: "{{ item }}.j2"
     dest: "/opt/openconext/stats/{{ item }}"
     owner: root
-    group: root
-    mode: "0644"
+    group: "{{ stats_group }}"
+    mode: "0640"
   with_items:
     - stats.conf
   notify: "restart statsgui"
@@ -36,6 +64,9 @@
     pull: true
     restart_policy: "always"
     state: started
+    env:
+      RUNAS_UID: "{{ stats_uid.uid }}"
+      RUNAS_GID: "{{ stats_gid.gid }}"
     networks:
       - name: "loadbalancer"
     mounts:
@@ -54,6 +85,9 @@
     pull: true
     restart_policy: "always"
     state: started
+    env:
+      APACHE_UID: "#{{ stats_uid.uid }}"
+      APACHE_GUID: "#{{ stats_gid.gid }}"
     labels:
       traefik.http.routers.statsgui.rule: "Host(`{{ stats_domain }}`)"
       traefik.http.routers.statsgui.tls: "true"
