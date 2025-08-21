@@ -37,8 +37,8 @@ httpd_csp:
   strict: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; manifest-src 'self'"
   strict_with_static_img: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; manifest-src 'self'"
   lenient_with_static_img_for_idp: "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self' https://*.{{ base_domain }}; frame-ancestors 'none'; base-uri 'none'"
-  lenient_with_static_img_for_idp_frcapi: "default-src 'none'; frame-src https://global.frcapi.com/; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self' https://*.{{ base_domain }}; frame-ancestors 'none'; base-uri 'none';"
-  nothing: "default-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'"
+  lenient_with_static_img_for_idp_frcapi: "default-src 'none'; frame-src https://global.frcapi.com/; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self' https://*.{{ base_domain }}; frame-ancestors 'none'; base-uri 'none'"
+  nothing: "default-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'"
 
 error_subject_prefix: "[{{ ansible_hostname }}] "
 
