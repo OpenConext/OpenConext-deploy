@@ -41,6 +41,7 @@ $template apache-spdashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.na
 $template inviteclient-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/invite//inviteclient.log"
 $template invitewelcome-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/invite//invitewelcome.log"
 $template inviteserver-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/invite//inviteserver.log"
+$template invitejson-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite/invitejson.log"
 $template inviteprovisioningmock-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/invite//inviteprovisioningmock.log"
 $template loadbalancer-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/traefik/traefik.log"
 {% for stepupapp in stepupapps %}

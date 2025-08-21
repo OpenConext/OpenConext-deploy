@@ -1,0 +1,42 @@
+#jinja2:lstrip_blocks: True
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+ <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+  <encoder>
+     <pattern>%d{ISO8601} %5p [%t] %logger{40}:%L - %m%n</pattern>
+   </encoder>
+ </appender>
+
+ <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+   <destination>host.docker.internal:514</destination>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        <customFields>{"app":"invite"}</customFields>
+        <includeCallerData>true</includeCallerData>
+        <fieldNames>
+            <thread>[ignore]</thread>
+            <version>[ignore]</version>
+            <levelValue>[ignore]</levelValue>
+       </fieldNames>
+       <prefix class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+         <layout class="ch.qos.logback.classic.PatternLayout">
+           <pattern>invitejson: </pattern>
+         </layout>
+</prefix>
+     </encoder>
+  </appender>
+
+ <logger name="invite" level="DEBUG" />
+ <logger name="org.springframework.security" level="WARN" />
+ <logger name="org.springframework" level="WARN" />
+ <logger name="org.springframework.security" level="WARN" />
+ <logger name="com.zaxxer.hikari" level="ERROR" />
+
+ <root level="WARN">
+   <appender-ref ref="STDOUT" />
+ {% if invite_logback_json | bool %}
+    <appender-ref ref="JSON_SYSLOG" />
+ {%endif%}
+ </root>
+
+</configuration>

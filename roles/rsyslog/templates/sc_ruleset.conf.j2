@@ -39,6 +39,7 @@ if $programname == "profile" and $msg startswith " {" then { action(type="omfile
 :programname, startswith, "inviteclient" { action(type="omfile" DynaFile="inviteclient-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, startswith, "invitewelcome" { action(type="omfile" DynaFile="invitewelcome-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, startswith, "inviteserver" { action(type="omfile" DynaFile="inviteserver-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "invitejson" { action(type="omfile" DynaFile="invitejson-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, startswith, "inviteprovisioningmock" { action(type="omfile" DynaFile="inviteprovisioningmock-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, startswith, "loadbalancer" { action(type="omfile" DynaFile="loadbalancer-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 

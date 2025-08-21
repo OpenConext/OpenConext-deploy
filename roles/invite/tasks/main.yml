@@ -16,6 +16,7 @@
     mode: "0644"
   with_items:
     - serverapplication.yml
+    - logback.xml
   notify: restart inviteserver
 
 - name: Copy private key for manage secrets encryption
@@ -68,6 +69,9 @@
     mounts:
       - source: /opt/openconext/invite/serverapplication.yml
         target: /application.yml
+        type: bind
+      - source: /opt/openconext/invite/logback.xml
+        target: /logback.yml
         type: bind
       - source: /opt/openconext/invite/private_key_pkcs8.pem
         target: /private_key_pkcs8.pem
