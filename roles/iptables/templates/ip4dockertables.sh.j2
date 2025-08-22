@@ -81,9 +81,7 @@ done
 # We open port 25 on docker hosts to allow containers to send emails to the docker host itself
 {% if 'docker' in group_names %}
 /sbin/iptables -t filter -A INPUT -p tcp -d {{ ansible_docker0.ipv4.address }} -m multiport --dports 25 -j ACCEPT
-{% endif %}
 # We open port 514 on docker hosts to allow containers to send syslog messages to the docker host itself
-{% if 'docker' in group_names %}
 /sbin/iptables -t filter -A INPUT -p tcp -d {{ ansible_docker0.ipv4.address }} -m multiport --dports 514 -j ACCEPT
 {% endif %}
 
