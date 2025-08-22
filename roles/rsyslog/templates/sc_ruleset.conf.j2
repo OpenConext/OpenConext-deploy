@@ -36,6 +36,7 @@ if $programname == "profile" and $msg startswith " {" then { action(type="omfile
 :programname, isequal, "myconextjson" { action(type="omfile" DynaFile="myconextjson-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "myconextgui" { action(type="omfile" DynaFile="apache-myconext-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "accountgui" { action(type="omfile" DynaFile="apache-account-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "servicedeskgui" { action(type="omfile" DynaFile="apache-servicedesk-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, startswith, "inviteclient" { action(type="omfile" DynaFile="inviteclient-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, startswith, "invitewelcome" { action(type="omfile" DynaFile="invitewelcome-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, startswith, "inviteserver" { action(type="omfile" DynaFile="inviteserver-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }

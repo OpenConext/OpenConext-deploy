@@ -1,8 +1,15 @@
 # This rsyslog configuration takes logs from journald and forwards them to a remote log serverad="imuxsock") # provides support for local system logging
+{% if 'docker' in group_names %}
+module(load="imptcp")
+input(type="imptcp" port="514")
+{% endif %}
 module(load="imuxsock" SysSock.Use="on")
 module(load="imklog")   # provides kernel logging support
 module(load="immark" interval="300" )  # provides --MARK-- message capability
 module(load="omrelp")
+
+template(name="CustomRelpFormat" type="string"
+  string="<%PRI%>%TIMESTAMP% {{ ansible_fqdn }} %syslogtag%%msg%\n")
 
 $PreserveFQDN on
 
@@ -27,6 +34,7 @@ queue.maxdiskspace="1G"
 queue.saveonshutdown="on"
 action.resumeRetryCount="-1"
 action.resumeInterval="5"
-action.writeAllMarkMessages="on")
+action.writeAllMarkMessages="on"
+template="CustomRelpFormat")
 {% endfor %}
 {% endif %}

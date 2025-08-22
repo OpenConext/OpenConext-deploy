@@ -1,4 +1,5 @@
 ---
 myconext_cronjobmaster: true
+myconext_logback_json: true
 myconext_docker_networks:
   - name: loadbalancer
