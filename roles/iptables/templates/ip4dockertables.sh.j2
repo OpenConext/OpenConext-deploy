@@ -75,12 +75,14 @@ done
 /sbin/iptables -t filter -P INPUT DROP
 /sbin/iptables -t filter -F INPUT
 /sbin/iptables -t filter -A INPUT -i lo -j ACCEPT
-# Add your non docker rules here 
+# Add your non docker rules here
 
-/sbin/iptables -t filter -A INPUT -p icmp -j ACCEPT 
+/sbin/iptables -t filter -A INPUT -p icmp -j ACCEPT
 # We open port 25 on docker hosts to allow containers to send emails to the docker host itself
 {% if 'docker' in group_names %}
 /sbin/iptables -t filter -A INPUT -p tcp -d {{ ansible_docker0.ipv4.address }} -m multiport --dports 25 -j ACCEPT
+# We open port 514 on docker hosts to allow containers to send syslog messages to the docker host itself
+/sbin/iptables -t filter -A INPUT -p tcp -d {{ ansible_docker0.ipv4.address }} -m multiport --dports 514 -j ACCEPT
 {% endif %}
 
 {% if iptables_incoming is defined %}
