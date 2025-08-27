@@ -68,7 +68,7 @@
     login_user: root
     login_host: localhost
     login_password: "{{ mariadb_root_password }}"
-  #  no_log: true
+  no_log: true
   with_nested:
     - "{{ databases.users }}"
     - "{{ database_clients }}"
@@ -82,7 +82,7 @@
     login_host: localhost
     priv: "*.*:SELECT,RELOAD,PROCESS,LOCK TABLES,BINLOG MONITOR,CONNECTION ADMIN,SHOW VIEW"
     state: present
-  #  no_log: true
+  no_log: true
 
 - name: Create the backup directory
   ansible.builtin.file:
