@@ -6,3 +6,6 @@ stats_base_domain: stats.{{ base_domain }}
 stats_oidc_metadata_url: "https://connect.{{ base_domain }}/.well-known/openid-configuration"
 stats_oidc_client_id: "stats.{{ base_domain }}"
 stats_domain: "stats.{{ base_domain }}"
+
+stats_user: "oc_stats"
+stats_group: "oc_stats"
