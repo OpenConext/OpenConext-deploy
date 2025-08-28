@@ -283,6 +283,7 @@ myconext:
   feature_mail_inactivity_mails: true
   feature_nudge_app_mail: true
   feature_service_desk_active: true
+  feature_use_remote_creation_for_affiliation: true
   feature_send_js_exceptions: true
   feature_deny_disposable_email_providers: true
   feature_create_eduid_institution_enabled: true
