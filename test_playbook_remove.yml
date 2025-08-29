@@ -1,0 +1,10 @@
+---
+- name: temporary test playbook
+  hosts: localhost
+  become: true
+  become_method: sudo
+
+  tasks:
+  - name: debug 
+    ansible.builtin.debug: 
+      var: sponsor_name
