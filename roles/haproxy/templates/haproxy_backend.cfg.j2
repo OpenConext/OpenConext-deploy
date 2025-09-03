@@ -21,7 +21,7 @@
 #---------------------------------------------------------------------
 #
   backend {{ application.name }}_be
-  option httpchk {{ application.ha_method }} {{ application.ha_url }} 
+  option httpchk {{ application.ha_method }} {{ application.ha_url }}
   http-check send ver HTTP/1.1 hdr Host  {{ application.vhost_name }}
 
   {%if application.x_forwarded_port is defined %}
@@ -35,8 +35,8 @@
   cookie HTTPSERVERID insert nocache indirect httponly secure maxidle {{ haproxy_cookie_max_idle }}
 
   {% for server in application.servers %}
-  server {{ server.label }} {{ server.ip }}:{% if server.port is defined %}{{ server.port }}{% else %}{{ application.port }}{% endif %} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}{% endif %} weight 100
-    
+  server {{ server.label }} {{ server.ip }}:{% if server.port is defined %}{{ server.port }}{% else %}{{ application.port }}{% endif %} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}{% endif %} weight 50
+
   {% endfor %}
 
 {% endfor %}
@@ -48,7 +48,7 @@
 #---------------------------------------------------------------------
 #
   backend {{ application.name }}_staging_be
-  option httpchk {{ application.ha_method }} {{ application.ha_url }} 
+  option httpchk {{ application.ha_method }} {{ application.ha_url }}
   http-check send ver HTTP/1.1 hdr Host  {{ application.vhost_name }}
 
   {%if application.x_forwarded_port is defined %}
@@ -62,8 +62,8 @@
   cookie HTTPSERVERIDSTAGING insert nocache indirect httponly secure maxidle {{ haproxy_cookie_max_idle }}
 
   {% for server in application.stagingservers %}
-  server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}{% endif %} weight 100
-    
+  server {{ server.label }} {{ server.ip }}:{{ application.port }} cookie {{ server.label }} check inter 8000 fall 5 rise 2 maxconn {{ application.maxconn | default('35') }} {% if application.sslbackend is defined%} ssl verify required verifyhost {{ application.backend_vhost_name }} ca-file {{ application.backend_ca_file }}{% endif %} weight 50
+
   {% endfor %}
 {% endif %}
 {% endfor %}
