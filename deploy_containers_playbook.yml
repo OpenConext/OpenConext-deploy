@@ -104,6 +104,12 @@
   roles:
     - { role: profile, tags: ['profile'] }
 
+- name: Deploy spdashboard app
+  hosts: docker_spdashboard
+  become: true
+  roles:
+    - { role: spdashboard, tags: ['spdashboard'] }
+
 - name: Deploy stats app
   hosts: docker_stats
   become: true
