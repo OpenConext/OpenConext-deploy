@@ -128,7 +128,8 @@
     name: myconextserver
     image: ghcr.io/openconext/openconext-myconext/myconext-server:{{ myconext_server_version }}
     pull: true
-    restart_policy: "always"
+    restart_policy: "on-failure"
+    restart_retries: 3
     state: started
     env:
       USE_SYSTEM_CA_CERTS: "1"
