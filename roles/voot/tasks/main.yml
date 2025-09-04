@@ -27,7 +27,8 @@
       TZ: "{{ timezone }}"
     image: ghcr.io/openconext/openconext-voot/voot:{{ voot_version }}
     pull: true
-    restart_policy: "always"
+    restart_policy: "{{ voot_server_restart_policy }}"
+    restart_retries: "{{ voot_server_restart_retries }}" # Only for restart policy on-failure
     state: started
     networks:
       - name: "loadbalancer"
