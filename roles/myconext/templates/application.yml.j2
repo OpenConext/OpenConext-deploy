@@ -242,7 +242,7 @@ geo_location:
   # Use either max_mind or mock
   service: max_mind
   license_key: {{ myconext_geo2lite_license_key }}
-  external_url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license_key}&suffix=tar.gz"
+  external_url: {{ myconext.geo_location_external_url }}
   download_directory: "/config/geo2lite"
 
 # Signicat configuration
