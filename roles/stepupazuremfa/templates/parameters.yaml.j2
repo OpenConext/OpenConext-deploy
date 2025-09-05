@@ -1,11 +1,12 @@
 parameters:
 {% if 'docker' in group_names %}
     app_env: prod
-    app_debug: false 
+    app_debug: false
     app_secret: {{ azuremfa_secret }}
 {% endif %}
     # All locales supported by the application
     locales: [{{ enabled_locales | join(",") }}]
+    federation_metadata_cache_location : '{{ current_release_config_file_dir_name_in_config }}/federation-metadata'
 
     # SAML configuration
     saml_idp_publickey: '{{ current_release_config_file_dir_name_in_config }}/cert.pem'
