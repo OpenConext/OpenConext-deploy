@@ -71,7 +71,7 @@
         target: /application.yml
         type: bind
       - source: /opt/openconext/invite/logback.xml
-        target: /logback.yml
+        target: /logback.xml
         type: bind
       - source: /opt/openconext/invite/private_key_pkcs8.pem
         target: /private_key_pkcs8.pem
