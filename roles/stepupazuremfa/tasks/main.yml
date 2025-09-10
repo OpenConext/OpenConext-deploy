@@ -80,13 +80,13 @@
       APACHE_UID: "#{{ azuremfa_uid.uid }}"
       APACHE_GUID: "#{{ azuremfa_guid.gid }}"
     mounts:
-      - source: /opt/openconext/azuremfa/public/images/header-logo.png
+      - source: "{{ current_release_appdir }}/public/imagesheader-logo.png"
         target: /var/www/html/public/build/images/header-logo.png
         type: bind
-      - source: /opt/openconext/azuremfa
+      - source: "{{ current_release_appdir }}"
         target: /var/www/html/config/openconext
         type: bind
-      - source: /opt/openconext/azuremfa/federation-metadata
+      - source: "{{ current_release_appdir }}/federation-metadata"
         target: /var/www/html/federation-metadata
         type: bind
   register: azuremfacontainer
