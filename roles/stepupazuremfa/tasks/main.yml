@@ -80,7 +80,7 @@
       APACHE_UID: "#{{ azuremfa_uid.uid }}"
       APACHE_GUID: "#{{ azuremfa_guid.gid }}"
     mounts:
-      - source: "{{ current_release_appdir }}/public/imagesheader-logo.png"
+      - source: "{{ current_release_appdir }}/public/images/header-logo.png"
         target: /var/www/html/public/build/images/header-logo.png
         type: bind
       - source: "{{ current_release_appdir }}"
