@@ -81,7 +81,7 @@
     - { role: oidcng, tags: ['oidcng'] }
 
 - name: Deploy oidc-playground app
-  hosts: docker_oidc-playground
+  hosts: docker_oidc_playground
   become: true
   roles:
     - { role: oidc-playground, tags: ['oidc-playground'] }
