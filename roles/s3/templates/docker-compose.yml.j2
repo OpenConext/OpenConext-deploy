@@ -1,0 +1,198 @@
+version: '3.8'
+
+networks:
+  {{ s3_docker_network_name }}:
+    driver: bridge
+
+volumes:
+  master_data:
+  {% for i in range(1, s3_volume_count + 1) %}
+  volume{{ i }}_data:
+  {% endfor %}
+  filer_data:
+  etcd_data:
+
+# Common configurations using YAML anchors
+x-common-vars: &common-vars
+  restart: always
+  networks:
+    - {{ s3_docker_network_name }}
+
+x-common-master: &common-master
+  <<: *common-vars
+  image: chrislusf/seaweedfs:latest
+  depends_on:
+    - etcd
+  command: ["-v=1", "master", "-mdir=/data", "-ip={{ s3_host_address }}", "-port=9333", "-peers={{ s3_host_address }}:9333", "-defaultReplication=001"]
+  deploy:
+    resources:
+      limits:
+        memory: {{ s3_master_memory_limit }}
+        cpus: {{ s3_master_cpu_limit }}
+
+x-common-volume: &common-volume
+  <<: *common-vars
+  image: chrislusf/seaweedfs:latest
+  command: ["-v=1", "volume", "-dir=/data", "-max=0", "-mserver={{ s3_host_address }}:9333", "-port=8080"]
+  deploy:
+    resources:
+      limits:
+        memory: {{ s3_volume_memory_limit }}
+        cpus: {{ s3_volume_cpu_limit }}
+
+x-common-filer: &common-filer
+  <<: *common-vars
+  image: chrislusf/seaweedfs:latest
+  depends_on:
+    - master1
+    - volume1
+  command: ["-v=1", "filer", "-master={{ s3_host_address }}:9333", "-port=8888", "-s3"]
+  deploy:
+    resources:
+      limits:
+        memory: {{ s3_filer_memory_limit }}
+        cpus: {{ s3_filer_cpu_limit }}
+
+services:
+  etcd:
+    <<: *common-vars
+    image: quay.io/coreos/etcd:v3.5.0
+    command: ["/usr/local/bin/etcd", "--name", "etcd", "--data-dir", "/data", "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://0.0.0.0:2379", "--listen-peer-urls", "http://0.0.0.0:2380", "--initial-advertise-peer-urls", "http://0.0.0.0:2380", "--initial-cluster", "etcd=http://0.0.0.0:2380", "--initial-cluster-token", "seaweedfs-token", "--initial-cluster-state", "new"]
+    volumes:
+      - etcd_data:/data
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+
+  master1:
+    <<: *common-master
+    container_name: master1
+    volumes:
+      - master_data:/data
+    ports:
+      - "9333:9333"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9333/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  {% for i in range(1, s3_volume_count + 1) %}
+  volume{{ i }}:
+    <<: *common-volume
+    container_name: volume{{ i }}
+    volumes:
+      - volume{{ i }}_data:/data
+    ports:
+      - "{{ 8080 + i - 1 }}:8080"
+    depends_on:
+      - master1
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+  {% endfor %}
+
+  {% for i in range(1, s3_filer_count + 1) %}
+  filer{{ i }}:
+    <<: *common-filer
+    container_name: filer{{ i }}
+    volumes:
+      - filer_data:/data
+    ports:
+      - "{{ 8888 + i - 1 }}:8888"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8888/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+  {% endfor %}
+
+  s3:
+    <<: *common-vars
+    image: chrislusf/seaweedfs:latest
+    container_name: s3
+    depends_on:
+      - master1
+      - filer1
+    command: ["-v=1", "s3", "-filer={{ s3_host_address }}:8888", "-port=8333", "-config=/etc/seaweedfs/s3.toml"]
+    volumes:
+      - {{ s3_config_dir }}/s3.toml:/etc/seaweedfs/s3.toml:ro
+    ports:
+      - "8333:8333"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8333/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          memory: {{ s3_filer_memory_limit }}
+          cpus: {{ s3_filer_cpu_limit }}
+
+  api:
+    <<: *common-vars
+    image: python:3.9-slim
+    container_name: api
+    depends_on:
+      - master1
+      - filer1
+      - s3
+    volumes:
+      - {{ s3_config_dir }}:/config:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    environment:
+      - SEAWEED_MASTER_URL=http://{{ s3_host_address }}:9333
+      - SEAWEED_VOLUME_URL=http://{{ s3_host_address }}:8080
+      - SEAWEED_FILER_URL=http://{{ s3_host_address }}:8888
+      - SEAWEED_S3_URL=http://{{ s3_host_address }}:8333
+    working_dir: /app
+    command: >
+      bash -c "pip install fastapi uvicorn docker boto3 requests &&
+      echo '#!/usr/bin/env python3' > /app/api.py &&
+      curl -s https://raw.githubusercontent.com/HarryKodden/SeaWeedFS-HA-Demo/main/api/api.py >> /app/api.py &&
+      python /app/api.py"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: {{ s3_api_memory_limit }}
+          cpus: {{ s3_api_cpu_limit }}
+
+  proxy:
+    <<: *common-vars
+    image: nginx:alpine
+    container_name: proxy
+    depends_on:
+      - master1
+      - filer1
+      - api
+    volumes:
+      - {{ s3_config_dir }}/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - {{ s3_config_dir }}/.htpasswd:/etc/nginx/.htpasswd:ro
+    ports:
+      - "80:80"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          memory: {{ s3_proxy_memory_limit }}
+          cpus: {{ s3_proxy_cpu_limit }}

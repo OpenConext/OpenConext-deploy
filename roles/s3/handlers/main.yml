@@ -1,0 +1,11 @@
+---
+# Handlers for the S3 role
+
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+
+- name: restart s3-cluster
+  systemd:
+    name: s3-cluster
+    state: restarted

@@ -1,0 +1,19 @@
+---
+# Debian family specific variables for s3 role
+
+s3_packages:
+- docker.io
+- docker-compose
+- python3-docker
+- python3-docker-compose
+- apache2-utils # For htpasswd command
+
+s3_services:
+- docker
+
+# System dependencies
+seaweedfs_dependencies:
+- wget
+- curl
+- jq
+- python3

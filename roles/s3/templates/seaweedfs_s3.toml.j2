@@ -1,0 +1,57 @@
+# SeaweedFS S3 Configuration File
+
+[aws]
+# The region name used when returning the region in the S3 API responses
+# Mandatory
+region = "{{ s3_region_name | default('us-east-1') }}"
+
+[s3.auths]
+# The admin credentials used to access s3
+# Default: none
+# Multiple credentials allowed
+id_key = "{{ s3_admin_key }}"
+id_secret = "{{ s3_admin_secret }}"
+
+{% if s3_additional_users | default([]) %}
+{% for user in s3_additional_users %}
+id_key = "{{ user.key }}"
+id_secret = "{{ user.secret }}"
+{% endfor %}
+{% endif %}
+
+[s3.admin]
+# The admin credentials used to manage buckets
+disableBucketPolicies = {{ s3_disable_bucket_policies | default('false') | lower }}
+# Default: none
+id_key = "{{ s3_admin_key }}"
+id_secret = "{{ s3_admin_secret }}"
+
+[s3.options]
+# The addressing style when accessing the S3 API
+# Valid values: path-style, virtual-hosted-style
+# Default: path-style
+address_style = "{{ s3_address_style | default('path-style') }}"
+
+# The signature version, valid values: "v2", "v4"
+# Default: v4
+signature_version = "{{ s3_signature_version | default('v4') }}"
+
+# Whether to support HeadDirObject S3 API, the SeaweedFS specific API as an optimization
+# Default: false
+enable_head_dir_object = {{ s3_enable_head_dir_object | default('false') | lower }}
+
+# Maximum multipart uploads kept in memory
+# Default: 10000
+multipartUploadLimitsMiB = {{ s3_multipart_upload_limits_mib | default(10000) }}
+
+# Whether to allow listing all buckets for any authenticated user
+# Default: false
+allow_anonymous_list_buckets = {{ s3_allow_anonymous_list_buckets | default('false') | lower }}
+
+# Whether to support cross-origin resource sharing (CORS) of objects
+# Default: true
+enable_CORS = {{ s3_enable_cors | default('true') | lower }}
+
+# Whether to include etag in the response
+# Default: true
+include_ETag = {{ s3_include_etag | default('true') | lower }}

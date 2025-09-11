@@ -1,0 +1,27 @@
+[Unit]
+Description=SeaweedFS S3 Cluster
+After=network.target
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory={{ s3_data_dir }}
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+
+# Pull the latest images
+ExecStartPre=-/usr/bin/docker compose -f {{ s3_data_dir }}/docker-compose.yml pull
+
+# Start the containers
+ExecStart=/usr/bin/docker compose -f {{ s3_data_dir }}/docker-compose.yml up -d
+
+# Stop the containers
+ExecStop=/usr/bin/docker compose -f {{ s3_data_dir }}/docker-compose.yml down
+
+# Restart policy
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
