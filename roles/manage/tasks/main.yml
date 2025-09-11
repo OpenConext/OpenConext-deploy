@@ -100,7 +100,8 @@
     image: ghcr.io/openconext/openconext-manage/manage-server:{{ manage_server_version }}
     entrypoint: /__cacert_entrypoint.sh
     pull: true
-    restart_policy: "always"
+    restart_policy: "{{ manage_server_restart_policy }}"
+    restart_retries: "{{ manage_server_restart_retries }}" # Only for restart policy on-failure
     state: started
     networks: "{{ manage_docker_networks }}"
     mounts:

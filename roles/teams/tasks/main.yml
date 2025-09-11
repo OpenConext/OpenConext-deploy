@@ -33,7 +33,8 @@
       TZ: "{{ timezone }}"
     image: ghcr.io/openconext/openconext-teams-ng/teams-server:{{ teams_server_version }}
     pull: true
-    restart_policy: "always"
+    restart_policy: "{{ teams_server_restart_policy }}"
+    restart_retries: "{{ teams_server_restart_retries }}" # Only for restart policy on-failure
     state: started
     networks: "{{ teams_docker_networks }}"
     mounts:

@@ -11,7 +11,7 @@
  <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
    <destination>host.docker.internal:514</destination>
     <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-        <customFields>{"app":"myconext"}</customFields>
+        <customFields>{"app":"invite"}</customFields>
         <includeCallerData>true</includeCallerData>
         <fieldNames>
             <thread>[ignore]</thread>
@@ -20,21 +20,21 @@
        </fieldNames>
        <prefix class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
          <layout class="ch.qos.logback.classic.PatternLayout">
-           <pattern>myconextjson: </pattern>
+           <pattern>invitejson: </pattern>
          </layout>
 </prefix>
      </encoder>
   </appender>
 
- <logger name="myconext" level="DEBUG" />
+ <logger name="invite" level="DEBUG" />
  <logger name="org.springframework.security" level="WARN" />
- <logger name="tiqr.org" level="INFO" />
- <logger name="io.changock" level="INFO" />
- <logger name="io.mongock" level="INFO" />
+ <logger name="org.springframework" level="WARN" />
+ <logger name="org.springframework.security" level="WARN" />
+ <logger name="com.zaxxer.hikari" level="ERROR" />
 
  <root level="WARN">
    <appender-ref ref="STDOUT" />
- {% if myconext_logback_json | bool %}
+ {% if invite_logback_json | bool %}
     <appender-ref ref="JSON_SYSLOG" />
  {%endif%}
  </root>

@@ -1,21 +1,49 @@
 ---
+
+
+#######################################
+## Create user
+#######################################
+
+- name: "Create Stats group"
+  group:
+    name: "{{ stats_group }}"
+    state: "present"
+  register: "stats_gid"
+
+- name: "Create Stats user"
+  user:
+    name: "{{ stats_user }}"
+    group: "{{ stats_group }}"
+    comment: "User to run OpenConext Stats service"
+    shell: "/bin/false"
+    password: "!"
+    home: "/opt/openconext/stats"
+    create_home: false
+    state: "present"
+  register: "stats_uid"
+
+#######################################
+## Create dirs and files
+#######################################
+
 - name: Create the directory the keep configfiles
   ansible.builtin.file:
-    dest: /opt/openconext/stats
-    state: directory
-    owner: root
-    group: root
-    mode: "0770"
+    dest: "/opt/openconext/stats"
+    state: "directory"
+    owner: "root"
+    group: "{{  stats_group }}"
+    mode: "0750"
 
 - name: Install server configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/stats/{{ item }}"
-    owner: root
-    group: root
-    mode: "0644"
+    owner: "root"
+    group: "{{ stats_group }}"
+    mode: "0640"
   with_items:
-    - config.yml
+    - "config.yml"
   notify: "restart statsserver"
 
 - name: Install gui configfiles
@@ -23,37 +51,48 @@
     src: "{{ item }}.j2"
     dest: "/opt/openconext/stats/{{ item }}"
     owner: root
-    group: root
-    mode: "0644"
+    group: "{{ stats_group }}"
+    mode: "0640"
   with_items:
-    - stats.conf
+    - "stats.conf"
   notify: "restart statsgui"
 
-- name: Create and start the servercontainer
+
+#######################################
+## Create containers
+#######################################
+
+- name: "Create and start the servercontainer"
   community.docker.docker_container:
-    name: statsserver
-    image: ghcr.io/openconext/openconext-stats/stats-server:{{ stats_server_version }}
+    name: "statsserver"
+    image: "ghcr.io/openconext/openconext-stats/stats-server:{{ stats_version }}"
     pull: true
     restart_policy: "always"
-    state: started
+    state: "started"
+    env:
+      RUNAS_UID: "{{ stats_uid.uid }}"
+      RUNAS_GID: "{{ stats_gid.gid }}"
     networks:
       - name: "loadbalancer"
     mounts:
-      - source: /opt/openconext/stats/config.yml
-        target: /app/server/config/config.yml
-        type: bind
-      - source: /dev/log
-        target: /dev/log
-        type: bind
-  register: statsservercontainer
+      - source: "/opt/openconext/stats/config.yml"
+        target: "/app/server/config/config.yml"
+        type: "bind"
+      - source: "/dev/log"
+        target: "/dev/log"
+        type: "bind"
+  register: "statsservercontainer"
 
-- name: Create and start the guicontainer
+- name: "Create and start the guicontainer"
   community.docker.docker_container:
-    name: statsgui
-    image: ghcr.io/openconext/openconext-stats/stats-gui:{{ stats_server_version }}
+    name: "statsgui"
+    image: "ghcr.io/openconext/openconext-stats/stats-gui:{{ stats_version }}"
     pull: true
     restart_policy: "always"
-    state: started
+    state: "started"
+    env:
+      APACHE_UID: "#{{ stats_uid.uid }}"
+      APACHE_GUID: "#{{ stats_gid.gid }}"
     labels:
       traefik.http.routers.statsgui.rule: "Host(`{{ stats_domain }}`)"
       traefik.http.routers.statsgui.tls: "true"
@@ -61,6 +100,6 @@
     networks:
       - name: "loadbalancer"
     mounts:
-      - source: /opt/openconext/stats/stats.conf
-        target: /etc/apache2/sites-enabled/000-default.conf
-        type: bind
+      - source: "/opt/openconext/stats/stats.conf"
+        target: "/etc/apache2/sites-enabled/000-default.conf"
+        type: "bind"

@@ -4,3 +4,5 @@ voot_manage_provision_oauth_rs_rp_secret: "{{ voot.oidcng_checkToken_secret }}"
 voot_manage_provision_oauth_rs_name_en: "{{ instance_name }} VOOT Resource Server"
 voot_manage_provision_oauth_rs_description_en: "The VOOT API is for group membership information"
 voot_manage_provision_oauth_rs_scopes: "groups"
+voot_server_restart_policy: always
+voot_server_restart_retries: 0

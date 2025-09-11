@@ -28,7 +28,7 @@ server:
 features: {{ manage.features }}
 
 feature_toggles:
-    allow_secret_public_rp: True
+  allow_secret_public_rp: True
 
 push:
   eb:
@@ -47,8 +47,8 @@ push:
     enabled: {{ manage.oidc_push_enabled }}
   pdp:
     url: https://pdp.{{ base_domain }}/pdp/api/manage/push
-    policy_url: https://pdp.{{ base_domain }}/pdp/api/manage/policies
     decide_url: https://pdp.{{ base_domain }}/pdp/api/manage/decide
+    parse_url: https://pdp.{{ base_domain }}/pdp/api/manage/parse
     name: {{ manage.pdp_name }}
     user: {{ pdp.username }}
     password: "{{ pdp.password }}"

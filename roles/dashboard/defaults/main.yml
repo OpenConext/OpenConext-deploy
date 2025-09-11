@@ -1,2 +1,4 @@
 dashboard_organization: SURFconext
 dashboard_hide_tabs: none
+dashboard_server_restart_policy: always
+dashboard_server_restart_retries: 0

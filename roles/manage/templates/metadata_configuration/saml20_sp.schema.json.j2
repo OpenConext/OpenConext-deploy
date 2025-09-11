@@ -77,6 +77,9 @@
     "entityid": {
       "type": "string"
     },
+    "organisationid": {
+          "type": "string"
+    },
     "type": {
       "type": "string",
       "enum": [
@@ -510,7 +513,7 @@
         },
         "coin:policy_enforcement_decision_required": {
           "type": "boolean",
-          "info": "Set to activate the user policy engine (PDP)."
+          "info": "Set to activate the user policy engine (PDP for this SP)."
         },
         "coin:original_metadata_url": {
           "type": "string",

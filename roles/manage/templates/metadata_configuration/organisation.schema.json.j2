@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "organisation",
+  "order": 5,
+  "type": "object",
+  "properties": {
+    "eid": {
+      "type": "number"
+    },
+    "entityid": {
+      "type": "string",
+      "format": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "kvkNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metaDataFields": {
+      "type": "object",
+      "properties": {},
+      "patternProperties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "revisionnote": {
+      "type": "string",
+      "format": "string"
+    },
+    "patternProperties": {
+      "name": {
+        "type": "string",
+        "info": "The friendly name of the Organisation."
+      },
+      "kvkNumber": {
+        "type": "string",
+        "info": "The friendly name of the Organisation."
+      },
+      "notes": {
+        "type": "string",
+        "info": "Additional information regarding the Organisation"
+      }
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "additionalProperties": false
+}

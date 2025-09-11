@@ -23,3 +23,5 @@ pdp_spring_flyway_enabled: true
 pdp_manage_push_testmode: true
 pdp_docker_networks:
   - name: loadbalancer
+pdp_server_restart_policy: always
+pdp_server_restart_retries: 0

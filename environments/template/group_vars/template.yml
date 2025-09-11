@@ -283,6 +283,7 @@ myconext:
   feature_mail_inactivity_mails: true
   feature_nudge_app_mail: true
   feature_service_desk_active: true
+  feature_use_remote_creation_for_affiliation: true
   feature_send_js_exceptions: true
   feature_deny_disposable_email_providers: true
   feature_create_eduid_institution_enabled: true
@@ -302,6 +303,7 @@ myconext:
     - { name: "privacy_policy" , url: "https://example.org/x/MIzaAQ" }
     - { name: "terms_of_service" , url: "https://example.org/x/LozaAQ"}
     - { name: "voorwaarden" , url: "https://example.org/x/HYzaAQ"}
+  geo_location_  external_url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license_key}&suffix=tar.gz"
 
 monitoring_tests:
   metadata_sp_url: "{{ monitoring_tests_metadata_sp_url }}"

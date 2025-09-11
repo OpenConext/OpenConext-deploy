@@ -15,5 +15,8 @@ invite_manage_provision_oauth_rs_scopes: "openid"
 invite_mock_install: false
 # Override is in the dockerX.env host_var files
 invite_cronjobmaster: true
+invite_logback_json: true
 invite_docker_networks:
   - name: loadbalancer
+invite_server_restart_policy: always
+invite_server_restart_retries: 0

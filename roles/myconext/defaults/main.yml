@@ -1,4 +1,7 @@
 ---
 myconext_cronjobmaster: true
+myconext_logback_json: true
 myconext_docker_networks:
   - name: loadbalancer
+myconext_server_restart_policy: always
+myconext_server_restart_retries: 0
