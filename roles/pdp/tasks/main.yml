@@ -34,7 +34,8 @@
       TZ: "{{ timezone }}"
     image: ghcr.io/openconext/openconext-pdp/pdp-server:{{ pdp_server_version }}
     pull: true
-    restart_policy: "always"
+    restart_policy: "{{ pdp_server_restart_policy }}"
+    restart_retries: "{{ pdp_server_restart_retries }}" # Only for restart policy on-failure
     state: started
     networks: "{{ pdp_docker_networks }}"
     mounts:

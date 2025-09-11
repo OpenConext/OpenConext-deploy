@@ -27,7 +27,8 @@
       TZ: "{{ timezone }}"
     image: ghcr.io/openconext/openconext-dashboard/dashboard-server:{{ dashboard_server_version }}
     pull: true
-    restart_policy: "always"
+    restart_policy: "{{ dashboard_server_restart_policy }}"
+    restart_retries: "{{ dashboard_server_restart_retries }}" # Only for restart policy on-failure
     state: started
     networks:
       - name: "loadbalancer"
