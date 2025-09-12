@@ -163,7 +163,7 @@
         - oidcngserver
 
 - name: Test oidc-playground containers
-  hosts: docker_oidc-playground
+  hosts: docker_oidc_playground
   become: true
   tasks:
     - name: Check playground containers state
