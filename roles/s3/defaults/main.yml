@@ -2,43 +2,19 @@
 # Default variables for the S3 role
 
 # Base configuration
-s3_base_dir: /opt/seaweedfs
+s3_base_dir: /opt/openconext/seaweedfs
 s3_config_dir: "{{ s3_base_dir }}/config"
 s3_data_dir: "{{ s3_base_dir }}/data"
-s3_log_dir: "/var/log/seaweedfs"
 
-# Authentication
-s3_auth_user: admin
-s3_auth_password: "{{ lookup('password', '/tmp/s3_auth_password chars=ascii_letters,digits length=16') }}"
+# S3 credentials - these can be overridden by values in the secrets file
+s3_access_key: "{{ s3_access_key | default('admin') }}"
+s3_secret_key: "{{ s3_secret_key | default(lookup('password', '/tmp/s3_secret_key chars=ascii_letters,digits length=40')) }}"
+s3_readonly_access_key: "{{ s3_readonly_access_key | default('readonly') }}"
+s3_readonly_secret_key: "{{ s3_readonly_secret_key | default(lookup('password', '/tmp/s3_readonly_secret_key chars=ascii_letters,digits length=40')) }}"
 
-# S3 API credentials
-s3_admin_key: "{{ lookup('password', '/tmp/s3_access_key_id chars=ascii_letters,digits length=20') }}"
-s3_admin_secret: "{{ lookup('password', '/tmp/s3_secret_access_key chars=ascii_letters,digits length=40') }}"
-s3_region_name: "us-east-1"
-s3_signature_version: "s3v4"
-s3_addressing_style: "path"
+# CORS configuration
+s3_cors_origin: "*"
 
-# Network configuration
-s3_host_address: "{{ ansible_default_ipv4.address }}"
-s3_domain_name: "{{ ansible_domain }}"
-
-# Cluster configuration
-s3_master_count: 3
-s3_volume_count: 3
-s3_filer_count: 2
-
-# Resource limits
-s3_master_memory_limit: "1G"
-s3_volume_memory_limit: "2G"
-s3_filer_memory_limit: "2G"
-s3_proxy_memory_limit: "512M"
-s3_api_memory_limit: "512M"
-
-s3_master_cpu_limit: "0.5"
-s3_volume_cpu_limit: "1.0"
-s3_filer_cpu_limit: "1.0"
-s3_proxy_cpu_limit: "0.5"
-s3_api_cpu_limit: "0.5"
-
-# Docker configuration
-s3_docker_network_name: "seaweedfs_network"
+# Domain configuration for S3 endpoints
+s3_filer_domain: "filer.{{ base_domain }}"
+s3_api_domain: "s3.{{ base_domain }}"

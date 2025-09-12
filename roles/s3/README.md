@@ -1,22 +1,22 @@
 # S3 Role
 
-This role sets up an S3-compatible object storage cluster using SeaweedFS.
+This role sets up an S3-compatible object storage cluster using SeaweedFS, integrated with the OpenConext environment.
 
 ## Overview
 
 The role implements a distributed SeaweedFS cluster with the following components:
 
-- Master server for coordination
-- Multiple volume servers for storage
-- Filer servers for file metadata and directory structure
-- S3 API gateway
-- Nginx proxy for routing and authentication
-- Management API for administration
+- Multiple master servers for high availability and coordination
+- Multiple volume servers for distributed storage
+- Filer server for file metadata and directory structure
+- S3 API gateway for S3-compatible access
+
+All services are deployed as Docker containers and integrated with the existing loadbalancer network.
 
 ## Requirements
 
-- Docker and Docker Compose must be installed on the target machine
-- Python with docker and docker-compose modules for Ansible
+- Docker must be installed on the target machine (handled by the docker role dependency)
+- Python with docker module for Ansible
 
 ## Configuration
 
@@ -24,30 +24,25 @@ The role implements a distributed SeaweedFS cluster with the following component
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `s3_base_dir` | Base directory for S3 installation | `/opt/s3` |
-| `s3_config_dir` | Directory for configuration files | `/opt/s3/config` |
-| `s3_data_dir` | Directory for data storage | `/opt/s3/data` |
-| `s3_log_dir` | Directory for log files | `/opt/s3/logs` |
-| `s3_host_address` | Host address for the S3 service | `localhost` |
-| `s3_domain_name` | Domain name for the S3 service | `s3.example.com` |
-| `s3_admin_key` | AWS access key for the admin user | `AKIAIOSFODNN7EXAMPLE` |
-| `s3_admin_secret` | AWS secret key for the admin user | `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY` |
-| `s3_auth_user` | Username for HTTP Basic Auth | `admin` |
-| `s3_auth_password` | Password for HTTP Basic Auth | `password` |
-| `s3_region_name` | AWS region name | `us-east-1` |
-| `s3_docker_network_name` | Docker network name | `seaweedfs_network` |
-| `s3_volume_count` | Number of volume servers | `3` |
-| `s3_filer_count` | Number of filer servers | `1` |
+| `s3_base_dir` | Base directory for S3 installation | `/opt/openconext/seaweedfs` |
+| `s3_config_dir` | Directory for configuration files | `{{ s3_base_dir }}/config` |
+| `s3_data_dir` | Directory for data storage | `{{ s3_base_dir }}/data` |
+| `s3_access_key` | S3 access key for the admin user | `admin` |
+| `s3_secret_key` | S3 secret key for the admin user | Generated random string |
+| `s3_readonly_access_key` | S3 access key for read-only user | `readonly` |
+| `s3_readonly_secret_key` | S3 secret key for read-only user | Generated random string |
+| `s3_cors_origin` | CORS origin allowed for S3 API | `*` |
+| `s3_filer_domain` | Domain name for the filer service | `filer.{{ base_domain }}` |
+| `s3_api_domain` | Domain name for the S3 API service | `s3.{{ base_domain }}` |
 
-### Resource Limits
+## Integration with OpenConext
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `s3_master_memory_limit` | Memory limit for master server | `1G` |
-| `s3_master_cpu_limit` | CPU limit for master server | `1.0` |
-| `s3_volume_memory_limit` | Memory limit for volume servers | `1G` |
-| `s3_volume_cpu_limit` | CPU limit for volume servers | `1.0` |
-| `s3_filer_memory_limit` | Memory limit for filer servers | `1G` |
+The S3 role integrates with the existing OpenConext deployment by:
+
+1. Using the same loadbalancer network for container networking
+2. Using Traefik for routing requests to the appropriate containers
+3. Following the same pattern for container management as other OpenConext roles
+4. Sharing the base domain configuration for consistent URL patterns
 | `s3_filer_cpu_limit` | CPU limit for filer servers | `1.0` |
 | `s3_api_memory_limit` | Memory limit for API server | `512M` |
 | `s3_api_cpu_limit` | CPU limit for API server | `0.5` |

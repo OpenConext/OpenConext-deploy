@@ -46,11 +46,11 @@
     name: "{{ item }}"
     restart: true
   with_items:
-    - master1
-    - master2
-    - master3
-    - volume1
-    - volume2
-    - volume3
-    - filer
-    - s3
+  - master1
+  - master2
+  - master3
+  - volume1
+  - volume2
+  - volume3
+  - filer
+  - s3

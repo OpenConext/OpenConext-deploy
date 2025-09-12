@@ -9,160 +9,229 @@
   - s3-install
 
 - name: Install required packages
-  package:
+  ansible.builtin.package:
     name: "{{ s3_packages }}"
     state: present
   tags:
   - s3
   - s3-install
 
-- name: Ensure required services are running
-  service:
-    name: "{{ item }}"
-    state: started
-    enabled: yes
-  with_items: "{{ s3_services }}"
-  tags:
-  - s3
-  - s3-install
-
 - name: Create required directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: root
     group: root
-    mode: 755
+    mode: "0755"
   with_items:
-  - "{{ s3_base_dir }}"
-  - "{{ s3_config_dir }}"
-  - "{{ s3_data_dir }}"
-  - "{{ s3_log_dir }}"
+  - "/opt/openconext/seaweedfs"
+  - "/opt/openconext/seaweedfs/config"
+  - "/opt/openconext/seaweedfs/data/master1"
+  - "/opt/openconext/seaweedfs/data/master2"
+  - "/opt/openconext/seaweedfs/data/master3"
+  - "/opt/openconext/seaweedfs/data/volume1"
+  - "/opt/openconext/seaweedfs/data/volume2"
+  - "/opt/openconext/seaweedfs/data/volume3"
+  - "/opt/openconext/seaweedfs/data/filer"
   tags:
   - s3
   - s3-install
 
-- name: Set up environment configuration file
-  template:
-    src: .env.j2
-    dest: "{{ s3_config_dir }}/.env"
+- name: Create S3 JSON configuration
+  ansible.builtin.template:
+    src: s3.json.j2
+    dest: "/opt/openconext/seaweedfs/config/s3.json"
     owner: root
     group: root
-    mode: 644
+    mode: "0644"
   tags:
   - s3
-  - s3-install
   - s3-config
 
-- name: Set up S3 configuration file
-  template:
-    src: seaweedfs_s3.toml.j2
-    dest: "{{ s3_config_dir }}/s3.toml"
-    owner: root
-    group: root
-    mode: 644
-  tags:
-  - s3
-  - s3-install
-  - s3-config
-
-- name: Set up Docker Compose file
-  template:
-    src: docker-compose.yml.j2
-    dest: "{{ s3_base_dir }}/docker-compose.yml"
-    owner: root
-    group: root
-    mode: 644
-  tags:
-  - s3
-  - s3-install
-  - s3-config
-
-- name: Set up Nginx configuration
-  template:
-    src: nginx.conf.j2
-    dest: "{{ s3_config_dir }}/nginx.conf"
-    owner: root
-    group: root
-    mode: 644
-  tags:
-  - s3
-  - s3-install
-  - s3-config
-
-- name: Set up htpasswd script
-  template:
-    src: generate_htpasswd.sh.j2
-    dest: "{{ s3_config_dir }}/generate_htpasswd.sh"
-    owner: root
-    group: root
-    mode: 755
-  tags:
-  - s3
-  - s3-install
-  - s3-config
-
-- name: Create .htpasswd for basic authentication
-  command: "{{ s3_config_dir }}/generate_htpasswd.sh {{ s3_auth_user }} {{ s3_auth_password }}"
-  args:
-    creates: "{{ s3_config_dir }}/.htpasswd"
-  tags:
-  - s3
-  - s3-install
-  - s3-config
-
-- name: Pull required Docker images
-  docker_image:
-    name: "{{ item }}"
-    source: pull
-  with_items:
-  - nginx:alpine
-  - python:3.9-slim
-  - chrislusf/seaweedfs:latest
-  tags:
-  - s3
-  - s3-install
-
-- name: Start SeaweedFS S3 cluster
-  docker_compose:
-    project_src: "{{ s3_base_dir }}"
-    state: present
-  tags:
-  - s3
-  - s3-service
-
-- name: Create systemd service for S3
-  template:
-    src: seaweedfs-s3.service.j2
-    dest: /etc/systemd/system/s3-cluster.service
-    owner: root
-    group: root
-    mode: 644
-  notify: reload systemd
-  tags:
-  - s3
-  - s3-service
-
-- name: Enable S3 service
-  systemd:
-    name: s3-cluster
-    enabled: yes
+# Deploy master nodes
+- name: Create and start master1 container
+  community.docker.docker_container:
+    name: master1
+    image: chrislusf/seaweedfs:latest
+    pull: true
+    restart_policy: "always"
     state: started
+    networks:
+    - name: "loadbalancer"
+    command: "master -port=9333 -ip=master1 -mdir=/data -peers=master1:9333,master2:9333,master3:9333"
+    volumes:
+    - "/opt/openconext/seaweedfs/data/master1:/data"
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://master1:9333/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
   tags:
   - s3
-  - s3-service
+  - s3-deploy
 
-- name: Wait for S3 cluster to be ready
-  uri:
-    url: "http://{{ s3_host_address }}:8080/api/health"
-    method: GET
-    status_code: 200
-    user: "{{ s3_auth_user }}"
-    password: "{{ s3_auth_password }}"
-  register: result
-  until: result.status == 200
-  retries: 10
-  delay: 5
+- name: Create and start master2 container
+  community.docker.docker_container:
+    name: master2
+    image: chrislusf/seaweedfs:latest
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+    - name: "loadbalancer"
+    command: "master -port=9333 -ip=master2 -mdir=/data -peers=master1:9333,master2:9333,master3:9333"
+    volumes:
+    - "/opt/openconext/seaweedfs/data/master2:/data"
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://master2:9333/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
   tags:
   - s3
-  - s3-service
+  - s3-deploy
+
+- name: Create and start master3 container
+  community.docker.docker_container:
+    name: master3
+    image: chrislusf/seaweedfs:latest
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+    - name: "loadbalancer"
+    command: "master -port=9333 -ip=master3 -mdir=/data -peers=master1:9333,master2:9333,master3:9333"
+    volumes:
+    - "/opt/openconext/seaweedfs/data/master3:/data"
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://master3:9333/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  tags:
+  - s3
+  - s3-deploy
+
+# Deploy volume nodes
+- name: Create and start volume1 container
+  community.docker.docker_container:
+    name: volume1
+    image: chrislusf/seaweedfs:latest
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+    - name: "loadbalancer"
+    command: "volume -port=8080 -ip=volume1 -mserver=master1:9333,master2:9333,master3:9333 -dir=/data -max=5 -rack=rack1"
+    volumes:
+    - "/opt/openconext/seaweedfs/data/volume1:/data"
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://volume1:8080/status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+  tags:
+  - s3
+  - s3-deploy
+
+- name: Create and start volume2 container
+  community.docker.docker_container:
+    name: volume2
+    image: chrislusf/seaweedfs:latest
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+    - name: "loadbalancer"
+    command: "volume -port=8080 -ip=volume2 -mserver=master1:9333,master2:9333,master3:9333 -dir=/data -max=5 -rack=rack1"
+    volumes:
+    - "/opt/openconext/seaweedfs/data/volume2:/data"
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://volume2:8080/status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+  tags:
+  - s3
+  - s3-deploy
+
+- name: Create and start volume3 container
+  community.docker.docker_container:
+    name: volume3
+    image: chrislusf/seaweedfs:latest
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+    - name: "loadbalancer"
+    command: "volume -port=8080 -ip=volume3 -mserver=master1:9333,master2:9333,master3:9333 -dir=/data -max=5 -rack=rack1"
+    volumes:
+    - "/opt/openconext/seaweedfs/data/volume3:/data"
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://volume3:8080/status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+  tags:
+  - s3
+  - s3-deploy
+
+# Deploy filer
+- name: Create and start filer container
+  community.docker.docker_container:
+    name: filer
+    image: chrislusf/seaweedfs:latest
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+    - name: "loadbalancer"
+    command: "filer -master=master1:9333,master2:9333,master3:9333 -ip=0.0.0.0 -port=8888 -dataCenter=dc1 -maxMB=1024"
+    volumes:
+    - "/opt/openconext/seaweedfs/data/filer:/data"
+    labels:
+      traefik.http.routers.filer.rule: "Host(`filer.{{ base_domain }}`)"
+      traefik.http.routers.filer.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8888/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+  tags:
+  - s3
+  - s3-deploy
+
+# Deploy S3 API endpoint
+- name: Create and start S3 container
+  community.docker.docker_container:
+    name: s3
+    image: chrislusf/seaweedfs:latest
+    pull: true
+    restart_policy: "always"
+    state: started
+    networks:
+    - name: "loadbalancer"
+    command: "s3 -filer=filer:8888 -ip.bind=0.0.0.0 -port=8333 -config=/etc/seaweedfs/s3.json"
+    volumes:
+    - "/opt/openconext/seaweedfs/config/s3.json:/etc/seaweedfs/s3.json:ro"
+    labels:
+      traefik.http.routers.s3.rule: "Host(`s3.{{ base_domain }}`)"
+      traefik.http.routers.s3.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "netstat -tlnp | grep :8333" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+  tags:
+  - s3
+  - s3-deploy

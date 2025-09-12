@@ -3,10 +3,7 @@
 
 s3_packages:
 - docker
-- docker-compose
 - python3-docker
-- python3-docker-compose
-- httpd-tools # For htpasswd command
 
 s3_services:
 - docker
