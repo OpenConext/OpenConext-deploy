@@ -1,0 +1,20 @@
+---
+# Default variables for the S3 role
+
+# Base configuration
+s3_base_dir: /opt/openconext/seaweedfs
+s3_config_dir: "{{ s3_base_dir }}/config"
+s3_data_dir: "{{ s3_base_dir }}/data"
+
+# S3 credentials - these can be overridden by values in the secrets file
+s3_access_key: "{{ s3_access_key | default('admin') }}"
+s3_secret_key: "{{ s3_secret_key | default(lookup('password', '/tmp/s3_secret_key chars=ascii_letters,digits length=40')) }}"
+s3_readonly_access_key: "{{ s3_readonly_access_key | default('readonly') }}"
+s3_readonly_secret_key: "{{ s3_readonly_secret_key | default(lookup('password', '/tmp/s3_readonly_secret_key chars=ascii_letters,digits length=40')) }}"
+
+# CORS configuration
+s3_cors_origin: "*"
+
+# Domain configuration for S3 endpoints
+s3_filer_domain: "filer.{{ base_domain }}"
+s3_api_domain: "s3.{{ base_domain }}"
