@@ -2,16 +2,17 @@
 
 name: mongo
 on:
-  push:
-    paths:
-      - 'roles/mongo/**'
-      - 'molecule/mongo/**'
-      - '.github/workflows/molecule-mongo.yml'
-  pull_request:
-    paths:
-      - 'roles/mongo/**'
-      - 'molecule/mongo/**'
-      - '.github/workflows/molecule-mongo.yml'
+  workflow_dispatch:
+  # push:
+  #   paths:
+  #     - 'roles/mongo/**'
+  #     - 'molecule/mongo/**'
+  #     - '.github/workflows/molecule-mongo.yml'
+  # pull_request:
+  #   paths:
+  #     - 'roles/mongo/**'
+  #     - 'molecule/mongo/**'
+  #     - '.github/workflows/molecule-mongo.yml'
 
 jobs:
   build:
