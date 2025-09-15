@@ -21,3 +21,5 @@ oidcng_manage_provision_samlsp_sign: "True"
 oidcng_manage_provision_samlsp_trusted_proxy: "True"
 oidcng_docker_networks:
   - name: loadbalancer
+oidcng_server_restart_policy: always
+oidcng_server_restart_retries: 0

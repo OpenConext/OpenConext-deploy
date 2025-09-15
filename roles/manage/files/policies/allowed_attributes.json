@@ -25,16 +25,14 @@
   },
   {
     "value": "urn:collab:group:surfteams.nl",
-    "label": "SURFteams group name (fully qualified)"
+    "label": "SURFconext Invite (voot) role urn"
   },
   {
     "value": "urn:collab:sab:surfnet.nl",
     "label": "SAB role"
-
   },
   {
     "value": "urn:mace:dir:attribute-def:mail",
     "label": "Mail address"
-
   }
 ]

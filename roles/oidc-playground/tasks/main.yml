@@ -27,8 +27,8 @@
       TZ: "{{ timezone }}"
     image: ghcr.io/openconext/openconext-oidc-playground/oidc-playground-server:{{ oidc_playground_server_version }}
     pull: true
-    restart_policy: "always"
-    state: started
+    restart_policy: "{{ oidc_playground_server_restart_policy }}"
+    restart_retries: "{{ oidc_playground_server_restart_retries }}" # Only for restart policy on-failure
     networks:
       - name: "loadbalancer"
     mounts:

@@ -63,7 +63,8 @@
       TZ: "{{ timezone }}"
     image: ghcr.io/openconext/openconext-invite/inviteserver:{{ invite_server_version }}
     pull: true
-    restart_policy: "always"
+    restart_policy: "{{ invite_server_restart_policy }}"
+    restart_retries: "{{ invite_server_restart_retries }}" # Only for restart policy on-failure
     state: started
     networks: "{{ invite_docker_networks }}"
     mounts:
@@ -71,7 +72,7 @@
         target: /application.yml
         type: bind
       - source: /opt/openconext/invite/logback.xml
-        target: /logback.yml
+        target: /logback.xml
         type: bind
       - source: /opt/openconext/invite/private_key_pkcs8.pem
         target: /private_key_pkcs8.pem

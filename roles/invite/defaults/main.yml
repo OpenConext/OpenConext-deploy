@@ -18,3 +18,5 @@ invite_cronjobmaster: true
 invite_logback_json: true
 invite_docker_networks:
   - name: loadbalancer
+invite_server_restart_policy: always
+invite_server_restart_retries: 0
