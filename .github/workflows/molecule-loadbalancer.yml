@@ -2,22 +2,23 @@
 
 name: loadbalancer
 on:
-  push:
-    paths:
-      - 'roles/haproxy/**'
-      - 'roles/keepalived/**'
-      - 'roles/bind/**'
-      - 'molecule/loadbalancer/**'
-      - 'roles/selfsigned_certs/**'
-      - '.github/workflows/molecule-loadbalancer.yml'
-  pull_request:
-    paths:
-      - 'roles/haproxy/**'
-      - 'roles/keepalived/**'
-      - 'roles/bind/**'
-      - 'molecule/loadbalancer/**'
-      - 'roles/selfsigned_certs/**'
-      - '.github/workflows/molecule-loadbalancer.yml'
+  workflow_dispatch:
+  # push:
+  #   paths:
+  #     - 'roles/haproxy/**'
+  #     - 'roles/keepalived/**'
+  #     - 'roles/bind/**'
+  #     - 'molecule/loadbalancer/**'
+  #     - 'roles/selfsigned_certs/**'
+  #     - '.github/workflows/molecule-loadbalancer.yml'
+  # pull_request:
+  #   paths:
+  #     - 'roles/haproxy/**'
+  #     - 'roles/keepalived/**'
+  #     - 'roles/bind/**'
+  #     - 'molecule/loadbalancer/**'
+  #     - 'roles/selfsigned_certs/**'
+  #     - '.github/workflows/molecule-loadbalancer.yml'
 
 jobs:
   build:
