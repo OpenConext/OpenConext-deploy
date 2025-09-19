@@ -1,7 +1,7 @@
 parameters:
 {% if 'docker' in group_names %}
     app_env: prod
-    app_debug: false 
+    app_debug: false
     app_secret: {{ azuremfa_secret }}
 {% endif %}
     # All locales supported by the application
@@ -25,4 +25,10 @@ parameters:
 {% endfor %}
 
     support_email: support@surfconext.nl
+
+    # Authentication issuers matching this regex will send ForceAuthn to the Azure MFA. The at sign is used as a
+    # delimiter, be sure to escape the first sign as Symfony would see it as a reference to a service.
     ra_issuer_entity_id_regex: '@@^https://(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/vetting-procedure/gssf/azuremfa/metadata$@'
+
+    # Metadata cache settings
+    federation_metadata_cache_location : '{{ current_release_config_file_dir_name_in_config }}/federation-metadata'
