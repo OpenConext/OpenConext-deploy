@@ -52,8 +52,8 @@
     etc_hosts:
       host.docker.internal: host-gateway
     labels:
-      traefik.http.routers.pdpgui.rule: "Host(`pdp.{{ base_domain }}`)"
-      traefik.http.routers.pdpgui.tls: "true"
+      traefik.http.routers.pdpserver.rule: "Host(`pdp.{{ base_domain }}`)"
+      traefik.http.routers.pdpserver.tls: "true"
       traefik.enable: "true"
     healthcheck:
       test:
