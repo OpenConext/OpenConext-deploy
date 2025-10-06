@@ -85,7 +85,7 @@ Please note that this has not been tested in quite a while. You will need a lot 
 
 # Playbooks, tags and the provision wrapper script
 
-Two playbooks exist in this repository: provision.yml and playbook_haproxy.yml. The latter can be used to do red/blue deployments if you also use our haproxy role.
+Two playbooks exist in this repository: provision.yml and adhoc_roodblauw_haproxy_playbook.yml. The latter can be used to do red/blue deployments if you also use our haproxy role.
 The main playbook is provision.yml. It contains series of plays to install every role on the right node. All roles are tagged, so you can use the [Ansible tag mechanism](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html) to deploy a specific role. 
 
 If you would like to deploy manage to your test environment, you would run:
