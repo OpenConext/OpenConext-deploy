@@ -238,13 +238,8 @@
     login_user: root
     login_password: "{{ mariadb_root_password }}"
     login_unix_socket: /var/lib/mysql/mysql.sock
-<<<<<<< HEAD
   run_once: true # run once because it is synced to other cluster nodes
-
-=======
-  run_once: true
   no_log: true
->>>>>>> main
 
 - name: Add Galera clustercheck user, used for keepalived to connect
   mysql_user:
@@ -255,12 +250,8 @@
     login_user: root
     login_password: "{{ mariadb_root_password }}"
     login_unix_socket: /var/lib/mysql/mysql.sock
-<<<<<<< HEAD
   run_once: true # run once because it is synced to other cluster nodes
-=======
-  run_once: true
   no_log: true
->>>>>>> main
 
 - name: Create the backup directory
   file:
@@ -299,25 +290,6 @@
   run_once: true # run once because it is synced to other cluster nodes
   tags: galera_create_db
 
-<<<<<<< HEAD
-- name: Create database super users for provisioning users and databases
-  mysql_user:
-    name: "{{ item.0.name }}"
-    host: "{{ item.1 }}"
-    password: "{{ item.0.password }}"
-    priv: "{{ item.0.privs | join('/') }}"
-    state: present
-    login_user: root
-    login_password: "{{ mariadb_root_password }}"
-    login_unix_socket: /var/lib/mysql/mysql.sock
-  with_subelements:
-    - "{{ galera_root_users }}"
-    - hosts
-  run_once: true # run once because it is synced to other cluster nodes
-  tags: galera_create_db
-
-=======
->>>>>>> main
 - name: MySQL my.cnf
   template:
     src: "my.cnf.j2"
