@@ -146,11 +146,11 @@ external-api-configuration:
       password: "{{ invite.lifecycle_secret }}"
       scopes:
         - lifecycle
-    -
-      username: internal
-      password: "{{ invite.internal_secret }}"
-      scopes:
-        - actuator
+    # -
+    #   username: internal
+    #   password: "{{ invite.internal_secret }}"
+    #   scopes:
+    #     - actuator
     -
       username: {{ invite.profile_user }}
       password: "{{ invite.profile_secret }}"
