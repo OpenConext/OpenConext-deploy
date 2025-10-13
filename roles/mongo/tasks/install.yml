@@ -12,20 +12,6 @@
       - mongodb-org
     state: present
 
-- name: Slurp the private key
-  ansible.builtin.slurp:
-    path: "/etc/pki/mongo/mongo.key"
-  register: mongo_key
-
-- name: Create combined key and certificate file
-  ansible.builtin.copy:
-    content: "{{ mongo_key['content'] | b64decode }}{{ certificate.certificate }}"
-    dest: "/etc/pki/mongo/keyandcert.pem"
-    owner: root
-    group: mongod
-    mode: "0440"
-  ignore_errors: '{{ ansible_check_mode }}'
-
 - name: Install pymongo
   ansible.builtin.pip:
     name: pymongo
@@ -70,7 +56,7 @@
     owner: root
     group: root
     mode: "0644"
-  notify: restart mongod
+  notify: Restart mongod
 
 - name: Enable and start mongod
   ansible.builtin.service:

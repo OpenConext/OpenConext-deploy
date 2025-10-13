@@ -4,14 +4,6 @@
     ansible_python_interpreter: "/usr/bin/python3"
   tags: mongo_users
 
-- name: Include CA tasks
-  ansible.builtin.include_tasks:
-    file: ca.yml
-    apply:
-      delegate_to: localhost
-      run_once: true
-      become: false
-
 - name: Include Certificate tasks
   ansible.builtin.include_tasks:
     file: certs.yml
