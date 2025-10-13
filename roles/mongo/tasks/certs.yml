@@ -2,6 +2,13 @@
 # In this task file keys and certificates for the
 # mongo servers are distributed
 
+# howto
+# dis keyadcert
+# dis CA
+# dist ca key
+# voorbeeld voor openconext users
+# readme hoe cn eruit moet zien
+
 
 - name: Create directory to keep mongo key material
   ansible.builtin.file:
@@ -20,3 +27,20 @@
     mode: 0440
   notify: Restart mongod
 
+- name: Distribute mongo cluster ca
+  ansible.builtin.template:
+    src: keyandcert.pem.j2
+    dest: "{{ mongo_pki_dir }}/keyandcert.pem"
+    owner: root
+    group: "{{ mongo_group }}"
+    mode: 0440
+  notify: Restart mongod
+
+- name: Copy ca pem file
+  ansible.builtin.copy:
+    src: "{{ environment_dir }}/secrets/mongo/mongoca.pem"
+    dest: "{{ mongo_pki_dir }}/mongoca.pem"
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart mongod
