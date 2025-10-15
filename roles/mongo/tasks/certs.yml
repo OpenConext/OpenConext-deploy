@@ -2,15 +2,6 @@
 # In this task file keys and certificates for the
 # mongo servers are distributed
 
-# 
-# howto
-# dis keyadcert
-# voorbeeld voor openconext users
-# readme hoe cn eruit moet zien
-#  Subject: OU=SURFconext TEST2
-
-
-
 - name: Create directory to keep mongo key material
   ansible.builtin.file:
     dest: "{{ mongo_pki_dir }}"
