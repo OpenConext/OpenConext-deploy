@@ -1,6 +1,7 @@
 # The global variable file mongodb installation
 
 mongo_service: "mongod"
+mongo_version: "7.0"
 
 # In the current mongo role only one cluster per environments
 # is possible, that works for now.
@@ -37,5 +38,3 @@ mongo_pki_dir: "/etc/pki/mongo"
 
 # Users and groups
 mongo_group: "mongod"
-
-

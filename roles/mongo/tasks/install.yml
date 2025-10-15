@@ -1,8 +1,8 @@
 ---
 - name: Create the repository for mongodb
   when: ansible_os_family == 'RedHat'
-  ansible.builtin.copy:
-    src: "mongo.repo"
+  ansible.builtin.template:
+    src: "mongo.repo.j2"
     dest: "/etc/yum.repos.d/mongo.repo"
     owner: root
     mode: "0640"
