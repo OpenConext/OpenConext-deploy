@@ -19,7 +19,7 @@
     mode: "0440"
   notify: Restart mongod
 
-- name: Distribute mongo cluster ca
+- name: Distribute mongo cluster key and cert
   ansible.builtin.template:
     src: keyandcert.pem.j2
     dest: "{{ mongo_pki_dir }}/keyandcert.pem"
