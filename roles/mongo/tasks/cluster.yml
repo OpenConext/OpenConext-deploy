@@ -4,6 +4,7 @@
     mongosh --port {{ mongod_port }} --quiet --eval 'db.isMaster().hosts'
   register: check_cluster
   changed_when: false
+  check_mode: false
 
 - name: Set fact for roles
   ansible.builtin.set_fact:
