@@ -17,6 +17,9 @@ mongo_admin_pass: "{{ mongo_admin_password }}" # Set this in secrets
 # The name of the replication set
 replica_set_name: "{{ instance_name }}" # Set this in group_vars
 
+# The replication role
+# mongo_replication_role: # Set this in host_vars, it can have the values: "primary", "secondary" or arbiter
+
 # Add a database
 mongo:
   users:
@@ -30,7 +33,7 @@ mongo_bind_listen_address: "0.0.0.0"
 # Certs and keys
 mongo_pki_dir: "/etc/pki/mongo"
 # mongo_cluster_cert set this in host_vars
-# mongo_cluster_private_key set this in host_vars
+# mongo_cluster_private_key set this in host_vars (encrypted with ansible-vault)
 
 # Users and groups
 mongo_group: "mongod"

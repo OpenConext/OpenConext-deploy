@@ -2,12 +2,13 @@
 # In this task file keys and certificates for the
 # mongo servers are distributed
 
+# 
 # howto
 # dis keyadcert
-# dis CA
-# dist ca key
 # voorbeeld voor openconext users
 # readme hoe cn eruit moet zien
+#  Subject: OU=SURFconext TEST2
+
 
 
 - name: Create directory to keep mongo key material
