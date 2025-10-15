@@ -1,5 +1,6 @@
 ---
 - name: Create the repository for mongodb
+  when: ansible_os_family == 'RedHat'
   ansible.builtin.copy:
     src: "mongo.repo"
     dest: "/etc/yum.repos.d/mongo.repo"
@@ -7,6 +8,7 @@
     mode: "0640"
 
 - name: Install the mongodb package
+  when: ansible_os_family == 'RedHat'
   ansible.builtin.yum:
     name:
       - mongodb-org

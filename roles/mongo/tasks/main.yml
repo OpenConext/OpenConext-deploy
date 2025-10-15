@@ -1,30 +1,37 @@
 ---
-- name: Use temporarily python3 as remote interpreter, this fixes pymongo
-  ansible.builtin.set_fact:
-    ansible_python_interpreter: "/usr/bin/python3"
-  tags: mongo_users
-
-- name: Include Certificate tasks
+- name: Include Certificate tasks # Todo: move this task to the redhat family block when the debian arbiter lb1 is obsolete
   ansible.builtin.include_tasks:
     file: certs.yml
 
-- name: Include installation tasks
-  ansible.builtin.include_tasks:
-    file: install.yml
+- name: Install and configure mongo on redhat family servers
+  when: ansible_os_family == 'RedHat'
+  block:
+    - name: Use temporarily python3 as remote interpreter, this fixes pymongo
+      ansible.builtin.set_fact:
+        ansible_python_interpreter: "/usr/bin/python3"
+      tags: mongo_users
 
-- name: Include cluster installation tasks
-  ansible.builtin.include_tasks:
-    file: cluster.yml
+    - name: Include installation tasks
+      ansible.builtin.include_tasks:
+        file: install.yml
 
-- name: Include user creation
-  ansible.builtin.include_tasks:
-    file: users.yml
+    - name: Include cluster installation tasks
+      ansible.builtin.include_tasks:
+        file: cluster.yml
 
-- name: Include postinstallation tasks
-  ansible.builtin.include_tasks:
-    file: postinstall.yml
+    - name: Include user creation
+      ansible.builtin.include_tasks:
+        file: users.yml
 
-- name: Use python2 again as remote interpreter
-  ansible.builtin.set_fact:
-    ansible_python_interpreter: "/usr/bin/python"
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+    - name: Include postinstallation tasks
+      ansible.builtin.include_tasks:
+        file: postinstall.yml
+
+    - name: Use python2 again as remote interpreter
+      ansible.builtin.set_fact:
+        ansible_python_interpreter: "/usr/bin/python"
+      when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+
+- name: Message for non redhat family servers
+  ansible.builtin.debug:
+    msg: "Sorry, this role only works on RedHat family servers"
