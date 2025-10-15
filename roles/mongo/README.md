@@ -13,3 +13,7 @@ Set the cluster certificate as variable mongo_cluster_cert in host_vars
 Set the mongo_cluster_private_key variable encrypted in host_vars
 
 Please review the official Mongo documentation for more information.
+
+# Todo
+- [ ] Add the possibility for adding and removing cluster members
+- [ ] Add the possibility for a standalone mongo server
