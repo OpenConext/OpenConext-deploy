@@ -16,7 +16,7 @@
     dest: "{{ mongo_pki_dir }}/keyandcert.pem"
     owner: root
     group: "{{ mongo_group }}"
-    mode: 0440
+    mode: "0440"
   notify: Restart mongod
 
 - name: Distribute mongo cluster ca
@@ -25,7 +25,7 @@
     dest: "{{ mongo_pki_dir }}/keyandcert.pem"
     owner: root
     group: "{{ mongo_group }}"
-    mode: 0440
+    mode: "0440"
   notify: Restart mongod
 
 - name: Copy ca pem file
@@ -34,5 +34,5 @@
     dest: "{{ mongo_pki_dir }}/mongoca.pem"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   notify: Restart mongod
