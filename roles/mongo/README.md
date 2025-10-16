@@ -17,3 +17,4 @@ Please review the official Mongo documentation for more information.
 # Todo
 - [ ] Add the possibility for adding and removing cluster members
 - [ ] Add the possibility for a standalone mongo server
+- [ ] TASK [mongo : Set fact for arbiter index number] throws an error in check mode when no limit is used

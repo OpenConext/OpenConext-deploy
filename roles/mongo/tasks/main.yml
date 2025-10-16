@@ -17,7 +17,7 @@
 
     - name: Include cluster installation tasks
       ansible.builtin.include_tasks:
-        file: cluster.yml
+        file: clusterconfig.yml
 
     - name: Include user creation
       ansible.builtin.include_tasks:
