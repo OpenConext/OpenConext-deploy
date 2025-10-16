@@ -21,6 +21,12 @@ mongo_servers: [] # Set this in group_vars
 #     priority: 3
 # mongo_arbiter_index: 0
 
+# The replication role
+# mongo_replication_role: # Set this in host_vars, it can have the values: "primary", "secondary" or arbiter
+
+# Todo: there is a link between mongo_replication_role and priority (arbiter is priority 1, primary the highest) so
+# setting them separately is not ideal.
+
 # The port for mongo server
 mongod_port: 27017
 
@@ -29,9 +35,6 @@ mongo_admin_pass: "{{ mongo_admin_password }}" # Set this in secrets
 
 # The name of the replication set
 replica_set_name: "{{ instance_name }}" # Set this in group_vars
-
-# The replication role
-# mongo_replication_role: # Set this in host_vars, it can have the values: "primary", "secondary" or arbiter
 
 # Add a database
 mongo:
