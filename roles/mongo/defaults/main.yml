@@ -9,6 +9,18 @@ mongo_servers: [] # Set this in group_vars
 #  - mongo1.example.com
 #  - mongo2.example.com
 
+# cluster members
+# Not all mongo servers in the inventory are cluster members, so we use a separate list for this.
+# Set this in group_vars of your environment(s). The arbiter should go first, or change the mongo_arbiter_index.
+# mongo_cluster_members:
+#   - host: "mongoarbiter.example.com:27017"
+#     priority: 1 # can vote, cannot become primary
+#   - host: "mongo2.example.com:27017"
+#     priority: 2
+#   - host: "mongo1.example.com:27017"
+#     priority: 3
+# mongo_arbiter_index: 0
+
 # The port for mongo server
 mongod_port: 27017
 
