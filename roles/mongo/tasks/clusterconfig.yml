@@ -6,11 +6,11 @@
   check_mode: false
 
 - name: Debug check_cluster variable
-  when: show_debug_info == true
+  when: show_debug_info is defined and show_debug_info | bool
   ansible.builtin.debug: "{{ check_cluster }}"
 
 - name: Debug mongo_cluster_members variable
-  when: show_debug_info == true
+  when: show_debug_info is defined and show_debug_info | bool
   ansible.builtin.debug: "{{ mongo_cluster_members }}"
 
 - name: Initial cluster initialisation
