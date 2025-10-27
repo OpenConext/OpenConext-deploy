@@ -66,6 +66,7 @@
 - hosts: mongo_servers
   gather_facts: yes
   become: true
+  serial: 1
   roles:
     - role: mongo
       tags: ['core', 'mongo']
