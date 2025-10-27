@@ -3,7 +3,10 @@
 module(load="imptcp")
 input(type="imptcp" port="514")
 {% endif %}
-module(load="imuxsock" SysSock.Use="on")
+module(load="imuxsock")
+module(load="imjournal"             # provides access to the systemd journal
+       UsePid="system" # PID nummber is retrieved as the ID of the process the journal entry originates from
+       StateFile="imjournal.state")
 module(load="imklog")   # provides kernel logging support
 module(load="immark" interval="300" )  # provides --MARK-- message capability
 module(load="omrelp")
