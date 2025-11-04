@@ -21,11 +21,17 @@ cursor = db.cursor()
 
 def update_lastseen(user_id, date):
     query = """
-    REPLACE INTO last_login (userid, lastseen)
+    INSERT INTO last_login (userid, lastseen)
     VALUES (%s, %s)
+    ON DUPLICATE KEY UPDATE
+    lastseen = GREATEST(lastseen, VALUES(lastseen))
     """
-    cursor.execute(query, (user_id, date))
-    db.commit()
+    try:
+        cursor.execute(query, (user_id, date))
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"Error updating last_login for user {user_id}: {e}")
 
 def load_in_mysql(a,b,c,d,e,f,g,h):
     sql = """insert into log_logins(idpentityid,spentityid,loginstamp,userid,keyid,sessionid,requestid,trustedproxyentityid) values(%s,%s,%s,%s,%s,%s,%s,%s)"""
@@ -73,4 +79,3 @@ for filename in os.listdir(workdir):
 
 cursor.close()
 db.close()
-
