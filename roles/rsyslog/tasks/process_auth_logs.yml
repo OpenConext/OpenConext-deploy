@@ -39,7 +39,7 @@
     state: present
   when: ansible_os_family == "Debian"
 
-- name: Create a python script that parses log_logins per environment
+- name: Create a python script that parses eb log_logins per environment
   ansible.builtin.template:
     src: parse_ebauth_to_mysql.py.j2
     dest: /usr/local/sbin/parse_ebauth_to_mysql_{{ item.name }}.py
@@ -49,10 +49,30 @@
   with_items: "{{ rsyslog_environments }}"
   when: item.db_loglogins_name is defined
 
-- name: Put log_logins logrotate scripts
+- name: Create a python script that parses stepup log_logins per environment
+  ansible.builtin.template:
+    src: parse_ebauth_to_mysql.py.j2
+    dest: /usr/local/sbin/parse_stepupauth_to_mysql_{{ item.name }}.py
+    mode: 0740
+    owner: root
+    group: root
+  with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
+
+- name: Put log_logins logrotate scripts for eb
   ansible.builtin.template:
     src: logrotate_ebauth.j2
     dest: /etc/logrotate.d/logrotate_ebauth_{{ item.name }}
+    mode: 0644
+    owner: root
+    group: root
+  with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
+
+- name: Put log_logins logrotate scripts for stepup
+  ansible.builtin.template:
+    src: logrotate_ebauth.j2
+    dest: /etc/logrotate.d/logrotate_stepupauth_{{ item.name }}
     mode: 0644
     owner: root
     group: root
