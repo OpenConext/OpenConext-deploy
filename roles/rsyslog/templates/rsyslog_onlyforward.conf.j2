@@ -21,8 +21,7 @@ template(name="CustomRelpFormat" type="string"
 $PreserveFQDN on
 
 *.emerg                         :omusrmsg:*
-
-{% if is defined rsyslog_maxmessagesize %}
+{% if rsyslog_maxmessagesize is defined %}
 $MaxMessageSize {{ rsyslog_maxmessagesize }}
 {% endif %}
 
