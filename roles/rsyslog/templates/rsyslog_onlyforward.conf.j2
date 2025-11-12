@@ -3,7 +3,9 @@
 module(load="imptcp")
 input(type="imptcp" port="514")
 {% endif %}
+{% if ansible_os_family == "RedHat" %}
 module(load="imuxsock")
+{% endif %}
 module(load="imjournal"             # provides access to the systemd journal
        UsePid="system" # PID number is retrieved as the ID of the process the journal entry originates from
        StateFile="imjournal.state"
