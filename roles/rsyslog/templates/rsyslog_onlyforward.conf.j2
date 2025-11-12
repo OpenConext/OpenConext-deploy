@@ -5,8 +5,10 @@ input(type="imptcp" port="514")
 {% endif %}
 module(load="imuxsock")
 module(load="imjournal"             # provides access to the systemd journal
-       UsePid="system" # PID nummber is retrieved as the ID of the process the journal entry originates from
-       StateFile="imjournal.state")
+       UsePid="system" # PID number is retrieved as the ID of the process the journal entry originates from
+       StateFile="imjournal.state"
+       ratelimit.interval="{{ rsyslog_imjournal_ratelimitinterval | default('600') }}"
+       ratelimit.burst="{{ rsyslog_imjournal_ratelimitburst | default('20000') }}")  # Reads journald logs
 module(load="imklog")   # provides kernel logging support
 module(load="immark" interval="300" )  # provides --MARK-- message capability
 module(load="omrelp")
