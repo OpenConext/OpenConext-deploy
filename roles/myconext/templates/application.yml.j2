@@ -114,6 +114,8 @@ feature:
   create_eduid_institution_landing: {{ myconext.feature_create_eduid_institution_landing }}
   # Do we default remember the user for a longer period
   default_remember_me: True
+  # Do we default add affiliate email address
+  default_affiliate_email: True
   # Does the SAMLIdpService expects authn requests to be signed
   requires_signed_authn_request: False
   # Do we support ID verify
@@ -134,6 +136,8 @@ feature:
   captcha_enabled: True
   # Set to true to use the BRIN code to add ui-roles and authentication scoped affiliations
   use_remote_creation_for_affiliation:  {{ myconext.feature_use_remote_creation_for_affiliation }}
+
+ default_affiliate_email_domain: eduid.nl
 
 captcha:
   sitekey: {{ myconext.captcha_sitekey }}
