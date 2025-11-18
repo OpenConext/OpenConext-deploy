@@ -599,3 +599,9 @@ docker_servers:
 
 iptables_enable: false
 dashboard_install: false
+
+# these already have appropriate defaults in the template or rsyslog but you can
+# change them if necessary, for example on docker hosts they have to be a little higher
+# rsyslog_imjournal_ratelimitburst: 2000
+# rsyslog_imjournal_ratelimitinterval: 600
+# rsyslog_maxmessagesize: 8000
