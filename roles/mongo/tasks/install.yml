@@ -7,11 +7,12 @@
     owner: root
     mode: "0640"
 
-- name: Install the mongodb package
+- name: Install the mongodb package and some helper packages
   when: ansible_os_family == 'RedHat'
   ansible.builtin.yum:
     name:
       - mongodb-org
+      - pip
     state: present
 
 - name: Install pymongo
