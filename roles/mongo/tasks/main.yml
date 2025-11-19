@@ -1,8 +1,4 @@
 ---
-- name: Include Certificate tasks # Todo: move this task to the redhat family block when the debian arbiter lb1 is obsolete
-  ansible.builtin.include_tasks:
-    file: certs.yml
-
 - name: Install and configure mongo on redhat family servers
   when: ansible_os_family == 'RedHat'
   block:
@@ -14,6 +10,10 @@
     - name: Include installation tasks
       ansible.builtin.include_tasks:
         file: install.yml
+
+    - name: Include Certificate tasks
+      ansible.builtin.include_tasks:
+        file: certs.yml
 
     - name: Include cluster installation tasks
       ansible.builtin.include_tasks:
