@@ -11,6 +11,8 @@
       ansible.builtin.include_tasks:
         file: install.yml
 
+    - ansible.builtin.meta: flush_handlers
+
     - name: Include Certificate tasks
       ansible.builtin.include_tasks:
         file: certs.yml
