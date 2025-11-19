@@ -93,3 +93,7 @@ mfa_values_supported:
  - "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorUnregistered"
  - "urn:oasis:names:tc:SAML:2.0:ac:classes:Password"
  - "transparent_authn_context"
+ - "https://eduid.nl/trust/linked-institution"
+ - "https://eduid.nl/trust/validate-names"
+ - "https://eduid.nl/trust/validate-names-external"
+ - "https://eduid.nl/trust/affiliation-student"
