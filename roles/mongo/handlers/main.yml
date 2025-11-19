@@ -1,6 +1,6 @@
 ---
-- name: restart mongod
+- name: Restart mongod
   throttle: 1
   service:
-    name: mongod
+    name: "{{ mongo_service }}"
     state: restarted

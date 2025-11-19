@@ -2,7 +2,9 @@
 %target_host%
 
 [mongo_servers]
-%target_host%
+mongo1.example.com
+mongo2.example.com
+mongo3.example.com
 
 [selfsigned_certs]
 %target_host%
