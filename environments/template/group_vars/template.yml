@@ -290,6 +290,7 @@ myconext:
   feature_create_eduid_institution_landing: true
   feature_allowlist: false
   feature_dry_run_email_cron: true
+  feature_enable_account_linking: true
   sms_api_url: "https://rest.spryngsms.com/v1/messages"
   sms_api_route: "default"
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
