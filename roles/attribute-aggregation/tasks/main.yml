@@ -54,8 +54,8 @@
     etc_hosts:
       host.docker.internal: host-gateway
     labels:
-      traefik.http.routers.aagui.rule: "Host(`aa.{{ base_domain }}`)"
-      traefik.http.routers.aagui.tls: "true"
+      traefik.http.routers.aaserver.rule: "Host(`aa.{{ base_domain }}`)"
+      traefik.http.routers.aaserver.tls: "true"
       traefik.enable: "true"
     healthcheck:
       test:
