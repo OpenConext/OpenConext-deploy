@@ -1,0 +1,56 @@
+---
+# Handlers for the S3 role
+
+- name: restart master1
+  community.docker.docker_container:
+    name: master1
+    restart: true
+
+- name: restart master2
+  community.docker.docker_container:
+    name: master2
+    restart: true
+
+- name: restart master3
+  community.docker.docker_container:
+    name: master3
+    restart: true
+
+- name: restart volume1
+  community.docker.docker_container:
+    name: volume1
+    restart: true
+
+- name: restart volume2
+  community.docker.docker_container:
+    name: volume2
+    restart: true
+
+- name: restart volume3
+  community.docker.docker_container:
+    name: volume3
+    restart: true
+
+- name: restart filer
+  community.docker.docker_container:
+    name: filer
+    restart: true
+
+- name: restart s3
+  community.docker.docker_container:
+    name: s3
+    restart: true
+
+- name: restart all s3 services
+  community.docker.docker_container:
+    name: "{{ item }}"
+    restart: true
+  with_items:
+    - master1
+    - master2
+    - master3
+    - volume1
+    - volume2
+    - volume3
+    - filer
+    - s3
