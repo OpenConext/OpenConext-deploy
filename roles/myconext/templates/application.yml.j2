@@ -117,6 +117,8 @@ feature:
   create_eduid_institution_landing: {{ myconext.feature_create_eduid_institution_landing }}
   # Do we default remember the user for a longer period
   default_remember_me: True
+  # Do we default add affiliate email address
+  default_affiliate_email: True
   # Does the SAMLIdpService expects authn requests to be signed
   requires_signed_authn_request: False
   # Do we support ID verify
@@ -143,6 +145,8 @@ feature:
   use_app: {{ myconext.feature_use_app }}
 
 default_affiliate_email_domain: eduid.nl
+
+ default_affiliate_email_domain: eduid.nl
 
 captcha:
   sitekey: {{ myconext.captcha_sitekey }}
