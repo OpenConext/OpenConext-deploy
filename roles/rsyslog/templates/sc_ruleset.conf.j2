@@ -1,7 +1,8 @@
 $RuleSet {{ item.name }}
 {% if item.name != "mgnt_sc" %}
 if $programname == "engineblock" and $msg startswith " engine" then { action(type="omfile" DynaFile="apache-eb-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
-if $programname == "engineblock" and $msg startswith ' {"channel":"authentication"' then { action(type="omfile" DynaFile="ebauth-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop  }
+if $programname == "engineblock" and $msg startswith "engine" then { action(type="omfile" DynaFile="apache-eb-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+if $programname == "engineblock" and $msg contains '{"channel":"authentication"' then { action(type="omfile" DynaFile="ebauth-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop  }
 :programname, isequal, "engineblock" { action(type="omfile" DynaFile="eblog-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "EBLOG" { action(type="omfile" DynaFile="eblog-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "Apache-EB" { action(type="omfile" DynaFile="apache-eb-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
