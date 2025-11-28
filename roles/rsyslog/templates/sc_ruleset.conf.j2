@@ -46,8 +46,8 @@ if $programname == "profile" and $msg startswith " {" then { action(type="omfile
 :programname, startswith, "inviteprovisioningmock" { action(type="omfile" DynaFile="inviteprovisioningmock-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, startswith, "loadbalancer" { action(type="omfile" DynaFile="loadbalancer-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 
-if $programname == "gateway" and $msg startswith ' {"message":"Second Factor Authenticated"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
-if $programname == "gateway" and $msg startswith ' {"message":"Intrinsic Loa Requested"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+if $programname == "gateway" and $msg contains '{"message":"Second Factor Authenticated"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+if $programname == "gateway" and $msg contains '{"message":"Intrinsic Loa Requested"' then { action(type="omfile" DynaFile="stepup-authentication-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 
 {% for stepupapp in stepupapps %}
 :programname, isequal, "stepup-{{ stepupapp }}" { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
