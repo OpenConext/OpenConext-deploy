@@ -77,6 +77,7 @@ manage:
   base_url: "https://manage.{{ base_domain }}"
   enabled: True
 
+mongodb_db: {{ myconext.mongo_database }}
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
 base_path: https://mijn.{{ myconext_base_domain }}
