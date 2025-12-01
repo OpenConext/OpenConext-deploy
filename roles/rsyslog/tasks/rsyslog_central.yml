@@ -51,6 +51,8 @@
     dest: /etc/rsyslog.d/templates/{{ item.name }}.conf
     backup: true
   with_items: "{{ rsyslog_environments }}"
+  notify:
+    - "restart rsyslog"
 
 - name: Create ruleset configurations
   template:
@@ -58,6 +60,8 @@
     dest: /etc/rsyslog.d/rulesets/{{ item.name }}.conf
     backup: true
   with_items: "{{ rsyslog_environments }}"
+  notify:
+    - "restart rsyslog"
 
 - name: Create sc listener configurations
   template:
@@ -65,6 +69,8 @@
     dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
     backup: true
   with_items: "{{ rsyslog_environments }}"
+  notify:
+    - "restart rsyslog"
 
 - name: Create logrotate file for apps and host logs
   template:
