@@ -48,7 +48,7 @@
       - source: /opt/openconext/pdp/xacml.conext.properties
         target: /xacml.conext.properties
         type: bind
-    command: "-Xmx512m --spring.config.location=./"
+    command: "-Xmx2048m --spring.config.location=./"
     etc_hosts:
       host.docker.internal: host-gateway
     healthcheck:
