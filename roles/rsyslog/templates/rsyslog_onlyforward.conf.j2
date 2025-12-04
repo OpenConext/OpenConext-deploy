@@ -11,8 +11,8 @@ module(load="imuxsock")
 module(load="imjournal"             # provides access to the systemd journal
        UsePid="system" # PID number is retrieved as the ID of the process the journal entry originates from
        StateFile="{{ rsyslog_imjournal_statefile | default('imjournal.state') }}"
-       ratelimit.interval="{{ rsyslog_imjournal_ratelimitinterval | default('600') }}"
-       ratelimit.burst="{{ rsyslog_imjournal_ratelimitburst | default('20000') }}")  # Reads journald logs
+       ratelimit.interval="{{ rsyslog_imjournal_ratelimitinterval | default('60') }}"
+       ratelimit.burst="{{ rsyslog_imjournal_ratelimitburst | default('10000') }}")  # Reads journald logs
 module(load="imklog")   # provides kernel logging support
 module(load="immark" interval="300" )  # provides --MARK-- message capability
 module(load="omrelp")
