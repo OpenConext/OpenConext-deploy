@@ -118,6 +118,8 @@ config:
   past-date-allowed: {{ invite.past_date_allowed }}
   performance-seed-allowed: {{ invite.performance_seed_allowed }}
   eduid-idp-schac-home-organization: {{ invite.eduid_idp_schac_home_organization }}
+  # Determines the languages available for switching language, supported are 'nl', 'en' and 'pt'
+  languages: "nl, en"
 
 feature:
   limit-institution-admin-role-visibility: {{ invite.limit_institution_admin_role_visibility }}
