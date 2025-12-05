@@ -62,8 +62,8 @@ spring:
     host: {{ smtp_server }}
 
 oidcng:
-  discovery-url: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
-  introspect-url: "https://connect.test2.surfconext.nl/oidc/introspect"
+  discovery-url: "https://connect.{{ env }}.surfconext.nl/oidc/.well-known/openid-configuration"
+  introspect-url: "https://connect.{{ env }}.surfconext.nl/oidc/introspect"
   resource-server-id: myconext.rs
   resource-server-secret: secret
   base-url: {{ openconextaccess_base_domain }}
@@ -90,7 +90,7 @@ config:
   client-url: "https://{{ openconextaccess_base_domain }}"
   base-url: "{{ base_domain }}"
   edu_id_schac_home_organization: "eduid.nl"
-  discovery: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
+  discovery: "https://connect.{{ env }}.surfconext.nl/oidc/.well-known/openid-configuration"
   invite: "https://invite.{{ base_domain }}"
   sram: "https://{{ env }}.sram.surf.nl/"
   serviceDesk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
