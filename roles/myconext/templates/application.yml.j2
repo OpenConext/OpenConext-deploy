@@ -61,7 +61,13 @@ cron:
   manage-initial-delay-milliseconds: 15000
   manage-fixed-rate-milliseconds: 300_000
   # Runs on the first day of February, May, August, and November.
-  mail-institution-mail-usage-expression: "0 0 0 * 2,5,8,11 *"
+  # 0 – seconds
+  # 30 – minute
+  # 5 – hour
+  # * – every day of month
+  # 2,5,8,11 – February, May, August, November
+  # * – every day of week
+  mail-institution-mail-usage-expression: "0 30 5 * 2,5,8,11 *"
   mail-institution-batch-size: 500
   # Every day at 6:30AM
   nudge-app-mail-expression: "0 30 6 * * ?"
