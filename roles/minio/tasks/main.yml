@@ -24,6 +24,7 @@
     mode: "0644"
   with_items:
     - config.env
+  no_log: true
   notify: Restart minio
 
 - name: Create and start the server container
