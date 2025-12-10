@@ -39,7 +39,6 @@
       - name: "loadbalancer"
     exposed_ports:
       - 9000
-      - 9090
     mounts:
       - source: "{{ minio_data_dir }}"
         target: "{{ minio_data_dir_oncontainer }}"
