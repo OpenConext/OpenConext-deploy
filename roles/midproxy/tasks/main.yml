@@ -24,7 +24,7 @@
   with_items:
     - internal_attributes.yaml
     - proxy_conf.yaml
-    - plugins
+    - plugins/
 
 - name: Create the SATOSA container
   community.docker.docker_container:
