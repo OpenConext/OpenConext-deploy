@@ -42,6 +42,12 @@
       SATOSA_ISSUER: '{{ midproxy.issuer }}'
       SATOSA_CLIENT_ID: '{{ midproxy_client_id }}'
       SATOSA_CLIENT_SECRET: '{{ midproxy_client_secret }}'
+    volumes:
+      - /opt/sram/midproxy:/etc/satosa
+    labels:
+      traefik.http.routers.midproxy.rule: "Host(`midproxy.{{ openconextaccess_base_domain }}`)"
+      traefik.http.routers.midproxy.tls: "true"
+      traefik.enable: "true"
     # curl is not availavble in the minimized satosa image
     # so this healthcheck won't work
     # healthcheck:
@@ -50,9 +56,3 @@
     #   timeout: 10s
     #   retries: 3
     #   start_period: 10s
-    volumes:
-      - /opt/sram/midproxy:/etc/satosa
-    labels:
-      traefik.http.routers.midproxy.rule: "Host(`midproxy.{{ openconextaccess_base_domain }}`)"
-      traefik.http.routers.midproxy.tls: "true"
-      traefik.enable: "true"
