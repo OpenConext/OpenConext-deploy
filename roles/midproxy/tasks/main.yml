@@ -1,7 +1,7 @@
 ---
 - name: Create directory to keep configfile
   ansible.builtin.file:
-    dest: "/opt/openconext/midproxy"
+    dest: "/opt/sram/midproxy"
     state: directory
     # owner: root
     # group: root
@@ -10,7 +10,7 @@
 - name: Copy EB SP metadata
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/midproxy/{{ midproxy.sp_metadata }}"
-    dest: "/opt/openconext/midproxy/{{ midproxy.sp_metadata }}"
+    dest: "/opt/sram/midproxy/{{ midproxy.sp_metadata }}"
     # owner: "root"
     # group: root
     # mode: "0740"
@@ -18,10 +18,10 @@
 - name: Copy SATOSA conf files
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: "/opt/openconext/midproxy/{{ item }}"
+    dest: "/opt/sram/midproxy/{{ item }}"
   with_items:
     - internal_attributes.yaml
-    - proxy_config.yaml
+    - proxy_conf.yaml
     - plugins
 
 - name: Create the SATOSA container
@@ -49,7 +49,7 @@
     #   retries: 3
     #   start_period: 10s
     volumes:
-      - /opt/openconext/midproxy:/etc/satosa
+      - /opt/sram/midproxy:/etc/satosa
     labels:
       traefik.http.routers.midproxy.rule: "Host(`midproxy.{{ openconextaccess_base_domain }}`)"
       traefik.http.routers.midproxy.tls: "true"
