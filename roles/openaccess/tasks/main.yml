@@ -19,6 +19,12 @@
     - serverapplication.yml
   notify: restart accessserver
 
+
+- name: Debug mariadb_in_docker # Show with -vv
+  ansible.builtin.debug:
+    msg: "{{ mariadb_in_docker }}"
+    verbosity: 2
+
 - name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
   ansible.builtin.set_fact:
     invite_docker_networks:
