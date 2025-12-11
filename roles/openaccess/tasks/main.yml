@@ -27,7 +27,7 @@
 
 - name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
   ansible.builtin.set_fact:
-    invite_docker_networks:
+    openaccess_docker_networks:
       - name: loadbalancer
       - name: openconext_mariadb
   when: mariadb_in_docker | default(false) | bool
@@ -42,8 +42,7 @@
     restart_policy: "{{ openaccess_server_restart_policy }}"
     restart_retries: "{{ openaccess_server_restart_retries }}" # Only for restart policy on-failure
     state: started
-    networks:
-      - name: "loadbalancer"
+    networks: "{{ openaccess_docker_networks }}"
     mounts:
       - source: /opt/openconext/openaccess/serverapplication.yml
         target: /application.yml
