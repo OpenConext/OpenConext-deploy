@@ -1,0 +1,30 @@
+ServerName {{ hostnames.sbs }}
+#ErrorLog /proc/self/fd/2
+#CustomLog /proc/self/fd/1 common
+DocumentRoot /opt/sbs/client/build
+
+Header set Content-Security-Policy "default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'none'; form-action 'self' https://*.{{ base_domain }}; frame-ancestors 'none'; block-all-mixed-content;"
+Header set Permissions-Policy      "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(self), gamepad=(), speaker-selection=()"
+
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/(api|pam-weblogin|flasgger_static|swagger|health|config|info|socket.io)
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+RewriteRule ^/(.*)$ /index.html  [L]
+
+ProxyRequests off
+ProxyPassMatch ^/(api|pam-weblogin|flasgger_static|swagger|health|config|info) http://{{ containers.sbs_server }}:{{sbs_backend_port}}/
+ProxyPassReverse / http://{{ containers.sbs_server }}:{{sbs_backend_port}}/
+ProxyPass /socket.io/ ws://{{ containers.sbs_server }}:{{sbs_backend_port}}/socket.io/
+ProxyPassReverse /socket.io/ ws://{{ containers.sbs_server }}:{{sbs_backend_port}}/socket.io/
+
+<If "%{REQUEST_URI} =~ m#^/api/images/#">
+    Header set Cache-Control:  "public, max-age=31536000, immutable"
+</If>
+<ElseIf "%{REQUEST_URI} =~ m#^/(api|pam-weblogin|flasgger_static|swagger|health|config|info)#">
+    Header set Cache-Control:  "no-cache, private"
+</ElseIf>
+
+<Directory /opt/sbs/client/build>
+    Require all granted
+    Options -Indexes
+</Directory>
