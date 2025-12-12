@@ -1,5 +1,10 @@
 # Where to place auxiliary files
-global(workDirectory="{{ rsyslog_workdirectory | default('/var/spool/rsyslog') }}")
+global(
+  workDirectory="{{ rsyslog_workdirectory | default('/var/spool/rsyslog') }}"
+  {% if rsyslog_maxmessagesize is defined %}
+  maxMessageSize {{ rsyslog_maxmessagesize }}
+  {% endif %}
+  )
 
 {% if 'docker' in group_names %}
 module(load="imptcp")
@@ -23,9 +28,6 @@ template(name="CustomRelpFormat" type="string"
 $PreserveFQDN on
 
 *.emerg                         :omusrmsg:*
-{% if rsyslog_maxmessagesize is defined %}
-$MaxMessageSize {{ rsyslog_maxmessagesize }}
-{% endif %}
 
 {% if  'sysloghost' not in group_names %}
 {% for relp_host in relp_remote %}
