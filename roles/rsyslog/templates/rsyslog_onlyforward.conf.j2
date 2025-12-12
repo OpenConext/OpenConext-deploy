@@ -2,7 +2,7 @@
 global(
   workDirectory="{{ rsyslog_workdirectory | default('/var/spool/rsyslog') }}"
   {% if rsyslog_maxmessagesize is defined %}
-  maxMessageSize {{ rsyslog_maxmessagesize }}
+  maxMessageSize="{{ rsyslog_maxmessagesize }}"
   {% endif %}
   )
 
