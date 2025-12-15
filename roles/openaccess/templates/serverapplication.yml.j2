@@ -106,13 +106,13 @@ config:
         descriptionNL: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
   idp_proxy_meta_data:  https://metadata.test2.surfconext.nl/idp-metadata.xml
   features:
-    - name: IDP_MANAGEMENT
+    - name: idp
       enabled: true
-    - name: INVITE
+    - name: invite
       enabled: true
-    - name: SRAM
+    - name: sram
       enabled: true
-    - name: MFA
+    - name: mfa
       enabled: true
 
 eduid-idp-entity-id: "https://login.{{ myconext_base_domain }}"
