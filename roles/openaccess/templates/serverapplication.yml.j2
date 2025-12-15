@@ -94,7 +94,7 @@ config:
   invite: "https://invite.{{ base_domain }}"
   sram: "https://{{ env }}.sram.surf.nl/"
   serviceDesk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
-  # TODO decide if we need this and if so, then move it to the env vars
+  # For other environments, move to group_vars
   identity_providers:
       - name: "SXS IdP"
         entityid: "http://mock-idp"
@@ -105,6 +105,15 @@ config:
         descriptionEN: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
         descriptionNL: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
   idp_proxy_meta_data:  https://metadata.test2.surfconext.nl/idp-metadata.xml
+  features:
+    - name: IDP_MANAGEMENT
+      enabled: true
+    - name: INVITE
+      enabled: true
+    - name: SRAM
+      enabled: true
+    - name: MFA
+      enabled: true
 
 eduid-idp-entity-id: "https://login.{{ myconext_base_domain }}"
 
