@@ -21,6 +21,7 @@ $template apache-voot-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/v
 $template galera-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/galera/galera.log"
 $template garb-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/galera/galera_garb.log"
 $template keepalived-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/keepalived/keepalived.log"
+$template mongo-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/mongo/mongo.log"
 $template apache-static-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/static/apache.log"
 $template apache-eb-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eb/apache.log"
 $template eblog-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eb/eb.log"
@@ -35,6 +36,7 @@ $template myconext-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/edui
 $template myconextjson-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/myconextjson.log"
 $template apache-myconext-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/myconext-apache.log"
 $template apache-account-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/account-apache.log"
+$template apache-servicedesk-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/servicedeskgui/servicedesk-apache.log
 $template apache-eduid-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/eduid-apache.log"
 $template spdashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/spdashboard/spdashboard.log"
 $template apache-spdashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/spdashboard/apache.log"

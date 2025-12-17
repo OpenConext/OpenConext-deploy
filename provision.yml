@@ -67,12 +67,14 @@
 - hosts: mysql_db
   gather_facts: no
   become: true
+  roles:
     - role: galera_create_users
       tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
 
 - hosts: mongo_servers
   gather_facts: yes
   become: true
+  serial: 1
   roles:
     - role: mongo
       tags: ['core', 'mongo']

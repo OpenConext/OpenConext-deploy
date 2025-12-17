@@ -68,6 +68,10 @@ oidcng:
   resource-server-secret: secret
   base-url: {{ openconextaccess_base_domain }}
 
+lifecycle:
+  user: lifecycle
+  password: {{ openconextaccess_lifecycle_secret }}
+
 jira:
   enabled: true
   base-url: {{ openconextaccess.jira.base_url }}
@@ -78,20 +82,24 @@ jira:
   # Timeout in milliseconds
   connection-timeout: 10000
 
+institution-admin:
+  entitlement: "urn:mace:surfnet.nl:surfnet.nl:sab:role:SURFconextverantwoordelijke"
+  organization-guid-prefix: "urn:mace:surfnet.nl:surfnet.nl:sab:organizationGUID:"
 
 config:
   client-url: "https://{{ openconextaccess_base_domain }}"
   base-url: "{{ base_domain }}"
   edu_id_schac_home_organization: "eduid.nl"
   discovery: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
+  invite: "https://invite.{{ base_domain }}"
+  sram: "https://{{ env }}.sram.surf.nl/"
+  serviceDesk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
+
+eduid-idp-entity-id: "https://login.{{ myconext_base_domain }}"
 
 super-admin:
   users:
     - "urn:collab:person:example.com:admin"
-
-institution-admin:
-  entitlement: "urn:mace:surfnet.nl:surfnet.nl:sab:role:SURFconextverantwoordelijke"
-  organization-guid-prefix: "urn:mace:surfnet.nl:surfnet.nl:sab:organizationGUID:"
 
 gui:
   disclaimer:
@@ -104,10 +112,13 @@ feature:
 email:
   from: "{{ noreply_email }}"
   contactEmail: "{{ support_email }}"
+  serviceDeskEmail: "{{ support_email }}"
+  supportEmail: "support@surfconext.nl"
   environment: "{{ environment_shortname }}"
 
 manage:
   enabled: True
+  activeManage: TEST
   test:
     url: {{ openconextaccess.managetest.url }}
     user: {{ openconextaccess.managetest.user }}
@@ -157,5 +168,3 @@ info:
   build:
     artifact: "@project.artifactId@"
     version: "@project.version@"
-
-eduid-idp-entity-id: "https://login.test2.eduid.nl"

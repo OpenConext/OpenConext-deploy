@@ -49,19 +49,28 @@
   template:
     src: sc_template.conf.j2
     dest: /etc/rsyslog.d/templates/{{ item.name }}.conf
+    backup: true
   with_items: "{{ rsyslog_environments }}"
+  notify:
+    - "restart rsyslog"
 
 - name: Create ruleset configurations
   template:
     src: sc_ruleset.conf.j2
     dest: /etc/rsyslog.d/rulesets/{{ item.name }}.conf
+    backup: true
   with_items: "{{ rsyslog_environments }}"
+  notify:
+    - "restart rsyslog"
 
 - name: Create sc listener configurations
   template:
     src: listener.conf.j2
     dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
+    backup: true
   with_items: "{{ rsyslog_environments }}"
+  notify:
+    - "restart rsyslog"
 
 - name: Create logrotate file for apps and host logs
   template:

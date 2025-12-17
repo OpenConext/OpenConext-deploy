@@ -9,7 +9,7 @@
  </appender>
 
  <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-    <destination>{{ ansible_fqdn }}:514</destination>
+   <destination>host.docker.internal:514</destination>
     <encoder class="net.logstash.logback.encoder.LogstashEncoder">
         <customFields>{"app":"oidcng"}</customFields>
         <includeCallerData>true</includeCallerData>
@@ -40,7 +40,8 @@
  </appender>
 
  <logger name="oidc" level="INFO" />
- <logger name="org.springframework" level="WARN" />
+ <logger name="com.github.cloudyrock.mongock" level="INFO" />
+ <logger name="org.springframework" level="INFO" />
  <root level="WARN">
 {%if oidcng_logback_email |bool  %}
    <appender-ref ref="EMAIL" />
