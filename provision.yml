@@ -48,6 +48,13 @@
     - role: mysql
       tags: ['core', 'db_mysql', 'mysql']
 
+# todo: clearer groupnames
+# for now:
+# dbcluster : all servers in galera cluster
+# dbcluster_nodes: just full nodes with mariadb in galera cluster
+# mysql_only: mariadb not in galera cluster
+# db_mysql: all mariadb servers, so mysql_only + dbcluster_nodes
+
 - hosts: dbcluster
   gather_facts: no
   become: true
@@ -64,7 +71,7 @@
     - role: keepalived
       tags: ['core', 'db_mysql', 'keepalived']
 
-- hosts: mysql_db
+- hosts: db_mysql
   gather_facts: no
   become: true
   roles:
