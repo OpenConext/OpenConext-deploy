@@ -1,7 +1,6 @@
 Ansible-driven provisioning of the OpenConext platform.
 ==============================
 
-# todo : pas aan aan nieuwe indeling en playbooks
 # Introduction
 
 This repository contains everything you need if you want to use Ansible for deployment of OpenConext applications, including the Stepup suite. It does currently not provide you with a step by step manual to get the whole OpenConext suite installed and working. With some Ansible experience and some work, you will be able to use this repository to deploy the OpenConext applications however. The document will provide information on how to do that.
