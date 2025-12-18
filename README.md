@@ -99,12 +99,12 @@ Edit group_var and host_var files if necessary
 The final setup will look like this:  
 
 - group_vars/all.yml
-- group_vars/<GROUPNAME>.yml
-- host_vars/<HOSTNAME>/yml
+- group_vars/\<GROUPNAME\>.yml
+- host_vars/\<HOSTNAME\>/yml
 - inventory
 - Openconext-deploy/provision.yml
 - Openconext-deploy/roles
-- <YOUROWNOPTIONALPLAYBOOKS>.yml
+- \<YOUROWNOPTIONALPLAYBOOKS\>.yml
 - ansible.cfg
 
 You can use the provision playbook now:
@@ -126,13 +126,13 @@ Edit group_var and host_var files if necessary
 
 The final setup will look like this:  
 
-- <ENVIRONMENT>/group_vars/all.yml
-- <ENVIRONMENT>/group_vars/<GROUPNAME>.yml
-- <ENVIRONMENT>/host_vars/<HOSTNAME>/yml
-- <ENVIRONMENT>/inventory
+- \<ENVIRONMENT\>/group_vars/all.yml
+- \<ENVIRONMENT\>/group_vars/\<GROUPNAME\>.yml
+- \<ENVIRONMENT\>/host_vars/\<HOSTNAME\>/yml
+- \<ENVIRONMENT\>/inventory
 - Openconext-deploy/provision.yml
 - Openconext-deploy/roles
-- <YOUROWNOPTIONALPLAYBOOKS>.yml
+- \<YOUROWNOPTIONALPLAYBOOKS\>.yml
 - ansible.cfg
 
 You can use the provision playbook now:
