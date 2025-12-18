@@ -96,10 +96,13 @@ cp -R OpenConext-deploy/environments/template/* .
 Edit your inventory file  
 Edit group_var and host_var files if necessary  
 
+Create an ansible vault in secrets and name it secrets.yml, an unencrypted example can be found in secrets/secret_example.yml  
+More information about vaults: https://docs.ansible.com/projects/ansible/latest/vault_guide/index.html
 The final setup will look like this:  
 
 - group_vars/all.yml
 - group_vars/\<GROUPNAME\>.yml
+- secrets/secrets.yml
 - host_vars/\<HOSTNAME\>/yml
 - inventory
 - Openconext-deploy/provision.yml
@@ -123,6 +126,9 @@ cp -R OpenConext-deploy/environments/template/* <ENVIRONMENT>
 ```
 Edit your inventory files  
 Edit group_var and host_var files if necessary  
+
+For each environment create an ansible vault in secrets and name it secrets.yml, an unencrypted example can be found in secrets/secret_example.yml  
+More information about vaults: https://docs.ansible.com/projects/ansible/latest/vault_guide/index.html
 
 The final setup will look like this:  
 
