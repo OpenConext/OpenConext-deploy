@@ -78,7 +78,7 @@ cd yourdir
 git clone https://github.com/OpenConext/OpenConext-deploy.git
 ```
 
-Create ansible.cfg and add Openconext-deploy/roles to your roles_path
+Create ansible.cfg in your directory and add Openconext-deploy/roles to your roles_path
 
 ```bash
 [defaults]
