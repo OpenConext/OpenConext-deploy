@@ -90,7 +90,7 @@ roles_path = OpenConext-deploy/roles # Add your own roles directory if you want
 Copy the inventory, host and group files from environment/template to your directory and adjust them according to your preferences:
 
 ```bash
-cp -R Openconext-deploy/environments/template/* .
+cp -R OpenConext-deploy/environments/template/* .
 ```
 
 Edit your inventory file  
@@ -118,7 +118,7 @@ Copy the inventory and group files from environment/template to your directory a
 
 ```bash
 mkdir <ENVIRONMENT> # test for example
-cp -R Openconext-deploy/environments/template/* <ENVIRONMENT>
+cp -R OpenConext-deploy/environments/template/* <ENVIRONMENT>
 # etc...
 ```
 Edit your inventory files  
