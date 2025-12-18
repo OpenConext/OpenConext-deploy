@@ -1,12 +1,10 @@
 [%env%:children]
-mongo_servers
-sysloghost
-loadbalancer_ha
-loadbalancer
-lifecycle
 dbcluster
 dbcluster_nodes
 docker_servers
+lifecycle
+loadbalancer
+loadbalancer_ha
 mongo_servers
 mysql_only
 stats
