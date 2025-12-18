@@ -9,15 +9,10 @@ selfsigned_certs
 sysloghost
 loadbalancer_ha
 loadbalancer
-elk
 lifecycle
 dbcluster
 dbcluster_nodes
 docker_servers
-elk
-lifecycle
-loadbalancer
-loadbalancer_ha
 mongo_servers
 mysql_only
 stats
@@ -27,7 +22,6 @@ sysloghost
 dbcluster
 dbcluster_nodes
 docker_servers
-elk
 lifecycle
 loadbalancer
 loadbalancer_ha
@@ -49,9 +43,6 @@ db3.example.com # arbitrator
 [dbcluster_nodes] # all galera members with a full mysql installation
 db1.example.com
 db2.example.com
-
-[elk]
-elk1.example.com
 
 [frontend:children]
 lifecycle
