@@ -1,19 +1,9 @@
-[storage]
-%target_host%
-
 [mongo_servers]
 mongo1.example.com
 mongo2.example.com
 mongo3.example.com
 
-[selfsigned_certs]
-%target_host%
-
-[loadbalancer]
-%target_host%
-
 [%env%:children]
-storage
 mongo_servers
 selfsigned_certs
 sysloghost
