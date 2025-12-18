@@ -5,7 +5,6 @@ mongo3.example.com
 
 [%env%:children]
 mongo_servers
-selfsigned_certs
 sysloghost
 loadbalancer_ha
 loadbalancer
