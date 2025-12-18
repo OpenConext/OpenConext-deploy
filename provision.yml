@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: Gather secrets
+  hosts: all
   gather_facts: no
   tasks:
     - name: Read vars from secrets file
@@ -8,45 +9,56 @@
       tags:
        - always
 
-- hosts: base
+- name: Deploy rsyslog
+  hosts: base
   gather_facts: yes
   become: true
   roles:
     - role: rsyslog
-      tags: ['core', 'base', 'rsyslog']
+  tags: ['core', 'base', 'rsyslog']
 
-- hosts: base
+- name: Deploy iptables
+  hosts: base
   gather_facts: yes
   become: true
   roles:
     - role: iptables
       when:
         - iptables_enable | bool
-      tags: ['core', 'base', 'iptables']
+  tags: ['core', 'base', 'iptables']
 
-- hosts: loadbalancer
+- name: Deploy loadbalancer
+  hosts: loadbalancer
   gather_facts: true
   become: true
   roles:
     - role: haproxy
-      tags: ['core', 'loadbalancer_ha', 'loadbalancer', 'lb']
+  tags: ['core', 'loadbalancer_ha', 'loadbalancer', 'lb']
 
-- hosts: loadbalancer_ha
+- name: Deploy loadbalancer keepalived
+  hosts: loadbalancer_ha
   gather_facts: true
   become: true
   roles:
     - role: keepalived
-      tags: ['core', 'loadbalancer_ha', 'keepalived']
-    - role: bind
-      tags: ['core', 'loadbalancer_ha', 'bind']
+  tags: ['core', 'loadbalancer_ha', 'keepalived']
 
-- hosts: mysql_standalone
+- name: Deploy loadbalancer bind
+  hosts: loadbalancer_ha
+  gather_facts: true
+  become: true
+  roles:
+    - role: bind
+  tags: ['core', 'loadbalancer_ha', 'bind']
+
+- name: Deploy standalone mariadb
+  hosts: mysql_standalone
   gather_facts: no
   become: true
   serial: 1
   roles:
     - role: mysql
-      tags: ['core', 'db_mysql', 'mysql']
+  tags: ['core', 'db_mysql', 'mysql']
 
 # todo: clearer groupnames
 # for now:
@@ -55,7 +67,8 @@
 # mysql_only: mariadb not in galera cluster
 # db_mysql: all mariadb servers, so mysql_only + dbcluster_nodes
 
-- hosts: dbcluster
+- name: Deploy galera
+  hosts: dbcluster
   gather_facts: no
   become: true
   serial: 1
@@ -63,42 +76,39 @@
     - role: galera
       tags: ['core', 'db_mysql', 'galera']
 
-- hosts: dbcluster_nodes
+- name: Deploy galera keepalived
+  hosts: dbcluster_nodes
   gather_facts: no
   become: true
   serial: 1
   roles:
     - role: keepalived
-      tags: ['core', 'db_mysql', 'keepalived']
+  tags: ['core', 'db_mysql', 'keepalived']
 
-- hosts: db_mysql
+- name: Create mysql users
+  hosts: db_mysql
   gather_facts: no
   become: true
   roles:
     - role: galera_create_users
-      tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
+  tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
 
-- hosts: mongo_servers
+- name: Deploy mongo servers
+  hosts: mongo_servers
   gather_facts: yes
   become: true
   serial: 1
   roles:
     - role: mongo
-      tags: ['core', 'mongo']
+  tags: ['core', 'mongo']
 
-- hosts: elk
-  gather_facts: true
-  become: true
-  roles:
-    - role: elk
-      tags: ['elk' ]
-
-- hosts: stats
+- name: Deploy stats
+  hosts: stats
   gather_facts: true
   become: true
   roles:
     - role: influxdb
-      tags: ['influxdb' ]
+  tags: ['influxdb' ]
 
 # Separate groups for all containerized apps
 # Dividing apps across the container services should be set in
