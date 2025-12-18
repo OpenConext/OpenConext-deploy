@@ -93,21 +93,21 @@ Copy the inventory, host and group files from environment/template to your direc
 cp -R Openconext-deploy/environments/template/* .
 ```
 
-Edit your inventory file
-Edit group_var and host_var files if necessary
+Edit your inventory file  
+Edit group_var and host_var files if necessary  
 
-The final setup will look like this:
+The final setup will look like this:  
 
-group_vars/all.yml
-group_vars/<GROUPNAME>.yml
-host_vars/<HOSTNAME>/yml
-inventory
-Openconext-deploy/provision.yml
-Openconext-deploy/roles
-<YOUROWNOPTIONALPLAYBOOKS>.yml
-ansible.cfg
+- group_vars/all.yml
+- group_vars/<GROUPNAME>.yml
+- host_vars/<HOSTNAME>/yml
+- inventory
+- Openconext-deploy/provision.yml
+- Openconext-deploy/roles
+- <YOUROWNOPTIONALPLAYBOOKS>.yml
+- ansible.cfg
 
-You can use the provision playbook now
+You can use the provision playbook now:
 
 ```bash
 ansible-playbook OpenConext-deploy/provision.yml -i inventory -t <TAG>
@@ -121,21 +121,21 @@ mkdir <ENVIRONMENT> # test for example
 cp -R Openconext-deploy/environments/template/* <ENVIRONMENT>
 # etc...
 ```
-Edit your inventory files
-Edit group_var and host_var files if necessary
+Edit your inventory files  
+Edit group_var and host_var files if necessary  
 
-The final setup will look like this:
+The final setup will look like this:  
 
-<ENVIRONMENT>/group_vars/all.yml
-<ENVIRONMENT>/group_vars/<GROUPNAME>.yml
-<ENVIRONMENT>/host_vars/<HOSTNAME>/yml
-<ENVIRONMENT>/inventory
-Openconext-deploy/provision.yml
-Openconext-deploy/roles
-<YOUROWNOPTIONALPLAYBOOKS>.yml
-ansible.cfg
+- <ENVIRONMENT>/group_vars/all.yml
+- <ENVIRONMENT>/group_vars/<GROUPNAME>.yml
+- <ENVIRONMENT>/host_vars/<HOSTNAME>/yml
+- <ENVIRONMENT>/inventory
+- Openconext-deploy/provision.yml
+- Openconext-deploy/roles
+- <YOUROWNOPTIONALPLAYBOOKS>.yml
+- ansible.cfg
 
-You can use the provision playbook now
+You can use the provision playbook now:
 
 ```bash
 ansible-playbook OpenConext-deploy/provision.yml -i <ENVIRONMENT>/inventory -t <TAG>
