@@ -40,12 +40,12 @@ Every application has a seperate role to install it. The following roles can be 
 | stepupra              | Stepup ra interface            |
 | stepupselfservice     | Stepup selfservice interface   |
 
-All these applications run in Docker. You can use the "docker" role to install docker and Traefik. The result is a Docker application server, with port 443 open. Applications are served by Traefik and recognized on basis of a Host: header. If you run a small installation, you can add a https certificate to Traefik and run a single node application server. 
+All these applications run in Docker. You can use the "docker" role to install docker and Traefik. The result is a Docker application server, with port 443 open. Applications are served by Traefik and recognized on basis of a Host: header. If you run a small installation, you can add a https certificate to Traefik and run a single node application server.
 
-For a fully functioning environment you also need a MariaDB database server and a Mongo database server. 
+For a fully functioning environment you also need a MariaDB database server and a Mongo database server.
 
 ## Infra roles
-This repository is used for deployment of SURFconext, and several roles that the SURFconext teams uses to provision our infrastructure are provided here as well. You can use them for your own infrastructure or use them as inspiration. 
+This repository is used for deployment of SURFconext, and several roles that the SURFconext teams uses to provision our infrastructure are provided here as well. You can use them for your own infrastructure or use them as inspiration.
 | name         | remarks                                                                      |
 | ---          | ---                                                                          |
 | bind         | DNS server for high availability. Very specific for SURFconext               |
@@ -60,8 +60,14 @@ This repository is used for deployment of SURFconext, and several roles that the
 | mongo        | Install a mongo cluster  (has its own README)                                |
 | manage_provision_entities|Provision entities to Manage                                      |
 
-# Environment specific variables
-Many variables can be overridden to create a setup suitable for your needs. The environment should be placed in the directory environments_external. 
+# Setting up your environment
+Many variables can be overridden to create a setup suitable for your needs. We will explain the setup here for one environment or for a multi-environment (OTAP for example) setup.
+
+## One environment
+
+## Multi-environment
+
+The environment should be placed in the directory environments_external.
 
 A script is available to provision a new environment. It will create a new environment directory under environments-external/ and it will create all necessary passwords and (self-signed) certificates. Replace <environment> with the name of the target. Replace <domain> with the domain of the target.
 

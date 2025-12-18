@@ -21,7 +21,7 @@
 
 - name: Copy ca pem file
   ansible.builtin.copy:
-    src: "{{ environment_dir }}/secrets/mongo/mongoca.pem"
+    src: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
     dest: "{{ mongo_pki_dir }}/mongoca.pem"
     owner: root
     group: root
