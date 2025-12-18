@@ -34,6 +34,8 @@ mysql_only
 dbcluster
 dbcluster_nodes
 
+[mysql_only]
+
 [dbcluster] # all galera members including arbitrator
 db1.example.com
 db2.example.com
