@@ -113,7 +113,7 @@ The final setup will look like this:
 You can use the provision playbook now:
 
 ```bash
-ansible-playbook OpenConext-deploy/provision.yml -i inventory -t <TAG>
+ansible-playbook OpenConext-deploy/provision.yml -i inventory -t <TAG> --ask-vault-password
 ```
 
 ## Multi-environment
@@ -144,7 +144,7 @@ The final setup will look like this:
 You can use the provision playbook now:
 
 ```bash
-ansible-playbook OpenConext-deploy/provision.yml -i <ENVIRONMENT>/inventory -t <TAG>
+ansible-playbook OpenConext-deploy/provision.yml -i <ENVIRONMENT>/inventory -t <TAG> --ask-vault-password
 ```
 
 # License
