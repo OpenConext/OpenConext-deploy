@@ -11,3 +11,4 @@ aa_manage_provision_oidcrp_allowed_resource_servers: '{"name": "{{ voot.oidcng_c
 aa_spring_flyway_enabled: true
 aa_docker_networks:
   - name: loadbalancer
+aa_springapp_tcpport: 8080

@@ -23,3 +23,4 @@ oidcng_docker_networks:
   - name: loadbalancer
 oidcng_server_restart_policy: always
 oidcng_server_restart_retries: 0
+oidcng_server_springapp_tcpport: 8080
