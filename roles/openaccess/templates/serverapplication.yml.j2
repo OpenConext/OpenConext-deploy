@@ -114,9 +114,13 @@ config:
       enabled: true
     - name: mfa
       enabled: true
+  acr_values:
+  {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}
+    - "{{ loa }}"
+  {% endfor %}
+  minimal_stepup_loa_level: "http://{{ base_domain }}/assurance/loa2"
 
 eduid-idp-entity-id: "https://login.{{ myconext_base_domain }}"
-loa-2-level: "http://{{ base_domain }}/assurance/loa2"
 
 super-admin:
   users:
