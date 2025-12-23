@@ -9,7 +9,7 @@
  </appender>
 
  <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-    <destination>{{ ansible_fqdn }}:514</destination>
+   <destination>host.docker.internal:514</destination>
     <encoder class="net.logstash.logback.encoder.LogstashEncoder">
         <customFields>{"app":"oidcng"}</customFields>
         <includeCallerData>true</includeCallerData>

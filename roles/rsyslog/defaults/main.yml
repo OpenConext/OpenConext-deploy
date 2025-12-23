@@ -22,3 +22,12 @@ rsyslog_dir_file_modes: 'dirCreateMode="0755" fileCreateMode="0640" FileGroup="s
 rsyslog_service_dropindir: "/etc/systemd/system/rsyslog.service.d"
 rsyslog_certifcate_dir: "/etc/pki/rsyslog"
 rsyslog_queue_dir: "/var/spool/rsyslog"
+
+# these already have appropriate defaults in the template or rsyslog but you can
+# change them if necessary, for example on docker hosts they have to be a little higher
+# rsyslog_imjournal_ratelimitburst: 2000
+# rsyslog_imjournal_ratelimitinterval: 600
+# rsyslog_maxmessagesize: 8000
+
+# rsyslog_imjournal_statefile # default is imjournal.state which means imjournal.state relative to the rsyslog workdir
+# rsyslog_workdirectory # default /var/spool/rsyslog
