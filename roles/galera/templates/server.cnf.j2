@@ -10,13 +10,15 @@
 
 # this is only for the mysqld standalone daemon
 [mysqld]
-sql_mode=NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+sql_mode=STRICT_ALL_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
 userstat = ON
 log_slave_updates = ON
 tmpdir = /var/lib/mysqltemp
 ssl-ca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }}
 ssl-key = {{ galera_tls_cert_path }}/{{ galera_server_key_name }}
 ssl-cert = {{ galera_tls_cert_path }}/{{ galera_server_crt_name }}
+tls_version=TLSv1.3
+ssl_cipher='ECDHE-ECDSA-AES128-GCM-SHA256'
 binlog_format=ROW
 default_storage_engine=innodb
 innodb_autoinc_lock_mode=2
@@ -28,6 +30,8 @@ datadir=/var/lib/mysql
 max_connections = 2000
 skip-external-locking
 skip-name-resolve
+skip-grant-tables = FALSE
+skip-symbolic-links = YES
 max_allowed_packet = 256M
 table_cache = 4096
 read_buffer_size = 4M
