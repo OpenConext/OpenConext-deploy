@@ -1,30 +1,19 @@
 ---
 - name: Create the repository for mongodb
-  ansible.builtin.copy:
-    src: "mongo.repo"
+  when: ansible_os_family == 'RedHat'
+  ansible.builtin.template:
+    src: "mongo.repo.j2"
     dest: "/etc/yum.repos.d/mongo.repo"
     owner: root
     mode: "0640"
 
-- name: Install the mongodb package
+- name: Install the mongodb package and some helper packages
+  when: ansible_os_family == 'RedHat'
   ansible.builtin.yum:
     name:
       - mongodb-org
+      - pip
     state: present
-
-- name: Slurp the private key
-  ansible.builtin.slurp:
-    path: "/etc/pki/mongo/mongo.key"
-  register: mongo_key
-
-- name: Create combined key and certificate file
-  ansible.builtin.copy:
-    content: "{{ mongo_key['content'] | b64decode }}{{ certificate.certificate }}"
-    dest: "/etc/pki/mongo/keyandcert.pem"
-    owner: root
-    group: mongod
-    mode: "0440"
-  ignore_errors: '{{ ansible_check_mode }}'
 
 - name: Install pymongo
   ansible.builtin.pip:
@@ -70,7 +59,7 @@
     owner: root
     group: root
     mode: "0644"
-  notify: restart mongod
+  notify: Restart mongod
 
 - name: Enable and start mongod
   ansible.builtin.service:
