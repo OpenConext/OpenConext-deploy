@@ -159,6 +159,12 @@ manage:
   staticManageDirectory: classpath:/manage
   #  staticManageDirectory: file:///usr/local/etc/manage
 
+invite:
+  enabled: True
+  url: "https://invite.{{ base_domain }}"
+  user: {{ invite.access_user }}
+  password: "{{ invite.access_secret }}"
+
 s3storage:
   url: {{ openconextaccess.s3_storage.url }}
   key: {{ openconextaccess.s3_storage.key }}
