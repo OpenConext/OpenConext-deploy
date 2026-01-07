@@ -33,6 +33,7 @@
     pull: true
     restart_policy: "always"
     state: started
+    restart: true
     networks:
       - name: "loadbalancer"
     env:
