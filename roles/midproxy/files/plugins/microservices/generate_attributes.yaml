@@ -5,5 +5,4 @@ config:
         default:
             default:
                 schachomeorganization: >-
-                  {{#schachomeorganization}}{{.}}{{/schachomeorganization}}
-                  {{^schachomeorganization}}myaccessid.org{{/schachomeorganization}}
+                    myaccessid.org
