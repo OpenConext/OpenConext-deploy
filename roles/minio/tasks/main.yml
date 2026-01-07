@@ -6,7 +6,8 @@
 
 - name: Add minio users
   ansible.builtin.include_tasks: "create_users.yml"
-  loop: 
-    - {{ name: "testuser1", password: "testpassword1" }}
+  loop:
+    - { name: 'testuser1', password: 'wheel' }
+    - { name: 'testuser2', password: 'root' }
   loop_control:
     loop_var: "user"
