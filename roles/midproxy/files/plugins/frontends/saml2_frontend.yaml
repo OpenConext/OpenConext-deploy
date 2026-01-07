@@ -36,7 +36,7 @@ config:
       local: [!ENV SATOSA_SP_METADATA]
     entityid: <base_url>/<name>/proxy.xml
     accepted_time_diff: 60
-    # attribute_map_dir: plugins/attribute-maps
+    attribute_map_dir: plugins/attribute-maps
     service:
       idp:
         endpoints:
@@ -56,8 +56,8 @@ config:
         policy:
           default:
             fail_on_missing_requested: false
-            # name_form: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
-            # attribute_restrictions: null
-            # lifetime: {minutes: 15}
-            # encrypt_assertion: false
-            # encrypted_advice_attributes: false
+            name_form: urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+            attribute_restrictions: null
+            lifetime: {minutes: 15}
+            encrypt_assertion: false
+            encrypted_advice_attributes: false
