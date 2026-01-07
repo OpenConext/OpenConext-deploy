@@ -4,3 +4,6 @@ minio_version: RELEASE.2025-05-24T17-08-30Z
 minio_root_user: "minioadmin"
 minio_data_dir_oncontainer: "/data"
 # minio_root_password get from vault
+minio_url_local: "http://127.0.0.1:9000"
+minio_aliases:
+  - "openconext"
