@@ -3,3 +3,10 @@
 
 - name: Configure minio
   ansible.builtin.include_tasks: "configure_minio.yml"
+
+- name: Add minio users
+  ansible.builtin.include_tasks: "create_users.yml"
+  loop: 
+    - {{ name: "testuser1", password: "testpassword1" }}
+  loop_control:
+    loop_var: "user"

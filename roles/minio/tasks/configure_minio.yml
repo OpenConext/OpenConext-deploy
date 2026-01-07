@@ -7,7 +7,7 @@
 
 - name: Debug alias list
   ansible.builtin.debug:
-    msg: "{{ minio_alias_present }}"
+    msg: "{{ minio_alias_present.rc }}" # stdout can contain password
     verbosity: 2
 
 - name: Configure minio connection alias
@@ -17,3 +17,9 @@
   failed_when: '"Added `" + minio_alias + "` successfully" not in alias_command.stdout'
   when: minio_alias_present.rc == 1
 
+- name: Add minio users
+
+# mc admin user add ALIAS ACCESSKEY SECRETKEY
+mc admin user add local userpiet secret123
+# mc admin policy attach ALIAS readwrite --user=USERNAME
+mc admin policy attach local readwrite --user=userpiet
