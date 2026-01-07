@@ -18,6 +18,10 @@
     - config.env
   notify: Restart minio
 
+- name: Create a docker volume
+  community.docker.docker_volume:
+    name: minio_data
+
 - name: Create and start the server container
   community.docker.docker_container:
     name: minio
