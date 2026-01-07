@@ -17,8 +17,8 @@ FRONTEND_MODULES:
   - "plugins/frontends/saml2_frontend.yaml"
   - "plugins/frontends/ping_frontend.yaml"
 
-# MICRO_SERVICES:
-#   - "plugins/microservices/static_attributes.yaml"
+MICRO_SERVICES:
+  - "plugins/microservices/generate_attributes.yaml"
 
 LOGGING:
   version: 1
