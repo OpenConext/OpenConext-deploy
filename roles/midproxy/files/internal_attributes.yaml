@@ -10,7 +10,7 @@ attributes:
     saml: [givenName]
   mail:
     openid: [email]
-    saml: [email, emailAddress, mail]
+    saml: [mail]
   name:
     openid: [name]
     saml: [cn]
