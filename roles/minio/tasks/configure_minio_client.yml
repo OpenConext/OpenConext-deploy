@@ -1,26 +1,30 @@
 ---
-- name: Download Minio Client
-  ansible.builtin.get_url:
-    url: "https://dl.min.io/client/mc/release/linux-amd64/{{ minio_client_version }}"
-    dest: "{{ minio_mc }}"
-    mode: '0700'
-    checksum: "{{ minio_client_checksum }}"
+- name: Configure minio client
+  block:
+  - name: Download Minio Client
+    ansible.builtin.get_url:
+      url: "https://dl.min.io/client/mc/release/linux-amd64/{{ minio_client_version }}"
+      dest: "{{ minio_mc }}"
+      mode: '0700'
+      checksum: "{{ minio_client_checksum }}"
 
-- name: Check if minio alias is set
-  ansible.builtin.command: "{{ minio_mc }} alias list {{ minio_alias }}"
-  changed_when: false
-  register: minio_alias_present
-  check_mode: false # always run its safe
-  failed_when: minio_alias_present.rc > 1 # rc 1 means alias not present thjats what we wanted to know
+  - name: Check if minio alias is set
+    ansible.builtin.command: "{{ minio_mc }} alias list {{ minio_alias }}"
+    changed_when: false
+    register: minio_alias_present
+    check_mode: false # always run its safe
+    failed_when: minio_alias_present.rc > 1 # rc 1 means alias not present thjats what we wanted to know
 
-- name: Debug alias list
-  ansible.builtin.debug:
-    msg: "{{ minio_alias_present.rc }}" # stdout can contain password
-    verbosity: 2
+  - name: Debug alias list
+    ansible.builtin.debug:
+      msg: "{{ minio_alias_present.rc }}" # stdout can contain password
+      verbosity: 2
 
-- name: Configure minio connection alias
-  ansible.builtin.command: "{{ minio_mc }} alias set {{ minio_alias }} {{ minio_url_local }} {{ minio_root_user }} {{ minio_root_password }}"
-  register: alias_command
-  changed_when: false
-  failed_when: '"Added `" + minio_alias + "` successfully" not in alias_command.stdout'
-  when: minio_alias_present.rc == 1
+  - name: Configure minio connection alias
+    ansible.builtin.command: "{{ minio_mc }} alias set {{ minio_alias }} {{ minio_url_local }} {{ minio_root_user }} {{ minio_root_password }}"
+    register: alias_command
+    changed_when: false
+    failed_when: '"Added `" + minio_alias + "` successfully" not in alias_command.stdout'
+    when: minio_alias_present.rc == 1
+
+  become: false # No mc client actions as root
