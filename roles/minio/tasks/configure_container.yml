@@ -31,6 +31,9 @@
     state: started
     env:
       MINIO_CONFIG_ENV_FILE: "/etc/config.env"
+    ports:
+      # Publish container port 9000 for mc client commands
+      - "9000:9000"
     networks:
       - name: "loadbalancer"
     mounts:
