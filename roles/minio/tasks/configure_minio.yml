@@ -1,8 +1,6 @@
 - name: Check if minio alias is set
   ansible.builtin.command: "mc alias list {{ minio_url_local }} {{ minio_root_user }} {{ minio_root_password }}"
   register: minio_alias_list
-  changed_when: false
-  failed_when: '"Added `" + minio_alias + "` successfully" not in alias_command.stdout'
   loop: "{{ minio_aliases }}"
 
 - name: Debug alias list
