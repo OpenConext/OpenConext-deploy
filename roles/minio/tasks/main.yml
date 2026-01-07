@@ -7,18 +7,10 @@
     group: root
     mode: "0755"
 
-- name: Create minio data directory
-  ansible.builtin.file:
-    state: directory
-    path: "{{ minio_data_dir }}"
-    owner: root
-    group: root
-    mode: "0755"
-
 - name: Place the serverapplication configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: /opt/openconext/minio/{{ item }}
+    dest: "{{ minio_dir }}/{{ item }}"
     owner: root
     group: root
     mode: "0644"

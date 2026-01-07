@@ -1,7 +1,5 @@
 ---
 minio_dir: /opt/openconext/minio
-minio_data_dir: "{{ minio_dir }}/data"
 minio_version: RELEASE.2025-05-24T17-08-30Z
-minio_data_dir_oncontainer: "/mnt/data"
 minio_root_user: "minioadmin"
 # minio_root_password get from vault
