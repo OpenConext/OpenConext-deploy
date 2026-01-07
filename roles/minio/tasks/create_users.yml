@@ -1,13 +1,14 @@
 - name: Check whether user is already configured
-  command: "{{ minio_mc }} admin user info {{ minio_alias }} {{ user.name }}"
-  register: get_user
+  ansible.builtin.command: "{{ minio_mc }} admin user info {{ minio_alias }} {{ user.name }}"
+  register: minio_user_present
   changed_when: false
   ignore_errors: true
+  failed_when: minio_user_present.rc > 1 # rc 1 means alias not present thjats what we wanted to know
 
 - name: Create users
-  command: "{{ mc_command }} admin user add {{ minio_alias }} {{ user.name }} {{ user.password }}"
-  register: add_user
-  changed_when: '"Added user `" + user.name + "` successfully" in add_user.stdout'
+  ansible.builtin.command: "{{ minio_mc }} admin user add {{ minio_alias }} {{ user.name }} {{ user.password }}"
+  register: minio_add_user
+  changed_when: '"Added user `" + user.name + "` successfully" in minio_add_user.stdout'
   when:
-    - get_user.rc==1
-    - '"Unable to get user info" in get_user.stderr'
+    - minio_user_present.rc==1
+    - '"Unable to get user info" in minio_user_present.stderr'
