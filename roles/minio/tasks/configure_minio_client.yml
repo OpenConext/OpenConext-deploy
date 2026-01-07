@@ -23,7 +23,6 @@
   - name: Configure minio connection alias
     ansible.builtin.command: "{{ minio_mc }} alias set {{ minio_alias }} {{ minio_url_local }} {{ minio_root_user }} {{ minio_root_password }}"
     register: alias_command
-    changed_when: false
     failed_when: '"Added `" + minio_alias + "` successfully" not in alias_command.stdout'
     when: minio_alias_present.rc == 1
 
