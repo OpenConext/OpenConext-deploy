@@ -1,8 +1,11 @@
 - name: Configure and start container
   ansible.builtin.include_tasks: "configure_container.yml"
 
-- name: Configure minio
-  ansible.builtin.include_tasks: "configure_minio.yml"
+- name: Configure minio client
+  ansible.builtin.include_tasks: "configure_minio_client.yml"
+
+- name: Configure minio server
+  ansible.builtin.include_tasks: "configure_minio_server.yml"
 
 - name: Add minio users
   ansible.builtin.include_tasks: "create_users.yml"

@@ -1,0 +1,7 @@
+---
+- name: Download Minio Client
+  ansible.builtin.get_url:
+    url: "https://dl.min.io/client/mc/release/linux-amd64/mc"
+    dest: "/usr/local/sbin/mc"
+    mode: '0700'
+    checksum: sha256:https://dl.min.io/client/mc/release/linux-amd64/mc.sha256sum
