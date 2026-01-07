@@ -8,5 +8,4 @@ minio_url_local: "http://127.0.0.1:9000"
 minio_alias: "openconext"
 minio_mc: "/usr/local/bin/mc"
 minio_users:
-    - { name: 'testuser1', password: 'wheelwheel' }
-    - { name: 'testuser2', password: 'rootroot' }
+    - { name: 'openconext', password: "{{ minio_passwords.openconext }}" } # set passwords in vault
