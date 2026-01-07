@@ -29,8 +29,6 @@
       MINIO_CONFIG_ENV_FILE: "/etc/config.env"
     networks:
       - name: "loadbalancer"
-    volumes:
-      - minio_data
     mounts:
       - source: "{{ minio_dir }}/config.env"
         target: /etc/config.env
