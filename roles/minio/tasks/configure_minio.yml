@@ -1,5 +1,5 @@
 - name: Check if minio alias is set
-  ansible.builtin.command: "mc alias list {{ minio_alias }}"
+  ansible.builtin.command: "{{ minio_mc }} alias list {{ minio_alias }}"
   changed_when: false
   register: minio_alias_present
   check_mode: false # always run its safe
