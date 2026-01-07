@@ -68,3 +68,8 @@
       retries: 3
       start_period: 10s
   register: minio_container
+
+- name: Show container debug info
+  ansible.builtin.debug:
+    msg: "{{ minio_container }}"
+    verbosity: 2
