@@ -8,12 +8,18 @@
       state: directory
       mode: '0700'
 
+  - name: Check for presence Minio Client
+    ansible.builtin.stat:
+      path: "{{ minio_mc }}"
+    register: minio_client_status
+
   - name: Download Minio Client
     ansible.builtin.get_url:
       url: "https://dl.min.io/client/mc/release/linux-amd64/{{ minio_client_version }}"
       dest: "{{ minio_mc }}"
       mode: '0700'
       checksum: "{{ minio_client_checksum }}"
+    when: not minio_client_status.stat.exists
 
   - name: Download Minio Client
     ansible.builtin.get_url:
