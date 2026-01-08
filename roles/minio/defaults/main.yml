@@ -6,7 +6,7 @@ minio_data_dir_oncontainer: "/data"
 # minio_root_password get from vault
 minio_url_local: "http://127.0.0.1:9000"
 minio_alias: "openconext"
-minio_client_path: $HOME/minio-binaries"
+minio_client_path: $HOME/minio-binaries
 minio_mc: "{{ minio_client_path }}/mc"
 minio_users:
     - { name: 'openconext', password: "{{ minio_passwords.openconext }}" } # set passwords in vault
