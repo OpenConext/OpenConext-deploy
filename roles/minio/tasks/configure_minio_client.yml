@@ -20,9 +20,9 @@
   - name: Check version Minio Client
     ansible.builtin.shell:
       cmd: "{{ minio_mc }} --version | head -1 | awk -F ' ' '{ print $3 }'"
-      args:
-        executable: /bin/bash
-      changed_when: false
+    args:
+      executable: /bin/bash
+    changed_when: false
     register: minio_client_current_version
 
   - name: Debug check version Minio Client
