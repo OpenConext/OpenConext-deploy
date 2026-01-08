@@ -1,2 +1,2 @@
-db = connect("mongodb://admin:{{ mongo_admin_password }}@{% for mongo_server in mongo_servers %}{{ mongo_server }}:{{ mongod_port }}{% if not loop.last %},{% endif %}{% endfor %}?ssl=true&tlsCAFile=/etc/pki/mongo/mongoca.pem")
+db = connect("mongodb://admin:{{ mongo_admin_password }}@{% for mongo_server in mongo_servers %}{{ mongo_server }}:{{ mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}?ssl=true&tlsCAFile=/etc/pki/mongo/mongoca.pem")
 

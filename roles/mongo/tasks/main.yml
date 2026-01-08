@@ -20,6 +20,9 @@
     - name: Include cluster installation tasks
       ansible.builtin.include_tasks:
         file: clusterconfig.yml
+      when:
+        - mongo_cluster_members is defined
+        - replica_set_name is defined
 
     - name: Include user creation
       ansible.builtin.include_tasks:

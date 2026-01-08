@@ -16,8 +16,10 @@ net:
 storage:
   dbPath: /var/lib/mongo
 
+{% if replica_set_name is defined %}
 replication:
   replSetName: {{ replica_set_name }}
+{% endif %}
 
 security:
     authorization: enabled

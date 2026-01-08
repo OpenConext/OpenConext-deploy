@@ -1,6 +1,6 @@
 ---
 - name: Check if hosts are in clustered
-  ansible.builtin.command: mongosh --port {{ mongod_port }} --quiet --eval 'db.isMaster().hosts'
+  ansible.builtin.command: mongosh --port {{ mongo_port }} --quiet --eval 'db.isMaster().hosts'
   register: check_cluster
   changed_when: false
   check_mode: false
@@ -24,7 +24,7 @@
   community.mongodb.mongodb_replicaset:
     login_host: localhost
     login_user: admin
-    login_port: "{{ mongod_port }}"
+    login_port: "{{ mongo_port }}"
     login_password: "{{ mongo_admin_password }}"
     replica_set: "{{ replica_set_name }}"
     members: "{{ mongo_cluster_members }}"
@@ -38,7 +38,7 @@
     login_user: admin
     login_password: "{{ mongo_admin_password }}"
     login_database: admin
-    login_port: "{{ mongod_port }}"
+    login_port: "{{ mongo_port }}"
     validate: default
     poll: 5
     interval: 12
@@ -50,7 +50,7 @@
     database: admin
     name: admin
     password: "{{ mongo_admin_password }}"
-    login_port: "{{ mongod_port }}"
+    login_port: "{{ mongo_port }}"
     roles: root
     state: present
   when: check_cluster.stdout == ""
