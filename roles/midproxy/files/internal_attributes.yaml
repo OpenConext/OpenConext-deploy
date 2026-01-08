@@ -2,9 +2,6 @@ attributes:
   displayname:
     openid: [name]
     saml: [displayName]
-  edupersontargetedid:
-    openid: [sub]
-    saml: [eduPersonTargetedID]
   givenname:
     openid: [given_name]
     saml: [givenName]
@@ -23,5 +20,3 @@ attributes:
   schachomeorganization:
     openid: [schac_home_organization]
     saml: [schacHomeOrganization]
-user_id_from_attrs: [edupersontargetedid]
-user_id_to_attr: edupersontargetedid
