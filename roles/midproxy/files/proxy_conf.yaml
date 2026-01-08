@@ -19,6 +19,7 @@ FRONTEND_MODULES:
 
 MICRO_SERVICES:
   - "plugins/microservices/generate_attributes.yaml"
+  - "plugins/microservices/regex_attributes.yaml"
 
 LOGGING:
   version: 1
