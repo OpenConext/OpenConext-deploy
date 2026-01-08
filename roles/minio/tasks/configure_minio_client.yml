@@ -1,6 +1,20 @@
 ---
 - name: Configure minio client
   block:
+
+  - name: Create directory for minio client
+    ansible.builtin.file:
+      path: "{{ minio_client_path }}"
+      state: directory
+      mode: '0700'
+
+  - name: Download Minio Client
+    ansible.builtin.get_url:
+      url: "https://dl.min.io/client/mc/release/linux-amd64/{{ minio_client_version }}"
+      dest: "{{ minio_mc }}"
+      mode: '0700'
+      checksum: "{{ minio_client_checksum }}"
+
   - name: Download Minio Client
     ansible.builtin.get_url:
       url: "https://dl.min.io/client/mc/release/linux-amd64/{{ minio_client_version }}"
