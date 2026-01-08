@@ -5,4 +5,4 @@ config:
         default:
             default:
                 schachomeorganization: >-
-                    myaccessid.org
+                    {{ uid.scope }}
