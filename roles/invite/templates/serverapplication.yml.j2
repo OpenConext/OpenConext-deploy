@@ -24,7 +24,7 @@ spring:
     banner-mode: "off"
   session:
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
 {% if invite_cronjobmaster is defined and invite_cronjobmaster == false  %}
       cleanup-cron: "-"
 {% else %}
