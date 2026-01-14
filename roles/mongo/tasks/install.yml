@@ -60,9 +60,3 @@
     group: root
     mode: "0644"
   notify: Restart mongod
-
-- name: Enable and start mongod
-  ansible.builtin.service:
-    name: mongod.service
-    enabled: true
-    state: started

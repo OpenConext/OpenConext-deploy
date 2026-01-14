@@ -1,4 +1,19 @@
-- name: Create mongo database users # requires pymongo 4+
+- name: Add the admin user
+  community.mongodb.mongodb_user:
+    database: admin
+    name: admin
+    password: "{{ mongo_admin_password }}"
+    login_port: "{{ mongo_port }}"
+    roles: root
+    state: present
+  #when: check_cluster.stdout == ""
+  #no_log: true
+  run_once: true
+
+- name: Create mongo database users cluster # requires pymongo 4+
+  when:
+    - mongo_cluster_members is defined
+    - replica_set_name is defined
   community.mongodb.mongodb_user:
     login_database: admin
     database: "{{ item.db_name }}"
@@ -8,8 +23,31 @@
     password: "{{ item.password }}"
     roles: readWrite
     replica_set: "{{ replica_set_name }}"
-  no_log: true
+  #no_log: true
   run_once: true
   with_items: "{{ mongo.users }}"
   changed_when: false
+  tags: mongo_users
+
+- name: Create mongo database users single server # requires pymongo 4+
+  when:
+    - mongo_cluster_members is not defined
+    - replica_set_name is not defined
+  community.mongodb.mongodb_user:
+    login_database: admin
+    database: "{{ item.db_name }}"
+    login_user: admin
+    login_password: "{{ mongo_admin_pass }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    roles: readWrite
+  #no_log: true
+  run_once: true
+  with_items: "{{ mongo.users }}"
+  changed_when: false
+  tags: mongo_users
+
+- name: debug ww
+  debug:
+    msg: "{{ mongo_admin_pass }}"
   tags: mongo_users
