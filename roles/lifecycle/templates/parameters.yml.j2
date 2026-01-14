@@ -1,6 +1,6 @@
 parameters:
     app_env: prod
-    app_debug: false 
+    app_debug: false
     app_secret: {{ lifecycle_symfony_secret }}
     database_host: {{ lifecycle_db_host }}
     database_port: 3306
@@ -28,6 +28,11 @@ parameters:
             url: 'https://aa.{{ base_domain}}/aa/api/'
             username: "{{ attribute_aggregator_api_lifecycle_username }}"
             password: "{{ attribute_aggregator_api_lifecycle_password }}"
+            verify_ssl: true
+        stepup:
+            url: 'https://middleware.{{ base_domain}}/'
+            username: "lifecycle"
+            password: "{{ lifecycle_password }}"
             verify_ssl: true
     user_quota: {{ lifecycle_user_quota }}
     inactivity_period: {{ lifecycle_inactivity_period }}
