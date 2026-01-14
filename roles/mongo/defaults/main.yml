@@ -33,6 +33,9 @@ mongo_port: 27017
 # The password for admin user
 mongo_admin_pass: "{{ mongo_admin_password }}" # Set this in secrets
 
+# Are we using a cluster?
+mongo_mode: "cluster" # cluster or standalone
+
 # The name of the replication set
 replica_set_name: "{{ instance_name }}" # Set this in group_vars
 

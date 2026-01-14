@@ -16,7 +16,7 @@ net:
 storage:
   dbPath: /var/lib/mongo
 
-{% if replica_set_name is defined %}
+{% if replica_set_name is defined and mongo_mode == "cluster" %}
 replication:
   replSetName: {{ replica_set_name }}
 {% endif %}
