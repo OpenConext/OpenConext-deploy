@@ -1,19 +1,37 @@
 - name: Add the admin user
-  community.mongodb.mongodb_user:
-    database: admin
-    name: admin
-    password: "{{ mongo_admin_password }}"
-    login_port: "{{ mongo_port }}"
-    roles: root
-    state: present
-  #when: check_cluster.stdout == ""
-  #no_log: true
-  run_once: true
+  block:
+    # first run add admin suer without logging in
+    - name: Add the admin user
+      community.mongodb.mongodb_user:
+        login_database: admin
+        database: admin
+        name: admin
+        password: "{{ mongo_admin_password }}"
+        login_port: "{{ mongo_port }}"
+        roles: root
+        state: present
+      #when: check_cluster.stdout == ""
+      #no_log: true
+      run_once: true
+  rescue:
+    # if the user was set we have to login
+    - name: Add the admin user
+      community.mongodb.mongodb_user:
+        login_database: admin
+        login_user: admin
+        login_password: "{{ mongo_admin_pass }}"
+        database: admin
+        name: admin
+        password: "{{ mongo_admin_password }}"
+        login_port: "{{ mongo_port }}"
+        roles: root
+        state: present
+      #when: check_cluster.stdout == ""
+      #no_log: true
+      run_once: true
 
 - name: Create mongo database users cluster # requires pymongo 4+
-  when:
-    - mongo_cluster_members is defined
-    - replica_set_name is defined
+  when: mongo_mode == "cluster"
   community.mongodb.mongodb_user:
     login_database: admin
     database: "{{ item.db_name }}"
@@ -30,9 +48,7 @@
   tags: mongo_users
 
 - name: Create mongo database users single server # requires pymongo 4+
-  when:
-    - mongo_cluster_members is not defined
-    - replica_set_name is not defined
+  when: mongo_mode != "cluster"
   community.mongodb.mongodb_user:
     login_database: admin
     database: "{{ item.db_name }}"
@@ -49,5 +65,5 @@
 
 - name: debug ww
   debug:
-    msg: "{{ mongo_admin_pass }}"
+    msg: "{{ mongo_admin_pass }} {{ mongo_admin_password }}"
   tags: mongo_users
