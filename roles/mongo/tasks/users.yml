@@ -1,42 +1,10 @@
-- name: Add the admin user
-  block:
-    # first run add admin suer without logging in
-    - name: Add the admin user
-      community.mongodb.mongodb_user:
-        login_database: admin
-        database: admin
-        name: admin
-        password: "{{ mongo_admin_password }}"
-        login_port: "{{ mongo_port }}"
-        roles: root
-        state: present
-      #when: check_cluster.stdout == ""
-      #no_log: true
-      run_once: true
-  rescue:
-    # if the user was set we have to login
-    - name: Add the admin user
-      community.mongodb.mongodb_user:
-        login_database: admin
-        login_user: admin
-        login_password: "{{ mongo_admin_pass }}"
-        database: admin
-        name: admin
-        password: "{{ mongo_admin_password }}"
-        login_port: "{{ mongo_port }}"
-        roles: root
-        state: present
-      #when: check_cluster.stdout == ""
-      #no_log: true
-      run_once: true
-
 - name: Create mongo database users cluster # requires pymongo 4+
   when: mongo_mode == "cluster"
   community.mongodb.mongodb_user:
     login_database: admin
     database: "{{ item.db_name }}"
     login_user: admin
-    login_password: "{{ mongo_admin_pass }}"
+    login_password: "{{ mongo_admin_password }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     roles: readWrite
@@ -53,7 +21,7 @@
     login_database: admin
     database: "{{ item.db_name }}"
     login_user: admin
-    login_password: "{{ mongo_admin_pass }}"
+    login_password: "{{ mongo_admin_password }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     roles: readWrite
@@ -61,9 +29,4 @@
   run_once: true
   with_items: "{{ mongo.users }}"
   changed_when: false
-  tags: mongo_users
-
-- name: debug ww
-  debug:
-    msg: "{{ mongo_admin_pass }} {{ mongo_admin_password }}"
   tags: mongo_users

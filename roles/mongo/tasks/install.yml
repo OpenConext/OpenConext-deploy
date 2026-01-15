@@ -52,6 +52,37 @@
     value: 128000
     state: present
 
+- name: Enable and start mongod for the first time
+  ansible.builtin.service:
+    name: mongod.service
+    enabled: true
+    state: started
+
+- name: Check if mongodb authentication is activated
+  ansible.builtin.shell:
+    cmd: "mongosh 'mongodb://127.0.0.1:{{ mongo_port }}/admin' --eval 'db.runCommand({ usersInfo: 1 })'"
+  register: mongo_authentication_enabled
+  changed_when: false
+  ignore_errors: true
+
+- name: Debug mongodb authentication check
+  ansible.builtin.debug:
+    msg: "{{ mongo_authentication_enabled.stdout }}"
+    verbosity: 2
+
+# first run add admin user without logging in
+- name: Add the admin user
+  community.mongodb.mongodb_user:
+    login_database: admin
+    database: admin
+    name: admin
+    password: "{{ mongo_admin_password }}"
+    login_port: "{{ mongo_port }}"
+    roles: root
+    state: present
+  no_log: true
+  run_once: true
+
 - name: Install mongodb.conf file
   ansible.builtin.template:
     src: "mongod.conf.j2"
@@ -59,4 +90,9 @@
     owner: root
     group: root
     mode: "0644"
+    backup: true
   notify: Restart mongod
+
+# restart mongo right away with authentication enabled
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

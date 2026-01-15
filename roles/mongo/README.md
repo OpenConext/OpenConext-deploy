@@ -15,7 +15,8 @@ Set the mongo_cluster_private_key variable encrypted in host_vars
 Please review the official Mongo documentation for more information.
 
 # Todo
-- [ ] Check mongo_replication_roles and give a clear fail message wehn not set
+- [x] Check mongo_replication_roles and give a clear fail message when not set
+- [ ] Add option to change the already exisiting admin user
 - [ ] Add the possibility for adding and removing cluster members
 - [ ] Add the possibility for a standalone mongo server
 - [ ] Cluster config does not work with serial 1 in the play but for mongo config changes you do want serial 1, split up the role?
