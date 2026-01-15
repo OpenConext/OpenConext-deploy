@@ -82,6 +82,7 @@
     state: present
   no_log: true
   run_once: true
+  when: mongo_authentication_enabled.rc == 0
 
 - name: Install mongodb.conf file
   ansible.builtin.template:
