@@ -1,2 +1,3 @@
 replica_set_name: "{{ instance_name }}"
 docker_mongodb_network_range: "172.21.22.0/24"
+mongodbdocker_version: "7.0.28"
