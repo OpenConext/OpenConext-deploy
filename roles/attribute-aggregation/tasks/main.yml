@@ -19,8 +19,14 @@
     - logback.xml
     - attributeAuthorities.yml
     - serviceProviderConfig.json
-    - apachelink.conf
   notify: restart attribute-aggregationserver
+
+- name: Remove obsolete config files
+  ansible.builtin.file:
+    name: "/opt/openconext/attribute-aggregation/{{ item }}"
+    state: "absent"
+  with_items:
+    - "apachelink.conf"
 
 - name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
   ansible.builtin.set_fact:
@@ -57,6 +63,8 @@
       traefik.http.routers.aaserver.rule: "Host(`aa.{{ base_domain }}`)"
       traefik.http.routers.aaserver.tls: "true"
       traefik.enable: "true"
+      traefik.http.routers.aalink.rule: "Host(`link.{{ base_domain }}`)"
+      traefik.http.routers.aalink.tls: "true"
     healthcheck:
       test:
         [
@@ -72,3 +80,11 @@
       retries: 3
       start_period: 10s
   register: aaservercontainer
+
+- name: Remove obsolete pdp containers
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: "absent"
+  loop:
+    - "aagui"
+    - "aalink"
