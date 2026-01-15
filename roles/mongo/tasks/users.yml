@@ -25,7 +25,7 @@
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     roles: readWrite
-  #no_log: true
+  no_log: true
   run_once: true
   with_items: "{{ mongo.users }}"
   changed_when: false
