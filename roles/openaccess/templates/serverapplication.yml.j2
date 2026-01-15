@@ -105,6 +105,7 @@ config:
         descriptionEN: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
         descriptionNL: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
   idp_proxy_meta_data:  https://metadata.test2.surfconext.nl/idp-metadata.xml
+  minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
   features:
     - name: idp
       enabled: true
@@ -116,9 +117,8 @@ config:
       enabled: true
   acr_values:
   {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}
-    - "{{ loa }}"
+  - "{{ loa }}"
   {% endfor %}
-  minimal_stepup_loa_level: "http://{{ base_domain }}/assurance/loa2"
 
 eduid-idp-entity-id: "https://login.{{ myconext_base_domain }}"
 
