@@ -65,6 +65,8 @@
       traefik.enable: "true"
       traefik.http.routers.aalink.rule: "Host(`link.{{ base_domain }}`)"
       traefik.http.routers.aalink.tls: "true"
+      traefik.http.routers.foobar.rule: "Host(`foobar.{{ base_domain }}`)"
+      traefik.http.routers.foobar.tls: "true"
     healthcheck:
       test:
         [
@@ -79,7 +81,8 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-  register: aaservercontainer
+  notify: "restart attribute-aggregationserver"
+  register: "aaservercontainer"
 
 - name: Remove obsolete pdp containers
   community.docker.docker_container:
