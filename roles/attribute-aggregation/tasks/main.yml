@@ -40,18 +40,22 @@
     state: started
     networks: "{{ aa_docker_networks }}"
     mounts:
-      - source: /opt/openconext/attribute-aggregation/serverapplication.yml
-        target: /application.yml
-        type: bind
-      - source: /opt/openconext/attribute-aggregation/logback.xml
-        target: /logback.xml
-        type: bind
-      - source: /opt/openconext/attribute-aggregation/attributeAuthorities.yml
-        target: /attributeAuthorities.yml
-        type: bind
-      - source: /opt/openconext/attribute-aggregation/serviceProviderConfig.json
-        target: /serviceProviderConfig.json
-        type: bind
+      - source: "/opt/openconext/attribute-aggregation/serverapplication.yml"
+        target: "/application.yml"
+        read_only: true
+        type: "bind"
+      - source: "/opt/openconext/attribute-aggregation/logback.xml"
+        target: "/logback.xml"
+        read_only: true
+        type: "bind"
+      - source: "/opt/openconext/attribute-aggregation/attributeAuthorities.yml"
+        target: "/attributeAuthorities.yml"
+        read_only: true
+        type: "bind"
+      - source: "/opt/openconext/attribute-aggregation/serviceProviderConfig.json"
+        target: "/serviceProviderConfig.json"
+        read_only: true
+        type: "bind"
     command: "-Xmx128m --spring.config.location=./"
     etc_hosts:
       host.docker.internal: host-gateway
@@ -85,15 +89,18 @@
     state: started
     networks: "{{ aa_docker_networks }}"
     mounts:
-      - source: /opt/openconext/attribute-aggregation/apachelink.conf
-        target: /etc/apache2/sites-enabled/000-default.conf
-        type: bind
-      - source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - source: /opt/openconext/common/favicon.ico
-        target: /var/www/favicon.ico
-        type: bind
+      - source: "/opt/openconext/attribute-aggregation/apachelink.conf"
+        target: "/etc/apache2/sites-enabled/000-default.conf"
+        read_only: true
+        type: "bind"
+      - source: "/etc/localtime"
+        target: "/etc/localtime"
+        read_only: true
+        type: "bind"
+      - source: "/opt/openconext/common/favicon.ico"
+        target: "/var/www/favicon.ico"
+        read_only: true
+        type: "bind"
     etc_hosts:
       host.docker.internal: host-gateway
     labels:
