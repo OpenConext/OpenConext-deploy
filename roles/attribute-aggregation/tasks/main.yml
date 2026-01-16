@@ -7,7 +7,7 @@
     group: "root"
     mode: "0770"
 
-- name: Place the serverapplication configfiles
+- name: Place the server application configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/attribute-aggregation/{{ item }}"
@@ -19,9 +19,19 @@
     - "logback.xml"
     - "attributeAuthorities.yml"
     - "serviceProviderConfig.json"
-    - "apachelink.conf"
   notify:
     - "Restart attribute-aggregationserver"
+
+- name: Place the link application configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/opt/openconext/attribute-aggregation/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items:
+    - "apachelink.conf"
+  notify:
     - "Restart attribute-aggregationlink"
 
 - name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
