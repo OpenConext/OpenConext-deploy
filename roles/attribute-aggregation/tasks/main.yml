@@ -104,8 +104,8 @@
     etc_hosts:
       host.docker.internal: host-gateway
     labels:
-      traefik.http.routers.attribute-aggregationlink.rule: "Host(`link.{{ base_domain }}`)"
-      traefik.http.routers.attribute-aggregationlink.tls: "true"
+      traefik.http.routers.aalink.rule: "Host(`link.{{ base_domain }}`)"
+      traefik.http.routers.aalink.tls: "true"
       traefik.enable: "true"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost/internal/health"]
