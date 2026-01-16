@@ -2,25 +2,27 @@
 - name: Create directory to keep configfile
   ansible.builtin.file:
     dest: "/opt/openconext/attribute-aggregation"
-    state: directory
-    owner: root
-    group: root
+    state: "directory"
+    owner: "root"
+    group: "root"
     mode: "0770"
 
 - name: Place the serverapplication configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: /opt/openconext/attribute-aggregation/{{ item }}
-    owner: root
-    group: root
+    dest: "/opt/openconext/attribute-aggregation/{{ item }}"
+    owner: "root"
+    group: "root"
     mode: "0644"
   with_items:
-    - serverapplication.yml
-    - logback.xml
-    - attributeAuthorities.yml
-    - serviceProviderConfig.json
-    - apachelink.conf
-  notify: restart attribute-aggregationserver
+    - "serverapplication.yml"
+    - "logback.xml"
+    - "attributeAuthorities.yml"
+    - "serviceProviderConfig.json"
+    - "apachelink.conf"
+  notify:
+    - "Restart attribute-aggregationserver"
+    - "Restart attribute-aggregationlink"
 
 - name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
   ansible.builtin.set_fact:
@@ -70,8 +72,9 @@
       interval: 10s
       timeout: 10s
       retries: 3
-      start_period: 10s
-  register: "aaservercontainer"
+      start_period: "10s"
+  notify: "Restart attribute-aggregationserver"
+  register: "aa_servercontainer"
 
 - name: Create the gui link container
   community.docker.docker_container:
@@ -113,6 +116,7 @@
       SHIB_ENTITYID: "https://link.{{ base_domain }}/shibboleth"
       SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
       SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
+  register: "aa_linkcontainer"
 
 - name: Remove obsolete pdp containers
   community.docker.docker_container:
