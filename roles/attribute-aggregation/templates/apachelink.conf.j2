@@ -12,8 +12,8 @@ Redirect /orcid https://link.{{ base_domain }}/aa/api/client/information.html
 ProxyPass /Shibboleth.sso !
 
 ProxyPass /redirect http://aaserver:8080/aa/api/redirect
-ProxyPass /internal/health http://aaserver:8080/aa/api/internal/health
-ProxyPass /internal/info http://aaserver:8080/aa/api/internal/info
+ProxyPass /internal/health http://aaserver:8080/internal/health
+ProxyPass /internal/info http://aaserver:8080/internal/info
 
 ProxyPass /aa/api http://aaserver:8080/aa/api
 ProxyPassReverse /aa/api http://aaserver:8080/aa/api
