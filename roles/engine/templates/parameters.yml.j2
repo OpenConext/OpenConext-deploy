@@ -38,7 +38,7 @@ parameters:
     ## * How attributes are displayed in Profile and Consent
     ## * How attributes are Normalized and Denormalized
     ## * How attributes are validated
-    attribute_definition_file_path: {{ engine_config_dir }}/attributes.json
+    attribute_definition_file_path: {{ _engine_container_config_dir }}/attributes.json
 
     ## The Signing / Encryption keys used for the SAML2 authentication and metadata
     ## When EngineBlock signs responses (when it acts as an Idp)
@@ -46,8 +46,8 @@ parameters:
     encryption_keys:
 {% for engine_key in engine_key_and_certs %}
       {{ engine_key.name }}:
-        publicFile: "{{ engine_certs_dir }}/{{ engine_key.name}}.crt"
-        privateFile: "{{ engine_certs_dir}}/{{ engine_key.name }}.key"
+        publicFile: "{{ _engine_container_certs_dir }}/{{ engine_key.name}}.crt"
+        privateFile: "{{ _engine_container_certs_dir}}/{{ engine_key.name }}.key"
 {% endfor %}
     ## List of signature methods explicitly forbidden by EngineBlock.
     forbidden_signature_methods: {  }
@@ -273,7 +273,7 @@ parameters:
     ## The single sign-on endpoint used for Stepup Gateway SFO callouts
     stepup.gateway.sfo.sso_location: '{{ engine_stepup_gateway_sfo_sso_location | replace("%","%%") }}'
     ## The public key from the Stepup Gateway IdP
-    stepup.gateway.sfo.key_file: "{{ engine_certs_dir }}/stepup_gateway.pem"
+    stepup.gateway.sfo.key_file: "{{ _engine_container_certs_dir }}/stepup_gateway.pem"
     ## You can override the default entityID used by Engineblock for its callout to stepup gateway.
     ## You also need to enable the feature toggle feature_stepup_sfo_override_engine_entityid above.
     stepup.sfo.override_engine_entityid: '{{ engine_stepup_override_entityid }}'
@@ -318,4 +318,4 @@ parameters:
     # A (list) mapping is for example <attributeLabel>: <attributeName> where the label represents the label that is
     # used in the authentication log record. The attributeName will be searched in the response attributes and if present
     # the log data will be enriched. The values of the response attributes are the final values after ARP and Attribute Manipulation.
-    auth.log.attributes: {{ engineblock_log_attributes }}
+    auth.log.attributes: {{ engine_log_attributes }}

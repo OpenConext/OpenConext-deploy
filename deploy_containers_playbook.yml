@@ -36,7 +36,7 @@
   hosts: docker_engineblock
   become: true
   roles:
-    - { role: engineblock, tags: ['engineblock', 'eb'] }
+    - { role: engine, tags: ['engineblock', 'eb'] }
 
 - name: Deploy invite app
   hosts: docker_invite

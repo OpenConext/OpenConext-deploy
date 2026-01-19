@@ -130,7 +130,7 @@
 - hosts: docker_apps2
   become: true
   roles:
-    - { role: engineblock,      tags: ["eb"] }
+    - { role: engine,      tags: ["eb"] }
     - { role: stepupgateway,    tags: [ 'stepupgateway' , 'stepup' ] }
 
 - hosts: docker_mariadb
