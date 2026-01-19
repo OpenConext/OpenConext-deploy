@@ -203,11 +203,14 @@
       APACHE_GUID: "#{{ engine_guid.gid }}"
       TZ: "{{ timezone }}"
       PHP_MEMORY_LIMIT: "{{ engine_php_memory }}"
+      APP_ENV: "prod"
+      APP_SECRET: "{{ engine_parameters_secret }}"
+      APP_DEBUG: "{{ engine_debug | bool | int }}"
     etc_hosts:
       host.docker.internal: host-gateway
     mounts:
       - source: "{{ _engine_config_dir }}/configs/parameters.yml"
-        target: "/var/www/html/app/config/parameters.yml"
+        target: "/var/www/html/app/config/packages/prod/parameters.yml"
         type: bind
         read_only: true
       - source: "{{ _engine_config_dir }}/languages/overrides.en.php"
