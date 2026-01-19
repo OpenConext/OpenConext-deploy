@@ -209,30 +209,39 @@
       - source: "{{ _engine_config_dir }}/configs/parameters.yml"
         target: "/var/www/html/app/config/parameters.yml"
         type: bind
+        read_only: true
       - source: "{{ _engine_config_dir }}/languages/overrides.en.php"
         target: "/var/www/html/languages/overrides.en.php"
         type: bind
+        read_only: true
       - source: "{{ _engine_config_dir }}/languages/overrides.nl.php"
         target: "/var/www/html/languages/overrides.nl.php"
         type: bind
+        read_only: true
       - source: "{{ _engine_config_dir }}/configs/attributes.json"
         target: "/var/www/html/app/config/attributes.json"
         type: bind
+        read_only: true
       - source: "{{ _engine_config_dir }}/images/background-back.svg"
         target: "/var/www/html/web/images/background-back.svg"
         type: bind
+        read_only: true
       - source: "{{ _engine_config_dir }}/images/background-front.svg"
         target: "/var/www/html/web/images/background-front.svg"
         type: bind
+        read_only: true
       - source: "{{ _engine_config_dir }}/images/logo.png"
         target: "/var/www/html/web/images/logo.png"
         type: bind
+        read_only: true
       - source: "{{ _engine_config_dir }}/certs/"
         target: "/var/www/html/certs/"
         type: bind
+        read_only: true
       - source: "/opt/openconext/common/favicon.ico"
         target: "/var/www/html/web/favicon.ico"
         type: bind
+        read_only: true
       - source: engineblock_sessions
         target: /tmp/
         type: volume
