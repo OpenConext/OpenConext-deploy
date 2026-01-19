@@ -20,7 +20,7 @@
 - name: Create the MongoDB container
   community.docker.docker_container:
     name: openconext_mongodb
-    image: bitnami/mongodb:7.0
+    image: mongo:{{ mongodbdocker_version }}
     state: started
     pull: true
     restart_policy: "always"
