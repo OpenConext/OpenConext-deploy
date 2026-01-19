@@ -1,321 +1,321 @@
 parameters:
-    ##########################################################################################
-    ## GLOBAL SETTINGS
-    ##########################################################################################
-    ## This is a string that should be unique to your application and it's commonly used to add more
-    ## entropy to security related operations. Its value should be a series of characters, numbers and
-    ## symbols chosen randomly and the recommended length is around 32 characters.
-    secret: {{ engine_parameters_secret }}
+  ##########################################################################################
+  ## GLOBAL SETTINGS
+  ##########################################################################################
+  ## This is a string that should be unique to your application. It's commonly used to add more
+  ## entropy to security related operations. Its value should be a series of characters, numbers and
+  ## symbols chosen randomly and the recommended length is around 32 characters.
+  secret: {{ engine_parameters_secret }}
 
-    ## Note: due to legacy reasons, hostname must be left empty (hostname
-    ## from the Host header will be used) or set to match the domain
-    ## setting. For example:
-    ##
-    ##    domain = vm.openconext.org
-    ##    hostname = engine.vm.openconext.org
-    domain: {{ base_domain }}
-    ## Set a fixed hostname for OpenConext EngineBlock to use.
-    hostname: engine.{{ engine_base_domain }}
+  ## Note: due to legacy reasons, hostname must be left empty (hostname
+  ## from the Host header will be used) or set to match the domain
+  ## setting. For example:
+  ##
+  ##    domain = vm.openconext.org
+  ##    hostname = engine.vm.openconext.org
+  domain: {{ base_domain }}
+  ## Set a fixed hostname for OpenConext EngineBlock to use.
+  hostname: engine.{{ engine_base_domain }}
 
-    ## Configure trusted proxies to use their X-Forwarded-For header.
-    trusted_proxies:
+  ## Configure trusted proxies to use their X-Forwarded-For header.
+  trusted_proxies:
 {% for engine_trusted_proxy_ip in engine_trusted_proxy_ips %}
-        - {{ engine_trusted_proxy_ip }}
+    - {{ engine_trusted_proxy_ip }}
 {% endfor %}
 
     ## The enabled languages, currently 'en', 'nl' and 'pt' are supported
-    enabled_languages:
-        - nl
-        - en
+  enabled_languages:
+    - nl
+    - en
 
 
-    ##########################################################################################
-    ## SAML2 SETTINGS
-    ##########################################################################################
-    ## Path to the attribute definition file.
-    ## Where EngineBlock can look for attribute definitions.
-    ## These determine:
-    ## * How attributes are displayed in Profile and Consent
-    ## * How attributes are Normalized and Denormalized
-    ## * How attributes are validated
-    attribute_definition_file_path: {{ _engine_container_config_dir }}/attributes.json
+  ##########################################################################################
+  ## SAML2 SETTINGS
+  ##########################################################################################
+  ## Path to the attribute definition file.
+  ## Where EngineBlock can look for attribute definitions.
+  ## These determine:
+  ## * How attributes are displayed in Profile and Consent
+  ## * How attributes are Normalized and Denormalized
+  ## * How attributes are validated
+  attribute_definition_file_path: {{ _engine_container_config_dir }}/attributes.json
 
-    ## The Signing / Encryption keys used for the SAML2 authentication and metadata
-    ## When EngineBlock signs responses (when it acts as an Idp)
-    ## or requests (when it acts as an SP) it uses these X.509 certs.
-    encryption_keys:
+  ## The Signing / Encryption keys used for the SAML2 authentication and metadata
+  ## When EngineBlock signs responses (when it acts as an Idp)
+  ## or requests (when it acts as an SP) it uses these X.509 certs.
+  encryption_keys:
 {% for engine_key in engine_key_and_certs %}
-      {{ engine_key.name }}:
-        publicFile: "{{ _engine_container_certs_dir }}/{{ engine_key.name}}.crt"
-        privateFile: "{{ _engine_container_certs_dir}}/{{ engine_key.name }}.key"
+    "{{ engine_key.name }}":
+      publicFile: "{{ _engine_container_certs_dir }}/{{ engine_key.name}}.crt"
+      privateFile: "{{ _engine_container_certs_dir}}/{{ engine_key.name }}.key"
 {% endfor %}
-    ## List of signature methods explicitly forbidden by EngineBlock.
-    forbidden_signature_methods: {  }
+  ## List of signature methods explicitly forbidden by EngineBlock.
+  forbidden_signature_methods: { }
 
-    ## List of allowed ACS location URI schemes
-    allowed_acs_location_schemes:
-        - http
-        - https
+  ## List of allowed ACS location URI schemes
+  allowed_acs_location_schemes:
+    - http
+    - https
 
-    ## Add RequestedAttributes to the AttributeConsumingService of the SP Proxy metadata of Engineblock, default is all
-    ## Options are 'all' (optional and required attributes), 'required' (only required attributes) or 'none'
-    metadata_add_requested_attributes: all
+  ## Add RequestedAttributes to the AttributeConsumingService of the SP Proxy metadata of Engineblock, default is all
+  ## Options are 'all' (optional and required attributes), 'required' (only required attributes) or 'none'
+  metadata_add_requested_attributes: all
 
-    ##########################################################################################
-    ## PHP SETTINGS
-    ##########################################################################################
-    ## Ideally, PHP is configured using the regular PHP configuration in
-    ## /etc, but EngineBlock supports runtime modification of PHP
-    ## settings.
-    php_settings:
-        memory_limit: 128M
-        display_errors: '{{ php_display_errors }}'
-        error_reporting: '6135'
-        date.timezone: {{ timezone }}
-        sendmail_from: 'OpenConext EngineBlock <openconext-engineblock@openconext.org>'
+  ##########################################################################################
+  ## PHP SETTINGS
+  ##########################################################################################
+  ## Ideally, PHP is configured using the regular PHP configuration in
+  ## /etc, but EngineBlock supports runtime modification of PHP
+  ## settings.
+  php_settings:
+    memory_limit: 128M
+    display_errors: '{{ php_display_errors }}'
+    error_reporting: '6135'
+    date.timezone: {{ timezone }}
+    sendmail_from: 'OpenConext EngineBlock <openconext-engineblock@openconext.org>'
 
-    ## EngineBlock API credentials
-    ## The API user config, allows for configuration of multiple different users
-    api.users.metadataPush.username: {{ engine_api_metadata_push_user }}
-    api.users.metadataPush.password: {{ engine_api_metadata_push_password | replace("%","%%") }}
-    api.users.profile.username: {{ engine_api_profile_user }}
-    api.users.profile.password: {{ engine_api_profile_password | replace("%","%%") }}
-    api.users.deprovision.username: {{ engine_api_deprovision_user }}
-    api.users.deprovision.password: {{ engine_api_deprovision_password | replace("%","%%") }}
+  ## EngineBlock API credentials
+  ## The API user config, allows for configuration of multiple different users
+  api.users.metadataPush.username: {{ engine_api_metadata_push_user }}
+  api.users.metadataPush.password: {{ engine_api_metadata_push_password | replace("%","%%") }}
+  api.users.profile.username: {{ engine_api_profile_user }}
+  api.users.profile.password: {{ engine_api_profile_password | replace("%","%%") }}
+  api.users.deprovision.username: {{ engine_api_deprovision_user }}
+  api.users.deprovision.password: {{ engine_api_deprovision_password | replace("%","%%") }}
 
-    ##########################################################################################
-    ## CLIENT SETTINGS
-    ##########################################################################################
-    ## Currently this is used for the outgoing requests with the PDP and AA client
-    http_client.timeout: {{ engine_http_client_timeout | int }}
+  ##########################################################################################
+  ## CLIENT SETTINGS
+  ##########################################################################################
+  ## Currently this is used for the outgoing requests with the PDP and AA client
+  http_client.timeout: {{ engine_http_client_timeout | int }}
 
-    ##########################################################################################
-    ## PDP SETTINGS
-    ##########################################################################################
-    ## Location of PDP
-    pdp.host: '{{ engine_pdp_baseurl }}'
+  ##########################################################################################
+  ## PDP SETTINGS
+  ##########################################################################################
+  ## Location of PDP
+  pdp.host: '{{ engine_pdp_baseurl }}'
 
-    ## PDP uses basic auth
-    pdp.username: {{ pdp.username }}
-    pdp.password: {{ pdp.password | replace("%","%%") }}
-    pdp.client_id: EngineBlock
-    pdp.policy_decision_point_path: {{ engine_pdp_path }}
+  ## PDP uses basic auth
+  pdp.username: {{ pdp.username }}
+  pdp.password: {{ pdp.password | replace("%","%%") }}
+  pdp.client_id: EngineBlock
+  pdp.policy_decision_point_path: {{ engine_pdp_path }}
 
 
-    ##########################################################################################
-    ## ATTRIBUTE AGGREGATION SETTINGS
-    ##########################################################################################
-    ## Location of AA
-    attribute_aggregation.base_url: '{{ engine_attribute_aggregation_baseurl }}'
-    attribute_aggregation.username: {{ engine_attribute_aggregation_username }}
-    attribute_aggregation.password: {{ engine_attribute_aggregation_password | replace("%","%%") }}
+  ##########################################################################################
+  ## ATTRIBUTE AGGREGATION SETTINGS
+  ##########################################################################################
+  ## Location of AA
+  attribute_aggregation.base_url: '{{ engine_attribute_aggregation_baseurl }}'
+  attribute_aggregation.username: {{ engine_attribute_aggregation_username }}
+  attribute_aggregation.password: {{ engine_attribute_aggregation_password | replace("%","%%") }}
 
-    ## LOGGING / ERROR HANDLING
-    ## Note that we have the following priorities:
-    ## EMERGENCY: system is unusable
-    ## ALERT: action must be taken immediately
-    ## CRITICAL: critical conditions
-    ## ERROR: error conditions
-    ## WARNING: warning conditions
-    ## NOTICE: normal but significant condition
-    ## INFO: informational messages
-    ## DEBUG: debug messages
-    logger.channel: engineblock
-    logger.fingers_crossed.passthru_level: {{ engine_logging_passthru_level }}
-    logger.fingers_crossed.action_level: ERROR
-    logger.syslog.ident: EBLOG
-    logger.line_format: '{{ '[%datetime%] %channel%.%level_name%: %message% %extra% %context%' | replace("%","%%") }}'
+  ## LOGGING / ERROR HANDLING
+  ## Note that we have the following priorities:
+  ## EMERGENCY: system is unusable
+  ## ALERT: action must be taken immediately
+  ## CRITICAL: critical conditions
+  ## ERROR: error conditions
+  ## WARNING: warning conditions
+  ## NOTICE: normal but significant condition
+  ## INFO: informational messages
+  ## DEBUG: debug messages
+  logger.channel: engineblock
+  logger.fingers_crossed.passthru_level: {{ engine_logging_passthru_level }}
+  logger.fingers_crossed.action_level: ERROR
+  logger.syslog.ident: EBLOG
+  logger.line_format: '{{ '[%datetime%] %channel%.%level_name%: %message% %extra% %context%' | replace("%","%%") }}'
 
-    ##########################################################################################
-    ## DATABASE SETTINGS
-    ##########################################################################################
-    database.host: {{ engine_database_host }}
-    database.port: '{{ engine_database_port }}'
-    database.user: {{ engine_database_user }}
-    database.password: {{ engine_database_password | replace("%","%%") }}
-    database.dbname: {{ engine_database_name }}
+  ##########################################################################################
+  ## DATABASE SETTINGS
+  ##########################################################################################
+  database.host: {{ engine_database_host }}
+  database.port: '{{ engine_database_port }}'
+  database.user: {{ engine_database_user }}
+  database.password: {{ engine_database_password | replace("%","%%") }}
+  database.dbname: {{ engine_database_name }}
 {% if develop %}
-    database.test.host: {{ engine_test_database_host }}
-    database.test.port: '{{ engine_test_database_port }}'
-    database.test.user: {{ engine_test_database_user }}
-    database.test.password: {{ engine_test_database_password | replace("%","%%") }}
-    database.test.dbname: {{ engine_test_database_name }}
+  database.test.host: {{ engine_test_database_host }}
+  database.test.port: '{{ engine_test_database_port }}'
+  database.test.user: {{ engine_test_database_user }}
+  database.test.password: {{ engine_test_database_password | replace("%","%%") }}
+  database.test.dbname: {{ engine_test_database_name }}
 {% endif %}
 
-    ##########################################################################################
-    ## MISCELLANEOUS SETTINGS
-    ##########################################################################################
-    ## The memory limit used for the metadata push this setting is overridden in the ConnectionsController
-    engineblock.metadata_push_memory_limit: {{ engine_metadata_push_memory_limit }}
-    ## Minimum execution time in milliseconds when a received response is deemed invalid (default: 5000 ms)
-    minimum_execution_time_on_invalid_received_response: {{ engine_minimum_execution_time_on_invalid_received_response | int }}
-    ## The value for guest qualifier. Can be overridden for specific environments
-    addgueststatus_guestqualifier: '{{ guest_qualifier | default('') }}'
-
-    ## Language cookie settings
-    cookie.path: {{ cookie_path | default('/') }}
-    cookie.secure: true
-    cookie.locale.domain: .{{ base_domain }}
-    cookie.locale.expiry: 5184000
-    cookie.locale.http_only: false
-    cookie.locale.secure: true
-
-    ## UI settings
-    view_default_title: {{ instance_name }}
-    view_default_header: {{ instance_name }}
-    view_default_logo: /images/logo.png
-    view_default_logo_width: 96
-    view_default_logo_height: 96
-    env_name: {{ environment_shortname }}
-    env_ribbon_color: {{ environment_ribbon_colour }}
-
-    ui_return_to_sp_link: false
-
-    ## The default email where IdP request access are send
-    email_request_access_address: {{ support_email }}
-
-    ## The query to be used to detect if healthy
-    monitor_database_health_check_query: 'SELECT uuid FROM user LIMIT 1;'
-
-    ## Cutoff point for showing unfiltered IdPs on the WAYF.
-    ## Do not show unfiltered IdPs on the WAYF if there are more IdPs than the cutoff point.
-    wayf.cutoff_point_for_showing_unfiltered_idps: {{ engine_wayf_cutoff_point_for_showing_unfiltered_idps | int }}
-
-    ## Allow users to save their selected IdP and then auto-select it on returning visits.
-    wayf.remember_choice: false
-
-    ## Toggle the default IdP quick link banner on the WAYF.
-    wayf.display_default_idp_banner_on_wayf: true
-    wayf.default_idp_entity_id: "https://login.{{ myconext_base_domain }}"
-
-    ## Toggle display & content of global site notice
-    global.site_notice.show: {{ engine_site_notice_show }}
-    global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'
-
-    ## Settings for detecting whether the user is stuck in a authentication loop within his session
-    time_frame_for_authentication_loop_in_seconds: {{ engine_time_frame_for_authentication_loop_in_seconds | int }}
-    maximum_authentication_procedures_allowed: {{ engine_maximum_authentication_procedures_allowed | int }}
-    maximum_authentications_per_session:  {{ engine_maximum_authentications_per_session | int }}
-
-    ## Store attributes with their values, meaning that if an Idp suddenly
-    ## sends a new value (like a new e-mail address) consent has to be
-    ## given again.
-    consent_store_values: true
-
-    ## Email configuration
-    email_idp_debugging:
-        from:
-            name: '{{ engine_idp_debugging_from_name }}'
-            address: {{ engine_idp_debugging_from_address }}
-        to:
-            address: {{ engine_idp_debugging_email_address }}
-            name: '{{ engine_idp_debugging_to_name }}'
-        subject: '{{ engine_idp_debugging_subject | replace("%","%%") }}'
-
-    ## Swiftmailer configuration
-    mailer_transport: 'smtp'
-    mailer_host: '{{ smtp_server }}'
-    mailer_port: '25'
-    mailer_user: ''
-    mailer_password: ''
-
-    ##########################################################################################
-    ## FEATURE SETTINGS
-    ##########################################################################################
-    feature_eb_encrypted_assertions: {{ engine_feature_encrypted_assertions | bool | to_json }}
-    feature_eb_encrypted_assertions_require_outer_signature: {{ engine_feature_encrypted_assertions_require_outer_signature | bool | to_json }}
-    feature_api_metadata_push: {{ engine_api_feature_metadata_push | bool | to_json }}
-    feature_api_consent_listing: {{ engine_api_feature_consent_listing | bool | to_json }}
-    feature_api_consent_remove: {{ engine_api_feature_consent_remove | bool | to_json }}
-    feature_api_metadata_api: {{ engine_api_feature_metadata_api | bool | to_json }}
-    feature_api_deprovision: {{ engine_api_feature_deprovision | bool | to_json }}
-    feature_run_all_manipulations_prior_to_consent: {{ engine_feature_run_all_manipulations_prior_to_consent | bool | to_json }}
-    feature_block_user_on_violation: {{ engine_feature_block_user_on_violation | bool | to_json }}
-    feature_enable_sso_notification: {{ engine_feature_enable_sso_notification | bool | to_json }}
-    feature_enable_sso_session_cookie: {{ engine_feature_enable_sso_session_cookie | bool | to_json }}
-    feature_enable_consent: {{ engine_feature_enable_consent | bool | to_json }}
-    feature_stepup_sfo_override_engine_entityid: {{ engine_feature_stepup_override_entityid | bool | to_json }}
-    feature_enable_idp_initiated_flow: {{ engine_feature_idp_initiated_flow | bool | to_json }}
-    feature_stepup_send_user_attributes: {{ engine_feature_send_user_attributes | bool | to_json }}
   ##########################################################################################
-    ## PROFILE SETTINGS
-    ##########################################################################################
-    ## Location of Profile
-    profile_base_url: '{{ engine_profile_baseurl | default('') }}'
+  ## MISCELLANEOUS SETTINGS
+  ##########################################################################################
+  ## The memory limit used for the metadata push this setting is overridden in the ConnectionsController
+  engineblock.metadata_push_memory_limit: {{ engine_metadata_push_memory_limit }}
+  ## Minimum execution time in milliseconds when a received response is deemed invalid (default: 5000 ms)
+  minimum_execution_time_on_invalid_received_response: {{ engine_minimum_execution_time_on_invalid_received_response | int }}
+  ## The value for guest qualifier. Can be overridden for specific environments
+  addgueststatus_guestqualifier: '{{ guest_qualifier | default('') }}'
 
-    ##########################################################################################
-    ## SFO SETTINGS
-    ##########################################################################################
-    ## This PCRE regex is used to blacklist incoming AuthnContextClassRef attributes on. If an empty string is used
-    ## the validation is skipped. The validator will throw an exception if the used regex is invalid.
-    stepup.authn_context_class_ref_blacklist_regex: '{{ engine_stepup_authn_context_class_ref_blacklist_regex | replace("%","%%") }}'
-    ## The loa mapping from the internal used LoA's to the Stepup Gateway LOA's.
-    ## Specification of the mapping: stepup.loa.mapping.[int 1|2|2].[string engineblock|gateway]
-    ## The integer after the mapping field indicates the LoA level (1, 2 or 3 are supported).
-    ## The engineblock or gateway keys specify the LoAs identifier as will be carried in the AuthnContextClassRef of an assertion.
-    stepup.loa.mapping:
-        10:
-            engineblock: '{{ engine_stepup_engineblock_loa1 | replace("%","%%") }}'
-            gateway: '{{ engine_stepup_gateway_loa1 | replace("%","%%") }}'
-        15:
-            engineblock: '{{ engine_stepup_engineblock_loa1_5 | replace("%","%%") }}'
-            gateway: '{{ engine_stepup_gateway_loa1_5 | replace("%","%%") }}'
-        20:
-            engineblock: '{{ engine_stepup_engineblock_loa2 | replace("%","%%") }}'
-            gateway: '{{ engine_stepup_gateway_loa2 | replace("%","%%") }}'
-        30:
-            engineblock: '{{ engine_stepup_engineblock_loa3 | replace("%","%%") }}'
-            gateway: '{{ engine_stepup_gateway_loa3 | replace("%","%%") }}'
-    ## The fallback LoA to return when the Stepup authentication fails but is not required
-    stepup.loa.loa1: '{{ engine_stepup_engineblock_loa1 | replace("%","%%") }}'
-    ## The EntityId (metadata URL) used in the callout to the SFO endpoint of the configured Stepup Gateway
-    stepup.gateway.sfo.entity_id: '{{ engine_stepup_gateway_sfo_entity_id | replace("%","%%") }}'
-    ## The single sign-on endpoint used for Stepup Gateway SFO callouts
-    stepup.gateway.sfo.sso_location: '{{ engine_stepup_gateway_sfo_sso_location | replace("%","%%") }}'
-    ## The public key from the Stepup Gateway IdP
-    stepup.gateway.sfo.key_file: "{{ _engine_container_certs_dir }}/stepup_gateway.pem"
-    ## You can override the default entityID used by Engineblock for its callout to stepup gateway.
-    ## You also need to enable the feature toggle feature_stepup_sfo_override_engine_entityid above.
-    stepup.sfo.override_engine_entityid: '{{ engine_stepup_override_entityid }}'
-    ## The name of the SAML attributes to send to Stepup with the GSSP SAML extension when
-    ## feature_stepup_send_user_attributes is enabled
-    stepup.callout_user_attributes:
-      - urn:mace:dir:attribute-def:mail
-      - urn:mace:terena.org:attribute-def:schacHomeOrganization
+  ## Language cookie settings
+  cookie.path: {{ cookie_path | default('/') }}
+  cookie.secure: true
+  cookie.locale.domain: .{{ base_domain }}
+  cookie.locale.expiry: 5184000
+  cookie.locale.http_only: false
+  cookie.locale.secure: true
 
-    ##########################################################################################
-    ## THEME SETTINGS
-    ##########################################################################################
-    # When changing the default theme name, be aware that the CI build will no longer be able to select our default
-    # test suite for js e2e tests. This because a SED command is in place to rewrite the parameters.yml.
-    # See the SED command in Gitlab Actions runner: 'Run Cypress integration tests'
-    theme.name: {{ engine_theme }}
+  ## UI settings
+  view_default_title: {{ instance_name }}
+  view_default_header: {{ instance_name }}
+  view_default_logo: /images/logo.png
+  view_default_logo_width: 96
+  view_default_logo_height: 96
+  env_name: {{ environment_shortname }}
+  env_ribbon_color: {{ environment_ribbon_colour }}
 
-    ##########################################################################################
-    ## SSO NOTIFICATION SETTINGS
-    ##########################################################################################
-    sso_notification_encryption_algorithm: AES-256-CBC
-    ## The encryption key used to decrypt the SSO notification
-    sso_notification_encryption_key: <xxx>
-    ## The encryption key salt used to decrypt the SSO notification
-    sso_notification_encryption_key_salt: <xxx>
+  ui_return_to_sp_link: false
 
-    ##########################################################################################
-    ## SSO SESSION COOKIES SETTINGS
-    ##########################################################################################
-    # When the user is successfully authenticated by an Identity Provider, Engineblock stores an SSO session cookie in
-    # their browser. OpenConext's SSO query service is then able, if necessary, to verify whether this cookie exists and
-    # to return the correct answer to the requesting party based on this.
-    # The time the cookie expires. This is a timestamp in number of seconds since the authentication.
-    # If set to 0 the cookie will expire at the end of the session (when the browser closes).
-    sso_session_cookie_max_age: 0
+  ## The default email where IdP request access are send
+  email_request_access_address: {{ support_email }}
 
-    ##########################################################################################
-    ## Authentication log enrichment
-    ##########################################################################################
-    # When a user successfully authenticates and additional logging to the authentication log is desired, the following
-    # parameter can be used to define a mapping of attributes that will be used to enrich the authentication log.
-    # A (list) mapping is for example <attributeLabel>: <attributeName> where the label represents the label that is
-    # used in the authentication log record. The attributeName will be searched in the response attributes and if present
-    # the log data will be enriched. The values of the response attributes are the final values after ARP and Attribute Manipulation.
-    auth.log.attributes: {{ engine_log_attributes }}
+  ## The query to be used to detect if healthy
+  monitor_database_health_check_query: 'SELECT uuid FROM user LIMIT 1;'
+
+  ## Cutoff point for showing unfiltered IdPs on the WAYF.
+  ## Do not show unfiltered IdPs on the WAYF if there are more IdPs than the cutoff point.
+  wayf.cutoff_point_for_showing_unfiltered_idps: {{ engine_wayf_cutoff_point_for_showing_unfiltered_idps | int }}
+
+  ## Allow users to save their selected IdP and then auto-select it on returning visits.
+  wayf.remember_choice: false
+
+  ## Toggle the default IdP quick link banner on the WAYF.
+  wayf.display_default_idp_banner_on_wayf: true
+  wayf.default_idp_entity_id: "https://login.{{ myconext_base_domain }}"
+
+  ## Toggle display & content of global site notice
+  global.site_notice.show: {{ engine_site_notice_show }}
+  global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'
+
+  ## Settings for detecting whether the user is stuck in a authentication loop within his session
+  time_frame_for_authentication_loop_in_seconds: {{ engine_time_frame_for_authentication_loop_in_seconds | int }}
+  maximum_authentication_procedures_allowed: {{ engine_maximum_authentication_procedures_allowed | int }}
+  maximum_authentications_per_session: {{ engine_maximum_authentications_per_session | int }}
+
+  ## Store attributes with their values, meaning that if an Idp suddenly
+  ## sends a new value (like a new e-mail address) consent has to be
+  ## given again.
+  consent_store_values: true
+
+  ## Email configuration
+  email_idp_debugging:
+    from:
+      name: '{{ engine_idp_debugging_from_name }}'
+      address: {{ engine_idp_debugging_from_address }}
+    to:
+      address: {{ engine_idp_debugging_email_address }}
+      name: '{{ engine_idp_debugging_to_name }}'
+    subject: '{{ engine_idp_debugging_subject | replace("%","%%") }}'
+
+  ## Swiftmailer configuration
+  mailer_transport: 'smtp'
+  mailer_host: '{{ smtp_server }}'
+  mailer_port: '25'
+  mailer_user: ''
+  mailer_password: ''
+
+  ##########################################################################################
+  ## FEATURE SETTINGS
+  ##########################################################################################
+  feature_eb_encrypted_assertions: {{ engine_feature_encrypted_assertions | bool | to_json }}
+  feature_eb_encrypted_assertions_require_outer_signature: {{ engine_feature_encrypted_assertions_require_outer_signature | bool | to_json }}
+  feature_api_metadata_push: {{ engine_api_feature_metadata_push | bool | to_json }}
+  feature_api_consent_listing: {{ engine_api_feature_consent_listing | bool | to_json }}
+  feature_api_consent_remove: {{ engine_api_feature_consent_remove | bool | to_json }}
+  feature_api_metadata_api: {{ engine_api_feature_metadata_api | bool | to_json }}
+  feature_api_deprovision: {{ engine_api_feature_deprovision | bool | to_json }}
+  feature_run_all_manipulations_prior_to_consent: {{ engine_feature_run_all_manipulations_prior_to_consent | bool | to_json }}
+  feature_block_user_on_violation: {{ engine_feature_block_user_on_violation | bool | to_json }}
+  feature_enable_sso_notification: {{ engine_feature_enable_sso_notification | bool | to_json }}
+  feature_enable_sso_session_cookie: {{ engine_feature_enable_sso_session_cookie | bool | to_json }}
+  feature_enable_consent: {{ engine_feature_enable_consent | bool | to_json }}
+  feature_stepup_sfo_override_engine_entityid: {{ engine_feature_stepup_override_entityid | bool | to_json }}
+  feature_enable_idp_initiated_flow: {{ engine_feature_idp_initiated_flow | bool | to_json }}
+  feature_stepup_send_user_attributes: {{ engine_feature_send_user_attributes | bool | to_json }}
+  ##########################################################################################
+  ## PROFILE SETTINGS
+  ##########################################################################################
+  ## Location of Profile
+  profile_base_url: '{{ engine_profile_baseurl | default('') }}'
+
+  ##########################################################################################
+  ## SFO SETTINGS
+  ##########################################################################################
+  ## This PCRE regex is used to blacklist incoming AuthnContextClassRef attributes on. If an empty string is used
+  ## the validation is skipped. The validator will throw an exception if the used regex is invalid.
+  stepup.authn_context_class_ref_blacklist_regex: '{{ engine_stepup_authn_context_class_ref_blacklist_regex | replace("%","%%") }}'
+  ## The loa mapping from the internal used LoA's to the Stepup Gateway LOA's.
+  ## Specification of the mapping: stepup.loa.mapping.[int 1|2|2].[string engineblock|gateway]
+  ## The integer after the mapping field indicates the LoA level (1, 2 or 3 are supported).
+  ## The engineblock or gateway keys specify the LoAs identifier as will be carried in the AuthnContextClassRef of an assertion.
+  stepup.loa.mapping:
+    10:
+      engineblock: '{{ engine_stepup_engineblock_loa1 | replace("%","%%") }}'
+      gateway: '{{ engine_stepup_gateway_loa1 | replace("%","%%") }}'
+    15:
+      engineblock: '{{ engine_stepup_engineblock_loa1_5 | replace("%","%%") }}'
+      gateway: '{{ engine_stepup_gateway_loa1_5 | replace("%","%%") }}'
+    20:
+      engineblock: '{{ engine_stepup_engineblock_loa2 | replace("%","%%") }}'
+      gateway: '{{ engine_stepup_gateway_loa2 | replace("%","%%") }}'
+    30:
+      engineblock: '{{ engine_stepup_engineblock_loa3 | replace("%","%%") }}'
+      gateway: '{{ engine_stepup_gateway_loa3 | replace("%","%%") }}'
+  ## The fallback LoA to return when the Stepup authentication fails but is not required
+  stepup.loa.loa1: '{{ engine_stepup_engineblock_loa1 | replace("%","%%") }}'
+  ## The EntityId (metadata URL) used in the callout to the SFO endpoint of the configured Stepup Gateway
+  stepup.gateway.sfo.entity_id: '{{ engine_stepup_gateway_sfo_entity_id | replace("%","%%") }}'
+  ## The single sign-on endpoint used for Stepup Gateway SFO callouts
+  stepup.gateway.sfo.sso_location: '{{ engine_stepup_gateway_sfo_sso_location | replace("%","%%") }}'
+  ## The public key from the Stepup Gateway IdP
+  stepup.gateway.sfo.key_file: "{{ _engine_container_certs_dir }}/stepup_gateway.pem"
+  ## You can override the default entityID used by Engineblock for its callout to stepup gateway.
+  ## You also need to enable the feature toggle feature_stepup_sfo_override_engine_entityid above.
+  stepup.sfo.override_engine_entityid: '{{ engine_stepup_override_entityid }}'
+  ## The name of the SAML attributes to send to Stepup with the GSSP SAML extension when
+  ## feature_stepup_send_user_attributes is enabled
+  stepup.callout_user_attributes:
+    - urn:mace:dir:attribute-def:mail
+    - urn:mace:terena.org:attribute-def:schacHomeOrganization
+
+  ##########################################################################################
+  ## THEME SETTINGS
+  ##########################################################################################
+  # When changing the default theme name, be aware that the CI build will no longer be able to select our default
+  # test suite for js e2e tests. This because a SED command is in place to rewrite the parameters.yml.
+  # See the SED command in Gitlab Actions runner: 'Run Cypress integration tests'
+  theme.name: {{ engine_theme }}
+
+  ##########################################################################################
+  ## SSO NOTIFICATION SETTINGS
+  ##########################################################################################
+  sso_notification_encryption_algorithm: AES-256-CBC
+  ## The encryption key used to decrypt the SSO notification
+  sso_notification_encryption_key: <xxx>
+  ## The encryption key salt used to decrypt the SSO notification
+  sso_notification_encryption_key_salt: <xxx>
+
+  ##########################################################################################
+  ## SSO SESSION COOKIES SETTINGS
+  ##########################################################################################
+  # When the user is successfully authenticated by an Identity Provider, Engineblock stores an SSO session cookie in
+  # their browser. OpenConext's SSO query service is then able, if necessary, to verify whether this cookie exists and
+  # to return the correct answer to the requesting party based on this.
+  # The time the cookie expires. This is a timestamp in number of seconds since the authentication.
+  # If set to 0 the cookie will expire at the end of the session (when the browser closes).
+  sso_session_cookie_max_age: 0
+
+  ##########################################################################################
+  ## Authentication log enrichment
+  ##########################################################################################
+  # When a user successfully authenticates and additional logging to the authentication log is desired, the following
+  # parameter can be used to define a mapping of attributes that will be used to enrich the authentication log.
+  # A (list) mapping is for example <attributeLabel>: <attributeName> where the label represents the label that is
+  # used in the authentication log record. The attributeName will be searched in the response attributes and if present
+  # the log data will be enriched. The values of the response attributes are the final values after ARP and Attribute Manipulation.
+  auth.log.attributes: {{ engine_log_attributes }}
