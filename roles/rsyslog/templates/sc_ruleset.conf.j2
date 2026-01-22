@@ -16,6 +16,7 @@ if $programname == "engineblock" and $msg contains '{"channel":"authentication"'
 :programname, isequal, "Apache-EBAPI" { action(type="omfile" DynaFile="apache-eb-api-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "manageserver" { action(type="omfile" DynaFile="manage-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "managegui" { action(type="omfile" DynaFile="apache-manage-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
+:programname, isequal, "managejson" { action(type="omfile" DynaFile="managejson-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "PDPANALYTICS" { action(type="omfile" DynaFile="pdpanalytics-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "pdp" { action(type="omfile" DynaFile="pdp-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "pdpserver" { action(type="omfile" DynaFile="pdp-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
