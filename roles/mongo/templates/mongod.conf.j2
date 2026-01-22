@@ -9,6 +9,7 @@ net:
   port: 27017
   tls:
     mode: preferTLS
+    disabledProtocols: TLS1_0,TLS1_1,TLS1_2
     certificateKeyFile: /etc/pki/mongo/keyandcert.pem
     CAFile: /etc/pki/mongo/mongoca.pem
     allowConnectionsWithoutCertificates: true
@@ -22,3 +23,4 @@ replication:
 security:
     authorization: enabled
     clusterAuthMode: x509
+    javascriptEnabled: false
