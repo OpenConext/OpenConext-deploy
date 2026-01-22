@@ -165,6 +165,13 @@ invite:
   user: {{ invite.access_user }}
   password: "{{ invite.access_secret }}"
 
+# Todo relace with openconextaccess user
+statistics:
+  enabled: True
+  url: {{ dashboard.stats_url }}
+  user: {{ dashboard.stats_user }}
+  password: {{ stats_dashboard_api_password }}
+
 s3storage:
   url: {{ openconextaccess.s3_storage.url }}
   key: {{ openconextaccess.s3_storage.key }}
