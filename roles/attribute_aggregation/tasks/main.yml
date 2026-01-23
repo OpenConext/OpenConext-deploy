@@ -44,7 +44,7 @@
 - name: Create and start the server container
   community.docker.docker_container:
     name: "aaserver"
-    image: "ghcr.io/openconext/openconext-attribute-aggregation/aa-server:{{ attribute_aggregation_server_version }}"
+    image: "ghcr.io/openconext/openconext-attribute-aggregation/aa-server:{{ attribute_aggregation_version }}"
     pull: true
     restart_policy: "always"
     state: "started"
