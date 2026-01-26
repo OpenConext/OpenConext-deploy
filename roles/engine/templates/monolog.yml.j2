@@ -11,7 +11,7 @@ monolog:
             channels: ["!authentication"]
         nested:
             type:      stream
-            level:     info
+            level:     {{  "debug" if engine_debug | bool else "info" }}
             path:      php://stderr
             formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
         authentication:
