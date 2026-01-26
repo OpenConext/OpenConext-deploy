@@ -239,4 +239,10 @@
       - source: engineblock_sessions
         target: /tmp/
         type: volume
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail -s http://localhost/internal/health | grep -q '\"status\":\"UP\"'"]
+      start_period: 60s
+      interval: 10s
+      timeout: 1s
+      retries: 20
   register: "engine_container"
