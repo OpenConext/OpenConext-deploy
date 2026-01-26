@@ -29,11 +29,14 @@
 
 - name: Place parameters.yml
   ansible.builtin.template:
-    src: parameters.yml.j2
-    dest: "{{ _engine_config_dir }}/configs/parameters.yml"
+    src: "{{ item }}.j2"
+    dest: "{{ _engine_config_dir }}/configs/{{ item }}"
     mode: "0640"
-    owner: root
-    group: engine
+    owner: "root"
+    group: "engine"
+  with_items:
+    - "parameters.yaml"
+    - "monolog.yaml"
   notify: "Restart engine"
 
 - name: Check presence of environment specific attributes.json
@@ -222,7 +225,7 @@
         type: bind
         read_only: true
       - source: "{{ _engine_config_dir }}/configs/attributes.json"
-        target: "/var/www/html/app/config/attributes.json"
+        target: "/var/www/html/config/packages/prod/attributes.json"
         type: bind
         read_only: true
       - source: "{{ _engine_config_dir }}/images/background-back.svg"
@@ -245,8 +248,8 @@
         target: "/var/www/html/web/favicon.ico"
         type: bind
         read_only: true
-      - source: engineblock_sessions
-        target: /tmp/
+      - source: "engineblock_sessions"
+        target: "/tmp/"
         type: volume
     healthcheck:
       test: ["CMD-SHELL", "curl --fail -s http://localhost/internal/health | grep -q '\"status\":\"UP\"'"]
