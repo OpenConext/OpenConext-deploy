@@ -35,8 +35,8 @@
     owner: "root"
     group: "engine"
   with_items:
-    - "parameters.yaml"
-    - "monolog.yaml"
+    - "parameters.yml"
+    - "monolog.yml"
   notify: "Restart engine"
 
 - name: Check presence of environment specific attributes.json
