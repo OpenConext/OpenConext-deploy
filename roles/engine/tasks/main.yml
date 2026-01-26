@@ -212,8 +212,8 @@
     etc_hosts:
       host.docker.internal: host-gateway
     mounts:
-      - source: "{{ _engine_config_dir }}/configs/parameters.yml"
-        target: "{{ _engine_container_config_dir }}parameters.yml"
+      - source: "{{ _engine_config_dir }}/configs/"
+        target: "{{ _engine_container_config_dir }}"
         type: bind
         read_only: true
       - source: "{{ _engine_config_dir }}/languages/overrides.en.php"
