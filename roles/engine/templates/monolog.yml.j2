@@ -1,26 +1,43 @@
 ---
 monolog:
-    channels: ["engineblock", "authentication"]
-    handlers:
-        main:
-            type: fingers_crossed
-            activation_strategy: OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy
-            passthru_level: "%logger.fingers_crossed.passthru_level%"
-            handler: nested
-            level: info
-            channels: ["!authentication"]
-        nested:
-            type:      stream
-            level:     {{  "debug" if engine_debug | bool else "info" }}
-            path:      php://stderr
-            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
-        authentication:
-            type:      stream
-            path:      php://stderr
-            level:     info
-            channels:  [authentication]
-            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
-        console:
-            type: console
-            process_psr_3_messages: false
-            channels: ["!event", "!doctrine", "!console"]
+  # define two extra channels next to the default symfony ones
+  channels: [ "engineblock", "authentication" ]
+
+  # Monolog handlers are processed in the order they are defined.
+  # Handlers with "channels" filters will only process messages from those channels (or exclude them).
+  handlers:
+
+    # wrapper for the "nested" handler: buffer any messages <passthru_level (NOTICE on prod), but directly pass through higher levels
+    # main: The 'main' handler is a fingers_crossed handler, which means it buffers all messages
+    # and only passes them to the 'nested' handler if one message reaches the 'activation_strategy' level.
+    # It excludes the 'authentication' channel to avoid duplicate logging of authentication events.
+    main:
+      type: fingers_crossed
+      activation_strategy: "OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy"
+      passthru_level: {{ engine_logging_passthru_level }}
+      handler: nested
+      level: info
+      channels: ["!authentication"]
+
+    # output handler for the request_buffered and main_buffered handlers
+    nested:
+      type: stream
+      level: {{  "debug" if engine_debug | bool else "info" }}
+      path: "php://stderr"
+      formatter: "OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter"
+
+    # authentication log, totally separate from the previous rules
+    # It only handles the 'authentication' channel.
+    authentication:
+      type: stream
+      path: "php://stderr"
+      level: info
+      channels: [ authentication ]
+      formatter: "OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter"
+
+    # console log, totally separate from the previous rules
+    # It excludes specific channels that are handled elsewhere or are too noisy in the console.
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: ["!event", "!doctrine", "!console"]
