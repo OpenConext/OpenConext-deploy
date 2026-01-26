@@ -248,4 +248,11 @@
       - source: engineblock_sessions
         target: /tmp/
         type: volume
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-s", "http://localhost/internal/health"]
+      start_period: 30s
+      start_interval: 1s
+      interval: 10s
+      timeout: 1s
+      retries: 20
   register: "engine_container"
