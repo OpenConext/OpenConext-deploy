@@ -94,6 +94,31 @@ config:
   invite: "https://invite.{{ base_domain }}"
   sram: "https://{{ env }}.sram.surf.nl/"
   serviceDesk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
+  # For other environments, move to group_vars
+  identity_providers:
+      - name: "SXS IdP"
+        entityid: "http://mock-idp"
+        descriptionEN: "Een test-IdP waarmee je zelf attributen-sets kunt simuleren. De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>"
+        descriptionNL: "Een test-IdP waarmee je zelf attributen-sets kunt simuleren. De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>"
+      - name: "SXS Dummy"
+        entityid: "https://idp.diy.surfconext.nl"
+        descriptionEN: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
+        descriptionNL: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
+  idp_proxy_meta_data:  https://metadata.test2.surfconext.nl/idp-metadata.xml
+  minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
+  features:
+    - name: idp
+      enabled: true
+    - name: invite
+      enabled: true
+    - name: sram
+      enabled: true
+    - name: mfa
+      enabled: true
+  acr_values:
+  {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}
+  - "{{ loa }}"
+  {% endfor %}
 
 eduid-idp-entity-id: "https://login.{{ myconext_base_domain }}"
 
@@ -133,6 +158,19 @@ manage:
   # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
   staticManageDirectory: classpath:/manage
   #  staticManageDirectory: file:///usr/local/etc/manage
+
+invite:
+  enabled: True
+  url: "https://invite.{{ base_domain }}"
+  user: {{ invite.access_user }}
+  password: "{{ invite.access_secret }}"
+
+# Todo relace with openconextaccess user
+statistics:
+  enabled: True
+  url: {{ dashboard.stats_url }}
+  user: {{ dashboard.stats_user }}
+  password: {{ stats_dashboard_api_password }}
 
 s3storage:
   url: {{ openconextaccess.s3_storage.url }}
