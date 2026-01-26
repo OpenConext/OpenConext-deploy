@@ -210,7 +210,7 @@
       host.docker.internal: host-gateway
     mounts:
       - source: "{{ _engine_config_dir }}/configs/parameters.yml"
-        target: "/var/www/html/app/config/packages/parameters.yml"
+        target: "/var/www/html/config/packages/prod/parameters.yml"
         type: bind
         read_only: true
       - source: "{{ _engine_config_dir }}/languages/overrides.en.php"
