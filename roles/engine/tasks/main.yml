@@ -250,8 +250,7 @@
         type: volume
     healthcheck:
       test: ["CMD", "curl", "--fail", "-s", "http://localhost/internal/health"]
-      start_period: 30s
-      start_interval: 1s
+      start_period: 60s
       interval: 10s
       timeout: 1s
       retries: 20
