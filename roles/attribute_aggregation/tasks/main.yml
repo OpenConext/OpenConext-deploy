@@ -1,0 +1,143 @@
+---
+- name: Create directory to keep configfile
+  ansible.builtin.file:
+    dest: "/opt/openconext/attribute-aggregation"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0770"
+
+- name: Place the server application configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/opt/openconext/attribute-aggregation/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items:
+    - "serverapplication.yml"
+    - "logback.xml"
+    - "attributeAuthorities.yml"
+    - "serviceProviderConfig.json"
+  notify:
+    - "Restart attribute-aggregationserver"
+
+- name: Place the link application configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/opt/openconext/attribute-aggregation/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items:
+    - "apachelink.conf"
+  notify:
+    - "Restart attribute-aggregationlink"
+
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    aa_docker_networks:
+      - name: "loadbalancer"
+      - name: "openconext_mariadb"
+  when: "mariadb_in_docker | default(false) | bool"
+
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: "aaserver"
+    image: "ghcr.io/openconext/openconext-attribute-aggregation/aa-server:{{ attribute_aggregation_version }}"
+    pull: true
+    restart_policy: "always"
+    state: "started"
+    networks: "{{ aa_docker_networks }}"
+    mounts:
+      - source: "/opt/openconext/attribute-aggregation/serverapplication.yml"
+        target: "/application.yml"
+        read_only: true
+        type: "bind"
+      - source: "/opt/openconext/attribute-aggregation/logback.xml"
+        target: "/logback.xml"
+        read_only: true
+        type: "bind"
+      - source: "/opt/openconext/attribute-aggregation/attributeAuthorities.yml"
+        target: "/attributeAuthorities.yml"
+        read_only: true
+        type: "bind"
+      - source: "/opt/openconext/attribute-aggregation/serviceProviderConfig.json"
+        target: "/serviceProviderConfig.json"
+        read_only: true
+        type: "bind"
+    command: "-Xmx128m --spring.config.location=./"
+    etc_hosts:
+      host.docker.internal: "host-gateway"
+    labels:
+      traefik.http.routers.aaserver.rule: "Host(`aa.{{ base_domain }}`)"
+      traefik.http.routers.aaserver.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/internal/health",
+        ]
+      interval: "10s"
+      timeout: "10s"
+      retries: 3
+      start_period: "10s"
+  notify: "Restart attribute-aggregationserver"
+  register: "aa_servercontainer"
+
+- name: Create the gui link container
+  community.docker.docker_container:
+    name: "aalink"
+    image: "ghcr.io/openconext/openconext-basecontainers/apache2-shibboleth:latest"
+    pull: true
+    restart_policy: "always"
+    state: "started"
+    networks: "{{ aa_docker_networks }}"
+    mounts:
+      - source: "/opt/openconext/attribute-aggregation/apachelink.conf"
+        target: "/etc/apache2/sites-enabled/000-default.conf"
+        read_only: true
+        type: "bind"
+      - source: "/etc/localtime"
+        target: "/etc/localtime"
+        read_only: true
+        type: "bind"
+      - source: "/opt/openconext/common/favicon.ico"
+        target: "/var/www/favicon.ico"
+        read_only: true
+        type: "bind"
+    etc_hosts:
+      host.docker.internal: "host-gateway"
+    labels:
+      traefik.http.routers.aalink.rule: "Host(`link.{{ base_domain }}`)"
+      traefik.http.routers.aalink.tls: "true"
+      traefik.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost/internal/health"]
+      interval: "10s"
+      timeout: "10s"
+      retries: 3
+      start_period: "10s"
+    hostname: "attribute-link"
+    env:
+      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img }}"
+      HTTPD_SERVERNAME: "link.{{ base_domain }}"
+      OPENCONEXT_INSTANCENAME: "{{ instance_name }}"
+      OPENCONEXT_ENGINE_LOGOUT_URL: "https://engine.{{ base_domain }}/logout"
+      OPENCONEXT_HELP_EMAIL: "{{ support_email }}"
+      SHIB_ENTITYID: "https://link.{{ base_domain }}/shibboleth"
+      SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
+      SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
+  register: "aa_linkcontainer"
+
+- name: Remove obsolete pdp containers
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: "absent"
+  loop:
+    - "aagui"
