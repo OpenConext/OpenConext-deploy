@@ -215,7 +215,7 @@
   mysql_user:
     name: "{{ mariadb_cluster_user }}"
     password: "{{ mariadb_cluster_password }}"
-    priv: "*.*:RELOAD,PROCESS,LOCK TABLES,BINLOG MONITOR,REPLICA MONITOR"
+    priv: "{{ mariadb_cluster_user_privs | default('*.*:RELOAD,PROCESS,LOCK TABLES,BINLOG MONITOR,SLAVE MONITOR') }}"
     state: present
     login_user: root
     login_password: "{{ mariadb_root_password  }}"

@@ -1,41 +1,24 @@
 ---
 - name: Check if hosts are in clustered
-  ansible.builtin.shell: >-
-    mongosh --port {{ mongod_port }} --quiet --eval 'db.isMaster().hosts'
+  ansible.builtin.command: mongosh --port {{ mongod_port }} --quiet --eval 'db.isMaster().hosts'
   register: check_cluster
   changed_when: false
+  check_mode: false
 
-- name: Set fact for roles
-  ansible.builtin.set_fact:
-    mongo_primary: "{{ mongo_replication_role == 'primary' }}"
-    mongo_secondary: "{{ mongo_replication_role == 'secondary' }}"
-    mongo_arbiter: "{{ mongo_replication_role == 'arbiter' }}"
+- name: Debug check_cluster variable
+  when: show_debug_info is defined and show_debug_info | bool
+  ansible.builtin.debug:
+    msg: "{{ check_cluster }}"
 
-- name: Build member list
-  ansible.builtin.set_fact:
-    members: >-
-      {{
-        members | default([]) +
-        [{
-          'host': item  ,
-          'priority': member_weight[hostvars[item].mongo_replication_role]
-        }]
-      }}
-  loop: "{{ ansible_play_hosts }}"
-  run_once: true
-  vars:
-    member_weight:
-      primary: 3
-      secondary: 2
-      arbiter: 1
+- name: Debug mongo_cluster_members variable
+  when: show_debug_info is defined and show_debug_info | bool
+  ansible.builtin.debug:
+    msg: "{{ mongo_cluster_members }}"
 
-- name: Set fact for arbiter index number
-  ansible.builtin.set_fact:
-    arbiter_index: "{{ hostid }}"
-  when: hostvars[item].mongo_arbiter
-  loop: "{{ ansible_play_hosts }}"
-  loop_control:
-    index_var: hostid
+- name: Debug mongo_replication_role variable
+  when: show_debug_info is defined and show_debug_info | bool
+  ansible.builtin.debug:
+    msg: "{{ mongo_replication_role }}"
 
 - name: Initial cluster initialisation
   community.mongodb.mongodb_replicaset:
@@ -44,8 +27,8 @@
     login_port: "{{ mongod_port }}"
     login_password: "{{ mongo_admin_password }}"
     replica_set: "{{ replica_set_name }}"
-    members: "{{ members }}"
-    arbiter_at_index: "{{ arbiter_index | default(omit) }}"
+    members: "{{ mongo_cluster_members }}"
+    arbiter_at_index: "{{ mongo_arbiter_index | default(0) }}"
     validate: false
   run_once: true
   when: mongo_replication_role == 'primary'

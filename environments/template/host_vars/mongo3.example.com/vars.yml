@@ -1,0 +1,3 @@
+backend_ipv4: <THIS_SERVERS_IP_USED_FOR_MONGO>
+mongo_replication_role: arbiter
+mongo_cluster_cert: <MONGO_CERTIFICATE> # use an identical OU, O or DC for all cluster members

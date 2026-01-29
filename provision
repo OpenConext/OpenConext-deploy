@@ -28,7 +28,7 @@ fi
 # Download extra roles when requirements.yml is present
 # and roles-external is not a symlink and is not a git repository
 # and the file .no-provision is not present
-if [ -d roles-external ] && [ -f "$environment_dir"/requirements.yml ]
+if [ -f "$environment_dir"/requirements.yml ]
 then
   if   [ -L roles-external ] || [ -d roles-external/.git ] \
     || [ -f roles-external/.no-provision ]

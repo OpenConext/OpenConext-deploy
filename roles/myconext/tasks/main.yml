@@ -126,7 +126,7 @@
 - name: Create and start the server container
   community.docker.docker_container:
     name: myconextserver
-    image: ghcr.io/openconext/openconext-myconext/myconext-server:{{ myconext_server_version }}
+    image: ghcr.io/openconext/openconext-myconext/myconext-server:{{ myconext_version }}
     pull: true
     restart_policy: "{{ myconext_server_restart_policy }}"
     restart_retries: "{{ myconext_server_restart_retries }}" # Only for restart policy on-failure
@@ -161,7 +161,7 @@
 - name: Create the client container
   community.docker.docker_container:
     name: myconextgui
-    image: ghcr.io/openconext/openconext-myconext/myconext-gui:{{ myconext_gui_version }}
+    image: ghcr.io/openconext/openconext-myconext/myconext-gui:{{ myconext_version }}
     pull: true
     restart_policy: "always"
     state: started
@@ -197,7 +197,7 @@
 - name: Create the account gui
   community.docker.docker_container:
     name: accountgui
-    image: ghcr.io/openconext/openconext-myconext/account-gui:{{ account_gui_version }}
+    image: ghcr.io/openconext/openconext-myconext/account-gui:{{ myconext_version }}
     pull: true
     restart_policy: "always"
     state: started
@@ -227,7 +227,7 @@
 - name: Create the servicedesk gui
   community.docker.docker_container:
     name: servicedeskgui
-    image: ghcr.io/openconext/openconext-myconext/servicedesk-gui:{{ servicedesk_gui_version }}
+    image: ghcr.io/openconext/openconext-myconext/servicedesk-gui:{{ myconext_version }}
     pull: true
     restart_policy: "always"
     state: started

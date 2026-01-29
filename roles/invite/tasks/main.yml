@@ -61,7 +61,7 @@
     name: inviteserver
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-invite/inviteserver:{{ invite_server_version }}
+    image: ghcr.io/openconext/openconext-invite/inviteserver:{{ invite_version }}
     pull: true
     restart_policy: "{{ invite_server_restart_policy }}"
     restart_retries: "{{ invite_server_restart_retries }}" # Only for restart policy on-failure
@@ -94,7 +94,7 @@
 - name: Create the client container
   community.docker.docker_container:
     name: inviteclient
-    image: ghcr.io/openconext/openconext-invite/inviteclient:{{ invite_client_version }}
+    image: ghcr.io/openconext/openconext-invite/inviteclient:{{ invite_version }}
     pull: true
     restart_policy: "always"
     state: started
@@ -120,7 +120,7 @@
 - name: Create the welcome container
   community.docker.docker_container:
     name: invitewelcome
-    image: ghcr.io/openconext/openconext-invite/invitewelcome:{{ invite_welcome_version }}
+    image: ghcr.io/openconext/openconext-invite/invitewelcome:{{ invite_version }}
     pull: true
     restart_policy: "always"
     state: started
@@ -147,7 +147,7 @@
 - name: Create and start the mock provisioning container
   community.docker.docker_container:
     name: inviteprovisioningmock
-    image: ghcr.io/openconext/openconext-invite/inviteprovisioningmock:{{ invite_mock_version }}
+    image: ghcr.io/openconext/openconext-invite/inviteprovisioningmock:{{ invite_version }}
     pull: true
     restart_policy: "always"
     state: started

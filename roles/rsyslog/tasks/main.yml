@@ -18,11 +18,11 @@
   block:
 
     # journald forwards logs to rsyslog
-    - name: Ensure journald forwards logs to rsyslog
+    - name: When using imjournal no forwarding necessary
       ansible.builtin.lineinfile:
         path: /etc/systemd/journald.conf
         search_string: 'ForwardToSyslog='
-        line: ForwardToSyslog=yes
+        line: 'ForwardToSyslog=no' # commenting out ForwardToSyslog=yes still results in enabling the option on debian
       notify:
         - "Restart journald"
 

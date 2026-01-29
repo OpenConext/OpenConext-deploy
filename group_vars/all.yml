@@ -34,6 +34,7 @@ httpd_csp:
   lenient: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
   lenient_with_static_img: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
   lenient_with_static_img_with_oidcng: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
+  lenient_with_static_img_with_surfconext: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} https://*.surfconext.nl http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
   strict: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; manifest-src 'self'"
   strict_with_static_img: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; manifest-src 'self'"
   lenient_with_static_img_for_idp: "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self' https://*.{{ base_domain }}; frame-ancestors 'none'; base-uri 'none'"
@@ -84,12 +85,3 @@ stepup_loa_values_supported:
  - "http://{{ base_domain }}/assurance/loa1.5"
  - "http://{{ base_domain }}/assurance/loa2"
  - "http://{{ base_domain }}/assurance/loa3"
-
-# If values are added, please add them to the IdP-Dashboard locales
-mfa_values_supported:
- - "http://schemas.microsoft.com/claims/multipleauthn"
- - "https://refeds.org/profile/mfa"
- - "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorContract"
- - "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorUnregistered"
- - "urn:oasis:names:tc:SAML:2.0:ac:classes:Password"
- - "transparent_authn_context"

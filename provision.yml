@@ -94,6 +94,7 @@
 - hosts: mongo_servers
   gather_facts: yes
   become: true
+  serial: 1
   roles:
     - role: mongo
       tags: ['core', 'mongo']
@@ -142,7 +143,7 @@
     - { role: teams,      tags: ["teams"] }
     - { role: pdp,        tags: ["pdp"] }
     - { role: voot,       tags: ["voot"] }
-    - { role: attribute-aggregation, tags: ["aa", "attribute-aggregation"] }
+    - { role: attribute_aggregation, tags: ["aa", "attribute-aggregation"] }
     - { role: oidc-playground, tags: ["oidc-playground"] }
     - { role: myconext,    tags: ["myconext"] }
     - { role: manage,    tags: ["manage"] }

@@ -27,12 +27,20 @@
       - name: openconext_mariadb
   when: mariadb_in_docker | default(false) | bool
 
+- name: Remove obsolete pdp containers
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - "pdpgui"
+    - "pdpserver"
+
 - name: Create and start the server container
   community.docker.docker_container:
-    name: pdpserver
+    name: pdp
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-pdp/pdp-server:{{ pdp_server_version }}
+    image: ghcr.io/openconext/openconext-pdp/pdp-server:{{ pdp_version }}
     pull: true
     restart_policy: "{{ pdp_server_restart_policy }}"
     restart_retries: "{{ pdp_server_restart_retries }}" # Only for restart policy on-failure
@@ -52,8 +60,8 @@
     etc_hosts:
       host.docker.internal: host-gateway
     labels:
-      traefik.http.routers.pdpgui.rule: "Host(`pdp.{{ base_domain }}`)"
-      traefik.http.routers.pdpgui.tls: "true"
+      traefik.http.routers.pdp.rule: "Host(`pdp.{{ base_domain }}`)"
+      traefik.http.routers.pdp.tls: "true"
       traefik.enable: "true"
     healthcheck:
       test:

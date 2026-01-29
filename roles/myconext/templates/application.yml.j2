@@ -37,8 +37,13 @@ springdoc:
     enabled: true
 
 email:
+  from_deprovisioning: <noreply+deprovisioning@{{ myconext_base_domain }}>
   from: eduID <noreply@{{ myconext_base_domain }}>
-  error_mail: info@surfconext.nl
+  from_code: eduID <noreply@{{ myconext_base_domain }}>
+  from_app_nudge: <noreply+appnudge@{{ myconext_base_domain }}>
+  from_new_device: <noreply+newdevice@{{ myconext_base_domain }}>
+  error: {{ error_mail_to }}
+  error_mail: {{ error_mail_to }}
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
   idp-surfconext-url: https://login.{{ myconext_base_domain }}
@@ -58,7 +63,14 @@ cron:
   manage-initial-delay-milliseconds: 15000
   manage-fixed-rate-milliseconds: 300_000
   # Runs on the first day of February, May, August, and November.
-  mail-institution-mail-usage-expression: "0 0 0 1 2,5,8,11 *"
+  # 0 – seconds
+  # 30 – minute
+  # 5 – hour
+  # * – every day of month
+  # 2,5,8,11 – February, May, August, November
+  # * – every day of week
+  mail-institution-mail-usage-expression: "0 30 5 * 2,5,8,11 *"
+  mail-institution-batch-size: 500
   # Every day at 6:30AM
   nudge-app-mail-expression: "0 30 6 * * ?"
   # Number of days after creation of the eduID account which the nudge mail is send
@@ -74,6 +86,7 @@ manage:
   base_url: "https://manage.{{ base_domain }}"
   enabled: True
 
+mongodb_db: {{ myconext.mongo_database }}
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
 base_path: https://mijn.{{ myconext_base_domain }}
@@ -114,6 +127,8 @@ feature:
   create_eduid_institution_landing: {{ myconext.feature_create_eduid_institution_landing }}
   # Do we default remember the user for a longer period
   default_remember_me: True
+  # Do we default add affiliate email address
+  default_affiliate_email: True
   # Does the SAMLIdpService expects authn requests to be signed
   requires_signed_authn_request: False
   # Do we support ID verify
@@ -134,6 +149,12 @@ feature:
   captcha_enabled: True
   # Set to true to use the BRIN code to add ui-roles and authentication scoped affiliations
   use_remote_creation_for_affiliation:  {{ myconext.feature_use_remote_creation_for_affiliation }}
+  # Set to true to show the account linking related options on the personal-info page and home page (banner)
+  enable_account_linking: {{ myconext.feature_enable_account_linking }}
+  # Set to true to show the app login option
+  use_app: {{ myconext.feature_use_app }}
+
+default_affiliate_email_domain: eduid.nl
 
 captcha:
   sitekey: {{ myconext.captcha_sitekey }}
@@ -146,7 +167,8 @@ private_key_path: file:///config/myconext_saml.key
 certificate_path: file:///config/myconext_saml.crt
 tiqr_hash_secret: "{{ myconext_tiqr_hash_secret }}"
 
-remember_me_max_age_seconds: 15_768_000
+remember_me_max_age_seconds: 15_768_000 # 11 uur
+tiqr_trust_for_pn_max_age_seconds: 15_768_000
 sso_mfa_duration_seconds: 3600
 nudge_eduid_app_login_days: {{ myconext.nudge_eduid_app_login_days }}
 nudge_eduid_app_pause_days: {{ myconext.nudge_eduid_app_pause_days }}
@@ -286,7 +308,7 @@ management:
       access: unrestricted
     health:
       access: unrestricted
-      show-details: when_authorized
+      show-details: always
     prometheus:
       access: read_only
     mappings:

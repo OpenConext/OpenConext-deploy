@@ -1,9 +1,18 @@
-# This rsyslog configuration takes logs from journald and forwards them to a remote log serverad="imuxsock") # provides support for local system logging
+# Where to place auxiliary files
+global(workDirectory="{{ rsyslog_workdirectory | default('/var/spool/rsyslog') }}")
+
 {% if 'docker' in group_names %}
 module(load="imptcp")
 input(type="imptcp" port="514")
 {% endif %}
-module(load="imuxsock" SysSock.Use="on")
+{% if ansible_os_family == "RedHat" %}
+module(load="imuxsock")
+{% endif %}
+module(load="imjournal"             # provides access to the systemd journal
+       UsePid="system" # PID number is retrieved as the ID of the process the journal entry originates from
+       StateFile="{{ rsyslog_imjournal_statefile | default('imjournal.state') }}"
+       ratelimit.interval="{{ rsyslog_imjournal_ratelimitinterval | default('60') }}"
+       ratelimit.burst="{{ rsyslog_imjournal_ratelimitburst | default('20000') }}")  # Reads journald logs
 module(load="imklog")   # provides kernel logging support
 module(load="immark" interval="300" )  # provides --MARK-- message capability
 module(load="omrelp")
@@ -14,6 +23,9 @@ template(name="CustomRelpFormat" type="string"
 $PreserveFQDN on
 
 *.emerg                         :omusrmsg:*
+{% if rsyslog_maxmessagesize is defined %}
+$MaxMessageSize {{ rsyslog_maxmessagesize }}
+{% endif %}
 
 {% if  'sysloghost' not in group_names %}
 {% for relp_host in relp_remote %}

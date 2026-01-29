@@ -2,31 +2,32 @@
 
 name: loadbalancer
 on:
-  push:
-    paths:
-      - 'roles/haproxy/**'
-      - 'roles/keepalived/**'
-      - 'roles/bind/**'
-      - 'molecule/loadbalancer/**'
-      - 'roles/selfsigned_certs/**'
-      - '.github/workflows/molecule-loadbalancer.yml'
-  pull_request:
-    paths:
-      - 'roles/haproxy/**'
-      - 'roles/keepalived/**'
-      - 'roles/bind/**'
-      - 'molecule/loadbalancer/**'
-      - 'roles/selfsigned_certs/**'
-      - '.github/workflows/molecule-loadbalancer.yml'
+  workflow_dispatch:
+  # push:
+  #   paths:
+  #     - 'roles/haproxy/**'
+  #     - 'roles/keepalived/**'
+  #     - 'roles/bind/**'
+  #     - 'molecule/loadbalancer/**'
+  #     - 'roles/selfsigned_certs/**'
+  #     - '.github/workflows/molecule-loadbalancer.yml'
+  # pull_request:
+  #   paths:
+  #     - 'roles/haproxy/**'
+  #     - 'roles/keepalived/**'
+  #     - 'roles/bind/**'
+  #     - 'molecule/loadbalancer/**'
+  #     - 'roles/selfsigned_certs/**'
+  #     - '.github/workflows/molecule-loadbalancer.yml'
 
 jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.8
 

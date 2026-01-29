@@ -1,6 +1,7 @@
 ---
 
 env: "%env%"
+show_debug_info: false # Show extra debug info
 mariadb_host: localhost
 rsyslog_host: localhost
 database_clients: [ "{{ mariadb_host }}" ]
@@ -27,8 +28,7 @@ relp_remote:
 
 php_display_errors: 1
 
-attribute_aggregation_gui_version: "3.0.6"
-attribute_aggregation_server_version: "3.0.6"
+attribute_aggregation_version: "3.0.6"
 oidc_playground_client_version: "3.0.0"
 oidc_playground_server_version: "3.0.0"
 engine_version: "6.15.0"
@@ -38,15 +38,12 @@ lifecycle_version: "0.1.1"
 monitoring_tests_version: "7.0.0"
 mujina_version: "8.0.2"
 oidcng_version: "6.1.6"
-pdp_server_version: "4.0.2"
-pdp_gui_version: "4.0.2"
+pdp_version: "7.3.0"
 profile_version: "3.1.4"
 teams_gui_version: "9.1.3"
 teams_server_version: "9.1.3"
 voot_version: "6.2.0"
-myconext_server_version: "6.0.2"
-myconext_gui_version: "6.0.2"
-account_gui_version: "6.0.2"
+myconext_version: "8.1.12-1"
 dashboard_server_version: "12.3.4"
 dashboard_gui_version: "12.3.4"
 invite_server_version: "0.0.2-SNAPSHOT"
@@ -290,6 +287,8 @@ myconext:
   feature_create_eduid_institution_landing: true
   feature_allowlist: false
   feature_dry_run_email_cron: true
+  feature_enable_account_linking: true
+  feature_use_app: true
   sms_api_url: "https://rest.spryngsms.com/v1/messages"
   sms_api_route: "default"
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
@@ -304,6 +303,12 @@ myconext:
     - { name: "terms_of_service" , url: "https://example.org/x/LozaAQ"}
     - { name: "voorwaarden" , url: "https://example.org/x/HYzaAQ"}
   geo_location_  external_url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={license_key}&suffix=tar.gz"
+  email:
+    from_deprovisioning: MyConext <noreply+deprovisioning@{{ myconext_base_domain }}>
+    from_code: MyConext <noreply@{{ myconext_base_domain }}>
+    from_app_nudge: MyConext <noreply+appnudge@{{ myconext_base_domain }}>
+    from_new_device: MyConext <noreply+newdevice@{{ myconext_base_domain }}>
+
 
 monitoring_tests:
   metadata_sp_url: "{{ monitoring_tests_metadata_sp_url }}"
@@ -373,6 +378,15 @@ manage:
         scopes: ["READ"]
       }
   oidc_rp_redirect_url_format: "url"
+
+# If values are added, please add them to the IdP-Dashboard locales
+mfa_values_supported:
+ - "http://schemas.microsoft.com/claims/multipleauthn"
+ - "https://refeds.org/profile/mfa"
+ - "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorContract"
+ - "urn:oasis:names:tc:SAML:2.0:ac:classes:MobileOneFactorUnregistered"
+ - "urn:oasis:names:tc:SAML:2.0:ac:classes:Password"
+ - "transparent_authn_context"
 
 loadbalancing:
   engine:
@@ -599,3 +613,9 @@ docker_servers:
 
 iptables_enable: false
 dashboard_install: false
+
+# these already have appropriate defaults in the template or rsyslog but you can
+# change them if necessary, for example on docker hosts they have to be a little higher
+# rsyslog_imjournal_ratelimitburst: 2000
+# rsyslog_imjournal_ratelimitinterval: 600
+# rsyslog_maxmessagesize: 8000
