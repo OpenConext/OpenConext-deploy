@@ -8,6 +8,24 @@
    </encoder>
  </appender>
 
+ <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+   <destination>host.docker.internal:514</destination>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        <customFields>{"app":"manage"}</customFields>
+        <includeCallerData>true</includeCallerData>
+        <fieldNames>
+            <thread>[ignore]</thread>
+            <version>[ignore]</version>
+            <levelValue>[ignore]</levelValue>
+       </fieldNames>
+       <prefix class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+         <layout class="ch.qos.logback.classic.PatternLayout">
+           <pattern>managejson: </pattern>
+         </layout>
+</prefix>
+     </encoder>
+  </appender>
+
 <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
    <smtpHost>{{ smtp_server }}</smtpHost>
    <from>{{ noreply_email }}</from>
@@ -27,6 +45,9 @@
  <root level="WARN">
    <appender-ref ref="EMAIL" />
    <appender-ref ref="STDOUT" />
+ {% if manage_logback_json | bool %}
+    <appender-ref ref="JSON_SYSLOG" />
+ {% endif %}
  </root>
 
 </configuration>
