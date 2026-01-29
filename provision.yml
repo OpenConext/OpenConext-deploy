@@ -2,6 +2,34 @@
 - hosts: all
   gather_facts: no
   tasks:
+    - name: Log playbook usage
+      delegate_to: 127.0.0.1
+      syslogger:
+        msg: >-
+            {{
+              {
+                'local_user': lookup('env','USER'),
+                'ansible_version': ansible_version | default(None),
+                'ansible_playbook_python': ansible_playbook_python | default(None),
+                'ansible_check_mode': ansible_check_mode | default(False),
+                'ansible_diff_mode': ansible_diff_mode | default(False),
+                'ansible_play_batch': ansible_play_batch | default([]),
+                'ansible_play_hosts': ansible_play_hosts | default([]),
+                'ansible_run_tags': ansible_run_tags | default([]),
+                'ansible_limit': ansible_limit | default(None),
+                'inventory_hostname': inventory_hostname | default(None),
+                'inventory_dir': inventory_dir | default(None),
+                'playbook_dir': playbook_dir | default(None),
+                'ansible_cmdline': lookup('file', '/proc/self/cmdline') | regex_replace('\u0000',' ') | default(None),
+                'ansible_forks': ansible_forks | default(None),
+              }
+              | to_json
+            }}
+        priority: "info"
+        facility: "user"
+        log_pid: true
+      tags:
+       - always
     - name: Read vars from secrets file
       include_vars: "{{ secrets_file }}"
       no_log: true
