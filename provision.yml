@@ -143,3 +143,5 @@
   become: true
   roles:
     - { role: minio, tags: ["minio"] }
+
+- import_playbook: "{{ environment_dir }}/playbook.yml"
