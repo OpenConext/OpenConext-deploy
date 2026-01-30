@@ -98,6 +98,7 @@ authorities:
     password: "{{ aa.invite_password }}",
     timeOut: 5000,
     type: "rest",
+    requestMethod: "GET",
     pathParams: [
       { index: 1, sourceAttribute: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" }
     ],
