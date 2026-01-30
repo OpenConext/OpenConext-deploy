@@ -31,3 +31,5 @@ rsyslog_queue_dir: "/var/spool/rsyslog"
 
 # rsyslog_imjournal_statefile # default is imjournal.state which means imjournal.state relative to the rsyslog workdir
 # rsyslog_workdirectory # default /var/spool/rsyslog
+
+rsyslog_enable_warn_empty_script: false

@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# Script to check for empty log files in /opt/surfconext/logs/apps
+# Usage: ./check_empty_logs.sh [-m]
+# -m: send mail if empty files are found
+
+set -e
+
+SEND_MAIL=false
+RECIPIENT="surfconext-beheer@surf.nl"
+HOSTNAME=$(hostname --fqdn)
+
+# Parse command line options
+while getopts "m" opt; do
+        case $opt in
+                m)
+                        SEND_MAIL=true
+                        ;;
+                \?)
+                        echo "Invalid option: -$OPTARG" >&2
+                        exit 1
+                        ;;
+        esac
+done
+
+# Find empty log files and read into array
+mapfile -t empty_files < <(find /opt/surfconext/logs/apps/prod_sc -maxdepth 2 -type f -size 0)
+
+# If no empty files found, exit successfully
+if [ ${#empty_files[@]} -eq 0 ]; then
+        exit 0
+fi
+
+# Empty files were found
+file_count=${#empty_files[@]}
+
+# Determine singular or plural
+if [ $file_count -eq 1 ]; then
+    file_word="file"
+    verb="was"
+else
+    file_word="files"
+    verb="were"
+fi
+
+# Create mail body
+mail_body=$(cat <<EOF
+Subject: Alert: Empty log files detected on ${HOSTNAME}
+
+Dear SURFconext team,
+
+This is an automated alert to inform you that ${file_count} empty log ${file_word} ${verb} found on ${HOSTNAME} in /opt/surfconext/logs/apps.
+
+Empty log files should not occur under normal operation and may indicate a configuration issue or a problem with the logging system.
+
+List of empty log files:
+
+$(printf '%s\n' "${empty_files[@]}")
+
+Please investigate this issue.
+
+--
+Your friendly automated monitoring system
+EOF
+)
+
+# Send mail if -m option was provided
+if [ "$SEND_MAIL" = true ]; then
+        echo "$mail_body" | mail -s "Alert: Empty log ${file_word} detected on ${HOSTNAME}" "$RECIPIENT"
+        echo "Mail sent to $RECIPIENT about $file_count empty log ${file_word}" | logger
+else
+        echo "Found $file_count empty log ${file_word}, but mail not sent (use -m to send):"
+        echo "$mail_body"
+fi
+
+exit 1
