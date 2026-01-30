@@ -7,7 +7,7 @@
 set -e
 
 SEND_MAIL=false
-RECIPIENT="surfconext-beheer@surf.nl"
+RECIPIENT="{{ rsyslog_warn_empty_log_recipient }}"
 HOSTNAME=$(hostname --fqdn)
 
 # Parse command line options
