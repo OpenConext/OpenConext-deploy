@@ -126,6 +126,7 @@
     - { role: lifecycle,      tags: ["lifecycle"] }
     - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
     - { role: openaccess, tags: ['openaccess' ] }
+    - { role: midproxy, tags: ['midproxy', 'myaccessid' ] }
 
 - hosts: docker_apps2
   become: true

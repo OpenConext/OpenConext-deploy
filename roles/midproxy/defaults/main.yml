@@ -1,0 +1,8 @@
+---
+midproxy:
+  satosa_version: 8
+  state_encryption_key: 'secret'
+  issuer: 'issuer'
+  client_id: 'client'
+  client_secret: 'secret'
+  sp_metadata: 'eb-metadata.xml'

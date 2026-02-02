@@ -1,0 +1,59 @@
+---
+- name: Create directory to keep configfile
+  ansible.builtin.file:
+    dest: "/opt/sram/midproxy"
+    state: directory
+    owner: 1000
+    group: 1000
+    mode: "0770"
+
+- name: Copy EB SP metadata
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/midproxy/{{ midproxy.sp_metadata }}"
+    dest: "/opt/sram/midproxy/{{ midproxy.sp_metadata }}"
+    owner: 1000
+    group: 1000
+    mode: "0740"
+
+- name: Copy SATOSA conf files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/opt/sram/midproxy/{{ item }}"
+    owner: 1000
+    group: 1000
+  with_items:
+    - internal_attributes.yaml
+    - proxy_conf.yaml
+    - plugins/
+
+- name: Create the SATOSA container
+  community.docker.docker_container:
+    name: midproxy
+    image: satosa:{{ midproxy.satosa_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    restart: true
+    networks:
+      - name: "loadbalancer"
+    env:
+      SATOSA_BASE: 'https://midproxy.{{ openconextaccess_base_domain }}'
+      SATOSA_STATE_ENCRYPTION_KEY: '{{ midproxy_state_encryption_key }}'
+      SATOSA_SP_METADATA: '{{ midproxy.sp_metadata }}'
+      SATOSA_ISSUER: '{{ midproxy.issuer }}'
+      SATOSA_CLIENT_ID: '{{ midproxy_client_id }}'
+      SATOSA_CLIENT_SECRET: '{{ midproxy_client_secret }}'
+    volumes:
+      - /opt/sram/midproxy:/etc/satosa
+    labels:
+      traefik.http.routers.midproxy.rule: "Host(`midproxy.{{ openconextaccess_base_domain }}`)"
+      traefik.http.routers.midproxy.tls: "true"
+      traefik.enable: "true"
+    # curl is not availavble in the minimized satosa image
+    # so this healthcheck won't work
+    # healthcheck:
+    #   test: ["CMD", "curl", "--fail" , "http://localhost"  ]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 10s

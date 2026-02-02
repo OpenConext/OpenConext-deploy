@@ -1,0 +1,10 @@
+module: satosa.micro_services.attribute_processor.AttributeProcessor
+name: RegexAttributeProcessor
+config:
+  process:
+  - attribute: uid
+    processors:
+    - name: RegexSubProcessor
+      module: satosa.micro_services.processors.regex_sub_processor
+      regex_sub_match_pattern: ^(.+)@.+$
+      regex_sub_replace_pattern: \1
