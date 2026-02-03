@@ -28,8 +28,7 @@ relp_remote:
 
 php_display_errors: 1
 
-attribute_aggregation_gui_version: "3.0.6"
-attribute_aggregation_server_version: "3.0.6"
+attribute_aggregation_version: "3.0.6"
 oidc_playground_client_version: "3.0.0"
 oidc_playground_server_version: "3.0.0"
 engine_version: "6.15.0"
