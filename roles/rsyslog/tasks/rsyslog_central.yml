@@ -77,9 +77,25 @@
     src: centralsyslog.j2
     dest: /etc/logrotate.d/centralsyslog
 
-- name: put ryslog config file
+- name: Put ryslog config file
   template:
     src: "rsyslog.conf.j2"
     dest: "/etc/rsyslog.conf"
   notify:
     - "restart rsyslog"
+
+- name: Put log empty warn script and cronjob
+  when: rsyslog_enable_warn_empty_script
+  block:
+    - name: Put log empty script
+      ansible.builtin.template:
+        src: warn-empty-log.sh.j2
+        dest: "{{ rsyslog_checkemptylogs_dir }}/warn-empty-log.sh"
+        backup: True
+    - name: Create cronjob
+      ansible.builtin.cron:
+        name: "check empty logs"
+        minute: "{{ rsyslog_checkemptylogs_cron_minute }}"
+        hour: "{{ rsyslog_checkemptylogs_cron_hour }}"
+        weekday: "{{ rsyslog_checkemptylogs_cron_weekdays }}"
+        job: "{{ rsyslog_checkemptylogs_dir }}/warn-empty-log.sh -m"
