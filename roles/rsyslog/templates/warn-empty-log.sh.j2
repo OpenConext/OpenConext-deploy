@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to check for empty log files in /opt/surfconext/logs/apps
+# Script to check for empty log files in {{ rsyslog_monitor_for_emptylogs_path }}
 # Usage: ./check_empty_logs.sh [-m]
 # -m: send mail if empty files are found
 
@@ -27,12 +27,12 @@ done
 mapfile -t empty_files < <(find {{ rsyslog_monitor_for_emptylogs_path }} -maxdepth 2 -type f -size 0)
 
 # If no empty files found, exit successfully
-if [ ${#empty_files[@]} -eq 0 ]; then
+if [ ${empty_files[@]} -eq 0 ]; then
         exit 0
 fi
 
 # Empty files were found
-file_count=${#empty_files[@]}
+file_count=${empty_files[@]}
 
 # Determine singular or plural
 if [ $file_count -eq 1 ]; then
