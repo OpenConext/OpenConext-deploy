@@ -34,3 +34,4 @@ rsyslog_queue_dir: "/var/spool/rsyslog"
 
 rsyslog_enable_warn_empty_script: false
 rsyslog_warn_empty_log_recipient: admin@example.com
+rsyslog_monitor_for_emptylogs_path: "{{ rsyslog_dir }}/apps/prod_sc"

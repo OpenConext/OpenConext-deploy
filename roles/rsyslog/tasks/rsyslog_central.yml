@@ -94,6 +94,7 @@
     - name: create cronjob
       ansible.builtin.cron:
         name: "check empty logs"
-        minute: "22"
-        hour: "2"
+        minute: "0"
+        hour: "9"
+        weekday: "1-5"
         job: "/usr/local/bin/warn-empty-log.sh -m"

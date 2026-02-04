@@ -24,7 +24,7 @@ while getopts "m" opt; do
 done
 
 # Find empty log files and read into array
-mapfile -t empty_files < <(find /opt/surfconext/logs/apps/prod_sc -maxdepth 2 -type f -size 0)
+mapfile -t empty_files < <(find {{ rsyslog_monitor_for_emptylogs_path }} -maxdepth 2 -type f -size 0)
 
 # If no empty files found, exit successfully
 if [ ${#empty_files[@]} -eq 0 ]; then
