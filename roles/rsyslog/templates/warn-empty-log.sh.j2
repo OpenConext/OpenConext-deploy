@@ -27,7 +27,7 @@ done
 mapfile -t empty_files < <(find {{ rsyslog_monitor_for_emptylogs_path }} -maxdepth 2 -type f -size 0)
 
 # If no empty files found, exit successfully
-if [ ${empty_files[@]} -eq 0 ]; then
+if [ "${empty_files[@]}" -eq 0 ]; then
         exit 0
 fi
 
