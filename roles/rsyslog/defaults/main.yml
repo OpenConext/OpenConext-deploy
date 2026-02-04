@@ -32,6 +32,11 @@ rsyslog_queue_dir: "/var/spool/rsyslog"
 # rsyslog_imjournal_statefile # default is imjournal.state which means imjournal.state relative to the rsyslog workdir
 # rsyslog_workdirectory # default /var/spool/rsyslog
 
+# Empty log check script, optional
 rsyslog_enable_warn_empty_script: false
 rsyslog_warn_empty_log_recipient: admin@example.com
 rsyslog_monitor_for_emptylogs_path: "{{ rsyslog_dir }}/apps/prod_sc"
+rsyslog_checkemptylogs_cron_minute: 0
+rsyslog_checkemptylogs_cron_hour }}"
+rsyslog_checkemptylogs_cron_weekdays }}"
+rsyslog_checkemptylogs_dir }}/warn-empty-log.sh -m"
