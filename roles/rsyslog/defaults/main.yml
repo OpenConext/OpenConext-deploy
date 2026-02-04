@@ -36,7 +36,7 @@ rsyslog_queue_dir: "/var/spool/rsyslog"
 rsyslog_enable_warn_empty_script: false
 rsyslog_warn_empty_log_recipient: admin@example.com
 rsyslog_monitor_for_emptylogs_path: "{{ rsyslog_dir }}/apps/prod_sc"
-rsyslog_checkemptylogs_cron_minute: 0
-rsyslog_checkemptylogs_cron_hour }}"
-rsyslog_checkemptylogs_cron_weekdays }}"
-rsyslog_checkemptylogs_dir }}/warn-empty-log.sh -m"
+rsyslog_checkemptylogs_cron_minute: "0"
+rsyslog_checkemptylogs_cron_hour: "9"
+rsyslog_checkemptylogs_cron_weekdays: "1-5"
+rsyslog_checkemptylogs_dir: "/usr/local/bin"
