@@ -158,7 +158,7 @@
       start_period: 10s
     hostname: managegui
     env:
-      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img }}"
+      HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_with_surfconext }}"
       HTTPD_SERVERNAME: "manage.{{ base_domain }}"
       OPENCONEXT_INSTANCENAME: "{{ instance_name }}"
       OPENCONEXT_ENGINE_LOGOUT_URL: "https://engine.{{ base_domain }}/logout"
