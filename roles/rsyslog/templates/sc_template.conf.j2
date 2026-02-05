@@ -41,12 +41,12 @@ $template apache-servicedesk-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.na
 $template apache-eduid-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/eduid-apache.log"
 $template spdashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/spdashboard/spdashboard.log"
 $template apache-spdashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/spdashboard/apache.log"
-$template inviteclient-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/invite//inviteclient.log"
-$template invitewelcome-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/invite//invitewelcome.log"
-$template inviteserver-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/invite//inviteserver.log"
+$template inviteclient-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite//inviteclient.log"
+$template invitewelcome-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite//invitewelcome.log"
+$template inviteserver-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite//inviteserver.log"
 $template invitejson-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite/invitejson.log"
-$template inviteprovisioningmock-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/invite//inviteprovisioningmock.log"
-$template loadbalancer-{{ item.name }}, "/opt/surfconext/logs/apps/{{ item.name }}/traefik/traefik.log"
+$template inviteprovisioningmock-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite//inviteprovisioningmock.log"
+$template loadbalancer-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/traefik/traefik.log"
 {% for stepupapp in stepupapps %}
 $template stepup-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}.log
 $template apache-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log
