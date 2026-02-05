@@ -14,13 +14,13 @@
 
 - name: Create directory to save the logs
   file:
-    path: "{{rsyslog_dir }}"
+    path: "{{ rsyslog_dir }}"
     owner: root
     group: "{{ rsyslog_read_group }}"
     mode: "0750"
     recurse: true
 
-- name: put rsyslog client certificate
+- name: Put rsyslog client certificate
   copy:
     src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogserver.crt"
     dest: "/etc/pki/rsyslog/rsyslogserver.crt"

@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: Gather secrets
+  hosts: all
   gather_facts: no
   tasks:
     - name: Read vars from secrets file
@@ -8,130 +9,300 @@
       tags:
        - always
 
-- hosts: rsyslog
+- name: Deploy rsyslog
+  hosts: base
   gather_facts: yes
   become: true
   roles:
     - role: rsyslog
-      tags: ['core', 'base', 'rsyslog']
+  tags: ['core', 'base', 'rsyslog']
 
-- hosts: base
+- name: Deploy iptables
+  hosts: base
   gather_facts: yes
   become: true
   roles:
     - role: iptables
       when:
         - iptables_enable | bool
-      tags: ['core', 'base', 'iptables']
-    - role: selfsigned_certs
-      when:
-        - "{{ use_selfsigned_certs | default(false) | bool }}"
-      tags: ['core', 'base', 'selfsigned_certs']
+  tags: ['core', 'base', 'iptables']
 
-- hosts: loadbalancer
+- name: Deploy loadbalancer
+  hosts: loadbalancer
   gather_facts: true
   become: true
   roles:
     - role: haproxy
-      tags: ['core', 'loadbalancer_ha', 'loadbalancer', 'lb']
-    - role: keepalived
-      when:
-        - "'loadbalancer_ha' in groups and inventory_hostname in groups['loadbalancer_ha']"
-      tags: ['core', 'loadbalancer_ha', 'keepalived']
-    - role: bind
-      when:
-        - "'loadbalancer_ha' in groups and inventory_hostname in groups['loadbalancer_ha']"
-      tags: ['core', 'loadbalancer_ha', 'bind']
+  tags: ['core', 'loadbalancer_ha', 'loadbalancer', 'lb']
 
-- hosts: db_mysql
+- name: Deploy loadbalancer keepalived
+  hosts: loadbalancer_ha
+  gather_facts: true
+  become: true
+  roles:
+    - role: keepalived
+  tags: ['core', 'loadbalancer_ha', 'keepalived']
+
+- name: Deploy loadbalancer bind
+  hosts: loadbalancer_ha
+  gather_facts: true
+  become: true
+  roles:
+    - role: bind
+  tags: ['core', 'loadbalancer_ha', 'bind']
+
+- name: Deploy standalone mariadb
+  hosts: mysql_standalone
   gather_facts: no
   become: true
   serial: 1
   roles:
     - role: mysql
-      when:
-        - inventory_hostname in groups['storage']
-      tags: ['core', 'db_mysql', 'mysql']
-    - role: galera
-      when:
-        - inventory_hostname in groups['dbcluster']
-      tags: ['core', 'db_mysql', 'galera']
-    - role: keepalived
-      when:
-        - inventory_hostname in groups['dbcluster_nodes']
-      tags: ['core', 'db_mysql', 'keepalived']
-    - role: galera_create_users
-      tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
+  tags: ['core', 'db_mysql', 'mysql']
 
-- hosts: mongo_servers
+# todo: clearer groupnames
+# for now:
+# dbcluster : all servers in galera cluster
+# dbcluster_nodes: just full nodes with mariadb in galera cluster
+# mysql_only: mariadb not in galera cluster
+# db_mysql: all mariadb servers, so mysql_only + dbcluster_nodes
+
+- name: Deploy galera
+  hosts: dbcluster
+  gather_facts: no
+  become: true
+  serial: 1
+  roles:
+    - role: galera
+      tags: ['core', 'db_mysql', 'galera']
+
+- name: Deploy galera keepalived
+  hosts: dbcluster_nodes
+  gather_facts: no
+  become: true
+  serial: 1
+  roles:
+    - role: keepalived
+  tags: ['core', 'db_mysql', 'keepalived']
+
+- name: Create mysql users
+  hosts: db_mysql
+  gather_facts: no
+  become: true
+  roles:
+    - role: galera_create_users
+  tags: ['core', 'db_mysql', 'galera', 'galera_create_users']
+
+- name: Deploy mongo servers
+  hosts: mongo_servers
   gather_facts: yes
   become: true
   serial: 1
   roles:
     - role: mongo
-      tags: ['core', 'mongo']
+  tags: ['core', 'mongo']
 
-- hosts: elk
-  gather_facts: true
-  become: true
-  roles:
-    - role: elk
-      tags: ['elk' ]
-
-- hosts: stats
+- name: Deploy stats
+  hosts: stats
   gather_facts: true
   become: true
   roles:
     - role: influxdb
-      tags: ['influxdb' ]
+  tags: ['influxdb' ]
 
-- hosts: stepuppapp
+# Separate groups for all containerized apps
+# Dividing apps across the container services should be set in
+# the inventory not in the playbook, this way you can easily change
+# it for different environments
+
+- name: Deploy attribute-aggregation app
+  hosts: docker_attribute_aggregation
   become: true
   roles:
-    - { role: stepupwebauthn,                            tags: ['stepupwebauthn','stepup' ] }
-    - { role: stepupazuremfa,                            tags: ['stepupazuremfa', 'stepup'] }
-    - { role: stepupmiddleware,                          tags: ['stepupmiddleware' , 'stepup'] }
-    - { role: stepupgateway,                             tags: ['stepupgateway' , 'stepup'] }
-    - { role: stepupselfservice,                         tags: ['stepupselfservice' , 'stepup'] }
-    - { role: stepupra        ,                          tags: ['stepupra' , 'stepup'] }
-    - { role: stepupgateway        ,                     tags: ['stepupgateway' , 'stepup'] }
+    - role: attribute-aggregation
+  tags: ['aa', 'attribute-aggregation']
 
-- hosts: docker_apps1,docker_apps2
+- name: Deploy dashboard app
+  hosts: docker_dashboard
   become: true
   roles:
-    - { role: docker,     tags: ['docker' ] }
+    - role: dashboard
+  tags: ['dashboard']
 
-- hosts: mujina
+- name: Deploy diyidp app
+  hosts: docker_diyidp
   become: true
   roles:
-    - { role: mujina-idp, tags: ["mujina-idp", "mujina"] }
-    - { role: mujina-sp, tags: ["mujina-sp", "mujina"] }
+    - diyidp
+  tags: ['diyidp']
 
-- hosts: docker_apps1
+- name: Deploy engineblock app
+  hosts: docker_engineblock
   become: true
   roles:
-    - { role: invite,     tags: ['invite' ] }
-    - { role: dashboard,  tags: ["dashboard"] }
-    - { role: teams,      tags: ["teams"] }
-    - { role: pdp,        tags: ["pdp"] }
-    - { role: voot,       tags: ["voot"] }
-    - { role: attribute_aggregation, tags: ["aa", "attribute-aggregation"] }
-    - { role: oidc-playground, tags: ["oidc-playground"] }
-    - { role: myconext,    tags: ["myconext"] }
-    - { role: manage,    tags: ["manage"] }
-    - { role: oidcng,    tags: ["oidcng"] }
-    - { role: stats,      tags: ["stats"] }
-    - { role: diyidp,      tags: ["diyidp"] }
-    - { role: profile,      tags: ["profile"] }
-    - { role: lifecycle,      tags: ["lifecycle"] }
-    - { role: stepuptiqr, tags: ['stepuptiqr' , 'stepup'] }
-    - { role: openaccess, tags: ['openaccess' ] }
+    - engineblock
+  tags: ['engineblock', 'eb']
 
-- hosts: docker_apps2
+- name: Deploy invite app
+  hosts: docker_invite
   become: true
   roles:
-    - { role: engineblock,      tags: ["eb"] }
-    - { role: stepupgateway,    tags: [ 'stepupgateway' , 'stepup' ] }
+    - invite
+  tags: ['invite']
+
+- name: Deploy lifecycle app
+  hosts: docker_lifecycle
+  become: true
+  roles:
+    - lifecycle
+  tags: ['lifecycle']
+
+- name: Deploy manage app
+  hosts: docker_manage
+  become: true
+  roles:
+    - role: manage
+  tags: ['manage']
+
+- name: Deploy mujina-idp app
+  hosts: docker_mujina_idp
+  become: true
+  roles:
+    - mujina-idp
+  tags: ['mujina-idp', 'mujina']
+
+- name: Deploy mujina-sp app
+  hosts: docker_mujina_sp
+  become: true
+  roles:
+    - mujina-sp
+  tags: ['mujina-sp', 'mujina']
+
+- name: Deploy myconext app
+  hosts: docker_myconext
+  become: true
+  roles:
+    - myconext
+  tags: ['myconext']
+
+- name: Deploy oidcng app
+  hosts: docker_oidcng
+  become: true
+  roles:
+    - oidcng
+  tags: ['oidcng']
+
+- name: Deploy oidc-playground app
+  hosts: docker_oidc_playground
+  become: true
+  roles:
+    - oidc-playground
+  tags: ['oidc-playground']
+
+- name: Deploy openaccess app & server
+  hosts: docker_openaccess
+  become: true
+  roles:
+    - openaccess
+  tags: ['openaccess']
+
+- name: Deploy pdp app
+  hosts: docker_pdp
+  become: true
+  roles:
+    - role: pdp
+  tags: ['pdp']
+
+- name: Deploy profile app
+  hosts: docker_profile
+  become: true
+  roles:
+    - role: profile
+  tags: ['profile']
+
+- name: Deploy spdashboard app
+  hosts: docker_spdashboard
+  become: true
+  roles:
+    - spdashboard
+  tags: ['spdashboard']
+
+- name: Deploy stats app
+  hosts: docker_stats
+  become: true
+  roles:
+    - stats
+  tags: ['stats']
+
+- name: Deploy stepupazuremfa app
+  hosts: docker_stepupazuremfa
+  become: true
+  roles:
+    - stepupazuremfa
+  tags: ['stepupazuremfa', 'stepup']
+
+- name: Deploy stepupgateway app
+  hosts: docker_stepupgateway
+  become: true
+  roles:
+    - stepupgateway
+  tags: ['stepupgateway', 'stepup']
+
+- name: Deploy stepupmiddleware app
+  hosts: docker_stepupmiddleware
+  become: true
+  roles:
+    - stepupmiddleware
+  tags: ['stepupmiddleware', 'stepup']
+
+- name: Deploy stepupra app
+  hosts: docker_stepupra
+  become: true
+  roles:
+    - stepupra
+  tags: ['stepupra', 'stepup']
+
+- name: Deploy stepupselfservice app
+  hosts: docker_stepupselfservice
+  become: true
+  roles:
+    - stepupselfservice
+  tags: ['stepupselfservice', 'stepup']
+
+- name: Deploy stepuptiqr app
+  hosts: docker_stepuptiqr
+  become: true
+  roles:
+    - stepuptiqr
+  tags: ['stepuptiqr', 'stepup']
+
+- name: Deploy stepupwebauthn app
+  hosts: docker_stepupwebauthn
+  become: true
+  roles:
+    - role: stepupwebauthn
+  tags: ['stepupwebauthn', 'stepup']
+
+- name: Deploy teams app
+  hosts: docker_teams
+  become: true
+  roles:
+    - teams
+  tags: ['teams']
+
+- name: Deploy voot app
+  hosts: docker_voot
+  become: true
+  roles:
+    - voot
+  tags: ['voot']
+
+- name: Deploy minio app
+  hosts: docker_minio
+  become: true
+  roles:
+    - minio
+  tags: ['minio']
 
 - hosts: docker_mariadb
   become: true
@@ -139,9 +310,3 @@
     - { role: mariadbdocker, tags: ['mariadbdocker']}
     - { role: mongodbdocker, tags: ['mongodbdocker']}
 
-- hosts: docker_minio
-  become: true
-  roles:
-    - { role: minio, tags: ["minio"] }
-
-- import_playbook: "{{ environment_dir }}/playbook.yml"
