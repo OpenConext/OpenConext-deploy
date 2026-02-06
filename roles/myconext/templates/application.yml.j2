@@ -39,8 +39,8 @@ springdoc:
 email:
   from_deprovisioning: "{{ myconext.email.from_deprovisioning }}"
   from_code: "{{ myconext.email.from_code }}"
-  from_app_nudge: "{{ myconext.email.from_deprovisioning }}"
-  from_new_device: "{{ myconext.email.from_deprovisioning }}"
+  from_app_nudge: "{{ myconext.email.from_app_nudge }}"
+  from_new_device: "{{ myconext.email.from_new_device }}"
   error: {{ error_mail_to }}
   error_mail: {{ error_mail_to }}
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
