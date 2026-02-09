@@ -27,7 +27,7 @@
     login_port: "{{ mongo_port }}"
     roles: root
     state: present
-  no_log: true
+  #no_log: true # todo enable
   run_once: true
   when: mongo_authentication_enabled.rc == 0
 

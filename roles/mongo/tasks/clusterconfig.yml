@@ -62,5 +62,5 @@
     roles: root
     state: present
   when: check_cluster.stdout == ""
-  no_log: true
+  #no_log: true #todo enable
   run_once: true
