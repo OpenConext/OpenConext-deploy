@@ -1,81 +1,145 @@
-[storage]
-%target_host%
-
-[mongo_servers]
-mongo1.example.com
-mongo2.example.com
-mongo3.example.com
-
-[selfsigned_certs]
-%target_host%
-
-[loadbalancer]
-%target_host%
-
 [%env%:children]
-storage
-mongo_servers
-selfsigned_certs
-sysloghost
-loadbalancer_ha
-loadbalancer
-elk
-lifecycle
 dbcluster
 dbcluster_nodes
+docker_servers
+lifecycle
+loadbalancer
+loadbalancer_ha
+mongo_servers
+mysql_only
 stats
-
-[sysloghost]
-[loadbalancer_ha]
-[elk]
-[lifecycle]
-[dbcluster]
-[dbcluster_nodes]
-[stats]
+sysloghost
 
 [base:children]
-loadbalancer
-storage
 dbcluster
-sysloghost
-elk
+dbcluster_nodes
+docker_servers
 lifecycle
-selfsigned_certs
-
-[loadbalancer:children]
+loadbalancer
 loadbalancer_ha
+mongo_servers
+mysql_only
+stats
+sysloghost
+
+[db_mysql:children]
+mysql_only
+dbcluster
+dbcluster_nodes
+
+[mysql_only]
+
+[dbcluster] # all galera members including arbitrator
+db1.example.com
+db2.example.com
+db3.example.com # arbitrator
+
+[dbcluster_nodes] # all galera members with a full mysql installation
+db1.example.com
+db2.example.com
 
 [frontend:children]
 lifecycle
 
-[db_mysql:children]
-storage
-dbcluster
-dbcluster_nodes
+[loadbalancer] # use this for standalone loadbalancer
 
-[local]
-localhost ansible_connection=local
+[loadbalancer_ha] # use this for failover loadbalancer setup
+lb1.example.com
+lb2.example.com
 
-# for refactored playbooks
+[lifecycle]
+lifecycle1.example.com
 
-[%location%:children] # create one or more groups here for your chosen location(s)
-storage
-mongo_servers
-sysloghost
-loadbalancer_ha
-loadbalancer
-lifecycle
-dbcluster
-dbcluster_nodes
-stats
-docker_servers
+[mongo_servers]
+mongo1.example.com
+mongo2.example.com
+mongo3.example.com # arbitrator
 
-[base:children]
-docker_servers
+[mysql_standalone]
+stats1.example.com # stats server needs mysql
+log1.example.com # log server needs mysql
 
-[docker_servers]
+[stats]
+stats1.example.com
+
+[sysloghost]
+log1.example.com
+
+# Docker
+
+[docker_servers:children]
+docker_apps1
+docker_apps2
+
+# Group the docker servers
+
+[docker_apps1]
 docker1.example.com
+
+[docker_apps2]
 docker2.example.com
 
-[docker_invite]
-docker2.example.com
+# Install containerized apps on the docker group you want
+
+[docker_invite:children]
+docker_apps1
+
+[docker_teams:children]
+docker_apps1
+
+[docker_pdp:children]
+docker_apps1
+
+[docker_voot:children]
+docker_apps1
+
+[docker_attribute_aggregation:children]
+docker_apps1
+
+[docker_oidc_playground:children]
+docker_apps1
+
+[docker_myconext:children]
+docker_apps1
+
+[docker_manage:children]
+docker_apps1
+
+[docker_oidcng:children]
+docker_apps1
+
+[docker_stats:children]
+docker_apps1
+
+[docker_diyidp:children]
+docker_apps1
+
+[docker_profile:children]
+docker_apps1
+
+[docker_lifecycle:children]
+docker_apps1
+
+[docker_engineblock:children]
+docker_apps2
+
+[docker_stepuptiqr:children]
+docker_apps1
+
+[docker_stepupwebauthn:children]
+docker_apps1
+
+[docker_stepupazuremfa:children]
+docker_apps1
+
+[docker_stepupmiddleware:children]
+docker_apps2
+
+[docker_stepupselfservice:children]
+docker_apps1
+
+[docker_stepupra:children]
+docker_apps1
+
+[docker_stepupgateway:children]
+docker_apps2

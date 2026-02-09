@@ -24,7 +24,7 @@ spring:
     banner-mode: "off"
   session:
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
 {% if invite_cronjobmaster is defined and invite_cronjobmaster == false  %}
       cleanup-cron: "-"
 {% else %}
@@ -154,6 +154,7 @@ external-api-configuration:
         - profile
     - username: {{ invite.sp_dashboard_user }}
       password: "{{ invite.sp_dashboard_secret }}"
+      organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
       scopes:
         - sp_dashboard
       applications:
@@ -161,6 +162,7 @@ external-api-configuration:
           manageType: SAML20_SP
     - username: {{ invite.access_user }}
       password: "{{ invite.access_secret }}"
+      organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
       scopes:
         - access
       applications:
