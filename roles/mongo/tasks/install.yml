@@ -64,6 +64,7 @@
   register: mongo_authentication_enabled
   changed_when: false
   ignore_errors: true
+  check_mode: false # This can safely run in check mode because it is not changing anything
 
 - name: Debug mongodb authentication check
   ansible.builtin.debug:

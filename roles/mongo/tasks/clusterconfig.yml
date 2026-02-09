@@ -1,5 +1,4 @@
 ---
-<<<<<<< HEAD
 
 - name: Debug replica settings
   ansible.builtin.debug:
@@ -13,10 +12,6 @@
     verbosity: 2
   ignore_errors: true
 
-=======
-# todo this weorks only for new deployments
-# rewrite so mongo config can be changed and cluster members can be added or removed
->>>>>>> main
 - name: Check if hosts are in clustered
   ansible.builtin.command: mongosh --port {{ mongo_port }} --quiet --eval 'db.isMaster().hosts'
   register: check_cluster
