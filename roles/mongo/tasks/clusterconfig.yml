@@ -19,13 +19,11 @@
   check_mode: false
 
 - name: Debug check_cluster variable
-  when: show_debug_info is defined and show_debug_info | bool
   ansible.builtin.debug:
     msg: "{{ check_cluster }}"
     verbosity: 2
 
 - name: Debug mongo_replication_role variable
-  when: show_debug_info is defined and show_debug_info | bool
   ansible.builtin.debug:
     msg: "{{ mongo_replication_role }}"
     verbosity: 2
