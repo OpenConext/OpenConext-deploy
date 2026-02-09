@@ -34,13 +34,6 @@
       ansible.builtin.include_tasks:
         file: certs.yml
 
-    - name: Include Service tasks
-      ansible.builtin.include_tasks:
-        file: services.yml
-
-    - name: Flush handlers
-      ansible.builtin.meta: flush_handlers
-
     - name: Debug standalone or cluster mode
       ansible.builtin.debug:
         msg: "{{ mongo_mode }}"
@@ -57,6 +50,15 @@
         file: clusterconfig.yml
       when:
         - mongo_mode == "cluster"
+
+    - name: Include Service tasks
+      ansible.builtin.include_tasks:
+        file: services.yml
+
+    # Mongod is installed, but service is not restarted until after 
+    # the initial admin user is added
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers
 
     - name: Include user creation
       ansible.builtin.include_tasks:

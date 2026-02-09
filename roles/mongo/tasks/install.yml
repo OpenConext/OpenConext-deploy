@@ -52,6 +52,8 @@
     value: 128000
     state: present
 
+# Mongod is installed, but service is not restarted until after 
+# the initial admin user is added
 - name: Install mongodb.conf file
   ansible.builtin.template:
     src: "mongod.conf.j2"
