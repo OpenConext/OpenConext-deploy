@@ -119,7 +119,7 @@
   hosts: docker_attribute_aggregation
   become: true
   roles:
-    - role: attribute-aggregation
+    - role: attribute_aggregation
   tags: ['aa', 'attribute-aggregation']
 
 - name: Deploy dashboard app
