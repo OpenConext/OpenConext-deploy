@@ -41,6 +41,11 @@
     - name: Flush handlers
       ansible.builtin.meta: flush_handlers
 
+    - name: Debug standalone or cluster mode
+      ansible.builtin.debug:
+        msg: "{{ mongo_mode }}"
+        verbosity: 2
+
     - name: Include standalone configuration tasks
       ansible.builtin.include_tasks:
         file: standaloneconfig.yml
