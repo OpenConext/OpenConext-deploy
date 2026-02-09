@@ -41,7 +41,13 @@
     - name: Flush handlers
       ansible.builtin.meta: flush_handlers
 
-    - name: Include cluster installation tasks
+    - name: Include standalone configuration tasks
+      ansible.builtin.include_tasks:
+        file: clusterconfig.yml
+      when:
+        - mongo_mode == "standalone"
+
+    - name: Include cluster configuration tasks
       ansible.builtin.include_tasks:
         file: clusterconfig.yml
       when:
