@@ -43,7 +43,7 @@
 
     - name: Include standalone configuration tasks
       ansible.builtin.include_tasks:
-        file: clusterconfig.yml
+        file: standaloneconfig.yml
       when:
         - mongo_mode == "standalone"
 
