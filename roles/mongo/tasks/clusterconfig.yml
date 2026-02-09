@@ -22,20 +22,13 @@
   when: show_debug_info is defined and show_debug_info | bool
   ansible.builtin.debug:
     msg: "{{ check_cluster }}"
-
-- name: Debug mongo_cluster_members variable
-  when: show_debug_info is defined and show_debug_info | bool
-  ansible.builtin.debug:
-    msg: "{{ mongo_cluster_members }}"
+    verbosity: 2
 
 - name: Debug mongo_replication_role variable
   when: show_debug_info is defined and show_debug_info | bool
   ansible.builtin.debug:
     msg: "{{ mongo_replication_role }}"
-
-- name: Debug host_id
-  ansible.builtin.debug:
-    msg: "{{ hostid }}"
+    verbosity: 2
 
 - name: Initial cluster initialisation
   community.mongodb.mongodb_replicaset:

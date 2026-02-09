@@ -42,9 +42,9 @@ replica_set_name: "{{ instance_name }}" # Set this in group_vars
 # Add a database
 mongo:
   users:
-    - { name: managerw, db_name: metadata, password: "{{ mongo_passwords.manage }}" }
-    - { name: oidcsrw, db_name: oidc, password: "{{ mongo_passwords.oidcng }}" }
-    - { name: myconextrw, db_name: myconext, password: "{{ mongo_passwords.myconext }}" }
+    - { name: managerw, db_name: metadata, password: "{{ mongo_passwords.manage }}", role: "readWrite" }
+    - { name: oidcsrw, db_name: oidc, password: "{{ mongo_passwords.oidcng }}", role: "readWrite"}
+    - { name: myconextrw, db_name: myconext, password: "{{ mongo_passwords.myconext }}", role: "readWrite" }
 
 # Listen on all addresses by default
 mongo_bind_listen_address: "0.0.0.0"

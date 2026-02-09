@@ -7,7 +7,7 @@
     login_password: "{{ mongo_admin_password }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    roles: readWrite
+    roles: "{{ item.role }}"
     replica_set: "{{ replica_set_name }}"
   #no_log: true
   run_once: true
@@ -24,7 +24,7 @@
     login_password: "{{ mongo_admin_password }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    roles: readWrite
+    roles: "{{ item.role }}"
   no_log: true
   run_once: true
   with_items: "{{ mongo.users }}"
