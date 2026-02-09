@@ -51,14 +51,18 @@
       when:
         - mongo_mode == "cluster"
 
-    - name: Include Service tasks
+    - name: Include General config tasks
       ansible.builtin.include_tasks:
-        file: services.yml
+        file: generalconfig.yml
 
     # Mongod is installed, but service is not restarted until after 
     # the initial admin user is added
     - name: Flush handlers
       ansible.builtin.meta: flush_handlers
+
+    - name: Include Service tasks
+      ansible.builtin.include_tasks:
+        file: services.yml
 
     - name: Include user creation
       ansible.builtin.include_tasks:

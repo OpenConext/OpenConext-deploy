@@ -1,0 +1,12 @@
+---
+# Config for standalone and replication server
+
+- name: Install mongodb.conf file
+  ansible.builtin.template:
+    src: "mongod.conf.j2"
+    dest: "/etc/mongod.conf"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  notify: Restart mongod

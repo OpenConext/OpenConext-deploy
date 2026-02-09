@@ -1,5 +1,5 @@
 ---
-
+# In this task file the cluster is configured
 - name: Debug replica settings
   ansible.builtin.debug:
     msg: "Replica set name {{ replica_set_name }}"
