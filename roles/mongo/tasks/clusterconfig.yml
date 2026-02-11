@@ -18,10 +18,10 @@
 #   changed_when: false
 #   check_mode: false
 
-- name: Debug check_cluster variable
-  ansible.builtin.debug:
-    msg: "{{ check_cluster }}"
-    verbosity: 2
+# - name: Debug check_cluster variable
+#   ansible.builtin.debug:
+#     msg: "{{ check_cluster }}"
+#     verbosity: 2
 
 - name: Debug mongo_replication_role variable
   ansible.builtin.debug:
