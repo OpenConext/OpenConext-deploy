@@ -5,6 +5,7 @@
     state: present
     ignoreerrors: yes
 
+# todo add this to a generic file and apply to aribtrator and cluster node
 - name: Add MariaDB.org repository Rocky 8
   template:
     src: "mariadb.repo.rocky8.j2"
