@@ -12,11 +12,11 @@
     verbosity: 2
   ignore_errors: true
 
-- name: Check if hosts are in clustered
-  ansible.builtin.command: mongosh --port {{ mongo_port }} --quiet --eval 'db.isMaster().hosts'
-  register: check_cluster
-  changed_when: false
-  check_mode: false
+# - name: Check if hosts are in clustered
+#   ansible.builtin.command: mongosh --port {{ mongo_port }} --quiet --eval 'db.isMaster().hosts'
+#   register: check_cluster
+#   changed_when: false
+#   check_mode: false
 
 - name: Debug check_cluster variable
   ansible.builtin.debug:
@@ -28,30 +28,62 @@
     msg: "{{ mongo_replication_role }}"
     verbosity: 2
 
-- name: Initial cluster initialisation
-  community.mongodb.mongodb_replicaset:
-    login_host: localhost
-    login_user: admin
-    login_port: "{{ mongo_port }}"
-    login_password: "{{ mongo_admin_password }}"
-    replica_set: "{{ replica_set_name }}"
-    members: "{{ mongo_cluster_members }}"
-    arbiter_at_index: "{{ mongo_arbiter_index | default(0) }}"
-    validate: false
-  run_once: true
-  when: mongo_replication_role == 'primary'
+- name: Ensure mongod is started
+  systemd:
+    name: mongod
+    enabled: yes
+    state: started
 
-- name: Wait until cluster health is ok
-  community.mongodb.mongodb_status:
-    login_user: admin
-    login_password: "{{ mongo_admin_password }}"
-    login_database: admin
-    login_port: "{{ mongo_port }}"
-    validate: default
-    poll: 5
-    interval: 12
-    replica_set: "{{ replica_set_name }}"
-  when: mongo_replication_role == 'primary'
+- name: Wait for MongoDB to be available
+  wait_for:
+    port: "{{ mongo_port }}"
+    delay: 5
+    timeout: 60
+
+# - name: Initial cluster initialisation
+#   community.mongodb.mongodb_replicaset:
+#     login_host: localhost
+#     login_user: admin
+#     login_port: "{{ mongo_port }}"
+#     login_password: "{{ mongo_admin_password }}"
+#     replica_set: "{{ replica_set_name }}"
+#     members: "{{ mongo_cluster_members }}"
+#     arbiter_at_index: "{{ mongo_arbiter_index | default(0) }}"
+#     validate: false
+#   run_once: true
+#   when: mongo_replication_role == 'primary'
+
+- name: Initiate replica set
+  shell: |
+    mongosh --eval '
+    rs.initiate({
+      _id: "{{ replica_set_name }}",
+      members: [
+        { _id: 0, host: "rocky1:{{ mongo_port }}" },
+        { _id: 1, host: "rocky2:{{ mongo_port }}" },
+        { _id: 2, host: "rocky3:{{ mongo_port }}", arbiterOnly: true }
+      ]
+    })'
+  when: mongo_replication_role == "primary"
+  register: rs_init
+  failed_when: false
+
+- name: Wait for replica set election
+  pause:
+    seconds: 20
+  when: mongo_replication_role == "primary"
+
+# - name: Wait until cluster health is ok
+#   community.mongodb.mongodb_status:
+#     login_user: admin
+#     login_password: "{{ mongo_admin_password }}"
+#     login_database: admin
+#     login_port: "{{ mongo_port }}"
+#     validate: default
+#     poll: 5
+#     interval: 12
+#     replica_set: "{{ replica_set_name }}"
+#   when: mongo_replication_role == 'primary'
 
 - name: Add the admin user
   community.mongodb.mongodb_user:
@@ -61,6 +93,6 @@
     login_port: "{{ mongo_port }}"
     roles: root
     state: present
-  when: check_cluster.stdout == ""
+  when: mongo_replication_role == "primary"
   #no_log: true #todo enable
-  run_once: true
+  #run_once: true

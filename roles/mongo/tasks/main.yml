@@ -45,17 +45,17 @@
       when:
         - mongo_mode == "standalone"
 
+    - name: Include General config tasks
+      ansible.builtin.include_tasks:
+        file: generalconfig.yml
+
     - name: Include cluster configuration tasks
       ansible.builtin.include_tasks:
         file: clusterconfig.yml
       when:
         - mongo_mode == "cluster"
 
-    - name: Include General config tasks
-      ansible.builtin.include_tasks:
-        file: generalconfig.yml
-
-    # Mongod is installed, but service is not restarted until after 
+    # Mongod is installed, but service is not restarted until after
     # the initial admin user is added
     - name: Flush handlers
       ansible.builtin.meta: flush_handlers
