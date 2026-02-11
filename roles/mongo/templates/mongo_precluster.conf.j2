@@ -1,0 +1,25 @@
+systemLog:
+  destination: file
+  logRotate: reopen
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+
+net:
+  bindIp: {{ mongo_bind_listen_address }}
+  port: 27017
+  tls:
+    mode: preferTLS
+    certificateKeyFile: /etc/pki/mongo/keyandcert.pem
+    CAFile: /etc/pki/mongo/mongoca.pem
+    allowConnectionsWithoutCertificates: true
+
+storage:
+  dbPath: /var/lib/mongo
+
+{% if replica_set_name is defined and mongo_mode == "cluster" %}
+replication:
+  replSetName: {{ replica_set_name }}
+{% endif %}
+
+security:
+    clusterAuthMode: x509

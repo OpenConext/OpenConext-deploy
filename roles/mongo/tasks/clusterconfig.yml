@@ -28,6 +28,17 @@
     msg: "{{ mongo_replication_role }}"
     verbosity: 2
 
+# TempConfig for cluster initialisation
+- name: Install temporary mongodb.conf file
+  ansible.builtin.template:
+    src: "mongod_precluster.conf.j2"
+    dest: "/etc/mongod.conf"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  notify: Restart mongod
+
 - name: Ensure mongod is started
   systemd:
     name: mongod
@@ -60,8 +71,6 @@
       _id: "{{ replica_set_name }}",
       members: [
         { _id: 0, host: "rocky1:{{ mongo_port }}" },
-        { _id: 1, host: "rocky2:{{ mongo_port }}" },
-        { _id: 2, host: "rocky3:{{ mongo_port }}", arbiterOnly: true }
       ]
     })'
   when: mongo_replication_role == "primary"
