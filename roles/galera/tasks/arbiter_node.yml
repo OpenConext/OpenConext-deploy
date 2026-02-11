@@ -5,12 +5,17 @@
     state: present
     ignoreerrors: yes
 
-# Add MariaDB repo and key
-- name: Add MariaDB.org repository
+- name: Add MariaDB.org repository Rocky 8
   template:
-    src: "mariadb.repo.j2"
+    src: "mariadb.repo.rocky8.j2"
     dest: "/etc/yum.repos.d/mariadb.repo"
-  when: ansible_os_family == 'RedHat'
+  when: ansible_distribution_major_version == '8'
+
+- name: Add MariaDB.org repository Rocky 9
+  template:
+    src: "mariadb.repo.rocky9.j2"
+    dest: "/etc/yum.repos.d/mariadb.repo"
+  when: ansible_distribution_major_version == '9'
 
 - name: Install Galera, rsync
   ansible.builtin.package:
