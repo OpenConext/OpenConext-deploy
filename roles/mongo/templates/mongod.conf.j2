@@ -14,7 +14,7 @@ net:
     allowConnectionsWithoutCertificates: true
 
 storage:
-  dbPath: /var/lib/mongo
+  dbPath: {{ mongo_data_path }}
 
 {% if replica_set_name is defined and mongo_mode == "cluster" %}
 replication:

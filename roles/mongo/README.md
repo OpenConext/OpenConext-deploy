@@ -20,3 +20,12 @@ Please review the official Mongo documentation for more information.
 - [ ] Add the possibility for adding and removing cluster members
 - [x] Add the possibility for a standalone mongo server
 - [ ] Cluster config does not work with serial 1 in the play but for mongo config changes you do want serial 1, split up the role?
+
+- secondary en arbitrator toevoegen. met delegate en rsadd?
+- werkt het ook met d emongo replication module?
+- hoe afdwingen dat de prmary eerst gaat?
+- check todos in de code
+
+TEST
+
+- mongo conf veranderen zonder replicatie gedoe

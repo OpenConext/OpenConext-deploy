@@ -56,3 +56,7 @@ mongo_pki_dir: "/etc/pki/mongo"
 
 # Users and groups
 mongo_group: "mongod"
+
+# Paths
+mongo_config_file: "/etc/mongod.conf"
+mongo_data_path: "/var/lib/mongo"
