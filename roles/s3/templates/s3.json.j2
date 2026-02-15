@@ -1,0 +1,30 @@
+{
+    "identities": [
+        {
+            "name": "admin",
+            "credentials": [
+                {
+                    "accessKey": "{{ s3_access_key | default('admin') }}",
+                    "secretKey": "{{ s3_secret_key | default('password') }}"
+                }
+            ],
+            "actions": ["Admin", "Read", "Write"]
+        },
+        {
+            "name": "readonly",
+            "credentials": [
+                {
+                    "accessKey": "{{ s3_readonly_access_key | default('readonly') }}",
+                    "secretKey": "{{ s3_readonly_secret_key | default('password') }}"
+                }
+            ],
+            "actions": ["Read"]
+        }
+    ],
+    "domains": [
+        {
+            "name": "*",
+            "allowedOrigins": ["{{ s3_cors_origin | default('*') }}"]
+        }
+    ]
+}
