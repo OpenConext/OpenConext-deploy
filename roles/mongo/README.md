@@ -25,6 +25,9 @@ Please review the official Mongo documentation for more information.
 - werkt het ook met d emongo replication module?
 - hoe afdwingen dat de prmary eerst gaat?
 - check todos in de code
+- extra check is er al een cluster niks aan doen
+- optie removen evt 
+- rs.addArb
 
 TEST
 

@@ -3,23 +3,23 @@
   when: mongo_mode == "cluster"
   block:
     - name: Fail on undefined replica_set_name
-      when: replica_set_name is not defined
+      when: mongo_replica_set_name is not defined
       ansible.builtin.fail:
         msg: "Something is wrong, mongo_mode was set to cluster but replica_set_name is undefined."
 
-    - name: Check some variables
-      when: mongo_cluster_members is not defined
-      ansible.builtin.fail:
-        msg: "Something is wrong, mongo_mode was set to cluster but mongo_cluster_members is undefined."
+    # - name: Check some variables
+    #   when: mongo_cluster_members is not defined
+    #   ansible.builtin.fail:
+    #     msg: "Something is wrong, mongo_mode was set to cluster but mongo_cluster_members is undefined."
 
 - name: Message for non redhat family servers
-  when: ansible_os_family != 'RedHat'
+  when: ansible_facts['os_family'] != 'RedHat'
   ansible.builtin.fail:
     msg: "Sorry, this role only works on RedHat family servers"
 
 - name: Install and configure mongo on redhat family servers
   when:
-    - ansible_os_family == 'RedHat'
+    - ansible_facts['os_family'] == 'RedHat'
   block:
     - name: Use temporarily python3 as remote interpreter, this fixes pymongo
       ansible.builtin.set_fact:
@@ -75,5 +75,6 @@
     - name: Use python2 again as remote interpreter
       ansible.builtin.set_fact:
         ansible_python_interpreter: "/usr/bin/python"
-      when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
-
+      when: 
+        - ansible_facts['distribution'] == 'CentOS'
+        - ansible_facts['distribution_major_version'] == '7'

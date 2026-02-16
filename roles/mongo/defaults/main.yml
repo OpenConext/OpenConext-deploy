@@ -37,7 +37,7 @@ mongo_port: 27017
 mongo_mode: "cluster" # cluster or standalone
 
 # The name of the replication set
-replica_set_name: "{{ instance_name }}" # Set this in group_vars
+mongo_replica_set_name: "{{ instance_name }}" # Set this in group_vars
 
 # Add a database
 mongo:

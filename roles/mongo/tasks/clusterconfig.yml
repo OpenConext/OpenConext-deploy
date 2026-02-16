@@ -2,18 +2,13 @@
 # In this task file the cluster is configured
 - name: Debug replica settings
   ansible.builtin.debug:
-    msg: "Replica set name {{ replica_set_name }}"
+    msg: "Replica set name {{ mongo_replica_set_name }}"
     verbosity: 2
 
-- name: Debug cluster members settings
-  ansible.builtin.debug:
-    msg: "Cluster members: {{ mongo_cluster_members }}"
-    verbosity: 2
-
-- name: Debug mongo_replication_role variable
-  ansible.builtin.debug:
-    msg: "{{ mongo_replication_role }}"
-    verbosity: 2
+# - name: Debug cluster members settings
+#   ansible.builtin.debug:
+#     msg: "Cluster members: {{ mongo_cluster.members }}"
+#     verbosity: 2
 
 - name: Enable and start mongod for the first time
   ansible.builtin.service:
@@ -52,7 +47,7 @@
         mode: "0644"
         backup: true
       notify: Restart mongod
-    
+
     # We want a mongo restart right away
     - name: Flush handlers
       ansible.builtin.meta: flush_handlers
@@ -75,45 +70,87 @@
     #     validate: false
     #   run_once: true
     #   when: mongo_replication_role == 'primary'
-
-    - name: Initiate replica set
-      shell: |
-        mongosh --eval '
-        rs.initiate({
-          _id: "{{ replica_set_name }}",
-          members: [
-            { _id: 0, host: "rocky1:{{ mongo_port }}" },
-          ]
-        })'
+    - name: Initiate replica set on primary
       when: mongo_replication_role == "primary"
-      register: rs_init
-      failed_when: false
+      block:
+        - name: Initiate replica set
+          shell: |
+            mongosh --eval '
+            rs.initiate({
+              _id: "{{ replica_set_name }}",
+              members: [
+                { _id: 0,
+                  host: "{{ ansible_facts['hostname']}}:{{ mongo_port }}",
+                  priority: 3
+                  },
+              ]
+            })'
+          register: rs_init
+          #failed_when: false
 
-    - name: Wait for replica set election
-      pause:
-        seconds: 20
-      when: mongo_replication_role == "primary"
+        - name: Wait for replica set election
+          pause:
+            seconds: 20
 
-    # - name: Wait until cluster health is ok
-    #   community.mongodb.mongodb_status:
-    #     login_user: admin
-    #     login_password: "{{ mongo_admin_password }}"
-    #     login_database: admin
-    #     login_port: "{{ mongo_port }}"
-    #     validate: default
-    #     poll: 5
-    #     interval: 12
-    #     replica_set: "{{ replica_set_name }}"
-    #   when: mongo_replication_role == 'primary'
+        - name: Debug rs init event
+          ansible.builtin.debug:
+            var: rs_init
+            verbosity: 2
 
-    - name: Add the admin user
-      community.mongodb.mongodb_user:
-        database: admin
-        name: admin
-        password: "{{ mongo_admin_password }}"
-        login_port: "{{ mongo_port }}"
-        roles: root
-        state: present
-      when: mongo_replication_role == "primary"
-      #no_log: true #todo enable
-      #run_once: true
+        - name: Add the admin user
+          community.mongodb.mongodb_user:
+            database: admin
+            name: admin
+            password: "{{ mongo_admin_password }}"
+            login_port: "{{ mongo_port }}"
+            roles: root
+            state: present
+          #no_log: true #todo enable
+          #run_once: true
+
+        - name: Wait until cluster health is ok
+          community.mongodb.mongodb_status:
+            login_user: admin
+            login_password: "{{ mongo_admin_password }}"
+            login_database: admin
+            login_port: "{{ mongo_port }}"
+            validate: default
+            poll: 5
+            interval: 12
+            replica_set: "{{ mongo_replica_set_name }}"
+          register: mongo_cluster_health
+
+        - name: Debug mongo_cluster_health
+          ansible.builtin.debug:
+            var: mongo_cluster_health
+            verbosity: 2
+
+    # end primary server block
+
+    - name: Add members to cluster
+      when: mongo_replication_role != "primary"
+      block:
+
+        - name: Add new mongo server to replication set
+          when: mongo_replication_role != "arbiter"
+          shell: |
+            mongosh -u admin --password {{ mongo_admin_password }} --eval '
+            rs.add ("{ host: "{{ ansible_hostname }}:{{ mongo_port }}",
+                       priority: {{ mongo_cluster_priority | default('2') }} }")'
+          register: rs_add
+          changed_when: false
+          delegate_to: "rocky1" # tod variable
+
+        - name: Add new mongo arbitrator to replication set
+          when: mongo_replication_role == "arbiter"
+          shell: |
+            mongosh -u admin --password {{ mongo_admin_password }} --eval '
+            rs.addArb (" { host: "{{ ansible_hostname }}:{{ mongo_port }}",
+                           priority: 0 }")'
+          register: rs_add
+          delegate_to: "rocky1" # tod variable
+
+        - name: Debug rs add event
+          ansible.builtin.debug:
+            var: rs_add
+            verbosity: 2

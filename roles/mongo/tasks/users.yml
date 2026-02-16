@@ -1,5 +1,7 @@
 - name: Create mongo database users cluster # requires pymongo 4+
-  when: mongo_mode == "cluster"
+  when:
+    - mongo_mode == "cluster"
+    - mongo_replication_role == "primary"
   community.mongodb.mongodb_user:
     login_database: admin
     database: "{{ item.db_name }}"
