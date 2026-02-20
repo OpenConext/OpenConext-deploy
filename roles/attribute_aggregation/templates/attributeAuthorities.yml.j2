@@ -109,7 +109,8 @@ authorities:
       }
     ],
     mappings: [
-      { responseKey: "id", targetAttribute: "urn:mace:dir:attribute-def:isMemberOf" }
+      { responseKey: "id", targetAttribute: "urn:mace:dir:attribute-def:isMemberOf" },
+      { responseKey: "autorisatie", targetAttribute: "urn:mace:surf.nl:attribute-def:surf-autorisaties" }
     ],
     attributes: [
       {
@@ -117,7 +118,14 @@ authorities:
         description: "Lists the roles the user is a member of",
         type: "string",
         example: "urn:mace:surf.nl:test.surfinvite.nl:77a273cf-6f0a-480a-991e-ada8e89e1d74:scim_mock_test_role"
+      },
+      {
+        name: "urn:mace:surf.nl:attribute-def:surf-autorisaties",
+        description: "Lists the surf-autorisaties for the user",
+        type: "string",
+        example: "urn:mace:surfnet.nl:surfnet.nl:sab:role:DNS-Beheerder"
       }
+
     ],
     requiredInputAttributes: [
       {
@@ -127,7 +135,7 @@ authorities:
         name: "SPentityID"
       }
     ],
-    validationRegExp: "^urn:(collab:group|mace:surf.nl):.*$"
+    validationRegExp: "^urn:(collab:group|mace:surf.nl|mace:surfnet.nl):.*$"
   }
   - {
     id: "sabrest",
