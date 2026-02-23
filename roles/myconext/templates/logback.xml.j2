@@ -8,14 +8,35 @@
    </encoder>
  </appender>
 
+ <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+   <destination>host.docker.internal:514</destination>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        <customFields>{"app":"myconext"}</customFields>
+        <includeCallerData>true</includeCallerData>
+        <fieldNames>
+            <thread>[ignore]</thread>
+            <version>[ignore]</version>
+            <levelValue>[ignore]</levelValue>
+       </fieldNames>
+       <prefix class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+         <layout class="ch.qos.logback.classic.PatternLayout">
+           <pattern>myconextjson: </pattern>
+         </layout>
+</prefix>
+     </encoder>
+  </appender>
+
  <logger name="myconext" level="DEBUG" />
  <logger name="org.springframework.security" level="WARN" />
  <logger name="tiqr.org" level="INFO" />
  <logger name="io.changock" level="INFO" />
- <logger name="io.mongock" level="INFO" />
-
+ <!--logger name="org.mongodb.driver.cluster" level="DEBUG" /-->
+ <!--logger name="org.mongodb.driver.connection" level="DEBUG" /-->
  <root level="WARN">
    <appender-ref ref="STDOUT" />
+ {% if myconext_logback_json | bool %}
+    <appender-ref ref="JSON_SYSLOG" />
+ {%endif%}
  </root>
 
 </configuration>

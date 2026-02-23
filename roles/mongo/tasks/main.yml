@@ -1,38 +1,40 @@
 ---
-- name: Use temporarily python3 as remote interpreter, this fixes pymongo
-  ansible.builtin.set_fact:
-    ansible_python_interpreter: "/usr/bin/python3"
-  tags: mongo_users
+- name: Install and configure mongo on redhat family servers
+  when: ansible_os_family == 'RedHat'
+  block:
+    - name: Use temporarily python3 as remote interpreter, this fixes pymongo
+      ansible.builtin.set_fact:
+        ansible_python_interpreter: "/usr/bin/python3"
+      tags: mongo_users
 
-- name: Include CA tasks
-  ansible.builtin.include_tasks:
-    file: ca.yml
-    apply:
-      delegate_to: localhost
-      run_once: true
-      become: false
+    - name: Include installation tasks
+      ansible.builtin.include_tasks:
+        file: install.yml
 
-- name: Include Certificate tasks
-  ansible.builtin.include_tasks:
-    file: certs.yml
+    - ansible.builtin.meta: flush_handlers
 
-- name: Include installation tasks
-  ansible.builtin.include_tasks:
-    file: install.yml
+    - name: Include Certificate tasks
+      ansible.builtin.include_tasks:
+        file: certs.yml
 
-- name: Include cluster installation tasks
-  ansible.builtin.include_tasks:
-    file: cluster.yml
+    - name: Include cluster installation tasks
+      ansible.builtin.include_tasks:
+        file: clusterconfig.yml
 
-- name: Include user creation
-  ansible.builtin.include_tasks:
-    file: users.yml
+    - name: Include user creation
+      ansible.builtin.include_tasks:
+        file: users.yml
 
-- name: Include postinstallation tasks
-  ansible.builtin.include_tasks:
-    file: postinstall.yml
+    - name: Include postinstallation tasks
+      ansible.builtin.include_tasks:
+        file: postinstall.yml
 
-- name: Use python2 again as remote interpreter
-  ansible.builtin.set_fact:
-    ansible_python_interpreter: "/usr/bin/python"
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+    - name: Use python2 again as remote interpreter
+      ansible.builtin.set_fact:
+        ansible_python_interpreter: "/usr/bin/python"
+      when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+
+- name: Message for non redhat family servers
+  when: ansible_os_family != 'RedHat'
+  ansible.builtin.debug:
+    msg: "Sorry, this role only works on RedHat family servers"

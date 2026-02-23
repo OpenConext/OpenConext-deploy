@@ -29,3 +29,5 @@ teams_manage_provision_samlsp_sign: false
 teams_spring_flyway_enabled: true
 teams_docker_networks: 
   - name: "loadbalancer"
+teams_server_restart_policy: always
+teams_server_restart_retries: 0

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "single_tenant_template",
-  "order": 7,
+  "order": 9,
   "definitions": {
     "AssertionConsumerServiceBinding": {
       "type": "string",
@@ -384,6 +384,10 @@
           "format": "url",
           "info": "The URL of the service used to log on."
         },
+        "coin:application_name": {
+          "type": "string",
+          "info": "The name of the service / application in related applications."
+        },
         "coin:transparant_issuer": {
           "type": "boolean",
           "info": "Set this to let the Engineblock use the EntityID of the IdP in stead of the EntityID of the Engineblock."
@@ -536,6 +540,28 @@
           ],
           "default": "AO",
           "info": "Set the contractual base that underlies a production SP / RP entity."
+        },
+        "application_tags": {
+          "type": "array",
+          "max": 3,
+          "items": {
+            "type": "string",
+            "enum": [
+              "education",
+              "research",
+              "privacy",
+              "content",
+              "repository",
+              "company",
+              "recommended",
+              "productivity",
+              "organization",
+              "cooperation",
+              "video",
+              "surf"
+            ]
+          },
+          "info": "The types of service used in the facet search in dashboard (max 3)."
         }
       },
       "patternProperties": {

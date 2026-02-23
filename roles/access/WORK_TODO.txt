@@ -1,7 +1,0 @@
-Placeholder for the work to be done yet
-
-@Ines, see the access: block in
-https://gitlab.surf.nl/surfconext/surfconext-deploy-environments/-/blob/main/test2/group_vars/test2.yml
-for the information about minio on test2.
-
-JIRA properties can be duplicated from idp-dashboard

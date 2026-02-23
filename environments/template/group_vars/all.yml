@@ -1,0 +1,87 @@
+---
+# The develop flag is used for development-specific tasks/roles and is set to true via --extra-vars
+# By default, these should not be run
+develop: false
+secrets_file: "{{ inventory_dir }}/secrets/secrets.yml"
+# To enable a minimal installation the following variable should be enabled:
+minimal_install: false
+
+timezone: Europe/Amsterdam
+
+maven_repo: https://build.openconext.org/repository/public/releases
+maven_snapshot_repo: https://build.openconext.org/repository/public/snapshots
+
+ssl_key_dir: /etc/httpd/keys
+
+apache_user: apache
+
+# Used in things like "powered by <sponsor_name>"
+sponsor_name: SURF
+
+# Virtal host that hosts shared static images (logos primarily)
+# Can be overridden in environments if it lives outside this env's base domain
+static_vhost: "static.{{ base_domain }}"
+oidcng_vhost: "connect.{{ base_domain }}"
+
+admin_email: "openconext-admin@example.edu"
+
+# Shown in banner on top right of UI in apps.
+# Colour can be: crimson, orange, hotpink or khaki
+environment_shortname: ""
+environment_ribbon_colour: ""
+
+httpd_csp:
+  lenient: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
+  lenient_with_static_img: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
+  lenient_with_static_img_with_oidcng: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
+  lenient_with_static_img_with_surfconext: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} https://*.surfconext.nl http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
+  strict: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; manifest-src 'self'"
+  strict_with_static_img: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; manifest-src 'self'"
+  lenient_with_static_img_for_idp: "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self' https://*.{{ base_domain }}; frame-ancestors 'none'; base-uri 'none'"
+  lenient_with_static_img_for_idp_frcapi: "default-src 'none'; frame-src https://global.frcapi.com/; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://{{ oidcng_vhost }}; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self' https://*.{{ base_domain }}; frame-ancestors 'none'; base-uri 'none'"
+  nothing: "default-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'"
+
+error_subject_prefix: "[{{ ansible_hostname }}] "
+
+# Some engineblock variables are shared between applications
+engine_api_domain: engine-api.{{ base_domain }}
+engine_api_metadata_push_user: serviceregistry
+engine_api_profile_user: profile
+engine_attribute_aggregation_username: "{{ aa.eb_username }}"
+engine_attribute_aggregation_password: "{{ aa.eb_password }}"
+
+# Some deprovision variables are shared between applications
+authz_server_api_lifecycle_username: authz_server_api_lifecycle_user
+teams_api_lifecycle_username: teams_api_lifecycle_user
+attribute_aggregator_api_lifecycle_username: attribute_aggregator_api_lifecycle_user
+engine_api_deprovision_user: lifecycle
+lifecycle_api_username: lifecycle
+
+# PHP vars
+php_session_dir: /var/lib/openconext/session/
+php_disabled_functions: "exec,passthru,shell_exec,system,proc_open,popen,curl_multi_exec,show_source,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,"
+openconext_releases_dir:   "/opt/openconext"
+openconext_builds_dir:     "{{ openconext_releases_dir }}/builds"
+
+# Stats vars shared over roles
+influx_stats_db: log_logins
+influxdb_admin_user: admin
+influxdb_stats_user: stats
+
+# The supported_languages_codes is a comma-separated String with the language codes that need to be supported.
+supported_language_codes: "en,nl"
+
+# Default logback retention time in days
+logback_max_history: 7
+
+# The manage spring_app port is used by various roles
+manage_springapp_tcpport: 9393
+
+# OpenConext Stepup Level of Assurance Identifiers
+# The intrinsic loa is "LoA 1" / just first factor / no stepup required
+stepup_intrinsic_loa: "http://{{ base_domain }}/assurance/loa1"
+# This does not include the intrinsic loa since most apps only require the >1 loa's
+stepup_loa_values_supported:
+ - "http://{{ base_domain }}/assurance/loa1.5"
+ - "http://{{ base_domain }}/assurance/loa2"
+ - "http://{{ base_domain }}/assurance/loa3"

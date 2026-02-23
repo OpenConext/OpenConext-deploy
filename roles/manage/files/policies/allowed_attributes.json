@@ -1,40 +1,56 @@
 [
   {
     "value": "urn:mace:terena.org:attribute-def:schacHomeOrganization",
+    "validationRegex": "^[a-z]+(\\.[a-z]+)+$",
+    "allowedInDenyRule": true,
     "label": "Schac home organization"
   },
   {
     "value": "urn:mace:terena.org:attribute-def:schacHomeOrganizationType",
+    "validationRegex": "^[a-z]+$",
+    "allowedInDenyRule": true,
     "label": "Schac home organization type"
   },
   {
     "value": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+    "validationRegex": "^(student|staff|faculty|employee|member)$",
+    "allowedInDenyRule": true,
     "label": "Edu person affiliation"
   },
   {
     "value": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
+    "validationRegex": "^(student|staff|faculty|employee|member)@[a-z]+(\\.[a-z]+)+$",
+    "allowedInDenyRule": true,
     "label": "Edu person scoped affiliation"
   },
   {
     "value": "urn:mace:dir:attribute-def:eduPersonEntitlement",
+    "validationRegex": "^[a-z]+$",
+    "allowedInDenyRule": true,
     "label": "Edu person entitlement"
   },
   {
     "value": "urn:mace:dir:attribute-def:isMemberOf",
+    "validationRegex": "^.*$",
+    "allowedInDenyRule": true,
     "label": "Is-member-of"
   },
   {
     "value": "urn:collab:group:surfteams.nl",
-    "label": "SURFteams group name (fully qualified)"
+    "validationRegex": "^(urn:mace:surf\\.nl:invite:|urn:collab:group:)[a-z0-9_]+$",
+    "allowedInDenyRule": false,
+    "label": "SURFconext Invite (voot) role urn"
   },
   {
     "value": "urn:collab:sab:surfnet.nl",
+    "validationRegex": "^(Superuser|Instellingsbevoegde|OperationeelBeheerder|SURFconextbeheerder|DNS-Beheerder)$",
+    "allowedInDenyRule": false,
     "label": "SAB role"
-
   },
   {
     "value": "urn:mace:dir:attribute-def:mail",
+    "validationRegex": "^[^@]+@[^@]+\\.[^@]+$",
+    "allowedInDenyRule": true,
     "label": "Mail address"
-
   }
 ]

@@ -1,0 +1,71 @@
+    # General setup for the virtual host, inherited from global configuration
+    ServerName https://access.{{ base_domain }}
+
+    ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-access'"
+    CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-access'" combined
+
+    RewriteEngine on
+
+    RewriteCond %{REQUEST_URI} !\.html$
+    RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
+    RewriteCond %{REQUEST_URI} !\.svg$
+    RewriteCond %{REQUEST_URI} !\.png$
+    RewriteCond %{REQUEST_URI} !\.ico$
+    RewriteCond %{REQUEST_URI} !\.woff$
+    RewriteCond %{REQUEST_URI} !\.woff2$
+    RewriteCond %{REQUEST_URI} !\.ttf$
+    RewriteCond %{REQUEST_URI} !\.eot$
+    RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
+    RewriteCond %{REQUEST_URI} !^/access
+    RewriteCond %{REQUEST_URI} !^/spDashboard
+    RewriteCond %{REQUEST_URI} !^/health
+    RewriteCond %{REQUEST_URI} !^/info
+    RewriteCond %{REQUEST_URI} !^/internal
+    RewriteCond %{REQUEST_URI} !^/login
+    RewriteCond %{REQUEST_URI} !^/startSSO
+    RewriteCond %{REQUEST_URI} !^/fonts
+    RewriteRule (.*) /index.html [L]
+
+    ProxyPreserveHost On
+    ProxyPass /Shibboleth.sso !
+    ProxyPass /access/api http://accessserver:8080/access/api retry=0
+    ProxyPassReverse /access/api http://accessserver:8080/access/api
+
+    ProxyPass /health http://accessserver:8080/internal/health retry=0
+    ProxyPass /info http://accessserver:8080/internal/info retry=0
+    ProxyPass /login http://accessserver:8080/login retry=0
+    ProxyPass /startSSO http://accessserver:8080/startSSO retry=0
+
+    ProxyPass /internal http://accessserver:8080/internal retry=0
+    ProxyPassReverse /internal http://accessserver:8080/internal
+
+    <Location />
+      AuthType shibboleth
+      ShibUseHeaders On
+      ShibRequireSession On
+      ShibRequestSetting REMOTE_ADDR X-Forwarded-For
+      Require valid-user
+    </Location>
+
+    DocumentRoot "/var/www/"
+
+    <Directory "/var/www/">
+      Require all granted
+    </Directory>
+
+    <Location ~ "/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "/internal/(health|info)">
+      Require all granted
+    </Location>
+
+    <Location ~ "^/(?!startSSO)">
+      Require all granted
+    </Location>
+
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Content-Type-Options "nosniff"
+

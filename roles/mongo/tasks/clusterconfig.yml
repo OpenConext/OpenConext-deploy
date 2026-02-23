@@ -1,0 +1,64 @@
+---
+# todo this weorks only for new deployments
+# rewrite so mongo config can be changed and cluster members can be added or removed
+- name: Check if hosts are in clustered
+  ansible.builtin.command: mongosh --port {{ mongod_port }} --quiet --eval 'db.isMaster().hosts'
+  register: check_cluster
+  changed_when: false
+  check_mode: false
+
+- name: Debug check_cluster variable
+  when: show_debug_info is defined and show_debug_info | bool
+  ansible.builtin.debug:
+    msg: "{{ check_cluster }}"
+
+- name: Debug mongo_cluster_members variable
+  when: show_debug_info is defined and show_debug_info | bool
+  ansible.builtin.debug:
+    msg: "{{ mongo_cluster_members }}"
+
+- name: Debug mongo_replication_role variable
+  when: show_debug_info is defined and show_debug_info | bool
+  ansible.builtin.debug:
+    msg: "{{ mongo_replication_role }}"
+
+- name: Debug host_id
+  ansible.builtin.debug:
+    msg: "{{ hostid }}"
+
+- name: Initial cluster initialisation
+  community.mongodb.mongodb_replicaset:
+    login_host: localhost
+    login_user: admin
+    login_port: "{{ mongod_port }}"
+    login_password: "{{ mongo_admin_password }}"
+    replica_set: "{{ replica_set_name }}"
+    members: "{{ mongo_cluster_members }}"
+    arbiter_at_index: "{{ mongo_arbiter_index | default(0) }}"
+    validate: false
+  run_once: true
+  when: mongo_replication_role == 'primary'
+
+- name: Wait until cluster health is ok
+  community.mongodb.mongodb_status:
+    login_user: admin
+    login_password: "{{ mongo_admin_password }}"
+    login_database: admin
+    login_port: "{{ mongod_port }}"
+    validate: default
+    poll: 5
+    interval: 12
+    replica_set: "{{ replica_set_name }}"
+  when: mongo_replication_role == 'primary'
+
+- name: Add the admin user
+  community.mongodb.mongodb_user:
+    database: admin
+    name: admin
+    password: "{{ mongo_admin_password }}"
+    login_port: "{{ mongod_port }}"
+    roles: root
+    state: present
+  when: check_cluster.stdout == ""
+  no_log: true
+  run_once: true

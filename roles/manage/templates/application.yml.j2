@@ -27,6 +27,9 @@ server:
 
 features: {{ manage.features }}
 
+feature_toggles:
+  allow_secret_public_rp: True
+
 push:
   eb:
     url: https://{{ engine_api_domain }}/api/connections
@@ -44,8 +47,8 @@ push:
     enabled: {{ manage.oidc_push_enabled }}
   pdp:
     url: https://pdp.{{ base_domain }}/pdp/api/manage/push
-    policy_url: https://pdp.{{ base_domain }}/pdp/api/manage/policies
     decide_url: https://pdp.{{ base_domain }}/pdp/api/manage/decide
+    parse_url: https://pdp.{{ base_domain }}/pdp/api/manage/parse
     name: {{ manage.pdp_name }}
     user: {{ pdp.username }}
     password: "{{ pdp.password }}"
@@ -61,6 +64,7 @@ product:
 metadata_configuration_path: file://{{ manage_dir }}/metadata_configuration
 metadata_templates_path: file://{{ manage_dir }}/metadata_templates
 metadata_export_path: classpath:/metadata_export
+disabled_metadata_schemas:
 
 security:
   backdoor_user_name: {{ manage.backdoor_api_user }}

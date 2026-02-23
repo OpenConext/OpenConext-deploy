@@ -26,6 +26,16 @@
     - "{{ current_release_config_dir_name }}"
     - "{{ current_release_appdir }}/public/images"
 
+- name: Create federation-metadata cache dir
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ item }}"
+    owner: "{{ appname }}"
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{ current_release_appdir }}/federation-metadata"
+
 - name: Install images
   ansible.builtin.include_role:
     name: stepupapp
@@ -70,10 +80,13 @@
       APACHE_UID: "#{{ azuremfa_uid.uid }}"
       APACHE_GUID: "#{{ azuremfa_guid.gid }}"
     mounts:
-      - source: /opt/openconext/azuremfa/public/images/header-logo.png
+      - source: "{{ current_release_appdir }}/public/images/header-logo.png"
         target: /var/www/html/public/build/images/header-logo.png
         type: bind
-      - source: /opt/openconext/azuremfa
+      - source: "{{ current_release_appdir }}"
         target: /var/www/html/config/openconext
+        type: bind
+      - source: "{{ current_release_appdir }}/federation-metadata"
+        target: /var/www/html/federation-metadata
         type: bind
   register: azuremfacontainer

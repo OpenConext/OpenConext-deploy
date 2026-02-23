@@ -2,33 +2,33 @@
 - name: Copy the log_logins and lastseen database table definitions
   copy:
     src: "{{ item }}"
-    dest: /tmp/{{ item }}
+    dest: /var/tmp/{{ item }}
     owner: root
     mode: 0744
   with_items:
     - log_logins.sql
     - lastseen.sql
-   
+
 - name: Create log_logins table for each log_login environment
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ item.db_loglogins_name }}"
     login_user: "{{ item.db_loglogins_user }}"
     login_password: "{{ item.db_loglogins_password }}"
     login_host: "{{ item.db_loglogins_host }}"
     state: import
-    target: /tmp/log_logins.sql
+    target: /var/tmp/log_logins.sql
   changed_when: false
   with_items: "{{ rsyslog_environments }}"
   when: item.db_loglogins_name is defined
 
 - name: Create lastseen table for each log_login environment
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ item.db_lastseen_name }}"
     login_user: "{{ item.db_lastseen_user }}"
     login_password: "{{ item.db_lastseen_password }}"
     login_host: "{{ item.db_lastseen_host }}"
     state: import
-    target: /tmp/lastseen.sql
+    target: /var/tmp/lastseen.sql
   changed_when: false
   with_items: "{{ rsyslog_environments }}"
   when: item.db_loglogins_name is defined
@@ -40,7 +40,7 @@
   when: ansible_os_family == "Debian"
 
 - name: Create a python script that parses log_logins per environment
-  template: 
+  ansible.builtin.template:
     src: parse_ebauth_to_mysql.py.j2
     dest: /usr/local/sbin/parse_ebauth_to_mysql_{{ item.name }}.py
     mode: 0740
@@ -50,7 +50,7 @@
   when: item.db_loglogins_name is defined
 
 - name: Put log_logins logrotate scripts
-  template:
+  ansible.builtin.template:
     src: logrotate_ebauth.j2
     dest: /etc/logrotate.d/logrotate_ebauth_{{ item.name }}
     mode: 0644
@@ -60,7 +60,7 @@
   when: item.db_loglogins_name is defined
 
 - name: Create logdirectory for log_logins cleanup script
-  file: 
+  ansible.builtin.file:
     path: "{{ rsyslog_dir }}/apps/{{ item.name }}/loglogins_cleanup/"
     state: directory
     owner: root
@@ -70,7 +70,7 @@
   when: item.db_loglogins_name is defined
 
 - name: Put log_logins cleanup script
-  template: 
+  ansible.builtin.template:
     src: clean_loglogins.j2
     dest: /usr/local/sbin/clean_loglogins_{{ item.name }}
     owner: root
@@ -80,7 +80,7 @@
   when: item.db_loglogins_name is defined
 
 - name: Create cronjobs to run the log_logins script
-  cron: 
+  ansible.builtin.cron:
     name: Delete old {{ item.name }} log_login data
     user: root
     minute: "20"

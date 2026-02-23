@@ -1,0 +1,3 @@
+---
+openaccess_server_restart_policy: always
+openaccess_server_restart_retries: 0

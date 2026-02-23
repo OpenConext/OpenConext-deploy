@@ -18,3 +18,25 @@ rsyslog_dir_file_modes: 'dirCreateMode="0755" fileCreateMode="0640" FileGroup="s
 #     host: '' # central syslog server
 #     port: '' # syslog port
 #     peer: '' # CN of the certificate of the central syslog server
+
+rsyslog_service_dropindir: "/etc/systemd/system/rsyslog.service.d"
+rsyslog_certifcate_dir: "/etc/pki/rsyslog"
+rsyslog_queue_dir: "/var/spool/rsyslog"
+
+# these already have appropriate defaults in the template or rsyslog but you can
+# change them if necessary, for example on docker hosts they have to be a little higher
+# rsyslog_imjournal_ratelimitburst: 2000
+# rsyslog_imjournal_ratelimitinterval: 600
+# rsyslog_maxmessagesize: 8000
+
+# rsyslog_imjournal_statefile # default is imjournal.state which means imjournal.state relative to the rsyslog workdir
+# rsyslog_workdirectory # default /var/spool/rsyslog
+
+# Empty log check script, optional
+rsyslog_enable_warn_empty_script: false
+rsyslog_warn_empty_log_recipient: admin@example.com
+rsyslog_monitor_for_emptylogs_path: "{{ rsyslog_dir }}/apps/prod_sc"
+rsyslog_checkemptylogs_cron_minute: "0"
+rsyslog_checkemptylogs_cron_hour: "9"
+rsyslog_checkemptylogs_cron_weekdays: "1-5"
+rsyslog_checkemptylogs_dir: "/usr/local/bin"

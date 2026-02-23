@@ -347,9 +347,13 @@
           "format": "url",
           "info": "The URL of the service used to log on."
         },
+        "coin:application_name": {
+          "type": "string",
+          "info": "The name of the service / application in related applications."
+        },
         "coin:policy_enforcement_decision_required": {
           "type": "boolean",
-          "info": "Set to activate the user policy engine (PDP)."
+          "info": "Set to activate the user policy engine (PDP) for this Service."
         },
         "coin:privacy:privacy_policy": {
           "type": "boolean",
@@ -423,6 +427,28 @@
             ]
           },
           "info": "The authorisation grant type's of this Relying Party."
+        },
+        "application_tags": {
+          "type": "array",
+          "max": 3,
+          "items": {
+            "type": "string",
+            "enum": [
+              "education",
+              "research",
+              "privacy",
+              "content",
+              "repository",
+              "company",
+              "recommended",
+              "productivity",
+              "organization",
+              "cooperation",
+              "video",
+              "surf"
+            ]
+          },
+          "info": "The types of service used in the facet search in dashboard (max 3)."
         }
       },
       "patternProperties": {

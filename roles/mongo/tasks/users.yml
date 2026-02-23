@@ -1,5 +1,5 @@
-- name: Create mongo database users
-  mongodb_user:
+- name: Create mongo database users # requires pymongo 4+
+  community.mongodb.mongodb_user:
     login_database: admin
     database: "{{ item.db_name }}"
     login_user: admin

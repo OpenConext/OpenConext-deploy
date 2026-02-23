@@ -1,69 +1,110 @@
-- name: install rsyslog
-  package:
+- name: Install rsyslog
+  ansible.builtin.package:
     name:
       - rsyslog
       - rsyslog-gnutls
       - rsyslog-relp
     state: present
   notify:
-  - "restart rsyslog"
-
-- name: Create the pki directory if it does not exist
-  file:
-    path: /etc/pki/rsyslog
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-
-# We need a key and client certificate to when using RELP
-- name: put rsyslog client key
-  copy:
-    content: "{{ rsyslogclientkey }}"
-    dest: "/etc/pki/rsyslog/rsyslogclient.key"
-    mode: 0400
-    owner: root
-  when:
-    - "'sysloghost' not in group_names"
-  no_log: true
-  notify:
     - "restart rsyslog"
 
-- name: put rsyslog client certificate
-  copy:
-    src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclient.crt"
-    dest: "/etc/pki/rsyslog/rsyslogclient.crt"
-    mode: 0744
-    owner: root
-    group: adm
-  when:
-    - "'sysloghost' not in group_names"
-  notify:
-    - "restart rsyslog"
+- name: Enable rsyslog
+  ansible.builtin.service:
+    name: rsyslog
+    enabled: true
 
-- name: put rsyslog CA file (new location)
-  copy:
-    src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclientca.crt"
-    dest: "/etc/pki/rsyslog/rsyslogclientca.crt"
-    mode: 0744
-    owner: root
-    group: adm
-  when:
-    - "'sysloghost' not in group_names"
+- name: Forwarding journalctl to rsyslog forward syslog to central logserver
+  when: "'sysloghost' not in group_names"
+  block:
 
-- name: put rsyslog config file for logforwarding
-  template:
-    src: "rsyslog_onlyforward.conf.j2"
-    dest: "/etc/rsyslog.conf"
-  notify:
-    - "restart rsyslog"
-  when:
-    - "'sysloghost' not in group_names"
+    # journald forwards logs to rsyslog
+    - name: When using imjournal no forwarding necessary
+      ansible.builtin.lineinfile:
+        path: /etc/systemd/journald.conf
+        search_string: 'ForwardToSyslog='
+        line: 'ForwardToSyslog=no' # commenting out ForwardToSyslog=yes still results in enabling the option on debian
+      notify:
+        - "Restart journald"
 
-- name: include tasks for central syslog server
-  include_tasks: rsyslog_central.yml
-  when:  "'sysloghost' in group_names"
+    - name: Remove logging dropin
+      ansible.builtin.file:
+        path: "{{ rsyslog_service_dropindir }}/logging.conf"
+        state: absent
+      notify: "Reload systemd"
+
+    # Since we specify queue.spoolDirectory, lets make sure it exists
+    - name: Create queue dir
+      ansible.builtin.file:
+        path: "{{ rsyslog_queue_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0700"
+
+    # rsyslog certificates for relp
+    - name: Create the pki directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ rsyslog_certifcate_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0700"
+
+    # We need a key and client certificate to when using RELP
+    - name: Put rsyslog client key
+      ansible.builtin.copy:
+        content: "{{ rsyslogclientkey }}"
+        dest: "{{ rsyslog_certifcate_dir }}/rsyslogclient.key"
+        mode: "0400"
+        owner: root
+      no_log: true
+      notify:
+        - "restart rsyslog"
+
+    - name: Put rsyslog client certificate
+      ansible.builtin.copy:
+        src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclient.crt"
+        dest: "{{ rsyslog_certifcate_dir }}/rsyslogclient.crt"
+        mode: "0744"
+        owner: root
+        group: adm
+      notify:
+        - "restart rsyslog"
+
+    - name: Put rsyslog CA file (new location)
+      ansible.builtin.copy:
+        src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclientca.crt"
+        dest: "{{ rsyslog_certifcate_dir }}/rsyslogclientca.crt"
+        mode: "0744"
+        owner: root
+        group: adm
+
+    - name: Put rsyslog config file for logforwarding
+      ansible.builtin.template:
+        src: "rsyslog_onlyforward.conf.j2"
+        dest: "/etc/rsyslog.conf"
+        mode: "0644"
+        owner: root
+        group: root
+      notify:
+        - "restart rsyslog"
+
+    # Not sure why this is necessary on the forwarding server
+    # but seems to work
+    - name: Allow extra port rsyslog_tls_port_t
+      community.general.seport:
+        ports: "{{ rsyslog_remote_relp_port }}"
+        proto: tcp
+        setype: syslog_tls_port_t
+        state: present
+      when: ansible_selinux.mode is defined and ansible_selinux.mode  == "enforcing"
+
+# central logserver
+
+- name: Include tasks for central syslog server
+  ansible.builtin.include_tasks: rsyslog_central.yml
+  when: "'sysloghost' in group_names"
 
 - name: Include tasks for authentication log processing
-  include_tasks: process_auth_logs.yml
+  ansible.builtin.include_tasks: process_auth_logs.yml
   when: "'auth_processor' in group_names"

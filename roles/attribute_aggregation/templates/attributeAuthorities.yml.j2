@@ -1,0 +1,178 @@
+authorities:
+  - {
+      id: "orcid",
+      description: "ORCID provides a persistent digital identifier that distinguishes you from every other researcher and, through integration in key research workflows such as manuscript and grant submission, supports automated linkages between you and your professional activities ensuring that your work is recognized",
+      endpoint: "",
+      user: "",
+      password: "",
+      timeOut: 1000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:eduPersonOrcid",
+          description: "The ORCID is a persistent digital identifier that distinguishes the account holder from every other researcher.",
+          type: "string",
+          example: "http://orcid.org/0000-0002-4926-2859"
+        }
+      ],
+      requiredInputAttributes: [
+        {
+        name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        }
+      ],
+      validationRegExp: "^(https?://orcid\\.org/|)([0-9]{4}-){3}[0-9]{3}[0-9X]$"
+    }
+  - {
+      id: "voot",
+      description: "An extensible protocol for dynamic exchange of group and authorization data",
+      endpoint: "https://voot.{{ base_domain }}",
+      user: "{{ aa.authz_client_id }}",
+      password: "{{ aa.authz_secret }}",
+      timeOut: 1000,
+      attributes: [
+        {
+          name: "urn:mace:dir:attribute-def:isMemberOf",
+          description: "Lists the collaborative organisations / groups the user is a member of",
+          type: "string",
+          example: "urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:admins"
+        }
+      ],
+      requiredInputAttributes: [
+        {
+        name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        }
+      ],
+      validationRegExp: "^urn:(collab:group|mace:surf.nl):.*$"
+    }
+  - {
+      id: "manage",
+      description: "Manage - SURF CRM",
+      endpoint: "{{ aa.manage_url }}",
+      user: "{{ aa.manage_username }}",
+      password: "{{ aa.manage_password }}",
+      timeOut: 3000,
+      attributes: [
+        {
+          name: "urn:mace:surf.nl:attribute-def:surf-crm-id",
+          description: "The SURF CRM value in Manage of the IdP attribute 'coin:institution_guid'.",
+          type: "guid",
+          example: "ad93daef-0911-e511-80d0-005056956c1a"
+        }
+      ],
+      requiredInputAttributes: [
+        {
+          name: "IDPentityID"
+        }
+      ],
+      validationRegExp: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    }
+  - {
+    id: "eduid",
+    description: "eduID Attribute Aggregator",
+    endpoint: "{{ aa.eduid_url }}",
+    user: "{{ aa.eduid_username }}",
+    password: "{{ aa.eduid_password }}",
+    timeOut: 3000,
+    attributes: [
+    {
+      name: "urn:mace:eduid.nl:1.1",
+      description: "SP scoped unique eduID.",
+      type: "string",
+      example: "b04f6998-81e3-4d40-9cee-d96a9fe570df"
+    }
+    ],
+    requiredInputAttributes: [
+    {
+      name: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
+    },
+    {
+      name: "SPentityID"
+    }
+    ],
+    validationRegExp: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+  }
+  - {
+    id: "invite",
+    description: "SURFconext Invite",
+    endpoint: "{{ aa.invite_url }}",
+    user: "{{ aa.invite_username }}",
+    password: "{{ aa.invite_password }}",
+    timeOut: 5000,
+    type: "rest",
+    requestMethod: "GET",
+    pathParams: [
+      { index: 1, sourceAttribute: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" }
+    ],
+    requestParams: [
+      {
+        sourceAttribute: "SPentityID",
+        name: "SPentityID"
+      }
+    ],
+    mappings: [
+      { responseKey: "id", targetAttribute: "urn:mace:dir:attribute-def:isMemberOf" }
+    ],
+    attributes: [
+      {
+        name: "urn:mace:dir:attribute-def:isMemberOf",
+        description: "Lists the roles the user is a member of",
+        type: "string",
+        example: "urn:mace:surf.nl:test.surfinvite.nl:77a273cf-6f0a-480a-991e-ada8e89e1d74:scim_mock_test_role"
+      }
+    ],
+    requiredInputAttributes: [
+      {
+        name: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+      },
+      {
+        name: "SPentityID"
+      }
+    ],
+    validationRegExp: "^urn:(collab:group|mace:surf.nl):.*$"
+  }
+  - {
+    id: "sabrest",
+    description: "SURF Autorisatie Beheer - REST",
+    endpoint: "{{ aa.sab_rest_endpoint }}",
+    user: "{{ aa.sab_rest_username }}",
+    password: "{{ aa.sab_rest_password }}",
+    timeOut: 1000,
+    attributes: [
+      {
+        name: "urn:mace:dir:attribute-def:eduPersonEntitlement",
+        description: "URI (either URN or URL) that indicates a set of rights to specific resources.",
+        type: "string",
+        example: "urn:mace:surfnet.nl:surfnet.nl:sab:role:Instellingsbevoegde"
+      },
+      {
+        name: "urn:mace:surf.nl:attribute-def:surf-autorisaties",
+        description: "URI (either URN or URL) that indicates a set of rights to specific resources.",
+        type: "string",
+        example: "urn:mace:surfnet.nl:surfnet.nl:sab:role:Instellingsbevoegde"
+      }
+
+    ],
+    requiredInputAttributes: [
+      {
+        name: "urn:mace:dir:attribute-def:uid",
+      },
+      {
+        name: "urn:mace:terena.org:attribute-def:schacHomeOrganization",
+      }
+
+    ],
+    validationRegExp: "^urn:mace:surfnet.nl:(surfnet\\.nl|surf\\.nl):sab:(role|organizationCode|organizationGUID|mobile):[A-Z0-9_+-]+$"
+  }
+  - {
+    id: "institution",
+    timeOut: 100,
+    attributes: [ ],
+    requiredInputAttributes: [
+      {
+        name: "SPentityID"
+      },
+      {
+        name: "urn:mace:eduid.nl:1.1"
+      }
+    ],
+    validationRegExp: ".*"
+  }

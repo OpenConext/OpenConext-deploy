@@ -1,11 +1,12 @@
 ---
 logging:
+  config: file:///logback.xml
   level:
     org.springframework: WARN
     org.springframework.web: WARN
     org.springframework.security: WARN
     com.zaxxer.hikari: ERROR
-    access: DEBUG
+    invite: DEBUG
 
 server:
   port: 8080
@@ -23,7 +24,7 @@ spring:
     banner-mode: "off"
   session:
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
 {% if invite_cronjobmaster is defined and invite_cronjobmaster == false  %}
       cleanup-cron: "-"
 {% else %}
@@ -117,6 +118,10 @@ config:
   past-date-allowed: {{ invite.past_date_allowed }}
   performance-seed-allowed: {{ invite.performance_seed_allowed }}
   eduid-idp-schac-home-organization: {{ invite.eduid_idp_schac_home_organization }}
+  # Determines the languages available for switching language, supported are 'nl', 'en' and 'pt'
+  languages: "nl, en"
+  environment: {{ environment_shortname }}
+
 
 feature:
   limit-institution-admin-role-visibility: {{ invite.limit_institution_admin_role_visibility }}
@@ -125,48 +130,46 @@ feature:
 # We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
 external-api-configuration:
   remote-users:
-    -
-      username: {{ invite.vootuser }}
+    - username: {{ invite.vootuser }}
       password: "{{ invite.vootsecret }}"
       scopes:
         - voot
-    -
-      username: {{ invite.teamsuser}}
+    - username: {{ invite.teamsuser}}
       password: "{{ invite.teamssecret }}"
       scopes:
         - teams
-    -
-      username: {{ aa.invite_username }}
+    - username: {{ aa.invite_username }}
       password: "{{ invite_attribute_aggregation_secret }}"
       scopes:
         - attribute_aggregation
-    -
-      username: {{ invite.lifecycle_user }}
+    - username: {{ invite.lifecycle_user }}
       password: "{{ invite.lifecycle_secret }}"
       scopes:
         - lifecycle
-    -
-      username: {{ invite.profile_user }}
+    - username: internal
+      password: "{{ invite.internal_secret }}"
+      scopes:
+        - actuator
+    - username: {{ invite.profile_user }}
       password: "{{ invite.profile_secret }}"
       scopes:
         - profile
-    -
-      username: {{ invite.sp_dashboard_user }}
+    - username: {{ invite.sp_dashboard_user }}
       password: "{{ invite.sp_dashboard_secret }}"
+      organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
       scopes:
         - sp_dashboard
       applications:
         - manageId: {{ invite.sp_dashboard_manage_id }}
           manageType: SAML20_SP
-    -
-      username: {{ invite.access_user }}
+    - username: {{ invite.access_user }}
       password: "{{ invite.access_secret }}"
+      organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
       scopes:
         - access
       applications:
         - manageId: {{ invite.access_manage_id }}
           manageType: OIDC10_RP
-
 
 voot:
   group_urn_domain: "{{ invite.group_urn_domain }}"
@@ -208,15 +211,15 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info,mappings"
+        include: "health,info,prometheus"
       base-path: "/internal"
   endpoint:
     info:
       enabled: true
     health:
       enabled: true
-    mappings:
-      enabled: true
+    prometheus:
+      access: unrestricted
   info:
     git:
       mode: full

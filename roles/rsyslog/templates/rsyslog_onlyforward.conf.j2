@@ -1,32 +1,52 @@
-# This rsyslog configuration takes logs from journald and forwards them to a remote log serverad="imuxsock") # provides support for local system logging
-module(load="imuxsock") 
+# Where to place auxiliary files
+global(workDirectory="{{ rsyslog_workdirectory | default('/var/spool/rsyslog') }}")
+
+{% if 'docker' in group_names %}
+module(load="imptcp")
+input(type="imptcp" port="514")
+{% endif %}
+{% if ansible_os_family == "RedHat" %}
+module(load="imuxsock")
+{% endif %}
+module(load="imjournal"             # provides access to the systemd journal
+       UsePid="system" # PID number is retrieved as the ID of the process the journal entry originates from
+       StateFile="{{ rsyslog_imjournal_statefile | default('imjournal.state') }}"
+       ratelimit.interval="{{ rsyslog_imjournal_ratelimitinterval | default('60') }}"
+       ratelimit.burst="{{ rsyslog_imjournal_ratelimitburst | default('20000') }}")  # Reads journald logs
 module(load="imklog")   # provides kernel logging support
-module(load="immark" interval="600" )  # provides --MARK-- message capability
+module(load="immark" interval="300" )  # provides --MARK-- message capability
+module(load="omrelp")
+
+template(name="CustomRelpFormat" type="string"
+  string="<%PRI%>%TIMESTAMP% {{ ansible_fqdn }} %syslogtag%%msg%\n")
 
 $PreserveFQDN on
 
-*.emerg                         :omusrmsg:* 
+*.emerg                         :omusrmsg:*
+{% if rsyslog_maxmessagesize is defined %}
+$MaxMessageSize {{ rsyslog_maxmessagesize }}
+{% endif %}
 
 {% if  'sysloghost' not in group_names %}
 {% for relp_host in relp_remote %}
 # Logs are forwarded to {{ relp_host.name }}
-module(load="omrelp")
-action(type="omrelp" 
-target="{{ relp_host.host }}" 
-port="{{ relp_host.port }}" 
-tls="on" 
-tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt" 
+action(type="omrelp"
+target="{{ relp_host.host }}"
+port="{{ relp_host.port }}"
+tls="on"
+tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt"
 tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
 tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
-tls.authmode="name" 
+tls.authmode="name"
 tls.permittedpeer=["{{ relp_host.peer }}"]
-queue.type="LinkedList" 
+queue.type="LinkedList"
 queue.filename="{{ relp_host.name }}"
-queue.spoolDirectory="/var/spool/rsyslog"
+queue.spoolDirectory="{{ rsyslog_queue_dir }}"
 queue.maxdiskspace="1G"
-queue.saveonshutdown="on" 
+queue.saveonshutdown="on"
 action.resumeRetryCount="-1"
 action.resumeInterval="5"
-action.writeAllMarkMessages="on")
+action.writeAllMarkMessages="on"
+template="CustomRelpFormat")
 {% endfor %}
 {% endif %}

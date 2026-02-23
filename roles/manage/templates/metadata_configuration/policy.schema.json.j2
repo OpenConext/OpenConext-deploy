@@ -51,7 +51,7 @@
     },
     "serviceProviderIds": {
       "type": "array",
-      "minItems": 1,
+      "minItems": 0,
       "items": {
         "type": "object",
         "properties": {
@@ -60,6 +60,10 @@
           }
         }
       }
+    },
+    "serviceProvidersNegated": {
+      "type": "boolean",
+      "default": "false"
     },
     "identityProviderIds": {
       "type": "array",
@@ -90,6 +94,9 @@
           },
           "value": {
             "type": "string"
+          },
+          "groupID": {
+            "type": "number"
           },
           "negated": {
             "type": "boolean",
@@ -122,6 +129,9 @@
                 },
                 "value": {
                   "type": "string"
+                },
+                "groupID": {
+                  "type": "number"
                 },
                 "negated": {
                   "type": "boolean"
@@ -195,8 +205,7 @@
     }
   },
   "required": [
-    "name",
-    "serviceProviderIds"
+    "name"
   ],
   "additionalProperties": false,
   "indexes": []

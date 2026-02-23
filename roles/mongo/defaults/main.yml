@@ -1,10 +1,31 @@
 # The global variable file mongodb installation
 
+mongo_service: "mongod"
+mongo_version: "7.0"
+
 # In the current mongo role only one cluster per environments
 # is possible, that works for now.
 mongo_servers: [] # Set this in group_vars
 #  - mongo1.example.com
 #  - mongo2.example.com
+
+# cluster members
+# Not all mongo servers in the inventory are cluster members, so we use a separate list for this.
+# Set this in group_vars of your environment(s). The arbiter should go first, or change the mongo_arbiter_index.
+# mongo_cluster_members:
+#   - host: "mongoarbiter.example.com:27017"
+#     priority: 1 # can vote, cannot become primary
+#   - host: "mongo2.example.com:27017"
+#     priority: 2
+#   - host: "mongo1.example.com:27017"
+#     priority: 3
+# mongo_arbiter_index: 0
+
+# The replication role
+# mongo_replication_role: # Set this in host_vars, it can have the values: "primary", "secondary" or arbiter
+
+# Todo: there is a link between mongo_replication_role and priority (arbiter is priority 1, primary the highest) so
+# setting them separately is not ideal.
 
 # The port for mongo server
 mongod_port: 27017
@@ -24,3 +45,11 @@ mongo:
 
 # Listen on all addresses by default
 mongo_bind_listen_address: "0.0.0.0"
+
+# Certs and keys
+mongo_pki_dir: "/etc/pki/mongo"
+# mongo_cluster_cert set this in host_vars
+# mongo_cluster_private_key set this in host_vars (encrypted with ansible-vault)
+
+# Users and groups
+mongo_group: "mongod"

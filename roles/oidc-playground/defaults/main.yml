@@ -1,1 +1,3 @@
 oidc_playground_dir: /opt/openconext/oidc-playground
+oidc_playground_server_restart_policy: always
+oidc_playground_server_restart_retries: 0

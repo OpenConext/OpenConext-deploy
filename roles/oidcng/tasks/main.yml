@@ -101,7 +101,8 @@
     image: ghcr.io/openconext/openconext-oidcng/oidcng:{{ oidcng_version }}
     entrypoint: /__cacert_entrypoint.sh
     pull: true
-    restart_policy: "always"
+    restart_policy: "{{ oidcng_server_restart_policy }}"
+    restart_retries: "{{ oidcng_server_restart_retries }}" # Only for restart policy on-failure
     state: started
     networks: "{{ oidcng_docker_networks }}"
     mounts:

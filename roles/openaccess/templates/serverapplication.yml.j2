@@ -1,0 +1,208 @@
+---
+logging:
+  config: classpath:/logback-spring.xml
+
+server:
+  port: 8080
+  error:
+    path: "/error"
+    include-message: always
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        secure: false
+
+spring:
+  main:
+    banner-mode: "off"
+  session:
+    jdbc:
+      cleanup-cron: "-"
+      initialize-schema: always
+    store-type: jdbc
+    timeout: 8h
+  mvc:
+    log-request-details: false
+  security:
+    oauth2:
+      client:
+        registration:
+          oidcng:
+            client-id: {{ oidc_playground.client_id }}
+            client-secret: {{ oidc_playground.secret }}
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: "authorization_code"
+            scope: openid
+        provider:
+          oidcng:
+            authorization-uri: "https://connect.{{ base_domain }}/oidc/authorize"
+            token-uri: "https://connect.{{ base_domain }}/oidc/token"
+            user-info-uri: "https://connect.{{ base_domain }}/oidc/userinfo"
+            jwk-set-uri: "https://connect.{{ base_domain }}/oidc/certs"
+            user-name-attribute: sub
+            user-info-authentication-method: client_secret_basic
+  jpa:
+    properties:
+      hibernate:
+        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        format_sql: false
+        show_sql: false
+    open-in-view: false
+    show-sql: false
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://{{ openconextaccess.db.host }}/openconextaccess?autoReconnect=true
+    username: {{ openconextaccess.db.user }}
+    password: {{ openconextaccess.db.secret }}
+  flyway:
+    locations: classpath:db/mysql/migration
+    fail-on-missing-locations: true
+  mail:
+    host: {{ smtp_server }}
+
+oidcng:
+  discovery-url: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
+  introspect-url: "https://connect.test2.surfconext.nl/oidc/introspect"
+  resource-server-id: myconext.rs
+  resource-server-secret: secret
+  base-url: {{ openconextaccess_base_domain }}
+
+lifecycle:
+  user: lifecycle
+  password: {{ openconextaccess_lifecycle_secret }}
+
+jira:
+  enabled: true
+  base-url: {{ openconextaccess.jira.base_url }}
+  user-name: {{ openconextaccess.jira.username }}
+  project-key: {{ openconextaccess.jira.project_key }}
+  environment: {{ openconextaccess.jira.environment }}
+  api-key: {{ openconextaccess.jira.api_key }}
+  # Timeout in milliseconds
+  connection-timeout: 10000
+
+institution-admin:
+  entitlement: "urn:mace:surfnet.nl:surfnet.nl:sab:role:SURFconextverantwoordelijke"
+  organization-guid-prefix: "urn:mace:surfnet.nl:surfnet.nl:sab:organizationGUID:"
+
+config:
+  client-url: "https://{{ openconextaccess_base_domain }}"
+  base-url: "{{ base_domain }}"
+  edu_id_schac_home_organization: "eduid.nl"
+  discovery: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
+  invite: "https://invite.{{ base_domain }}"
+  sram: "https://{{ env }}.sram.surf.nl/"
+  serviceDesk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
+  # For other environments, move to group_vars
+  identity_providers:
+      - name: "SXS IdP"
+        entityid: "http://mock-idp"
+        descriptionEN: "Een test-IdP waarmee je zelf attributen-sets kunt simuleren. De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>"
+        descriptionNL: "Een test-IdP waarmee je zelf attributen-sets kunt simuleren. De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>"
+      - name: "SXS Dummy"
+        entityid: "https://idp.diy.surfconext.nl"
+        descriptionEN: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
+        descriptionNL: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
+  idp_proxy_meta_data:  https://metadata.test2.surfconext.nl/idp-metadata.xml
+  minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
+  features:
+    - name: idp
+      enabled: true
+    - name: invite
+      enabled: true
+    - name: sram
+      enabled: true
+    - name: mfa
+      enabled: true
+  acr_values:
+  {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}
+  - "{{ loa }}"
+  {% endfor %}
+
+eduid-idp-entity-id: "https://login.{{ myconext_base_domain }}"
+
+super-admin:
+  users:
+    - "urn:collab:person:example.com:admin"
+
+gui:
+  disclaimer:
+    background-color: {{ environment_ribbon_colour }}
+    content: {{ environment_shortname }}
+
+feature:
+  enable-performance-seed: False
+
+email:
+  from: "{{ noreply_email }}"
+  contactEmail: "{{ support_email }}"
+  serviceDeskEmail: "{{ support_email }}"
+  supportEmail: "support@surfconext.nl"
+  environment: "{{ environment_shortname }}"
+
+manage:
+  enabled: True
+  activeManage: TEST
+  test:
+    url: {{ openconextaccess.managetest.url }}
+    user: {{ openconextaccess.managetest.user }}
+    password: {{ openconextaccess.managetest.password }}
+    defaultState: prodaccepted
+  prod:
+    url: {{ openconextaccess.manageprod.url }}
+    user: {{ openconextaccess.manageprod.user }}
+    password: {{ openconextaccess.managetest.password }}
+    defaultState: testaccepted
+  # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
+  # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
+  staticManageDirectory: classpath:/manage
+  #  staticManageDirectory: file:///usr/local/etc/manage
+
+invite:
+  enabled: True
+  url: "https://invite.{{ base_domain }}"
+  user: {{ invite.access_user }}
+  password: "{{ invite.access_secret }}"
+
+# Todo relace with openconextaccess user
+statistics:
+  enabled: True
+  url: {{ dashboard.stats_url }}
+  user: {{ dashboard.stats_user }}
+  password: {{ stats_dashboard_api_password }}
+
+s3storage:
+  url: {{ openconextaccess.s3_storage.url }}
+  key: {{ openconextaccess.s3_storage.key }}
+  secret: {{ openconextaccess.s3_storage.secret }}
+  bucket: {{ openconextaccess.s3_storage.bucket }}
+
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,mappings,metrics"
+      base-path: "/internal"
+  endpoint:
+    info:
+      access: unrestricted
+    health:
+      access: unrestricted
+      show-details: always
+    mappings:
+      access: none
+    metrics:
+      access: none
+  info:
+    git:
+      mode: full
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"

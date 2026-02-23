@@ -83,6 +83,11 @@ parameters:
     api.users.deprovision.username: {{ engine_api_deprovision_user }}
     api.users.deprovision.password: {{ engine_api_deprovision_password | replace("%","%%") }}
 
+    ##########################################################################################
+    ## CLIENT SETTINGS
+    ##########################################################################################
+    ## Currently this is used for the outgoing requests with the PDP and AA client
+    http_client.timeout: {{ engine_http_client_timeout | int }}
 
     ##########################################################################################
     ## PDP SETTINGS
@@ -190,6 +195,7 @@ parameters:
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: {{ engine_time_frame_for_authentication_loop_in_seconds | int }}
     maximum_authentication_procedures_allowed: {{ engine_maximum_authentication_procedures_allowed | int }}
+    maximum_authentications_per_session:  {{ engine_maximum_authentications_per_session | int }}
 
     ## Store attributes with their values, meaning that if an Idp suddenly
     ## sends a new value (like a new e-mail address) consent has to be
@@ -230,7 +236,8 @@ parameters:
     feature_enable_consent: {{ engine_feature_enable_consent | bool | to_json }}
     feature_stepup_sfo_override_engine_entityid: {{ engine_feature_stepup_override_entityid | bool | to_json }}
     feature_enable_idp_initiated_flow: {{ engine_feature_idp_initiated_flow | bool | to_json }}
-    ##########################################################################################
+    feature_stepup_send_user_attributes: {{ engine_feature_send_user_attributes | bool | to_json }}
+  ##########################################################################################
     ## PROFILE SETTINGS
     ##########################################################################################
     ## Location of Profile
@@ -270,6 +277,11 @@ parameters:
     ## You can override the default entityID used by Engineblock for its callout to stepup gateway.
     ## You also need to enable the feature toggle feature_stepup_sfo_override_engine_entityid above.
     stepup.sfo.override_engine_entityid: '{{ engine_stepup_override_entityid }}'
+    ## The name of the SAML attributes to send to Stepup with the GSSP SAML extension when
+    ## feature_stepup_send_user_attributes is enabled
+    stepup.callout_user_attributes:
+      - urn:mace:dir:attribute-def:mail
+      - urn:mace:terena.org:attribute-def:schacHomeOrganization
 
     ##########################################################################################
     ## THEME SETTINGS

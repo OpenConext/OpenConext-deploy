@@ -31,5 +31,8 @@ manage_tabs_enabled:
   - single_tenant_template
   - provisioning
   - sram
+  - organisation
 manage_docker_networks:
   - name: loadbalancer
+manage_server_restart_policy: always
+manage_server_restart_retries: 0

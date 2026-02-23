@@ -1,0 +1,9 @@
+- name: restart accessserver
+  community.docker.docker_container:
+    name: accessserver
+    state: started
+    restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
+  when: accessservercontainer is success and accessservercontainer is not change
