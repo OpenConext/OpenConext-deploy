@@ -88,6 +88,10 @@
       - source: /opt/openconext/invite/public_key.pem
         target: /public_key.pem
         type: bind
+      - source: /opt/openconext/invite/crm_config.json
+        target: /crm_config.json
+        type: bind
+
     command: '-Xmx256M --spring.config.location=./'
     etc_hosts:
       host.docker.internal: host-gateway
