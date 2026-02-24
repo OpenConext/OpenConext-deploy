@@ -19,6 +19,14 @@
     - logback.xml
   notify: restart inviteserver
 
+- name: Copy CRM crm_config.json from inventory
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/invite/crm_config.json"
+    dest: "/opt/openconext/invite/crm_config.json"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
 - name: Copy private key for manage secrets encryption
   ansible.builtin.copy:
     content: "{{ invite_private_key_pkcs8 }}"
@@ -80,6 +88,10 @@
       - source: /opt/openconext/invite/public_key.pem
         target: /public_key.pem
         type: bind
+      - source: /opt/openconext/invite/crm_config.json
+        target: /crm_config.json
+        type: bind
+
     command: '-Xmx256M --spring.config.location=./'
     etc_hosts:
       host.docker.internal: host-gateway
