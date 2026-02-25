@@ -199,7 +199,9 @@ manage:
   #  staticManageDirectory: file:///usr/local/etc/manage
 
 springdoc:
-  pathsToMatch: "/api/external/v1/**"
+  pathsToMatch:
+    - "/api/external/v1/**"
+    - "/api/internal/v1/crm"
   api-docs:
     path: "/ui/api-docs"
   swagger-ui:
