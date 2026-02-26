@@ -99,6 +99,7 @@ oidcng:
 crm:
   api-key-header: "{{ invite_crm_api_key_header }}"
   collab-person-prefix: "urn:collab:person"
+  inviter-name: "SURF CRM"
   # The crm-config-resource can an absolute file path, e.g. file:///opt/openconext/invite/crm_config.json or
   # a classpath entry
   crm-config-resource: "file:///crm_config.json"
@@ -199,7 +200,9 @@ manage:
   #  staticManageDirectory: file:///usr/local/etc/manage
 
 springdoc:
-  pathsToMatch: "/api/external/v1/**"
+  pathsToMatch:
+    - "/api/external/v1/**"
+    - "/api/internal/v1/crm"
   api-docs:
     path: "/ui/api-docs"
   swagger-ui:
