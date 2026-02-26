@@ -96,6 +96,14 @@ oidcng:
   resource-server-secret: "{{ invite.resource_server_secret }}"
   base-url: https://invite.{{ base_domain }}
 
+crm:
+  api-key-header: "{{ invite_crm_api_key_header }}"
+  collab-person-prefix: "urn:collab:person"
+  inviter-name: "SURF CRM"
+  # The crm-config-resource can an absolute file path, e.g. file:///opt/openconext/invite/crm_config.json or
+  # a classpath entry
+  crm-config-resource: "file:///crm_config.json"
+
 super-admin:
   users: {{ invite.super_admins }}
 
@@ -120,7 +128,8 @@ config:
   eduid-idp-schac-home-organization: {{ invite.eduid_idp_schac_home_organization }}
   # Determines the languages available for switching language, supported are 'nl', 'en' and 'pt'
   languages: "nl, en"
-  environment: ${gui.disclaimer.content}
+  environment: {{ environment_shortname }}
+
 
 feature:
   limit-institution-admin-role-visibility: {{ invite.limit_institution_admin_role_visibility }}
@@ -191,7 +200,9 @@ manage:
   #  staticManageDirectory: file:///usr/local/etc/manage
 
 springdoc:
-  pathsToMatch: "/api/external/v1/**"
+  pathsToMatch:
+    - "/api/external/v1/**"
+    - "/api/internal/v1/crm"
   api-docs:
     path: "/ui/api-docs"
   swagger-ui:
