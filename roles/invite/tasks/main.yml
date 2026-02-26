@@ -26,6 +26,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
+  notify: restart inviteserver
 
 - name: Copy private key for manage secrets encryption
   ansible.builtin.copy:
