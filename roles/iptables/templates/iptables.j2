@@ -24,86 +24,19 @@
 -A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
 {% endfor %}
 
-{% if iptables_incoming_lb is defined %}
-### Loadbalancer rules
-{% for service in iptables_incoming_lb %}
+
+{# select all variables that start with iptables_incoming_ and put them in a dict #}
+{% set iptables_all = vars | dict2items | selectattr('key', 'match', '^iptables_incoming_') | list | items2dict %}
+
+{% for name, rules in iptables_all.iteritems() %}
+### Rules from {{ name }}
+{% for service in rules %}
 {{'##'|e }} {{ service.name }}
 {{'##'|e }} {{'=' * service.name|length }}
 -A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }} {{'-d '+service.destination if service.destination is defined else ''}}  -j ACCEPT
 {% endfor %}
-{% endif %}
-
-{% if iptables_incoming_php is defined %}
-### PHP apps rules
-{% for service in iptables_incoming_php %}
-{{'##'|e }} {{ service.name }}
-{{'##'|e }} {{'=' * service.name|length }}
--A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
 {% endfor %}
-{% endif %}
 
-{% if iptables_incoming_stepup is defined %}
-### STEPUP apps rules
-{% for service in iptables_incoming_stepup %}
-{{'##'|e }} {{ service.name }}
-{{'##'|e }} {{'=' * service.name|length }}
--A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
-{% endfor %}
-{% endif %}
-
-{% if iptables_incoming_java is defined %}
-### JAVA apps rules
-{% for service in iptables_incoming_java %}
-{{'##'|e }} {{ service.name }}
-{{'##'|e }} {{'=' * service.name|length }}
--A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
-{% endfor %}
-{% endif %}
-
-{% if iptables_incoming_db_mongo is defined %}
-### Mongo rules
-{% for service in iptables_incoming_db_mongo %}
-{{'##'|e }} {{ service.name }}
-{{'##'|e }} {{'=' * service.name|length }}
--A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
-{% endfor %}
-{% endif %}
-
-{% if iptables_incoming_db_galera is defined %}
-### Galera rules
-{% for service in iptables_incoming_db_galera %}
-{{'##'|e }} {{ service.name }}
-{{'##'|e }} {{'=' * service.name|length }}
--A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
-{% endfor %}
-{% endif %}
-
-{% if iptables_incoming_elk is defined %}
-### ELK rules
-{% for service in iptables_incoming_elk %}
-{{'##'|e }} {{ service.name }}
-{{'##'|e }} {{'=' * service.name|length }}
--A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
-{% endfor %}
-{% endif %}
-
-{% if iptables_incoming_extra is defined %}
-### Optional extra rules for flexibility
-{% for service in iptables_incoming_extra %}
-{{'##'|e }} {{ service.name }}
-{{'##'|e }} {{'=' * service.name|length }}
--A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
-{% endfor %}
-{% endif %}
-
-{% if iptables_incoming_hostspecific is defined %}
-### Host specific rules
-{% for service in iptables_incoming_hostspecific %}
-{{'##'|e }} {{ service.name }}
-{{'##'|e }} {{'=' * service.name|length }}
--A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
-{% endfor %}
-{% endif %}
 
 {% if 'loadbalancer' in group_names %}
 ### Allow VRRP
