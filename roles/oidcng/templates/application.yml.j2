@@ -39,6 +39,9 @@ server:
     max-http-form-post-size: 10000000
     max-swallow-size: 10000000
 
+# Maximum length of query parameters in bytes for authorization endpoint
+max-query-param-size: 8184
+
 mongodb_db: {{ oidcng.mongo_database }}
 oidc_saml_mapping_path: file://{{ oidcng_config_dir }}/oidc_saml_mapping.json
 openid_configuration_path: file://{{ oidcng_config_dir }}/openid-configuration.json
