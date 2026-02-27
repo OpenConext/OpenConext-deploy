@@ -93,7 +93,8 @@ config:
   discovery: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
   invite: "https://invite.{{ base_domain }}"
   sram: "https://{{ env }}.sram.surf.nl/"
-  serviceDesk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
+  service_desk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
+  feedback_widget_enabled: true
   # For other environments, move to group_vars
   identity_providers:
       - name: "SXS IdP"

@@ -39,12 +39,12 @@ Every application has a seperate role to install it. The following roles can be 
 | stepupra              | Stepup ra interface            |
 | stepupselfservice     | Stepup selfservice interface   |
 
-All these applications run in Docker. You can use the "docker" role to install docker and Traefik. The result is a Docker application server, with port 443 open. Applications are served by Traefik and recognized on basis of a Host: header. If you run a small installation, you can add a https certificate to Traefik and run a single node application server. 
+All these applications run in Docker. You can use the "docker" role to install docker and Traefik. The result is a Docker application server, with port 443 open. Applications are served by Traefik and recognized on basis of a Host: header. If you run a small installation, you can add a https certificate to Traefik and run a single node application server.
 
-For a fully functioning environment you also need a MariaDB database server and a Mongo database server. 
+For a fully functioning environment you also need a MariaDB database server and a Mongo database server.
 
 ## Infra roles
-This repository is used for deployment of SURFconext, and several roles that the SURFconext teams uses to provision our infrastructure are provided here as well. You can use them for your own infrastructure or use them as inspiration. 
+This repository is used for deployment of SURFconext, and several roles that the SURFconext teams uses to provision our infrastructure are provided here as well. You can use them for your own infrastructure or use them as inspiration.
 | name         | remarks                                                                      |
 | ---          | ---                                                                          |
 | bind         | DNS server for high availability. Very specific for SURFconext               |
@@ -59,40 +59,93 @@ This repository is used for deployment of SURFconext, and several roles that the
 | mongo        | Install a mongo cluster  (has its own README)                                |
 | manage_provision_entities|Provision entities to Manage                                      |
 
-# Environment specific variables
-Many variables can be overridden to create a setup suitable for your needs. The environment should be placed in the directory environments_external. 
+# Setting up your environment
+Many variables can be overridden to create a setup suitable for your needs. We will explain the setup here for one environment or for a multi-environment (OTAP for example) setup.
 
-A script is available to provision a new environment. It will create a new environment directory under environments-external/ and it will create all necessary passwords and (self-signed) certificates. Replace <environment> with the name of the target. Replace <domain> with the domain of the target.
+The setup descibed below should work, but when using ansible many paths lead to Rome. If you want to know more about variables and where to save them, this can be helpfull: https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
 
+## Inventory
+You need an inventory file for your environment or multiple inventory files if you have multiple environments. An example can be found in environments/template
 
-```
-/prep-env <environment> <domain>
-```
-Then run
-```
-cp environments-external/<environment>/host_vars/template.yml environments-external/<environment>/host_vars/<target_ip>.yml
-```
-(where <target_ip> is the ip address or hostname of your target machine, whatever is set in your inventory file)
+## Playbook
+You can use the provision.yml script to deploy all infra and application roles. Every play has a tag so you can deploy your environment one application at a time by using the specific tag. You can also use your own playbooks if you prefer.
 
-Change in environments-external/<environment>/inventory:
-Change all references from %target_host% to <target_ip>
+## First steps
+Clone the repository with git.
 
-```
-Please note that this has not been tested in quite a while. You will need a lot of manual work to get this environment working
+```bash
+cd yourdir
+git clone https://github.com/OpenConext/OpenConext-deploy.git
 ```
 
+Create ansible.cfg in your directory and add Openconext-deploy/roles to your roles_path
 
-# Playbooks, tags and the provision wrapper script
-
-Two playbooks exist in this repository: provision.yml and playbook_haproxy.yml. The latter can be used to do red/blue deployments if you also use our haproxy role.
-The main playbook is provision.yml. It contains series of plays to install every role on the right node. All roles are tagged, so you can use the [Ansible tag mechanism](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html) to deploy a specific role. 
-
-If you would like to deploy manage to your test environment, you would run:
-```
-ansible-playbook -i environments-external/test/inventory --tags manage -u THE_REMOTE_SSH_USER_WITH_SUDO_PERMISSIONS
+```bash
+[defaults]
+diff = true
+roles_path = OpenConext-deploy/roles # Add your own roles directory if you want
 ```
 
-A wrapper script which enables you to use your own roles can be used as well. That is documented here: https://github.com/OpenConext/OpenConext-deploy/wiki/Add-your-own-roles-and-playbooks 
+## One environment
+Copy the inventory, host and group files from environment/template to your directory and adjust them according to your preferences:
+
+```bash
+cp -R OpenConext-deploy/environments/template/* .
+```
+
+Edit your inventory file  
+Edit group_var and host_var files if necessary  
+
+Create an ansible vault in secrets and name it secrets.yml, an unencrypted example can be found in secrets/secret_example.yml  
+More information about vaults: https://docs.ansible.com/projects/ansible/latest/vault_guide/index.html
+The final setup will look like this:  
+
+- group_vars/all.yml
+- group_vars/\<GROUPNAME\>.yml
+- secrets/secrets.yml
+- host_vars/\<HOSTNAME\>/yml
+- inventory
+- Openconext-deploy/provision.yml
+- Openconext-deploy/roles
+- \<YOUROWNOPTIONALPLAYBOOKS\>.yml
+- ansible.cfg
+
+You can use the provision playbook now:
+
+```bash
+ansible-playbook OpenConext-deploy/provision.yml -i inventory -t <TAG> --ask-vault-password
+```
+
+## Multi-environment
+Copy the inventory and group files from environment/template to your directory and adjust them according to your preferences:
+
+```bash
+mkdir <ENVIRONMENT> # test for example
+cp -R OpenConext-deploy/environments/template/* <ENVIRONMENT>
+# etc...
+```
+Edit your inventory files  
+Edit group_var and host_var files if necessary  
+
+For each environment create an ansible vault in secrets and name it secrets.yml, an unencrypted example can be found in secrets/secret_example.yml  
+More information about vaults: https://docs.ansible.com/projects/ansible/latest/vault_guide/index.html
+
+The final setup will look like this:  
+
+- \<ENVIRONMENT\>/group_vars/all.yml
+- \<ENVIRONMENT\>/group_vars/\<GROUPNAME\>.yml
+- \<ENVIRONMENT\>/host_vars/\<HOSTNAME\>/yml
+- \<ENVIRONMENT\>/inventory
+- Openconext-deploy/provision.yml
+- Openconext-deploy/roles
+- \<YOUROWNOPTIONALPLAYBOOKS\>.yml
+- ansible.cfg
+
+You can use the provision playbook now:
+
+```bash
+ansible-playbook OpenConext-deploy/provision.yml -i <ENVIRONMENT>/inventory -t <TAG> --ask-vault-password
+```
 
 # License
 
