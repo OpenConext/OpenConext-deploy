@@ -211,11 +211,16 @@
     - galera_bootstrap_node == inventory_hostname
 
 #  Add cluster user
+# todo: this task shows a change in --check mode although it is not necessarily 
+# changing anything for real, skipping in check mode is also not ideal
+# maybe add a task that runs in check mode that only checks for presence of the user
+# also, run_once could break things if there would be multiple galera clusters
+# not sure whether its important though..
 - name: add mariadb cluster sst user
   mysql_user:
     name: "{{ mariadb_cluster_user }}"
     password: "{{ mariadb_cluster_password }}"
-    priv: "{{ mariadb_cluster_user_privs | default('*.*:RELOAD,PROCESS,LOCK TABLES,BINLOG MONITOR,REPLICA MONITOR') }}"
+    priv: "{{ mariadb_cluster_user_privs | default('*.*:RELOAD,PROCESS,LOCK TABLES,BINLOG MONITOR,SLAVE MONITOR') }}"
     state: present
     login_user: root
     login_password: "{{ mariadb_root_password  }}"
@@ -233,7 +238,7 @@
     login_user: root
     login_password: "{{ mariadb_root_password }}"
     login_unix_socket: /var/lib/mysql/mysql.sock
-  run_once: true
+  run_once: true # run once because it is synced to other cluster nodes
   no_log: true
 
 - name: Add Galera clustercheck user, used for keepalived to connect
@@ -245,7 +250,7 @@
     login_user: root
     login_password: "{{ mariadb_root_password }}"
     login_unix_socket: /var/lib/mysql/mysql.sock
-  run_once: true
+  run_once: true # run once because it is synced to other cluster nodes
   no_log: true
 
 - name: Create the backup directory
@@ -282,7 +287,7 @@
     login_unix_socket: /var/lib/mysql/mysql.sock
   with_items:
     - "{{ databases.names }}"
-  run_once: true
+  run_once: true # run once because it is synced to other cluster nodes
   tags: galera_create_db
 
 - name: MySQL my.cnf
