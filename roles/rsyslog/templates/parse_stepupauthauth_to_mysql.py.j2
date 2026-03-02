@@ -1,0 +1,133 @@
+#!/usr/bin/python3
+# This script parses rotated stepup-authentication.log files produced by engineblock.
+# It filters for successful logins (authentication_result:OK) and inserts the data
+# into the log_logins and last_login MySQL tables.
+# This script is intended to be run separately during logrotate.
+
+import os
+import sys
+import json
+import MySQLdb
+from dateutil.parser import parse
+
+# Configuration variables (to be injected by Ansible/Jinja2)
+mysql_host="{{ item.db_loglogins_host }}"
+mysql_user="{{ item.db_loglogins_user }}"
+mysql_password="{{ item.db_loglogins_password }}"
+mysql_db="{{ item.db_loglogins_name }}"
+workdir="{{ rsyslog_dir }}/log_logins/{{ item.name}}/"
+
+# Establish database connection
+try:
+    db = MySQLdb.connect(mysql_host,mysql_user,mysql_password,mysql_db )
+    cursor = db.cursor()
+except Exception as e:
+    print(f"Error connecting to MySQL: {e}")
+    sys.exit(1)
+
+# --- Database Functions ---
+
+def update_lastseen(user_id, date):
+    """
+    Updates the last_login table.
+    Uses GREATEST() to ensure only newer dates overwrite the existing 'lastseen' value.
+    """
+    query = """
+    INSERT INTO last_login (userid, lastseen)
+    VALUES (%s, %s)
+    ON DUPLICATE KEY UPDATE
+    lastseen = GREATEST(lastseen, VALUES(lastseen))
+    """
+    try:
+        cursor.execute(query, (user_id, date))
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"Error updating last_login for user {user_id}: {e}")
+
+def load_stepup_in_mysql(idp, sp, loginstamp, userid, requestid):
+    """
+    Inserts Step-up login data into the log_logins table.
+    Fills keyid, sessionid, and trustedproxyentityid with NULL.
+    """
+    # Columns in log_logins: idpentityid, spentityid, loginstamp, userid, keyid, sessionid, requestid, trustedproxyentityid
+
+    keyid = None
+    sessionid = None
+    trustedproxyentityid = None
+
+    sql = """
+    INSERT INTO log_logins(idpentityid, spentityid, loginstamp, userid, keyid, sessionid, requestid, trustedproxyentityid)
+    VALUES(%s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    try:
+        cursor.execute(sql, (idp, sp, loginstamp, userid, keyid, sessionid, requestid, trustedproxyentityid))
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"Error inserting stepup data: {e}")
+        # Print the data that failed insertion
+        print((idp, sp, loginstamp, userid, keyid, sessionid, requestid, trustedproxyentityid))
+
+# --- Parsing Function ---
+
+def parse_stepup_lines(a):
+    """
+    Opens the stepup log file, parses each line, filters for successful logins,
+    and loads the data into MySQL.
+    """
+    input_file = open((a), 'r')
+    for line in input_file:
+        try:
+            # Assumes JSON data starts after the first ']:'
+            jsonline = line.split(']:',2)[1]
+            data = json.loads(jsonline)
+        except:
+            continue
+
+        # 1. Filtering condition: Only parse logs having authentication_result:OK
+        if data.get("authentication_result") != "OK":
+            continue
+
+        # 2. Extract required fields
+        user_id = data.get("identity_id")
+        timestamp = data.get("datetime")
+        request_id = data.get("request_id")
+        sp_entity_id = data.get("requesting_sp")
+        idp_entity_id = data.get("authenticating_idp")
+
+        # Basic data validation
+        if not user_id or not timestamp:
+            continue
+
+        try:
+            # 3. Format date and time for MySQL
+            loginstamp = parse(timestamp).strftime("%Y-%m-%d %H:%M:%S")
+            last_login_date = parse(timestamp).strftime("%Y-%m-%d")
+        except:
+            continue
+
+        # 4. Insert into MySQL
+        load_stepup_in_mysql(idp_entity_id, sp_entity_id, loginstamp, user_id, request_id)
+
+        # 5. Update last login date
+        update_lastseen(user_id, last_login_date)
+
+
+# --- Main Execution ---
+
+## Loop over the files and parse them one by one
+for filename in os.listdir(workdir):
+    filetoparse=(os.path.join(workdir, filename))
+
+    # Check for Stepup files, ignore compressed files
+    if os.path.isfile(filetoparse) and filename.startswith("stepup-authentication.log-") and not filename.endswith(".gz"):
+        print(f"Parsing stepup log file: {filename}")
+        parse_stepup_lines(filetoparse)
+    else:
+        continue
+
+# Close database connection
+cursor.close()
+db.close()
+print("Stepup log parsing complete.")
