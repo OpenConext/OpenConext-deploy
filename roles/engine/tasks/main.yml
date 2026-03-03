@@ -222,7 +222,7 @@
         target: "/var/www/html/languages/overrides.nl.php"
         type: bind
       - source: "{{ _engine_config_dir }}/configs/attributes.json"
-        target: "/var/www/html/app/config/attributes.json"
+        target: "{{ _engine_container_config_dir }}/attributes.json"
         type: bind
       - source: "{{ _engine_config_dir }}/images/background-back.svg"
         target: "/var/www/html/web/images/background-back.svg"
@@ -239,8 +239,8 @@
       - source: "/opt/openconext/common/favicon.ico"
         target: "/var/www/html/web/favicon.ico"
         type: bind
-      - source: engineblock_sessions
-        target: /tmp/
+      - source: "engineblock_sessions"
+        target: "/tmp/"
         type: volume
     healthcheck:
       test: ["CMD-SHELL", "curl --fail -s http://localhost/internal/health | grep -q '\"status\":\"UP\"'"]

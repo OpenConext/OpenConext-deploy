@@ -1,3 +1,3 @@
-_engine_config_dir: /opt/openconext/engine
-_engine_container_config_dir: /var/www/html/app/config
-_engine_container_certs_dir: /var/www/html/certs
+_engine_config_dir: "/opt/openconext/engine"
+_engine_container_config_dir: "/var/www/html/config/packages/prod/"
+_engine_container_certs_dir: "/var/www/html/certs"
