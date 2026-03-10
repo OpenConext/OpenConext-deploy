@@ -14,13 +14,13 @@
 
 - name: Create directory to save the logs
   file:
-    path: "{{rsyslog_dir }}"
+    path: "{{ rsyslog_dir }}"
     owner: root
     group: "{{ rsyslog_read_group }}"
     mode: "0750"
     recurse: true
 
-- name: put rsyslog client certificate
+- name: Put rsyslog client certificate
   copy:
     src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogserver.crt"
     dest: "/etc/pki/rsyslog/rsyslogserver.crt"
@@ -49,28 +49,53 @@
   template:
     src: sc_template.conf.j2
     dest: /etc/rsyslog.d/templates/{{ item.name }}.conf
+    backup: true
   with_items: "{{ rsyslog_environments }}"
+  notify:
+    - "restart rsyslog"
 
 - name: Create ruleset configurations
   template:
     src: sc_ruleset.conf.j2
     dest: /etc/rsyslog.d/rulesets/{{ item.name }}.conf
+    backup: true
   with_items: "{{ rsyslog_environments }}"
+  notify:
+    - "restart rsyslog"
 
 - name: Create sc listener configurations
   template:
     src: listener.conf.j2
     dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
+    backup: true
   with_items: "{{ rsyslog_environments }}"
+  notify:
+    - "restart rsyslog"
 
 - name: Create logrotate file for apps and host logs
   template:
     src: centralsyslog.j2
     dest: /etc/logrotate.d/centralsyslog
 
-- name: put ryslog config file
+- name: Put ryslog config file
   template:
     src: "rsyslog.conf.j2"
     dest: "/etc/rsyslog.conf"
   notify:
     - "restart rsyslog"
+
+- name: Put log empty warn script and cronjob
+  when: rsyslog_enable_warn_empty_script
+  block:
+    - name: Put log empty script
+      ansible.builtin.template:
+        src: warn-empty-log.sh.j2
+        dest: "{{ rsyslog_checkemptylogs_dir }}/warn-empty-log.sh"
+        backup: True
+    - name: Create cronjob
+      ansible.builtin.cron:
+        name: "check empty logs"
+        minute: "{{ rsyslog_checkemptylogs_cron_minute }}"
+        hour: "{{ rsyslog_checkemptylogs_cron_hour }}"
+        weekday: "{{ rsyslog_checkemptylogs_cron_weekdays }}"
+        job: "{{ rsyslog_checkemptylogs_dir }}/warn-empty-log.sh -m"

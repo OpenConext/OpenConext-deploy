@@ -1,88 +1,29 @@
 ---
 # In this task file keys and certificates for the
-# mongo servers are created and signed with the ca from ca.yml
-- name: Install some packages
-  ansible.builtin.yum:
-    name:
-      - python3
-      - python3-pip
-    state: present
-
-- name: Install python36-cryptography on CentOS7
-  ansible.builtin.yum:
-    name:
-      - python36-cryptography
-    state: present
-  when: ansible_distribution_major_version == '7'
-
-- name: Install python36-cryptography on Rocky 8 and 9
-  ansible.builtin.yum:
-    name:
-      - python3-cryptography
-    state: present
-  when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
+# mongo servers are distributed
 
 - name: Create directory to keep mongo key material
   ansible.builtin.file:
-    dest: "/etc/pki/mongo/"
+    dest: "{{ mongo_pki_dir }}"
     state: directory
     owner: root
     group: root
     mode: "0775"
 
-- name: Create private keys
-  community.crypto.openssl_privatekey:
-    path: "/etc/pki/mongo/mongo.key"
-
-- name: Check whether certificate exists
-  ansible.builtin.stat:
-    path: "/etc/pki/mongo/mongo.pem"
-  register: certificate_exists
-
-- name: Create certificate signing request (CSR) for new certificate
-  community.crypto.openssl_csr_pipe:
-    privatekey_path: "/etc/pki/mongo/mongo.key"
-    subject_alt_name:
-      - "{{ mongo_tls_host_altname_dnsorip | default('DNS') }}:{{ inventory_hostname }}"
-    organizational_unit_name: "{{ instance_name }}"
-  register: csr
-  changed_when: false
-
-- name: Read existing certificate if exists
-  ansible.builtin.slurp:
-    src: /etc/pki/mongo/mongo.pem
-  when: certificate_exists.stat.exists
-  register: certificate
-
-- name: Sign certificate with our CA
-  community.crypto.x509_certificate_pipe:
-    content: "{{ (certificate.content | b64decode) if certificate_exists.stat.exists else omit }}"
-    csr_content: "{{ csr.csr }}"
-    provider: ownca
-    ownca_path: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
-    ownca_privatekey_path: "{{ inventory_dir }}/secrets/mongo/mongoca.key"
-    ownca_privatekey_passphrase: "{{ mongo_ca_passphrase }}"
-    ownca_not_after: +3650d  # valid for ten years
-    ownca_not_before: "-1d"  # valid since yesterday
-  delegate_to: localhost
-  register: certificate
-  ignore_errors: '{{ ansible_check_mode }}'
-  become: false
-
-- name: Write certificate file
-  ansible.builtin.copy:
-    dest: /etc/pki/mongo/mongo.pem
-    content: "{{ certificate.certificate }}"
+- name: Distribute mongo cluster key and cert
+  ansible.builtin.template:
+    src: keyandcert.pem.j2
+    dest: "{{ mongo_pki_dir }}/keyandcert.pem"
     owner: root
-    group: root
-    mode: "0400"
-  when: certificate is changed
+    group: "{{ mongo_group }}"
+    mode: "0440"
+  notify: Restart mongod
 
-- name: Install the CA certificate
+- name: Copy ca pem file
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
-    dest: /etc/pki/mongo/mongoca.pem
+    dest: "{{ mongo_pki_dir }}/mongoca.pem"
     owner: root
     group: root
     mode: "0644"
-  notify: restart mongod
+  notify: Restart mongod

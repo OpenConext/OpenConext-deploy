@@ -1,0 +1,12 @@
+---
+replica_set_name: my_mongo_cluster
+
+mongo_cluster_members:
+  - host: "mongo3.example.com:{{ mongo_port }}" # arbiter first or change mongo_arbiter_index
+    priority: 1 # can vote, cannot become primary
+  - host: "mongo2.example.com:{{ mongo_port }}"
+    priority: 2
+  - host: "mongo1.example.com:{{ mongo_port }}"
+    priority: 3
+
+# mongo_arbiter_index # default is 0
