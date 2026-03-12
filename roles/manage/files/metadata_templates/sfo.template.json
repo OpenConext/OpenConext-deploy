@@ -8,5 +8,7 @@
   "assertion_encryption_enabled": false,
   "second_factor_only": true,
   "second_factor_only_nameid_patterns": [],
-  "blacklisted_encryption_algorithms": []
+  "blacklisted_encryption_algorithms": [],
+  "allow_sso_on_2fa": true,
+  "set_sso_cookie_on_2fa": true
 }
