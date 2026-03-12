@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "sfo",
+  "order": 10,
+  "type": "object",
+  "properties": {
+    "eid": {
+      "type": "number"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entityid": {
+      "type": "string",
+      "minLength": 1
+    },
+    "public_key": {
+      "type": "string",
+      "format": "certificate",
+      "info": "The supplied public certificate of the institution. This must be a PEM encoded certificate. DER, CRT or CER are not supported."
+    },
+    "acs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "url"
+      },
+      "info": "The ACS locations of this institution."
+    },
+    "loa": {
+      "type": "string",
+      "enum": [
+        "http://test.surfconext.nl/assurance/loa1.5",
+        "http://test.surfconext.nl/assurance/loa2",
+        "http://test.surfconext.nl/assurance/loa3"
+      ],
+      "default": "http://test.surfconext.nl/assurance/loa2"
+    },
+    "assertion_encryption_enabled": {
+      "type": "boolean"
+    },
+    "second_factor_only": {
+      "type": "boolean"
+    },
+    "second_factor_only_nameid_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blacklisted_encryption_algorithms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "revisionid": {
+      "type": "number"
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "revisionnote": {
+      "type": "string"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metaDataFields": {
+      "type": "object",
+      "properties": {},
+      "patternProperties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "name",
+    "entityid",
+    "public_key",
+    "acs",
+    "loa"
+  ],
+  "additionalProperties": false,
+  "indexes": []
+}

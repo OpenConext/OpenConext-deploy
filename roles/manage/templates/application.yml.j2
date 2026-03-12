@@ -53,6 +53,13 @@ push:
     user: {{ pdp.username }}
     password: "{{ pdp.password }}"
     enabled: {{ manage.pdp_push_enabled }}
+  stepup:
+    url: https://middleware.{{ base_domain }}
+    user: {{ manage.middleware_user }}
+    configuration_file: "file:///stepup_config.json"
+    password: {{ manage_middleware_password }}
+    enabled:  {{ manage.stepup_push_enabled }}
+
 
 product:
   name: Manage
