@@ -13,7 +13,7 @@ monolog:
     # It excludes the 'authentication' channel to avoid duplicate logging of authentication events.
     main:
       type: fingers_crossed
-      activation_strategy: "OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy"
+      activation_strategy: 'OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy'
       passthru_level: {{ engine_logging_passthru_level }}
       handler: nested
       level: info
@@ -24,7 +24,7 @@ monolog:
       type: stream
       level: {{  "debug" if engine_debug | bool else "info" }}
       path: "php://stderr"
-      formatter: "OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter"
+      formatter: 'OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter'
 
     # authentication log, totally separate from the previous rules
     # It only handles the 'authentication' channel.
@@ -33,7 +33,7 @@ monolog:
       path: "php://stderr"
       level: info
       channels: [ authentication ]
-      formatter: "OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter"
+      formatter: 'OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter'
 
     # console log, totally separate from the previous rules
     # It excludes specific channels that are handled elsewhere or are too noisy in the console.
