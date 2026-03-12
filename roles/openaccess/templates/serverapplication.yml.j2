@@ -172,6 +172,13 @@ s3storage:
   secret: {{ openconextaccess.s3_storage.secret }}
   bucket: {{ openconextaccess.s3_storage.bucket }}
 
+statistics:
+  enabled: {{ openconextaccess.statistics.enabled }}
+  url: {{ openconextaccess.statistics.url }}
+  user: {{ openconextaccess.statistics.user }}
+  password: {{ openconextaccess.statistics.password }}
+
+
 management:
   health:
     mail:
