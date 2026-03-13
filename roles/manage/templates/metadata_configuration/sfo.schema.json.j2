@@ -31,11 +31,11 @@
     "loa": {
       "type": "string",
       "enum": [
-        "http://test.surfconext.nl/assurance/loa1.5",
-        "http://test.surfconext.nl/assurance/loa2",
-        "http://test.surfconext.nl/assurance/loa3"
-      ],
-      "default": "http://test.surfconext.nl/assurance/loa2"
+            {% for loa in stepup_loa_values_supported %}
+            "{{ loa }}"{{ "," if not loop.last else ""}}
+            {% endfor %}
+          ],
+      "default": "{{ stepup_loa_values_supported[0] }}",
     },
     "assertion_encryption_enabled": {
       "type": "boolean"

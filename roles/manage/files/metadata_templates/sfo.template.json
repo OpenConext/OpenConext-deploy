@@ -4,7 +4,7 @@
   "metaDataFields": {},
   "public_key": "",
   "acs": [],
-  "loa": "http://test.surfconext.nl/assurance/loa2",
+  "loa": "{{ stepup_loa_values_supported[0] }}",
   "assertion_encryption_enabled": false,
   "second_factor_only": true,
   "second_factor_only_nameid_patterns": [],
