@@ -29,8 +29,8 @@ spring:
       client:
         registration:
           oidcng:
-            client-id: {{ openconextaccess.oidcng.client_id }}
-            client-secret: {{ openconextaccess.oidcng.secret }}
+            client-id: {{ oidc_playground.client_id }}
+            client-secret: {{ oidc_playground.secret }}
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: "authorization_code"
             scope: openid
