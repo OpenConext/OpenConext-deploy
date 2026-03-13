@@ -31,7 +31,7 @@
     "loa": {
       "type": "string",
       "enum": [
-            {% for loa in stepup_loa_values_supported %}
+            {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}
             "{{ loa }}"{{ "," if not loop.last else ""}}
             {% endfor %}
           ],
