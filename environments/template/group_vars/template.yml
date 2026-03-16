@@ -1,7 +1,6 @@
 ---
 
 env: "%env%"
-show_debug_info: false # Show extra debug info
 mariadb_host: localhost
 rsyslog_host: localhost
 database_clients: [ "{{ mariadb_host }}" ]
