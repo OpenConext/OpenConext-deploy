@@ -1,0 +1,32 @@
+[Unit]
+Description=SBS
+After=network.target
+
+[Service]
+DynamicUser=true
+User=_sram_sbs
+Group=_sram_sbs
+SupplementaryGroups={{sbs_group}}
+
+WorkingDirectory={{sbs_git_dir}}
+ReadWritePaths={{sbs_log_dir}}
+NoNewPrivileges=true
+PrivateTmp=true
+
+Environment="CONFIG=config/config.yml"
+Environment="PROFILE=log_to_stdout"
+# the python requests module uses the CAs provided by the certifi package by default
+# we'll just take the OS-provided CAs, thankyouverymuch
+Environment="REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt"
+
+Type=notify
+ExecStart={{sbs_env_dir}}/bin/gunicorn --worker-class eventlet --workers {{sbs_num_workers}} --bind 127.0.0.1:8080 server.__main__:app
+
+Restart=on-failure
+RestartSec=10
+
+KillMode=mixed
+TimeoutStopSec=5
+
+[Install]
+WantedBy=multi-user.target
