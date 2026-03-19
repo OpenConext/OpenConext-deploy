@@ -1,0 +1,22 @@
+{
+    "strict": true,
+    "debug": true,
+    "sp": {
+        "entityId": "{{ sbs_surf_secure_id.sp_entity_id }}",
+        "assertionConsumerService": {
+            "url": "{{ sbs_surf_secure_id.acs_url }}",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        },
+        "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+        "x509cert": "{{ sbs_surf_secure_id.pub | barepem }}",
+        "privateKey": "{{ sbs_surf_secure_id.priv | barepem }}"
+    },
+    "idp": {
+        "entityId": "{{ sbs_ssid_entityid }}",
+        "singleSignOnService": {
+            "url": "{{ sbs_ssid_sso_endpoint }}",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "x509cert": "{{ sbs_surf_secure_id.sa_idp_certificate | barepem }}"
+    }
+}

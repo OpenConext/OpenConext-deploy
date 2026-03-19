@@ -1,0 +1,35 @@
+{
+    "security": {
+        "nameIdEncrypted": false,
+        "authnRequestsSigned": true,
+        "logoutRequestSigned": false,
+        "logoutResponseSigned": false,
+        "signMetadata": false,
+        "wantMessagesSigned": false,
+        "wantAssertionsSigned": true,
+        "wantNameId" : true,
+        "wantNameIdEncrypted": false,
+        "wantAttributeStatement": false,
+        "wantAssertionsEncrypted": false,
+        "requestedAuthnContext": ["{{sbs_ssid_authncontext}}"],
+        "requestedAuthnContextComparison": "minimum",
+        "failOnAuthnContextMismatch": false,
+        "allowSingleLabelDomains": false,
+        "signatureAlgorithm": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+        "digestAlgorithm": "http://www.w3.org/2001/04/xmlenc#sha256",
+        "rejectDeprecatedAlgorithm": true
+    },
+    "contactPerson": {
+        "technical": {
+            "givenName": "{{ mail.admin_name }}",
+            "emailAddress": "{{ mail.admin_address }}"
+        }
+    },
+    "organization": {
+        "en-US": {
+            "name": "{{ org.name }}",
+            "displayname": "{{ org.name }}",
+            "url": "{{ org.url }}"
+        }
+    }
+}
