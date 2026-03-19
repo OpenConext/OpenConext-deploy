@@ -1,0 +1,61 @@
+---
+- name: "Create redis group"
+  group:
+    name: "{{ redis.group }}"
+    state: "present"
+  register: "result"
+
+- name: "Save redis group gid"
+  set_fact:
+    redis_group_gid: "{{ result.gid }}"
+
+- name: "Create redis user"
+  user:
+    name: "{{ redis.user }}"
+    group: "{{ redis.group }}"
+    comment: "User to run SRAM Redis service"
+    shell: "/bin/false"
+    password: "!"
+    home: "{{ redis.conf_dir }}"
+    create_home: false
+    state: "present"
+  register: "result"
+
+- name: "Save redis user uid"
+  set_fact:
+    redis_user_uid: "{{ result.uid }}"
+
+- name: "Create directories"
+  file:
+    path: "{{item.path}}"
+    state: "directory"
+    owner: "{{ redis.user }}"
+    group: "{{ redis.group }}"
+    mode: "{{item.mode}}"
+  with_items:
+    - { path: "{{redis.conf_dir}}", mode: "0755" }
+    - { path: "{{redis.data_dir}}", mode: "0755" }
+
+- name: "Create redis config"
+  template:
+    src: "redis.conf.j2"
+    dest: "{{ redis.conf_dir }}/redis.conf"
+    owner: "{{ redis.user }}"
+    group: "{{ redis.group }}"
+    mode: "0644"
+  notify: "Restart redis container"
+
+- name: "Create redis container"
+  community.docker.docker_container:
+    name: "redis"
+    image: "{{ redis.image }}"
+    restart_policy: "always"
+    state: "started"
+    user: "{{ redis_user_uid }}:{{ redis_group_gid }}"
+    command: |
+      redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - "{{ redis.conf_dir }}:/usr/local/etc/redis"
+      - "{{ redis.data_dir }}:/data"
+    networks:
+      - name: loadbalancer
