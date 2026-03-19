@@ -1,0 +1,171 @@
+---
+- name: "Create SBS group"
+  group:
+    name: "{{ sbs.group }}"
+    state: "present"
+  register: "result"
+
+- name: "Save SBS group gid"
+  set_fact:
+    sbs_group_gid: "{{ result.gid }}"
+
+- name: "Create SBS user"
+  user:
+    name: "{{ sbs.user }}"
+    group: "{{ sbs.group }}"
+    comment: "User to run SBS service"
+    shell: "/bin/false"
+    password: "!"
+    home: "{{ sbs.conf_dir }}"
+    create_home: false
+    state: "present"
+  register: "result"
+
+- name: "Save sbs user uid"
+  set_fact:
+    sbs_user_uid: "{{ result.uid }}"
+
+- name: "Create directories"
+  file:
+    path: "{{item.path}}"
+    state: "directory"
+    owner: "root"
+    group: "{{sbs_group_gid}}"
+    mode: "{{item.mode}}"
+  with_items:
+    - { path: "{{sbs.work_dir}}",            mode: "0755" }
+    - { path: "{{sbs.conf_dir}}",            mode: "0755" }
+    - { path: "{{sbs.conf_dir}}/saml",       mode: "0755" }
+    - { path: "{{sbs.log_dir}}",             mode: "0775" }
+    - { path: "{{sbs.cert_dir}}",            mode: "0755" }
+
+- name: "Fix file permissions"
+  file:
+    path: "{{sbs.log_dir}}/{{item}}"
+    owner: "root"
+    group: "{{sbs_group_gid}}"
+    mode: "0664"
+    state: "touch"
+    modification_time: "preserve"
+    access_time: "preserve"
+  with_items:
+    - "sbs.log"
+    - "sbs_debug.log"
+
+- name: "Copy wildcard backend cert"
+  copy:
+    content: "{{wildcard_backend_cert.pub}}"
+    dest: "{{sbs.cert_dir}}/backend.crt"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: "Restart sbs containers"
+
+- name: "Copy https cert"
+  copy:
+    content: "{{https_cert.cert}}"
+    dest: "{{sbs.cert_dir}}/frontend.crt"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: "Restart sbs containers"
+
+- name: "Install database certificate"
+  copy:
+    dest: "{{sbs.db_cert_path}}"
+    content: "{{ sbs.db_tls_cert }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: "Create SBS config files"
+  template:
+    src: "{{item.name}}.j2"
+    dest: "{{ sbs.conf_dir }}/{{item.name}}"
+    owner: "root"
+    group: "{{sbs_group_gid}}"
+    mode: "{{item.mode}}"
+  with_items:
+    - { name: "config.yml",      mode: "0644" }
+    - { name: "alembic.ini",     mode: "0644" }
+    - { name: "disclaimer.css",  mode: "0644" }
+    - { name: "sbs-apache.conf", mode: "0644" }
+  no_log: "{{sram_ansible_nolog}}"
+  notify: "Restart sbs containers"
+
+- name: "Run SBS migrations"
+  throttle: 1
+  community.docker.docker_container:
+    name: "sbs_migration"
+    image: "{{ sbs.server_image }}"
+    pull: "never"
+    state: "started"
+    restart_policy: "no"
+    detach: false
+    env:
+      RUNAS_UID: "{{ sbs_user_uid | string }}"
+      RUNAS_GID: "{{ sbs_group_gid | string }}"
+      CONFIG: "/opt/sbs/server/config/config.yml"
+      MIGRATIONS_ONLY: "1"
+    # don't actually run the server
+    command: "/bin/true"
+    volumes:
+      - "{{ sbs.conf_dir }}:/sbs-config"
+      - "{{ sbs.cert_dir }}:/sbs-config/cert"
+      - "{{ sbs.log_dir }}:/opt/sbs/log"
+    networks:
+      - name: "{{internal_network}}"
+  register: "result"
+  failed_when: "'container' not in result or result.container.State.ExitCode != 0"
+  changed_when: "'[alembic.runtime.migration] Running upgrade' in result.container.Output"
+  notify: "Restart sbs containers"
+
+# Remove the migration container; we can't do that with auto_remove, because if we use that, ansible
+# will not save the output in result
+- name: "Remove migration container"
+  community.docker.docker_container:
+    name: "sbs_migration"
+    state: "absent"
+  # TODO: fix this by only running this if "sbs_image is changed"
+  changed_when: false
+
+- name: "Start sbs container"
+  community.docker.docker_container:
+    name: "sbs"
+    image: "{{ sbs.image }}"
+    pull: "never"
+    restart_policy: "always"
+    state: "started"
+    env:
+      RUN_MIGRATIONS: "0"
+    volumes:
+      - "{{ sbs.conf_dir }}/sbs-apache.conf:/etc/apache2/sites-enabled/sbs.conf:ro"
+    networks:
+      - name: loadbalancer
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "{{traefik_network}}"
+      traefik.http.routers.sbs.rule: "Host(`{{ sbs.base_domain }}`)"
+      traefik.http.routers.sbs.tls: "true"
+
+- name: "Start SBS server container"
+  community.docker.docker_container:
+    name: "sbs_server"
+    image: "{{ sbs.server_image }}"
+    restart_policy: "always"
+    state: "started"
+    env:
+      RUNAS_UID: "{{ sbs_user_uid | string }}"
+      RUNAS_GID: "{{ sbs_group_gid | string }}"
+      CONFIG: "/opt/sbs/server/config/config.yml"
+      REQUESTS_CA_BUNDLE: "/etc/ssl/certs/ca-certificates.crt"
+      RUN_MIGRATIONS: "0"
+    pull: "always"
+    command: "/usr/local/bin/gunicorn --preload --worker-class eventlet --workers 8 --bind 0.0.0.0:8080 server.__main__:app"
+    volumes:
+      - "{{ sbs.conf_dir }}:/sbs-config"
+      - "{{ sbs.cert_dir }}:/sbs-config/cert"
+      - "{{ sbs.log_dir }}:/opt/sbs/log"
+      - "/tmp/ci-runner:/tmp/ci-runner"
+    networks:
+      - name: loadbalander
