@@ -229,15 +229,15 @@
         type: bind
         read_only: true
       - source: "{{ _engine_config_dir }}/images/background-back.svg"
-        target: "/var/www/html/web/images/background-back.svg"
+        target: "/var/www/html/public/images/background-back.svg"
         type: bind
         read_only: true
       - source: "{{ _engine_config_dir }}/images/background-front.svg"
-        target: "/var/www/html/web/images/background-front.svg"
+        target: "/var/www/html/public/images/background-front.svg"
         type: bind
         read_only: true
       - source: "{{ _engine_config_dir }}/images/logo.png"
-        target: "/var/www/html/web/images/logo.png"
+        target: "/var/www/html/public/images/logo.png"
         type: bind
         read_only: true
       - source: "{{ _engine_config_dir }}/certs/"
