@@ -132,8 +132,8 @@ config:
 
 
 feature:
-  limit-institution-admin-role-visibility: {{ invite.limit_institution_admin_role_visibility }}
   enable-performance-seed: False
+  allow-for-eduid-only-enforcement-for-non-guests: False
 
 # We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
 external-api-configuration:
@@ -202,7 +202,9 @@ manage:
 springdoc:
   pathsToMatch:
     - "/api/external/v1/**"
-    - "/api/internal/v1/crm"
+    - "/crm/profile"
+    - "/api/profile"
+    - "/crm/api/v1/**"
   api-docs:
     path: "/ui/api-docs"
   swagger-ui:
