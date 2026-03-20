@@ -53,11 +53,20 @@ push:
     user: {{ pdp.username }}
     password: "{{ pdp.password }}"
     enabled: {{ manage.pdp_push_enabled }}
+  stepup:
+    url: https://middleware.{{ base_domain }}
+    user: {{ manage.middleware_user }}
+    configuration_file: "file:///stepup_config.json"
+    password: {{ manage_middleware_password }}
+    enabled:  {{ manage.stepup_push_enabled }}
+
 
 product:
   name: Manage
   organization: {{ instance_name }}
   service_provider_feed_url: {{ manage_service_provider_feed_url }}
+  jira_base_url: https://servicedesk.surf.nl/jira/browse/
+  jira_ticket_prefixes: CXT,SD
   supported_languages: {{ supported_language_codes }}
   show_oidc_rp: {{ manage_show_oidc_rp_tab }}
 
