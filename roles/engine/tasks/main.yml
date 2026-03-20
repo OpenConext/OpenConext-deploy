@@ -245,7 +245,7 @@
         type: bind
         read_only: true
       - source: "/opt/openconext/common/favicon.ico"
-        target: "/var/www/html/web/favicon.ico"
+        target: "/var/www/html/public/favicon.ico"
         type: bind
         read_only: true
       - source: "engineblock_sessions"
