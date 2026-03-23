@@ -182,7 +182,7 @@ parameters:
     wayf.cutoff_point_for_showing_unfiltered_idps: {{ engine_wayf_cutoff_point_for_showing_unfiltered_idps | int }}
 
     ## Allow users to save their selected IdP and then auto-select it on returning visits.
-    wayf.remember_choice: false
+    wayf.remember_choice: {{ engine_wayf_show_remember_choice }}
 
     ## Toggle the default IdP quick link banner on the WAYF.
     wayf.display_default_idp_banner_on_wayf: true

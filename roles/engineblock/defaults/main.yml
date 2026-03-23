@@ -20,6 +20,7 @@ engine_feature_send_user_attributes: 0
 
 # Cutoff point for showing unfiltered IdPs on the WAYF
 engine_wayf_cutoff_point_for_showing_unfiltered_idps: 50
+engine_wayf_show_remember_choice: false
 
 ## Engine installer specific variables.
 engine_version_dir: "{{ engine_version | replace('/', '-') }}"

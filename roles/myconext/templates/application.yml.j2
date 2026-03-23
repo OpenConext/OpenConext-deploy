@@ -37,11 +37,12 @@ springdoc:
     enabled: true
 
 email:
-  from_deprovisioning: <noreply+deprovisioning@{{ myconext_base_domain }}>
-  from_code: eduID <noreply@{{ myconext_base_domain }}>
-  from_app_nudge: <noreply+appnudge@{{ myconext_base_domain }}>
-  from_new_device: <noreply+newdevice@{{ myconext_base_domain }}>
+  from_deprovisioning: "{{ myconext.email.from_deprovisioning }}"
+  from_code: "{{ myconext.email.from_code }}"
+  from_app_nudge: "{{ myconext.email.from_app_nudge }}"
+  from_new_device: "{{ myconext.email.from_new_device }}"
   error: {{ error_mail_to }}
+  error_mail: {{ error_mail_to }}
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
   idp-surfconext-url: https://login.{{ myconext_base_domain }}

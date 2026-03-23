@@ -17,9 +17,9 @@
       ansible.builtin.include_tasks:
         file: certs.yml
 
-    - name: Include cluster installation tasks
-      ansible.builtin.include_tasks:
-        file: clusterconfig.yml
+    # - name: Include cluster installation tasks
+    #   ansible.builtin.include_tasks:
+    #     file: clusterconfig.yml
 
     - name: Include user creation
       ansible.builtin.include_tasks:
