@@ -30,14 +30,14 @@
       ansible.builtin.include_tasks:
         file: install.yml
 
-    - name: Include Certificate tasks
-      ansible.builtin.include_tasks:
-        file: certs.yml
-
     - name: Debug standalone or cluster mode
       ansible.builtin.debug:
         msg: "{{ mongo_mode }}"
         verbosity: 2
+
+    - name: Include Certificate tasks
+      ansible.builtin.include_tasks:
+        file: certs.yml
 
     - name: Include standalone configuration tasks
       ansible.builtin.include_tasks:
@@ -75,6 +75,6 @@
     - name: Use python2 again as remote interpreter
       ansible.builtin.set_fact:
         ansible_python_interpreter: "/usr/bin/python"
-      when: 
+      when:
         - ansible_facts['distribution'] == 'CentOS'
         - ansible_facts['distribution_major_version'] == '7'

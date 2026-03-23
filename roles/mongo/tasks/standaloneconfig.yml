@@ -7,14 +7,15 @@
 - name: Check if mongodb authentication is activated
   ansible.builtin.shell:
     cmd: "mongosh 'mongodb://127.0.0.1:{{ mongo_port }}/admin' --eval 'db.runCommand({ usersInfo: 1 })'"
-  register: mongo_authentication_enabled
+  register: mongo_authentication_disabled
   changed_when: false
   ignore_errors: true
   check_mode: false # This can safely run in check mode because it is not changing anything
+  failed_when: mongo_authentication_disabled.rc > 1 # rc=1 means command failed because authentication is enabled, we need to know that but we don't need to see an error
 
 - name: Debug mongodb authentication check
   ansible.builtin.debug:
-    msg: "{{ mongo_authentication_enabled.stdout }}"
+    msg: "{{ mongo_authentication_disabled.stdout }}"
     verbosity: 2
 
 # first run add admin user without logging in
@@ -27,9 +28,9 @@
     login_port: "{{ mongo_port }}"
     roles: root
     state: present
-  #no_log: true # todo enable
+  no_log: true
   run_once: true
-  when: mongo_authentication_enabled.rc == 0
+  when: mongo_authentication_disabled.rc == 0
 
 
 # restart mongo right away with authentication enabled
