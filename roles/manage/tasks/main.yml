@@ -11,15 +11,6 @@
     - "/opt/openconext/manage/metadata_templates"
     - "/opt/openconext/manage/policies"
 
-- name: Copy Stepup stepup_config.json from inventory
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/manage/stepup_config.json"
-    dest: "/opt/openconext/manage/stepup_config.json"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  notify: restart manageserver
-
 - name: Import the mongo CA file
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
@@ -123,10 +114,6 @@
       - source: /opt/openconext/manage/__cacert_entrypoint.sh
         target: /__cacert_entrypoint.sh
         type: bind
-      - source: /opt/openconext/manage/stepup_config.json
-        target: /stepup_config.json
-        type: bind
-
     command: "java -jar /app.jar -Xmx512m --spring.config.location=./config/"
     etc_hosts:
       host.docker.internal: host-gateway
