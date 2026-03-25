@@ -60,3 +60,6 @@ mongo_group: "mongod"
 # Paths
 mongo_config_file: "/etc/mongod.conf"
 mongo_data_path: "/var/lib/mongo"
+
+# to avoid surprises only initiate or reconfigure cluster if this is true (use -e mongo_configure_cluster=true when you run your playbook)
+mongo_configure_cluster: false

@@ -1,12 +1,4 @@
 ---
-- name: Check some cluster related variables
-  when: mongo_mode == "cluster"
-  block:
-    - name: Fail on undefined replica_set_name
-      when: mongo_replica_set_name is not defined
-      ansible.builtin.fail:
-        msg: "Something is wrong, mongo_mode was set to cluster but replica_set_name is undefined."
-
     # - name: Check some variables
     #   when: mongo_cluster_members is not defined
     #   ansible.builtin.fail:
@@ -21,6 +13,16 @@
   when:
     - ansible_facts['os_family'] == 'RedHat'
   block:
+    - name: Debug standalone or cluster mode
+      ansible.builtin.debug:
+        msg: "{{ mongo_mode }}"
+        verbosity: 2
+
+    - name: Debug cluster reconfiguration is allowed
+      ansible.builtin.debug:
+        msg: "{{ mongo_configure_cluster }}"
+        verbosity: 2
+
     - name: Use temporarily python3 as remote interpreter, this fixes pymongo
       ansible.builtin.set_fact:
         ansible_python_interpreter: "/usr/bin/python3"
@@ -29,11 +31,6 @@
     - name: Include installation tasks
       ansible.builtin.include_tasks:
         file: install.yml
-
-    - name: Debug standalone or cluster mode
-      ansible.builtin.debug:
-        msg: "{{ mongo_mode }}"
-        verbosity: 2
 
     - name: Include Certificate tasks
       ansible.builtin.include_tasks:
@@ -50,7 +47,11 @@
         file: clusterconfig.yml
       when:
         - mongo_mode == "cluster"
+        - mongo_configure_cluster | bool # safest option is to set this to false and enable with -e mongo_configure_cluster=true
 
+    # todo: add admin user for cluster and standalone in a separate file?
+
+    # Install configuration file after cluster is up, some settings will not work before that
     - name: Include General config tasks
       ansible.builtin.include_tasks:
         file: generalconfig.yml
@@ -72,7 +73,7 @@
       ansible.builtin.include_tasks:
         file: postinstall.yml
 
-    - name: Use python2 again as remote interpreter
+    - name: Use python2 again as remote interpreter on centos 7
       ansible.builtin.set_fact:
         ansible_python_interpreter: "/usr/bin/python"
       when:
