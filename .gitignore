@@ -2,6 +2,7 @@
 secrets_test.yml
 .vagrant
 .idea/
+
 .DS_Store
 delme
 
