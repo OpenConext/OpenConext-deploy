@@ -23,7 +23,7 @@
         msg: "{{ mongo_configure_cluster }}"
         verbosity: 2
 
-    - name: Use temporarily python3 as remote interpreter, this fixes pymongo
+    - name: Use temporarily python3 as remote interpreter, this fixes pymongo # todo is this still necessary?
       ansible.builtin.set_fact:
         ansible_python_interpreter: "/usr/bin/python3"
       tags: mongo_users
@@ -36,11 +36,18 @@
       ansible.builtin.include_tasks:
         file: certs.yml
 
-    - name: Include standalone configuration tasks
+    # todo: magw eg?
+    # - name: Include standalone configuration tasks
+    #   ansible.builtin.include_tasks:
+    #     file: standaloneconfig.yml
+    #   when:
+    #     - mongo_mode == "standalone"
+
+    - name: Include General config tasks
       ansible.builtin.include_tasks:
-        file: standaloneconfig.yml
-      when:
-        - mongo_mode == "standalone"
+        file: generalconfig.yml
+
+    # todo: are both tasks necesary?? below
 
     - name: Include cluster configuration tasks
       ansible.builtin.include_tasks:
@@ -51,18 +58,7 @@
 
     # todo: add admin user for cluster and standalone in a separate file?
 
-    # Install configuration file after cluster is up, some settings will not work before that
-    # For example authentication enabling before we insert the first admin user
-    # or replication enabled before the cluster is initialized
-    - name: Include General config tasks
-      ansible.builtin.include_tasks:
-        file: generalconfig.yml
 
-    # todo: are both tasks necesary?? below
-
-    # Mongod is installed, restart the service one more time
-    - name: Flush handlers
-      ansible.builtin.meta: flush_handlers
 
     - name: Include Service tasks
       ansible.builtin.include_tasks:
