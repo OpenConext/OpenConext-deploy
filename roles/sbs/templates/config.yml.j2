@@ -3,8 +3,8 @@ database:
   uri: {{ sbs.db_connection_sbs }}
 
 redis:
-{% if environment_name == 'tst2' %}
-  uri: "redis://{{redis_vhost}}/"
+{% if sbs.environment_name == 'test2' %}
+  uri: "redis://{{ sbs.redis_user }}:{{ sbs.redis_password }}@{{sbs.redis_host}}/"
 {% else %}
   uri: "redis{% if sbs.redis_ssl %}s{% endif %}://{{ sbs.redis_user }}:{{ sbs.redis_password }}@{{ sbs.redis_host }}:{{ sbs.redis_port }}/"
 {% endif %}
@@ -54,7 +54,7 @@ eppn_scope: " {{ sbs.eppn_scope }}"
 scim_schema_sram: "urn:mace:surf.nl:sram:scim:extension"
 collaboration_creation_allowed_entitlement: "urn:mace:surf.nl:sram:allow-create-co"
 
-{% if environment_name == "prd" %}
+{% if sbs.environment_name == "prd" %}
 environment_disclaimer: ""
 {% else %}
 environment_disclaimer: "{{ sbs.disclaimer_label }}"

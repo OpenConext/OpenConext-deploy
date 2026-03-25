@@ -1,6 +1,6 @@
-{% if environment_name!="prd" -%}
+{% if sbs.environment_name!="prd" -%}
 body::after {
-    background: {{ sbs_disclaimer_color }};
-    content: "{{ sbs_disclaimer_label }}";
+    background: {{ sbs.disclaimer_color }};
+    content: "{{ sbs.disclaimer_label }}";
 }
 {% endif %}
