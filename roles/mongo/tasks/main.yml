@@ -52,12 +52,15 @@
     # todo: add admin user for cluster and standalone in a separate file?
 
     # Install configuration file after cluster is up, some settings will not work before that
+    # For example authentication enabling before we insert the first admin user
+    # or replication enabled before the cluster is initialized
     - name: Include General config tasks
       ansible.builtin.include_tasks:
         file: generalconfig.yml
 
-    # Mongod is installed, but service is not restarted until after
-    # the initial admin user is added
+    # todo: are both tasks necesary?? below
+
+    # Mongod is installed, restart the service one more time
     - name: Flush handlers
       ansible.builtin.meta: flush_handlers
 
