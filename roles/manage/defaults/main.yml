@@ -32,8 +32,6 @@ manage_tabs_enabled:
   - provisioning
   - sram
   - organisation
-  - sfo
-  - institution
 manage_docker_networks:
   - name: loadbalancer
 manage_server_restart_policy: always
