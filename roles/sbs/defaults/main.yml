@@ -1,38 +1,49 @@
 ---
-sbs: "{{ sbs_defaults | combine(sbs_overrides, recursive=true) }}"
+sbs: "{{ sbs_defaults | combine(sbs_overrides) }}"
+
 sbs_defaults:
+  base_domain: "test2.sram.surf.nl"
+  environment_name: test
+  ansible_nolog: true
+  base_url: "https://{{ sbs_defaults.base_domain }}"
+  server_image:  "ghcr.io/surfscz/sram-sbs-server:main"
+  client_image: "ghcr.io/surfscz/sram-sbs-client:main"
+
   openidc_timeout: 86400
   sram_conf_dir: "{{ current_release_appdir }}/sram"
 
-  work_dir: "{{ sram_conf_dir }}/sbs"
-  git_dir: "{{ sbs.work_dir }}/sbs"
-  env_dir: "{{ sbs.work_dir }}/sbs-env"
-  conf_dir: "{{ sbs.work_dir }}/config"
-  log_dir: "{{ sbs.work_dir }}/log"
-  cert_dir: "{{ sbs.work_dir }}/cert"
-  apache_conf: "{{ sbs.work_dir }}/sbs.conf"
-  nginx_conf: "{{ sbs.work_dir }}/nginx.conf"
-
+  work_dir: "{{ sbs_defaults.sram_conf_dir }}/sbs"
+  git_dir: "{{ sbs_defaults.work_dir }}/sbs"
+  env_dir: "{{ sbs_defaults.work_dir }}/sbs-env"
+  conf_dir: "{{ sbs_defaults.work_dir }}/config"
+  log_dir: "{{ sbs_defaults.work_dir }}/log"
+  cert_dir: "{{ sbs_defaults.work_dir }}/cert"
+  apache_conf: "{{ sbs_defaults.work_dir }}/sbs_defaults.conf"
+  nginx_conf: "{{ sbs_defaults.work_dir }}/nginx.conf"
 
   db_name: "sbs"
   db_user: "sbsrw"
-  dbbackup_user: "sbs_backupper"
-  migration_user: "sbs_migrater"
+  # dbbackup_user: "sbs_backupper"
+  migration_user: "sbsmigrate"
 
   db_connection: "\
-    mysql+mysqldb://%s:%s@{{ mariadb_host }}/{{ sbs_db_name }}\
+    mysql+mysqldb://%s:%s@{{ mariadb_host }}/{{ sbs_defaults.db_name }}\
     ?ssl=true&charset=utf8mb4"
-  db_connection_sbs: "{{ sbs_db_connection | format(sbs_db_user, sbs_db_password) }}"
+  db_connection_sbs: "{{ sbs_defaults.db_connection | format(sbs_defaults.db_user, mysql_passwords.sbs) }}"
   db_connection_migration: "\
-    {{ sbs_db_connection | format(sbs_migration_user, sbs_migration_password) }}"
+    {{ sbs_defaults.db_connection | format(sbs_defaults.migration_user, mysql_passwords.sbsmigrate) }}"
+
+  db_secret: secret
+  secret_key_suffix: suffix
+  encryption_key: encryption_key
 
   redis_host: redis
   redis_port: 6379
   redis_ssl: false
   redis_user: default
 
-  mail_host: "{{ mail.relay_to }}"
-  mail_port: "{{ mail.relay_port }}"
+  mail_host: "host.docker.internal"
+  mail_port: 25
 
   user: "sbs"
   group: "sbs"
@@ -94,7 +105,7 @@ sbs_defaults:
   oidc_token_endpoint: "http://localhost/OIDC/token"
   oidc_userinfo_endpoint: "http://localhost/OIDC/userinfo"
   oidc_jwks_endpoint: "http://localhost/OIDC/jwks.json"
-  oidc_redirect_uri: "https://sbs.scz-vm.net/api/users/resume-session"
+  oidc_redirect_uri: "https://{{sbs_defaults.base_domain}}/api/users/resume-session"
   mfa_idp_allowed: false
   eduteams_continue_endpoint: "https://localhost/continue"
   eb_continue_endpoint: "https://engine.(.*)surfconext.nl(.*)"
@@ -105,20 +116,20 @@ sbs_defaults:
     - openid
 
   manage_base_enabled: False
-  manage_base_url: "https://manage.test2.surfconext.nl"
-  manage_sram_rp_entity_id: "sbs.test2.sram.surf.nl"
+  manage_base_url: "https://manage.{{base_domain}}"
+  manage_sram_rp_entity_id: "sbs.{{sbs_defaults.base_domain}}"
   manage_verify_peer: False
 
   idp_metadata_url: "https://metadata.surfconext.nl/signed/2023/edugain-downstream-idp.xml "
-  backup_dir: "{{backup_base}}/sbs"
+  # backup_dir: "{{backup_base}}/sbs"
 
   swagger_enabled: true
 
   ssid_identity_providers: []
   surf_secure_id:
     environment: "unknown.example.org"
-    sp_entity_id: "https://sbs.{{base_domain}}"
-    acs_url: "https://{{base_domain}}/api/users/acs"
+    sp_entity_id: "https://sbs.{{sbs_defaults.base_domain}}"
+    acs_url: "https://{{sbs_defaults.base_domain}}/api/users/acs"
     sa_gw_environment: "sa-gw.unknown.example.org"
     sa_idp_certificate: |
       -----BEGIN CERTIFICATE-----
@@ -134,11 +145,11 @@ sbs_defaults:
       -----END CERTIFICATE-----
 
   ssid_authncontext: "\
-    http://{{ sbs.surf_secure_id.environment }}/assurance/sfo-level2"
+    http://{{ sbs_defaults.surf_secure_id.environment }}/assurance/sfo-level2"
   ssid_entityid: "\
-    https://{{ sbs.surf_secure_id.sa_gw_environment }}/second-factor-only/metadata"
+    https://{{ sbs_defaults.surf_secure_id.sa_gw_environment }}/second-factor-only/metadata"
   ssid_sso_endpoint: "\
-    https://{{ sbs.surf_secure_id.sa_gw_environment }}/second-factor-only/single-sign-on"
+    https://{{ sbs_defaults.surf_secure_id.sa_gw_environment }}/second-factor-only/single-sign-on"
 
   mfa_sso_minutes: 10
   mfa_fallback_enabled: true
@@ -157,3 +168,9 @@ sbs_defaults:
     - 'sha256-WTC9gHKjIpzl5ub1eg/YrRy/k+jlzeyRojah9dxAApc='  # on /new-service-request
 
   engine_block_api_token: secret
+
+  # wildcard_backend_cert:
+  #   pub: |
+  #     -----BEGIN CERTIFICATE-----
+  #     12345
+  #     -----END CERTIFICATE-----

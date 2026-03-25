@@ -1,4 +1,9 @@
 ---
+# - name: "Initialize database"
+#   throttle: 1
+#   import_tasks: "database_init.yml"
+#   when: "is_dev"
+
 - name: "Create SBS group"
   group:
     name: "{{ sbs.group }}"
@@ -29,7 +34,7 @@
   file:
     path: "{{item.path}}"
     state: "directory"
-    owner: "root"
+    owner: "{{sbs_user_uid}}"
     group: "{{sbs_group_gid}}"
     mode: "{{item.mode}}"
   with_items:
@@ -42,7 +47,7 @@
 - name: "Fix file permissions"
   file:
     path: "{{sbs.log_dir}}/{{item}}"
-    owner: "root"
+    owner: "{{sbs_user_uid}}"
     group: "{{sbs_group_gid}}"
     mode: "0664"
     state: "touch"
@@ -50,39 +55,43 @@
     access_time: "preserve"
   with_items:
     - "sbs.log"
-    - "sbs_debug.log"
+    - "sbs.debug.log"
 
-- name: "Copy wildcard backend cert"
-  copy:
-    content: "{{wildcard_backend_cert.pub}}"
-    dest: "{{sbs.cert_dir}}/backend.crt"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  notify: "Restart sbs containers"
+# - name: "Copy wildcard backend cert"
+#   copy:
+#     content: "{{wildcard_backend_cert.pub}}"
+#     dest: "{{sbs.cert_dir}}/backend.crt"
+#     owner: "root"
+#     group: "root"
+#     mode: "0644"
+#   notify: "Restart sbs containers"
 
-- name: "Copy https cert"
-  copy:
-    content: "{{https_cert.cert}}"
-    dest: "{{sbs.cert_dir}}/frontend.crt"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  notify: "Restart sbs containers"
+# - name: "Copy https cert"
+#   copy:
+#     content: "{{https_cert.cert}}"
+#     dest: "{{sbs.cert_dir}}/frontend.crt"
+#     owner: "root"
+#     group: "root"
+#     mode: "0644"
+#   notify: "Restart sbs containers"
 
-- name: "Install database certificate"
-  copy:
-    dest: "{{sbs.db_cert_path}}"
-    content: "{{ sbs.db_tls_cert }}"
-    owner: "root"
-    group: "root"
-    mode: "0644"
+# - name: "Install database certificate"
+#   copy:
+#     dest: "{{sbs.db_cert_path}}"
+#     content: "{{ sbs.db_tls_cert }}"
+#     owner: "root"
+#     group: "root"
+#     mode: "0644"
+- name: "Touch file in {{ sbs.cert_dir }}"
+  ansible.builtin.file:
+    path: "{{sbs.cert_dir}}/dummy"
+    state: file
 
 - name: "Create SBS config files"
   template:
     src: "{{item.name}}.j2"
     dest: "{{ sbs.conf_dir }}/{{item.name}}"
-    owner: "root"
+    owner: "{{sbs_user_uid}}"
     group: "{{sbs_group_gid}}"
     mode: "{{item.mode}}"
   with_items:
@@ -90,13 +99,35 @@
     - { name: "alembic.ini",     mode: "0644" }
     - { name: "disclaimer.css",  mode: "0644" }
     - { name: "sbs-apache.conf", mode: "0644" }
-  no_log: "{{sram_ansible_nolog}}"
+  no_log: "{{sbs.ansible_nolog}}"
   notify: "Restart sbs containers"
+
+- name: "Pull sbs image"
+  community.docker.docker_image_pull:
+    name: "{{ item }}"
+  with_items:
+    - "{{ sbs.client_image }}"
+    - "{{ sbs.server_image }}"
+  register: "sbs_image"
+
+# We need to remove sram-static so it gets repopulated
+# with new SBS image static content
+- name: "Clean up old containers"
+  block:
+    - name: "Stop and remove sbs and sbs-server containers"
+      community.docker.docker_container:
+        name: "{{ item }}"
+        state: "absent"
+      with_items:
+        - "sbs-client"
+        - "sbs-server"
+
+  when: "sbs_image is changed"
 
 - name: "Run SBS migrations"
   throttle: 1
   community.docker.docker_container:
-    name: "sbs_migration"
+    name: "sbs-migration"
     image: "{{ sbs.server_image }}"
     pull: "never"
     state: "started"
@@ -105,52 +136,49 @@
     env:
       RUNAS_UID: "{{ sbs_user_uid | string }}"
       RUNAS_GID: "{{ sbs_group_gid | string }}"
-      CONFIG: "/opt/sbs/server/config/config.yml"
       MIGRATIONS_ONLY: "1"
     # don't actually run the server
     command: "/bin/true"
     volumes:
       - "{{ sbs.conf_dir }}:/sbs-config"
-      - "{{ sbs.cert_dir }}:/sbs-config/cert"
+      - "{{ sbs.cert_dir }}:/sbs-config/cert:ro"
       - "{{ sbs.log_dir }}:/opt/sbs/log"
     networks:
-      - name: "{{internal_network}}"
+      - name: "loadbalancer"
   register: "result"
   failed_when: "'container' not in result or result.container.State.ExitCode != 0"
   changed_when: "'[alembic.runtime.migration] Running upgrade' in result.container.Output"
   notify: "Restart sbs containers"
 
-# Remove the migration container; we can't do that with auto_remove, because if we use that, ansible
+# Remove the migration container; we can do that with auto_remove, because if we use that, ansible
 # will not save the output in result
 - name: "Remove migration container"
   community.docker.docker_container:
-    name: "sbs_migration"
+    name: "sbs-migration"
     state: "absent"
   # TODO: fix this by only running this if "sbs_image is changed"
   changed_when: false
 
-- name: "Start sbs container"
+- name: "Start sbs client container"
   community.docker.docker_container:
-    name: "sbs"
-    image: "{{ sbs.image }}"
+    name: "sbs-client"
+    image: "{{ sbs.client_image }}"
     pull: "never"
     restart_policy: "always"
     state: "started"
-    env:
-      RUN_MIGRATIONS: "0"
     volumes:
       - "{{ sbs.conf_dir }}/sbs-apache.conf:/etc/apache2/sites-enabled/sbs.conf:ro"
+      - "{{ sbs.conf_dir }}/disclaimer.css:/opt/sbs/client/dist/disclaimer.css:ro"
     networks:
-      - name: loadbalancer
+      - name: "loadbalancer"
     labels:
+      traefik.http.routers.sbsclient.rule: "Host(`{{ sbs.base_domain }}`)"
+      traefik.http.routers.sbsclient.tls: "true"
       traefik.enable: "true"
-      traefik.docker.network: "{{traefik_network}}"
-      traefik.http.routers.sbs.rule: "Host(`{{ sbs.base_domain }}`)"
-      traefik.http.routers.sbs.tls: "true"
 
 - name: "Start SBS server container"
   community.docker.docker_container:
-    name: "sbs_server"
+    name: "sbs-server"
     image: "{{ sbs.server_image }}"
     restart_policy: "always"
     state: "started"
@@ -160,12 +188,15 @@
       CONFIG: "/opt/sbs/server/config/config.yml"
       REQUESTS_CA_BUNDLE: "/etc/ssl/certs/ca-certificates.crt"
       RUN_MIGRATIONS: "0"
-    pull: "always"
-    command: "/usr/local/bin/gunicorn --preload --worker-class eventlet --workers 8 --bind 0.0.0.0:8080 server.__main__:app"
+    pull: "never"
     volumes:
       - "{{ sbs.conf_dir }}:/sbs-config"
-      - "{{ sbs.cert_dir }}:/sbs-config/cert"
+      - "{{ sbs.cert_dir }}:/sbs-config/cert:ro"
       - "{{ sbs.log_dir }}:/opt/sbs/log"
       - "/tmp/ci-runner:/tmp/ci-runner"
     networks:
-      - name: loadbalander
+      - name: "loadbalancer"
+    # TODO: fix this: this is only for dev
+    etc_hosts:
+      oidc-op.scz-vm.net: "172.20.1.24"
+      host.docker.internal: host-gateway
