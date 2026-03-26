@@ -3,7 +3,6 @@ sbs: "{{ sbs_defaults | combine(sbs_overrides) }}"
 
 sbs_defaults:
   base_domain: "test2.sram.surf.nl"
-  environment_name: test
   ansible_nolog: true
   base_url: "https://{{ sbs_defaults.base_domain }}"
   server_image:  "ghcr.io/surfscz/sram-sbs-server:main"
