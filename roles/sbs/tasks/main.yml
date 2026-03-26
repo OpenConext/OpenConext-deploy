@@ -57,31 +57,8 @@
     - "sbs.log"
     - "sbs.debug.log"
 
-# - name: "Copy wildcard backend cert"
-#   copy:
-#     content: "{{wildcard_backend_cert.pub}}"
-#     dest: "{{sbs.cert_dir}}/backend.crt"
-#     owner: "root"
-#     group: "root"
-#     mode: "0644"
-#   notify: "Restart sbs containers"
-
-# - name: "Copy https cert"
-#   copy:
-#     content: "{{https_cert.cert}}"
-#     dest: "{{sbs.cert_dir}}/frontend.crt"
-#     owner: "root"
-#     group: "root"
-#     mode: "0644"
-#   notify: "Restart sbs containers"
-
-# - name: "Install database certificate"
-#   copy:
-#     dest: "{{sbs.db_cert_path}}"
-#     content: "{{ sbs.db_tls_cert }}"
-#     owner: "root"
-#     group: "root"
-#     mode: "0644"
+# Create dummy file in certs dir to pacify container pre-init script
+# https://github.com/SURFscz/SBS/pull/2312
 - name: "Touch file in {{ sbs.cert_dir }}"
   ansible.builtin.file:
     path: "{{sbs.cert_dir}}/dummy"

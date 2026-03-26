@@ -72,9 +72,6 @@ sbs_defaults:
 
   wiki_link: "https://www.example.org/wiki"
 
-  backend_port: 8080
-  num_workers: 2
-
   cron_hour_of_day: 4
   seed_allowed: True
   api_keys_enabled: True
@@ -168,9 +165,3 @@ sbs_defaults:
     - 'sha256-WTC9gHKjIpzl5ub1eg/YrRy/k+jlzeyRojah9dxAApc='  # on /new-service-request
 
   engine_block_api_token: secret
-
-  # wildcard_backend_cert:
-  #   pub: |
-  #     -----BEGIN CERTIFICATE-----
-  #     12345
-  #     -----END CERTIFICATE-----
