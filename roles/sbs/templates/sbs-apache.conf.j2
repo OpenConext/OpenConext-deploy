@@ -12,10 +12,10 @@ RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
 RewriteRule ^/(.*)$ /index.html  [L]
 
 ProxyRequests off
-ProxyPassMatch ^/(api|pam-weblogin|flasgger_static|swagger|health|config|info) http://sbs-server:{{sbs.backend_port}}/
-ProxyPassReverse / http://sbs-server:{{sbs.backend_port}}/
-ProxyPass /socket.io/ ws://sbs-server:{{sbs.backend_port}}/socket.io/
-ProxyPassReverse /socket.io/ ws://sbs-server:{{sbs.backend_port}}/socket.io/
+ProxyPassMatch ^/(api|pam-weblogin|flasgger_static|swagger|health|config|info) http://sbs-server:8080/
+ProxyPassReverse / http://sbs-server:8080/
+ProxyPass /socket.io/ ws://sbs-server:8080/socket.io/
+ProxyPassReverse /socket.io/ ws://sbs-server:8080/socket.io/
 
 <If "%{REQUEST_URI} =~ m#^/api/images/#">
     Header set Cache-Control:  "public, max-age=31536000, immutable"
