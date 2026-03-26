@@ -49,10 +49,20 @@
   with_items: "{{ rsyslog_environments }}"
   when: item.db_loglogins_name is defined
 
-- name: Put log_logins logrotate scripts
+- name: Put log_logins logrotate scripts for ebauth
   ansible.builtin.template:
     src: logrotate_ebauth.j2
     dest: /etc/logrotate.d/logrotate_ebauth_{{ item.name }}
+    mode: 0644
+    owner: root
+    group: root
+  with_items: "{{ rsyslog_environments }}"
+  when: item.db_loglogins_name is defined
+
+- name: Put log_logins logrotate scripts for stepup
+  template:
+    src: logrotate_stepup_authentication.j2
+    dest: /etc/logrotate.d/logrotate_stepup_authentication_{{ item.name }}
     mode: 0644
     owner: root
     group: root
