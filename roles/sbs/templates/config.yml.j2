@@ -30,8 +30,8 @@ api_users:
 {% endfor %}
 
 oidc:
-  client_id: "{{ sbs.client_id }}"
-  client_secret: "{{ sbs.client_secret }}"
+  client_id: "{{ sbs.oidc_client_id }}"
+  client_secret: "{{ sbs.oidc_client_secret }}"
   audience: "{{ sbs.oidc_jwt_audience }}"
   verify_peer:  {{ sbs.oidc_verify_peer }}
   authorization_endpoint: "{{ sbs.oidc_authz_endpoint}}"
@@ -45,7 +45,7 @@ oidc:
   second_factor_authentication_required: {{ sbs.second_factor_authentication_required }}
   totp_token_name: "{{ sbs.totp_token_name }}"
   # The service_id in the proxy_authz endpoint when logging into SBS. Most likely to equal the oidc.client_id
-  sram_service_entity_id: "{{ sbs.client_id }}"
+  sram_service_entity_id: "{{ sbs.oidc_client_id }}"
   scopes: {{ sbs.oidc_scopes }}
 
 base_scope: "{{ base_domain }}"
