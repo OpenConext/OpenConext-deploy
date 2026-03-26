@@ -1,0 +1,24 @@
+---
+- name: restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted
+  listen: "restart rsyslog"
+
+- name: systemd daemon-reload
+  systemd:
+    name: slapd
+    daemon_reload: yes
+
+- name: restart LDAP
+  systemd:
+    name: slapd
+    state: restarted
+    enabled: true
+    daemon-reload: true
+
+- name: Restart the ldap container
+  community.docker.docker_container:
+    name: "{{ containers.ldap }}"
+    restart: true
+    state: started
