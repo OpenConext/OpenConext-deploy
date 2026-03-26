@@ -1,3 +1,4 @@
+---
 - name: Add group engine
   ansible.builtin.group:
     name: "engine"
@@ -20,77 +21,79 @@
     group: root
     mode: "0755"
   with_items:
-    - "{{ current_release_config_dir_name }}"
-    - "{{ current_release_config_dir_name }}/certs"
-    - "{{ current_release_config_dir_name }}/configs"
-    - "{{ current_release_config_dir_name }}/images"
-    - "{{ current_release_config_dir_name }}/languages"
+    - "{{ _engine_config_dir }}"
+    - "{{ _engine_config_dir }}/certs"
+    - "{{ _engine_config_dir }}/configs"
+    - "{{ _engine_config_dir }}/images"
+    - "{{ _engine_config_dir }}/languages"
 
 - name: Place parameters.yml
   ansible.builtin.template:
-    src: parameters.yml.j2
-    dest: "{{ current_release_config_dir_name }}/configs/parameters.yml"
+    src: "{{ item }}.j2"
+    dest: "{{ _engine_config_dir }}/configs/{{ item }}"
     mode: "0640"
-    owner: root
-    group: engine
-  notify: restart engine
+    owner: "root"
+    group: "engine"
+  with_items:
+    - "parameters.yml"
+    - "monolog.yml"
+  notify: "Restart engine"
 
 - name: Check presence of environment specific attributes.json
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/eb/attributes.json"
-  register: attributes_json_present
+  register: engine_attributes_json_present
   become: false
   delegate_to: localhost
 
 - name: Copy environment specific attributes.json
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/eb/attributes.json"
-    dest: "{{ current_release_config_dir_name }}/configs/"
+    dest: "{{ _engine_config_dir }}/configs/"
     mode: "0644"
     owner: root
     group: engine
-  when: attributes_json_present.stat.exists
+  when: engine_attributes_json_present.stat.exists
 
 - name: Check presence of language specific overrides
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/eb/languages/"
-  register: overrides_present
+  register: engine_overrides_present
   become: false
   delegate_to: localhost
 
 - name: Copy language specific overrides
   ansible.builtin.template:
     src: "{{ item }}"
-    dest: "{{ current_release_config_dir_name }}/languages/"
+    dest: "{{ _engine_config_dir }}/languages/"
     owner: root
     group: engine
     mode: "0644"
-  when: overrides_present.stat.exists
+  when: engine_overrides_present.stat.exists
   with_fileglob:
     - "{{ inventory_dir }}/files/eb/languages/*"
-  notify:
-    - "restart engine"
+  notify: "Restart engine"
 
 - name: Check if we have a custom logo
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/logo.png"
-  register: customlogo
+  register: engine_customlogo
   become: false
   delegate_to: localhost
 
 - name: Install environment specific logo
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/logo.png"
-    dest: "{{ current_release_config_dir_name }}/images/"
+    dest: "{{ _engine_config_dir }}/images/"
     owner: root
     group: engine
     mode: "0644"
-  when: customlogo.stat.exists
+  when: engine_customlogo.stat.exists
 
 - name: Check if we have a custom favicon
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/favicon.ico"
-  register: customfavicon
+  register: engine_customfavicon
   become: false
   delegate_to: localhost
 
@@ -101,60 +104,60 @@
     owner: root
     group: root
     mode: "0644"
-  when: customfavicon.stat.exists
+  when: engine_customfavicon.stat.exists
 
 - name: Check if we have a custom background back image for the feedback page
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/eb/background-back.svg"
-  register: eb_customfeedbackbackground
+  register: engine_customfeedbackbackground
   become: false
   delegate_to: localhost
 
 - name: Install environment specific background back image
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/eb/background-back.svg"
-    dest: "{{ current_release_config_dir_name }}/images/"
+    dest: "{{ _engine_config_dir }}/images/"
     owner: root
     group: engine
     mode: "0644"
-  when: eb_customfeedbackbackground.stat.exists
+  when: engine_customfeedbackbackground.stat.exists
 
 - name: Check if we have a custom background front image for the feedback page
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/eb/background-front.svg"
-  register: eb_customfeedbackforeground
+  register: engine_customfeedbackforeground
   become: false
   delegate_to: localhost
 
 - name: Install environment specific background front image
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/eb/background-front.svg"
-    dest: "{{ current_release_config_dir_name }}/images/"
+    dest: "{{ _engine_config_dir }}/images/"
     owner: root
     group: engine
     mode: "0644"
-  when: eb_customfeedbackforeground.stat.exists
+  when: engine_customfeedbackforeground.stat.exists
 
 - name: Check if we have a Stepup GW certificate
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/certs/stepup_gateway.pem"
-  register: eb_stepupgwcert
+  register: engine_stepupgwcert
   become: false
   delegate_to: localhost
 
 - name: Install Stepup GW certificate
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/stepup_gateway.pem"
-    dest: "{{ current_release_config_dir_name }}/certs/"
+    dest: "{{ _engine_config_dir }}/certs/"
     owner: root
     group: engine
     mode: "0644"
-  when: eb_stepupgwcert.stat.exists
+  when: engine_stepupgwcert.stat.exists
 
 - name: Copy over the engineblock keys
   ansible.builtin.copy:
     content: "{{ item.private_key }}"
-    dest: "{{ current_release_config_dir_name }}/certs/{{ item.name }}.key"
+    dest: "{{ _engine_config_dir }}/certs/{{ item.name }}.key"
     owner: root
     group: engine
     mode: "0440"
@@ -164,7 +167,7 @@
 - name: Copy engineblock certificates to correct location
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/{{ item.crt_name }}"
-    dest: "{{ current_release_config_dir_name }}/certs/{{ item.name }}.crt"
+    dest: "{{ _engine_config_dir }}/certs/{{ item.name }}.crt"
     owner: root
     group: engine
     mode: "0644"
@@ -189,7 +192,7 @@
     image: ghcr.io/openconext/openconext-engineblock/openconext-engineblock:{{ engine_version }}
     pull: true
     restart_policy: "always"
-    networks: "{{ engine_docker_networks}}"
+    networks: "{{ engine_docker_networks }}"
     labels:
       traefik.http.routers.engine.rule: "Host(`engine.{{ base_domain }}`)"
       traefik.http.routers.engine.service: "engineblock"
@@ -203,37 +206,55 @@
       APACHE_GUID: "#{{ engine_guid.gid }}"
       TZ: "{{ timezone }}"
       PHP_MEMORY_LIMIT: "{{ engine_php_memory }}"
+      APP_ENV: "prod"
+      APP_SECRET: "{{ engine_parameters_secret }}"
+      APP_DEBUG: "{{ engine_debug | bool | int }}"
     etc_hosts:
       host.docker.internal: host-gateway
     mounts:
-      - source: "{{ current_release_config_dir_name }}/configs/parameters.yml"
-        target: "/var/www/html/app/config/parameters.yml"
+      - source: "{{ _engine_config_dir }}/configs/"
+        target: "{{ _engine_container_config_dir }}"
         type: bind
-      - source: "{{ current_release_config_dir_name }}/languages/overrides.en.php"
+        read_only: true
+      - source: "{{ _engine_config_dir }}/languages/overrides.en.php"
         target: "/var/www/html/languages/overrides.en.php"
         type: bind
-      - source: "{{ current_release_config_dir_name }}/languages/overrides.nl.php"
+        read_only: true
+      - source: "{{ _engine_config_dir }}/languages/overrides.nl.php"
         target: "/var/www/html/languages/overrides.nl.php"
         type: bind
-      - source: "{{ current_release_config_dir_name }}/configs/attributes.json"
-        target: "/var/www/html/app/config/attributes.json"
+        read_only: true
+      - source: "{{ _engine_config_dir }}/configs/attributes.json"
+        target: "{{ _engine_container_config_dir }}/attributes.json"
         type: bind
-      - source: "{{ current_release_config_dir_name }}/images/background-back.svg"
-        target: "/var/www/html/web/images/background-back.svg"
+        read_only: true
+      - source: "{{ _engine_config_dir }}/images/background-back.svg"
+        target: "/var/www/html/public/images/background-back.svg"
         type: bind
-      - source: "{{ current_release_config_dir_name }}/images/background-front.svg"
-        target: "/var/www/html/web/images/background-front.svg"
+        read_only: true
+      - source: "{{ _engine_config_dir }}/images/background-front.svg"
+        target: "/var/www/html/public/images/background-front.svg"
         type: bind
-      - source: "{{ current_release_config_dir_name }}/images/logo.png"
-        target: "/var/www/html/web/images/logo.png"
+        read_only: true
+      - source: "{{ _engine_config_dir }}/images/logo.png"
+        target: "/var/www/html/public/images/logo.png"
         type: bind
-      - source: "{{ current_release_config_dir_name }}/certs/"
+        read_only: true
+      - source: "{{ _engine_config_dir }}/certs/"
         target: "/var/www/html/certs/"
         type: bind
+        read_only: true
       - source: "/opt/openconext/common/favicon.ico"
-        target: "/var/www/html/web/favicon.ico"
+        target: "/var/www/html/public/favicon.ico"
         type: bind
-      - source: engineblock_sessions
-        target: /tmp/
+        read_only: true
+      - source: "engineblock_sessions"
+        target: "/tmp/"
         type: volume
-  register: ebcontainer
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail -s http://localhost/internal/health | grep -q '\"status\":\"UP\"'"]
+      start_period: 60s
+      interval: 10s
+      timeout: 1s
+      retries: 20
+  register: "engine_container"
