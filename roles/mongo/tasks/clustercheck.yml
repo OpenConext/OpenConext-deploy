@@ -1,0 +1,27 @@
+---
+# task file to check if cluster is up and running
+
+# Get the replicaset status and then lookup the primary's hostname and save to a variable
+- name: Check replicaset status
+  community.mongodb.mongodb_status:
+    login_host: localhost
+    login_user: admin
+    login_port: "{{ mongo_port }}"
+    login_password: "{{ mongo_admin_password }}"
+    replica_set: "{{ mongo_replica_set_name }}"
+    poll: 3
+    interval: 10
+  register: replica_status
+  ignore_errors: true
+  when: mongo_replication_role == 'primary'
+
+- name: Debug replica set status
+  ansible.builtin.debug:
+    msg: "{{ replica_status }}"
+
+- name: Fail when there is no cluster reconfiguration options set
+  ansible.builtin.fail:
+    msg: "Your mongo cluster is broken or non existent and mongo_configure_cluster is disabled, consider enabling it and fix your cluster."
+  when:
+    - replica_status.failed
+    - not mongo_configure_cluster | bool

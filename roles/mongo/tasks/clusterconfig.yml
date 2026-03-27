@@ -64,7 +64,7 @@
     login_password: "{{ mongo_admin_password }}"
     replica_set: "{{ mongo_replica_set_name }}"
     members: "{{ mongo_cluster_members }}"
-    validate: false
+    validate: false # todo moet dat niet true zijn
   run_once: true
   when: mongo_replication_role == 'primary'
 

@@ -47,8 +47,6 @@
       ansible.builtin.include_tasks:
         file: generalconfig.yml
 
-    # todo: are both tasks necesary?? below
-
     - name: Include cluster configuration tasks
       ansible.builtin.include_tasks:
         file: clusterconfig.yml
@@ -56,9 +54,13 @@
         - mongo_mode == "cluster"
         - mongo_configure_cluster | bool # safest option is to set this to false and enable with -e mongo_configure_cluster=true
 
+    - name: Include cluster check tasks
+      ansible.builtin.include_tasks:
+        file: clustercheck.yml
+      when:
+        - mongo_mode == "cluster"
+
     # todo: add admin user for cluster and standalone in a separate file?
-
-
 
     - name: Include Service tasks
       ansible.builtin.include_tasks:
@@ -67,6 +69,7 @@
     - name: Include user creation
       ansible.builtin.include_tasks:
         file: users.yml
+      when: not replica_status.failed OR mongo_mode == "standalone" # Cannot add users on a broken cluster
 
     - name: Include postinstallation tasks
       ansible.builtin.include_tasks:
