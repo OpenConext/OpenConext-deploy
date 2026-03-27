@@ -1,0 +1,28 @@
+---
+- name: Make sure clients sync directory exists
+  file:
+    path: "{{ plsc.conf_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: "Create plsc.yml source if it doesn't exist"
+  template:
+    src: "plsc.yml.j2"
+    dest: "{{ plsc.conf_dir }}/plsc.yml"
+    mode: "0640"
+  no_log: "{{plsc.ansible_nolog}}"
+  notify: "Restart the plsc container"
+
+- name: Create the plsc container
+  community.docker.docker_container:
+    name: "plsc"
+    image: "{{ plsc.image }}"
+    restart_policy: "always"
+    state: started
+    pull: true
+    mounts:
+      - type: bind
+        source: "{{ plsc.conf_dir }}/plsc.yml"
+        target: "/opt/plsc/plsc.yml"
+    networks:
+      - name: "loadbalancer"
