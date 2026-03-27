@@ -1,5 +1,5 @@
 ---
-sbs: "{{ sbs_defaults | combine(sbs_overrides) }}"
+sbs: "{{ sbs_defaults | combine(sbs_overrides, recursive=true) }}"
 
 sbs_defaults:
   base_domain: "test2.sram.surf.nl"
@@ -68,6 +68,8 @@ sbs_defaults:
   admin_email: "sram-beheer@localhost"
   ticket_email: "sram-support@surf.nl"
   eduteams_email: "eduteams@localhost"
+
+  suppress_mails: False
 
   wiki_link: "https://www.example.org/wiki"
 
