@@ -1,0 +1,14 @@
+- load fail_on_error True:
+    - "https://proxy.acc.sram.eduteams.org/metadata/frontend.xml"
+- select
+- xslt:
+    stylesheet: "xslt/transform_proxy.xslt"
+- finalize:
+    cacheDuration: P7D
+    validUntil: P14D
+    name: "SURF Research Access Management"
+- sign:
+    key: "certs/signing.key"
+    cert: "certs/signing.crt"
+- publish: "out/proxy_idp.xml.new"
+- stats

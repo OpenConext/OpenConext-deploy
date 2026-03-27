@@ -1,0 +1,6 @@
+{% if env!="prd" -%}
+body::after {
+    background: {{ sbs.disclaimer_color }};
+    content: "{{ sbs.disclaimer_label }}";
+}
+{% endif %}

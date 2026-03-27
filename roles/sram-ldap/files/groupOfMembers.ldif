@@ -1,0 +1,19 @@
+# Internet X.500 Schema for Ldappc
+# Includes the groupOfMembers ObjectClass schema
+#
+# Taken from RFC2307bis draft 2
+# https://tools.ietf.org/html/draft-howard-rfc2307bis-02
+#
+# An structural object class, "groupOfMembers" is a convenient container
+# for an extensible set of attributes concerning group memberships.
+#
+dn: cn=groupOfMembers,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: groupOfMembers
+olcObjectClasses: ( 1.3.6.1.1.1.2.18 SUP top STRUCTURAL
+  NAME 'groupOfMembers'
+  DESC 'A group with members (DNs)'
+  MUST cn
+  MAY ( businessCategory $ seeAlso $ owner $ ou $ o $
+        description $ member )
+  )

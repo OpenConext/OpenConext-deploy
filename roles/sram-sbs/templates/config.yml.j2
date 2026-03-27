@@ -1,0 +1,264 @@
+---
+database:
+  uri: {{ sbs.db_connection_sbs }}
+
+redis:
+{% if env == 'test2' %}
+  uri: "redis://{{ sbs.redis_user }}:{{ sbs.redis_password }}@{{sbs.redis_host}}/"
+{% else %}
+  uri: "redis{% if sbs.redis_ssl %}s{% endif %}://{{ sbs.redis_user }}:{{ sbs.redis_password }}@{{ sbs.redis_host }}:{{ sbs.redis_port }}/"
+{% endif %}
+
+# add a per-release suffix here to invalidate sessions on new releases
+secret_key: {{ sbs.db_secret }}{{sbs.secret_key_suffix}}
+# Must be a base64 encoded key of 128, 192, or 256 bits.
+# Generate: base64.b64encode(os.urandom(256 // 8)).decode()
+encryption_key: {{ sbs.encryption_key  }}
+
+# Lifetime of session in minutes (one day is 60 * 24)
+permanent_session_lifetime: {{ sbs.session_lifetime }}
+
+logging:
+  log_to_stdout: {{ sbs.log_to_stdout }}
+
+# Valid scopes are "READ" and "WRITE"
+api_users:
+{% for name, user in sbs.api_users.items() %}
+  - name: "{{ name }}"
+    password: "{{ user.password }}"
+    scopes: "[ {{ user.scopes | join(', ') }} ]"
+{% endfor %}
+
+oidc:
+  client_id: "{{ sbs.oidc_client_id }}"
+  client_secret: "{{ sbs.oidc_client_secret }}"
+  audience: "{{ sbs.oidc_jwt_audience }}"
+  verify_peer:  {{ sbs.oidc_verify_peer }}
+  authorization_endpoint: "{{ sbs.oidc_authz_endpoint}}"
+  token_endpoint: "{{ sbs.oidc_token_endpoint }}"
+  userinfo_endpoint: "{{ sbs.oidc_userinfo_endpoint }}"
+  jwks_endpoint: "{{ sbs.oidc_jwks_endpoint }}"
+  #Note that the paths for these  uri's is hardcoded and only domain and port differ per environment
+  redirect_uri: "{{ sbs.oidc_redirect_uri }}"
+  continue_eduteams_redirect_uri: "{{ sbs.eduteams_continue_endpoint }}"
+  continue_eb_redirect_uri: "{{ sbs.eb_continue_endpoint }}"
+  second_factor_authentication_required: {{ sbs.second_factor_authentication_required }}
+  totp_token_name: "{{ sbs.totp_token_name }}"
+  # The service_id in the proxy_authz endpoint when logging into SBS. Most likely to equal the oidc.client_id
+  sram_service_entity_id: "{{ sbs.oidc_client_id }}"
+  scopes: {{ sbs.oidc_scopes }}
+
+base_scope: "{{ base_domain }}"
+entitlement_group_namespace: "{{ sbs.urn_namespace }}"
+eppn_scope: " {{ sbs.eppn_scope }}"
+scim_schema_sram: "urn:mace:surf.nl:sram:scim:extension"
+collaboration_creation_allowed_entitlement: "urn:mace:surf.nl:sram:allow-create-co"
+
+{% if env == "prd" %}
+environment_disclaimer: ""
+{% else %}
+environment_disclaimer: "{{ sbs.disclaimer_label }}"
+{% endif %}
+
+# All services in the white list can be requested in the create-restricted-co API
+# The default organisation is a fallback for when the administrator has no schac_home_org
+restricted_co:
+  services_white_list: [ "https://cloud" ]
+  default_organisation: "{{ sbs.restricted_co_default_org }}"
+
+mail:
+  host: {{ sbs.mail_host }}
+  port: {{ sbs.mail_port }}
+  sender_name: {{ sbs.mail_sender_name }}
+  sender_email: {{ sbs.mail_sender_email }}
+  suppress_sending_mails: {{ sbs.suppress_mails }}
+  info_email: {{ sbs.support_email }}
+  beheer_email: {{ sbs.admin_email }}
+  ticket_email: {{ sbs.ticket_email }}
+  eduteams_email: {{ sbs.eduteams_email }}
+  # Do we mail a summary of new Organizations and Services to the beheer_email?
+  audit_trail_notifications_enabled: {{ sbs.audit_trail_notifications_enabled }}
+  account_deletion_notifications_enabled: True
+  send_exceptions: {{ sbs.send_exceptions }}
+  send_js_exceptions: {{ sbs.send_js_exceptions }}
+  send_exceptions_recipients: [ "{{ sbs.exceptions_mail }}" ]
+  environment: "{{ base_domain }}"
+
+manage:
+  enabled: {{ sbs.manage_base_enabled }}
+  # The entity_id of the SRAM RP in Manage for API retrieval, e.g "sbs.test2.sram.surf.nl"
+  sram_rp_entity_id: "{{ sbs.manage_sram_rp_entity_id }}"
+  base_url: "{{ sbs.manage_base_url }}"
+  user: "{{ sbs.manage_user }}"
+  password: "{{ sbs.manage_password }}"
+  verify_peer: {{ sbs.manage_verify_peer }}
+
+aup:
+  version: 1
+  url_aup_en: "https://edu.nl/6wb63"
+  url_aup_nl: "https://edu.nl/6wb63"
+
+base_url: {{ sbs.base_url }}
+socket_url: {{ sbs.base_url }}
+base_server_url: {{ sbs.base_url }}
+wiki_link: {{ sbs.wiki_link }}
+
+admin_users:
+{% for admin_user in sbs.admin_users %}
+  - uid: "{{ admin_user.uid }}"
+{% endfor %}
+
+organisation_categories:
+  - "HBO"
+  - "MBO"
+  - "UMC"
+  - "University"
+  - "Research"
+  - "SURF"
+
+feature:
+  seed_allowed: {{ sbs.seed_allowed }}
+  api_keys_enabled: {{ sbs.api_keys_enabled }}
+  feedback_enabled: {{ sbs.feedback_enabled }}
+  impersonation_allowed: {{ sbs.impersonation_allowed }}
+  sbs_swagger_enabled: {{ sbs.swagger_enabled }}
+  admin_platform_backdoor_totp: {{ sbs.admin_platform_backdoor_totp }}
+  past_dates_allowed: {{ sbs.past_dates_allowed }}
+  mock_scim_enabled: {{ sbs.mock_scim_enabled }}
+
+metadata:
+  idp_url: "{{sbs.idp_metadata_url}}"
+  parse_at_startup: True
+  # No need for environment specific values
+  scope_override:
+    knaw.nl: "Koninklijke Nederlandse Akademie van Wetenschappen (KNAW)"
+
+platform_admin_notifications:
+  # Do we daily check for CO join_requests and CO requests and send a summary mail to beheer_email?
+  enabled: False
+  cron_hour_of_day: {{ sbs.cron_hour_of_day }}
+  # How long before we include open join_requests in the summary
+  outstanding_join_request_days_threshold: 7
+  # How long before we include open CO requests in the summary
+  outstanding_coll_request_days_threshold: 7
+
+user_requests_retention:
+  # Do we daily check for CO join_requests and CO requests and delete approved and denied?
+  enabled: {{ sbs.notifications_enabled }}
+  cron_hour_of_day: {{ sbs.cron_hour_of_day }}
+  # How long before we delete approved / denied join_requests
+  outstanding_join_request_days_threshold: 90
+  # How long before we delete approved / denied CO requests
+  outstanding_coll_request_days_threshold: 90
+
+# The retention config determines how long users may be inactive, how long the reminder email is valid and when do we resent the magic link
+retention:
+  cron_hour_of_day: {{ sbs.cron_hour_of_day }}
+  # how many days of inactivity before a user is suspended
+  #   0 allows for any last_login_date in the past to trigger suspension notification
+  allowed_inactive_period_days: {{ sbs.suspension_inactive_days }}
+  # how many days before suspension do we send a warning
+  #   -1 will suspend notified users on second suspension cron
+  reminder_suspend_period_days: {{ sbs.suspension_reminder_days }}
+  # how many days after suspension do we delete the account
+  remove_suspended_users_period_days: 90
+  # how many days before deletion do we send a reminder
+  reminder_expiry_period_days: 7
+  # whether to send a notification of the result of the retention process to the beheer_email
+  admin_notification_mail: {{ sbs.suspension_notify_admin }}
+
+collaboration_expiration:
+  # Do we daily check for CO's that will be deleted because they have been expired?
+  enabled: {{ sbs.notifications_enabled }}
+  cron_hour_of_day: {{ sbs.cron_hour_of_day }}
+  # How long after expiration do we actually delete expired collaborations
+  expired_collaborations_days_threshold: 90
+  # How many days before actual expiration do we mail the organisation members
+  expired_warning_mail_days_threshold: 10
+
+collaboration_suspension:
+  # Do we daily check for CO's that will be suspended because of inactivity?
+  enabled: {{ sbs.notifications_enabled }}
+  cron_hour_of_day: {{ sbs.cron_hour_of_day }}
+  # After how many days of inactivity do we suspend collaborations
+  collaboration_inactivity_days_threshold: 365
+  # How many days before actual suspension do we mail the organisation members
+  inactivity_warning_mail_days_threshold: 10
+  # After how many days after suspension do we actually delete the collaboration
+  collaboration_deletion_days_threshold: 90
+
+membership_expiration:
+  # Do we daily check for memberships that will be deleted because they have been expired?
+  enabled: {{ sbs.notifications_enabled }}
+  cron_hour_of_day: {{ sbs.cron_hour_of_day }}
+  # How long after expiration do we actually delete expired memberships
+  expired_memberships_days_threshold: 90
+  # How many days before actual expiration do we mail the co admin and member
+  expired_warning_mail_days_threshold: 10
+
+invitation_reminders:
+  # Do we daily check for invitations that need a reminder?
+  enabled: {{ sbs.invitation_reminders_enabled }}
+  cron_hour_of_day: {{ sbs.cron_hour_of_day }}
+  # How many days before expiration of an invitation do we remind the user?
+  invitation_reminders_threshold: 5
+
+invitation_expirations:
+  # Do we daily check for invitations that are expired / accepted and are eligible for deletion ?
+  enabled: {{ sbs.invitation_expirations_enabled }}
+  cron_hour_of_day: {{ sbs.cron_hour_of_day }}
+  # How long after expiration of an invitation do we delete the invitation?
+  nbr_days_remove_expired_invitations: 10
+  # How long after expiration of an API created invitation do we delete the invitation?
+  nbr_days_remove_api_expired_invitations: 30
+
+orphan_users:
+  # Do we daily check for users that are orphans soo they can be deleted?
+  enabled: {{ sbs.delete_orphaned }}
+  cron_hour_of_day: {{ sbs.cron_hour_of_day }}
+  # How long after created do we delete orphan users
+  delete_days_threshold: 14
+
+open_requests:
+  # Do we weekly check for all open requests?
+  enabled: {{ sbs.open_requests_enabled }}
+  cron_day_of_week: 1
+
+scim_sweep:
+  # Do we enable scim sweeps?
+  enabled: {{ sbs.scim_sweep }}
+  # How often do we check if scim sweeps are needed per service
+  cron_minutes_expression: "*/15"
+
+ldap:
+  url: "{{ sbs.ldap_url }}"
+  bind_account: "{{ sbs.ldap_bind_account }}"
+
+# A MFA login in a different flow is valid for X minutes
+mfa_sso_time_in_minutes: {{sbs.mfa_sso_minutes}}
+
+# whether to fall back to TOTP MFA
+mfa_fallback_enabled: {{sbs.mfa_fallback_enabled}}
+
+# Lower case entity ID's and schac_home allowed skipping MFA.
+# Note that for a login directly into SRAM only schac_home can be used as the entity_idp of the IdP is unknown
+mfa_idp_allowed: {{sbs.mfa_idp_allowed}}
+
+# Lower case schachome organisations / entity ID's where SURFSecure ID is used for step-up
+ssid_identity_providers: {{sbs.ssid_identity_providers}}
+
+ssid_config_folder: saml
+
+pam_web_sso:
+  session_timeout_seconds: 300
+
+rate_limit_totp_guesses_per_30_seconds: 10
+
+# The uid's of user that will never be suspended or deleted
+excluded_user_accounts:
+{% for excluded_user in sbs.excluded_users %}
+  - uid: "{{ excluded_user.uid }}"
+{% endfor %}
+
+engine_block:
+  api_token: {{ sbs.engine_block_api_token }}

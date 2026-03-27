@@ -1,0 +1,20 @@
+[Unit]
+Description = LDAP server
+
+[Service]
+Type = forking
+User = root
+SupplementaryGroups = ssl-cert
+ExecStartPre=-/bin/mkdir -p /var/run/slapd
+ExecStartPre=-/bin/chown openldap. /var/run/slapd
+ExecStart = /usr/sbin/slapd -F /etc/ldap/slapd.d -u openldap -g openldap -h 'ldapi:/// ldap://localhost/ ldaps://{{inventory_hostname}}/'
+Restart = always
+RestartSec = 30
+PIDFile = /run/slapd/slapd.pid
+# defaults are 1024:524288 which is too small for slapd
+# see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=378261 and
+# https://www.openldap.org/lists/openldap-software/200802/msg00186.html
+LimitNOFILE=4096:524288
+
+[Install]
+WantedBy = multi-user.target
