@@ -13,8 +13,7 @@
     interval: 10
   register: replica_status
   ignore_errors: true
-  when: mongo_replication_role == 'primary'
-
+  
 - name: Debug replica set status
   ansible.builtin.debug:
     msg: "{{ replica_status }}"

@@ -59,6 +59,7 @@
         file: clustercheck.yml
       when:
         - mongo_mode == "cluster"
+        - mongo_replication_role == 'primary'
 
     # todo: add admin user for cluster and standalone in a separate file?
 
@@ -69,7 +70,10 @@
     - name: Include user creation
       ansible.builtin.include_tasks:
         file: users.yml
-      when: not replica_status.failed OR mongo_mode == "standalone" # Cannot add users on a broken cluster
+      # Cannot add users on a broken cluster
+      when: >
+        (mongo_replication_role == 'primary' and not replica_status.failed)
+        or mongo_mode == 'standalone'
 
     - name: Include postinstallation tasks
       ansible.builtin.include_tasks:

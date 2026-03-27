@@ -16,7 +16,7 @@ net:
 storage:
   dbPath: {{ mongo_data_path }}
 
-{% if replica_set_name is defined and mongo_mode == "cluster" %}
+{% if mongo_replica_set_name is defined and mongo_mode == "cluster" %}
 replication:
   replSetName: {{ mongo_replica_set_name }}
 {% endif %}

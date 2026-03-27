@@ -1,7 +1,8 @@
 ---
 # In this task file the cluster is configured
 
-# todo rs.add add stees opnieuw dat willen we niet
+# todo  "replica set IDs do not match, ours: 69c663d0733acfe1f8d30e5b; remote node's: 69c663d08003f534c4bac5d3"
+# todo overrule serial for cluster initialize https://stackoverflow.com/questions/50026802/override-ansible-playbook-serial-from-command-line
 # todo arbiter optie
 # todo set votes, priority, hidden (uit hostvars?)
 # priority moet matchen met replication role, of replication role uit cluster mebers halen?
@@ -9,8 +10,7 @@
 # todo test alle servers leeg in 1 keer deployen
 # todo test primary eerst dan secundaries
 # todo test config wijziging zonder cluster wijziging
-# todo node verwijderen
-# todo prio wijzigen
+# todo node verwijderen of andere reconfiguring
 
 - name: Check some cluster related variables
   when: mongo_mode == "cluster"
@@ -56,17 +56,51 @@
     enabled: true
     state: started
 
-- name: Initial cluster initialisation
-  community.mongodb.mongodb_replicaset:
-    login_host: localhost
-    login_user: admin
-    login_port: "{{ mongo_port }}"
-    login_password: "{{ mongo_admin_password }}"
-    replica_set: "{{ mongo_replica_set_name }}"
-    members: "{{ mongo_cluster_members }}"
-    validate: false # todo moet dat niet true zijn
-  run_once: true
+- name: initialise cluster
   when: mongo_replication_role == 'primary'
+  block:
+
+    - name: Check if replica set is already initialised
+      community.mongodb.mongodb_shell:
+        login_host: localhost
+        login_user: admin
+        login_port: "{{ mongo_port }}"
+        login_password: "{{ mongo_admin_password }}"
+        eval: "rs.status().ok"
+        db: admin
+      register: rs_already_init
+      ignore_errors: true
+
+    - name: Initialise replica set (if not already done)
+      community.mongodb.mongodb_shell:
+        login_host: localhost
+        login_user: admin
+        login_port: "{{ mongo_port }}"
+        login_password: "{{ mongo_admin_password }}"
+        eval: |
+          rs.initiate({
+            _id: "{{ mongo_replica_set_name }}",
+            members: [
+              {% for m in mongo_cluster_members %}
+              { _id: {{ loop.index0 }}, host: "{{ m.host }}", priority: {{ m.priority }}, votes: {{ m.votes }} }{{ "," if not loop.last else "" }}
+              {% endfor %}
+            ]
+          })
+        db: admin
+      when: rs_already_init.failed or rs_already_init.transformed_output[0] != 1
+      register: rs_init
+
+    # - name: Initial cluster initialisation
+    #   community.mongodb.mongodb_replicaset:
+    #     login_host: localhost
+    #     login_user: admin
+    #     login_port: "{{ mongo_port }}"
+    #     login_password: "{{ mongo_admin_password }}"
+    #     replica_set: "{{ mongo_replica_set_name }}"
+    #     members: "{{ mongo_cluster_members }}"
+    #     validate: false # todo moet dat niet true zijn
+    #   run_once: true
+    #   when: mongo_replication_role == 'primary'
 
 # - name: Add members to cluster
 #   when: mongo_replication_role != "primary"
