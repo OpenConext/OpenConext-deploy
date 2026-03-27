@@ -1,5 +1,5 @@
 ---
-ldap: "{{ ldap_defaults | combine(ldap_overrides) }}"
+ldap: "{{ ldap_defaults | combine(ldap_overrides, recursive=true) }}"
 
 ldap_defaults:
   image: "ghcr.io/surfscz/sram-ldap:main"

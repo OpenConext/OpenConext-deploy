@@ -71,7 +71,7 @@ mail:
   port: {{ sbs.mail_port }}
   sender_name: {{ sbs.mail_sender_name }}
   sender_email: {{ sbs.mail_sender_email }}
-  suppress_sending_mails: False
+  suppress_sending_mails: {{ sbs.suppress_mails }}
   info_email: {{ sbs.support_email }}
   beheer_email: {{ sbs.admin_email }}
   ticket_email: {{ sbs.ticket_email }}

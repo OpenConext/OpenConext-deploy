@@ -1,0 +1,8 @@
+---
+mailpit: "{{ mailpit_defaults | combine(mailpit_overrides, recursive=true) }}"
+
+mailpit_defaults:
+  image: "axllent/mailpit"
+  hostname: "mailpit.{{ base_domain }}"
+  user: "mailpit"
+  group: "mailpit"
