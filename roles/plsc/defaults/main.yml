@@ -1,0 +1,15 @@
+---
+plsc: "{{ plsc_defaults | combine(plsc_overrides, recursive=true) }}"
+
+plsc_defaults:
+  image: "ghcr.io/surfscz/sram-plsc:main"
+  conf_dir: "{{current_release_appdir}}/sram/plsc"
+  ansible_nolog: false
+  ldap_uri: "ldap://ldap:389/"
+  ldap_basedn: "dc=services,dc=vnet"
+  ldap_binddn: "cn=admin,dc=vnet"
+  ldap_password: "secret"
+  sbs_host: "http://sbs-server:8080"
+  sbs_user: "sysread"
+  sbs_password: "secret"
+  retry: 3
