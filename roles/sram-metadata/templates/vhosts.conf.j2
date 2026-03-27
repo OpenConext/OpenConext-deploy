@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+    ServerName sram-metadata-server
+    DocumentRoot /var/www/html
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    <Location />
+        Require all granted
+    </Location>
+    <Directory "/var/www/html">
+        Require all granted
+        Options FollowSymLinks
+        Options -MultiViews
+    </Directory>
+</VirtualHost>
