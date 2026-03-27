@@ -1,0 +1,18 @@
+---
+# - name: enable plsc job
+#   systemd:
+#     name: "plsc.timer"
+#     enabled: true
+#     state: "restarted"
+#     daemon_reload: true
+
+# - name: "restart zabbix-agent"
+#   systemd:
+#     name: "zabbix-agent2.service"
+#     state: "restarted"
+
+- name: Restart the plsc container
+  community.docker.docker_container:
+    name: sram-plsc
+    restart: true
+    state: started

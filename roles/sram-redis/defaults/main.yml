@@ -1,0 +1,11 @@
+---
+redis: "{{ redis_defaults | combine(redis_overrides, recursive=true) }}"
+redis_defaults:
+  image: "docker.io/library/redis:7"
+  conf_dir: "{{ current_release_appdir }}/sram/redis"
+  data_dir: "{{ current_release_appdir }}/sram/redis/data"
+  user: redis
+  group: redis
+  redis_user: default
+  redis_password: changethispassword
+  max_memory: 100mb
