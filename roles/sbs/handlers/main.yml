@@ -1,9 +1,0 @@
----
-- name: Restart sbs containers
-  community.docker.docker_container:
-    name: "{{ item }}"
-    state: started
-    restart: true
-  loop:
-    - sbs-client
-    - sbs-server
