@@ -1,0 +1,38 @@
+---
+ldap_image: "ghcr.io/surfscz/sram-ldap:main"
+ldap_conf_dir: "{{ current_release_appdir }}/sram/ldap"
+ldap_ldif_dir: "{{ ldap_conf_dir }}/schema"
+ldap_certs_dir: "{{ ldap_conf_dir }}/certs"
+ldap_backup_dir: "{{ ldap_conf_dir }}/ldap"
+ldap_data_dir: "{{ ldap_conf_dir}}/data"
+ldap_uri: "ldap://localhost/"
+
+ldap_user: "openldap"
+ldap_group: "openldap"
+
+# admin_group: "ldap_admin"
+ldap_admins:
+  - name: Admin
+    uid: admin
+    pw_hash: <slappasswd output>
+    sshkey: ""
+
+ldap_loglevel: "stats stats2 filter"
+
+ldap_services_password: secret
+ldap_monitor_password: secret
+ldap_ldap_monitor_password: secret
+
+ldap_uri: "ldap://localhost/"
+ldap_rid_prefix: "ldap://"
+
+ldap_base_domain: "{{ base_domain }}"
+ldap_base_dn: >-
+  {{ ((ldap_base_domain.split('.')|length)*['dc=']) |
+  zip(ldap_base_domain.split('.')) | list | map('join', '') | list | join(',') }}
+ldap_services_dn:
+  basedn: "dc=services,{{ ldap_base_dn }}"
+  o:      "Services"
+  binddn: "cn=admin,{{ ldap_base_dn }}"
+
+ldap_hosts: {}

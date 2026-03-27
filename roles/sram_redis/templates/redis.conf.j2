@@ -1,0 +1,3 @@
+user {{redis_redis_user}} on +@all ~* &* >{{redis_redis_password}}
+maxmemory {{ redis_max_memory }}
+maxmemory-policy allkeys-lru
