@@ -65,8 +65,14 @@ mongo_data_path: "/var/lib/mongo"
 # set in group_vars
 # mongo_cluster_members:
 #   - host: mongo1.example.com:{{ mongo_port }}
+#     prioriy: 3
+#     votes: 1
 #   - host: mongo2.example.com:{{ mongo_port }}
+#     prioriy: 2
+#     votes: 1
 #   - host: mongo3.example.com:{{ mongo_port }}
+#     prioriy: 2
+#     votes: 1
 
-# to avoid surprises only initiate or reconfigure cluster if this is true (use -e mongo_configure_cluster=true when you run your playbook)
+# to avoid surprises only initiate or reconfigure cluster if this is true (safest option is to use -e mongo_configure_cluster=true with your deployemnt when cluster configuration is necessary)
 mongo_configure_cluster: false

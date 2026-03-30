@@ -1,12 +1,13 @@
 ---
 # In this task file the cluster is configured
 
-# todo  "replica set IDs do not match, ours: 69c663d0733acfe1f8d30e5b; remote node's: 69c663d08003f534c4bac5d3"
 # todo overrule serial for cluster initialize https://stackoverflow.com/questions/50026802/override-ansible-playbook-serial-from-command-line
 # todo arbiter optie
 # todo set votes, priority, hidden (uit hostvars?)
 # priority moet matchen met replication role, of replication role uit cluster mebers halen?
 # todo write concern zetten
+
+# testen
 # todo test alle servers leeg in 1 keer deployen
 # todo test primary eerst dan secundaries
 # todo test config wijziging zonder cluster wijziging

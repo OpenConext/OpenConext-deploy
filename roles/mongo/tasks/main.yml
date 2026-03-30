@@ -1,8 +1,5 @@
 ---
-    # - name: Check some variables
-    #   when: mongo_cluster_members is not defined
-    #   ansible.builtin.fail:
-    #     msg: "Something is wrong, mongo_mode was set to cluster but mongo_cluster_members is undefined."
+# Main task file mongo role
 
 - name: Message for non redhat family servers
   when: ansible_facts['os_family'] != 'RedHat'
@@ -35,13 +32,6 @@
     - name: Include Certificate tasks
       ansible.builtin.include_tasks:
         file: certs.yml
-
-    # todo: magw eg?
-    # - name: Include standalone configuration tasks
-    #   ansible.builtin.include_tasks:
-    #     file: standaloneconfig.yml
-    #   when:
-    #     - mongo_mode == "standalone"
 
     - name: Include General config tasks
       ansible.builtin.include_tasks:
