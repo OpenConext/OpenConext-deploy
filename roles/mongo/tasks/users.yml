@@ -10,7 +10,7 @@
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     roles: "{{ item.role }}"
-    replica_set: "{{ replica_set_name }}"
+    replica_set: "{{ mongo_replica_set_name }}"
   #no_log: true todo enable
   run_once: true
   with_items: "{{ mongo.users }}"

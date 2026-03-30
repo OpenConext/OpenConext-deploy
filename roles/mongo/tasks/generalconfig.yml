@@ -20,19 +20,21 @@
     msg: "{{ mongo_authentication_disabled.stdout }}"
     verbosity: 2
 
-# first run add admin user without logging in
-- name: Add the admin user
-  community.mongodb.mongodb_user:
-    login_database: admin
-    database: admin
-    name: admin
-    password: "{{ mongo_admin_password }}"
-    login_port: "{{ mongo_port }}"
-    roles: root
-    state: present
-  # todo enable no_log: true
-  run_once: true
-  when: mongo_authentication_disabled.rc == 0
+- name: configure primary or standalone
+  when: mongo_mode == "standalone" or mongo_replication_role == "primary"
+  block:
+    # first run add admin user without logging in
+    - name: Add the admin user
+      community.mongodb.mongodb_user:
+        login_database: admin
+        database: admin
+        name: admin
+        password: "{{ mongo_admin_password }}"
+        login_port: "{{ mongo_port }}"
+        roles: root
+        state: present
+      # todo enable no_log: true
+      when: mongo_authentication_disabled.rc == 0
 
 # Config for standalone and replication server
 - name: Install mongodb.conf file
