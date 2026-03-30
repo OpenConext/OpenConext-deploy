@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "institution",
+  "order": 11,
+  "type": "object",
+  "properties": {
+    "eid": {
+      "type": "number"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entityid": {
+      "type": "string",
+      "minLength": 1
+    },
+    "identifier": {
+      "type": "string",
+      "info": "The unique identifier of the institution."
+    },
+    "use_ra_locations": {
+      "type": "boolean"
+    },
+    "show_raa_contact_information": {
+      "type": "boolean"
+    },
+    "verify_email": {
+      "type": "boolean"
+    },
+    "allowed_second_factors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "yubikey",
+          "tiqr",
+          "webauthn",
+          "sms"
+        ]
+      }
+    },
+    "number_of_tokens_per_identity": {
+      "type": "number"
+    },
+    "use_ra": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "use_raa": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "select_raa": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "self_vet": {
+      "type": "boolean"
+    },
+    "allow_self_asserted_tokens": {
+      "type": "boolean"
+    },
+    "sso_on_2fa": {
+      "type": "boolean"
+    },
+    "stepup-client": {
+      "type": "string",
+      "enum": [
+        "freerider",
+        "full"
+      ],
+      "default": "freerider"
+    },
+
+    "revisionid": {
+      "type": "number"
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "revisionnote": {
+      "type": "string"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metaDataFields": {
+      "type": "object",
+      "properties": {},
+      "patternProperties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "name",
+    "entityid",
+    "identifier",
+    "stepup-client"
+  ],
+  "additionalProperties": false,
+  "indexes": []
+}
