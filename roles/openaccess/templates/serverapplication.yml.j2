@@ -29,17 +29,17 @@ spring:
       client:
         registration:
           oidcng:
-            client-id: {{ oidc_playground.client_id }}
-            client-secret: {{ oidc_playground.secret }}
+            client-id: {{ openconextaccess.oidcng.client_id }}
+            client-secret: {{ openconextaccess.oidcng.secret }}
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: "authorization_code"
             scope: openid
         provider:
           oidcng:
-            authorization-uri: "https://connect.{{ base_domain }}/oidc/authorize"
-            token-uri: "https://connect.{{ base_domain }}/oidc/token"
-            user-info-uri: "https://connect.{{ base_domain }}/oidc/userinfo"
-            jwk-set-uri: "https://connect.{{ base_domain }}/oidc/certs"
+            authorization-uri: {{ openconextaccess.oidcng.authorization_uri }}
+            token-uri: {{ openconextaccess.oidcng.token_uri }}
+            user-info-uri: {{ openconextaccess.oidcng.user_info_uri }}
+            jwk-set-uri: {{ openconextaccess.oidcng.jwk_set_uri }}
             user-name-attribute: sub
             user-info-authentication-method: client_secret_basic
   jpa:
@@ -62,8 +62,8 @@ spring:
     host: {{ smtp_server }}
 
 oidcng:
-  discovery-url: "https://connect.{{ env }}.surfconext.nl/oidc/.well-known/openid-configuration"
-  introspect-url: "https://connect.{{ env }}.surfconext.nl/oidc/introspect"
+  discovery-url: {{ openconextaccess.oidcng.discovery_url }}
+  introspect-url: {{ openconextaccess.oidcng.introspect_url }}
   resource-server-id: myconext.rs
   resource-server-secret: secret
   base-url: {{ openconextaccess_base_domain }}
@@ -105,7 +105,7 @@ config:
         entityid: "https://idp.diy.surfconext.nl"
         descriptionEN: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
         descriptionNL: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
-  idp_proxy_meta_data:  https://metadata.test2.surfconext.nl/idp-metadata.xml
+  idp_proxy_meta_data: {{ openconextaccess.idp_proxy_meta_data }}
   minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
   features:
     - name: idp
@@ -121,7 +121,7 @@ config:
   - "{{ loa }}"
   {% endfor %}
 
-eduid-idp-entity-id: "https://login.{{ myconext_base_domain }}"
+eduid-idp-entity-id: {{ openconextaccess.eduid_idp_entity_id }}
 
 super-admin:
   users:
