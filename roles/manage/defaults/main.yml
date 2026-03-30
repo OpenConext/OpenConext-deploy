@@ -12,6 +12,8 @@ manage_exclude_sram_imports_in_push: true
 manage_show_oidc_rp_tab: false
 manage_exclude_oidc_rp_imports_in_push: false
 manage_metadata_refresh_cron_schedule: "-"
+manage_jira_ticket_prefixes: ""
+manage_jira_base_url: "https://jira.example.org/"
 manage_manage_provision_samlsp_client_id: "https://manage.{{ base_domain }}/shibboleth"
 manage_manage_provision_samlsp_name_en: "{{ instance_name }} Manage"
 manage_manage_provision_samlsp_description_en: "{{ instance_name }} Manage"
