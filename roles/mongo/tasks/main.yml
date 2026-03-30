@@ -51,8 +51,6 @@
         - mongo_mode == "cluster"
         - mongo_replication_role == 'primary'
 
-    # todo: add admin user for cluster and standalone in a separate file?
-
     - name: Include Service tasks
       ansible.builtin.include_tasks:
         file: services.yml

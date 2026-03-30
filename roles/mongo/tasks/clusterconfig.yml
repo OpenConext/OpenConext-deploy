@@ -1,7 +1,6 @@
 ---
 # In this task file the cluster is configured
 
-# todo overrule serial for cluster initialize https://stackoverflow.com/questions/50026802/override-ansible-playbook-serial-from-command-line
 # todo arbiter optie
 # todo set votes, priority, hidden (uit hostvars?)
 # priority moet matchen met replication role, of replication role uit cluster mebers halen?
@@ -72,7 +71,19 @@
       register: rs_already_init
       ignore_errors: true
 
-    - name: Initialise replica set (if not already done)
+    - name: Debug cluster initialization check
+      ansible.builtin.debug:
+        msg: "{{ rs_already_init }}"
+        verbosity: 2
+
+    - name: Debug cluster initialization check failed
+      ansible.builtin.debug:
+        msg: "{{ rs_already_init.failed }}"
+        verbosity: 2
+
+    # This should be possible with community.mongodb.mongodb_replicaset
+    # But we keep getting authenticatione error so leave it like this for now
+    - name: Initialise replica set if necessary
       community.mongodb.mongodb_shell:
         login_host: localhost
         login_user: admin
@@ -88,36 +99,20 @@
             ]
           })
         db: admin
-      when: rs_already_init.failed or rs_already_init.transformed_output[0] != 1
+      when: rs_already_init.failed
       register: rs_init
 
-    # - name: Initial cluster initialisation
-    #   community.mongodb.mongodb_replicaset:
-    #     login_host: localhost
-    #     login_user: admin
-    #     login_port: "{{ mongo_port }}"
-    #     login_password: "{{ mongo_admin_password }}"
-    #     replica_set: "{{ mongo_replica_set_name }}"
-    #     members: "{{ mongo_cluster_members }}"
-    #     validate: false # todo moet dat niet true zijn
-    #   run_once: true
-    #   when: mongo_replication_role == 'primary'
+    - name: Debug cluster initialization
+      ansible.builtin.debug:
+        msg: "{{ rs_init }}"
+        verbosity: 2
 
-# - name: Add members to cluster
-#   when: mongo_replication_role != "primary"
-#   block:
-#     - name: Add new mongo server to replication set
-#       when: mongo_replication_role != "arbiter"
-#       community.mongodb.mongodb_shell:
-#         login_host: localhost
-#         login_user: admin
-#         login_password: "{{ mongo_admin_password }}"
-#         login_database: admin
-#         eval: 'rs.add({ host: "{{ ansible_hostname }}:{{ mongo_port }}" })'
-#       register: rs_add
-#       delegate_to: "{{ mongo_primary_host }}"
-
-    # - name: Debug rs add event
-    #   ansible.builtin.debug:
-    #     var: rs_add
-    #     verbosity: 2
+    - name: Reconfigure cluster if necessary
+      community.mongodb.mongodb_replicaset:
+        login_host: localhost
+        login_user: admin
+        login_password: "{{ mongo_admin_password }}"
+        login_port: "{{ mongo_port }}"
+        reconfigure: true
+        replica_set: "{{ mongo_replica_set_name }}"
+        members: "{{ mongo_cluster_members }}"
