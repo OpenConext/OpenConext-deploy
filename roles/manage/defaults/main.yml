@@ -22,7 +22,7 @@ manage_manage_provision_samlsp_trusted_proxy: false
 manage_manage_provision_samlsp_sign: false
 manage_provision_push: false
 manage_super_user_attribute_name: is-member-of
-manage_tabs_enabled:
+manage_tabs_available:
   - saml20_idp
   - saml20_sp
   - oidc10_rp
@@ -32,6 +32,7 @@ manage_tabs_enabled:
   - provisioning
   - sram
   - organisation
+manage_tabs_disabled: []
 manage_docker_networks:
   - name: loadbalancer
 manage_server_restart_policy: always
