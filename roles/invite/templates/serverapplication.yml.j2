@@ -75,10 +75,14 @@ crypto:
 
 cron:
   user-cleaner-expression: "0 0/30 * * * *"
+  user-cleaner-lock-at-least-for: "PT5M"
+  user-cleaner-lock-at-most-for: "PT28M"
   last-activity-duration-days: 1000
   role-expiration-notifier-expression: "0 0/30 * * * *"
   # Set to -1 to suppress role expiry notifications
   role-expiration-notifier-duration-days: 5
+  role-expiration-notifier-lock-at-least-for: "PT5M"
+  role-expiration-notifier-lock-at-most-for: "PT28M"
   metadata-resolver-initial-delay-milliseconds: 1
   metadata-resolver-fixed-rate-milliseconds: 86_400_000
   metadata-resolver-url: "https://metadata.{{ base_domain }}/idps-metadata.xml"
