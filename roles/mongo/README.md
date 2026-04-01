@@ -26,6 +26,6 @@ See also https://docs.ansible.com/projects/ansible/latest/playbook_guide/playboo
 # Todo
 - [x] Check mongo_replication_roles and give a clear fail message when not set
 - [ ] Add option to change the already existing admin user, for now change the password manually and change it in the ansible config accordingly
-- [ ] Add the possibility for adding and removing cluster members
+- [x] Add the possibility for adding and removing cluster members
 - [x] Add the possibility for a standalone mongo server
-- [ ] Cluster config does not work with serial 1 in the play but for mongo config changes you do want serial 1, split up the role?
+- [x] Cluster changes can be enabled or disabled
