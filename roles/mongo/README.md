@@ -29,3 +29,4 @@ See also https://docs.ansible.com/projects/ansible/latest/playbook_guide/playboo
 - [x] Add the possibility for adding and removing cluster members
 - [x] Add the possibility for a standalone mongo server
 - [x] Cluster changes can be enabled or disabled
+- [ ] Reconfigure cluster always reports changed

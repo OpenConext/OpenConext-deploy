@@ -13,14 +13,20 @@
     interval: 10
   register: replica_status
   ignore_errors: true
-  
+
 - name: Debug replica set status
   ansible.builtin.debug:
     msg: "{{ replica_status }}"
 
 - name: Fail when there is no cluster reconfiguration options set
   ansible.builtin.fail:
-    msg: "Your mongo cluster is broken or non existent and mongo_configure_cluster is disabled, consider enabling it and fix your cluster."
+    msg: "Your mongo cluster is broken or non existent and mongo_configure_cluster is disabled, consider enabling it and fix your cluster. The error: {{ replica_status.msg }}."
   when:
     - replica_status.failed
     - not mongo_configure_cluster | bool
+
+- name: Fail when you misconfigured your replica cluster
+  ansible.builtin.fail:
+    msg: "Your mongo cluster is broken, error: {{ replica_status.msg }}."
+  when:
+    - replica_status.failed
