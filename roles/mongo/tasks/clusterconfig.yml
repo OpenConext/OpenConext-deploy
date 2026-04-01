@@ -12,6 +12,7 @@
 # todo test config wijziging zonder cluster wijziging
 # todo node verwijderen of andere reconfiguring
 
+# Do some preflight checks
 - name: Check some cluster related variables
   when: mongo_mode == "cluster"
   block:
@@ -25,6 +26,7 @@
     msg: "Replica set name {{ mongo_replica_set_name }}"
     verbosity: 2
 
+# Who is primary
 - name: Identify designated primary
   ansible.builtin.set_fact:
     mongo_primary_host: >-
@@ -38,7 +40,6 @@
       }}
   failed_when: mongo_primary_host is not defined or mongo_primary_host == ''
 
-# Who is primary
 - name: Debug primary settings
   ansible.builtin.debug:
     msg: "Primary is {{ mongo_primary_host }}"
@@ -50,16 +51,17 @@
     msg: "This nodes replication role is {{ mongo_replication_role }}"
     verbosity: 2
 
+# Cannot initialise a cluster without starting.......
 - name: Enable and start mongod
   ansible.builtin.service:
     name: mongod.service
     enabled: true
     state: started
 
-- name: initialise cluster
+# Initialise cluster block
+- name: initialise or reconfigure cluster block
   when: mongo_replication_role == 'primary'
   block:
-
     - name: Check if replica set is already initialised
       community.mongodb.mongodb_shell:
         login_host: localhost
@@ -76,11 +78,6 @@
         msg: "{{ rs_already_init }}"
         verbosity: 2
 
-    - name: Debug cluster initialization check failed
-      ansible.builtin.debug:
-        msg: "{{ rs_already_init.failed }}"
-        verbosity: 2
-
     # This should be possible with community.mongodb.mongodb_replicaset
     # But we keep getting authenticatione error so leave it like this for now
     - name: Initialise replica set if necessary
@@ -94,7 +91,7 @@
             _id: "{{ mongo_replica_set_name }}",
             members: [
               {% for m in mongo_cluster_members %}
-              { _id: {{ loop.index0 }}, host: "{{ m.host }}", priority: {{ m.priority }}, votes: {{ m.votes }} }{{ "," if not loop.last else "" }}
+              { _id: {{ loop.index0 }}, host: "{{ m.host }}", priority: {{ m.priority }}, votes: {{ m.votes }}{% if m.arbiterOnly is defined and m.arbiterOnly and m.arbiterOnly == true %}, arbiterOnly: true {% endif %} }{{ "," if not loop.last else "" }}
               {% endfor %}
             ]
           })
@@ -107,6 +104,7 @@
         msg: "{{ rs_init }}"
         verbosity: 2
 
+    # Reconfigure cluster
     - name: Reconfigure cluster if necessary
       community.mongodb.mongodb_replicaset:
         login_host: localhost

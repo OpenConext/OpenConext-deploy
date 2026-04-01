@@ -65,14 +65,15 @@ mongo_data_path: "/var/lib/mongo"
 # set in group_vars
 # mongo_cluster_members:
 #   - host: mongo1.example.com:{{ mongo_port }}
-#     prioriy: 3
+#     priority: 3
 #     votes: 1
 #   - host: mongo2.example.com:{{ mongo_port }}
-#     prioriy: 2
+#     priority: 2
 #     votes: 1
 #   - host: mongo3.example.com:{{ mongo_port }}
-#     prioriy: 2
+#     priority: 1
 #     votes: 1
+#     arbiterOnly: true
 
-# to avoid surprises only initiate or reconfigure cluster if this is true (safest option is to use -e mongo_configure_cluster=true with your deployemnt when cluster configuration is necessary)
+# to avoid surprises only initiate or reconfigure cluster if this is true (safest option is to use -e mongo_configure_cluster=true with your deployment when cluster configuration is necessary)
 mongo_configure_cluster: false
