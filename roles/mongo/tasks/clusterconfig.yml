@@ -114,3 +114,9 @@
         reconfigure: true
         replica_set: "{{ mongo_replica_set_name }}"
         members: "{{ mongo_cluster_members }}"
+      register: rs_reconfigure
+
+    - name: Debug cluster reconfiguration
+      ansible.builtin.debug:
+        msg: "{{ rs_reconfigure }}"
+        verbosity: 2
