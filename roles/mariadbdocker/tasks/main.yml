@@ -30,7 +30,7 @@
 - name: Create the MariaDB container
   community.docker.docker_container:
     name: openconext_mariadb
-    image: mariadb:10.11
+    image: mariadb:10.6
     state: started
     pull: true
     restart_policy: "always"
