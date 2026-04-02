@@ -22,22 +22,8 @@ engine_feature_send_user_attributes: 0
 engine_wayf_cutoff_point_for_showing_unfiltered_idps: 50
 engine_wayf_show_remember_choice: false
 
-## Engine installer specific variables.
-engine_version_dir: "{{ engine_version | replace('/', '-') }}"
-engine_branch_dir: "{{ openconext_builds_dir }}/OpenConext-engineblock-{{ engine_branch | replace('/', '-') }}"
-engine_release_dir: "{{ openconext_releases_dir }}/OpenConext-engineblock-{{ engine_version_dir }}"
-engine_build_path: "{{ openconext_builds_dir }}/OpenConext-engineblock-{{ engine_version_dir }}.tar.gz"
-engine_download_url: "https://github.com/OpenConext/OpenConext-engineblock/releases/download/{{ engine_version }}/OpenConext-engineblock-{{ engine_version_dir }}.tar.gz"
-engine_current_release_symlink: "{{ openconext_releases_dir }}/OpenConext-engineblock"
-
-engine_ipv4_address: "*"
-# engine_ipv6_address:
-engine_api_ipv4_address: "*"
-# engine_api_ipv6_address:
-
 # Required for the Symfony routing.
 engine_base_domain: "{{ base_domain }}"
-
 engine_domain: engine.{{ base_domain }}
 
 engine_debug: false
@@ -89,8 +75,6 @@ engine_stepup_gateway_loa3: "http://{{ engine_stepup_base_domain }}/assurance/lo
 engine_stepup_gateway_sfo_entity_id: "https://{{ engine_stepup_gateway_domain }}/second-factor-only/metadata"
 # The single sign-on endpoint used for Stepup Gateway SFO callouts
 engine_stepup_gateway_sfo_sso_location: "https://{{ engine_stepup_gateway_domain }}/second-factor-only/single-sign-on"
-# The public key from the Stepup Gateway IdP
-engine_stepup_gateway_sfo_public_key_file: "{{ engine_keys.default.publicFile }}"
 
 ## The minimum priority of messages that will be logged
 engine_logging_passthru_level: NOTICE
@@ -104,13 +88,12 @@ engine_idp_debugging_to_name: "{{ instance_name }} Admin"
 engine_idp_debugging_email_address: "{{ support_email }}"
 engine_idp_debugging_subject: "IdP debug info from %1$s"
 
-eb_support_url: "https://example.org"
-eb_support_url_nameid: "https://example.org"
-eb_tos_url: "https://example.org"
+engine_support_url: "https://example.org"
+engine_support_url_nameid: "https://example.org"
 
 engine_site_notice_show: false
 
-engineblock_log_attributes: []
+engine_log_attributes: []
 
 engine_php_memory: 256M
 engine_docker_networks:
