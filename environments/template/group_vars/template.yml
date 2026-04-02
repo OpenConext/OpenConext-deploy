@@ -1,7 +1,6 @@
 ---
 
 env: "%env%"
-show_debug_info: false # Show extra debug info
 mariadb_host: localhost
 rsyslog_host: localhost
 database_clients: [ "{{ mariadb_host }}" ]
@@ -32,8 +31,7 @@ attribute_aggregation_version: "3.0.6"
 oidc_playground_client_version: "3.0.0"
 oidc_playground_server_version: "3.0.0"
 engine_version: "6.15.0"
-manage_gui_version: "7.3.3-SNAPSHOT"
-manage_server_version: "7.3.3-SNAPSHOT"
+manage_version: "9.6.0"
 lifecycle_version: "0.1.1"
 monitoring_tests_version: "7.0.0"
 mujina_version: "8.0.2"
@@ -213,7 +211,7 @@ aa:
   sab_username: coin-test
   sab_rest_username: surfconexttest
   sab_rest_password: "{{ aa_sab_rest_password }}"
-  sab_rest_endpoint: https://sab.acc.surfaccess.nl
+  sab_rest_endpoint: https://sab.acc.surfaccess.nl/api/profile
   surfmarket_url: https://example.org
   surfmarket_username: example@example.org
   surfmarket_password: "{{ aa_surfmarket_password }}"
