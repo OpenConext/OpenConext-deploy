@@ -112,3 +112,43 @@
       ansible.builtin.debug:
         msg: "{{ rs_reconfigure }}"
         verbosity: 2
+
+    - name: Wait for the replicaset to stabilise
+      community.mongodb.mongodb_status:
+        replica_set: "{{ mongo_replica_set_name }}"
+        login_host: localhost
+        login_user: admin
+        login_password: "{{ mongo_admin_password }}"
+        login_port: "{{ mongo_port }}"
+        poll: 5
+        interval: 30
+
+    # Cluster settings that cannot be changed with mongodb_replicaset
+
+    - name: Get current default write concern
+      community.mongodb.mongodb_shell:
+        login_host: localhost
+        login_port: 27017
+        login_user: admin
+        login_password: "{{ mongo_admin_password }}"
+        eval: "db.adminCommand({ getDefaultRWConcern: 1 })"
+        #transform: raw
+      register: current_write_concern
+      changed_when: false
+
+    - name: Debug write concern check
+      ansible.builtin.debug:
+        msg: "{{ current_write_concern.transformed_output.defaultWriteConcern }}"
+        verbosity: 2
+
+    - name: Set default write concern
+      community.mongodb.mongodb_shell:
+        login_host: localhost
+        login_user: admin
+        login_password: "{{ mongo_admin_password }}"
+        login_port: "{{ mongo_port }}"
+        eval: "db.adminCommand({ setDefaultRWConcern: 1, defaultWriteConcern: { w: {{ mongo_cluster_write_concern | default('majority') }}, wtimeout: {{ mongo_cluster_write_timeout | default(5000) }} } })"
+      when: >
+          current_write_concern.transformed_output.defaultWriteConcern.w | string != mongo_cluster_write_concern | default('majority') | string
+          or
+          current_write_concern.transformed_output.defaultWriteConcern.wtimeout | int != mongo_cluster_write_timeout | default(5000) | int

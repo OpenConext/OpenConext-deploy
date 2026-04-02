@@ -75,5 +75,8 @@ mongo_data_path: "/var/lib/mongo"
 #     votes: 1
 #     arbiterOnly: true
 
+mongo_cluster_write_concern: "majority"
+mongo_cluster_write_timeout: 5000
+
 # to avoid surprises only initiate or reconfigure cluster if this is true (safest option is to use -e mongo_configure_cluster=true with your deployment when cluster configuration is necessary)
 mongo_configure_cluster: false
