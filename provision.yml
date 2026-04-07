@@ -140,7 +140,7 @@
   hosts: docker_engineblock
   become: true
   roles:
-    - engineblock
+    - engine
   tags: ['engineblock', 'eb']
 
 - name: Deploy invite app
