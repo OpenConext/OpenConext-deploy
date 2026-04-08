@@ -228,7 +228,7 @@ parameters:
   feature_stepup_sfo_override_engine_entityid: {{ engine_feature_stepup_override_entityid | bool | to_json }}
   feature_enable_idp_initiated_flow: {{ engine_feature_idp_initiated_flow | bool | to_json }}
   feature_stepup_send_user_attributes: {{ engine_feature_send_user_attributes | bool | to_json }}
-  feature_enable_sram_interrupt: { { engine_feature_enable_sbs_interrupt | bool | to_json } }
+  feature_enable_sram_interrupt: {{ engine_feature_enable_sbs_interrupt | bool | to_json }}
   ##########################################################################################
   ## PROFILE SETTINGS
   ##########################################################################################
