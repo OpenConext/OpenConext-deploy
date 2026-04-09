@@ -1,9 +1,4 @@
 ---
-# - name: "Initialize database"
-#   throttle: 1
-#   import_tasks: "database_init.yml"
-#   when: "is_dev"
-
 - name: "Create SBS group"
   group:
     name: "{{ sbs_group }}"
@@ -123,17 +118,9 @@
       # TODO: Should we parametrize this?
       - name: "loadbalancer"
   register: "result"
-  # failed_when: "'container' not in result or result.container.State.ExitCode != 0"
-  # changed_when: "'[alembic.runtime.migration] Running upgrade' in result.container.Output"
+  failed_when: "'container' not in result or result.container.State.ExitCode != 0"
+  changed_when: "'[alembic.runtime.migration] Running upgrade' in result.container.Output | default('')"
   notify: "Restart sbs containers"
-
-# What's with result.container?
-- name: debug result
-  ansible.builtin.debug:
-    msg: "{{ result }}"
-
-# - name: Stop
-#   meta: end_play
 
 # Remove the migration container; we can do that with auto_remove, because if we use that, ansible
 # will not save the output in result
