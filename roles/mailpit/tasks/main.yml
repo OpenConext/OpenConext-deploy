@@ -1,14 +1,14 @@
 ---
 - name: "Create mailpit group"
   group:
-    name: "{{ mailpit.group }}"
+    name: "{{ mailpit_group }}"
     state: "present"
   register: "result"
 
 - name: "Create mailpit user"
   user:
-    name: "{{ mailpit.user }}"
-    group: "{{ mailpit.group }}"
+    name: "{{ mailpit_user }}"
+    group: "{{ mailpit_group }}"
     comment: "User to run Mailpit service"
     shell: "/bin/false"
     password: "!"
@@ -23,7 +23,7 @@
 - name: "Create mailpit container"
   docker_container:
     name: "mailpit"
-    image: "{{ mailpit.image }}"
+    image: "{{ mailpit_image }}"
     restart_policy: "always"
     state: "started"
     user: "{{ mailpit_user_uid }}"
@@ -32,6 +32,6 @@
       - name: "loadbalancer"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.mailpit.rule: "Host(`{{ mailpit.hostname }}`)"
+      traefik.http.routers.mailpit.rule: "Host(`{{ mailpit_hostname }}`)"
       traefik.http.routers.mailpit.tls: "true"
       traefik.http.services.mailpit.loadbalancer.server.port: 8025
