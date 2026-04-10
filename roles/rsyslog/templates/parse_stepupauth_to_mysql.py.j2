@@ -86,8 +86,13 @@ def parse_stepup_lines(a):
             continue
 
         # 1. Filtering condition: Only parse logs having authentication_result:OK
-        if data.get("authentication_result") != "OK":
-            continue
+        # Only successful authentications are logged, so this check is not
+        # necessary. There is currently a bug in the Stepup-Gateway where
+        # FAILED is logged, even though the result is OK, making this check
+        # do the wrong thing now.
+        #
+        #if data.get("authentication_result") != "OK":
+        #    continue
 
         # 2. Extract required fields
         user_id = data.get("identity_id")
