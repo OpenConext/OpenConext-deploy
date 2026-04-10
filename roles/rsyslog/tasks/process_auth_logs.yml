@@ -71,7 +71,7 @@
 
 - name: Put log_logins logrotate scripts for stepup
   ansible.builtin.template:
-    src: logrotate_ebauth.j2
+    src: logrotate_stepupauth.j2
     dest: /etc/logrotate.d/logrotate_stepupauth_{{ item.name }}
     mode: 0644
     owner: root
