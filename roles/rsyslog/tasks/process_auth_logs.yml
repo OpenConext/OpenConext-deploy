@@ -51,7 +51,7 @@
 
 - name: Create a python script that parses stepup log_logins per environment
   ansible.builtin.template:
-    src: parse_ebauth_to_mysql.py.j2
+    src: parse_stepupauth_to_mysql.py.j2
     dest: /usr/local/sbin/parse_stepupauth_to_mysql_{{ item.name }}.py
     mode: 0740
     owner: root
