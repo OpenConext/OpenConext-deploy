@@ -53,6 +53,11 @@
       become_user: "acme"
       become: true
 
+    - name: Debug certificates issuer
+      ansible.buitlin.debug:
+        msg: "{{ acme_issue }}"
+        verbosity: 2
+
     # Now deploy the certificates to haproxy
     # We do this in two steps:
     # 1. Cold-deploy the certificates to haproxy's certs directory
