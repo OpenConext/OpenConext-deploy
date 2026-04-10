@@ -103,6 +103,10 @@ def parse_stepup_lines(a):
 
         # Basic data validation
         if not user_id or not timestamp:
+            print(
+                    "Skipping line: validation failed "
+                    f"(user_id={user_id!r}, timestamp={timestamp!r}, request_id={request_id!r})"
+            )
             continue
 
         try:
@@ -110,6 +114,10 @@ def parse_stepup_lines(a):
             loginstamp = parse(timestamp).strftime("%Y-%m-%d %H:%M:%S")
             last_login_date = parse(timestamp).strftime("%Y-%m-%d")
         except:
+            print(
+                    "Skipping line: timestamp parsing failed "
+                    f"(timestamp={timestamp!r}, user_id={user_id!r}, error={e})"
+            )
             continue
 
         # 4. Insert into MySQL
