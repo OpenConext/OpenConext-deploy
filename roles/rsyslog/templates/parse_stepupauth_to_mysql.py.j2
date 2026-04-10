@@ -95,11 +95,11 @@ def parse_stepup_lines(a):
         #    continue
 
         # 2. Extract required fields
-        user_id = data.get("identity_id")
-        timestamp = data.get("datetime")
-        request_id = data.get("request_id")
-        sp_entity_id = data.get("requesting_sp")
-        idp_entity_id = data.get("authenticating_idp")
+        user_id = data.get("context").("identity_id")
+        timestamp = data.get("context").("datetime")
+        request_id = data.get("context").("request_id")
+        sp_entity_id = data.get("context").("requesting_sp")
+        idp_entity_id = data.get("context").("authenticating_idp")
 
         # Basic data validation
         if not user_id or not timestamp:
