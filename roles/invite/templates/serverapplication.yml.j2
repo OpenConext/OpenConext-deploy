@@ -7,6 +7,7 @@ logging:
     org.springframework.security: WARN
     com.zaxxer.hikari: ERROR
     invite: DEBUG
+    net.javacrumbs.shedlock: DEBUG
 
 server:
   port: 8080
@@ -74,11 +75,13 @@ crypto:
   private-key-location: file:///private_key_pkcs8.pem
 
 cron:
-  user-cleaner-expression: "0 0/30 * * * *"
+  user-cleaner-cron: "PT30M"
+  user-cleaner-cron-initial-delay: "PT10M"
   user-cleaner-lock-at-least-for: "PT5M"
   user-cleaner-lock-at-most-for: "PT28M"
   last-activity-duration-days: 1000
-  role-expiration-notifier-expression: "0 0/30 * * * *"
+  role-expiration-notifier-cron: "PT30M"
+  role-expiration-notifier-cron-initial-delay: "PT15M"
   # Set to -1 to suppress role expiry notifications
   role-expiration-notifier-duration-days: 5
   role-expiration-notifier-lock-at-least-for: "PT5M"
