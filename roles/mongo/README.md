@@ -22,6 +22,9 @@ Another issue is the serial value, it is safest to set it to 1 in your playbook,
 
 See also https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_strategies.html#setting-the-batch-size-with-serial
 
+# Cluster reconfiguration
+
+Warning: the cluster reconfiguration option in the mongodb_replicationset module is experimental. and you can only add or remove one node at a time.
 
 # Todo
 - [x] Check mongo_replication_roles and give a clear fail message when not set
@@ -30,3 +33,4 @@ See also https://docs.ansible.com/projects/ansible/latest/playbook_guide/playboo
 - [x] Add the possibility for a standalone mongo server
 - [x] Cluster changes can be enabled or disabled
 - [ ] Reconfigure cluster always reports changed
+- [ ] Initialise cluster always reports changed

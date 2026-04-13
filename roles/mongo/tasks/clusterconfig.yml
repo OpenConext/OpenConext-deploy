@@ -51,7 +51,7 @@
     state: started
 
 # Initialise cluster block
-- name: initialise or reconfigure cluster block
+- name: Initialise or reconfigure cluster block
   when: mongo_replication_role == 'primary'
   block:
     - name: Check if replica set is already initialised
@@ -97,6 +97,7 @@
         verbosity: 2
 
     # Reconfigure cluster
+    # todo: this alwasy returns changed even wehn nothing changes
     - name: Reconfigure cluster if necessary
       community.mongodb.mongodb_replicaset:
         login_host: localhost
@@ -132,7 +133,6 @@
         login_user: admin
         login_password: "{{ mongo_admin_password }}"
         eval: "db.adminCommand({ getDefaultRWConcern: 1 })"
-        #transform: raw
       register: current_write_concern
       changed_when: false
 
@@ -140,15 +140,31 @@
       ansible.builtin.debug:
         msg: "{{ current_write_concern.transformed_output.defaultWriteConcern }}"
         verbosity: 2
+      when: current_write_concern.transformed_output.defaultWriteConcern is defined
 
     - name: Set default write concern
-      community.mongodb.mongodb_shell:
-        login_host: localhost
-        login_user: admin
-        login_password: "{{ mongo_admin_password }}"
-        login_port: "{{ mongo_port }}"
-        eval: "db.adminCommand({ setDefaultRWConcern: 1, defaultWriteConcern: { w: {{ mongo_cluster_write_concern | default('majority') }}, wtimeout: {{ mongo_cluster_write_timeout | default(5000) }} } })"
       when: >
-          current_write_concern.transformed_output.defaultWriteConcern.w | string != mongo_cluster_write_concern | default('majority') | string
+          current_write_concern.transformed_output.defaultWriteConcern is defined
+          and
+          (current_write_concern.transformed_output.defaultWriteConcern.w | string != mongo_cluster_write_concern | default('majority') | string
           or
-          current_write_concern.transformed_output.defaultWriteConcern.wtimeout | int != mongo_cluster_write_timeout | default(5000) | int
+          current_write_concern.transformed_output.defaultWriteConcern.wtimeout | int != mongo_cluster_write_timeout | default(5000) | int)
+          or current_write_concern.transformed_output.defaultWriteConcern is not defined
+      block:
+        - name: "set write concern majority"
+          when: mongo_cluster_write_concern == "majority"
+          community.mongodb.mongodb_shell:
+            login_host: localhost
+            login_user: admin
+            login_password: "{{ mongo_admin_password }}"
+            login_port: "{{ mongo_port }}"
+            eval: "db.adminCommand({ setDefaultRWConcern: 1, defaultWriteConcern: { w: \"{{ mongo_cluster_write_concern | default('majority') }}\", wtimeout: {{ mongo_cluster_write_timeout | default(5000) }} } })"
+        # could not get this to work with either majority with quotes or number without quotes so for now an ugly fix
+        - name: "set write concern numeric"
+          when: mongo_cluster_write_concern != "majority"
+          community.mongodb.mongodb_shell:
+            login_host: localhost
+            login_user: admin
+            login_password: "{{ mongo_admin_password }}"
+            login_port: "{{ mongo_port }}"
+            eval: "db.adminCommand({ setDefaultRWConcern: 1, defaultWriteConcern: { w: {{ mongo_cluster_write_concern | default('majority') }}, wtimeout: {{ mongo_cluster_write_timeout | default(5000) }} } })"
