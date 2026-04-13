@@ -34,3 +34,4 @@ Warning: the cluster reconfiguration option in the mongodb_replicationset module
 - [x] Cluster changes can be enabled or disabled
 - [ ] Reconfigure cluster always reports changed
 - [ ] Initialise cluster always reports changed
+- [ ] Check replication role of a host in host_vars against the settings in the cluster_members array
