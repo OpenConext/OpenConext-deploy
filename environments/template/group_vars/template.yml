@@ -156,15 +156,15 @@ voot:
     - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
     - {
-        type: "teams",
-        url: "https://teams.{{ base_domain }}/api/voot",
-        credentials: {
-         username: "{{ teams.voot_api_user }}",
-         secret: "{{ external_group_provider_secrets.teams }}"
-        },
-        schacHomeOrganization: "{{ base_domain}}",
-        name: "SURFteams",
-        timeoutMillis: 15000
+          type: "invite",
+          url: "https://invite.{{ base_domain }}/api/external/v1/voot",
+          credentials: {
+              username: "{{ invite.vootuser }}",
+              secret: "{{ invite.vootsecret }}"
+          },
+          schacHomeOrganization: "N/A",
+          name: "Invite",
+          timeoutMillis: 3000
       }
 
 oidc_playground:
