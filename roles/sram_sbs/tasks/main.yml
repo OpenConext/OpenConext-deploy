@@ -37,7 +37,6 @@
     - { path: "{{sbs_conf_dir}}",            mode: "0755" }
     - { path: "{{sbs_conf_dir}}/saml",       mode: "0755" }
     - { path: "{{sbs_log_dir}}",             mode: "0775" }
-    - { path: "{{sbs_cert_dir}}",            mode: "0755" }
 
 - name: "Fix file permissions"
   file:
@@ -51,13 +50,6 @@
   with_items:
     - "sbs.log"
     - "sbs.debug.log"
-
-# Create dummy file in certs dir to pacify container pre-init script
-# https://github.com/SURFscz/SBS/pull/2312
-- name: "Touch file in {{ sbs_cert_dir }}"
-  ansible.builtin.copy:
-    content: ""
-    dest: "{{sbs_cert_dir}}/dummy"
 
 - name: "Create SBS config files"
   template:
@@ -82,54 +74,44 @@
     - "{{ sbs_server_image }}"
   register: "sbs_image"
 
-# We need to remove sram-static so it gets repopulated
-# with new SBS image static content
-- name: "Clean up old containers"
+- name: "Migration"
+  # For some reason --check breaks this block
+  when: "sbs_image is changed and not ansible_check_mode"
   block:
-    - name: "Stop and remove sbs and sbs-server containers"
+    - name: "Run SBS migrations"
+      throttle: 1
       community.docker.docker_container:
-        name: "{{ item }}"
+        name: "sram-sbs-migration"
+        image: "{{ sbs_server_image }}"
+        pull: "never"
+        state: "started"
+        restart_policy: "no"
+        detach: false
+        env:
+          RUNAS_UID: "{{ sbs_user_uid | string }}"
+          RUNAS_GID: "{{ sbs_group_gid | string }}"
+          MIGRATIONS_ONLY: "1"
+        # don't actually run the server
+        command: "/bin/true"
+        volumes:
+          - "{{ sbs_conf_dir }}:/sbs-config"
+          - "{{ sbs_log_dir }}:/opt/sbs/log"
+        networks:
+          # TODO: Should we parametrize this?
+          - name: "loadbalancer"
+      register: "result"
+      failed_when: "'container' not in result or result.container.State.ExitCode != 0"
+      changed_when: "'[alembic.runtime.migration] Running upgrade' in result.container.Output | default('')"
+      notify: "Restart sbs containers"
+
+    # Remove the migration container; we can do that with auto_remove, because if we use that, ansible
+    # will not save the output in result
+    - name: "Remove migration container"
+      community.docker.docker_container:
+        name: "sram-sbs-migration"
         state: "absent"
-      with_items:
-        - "sbs-client"
-        - "sbs-server"
-  when: "sbs_image is changed"
-
-- name: "Run SBS migrations"
-  throttle: 1
-  community.docker.docker_container:
-    name: "sram-sbs-migration"
-    image: "{{ sbs_server_image }}"
-    pull: "never"
-    state: "started"
-    restart_policy: "no"
-    detach: false
-    env:
-      RUNAS_UID: "{{ sbs_user_uid | string }}"
-      RUNAS_GID: "{{ sbs_group_gid | string }}"
-      MIGRATIONS_ONLY: "1"
-    # don't actually run the server
-    command: "/bin/true"
-    volumes:
-      - "{{ sbs_conf_dir }}:/sbs-config"
-      - "{{ sbs_cert_dir }}:/sbs-config/cert:ro"
-      - "{{ sbs_log_dir }}:/opt/sbs/log"
-    networks:
-      # TODO: Should we parametrize this?
-      - name: "loadbalancer"
-  register: "result"
-  failed_when: "'container' not in result or result.container.State.ExitCode != 0"
-  changed_when: "'[alembic.runtime.migration] Running upgrade' in result.container.Output | default('')"
-  notify: "Restart sbs containers"
-
-# Remove the migration container; we can do that with auto_remove, because if we use that, ansible
-# will not save the output in result
-- name: "Remove migration container"
-  community.docker.docker_container:
-    name: "sram-sbs-migration"
-    state: "absent"
-  # TODO: fix this by only running this if "sbs_image is changed"
-  changed_when: false
+      # TODO: fix this by only running this if "sbs_image is changed"
+      changed_when: false
 
 - name: "Start sbs client container"
   community.docker.docker_container:
@@ -163,7 +145,6 @@
     pull: "never"
     volumes:
       - "{{ sbs_conf_dir }}:/sbs-config"
-      - "{{ sbs_cert_dir }}:/sbs-config/cert:ro"
       - "{{ sbs_log_dir }}:/opt/sbs/log"
       - "/tmp/ci-runner:/tmp/ci-runner"
     networks:
