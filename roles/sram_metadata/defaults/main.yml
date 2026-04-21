@@ -1,0 +1,78 @@
+---
+sram_metadata_image_server: "ghcr.io/openconext/openconext-basecontainers/apache2:latest"
+sram_metadata_image_pyff: "ghcr.io/surfscz/sram-pyff:main"
+sram_metadata_hostname: "meta.{{ base_domain }}"
+sram_metadata_basedir: "{{current_release_appdir}}/sram/metadata"
+
+# server_name: "metadata-server"
+
+sram_metadata_user: "sram-metadata"
+sram_metadata_group: "sram-metadata"
+
+#   idps_source: "https://metadata.surfconext.nl/idps-metadata.xml"
+#   idps_cert: |
+#   -----BEGIN CERTIFICATE-----
+#   MIIEKjCCAhICEG12w6QqayYAWntxDN59dU0wDQYJKoZIhvcNAQELBQAwPDELMAkG
+#   A1UEBhMCTkwxEDAOBgNVBAoMB1NVUkZuZXQxGzAZBgNVBAMMElNVUkZjb25leHQg
+#   Um9vdCBDQTAeFw0xOTAxMTQxNjM5MDVaFw0yNDAxMTgxNjM5MDVaMGsxCzAJBgNV
+#   BAYTAk5MMRAwDgYDVQQIDAdVdHJlY2h0MRAwDgYDVQQKDAdTVVJGbmV0MRMwEQYD
+#   VQQLDApTVVJGY29uZXh0MSMwIQYDVQQDDBpTVVJGY29uZXh0IG1ldGFkYXRhIHNp
+#   Z25lcjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMckFyqXzW7dbMt4
+#   wDdSLaAjFAbNziUgQaivu4dl9Uf/cZ4f36a9DfQBUSraNoIR76ruwK3TPfFalemp
+#   xmWTsoVSQpb3AOsWbU+i0YKS1cmcqMUC1fef2j1IbuK4B4nEu9S5saGNVGNvUJ+Y
+#   jDUpC5vyyp7boW9E1md2jIBI6Mw+ZhlmkPucqaphxurWnm0KbxTZrYLOBZ1IXj6r
+#   yrRoFwwtjEH+CW8cRn8OATK0q4yb0BVr2gY2tp/lTpASHZ3WVWBK0prwK0KkusY6
+#   ck+/vvlk46IdEr803NB0Dm3ECh3i65mfCaWzVTtd/md874paK+65f1JeVyd5I5al
+#   M2KEpvkCAwEAATANBgkqhkiG9w0BAQsFAAOCAgEAjvJXXkxOqh3K0k2NdDG5EOTy
+#   bA+koRbAqhdY/qJoSnqTzwBxJc6aPs+L4q2PIoLo0gNJj1Nm1taLusaaK+CBx3ar
+#   1kxEika5FM0dqFjD3i7Y5U0FMeDB5cReo8TNdo31VGoY7CbRjtqHLRTuKzNmIfEm
+#   ahLnHIBtarE82b7Mpg0aLxjrRR+t8wSCriy+e9AEPzC5bWxtPJA+OhU8U9hMuOs5
+#   SzKmHwYue4WY3q1rRaDpK3fqgXRDRfznNn9/RDDbBos7CRMSAPEmAO28qLKBW/1z
+#   a2TKQLddZ3uoCurFNbToSTueKYVEnveQNO2P5X6uy4rcYkjeSiwbmHo7jYuHAxx4
+#   uGzHMpoqoGNx+2iYjtUo3dJUXzcZai3X+RuuMKXXvqGzrxJsoKayNVAE1dWoUHJl
+#   RouPhDLTdZq/pblORhFS8r10rKhSScgrNuN9LTTV7EPFeVr8trocNwl8IruH+eNL
+#   6/7b5Y7fb7rvpxeHjWrTz8a9BXAIAv+bgyrg4OHGRcNIQb0XF438HD9r8Zb92B6Z
+#   VCR3aVS5496+1td+8aN/Blzo59LhKPiHyGZCPHFV/oBqG7nxp603kcWmJOcG+AgB
+#   9bFiAimF5LLk/LnMfplK9w0vvxWVcdQkDgVPYvEGNtttj0QC7/jM4ZeihGb6Oyzy
+#   DZA6aeg73/ygOATQ13A=
+#   -----END CERTIFICATE-----
+sram_metadata_idps_filters: []
+
+sram_metadata_idps_files:
+- name: "dummy-idp"
+  metadata: |
+    <?xml version="1.0" encoding="utf-8"?>
+    <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+                          xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute"
+                        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+                        xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+                        entityID="https://test-idp.sram.surf.nl/saml/saml2/idp/metadata.php">
+      <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+          Location="https://test-idp.sram.surf.nl/saml/module.php/saml/idp/singleSignOnService"/>
+      </md:IDPSSODescriptor>
+      <md:Organization>
+        <md:OrganizationName xml:lang="en">SRAM VM Dummy IdP</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">SRAM VM Dummy IdP</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://test-idp.sram.example.org/</md:OrganizationURL>
+      </md:Organization>
+      <md:ContactPerson contactType="technical">
+        <md:GivenName>Administrator</md:GivenName>
+        <md:EmailAddress>mailto:sinterklaas@example.nl</md:EmailAddress>
+      </md:ContactPerson>
+    </md:EntityDescriptor>
+
+#   idps_xrd: "{{metadata_defaults.basedir}}/certs/surfconext.xrd"
+#   idps_source_dir: "/opt/metadata-src"
+#   idps_feed: "{{ metadata_defaults.basedir }}/idps_feed.fd"
+#   idps_file: "idps.xml"
+##
+#   proxy_frontend_source: "https://satosa.local/frontend.xml"
+#   proxy_frontend_feed: "{{ metadata_defaults.basedir }}/frontend_feed.fd"
+#   proxy_frontend_file: "proxy_idp.xml"
+#
+#   proxy_backend_source: "https://satosa.local/metadata/backend.xml"
+#   proxy_backend_feed: "{{ metadata_defaults.basedir }}/backend_feed.fd"
+#   proxy_backend_file: "proxy_sp.xml"

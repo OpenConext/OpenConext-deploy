@@ -1,0 +1,49 @@
+---
+- name: "Create metadata group"
+  group:
+    name: "{{ sram_metadata_group }}"
+    state: "present"
+  register: "result"
+
+- name: "Save metadata group gid"
+  set_fact:
+    metadata_group_gid: "{{ result.gid }}"
+
+- name: "Create metadata user"
+  user:
+    name: "{{ sram_metadata_user }}"
+    group: "{{ sram_metadata_group }}"
+    comment: "User to run metadata service"
+    shell: "/bin/false"
+    password: "!"
+    home: "{{ sram_metadata_basedir }}"
+    create_home: false
+    state: "present"
+  register: "result"
+
+- name: "Save metadata user uid"
+  set_fact:
+    metadata_user_uid: "{{ result.uid }}"
+
+
+- name: "Create metadata directories"
+  file:
+    path: "{{ item.dir }}"
+    state: "directory"
+    mode: "{{ item.mode }}"
+    owner: "root"
+    group: "{{ sram_metadata_group }}"
+  with_items:
+    - { dir: "{{sram_metadata_basedir}}/web",   mode: "0775" }
+    - { dir: "{{sram_metadata_basedir}}/feeds", mode: "0755" }
+    - { dir: "{{sram_metadata_basedir}}/src",   mode: "0755" }
+    - { dir: "{{sram_metadata_basedir}}/certs", mode: "0755" }
+    - { dir: "{{sram_metadata_basedir}}/xslt",  mode: "0755" }
+  notify: "Restart the pyFF container"
+
+
+- name: "Start pyff container"
+  include_tasks: "pyff.yml"
+
+- name: "Start http container"
+  include_tasks: "http.yml"

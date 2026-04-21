@@ -1,0 +1,19 @@
+#!/bin/bash
+# vim:ft=sh
+set -e
+
+if [ $UID -ne 0 ]
+then
+	echo "Sorry, this script must run as root"
+	exit 1
+fi
+
+BACKUP_DIR="{{ldap_backup_dir}}"
+BACKUP_FILE="$BACKUP_DIR/ldap_$(/bin/date +%Y-%m-%d_%H:%M)"
+
+mkdir -p -m 0755 "$BACKUP_DIR"
+
+/usr/sbin/slapcat -o ldif-wrap=no -n0 | /bin/bzip2 -c6 > "${BACKUP_FILE}.db0.ldif.bz2"
+/usr/sbin/slapcat -o ldif-wrap=no -n1 | /bin/bzip2 -c6 > "${BACKUP_FILE}.db1.ldif.bz2"
+
+exit 0
