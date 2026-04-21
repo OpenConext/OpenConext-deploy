@@ -78,7 +78,6 @@ engine_stepup_gateway_sfo_entity_id: "https://{{ engine_stepup_gateway_domain }}
 engine_stepup_gateway_sfo_sso_location: "https://{{ engine_stepup_gateway_domain }}/second-factor-only/single-sign-on"
 
 # SBS interrupt settings
-engine_sbs_base_url: "sbs.{{ base_domain }}"
 engine_sbs_attributes_allowed:
   - 'urn:mace:dir:attribute-def:eduPersonEntitlement'
   - 'urn:mace:dir:attribute-def:uid'
