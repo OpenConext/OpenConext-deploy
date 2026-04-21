@@ -208,7 +208,7 @@
       PHP_MEMORY_LIMIT: "{{ engine_php_memory }}"
       APP_ENV: "prod"
       APP_SECRET: "{{ engine_parameters_secret }}"
-      APP_DEBUG: "{{ engine_debug | bool | int }}"
+      APP_DEBUG: "{{ engine_debug | bool | int | string }}"
     etc_hosts:
       host.docker.internal: host-gateway
     mounts:
