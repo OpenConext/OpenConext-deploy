@@ -8,10 +8,10 @@
 - name: Check some cluster related variables
   when: mongo_mode == "cluster"
   block:
-    - name: Fail on undefined replica_set_name
+    - name: Fail on undefined mongo_replica_set_name
       when: mongo_replica_set_name is not defined
       ansible.builtin.fail:
-        msg: "Something is wrong, mongo_mode was set to cluster but replica_set_name is undefined."
+        msg: "Something is wrong, mongo_mode was set to cluster but mongo_replica_set_name is undefined."
 
 - name: Debug replica settings
   ansible.builtin.debug:
