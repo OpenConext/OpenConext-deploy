@@ -53,4 +53,4 @@ mongo_pki_dir: "/etc/pki/mongo"
 
 # Users and groups
 mongo_group: "mongod"
-mongo_pymongo_version: 4.16
+mongo_pymongo_version: 4.16.0
