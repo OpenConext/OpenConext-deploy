@@ -60,6 +60,7 @@ mongo_group: "mongod"
 # Paths
 mongo_config_file: "/etc/mongod.conf"
 mongo_data_path: "/var/lib/mongo"
+mongo_pymongo_version: 4.16
 
 # cluster members
 # set in group_vars

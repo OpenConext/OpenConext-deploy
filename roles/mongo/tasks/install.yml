@@ -15,7 +15,7 @@
 
 - name: Install pymongo
   ansible.builtin.pip:
-    name: pymongo
+    name: pymongo="{{ mongo_pymongo_version }}"
 
 - name: Install kernel settings script
   ansible.builtin.copy:
