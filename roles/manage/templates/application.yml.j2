@@ -83,6 +83,9 @@ policies:
   allowed_attributes: file://{{ manage_dir }}/policies/allowed_attributes.json
   extra_saml_attributes: file://{{ manage_dir }}/policies/extra_saml_attributes.json
 
+sram:
+  sram_rp_entity_id: ""{{ manage.sram_rp_entity_id }}"
+
 spring:
   mail:
     host: {{ smtp_server }}
