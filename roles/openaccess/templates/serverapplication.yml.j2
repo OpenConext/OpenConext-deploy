@@ -20,6 +20,8 @@ spring:
     jdbc:
       cleanup-cron: "-"
       initialize-schema: always
+      flush-mode: on_save
+      save-mode: on_set_attribute
     store-type: jdbc
     timeout: 8h
   mvc:
@@ -67,6 +69,16 @@ oidcng:
   resource-server-id: myconext.rs
   resource-server-secret: secret
   base-url: {{ openconextaccess_base_domain }}
+
+cron:
+  user-cleaner-cron: "PT60M"
+  user-cleaner-cron-initial-delay: "PT10M"
+  user-cleaner-lock-at-least-for: "PT5M"
+  user-cleaner-lock-at-most-for: "PT28M"
+  org-contact-reminder-days: 365
+  org-delete-after-days: 365
+  user-inactivity-warn-days: 365
+  user-inactivity-delete-days: 1095
 
 lifecycle:
   user: lifecycle
@@ -141,6 +153,7 @@ email:
   contactEmail: "{{ support_email }}"
   serviceDeskEmail: "{{ support_email }}"
   supportEmail: "support@surfconext.nl"
+  jiraErrorEmail: "{{ support_email }}"
   environment: "{{ environment_shortname }}"
 
 manage:
