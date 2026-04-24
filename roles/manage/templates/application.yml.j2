@@ -64,7 +64,7 @@ product:
 metadata_configuration_path: file://{{ manage_dir }}/metadata_configuration
 metadata_templates_path: file://{{ manage_dir }}/metadata_templates
 metadata_export_path: classpath:/metadata_export
-disabled_metadata_schemas:
+disabled_metadata_schemas: []
 
 security:
   backdoor_user_name: {{ manage.backdoor_api_user }}
@@ -82,6 +82,9 @@ crypto:
 policies:
   allowed_attributes: file://{{ manage_dir }}/policies/allowed_attributes.json
   extra_saml_attributes: file://{{ manage_dir }}/policies/extra_saml_attributes.json
+
+sram:
+  sram_rp_entity_id: ""{{ manage.sram_rp_entity_id }}"
 
 spring:
   mail:

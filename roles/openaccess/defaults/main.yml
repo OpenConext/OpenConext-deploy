@@ -1,3 +1,5 @@
 ---
 openaccess_server_restart_policy: always
 openaccess_server_restart_retries: 0
+openaccess_docker_networks:
+  - name: loadbalancer

@@ -1,7 +1,14 @@
 ---
 minio_dir: /opt/openconext/minio
-minio_data_dir: "{{ minio_dir }}/data"
 minio_version: RELEASE.2025-05-24T17-08-30Z
-minio_data_dir_oncontainer: "/mnt/data"
 minio_root_user: "minioadmin"
+minio_data_dir_oncontainer: "/data"
 # minio_root_password get from vault
+minio_url_local: "http://127.0.0.1:9000"
+minio_alias: "openconext"
+minio_client_path: $HOME/minio-binaries
+minio_mc: "{{ minio_client_path }}/mc"
+minio_users:
+    - { name: 'openconext', password: "{{ minio_passwords.openconext }}" } # set passwords in vault
+minio_client_checksum: "sha256:01f866e9c5f9b87c2b09116fa5d7c06695b106242d829a8bb32990c00312e891"
+minio_client_version: "RELEASE.2025-08-13T08-35-41Z"

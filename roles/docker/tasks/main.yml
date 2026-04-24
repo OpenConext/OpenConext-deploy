@@ -82,7 +82,7 @@
 - name: Create the Traefik loadbalancer
   community.docker.docker_container:
     name: loadbalancer
-    image: traefik:latest
+    image: traefik:{{ docker_traefik_version }}
     published_ports: "{{ docker_traefik_ports }}"
     pull: true
     restart_policy: "always"

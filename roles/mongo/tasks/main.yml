@@ -33,6 +33,7 @@
       ansible.builtin.include_tasks:
         file: certs.yml
 
+<<<<<<< HEAD
     - name: Include General config tasks
       ansible.builtin.include_tasks:
         file: generalconfig.yml
@@ -54,6 +55,11 @@
     - name: Include Service tasks
       ansible.builtin.include_tasks:
         file: services.yml
+=======
+    # - name: Include cluster installation tasks
+    #   ansible.builtin.include_tasks:
+    #     file: clusterconfig.yml
+>>>>>>> main
 
     - name: Include user creation
       ansible.builtin.include_tasks:

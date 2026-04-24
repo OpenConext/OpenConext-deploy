@@ -97,7 +97,7 @@
 - name: Create and start the server container
   community.docker.docker_container:
     name: manageserver
-    image: ghcr.io/openconext/openconext-manage/manage-server:{{ manage_server_version }}
+    image: ghcr.io/openconext/openconext-manage/manage-server:{{ manage_version }}
     entrypoint: /__cacert_entrypoint.sh
     pull: true
     restart_policy: "{{ manage_server_restart_policy }}"
@@ -140,7 +140,7 @@
 - name: Create the gui container
   community.docker.docker_container:
     name: managegui
-    image: ghcr.io/openconext/openconext-manage/manage-gui:{{ manage_gui_version }}
+    image: ghcr.io/openconext/openconext-manage/manage-gui:{{ manage_version }}
     pull: true
     restart_policy: "always"
     state: started

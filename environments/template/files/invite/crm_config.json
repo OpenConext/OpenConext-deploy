@@ -1,0 +1,231 @@
+{
+  "AAI": {
+    "name": "AAIverantwoordelijke",
+    "roleId": "fc89aa87-07e4-e811-8100-005056956c1a",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "BVW": {
+    "name": "Beveiligingsverantwoordelijke",
+    "roleId": "92b2b379-07e4-e811-8100-005056956c1a",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "CONBEH": {
+    "name": "SURFconextbeheerder",
+    "roleId": "5e17b508-08e4-e811-8100-005056956c1a",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "CONVER": {
+    "name": "SURFconextverantwoordelijke",
+    "roleId": "cf652619-08e4-e811-8100-005056956c1a",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "DNS": {
+    "name": "DNS-Beheerder",
+    "roleId": "f3ff6ef5-07e4-e811-8100-005056956c1a",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "DOM": {
+    "name": "Domeinnamenverantwoordelijke",
+    "roleId": "fba019c7-07e4-e811-8100-005056956c1a",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "INFB": {
+    "name": "Infrabeheerder",
+    "roleId": "1d3d6ae6-07e4-e811-8100-005056956c1a",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "IVW": {
+    "name": "Infraverantwoordelijke",
+    "roleId": "1ca2f1d9-07e4-e811-8100-005056956c1a",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "MISP": {
+    "name": "MISP-beheerder",
+    "roleId": "d01ddc0c-b930-ec11-9112-0050569571ea",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "SIEMB": {
+    "name": "SIEM-beheerder",
+    "roleId": "cf6ab19d-0a75-eb11-9106-0050569571ea",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "SIEMV": {
+    "name": "SIEM-verantwoordelijke",
+    "roleId": "26334f6b-0a75-eb11-9106-0050569571ea",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "SRAM": {
+    "name": "SRAM-verantwoordelijke",
+    "roleId": "716dda55-bd5e-ea11-90f9-0050569571ea",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "SWB": {
+    "name": "SURFwireless-beheerder",
+    "roleId": "57f2ce48-08e4-e811-8100-005056956c1a",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "SWV": {
+    "name": "SURFwireless-verantwoordelijke",
+    "roleId": "16fef478-9189-ec11-93b0-0022489d3138",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "SUP": {
+    "name": "Superuser",
+    "roleId": "7de1c1b9-11cb-ea11-90ff-0050569571ea",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "SUPRO": {
+    "name": "SuperuserRO",
+    "roleId": "80e1c1b9-11cb-ea11-90ff-0050569571ea",
+    "applications": [
+      {
+        "manageEntityID": "https://manage.test.surfconext.nl/shibboleth",
+        "manageType": "saml20_sp"
+      },
+      {
+        "manageEntityID": "invite.test.surfconext.nl",
+        "manageType": "oidc10_rp"
+      }
+    ]
+  },
+  "OB": {
+    "name": "OperationeelBeheerder",
+    "roleId": "112a6aa1-07e4-e811-8100-005056956c1a",
+    "applications": []
+  }
+}
