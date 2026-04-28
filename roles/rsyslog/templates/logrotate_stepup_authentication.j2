@@ -1,0 +1,17 @@
+{{ rsyslog_dir }}/log_logins/{{ item.name }}/stepup-authentication.log
+{
+    missingok
+    daily
+    rotate 180
+    sharedscripts
+    dateext
+    dateyesterday
+    compress
+    delaycompress
+    create 0640 root {{ rsyslog_read_group }} 
+    postrotate
+      # TODO: Write logs to MySQL for further processing (e.g. for deprovisioning)
+      # E.g.: /usr/local/sbin/parse_stepup_authentication_to_mysql_{{ item.name }}.py > /dev/null
+      systemctl kill -s HUP rsyslog.service
+    endscript
+}
