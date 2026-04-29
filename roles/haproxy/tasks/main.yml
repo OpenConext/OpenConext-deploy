@@ -16,7 +16,7 @@
 - name: Install haproxy and socat
   ansible.builtin.apt:
     name:
-      - "haproxy=3.0.*"
+      - "haproxy"
       - "socat"
       - "git"
     state: "present"
