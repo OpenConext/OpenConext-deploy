@@ -34,6 +34,13 @@
         mode: "0700"
         owner: root
 
+- name: Debug mongo_cluster_members
+  debug:
+    msg: "{{ item.host }}"
+    verbosity: 2
+  loop:
+    "{{ mongo_cluster_members }}"
+
 - name: Create mongosh config file
   ansible.builtin.template:
     src: mongoshrc.js.j2
