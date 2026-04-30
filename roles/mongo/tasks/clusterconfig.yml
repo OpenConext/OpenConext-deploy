@@ -123,6 +123,7 @@
         login_port: "{{ mongo_port }}"
         poll: 5
         interval: 30
+        validate: minimal # default fails on even number of servers and although this is not a great situation, it is sometimes the temporary situation because we can onlye add or remove 1 node at a time
 
     # Cluster settings that cannot be changed with mongodb_replicaset
 
