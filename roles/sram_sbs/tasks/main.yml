@@ -1,7 +1,7 @@
 ---
 - name: "Create SBS group"
   group:
-    name: "{{ sbs_group }}"
+    name: "{{ sram_sbs_group }}"
     state: "present"
   register: "result"
 
@@ -11,12 +11,12 @@
 
 - name: "Create SBS user"
   user:
-    name: "{{ sbs_user }}"
-    group: "{{ sbs_group }}"
+    name: "{{ sram_sbs_user }}"
+    group: "{{ sram_sbs_group }}"
     comment: "User to run SBS service"
     shell: "/bin/false"
     password: "!"
-    home: "{{ sbs_conf_dir }}"
+    home: "{{ sram_sbs_conf_dir }}"
     create_home: false
     state: "present"
   register: "result"
@@ -33,14 +33,14 @@
     group: "{{sbs_group_gid}}"
     mode: "{{item.mode}}"
   with_items:
-    - { path: "{{sbs_work_dir}}",            mode: "0755" }
-    - { path: "{{sbs_conf_dir}}",            mode: "0755" }
-    - { path: "{{sbs_conf_dir}}/saml",       mode: "0755" }
-    - { path: "{{sbs_log_dir}}",             mode: "0775" }
+    - { path: "{{sram_sbs_work_dir}}",            mode: "0755" }
+    - { path: "{{sram_sbs_conf_dir}}",            mode: "0755" }
+    - { path: "{{sram_sbs_conf_dir}}/saml",       mode: "0755" }
+    - { path: "{{sram_sbs_log_dir}}",             mode: "0775" }
 
 - name: "Fix file permissions"
   file:
-    path: "{{sbs_log_dir}}/{{item}}"
+    path: "{{sram_sbs_log_dir}}/{{item}}"
     owner: "{{sbs_user_uid}}"
     group: "{{sbs_group_gid}}"
     mode: "0664"
@@ -54,7 +54,7 @@
 - name: "Create SBS config files"
   template:
     src: "{{item.name}}.j2"
-    dest: "{{ sbs_conf_dir }}/{{item.name}}"
+    dest: "{{ sram_sbs_conf_dir }}/{{item.name}}"
     owner: "{{sbs_user_uid}}"
     group: "{{sbs_group_gid}}"
     mode: "{{item.mode}}"
@@ -63,26 +63,26 @@
     - { name: "alembic.ini",     mode: "0644" }
     - { name: "disclaimer.css",  mode: "0644" }
     - { name: "sbs-apache.conf", mode: "0644" }
-  no_log: "{{sbs_ansible_nolog}}"
+  no_log: "{{ sram_sbs_ansible_nolog }}"
   notify: "Restart sbs containers"
 
 - name: "Pull sbs image"
   community.docker.docker_image_pull:
     name: "{{ item }}"
   with_items:
-    - "{{ sbs_client_image }}"
-    - "{{ sbs_server_image }}"
-  register: "sbs_image"
+    - "{{ sram_sbs_client_image }}"
+    - "{{ sram_sbs_server_image }}"
+  register: "sram_sbs_image"
 
 - name: "Migration"
   # For some reason --check breaks this block
-  when: "sbs_image is changed and not ansible_check_mode"
+  when: "sram_sbs_image is changed and not ansible_check_mode"
   block:
     - name: "Run SBS migrations"
       throttle: 1
       community.docker.docker_container:
         name: "sram-sbs-migration"
-        image: "{{ sbs_server_image }}"
+        image: "{{ sram_sbs_server_image }}"
         pull: "never"
         state: "started"
         restart_policy: "no"
@@ -94,8 +94,8 @@
         # don't actually run the server
         command: "/bin/true"
         volumes:
-          - "{{ sbs_conf_dir }}:/sbs-config"
-          - "{{ sbs_log_dir }}:/opt/sbs/log"
+          - "{{ sram_sbs_conf_dir }}:/sbs-config"
+          - "{{ sram_sbs_log_dir }}:/opt/sbs/log"
         networks:
           # TODO: Should we parametrize this?
           - name: "loadbalancer"
@@ -104,36 +104,36 @@
       changed_when: "'[alembic.runtime.migration] Running upgrade' in result.container.Output | default('')"
       notify: "Restart sbs containers"
 
-    # Remove the migration container; we can do that with auto_remove, because if we use that, ansible
-    # will not save the output in result
+    # Remove the migration container; we can't do that with auto_remove,
+    # because if we use that, ansible will not save the output in result
     - name: "Remove migration container"
       community.docker.docker_container:
         name: "sram-sbs-migration"
         state: "absent"
-      # TODO: fix this by only running this if "sbs_image is changed"
+      # TODO: fix this by only running this if "sram_sbs_image is changed"
       changed_when: false
 
 - name: "Start sbs client container"
   community.docker.docker_container:
     name: "sram-sbs-client"
-    image: "{{ sbs_client_image }}"
+    image: "{{ sram_sbs_client_image }}"
     pull: "never"
     restart_policy: "always"
     state: "started"
     volumes:
-      - "{{ sbs_conf_dir }}/sbs-apache.conf:/etc/apache2/sites-enabled/sbs.conf:ro"
-      - "{{ sbs_conf_dir }}/disclaimer.css:/opt/sbs/client/dist/disclaimer.css:ro"
+      - "{{ sram_sbs_conf_dir }}/sbs-apache.conf:/etc/apache2/sites-enabled/sbs.conf:ro"
+      - "{{ sram_sbs_conf_dir }}/disclaimer.css:/opt/sbs/client/dist/disclaimer.css:ro"
     networks:
       - name: "loadbalancer"
     labels:
-      traefik.http.routers.sbsclient.rule: "Host(`{{ sbs_base_domain }}`)"
+      traefik.http.routers.sbsclient.rule: "Host(`{{ sram_sbs_base_domain }}`)"
       traefik.http.routers.sbsclient.tls: "true"
       traefik.enable: "true"
 
 - name: "Start SBS server container"
   community.docker.docker_container:
     name: "sram-sbs-server"
-    image: "{{ sbs_server_image }}"
+    image: "{{ sram_sbs_server_image }}"
     restart_policy: "always"
     state: "started"
     env:
@@ -144,8 +144,8 @@
       RUN_MIGRATIONS: "0"
     pull: "never"
     volumes:
-      - "{{ sbs_conf_dir }}:/sbs-config"
-      - "{{ sbs_log_dir }}:/opt/sbs/log"
+      - "{{ sram_sbs_conf_dir }}:/sbs-config"
+      - "{{ sram_sbs_log_dir }}:/opt/sbs/log"
       - "/tmp/ci-runner:/tmp/ci-runner"
     networks:
       - name: "loadbalancer"

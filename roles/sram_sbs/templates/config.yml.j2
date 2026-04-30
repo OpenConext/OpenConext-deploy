@@ -1,110 +1,110 @@
 ---
 database:
-  uri: {{ sbs_db_connection_sbs }}
+  uri: {{ sram_sbs_db_connection_sbs }}
 
 redis:
 {% if environment_shortname == 'test2' %}
-  uri: "redis://{{ sbs_redis_user }}:{{ sbs_redis_password }}@{{sbs_redis_host}}/"
+  uri: "redis://{{ sram_sbs_redis_user }}:{{ sram_sbs_redis_password }}@{{ sram_sbs_redis_host }}/"
 {% else %}
-  uri: "redis{% if sbs_redis_ssl %}s{% endif %}://{{ sbs_redis_user }}:{{ sbs_redis_password }}@{{ sbs_redis_host }}:{{ sbs_redis_port }}/"
+  uri: "redis{% if sram_sbs_redis_ssl %}s{% endif %}://{{ sram_sbs_redis_user }}:{{ sram_sbs_redis_password }}@{{ sram_sbs_redis_host }}:{{ sram_sbs_redis_port }}/"
 {% endif %}
 
 # add a per-release suffix here to invalidate sessions on new releases
-secret_key: {{ sbs_db_secret }}{{sbs_secret_key_suffix}}
+secret_key: {{ sram_sbs_db_secret }}{{ sram_sbs_secret_key_suffix }}
 # Must be a base64 encoded key of 128, 192, or 256 bits.
 # Generate: base64.b64encode(os.urandom(256 // 8)).decode()
-encryption_key: {{ sbs_encryption_key  }}
+encryption_key: {{ sram_sbs_encryption_key  }}
 
 # Lifetime of session in minutes (one day is 60 * 24)
-permanent_session_lifetime: {{ sbs_session_lifetime }}
+permanent_session_lifetime: {{ sram_sbs_session_lifetime }}
 
 logging:
-  log_to_stdout: {{ sbs_log_to_stdout }}
+  log_to_stdout: {{ sram_sbs_log_to_stdout }}
 
 # Valid scopes are "READ" and "WRITE"
 api_users:
-{% for name, user in sbs_api_users.items() %}
+{% for name, user in sram_sbs_api_users.items() %}
   - name: "{{ name }}"
     password: "{{ user.password }}"
     scopes: "[ {{ user.scopes | join(', ') }} ]"
 {% endfor %}
 
 oidc:
-  client_id: "{{ sbs_oidc_client_id }}"
-  client_secret: "{{ sbs_oidc_client_secret }}"
-  audience: "{{ sbs_oidc_jwt_audience }}"
-  verify_peer:  {{ sbs_oidc_verify_peer }}
-  authorization_endpoint: "{{ sbs_oidc_authz_endpoint}}"
-  token_endpoint: "{{ sbs_oidc_token_endpoint }}"
-  userinfo_endpoint: "{{ sbs_oidc_userinfo_endpoint }}"
-  jwks_endpoint: "{{ sbs_oidc_jwks_endpoint }}"
+  client_id: "{{ sram_sbs_oidc_client_id }}"
+  client_secret: "{{ sram_sbs_oidc_client_secret }}"
+  audience: "{{ sram_sbs_oidc_jwt_audience }}"
+  verify_peer:  {{ sram_sbs_oidc_verify_peer }}
+  authorization_endpoint: "{{ sram_sbs_oidc_authz_endpoint}}"
+  token_endpoint: "{{ sram_sbs_oidc_token_endpoint }}"
+  userinfo_endpoint: "{{ sram_sbs_oidc_userinfo_endpoint }}"
+  jwks_endpoint: "{{ sram_sbs_oidc_jwks_endpoint }}"
   #Note that the paths for these  uri's is hardcoded and only domain and port differ per environment
-  redirect_uri: "{{ sbs_oidc_redirect_uri }}"
-  continue_eduteams_redirect_uri: "{{ sbs_eduteams_continue_endpoint }}"
-  continue_eb_redirect_uri: "{{ sbs_eb_continue_endpoint }}"
-  second_factor_authentication_required: {{ sbs_second_factor_authentication_required }}
-  totp_token_name: "{{ sbs_totp_token_name }}"
+  redirect_uri: "{{ sram_sbs_oidc_redirect_uri }}"
+  continue_eduteams_redirect_uri: "{{ sram_sbs_eduteams_continue_endpoint }}"
+  continue_eb_redirect_uri: "{{ sram_sbs_eb_continue_endpoint }}"
+  second_factor_authentication_required: {{ sram_sbs_second_factor_authentication_required }}
+  totp_token_name: "{{ sram_sbs_totp_token_name }}"
   # The service_id in the proxy_authz endpoint when logging into SBS. Most likely to equal the oidc.client_id
-  sram_service_entity_id: "{{ sbs_oidc_client_id }}"
-  scopes: {{ sbs_oidc_scopes }}
+  sram_service_entity_id: "{{ sram_sbs_oidc_client_id }}"
+  scopes: {{ sram_sbs_oidc_scopes }}
 
 base_scope: "{{ base_domain }}"
-entitlement_group_namespace: "{{ sbs_urn_namespace }}"
-eppn_scope: " {{ sbs_eppn_scope }}"
+entitlement_group_namespace: "{{ sram_sbs_urn_namespace }}"
+eppn_scope: " {{ sram_sbs_eppn_scope }}"
 scim_schema_sram: "urn:mace:surf.nl:sram:scim:extension"
 collaboration_creation_allowed_entitlement: "urn:mace:surf.nl:sram:allow-create-co"
 
 {% if env == "prd" %}
 environment_disclaimer: ""
 {% else %}
-environment_disclaimer: "{{ sbs_disclaimer_label }}"
+environment_disclaimer: "{{ sram_sbs_disclaimer_label }}"
 {% endif %}
 
 # All services in the white list can be requested in the create-restricted-co API
 # The default organisation is a fallback for when the administrator has no schac_home_org
 restricted_co:
   services_white_list: [ "https://cloud" ]
-  default_organisation: "{{ sbs_restricted_co_default_org }}"
+  default_organisation: "{{ sram_sbs_restricted_co_default_org }}"
 
 mail:
-  host: {{ sbs_mail_host }}
-  port: {{ sbs_mail_port }}
-  sender_name: {{ sbs_mail_sender_name }}
-  sender_email: {{ sbs_mail_sender_email }}
-  suppress_sending_mails: {{ sbs_suppress_mails }}
-  info_email: {{ sbs_support_email }}
-  beheer_email: {{ sbs_admin_email }}
-  ticket_email: {{ sbs_ticket_email }}
-  eduteams_email: {{ sbs_eduteams_email }}
+  host: {{ sram_sbs_mail_host }}
+  port: {{ sram_sbs_mail_port }}
+  sender_name: {{ sram_sbs_mail_sender_name }}
+  sender_email: {{ sram_sbs_mail_sender_email }}
+  suppress_sending_mails: {{ sram_sbs_suppress_mails }}
+  info_email: {{ sram_sbs_support_email }}
+  beheer_email: {{ sram_sbs_admin_email }}
+  ticket_email: {{ sram_sbs_ticket_email }}
+  eduteams_email: {{ sram_sbs_eduteams_email }}
   # Do we mail a summary of new Organizations and Services to the beheer_email?
-  audit_trail_notifications_enabled: {{ sbs_audit_trail_notifications_enabled }}
+  audit_trail_notifications_enabled: {{ sram_sbs_audit_trail_notifications_enabled }}
   account_deletion_notifications_enabled: True
-  send_exceptions: {{ sbs_send_exceptions }}
-  send_js_exceptions: {{ sbs_send_js_exceptions }}
-  send_exceptions_recipients: [ "{{ sbs_exceptions_mail }}" ]
+  send_exceptions: {{ sram_sbs_send_exceptions }}
+  send_js_exceptions: {{ sram_sbs_send_js_exceptions }}
+  send_exceptions_recipients: [ "{{ sram_sbs_exceptions_mail }}" ]
   environment: "{{ base_domain }}"
 
 manage:
-  enabled: {{ sbs_manage_base_enabled }}
+  enabled: {{ sram_sbs_manage_base_enabled }}
   # The entity_id of the SRAM RP in Manage for API retrieval, e.g "sbs.test2.sram.surf.nl"
-  sram_rp_entity_id: "{{ sbs_manage_sram_rp_entity_id }}"
-  base_url: "{{ sbs_manage_base_url }}"
-  user: "{{ sbs_manage_user }}"
-  password: "{{ sbs_manage_password }}"
-  verify_peer: {{ sbs_manage_verify_peer }}
+  sram_rp_entity_id: "{{ sram_sbs_manage_sram_rp_entity_id }}"
+  base_url: "{{ sram_sbs_manage_base_url }}"
+  user: "{{ sram_sbs_manage_user }}"
+  password: "{{ sram_sbs_manage_password }}"
+  verify_peer: {{ sram_sbs_manage_verify_peer }}
 
 aup:
   version: 1
   url_aup_en: "https://edu.nl/6wb63"
   url_aup_nl: "https://edu.nl/6wb63"
 
-base_url: {{ sbs_base_url }}
-socket_url: {{ sbs_base_url }}
-base_server_url: {{ sbs_base_url }}
-wiki_link: {{ sbs_wiki_link }}
+base_url: {{ sram_sbs_base_url }}
+socket_url: {{ sram_sbs_base_url }}
+base_server_url: {{ sram_sbs_base_url }}
+wiki_link: {{ sram_sbs_wiki_link }}
 
 admin_users:
-{% for admin_user in sbs_admin_users %}
+{% for admin_user in sram_sbs_admin_users %}
   - uid: "{{ admin_user.uid }}"
 {% endfor %}
 
@@ -117,17 +117,17 @@ organisation_categories:
   - "SURF"
 
 feature:
-  seed_allowed: {{ sbs_seed_allowed }}
-  api_keys_enabled: {{ sbs_api_keys_enabled }}
-  feedback_enabled: {{ sbs_feedback_enabled }}
-  impersonation_allowed: {{ sbs_impersonation_allowed }}
-  sbs_swagger_enabled: {{ sbs_swagger_enabled }}
-  admin_platform_backdoor_totp: {{ sbs_admin_platform_backdoor_totp }}
-  past_dates_allowed: {{ sbs_past_dates_allowed }}
-  mock_scim_enabled: {{ sbs_mock_scim_enabled }}
+  seed_allowed: {{ sram_sbs_seed_allowed }}
+  api_keys_enabled: {{ sram_sbs_api_keys_enabled }}
+  feedback_enabled: {{ sram_sbs_feedback_enabled }}
+  impersonation_allowed: {{ sram_sbs_impersonation_allowed }}
+  sbs_swagger_enabled: {{ sram_sbs_swagger_enabled }}
+  admin_platform_backdoor_totp: {{ sram_sbs_admin_platform_backdoor_totp }}
+  past_dates_allowed: {{ sram_sbs_past_dates_allowed }}
+  mock_scim_enabled: {{ sram_sbs_mock_scim_enabled }}
 
 metadata:
-  idp_url: "{{sbs_idp_metadata_url}}"
+  idp_url: "{{ sram_sbs_idp_metadata_url }}"
   parse_at_startup: True
   # No need for environment specific values
   scope_override:
@@ -136,7 +136,7 @@ metadata:
 platform_admin_notifications:
   # Do we daily check for CO join_requests and CO requests and send a summary mail to beheer_email?
   enabled: False
-  cron_hour_of_day: {{ sbs_cron_hour_of_day }}
+  cron_hour_of_day: {{ sram_sbs_cron_hour_of_day }}
   # How long before we include open join_requests in the summary
   outstanding_join_request_days_threshold: 7
   # How long before we include open CO requests in the summary
@@ -144,8 +144,8 @@ platform_admin_notifications:
 
 user_requests_retention:
   # Do we daily check for CO join_requests and CO requests and delete approved and denied?
-  enabled: {{ sbs_notifications_enabled }}
-  cron_hour_of_day: {{ sbs_cron_hour_of_day }}
+  enabled: {{ sram_sbs_notifications_enabled }}
+  cron_hour_of_day: {{ sram_sbs_cron_hour_of_day }}
   # How long before we delete approved / denied join_requests
   outstanding_join_request_days_threshold: 90
   # How long before we delete approved / denied CO requests
@@ -153,24 +153,24 @@ user_requests_retention:
 
 # The retention config determines how long users may be inactive, how long the reminder email is valid and when do we resent the magic link
 retention:
-  cron_hour_of_day: {{ sbs_cron_hour_of_day }}
+  cron_hour_of_day: {{ sram_sbs_cron_hour_of_day }}
   # how many days of inactivity before a user is suspended
   #   0 allows for any last_login_date in the past to trigger suspension notification
-  allowed_inactive_period_days: {{ sbs_suspension_inactive_days }}
+  allowed_inactive_period_days: {{ sram_sbs_suspension_inactive_days }}
   # how many days before suspension do we send a warning
   #   -1 will suspend notified users on second suspension cron
-  reminder_suspend_period_days: {{ sbs_suspension_reminder_days }}
+  reminder_suspend_period_days: {{ sram_sbs_suspension_reminder_days }}
   # how many days after suspension do we delete the account
   remove_suspended_users_period_days: 90
   # how many days before deletion do we send a reminder
   reminder_expiry_period_days: 7
   # whether to send a notification of the result of the retention process to the beheer_email
-  admin_notification_mail: {{ sbs_suspension_notify_admin }}
+  admin_notification_mail: {{ sram_sbs_suspension_notify_admin }}
 
 collaboration_expiration:
   # Do we daily check for CO's that will be deleted because they have been expired?
-  enabled: {{ sbs_notifications_enabled }}
-  cron_hour_of_day: {{ sbs_cron_hour_of_day }}
+  enabled: {{ sram_sbs_notifications_enabled }}
+  cron_hour_of_day: {{ sram_sbs_cron_hour_of_day }}
   # How long after expiration do we actually delete expired collaborations
   expired_collaborations_days_threshold: 90
   # How many days before actual expiration do we mail the organisation members
@@ -178,8 +178,8 @@ collaboration_expiration:
 
 collaboration_suspension:
   # Do we daily check for CO's that will be suspended because of inactivity?
-  enabled: {{ sbs_notifications_enabled }}
-  cron_hour_of_day: {{ sbs_cron_hour_of_day }}
+  enabled: {{ sram_sbs_notifications_enabled }}
+  cron_hour_of_day: {{ sram_sbs_cron_hour_of_day }}
   # After how many days of inactivity do we suspend collaborations
   collaboration_inactivity_days_threshold: 365
   # How many days before actual suspension do we mail the organisation members
@@ -189,8 +189,8 @@ collaboration_suspension:
 
 membership_expiration:
   # Do we daily check for memberships that will be deleted because they have been expired?
-  enabled: {{ sbs_notifications_enabled }}
-  cron_hour_of_day: {{ sbs_cron_hour_of_day }}
+  enabled: {{ sram_sbs_notifications_enabled }}
+  cron_hour_of_day: {{ sram_sbs_cron_hour_of_day }}
   # How long after expiration do we actually delete expired memberships
   expired_memberships_days_threshold: 90
   # How many days before actual expiration do we mail the co admin and member
@@ -198,15 +198,15 @@ membership_expiration:
 
 invitation_reminders:
   # Do we daily check for invitations that need a reminder?
-  enabled: {{ sbs_invitation_reminders_enabled }}
-  cron_hour_of_day: {{ sbs_cron_hour_of_day }}
+  enabled: {{ sram_sbs_invitation_reminders_enabled }}
+  cron_hour_of_day: {{ sram_sbs_cron_hour_of_day }}
   # How many days before expiration of an invitation do we remind the user?
   invitation_reminders_threshold: 5
 
 invitation_expirations:
   # Do we daily check for invitations that are expired / accepted and are eligible for deletion ?
-  enabled: {{ sbs_invitation_expirations_enabled }}
-  cron_hour_of_day: {{ sbs_cron_hour_of_day }}
+  enabled: {{ sram_sbs_invitation_expirations_enabled }}
+  cron_hour_of_day: {{ sram_sbs_cron_hour_of_day }}
   # How long after expiration of an invitation do we delete the invitation?
   nbr_days_remove_expired_invitations: 10
   # How long after expiration of an API created invitation do we delete the invitation?
@@ -214,38 +214,38 @@ invitation_expirations:
 
 orphan_users:
   # Do we daily check for users that are orphans soo they can be deleted?
-  enabled: {{ sbs_delete_orphaned }}
-  cron_hour_of_day: {{ sbs_cron_hour_of_day }}
+  enabled: {{ sram_sbs_delete_orphaned }}
+  cron_hour_of_day: {{ sram_sbs_cron_hour_of_day }}
   # How long after created do we delete orphan users
   delete_days_threshold: 14
 
 open_requests:
   # Do we weekly check for all open requests?
-  enabled: {{ sbs_open_requests_enabled }}
+  enabled: {{ sram_sbs_open_requests_enabled }}
   cron_day_of_week: 1
 
 scim_sweep:
   # Do we enable scim sweeps?
-  enabled: {{ sbs_scim_sweep }}
+  enabled: {{ sram_sbs_scim_sweep }}
   # How often do we check if scim sweeps are needed per service
   cron_minutes_expression: "*/15"
 
 ldap:
-  url: "{{ sbs_ldap_url }}"
-  bind_account: "{{ sbs_ldap_bind_account }}"
+  url: "{{ sram_sbs_ldap_url }}"
+  bind_account: "{{ sram_sbs_ldap_bind_account }}"
 
 # A MFA login in a different flow is valid for X minutes
-mfa_sso_time_in_minutes: {{sbs_mfa_sso_minutes}}
+mfa_sso_time_in_minutes: {{ sram_sbs_mfa_sso_minutes }}
 
 # whether to fall back to TOTP MFA
-mfa_fallback_enabled: {{sbs_mfa_fallback_enabled}}
+mfa_fallback_enabled: {{ sram_sbs_mfa_fallback_enabled }}
 
 # Lower case entity ID's and schac_home allowed skipping MFA.
 # Note that for a login directly into SRAM only schac_home can be used as the entity_idp of the IdP is unknown
-mfa_idp_allowed: {{sbs_mfa_idp_allowed}}
+mfa_idp_allowed: {{ sram_sbs_mfa_idp_allowed }}
 
 # Lower case schachome organisations / entity ID's where SURFSecure ID is used for step-up
-ssid_identity_providers: {{sbs_ssid_identity_providers}}
+ssid_identity_providers: {{ sram_sbs_ssid_identity_providers }}
 
 ssid_config_folder: saml
 
@@ -256,9 +256,9 @@ rate_limit_totp_guesses_per_30_seconds: 10
 
 # The uid's of user that will never be suspended or deleted
 excluded_user_accounts:
-{% for excluded_user in sbs_excluded_users %}
+{% for excluded_user in sram_sbs_excluded_users %}
   - uid: "{{ excluded_user.uid }}"
 {% endfor %}
 
 engine_block:
-  api_token: {{ sbs_engine_block_api_token }}
+  api_token: {{ sram_sbs_engine_block_api_token }}

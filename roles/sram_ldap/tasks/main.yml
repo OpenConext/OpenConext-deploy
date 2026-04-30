@@ -11,19 +11,17 @@
   file:
     path: "{{ item.path }}"
     state: "directory"
-    # owner: "{{ ldap_user }}"
-    # group: "{{ ldap_group }}"
     mode: "{{ item.mode }}"
   with_items:
-    - { path: "{{ldap_ldif_dir}}",  mode: "0755" }
-    - { path: "{{ldap_certs_dir}}", mode: "0755" }
-    - { path: "{{ldap_data_dir}}",  mode: "0777" }
+    - { path: "{{sram_ldap_ldif_dir}}",  mode: "0755" }
+    - { path: "{{sram_ldap_certs_dir}}", mode: "0755" }
+    - { path: "{{sram_ldap_data_dir}}",  mode: "0777" }
   notify: Restart the ldap container
 
 - name: Copy schemas
   copy:
     src: "{{ item }}"
-    dest: "{{ ldap_ldif_dir }}/{{ item }}"
+    dest: "{{ sram_ldap_ldif_dir }}/{{ item }}"
     mode: "0644"
   with_items:
     - sczGroup.ldif
@@ -38,51 +36,39 @@
 - name: Copying ldap-add script
   copy:
     src: "{{ item }}"
-    dest: "{{ ldap_conf_dir }}/{{ item }}"
+    dest: "{{ sram_ldap_conf_dir }}/{{ item }}"
     mode: "0755"
   with_items:
     - ldap-add
 
-# # cert is used for communication between ldap for sync
-# # is generated in roles/certificates/tasks/main.yml
-# - name: Copy wildcard frontend cert
-#   copy:
-#     src: "/etc/ssl/certs/sram-https.pem"   # was installed here by update-ca-certificates
-#     remote_src: true
-#     dest: "{{ldap_certs_dir}}/frontend.crt"
-#     mode: "0644"
-#   when: "is_dev"
-#   notify: Restart the ldap container
-
 - name: Setup ldap hosts
   vars:
     host:
-      key: "%s.{{ ldap_base_domain }}"
+      key: "%s.{{ sram_ldap_base_domain }}"
       value: "%s"
     etc_hosts: {}
   set_fact:
     etc_hosts: >-
       {{ etc_hosts |
       combine({ host.key | format(item.key): host.value | format(item.value) }) }}
-  with_dict: "{{ ldap_hosts }}"
+  with_dict: "{{ sram_ldap_hosts }}"
 
 - name: Create the ldap container
   community.docker.docker_container:
     name: "sram-ldap"
-    image: "{{ ldap_image }}"
+    image: "{{ sram_ldap_image }}"
     restart_policy: "always"
     state: started
-    pull: true
+    # pull: true
     ports:
       - 0.0.0.0:389:389
     env:
       LDAP_ORGANISATION: "{{ env }}"
-      LDAP_DOMAIN: "{{ ldap_base_domain }}"
-      LDAP_ROOTPASS: "{{ ldap_services_password }}"
+      LDAP_DOMAIN: "{{ sram_ldap_base_domain }}"
+      LDAP_ROOTPASS: "{{ sram_ldap_services_password }}"
     etc_hosts: "{{ etc_hosts }}"
     volumes:
-      # For now the target side /opt/ldap is hard-coded
-      - "{{ ldap_conf_dir }}:/opt/ldap"
+      - "{{ sram_ldap_conf_dir }}:/opt/ldap"
     networks:
       - name: "loadbalancer"
     labels:
@@ -92,11 +78,11 @@
       traefik.tcp.routers.ldap.tls: "true"
       traefik.tcp.services.ldap.loadbalancer.server.port: "389"
     healthcheck:
-      test:
-        - "CMD"
-        - "bash"
-        - "-c"
-        - "[[ -S /var/run/slapd/ldapi ]]"
+      test: "-S /var/run/slapd/ldapi"
+        # - "CMD"
+        # - "bash"
+        # - "-c"
+        # - "[[ -S /var/run/slapd/ldapi ]]"
   register: "ldap_container"
 
 - name: Wait for LDAP initialization
@@ -111,7 +97,6 @@
 
 - name: Ensure the schemas are added to LDAP
   ansible.builtin.shell:
-    # For now the target side /opt/ldap is hard-coded
     cmd: "docker exec sram-ldap /opt/ldap/ldap-add /opt/ldap/schema/{{ item }}"
   register: "result"
   failed_when: "result.rc not in [0,80]"
@@ -133,8 +118,8 @@
       olcDbIndex: "{{item}}"
     state: "present"
     bind_dn: "cn=admin,cn=config"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ ldap_uri }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
   with_items:
     - "entryUUID eq"
     - "o eq"
@@ -148,33 +133,21 @@
     attributes:
       olcSizeLimit: "unlimited"
     bind_dn: "cn=admin,cn=config"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ ldap_uri }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
 
 - name: Set config
   community.general.ldap_attrs:
     dn: "cn=config"
     state: "present"
     attributes:
-      olcServerID: "{{ ldap_server_id }}"
+      olcServerID: "{{ sram_ldap_server_id }}"
       olcSizeLimit: "unlimited"
-      olcLogLevel: "{{ ldap_loglevel }}"
+      olcLogLevel: "{{ sram_ldap_loglevel }}"
       olcAttributeOptions: "time-"
     bind_dn: "cn=admin,cn=config"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ ldap_uri }}"
-
-# # cert is used for communication between ldap for sync
-# # is generated in roles/certificates/tasks/main.yml
-# - name: Set TLS config
-#   community.general.ldap_attrs:
-#     dn: "cn=config"
-#     state: "exact"
-#     attributes:
-#       olcTLSCACertificateFile: "/opt/ldap/certs/frontend.crt"
-#     bind_dn: "cn=admin,cn=config"
-#     bind_pw: "{{ ldap_services_password }}"
-#     server_uri: "{{ ldap_uri }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
 
 - name: Setup Modules
   community.general.ldap_attrs:
@@ -184,8 +157,8 @@
         - syncprov
         - dynlist.so
     bind_dn: "cn=admin,cn=config"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ ldap_uri }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
 
 - name: Setup Dynlist
   community.general.ldap_entry:
@@ -196,8 +169,8 @@
     attributes:
       olcDlAttrSet: "voPerson labeledURI member+memberOf@groupOfMembers"
     bind_dn: "cn=admin,cn=config"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ ldap_uri }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
 
 - name: Setup Syncprov
   community.general.ldap_entry:
@@ -209,51 +182,8 @@
       olcSpCheckpoint: 100 10
       olcSpSessionLog: 100
     bind_dn: "cn=admin,cn=config"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ ldap_uri }}"
-
-# Leave this here in case we do want to build our own
-# root database from scratch instead of relying on the
-# domain based Debian slapd package setup
-#
-# - name: Setup main database
-#   community.general.ldap_attrs:
-#     dn: olcDatabase={1}mdb,cn=config
-#     attributes:
-#       olcSuffix: "{{ ldap_services_dn.basedn }}"
-#       olcRootDN: "{{ ldap_services_dn.binddn }}"
-#       olcRootPW: "{{ '%s' | format(services_ldap_password) |  slapd_hash }}"
-#     state: exact
-#
-# - name: Set root credentials
-#   community.general.ldap_attrs:
-#     dn: olcDatabase={0}config,cn=config
-#     attributes:
-#       olcAccess: >-
-#           {0}to *
-#           by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage
-#           {% if environment_name=="vm" %}
-#           by dn.exact=gidNumber=1000+uidNumber=1000,cn=peercred,cn=external,cn=auth manage
-#           {% endif %}
-#           by dn.exact="{{ ldap_services_dn.binddn }}" manage
-#           by * break
-#     state: exact
-#     bind_dn: "cn=admin,cn=config"
-#     bind_pw: "{{ ldap_services_password }}"
-#     server_uri: "{{ ldap_uri }}"
-#
-#
-# - name: Get uid of openldap user
-#   ansible.builtin.getent:
-#     database: "passwd"
-#     key: "openldap"
-#
-# # store it in a nice var (so line below doesn't get too long)
-# - name: Save gid of openldap user
-#   ansible.builtin.set_fact:
-#     openldap_auth: "gidNumber={{ansible_facts.getent_passwd['openldap'][2]}}+\
-#                     uidNumber={{ansible_facts.getent_passwd['openldap'][1]}}"
-#
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
 
 - name: Set ACLs
   community.general.ldap_attrs:
@@ -261,15 +191,15 @@
     attributes:
       olcAccess:
         - >-
-          to dn.regex="(([^,]+),{{ ldap_services_dn.basedn }})$"
-          by dn.exact="{{ ldap_services_dn.binddn }}" write
+          to dn.regex="(([^,]+),{{ sram_ldap_services_dn.basedn }})$"
+          by dn.exact="{{ sram_ldap_services_dn.binddn }}" write
           by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth write
           by dn.exact,expand="cn=admin,$1" read
           by * break
         - >-
           to *
           by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage
-          by dn.regex="cn=[^,]+,{{ ldap_services_dn.basedn }}" read
+          by dn.regex="cn=[^,]+,{{ sram_ldap_services_dn.basedn }}" read
           {% if env=="vm" %}
           by dn.exact=gidNumber=1000+uidNumber=1000,cn=peercred,cn=external,cn=auth manage
           {% endif %}
@@ -282,10 +212,10 @@
     state: exact
     ordered: true
     bind_dn: "cn=admin,cn=config"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ ldap_uri }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
 
-# ldap_rids:
+# sram_ldap_rids:
 #   101: ldaps://ldap1.scz-vm.net/
 #   102: ldaps://ldap2.scz-vm.net/
 
@@ -294,14 +224,14 @@
     start: 101
     rid:
       key: "%d"
-      value: "{{ ldap_rid_prefix }}%s.{{ ldap_base_domain }}/"
+      value: "{{ sram_ldap_rid_prefix }}%s.{{ sram_ldap_base_domain }}/"
     ldap_rids: {}
   set_fact:
     ldap_rids: >-
       {{ ldap_rids | combine({ rid.key | format(start|int):
       rid.value | format(item.key) }) }}
     start: "{{ start|int + 1 }}"
-  with_dict: "{{ ldap_hosts | dict2items | sort(attribute='key') }}"
+  with_dict: "{{ sram_ldap_hosts | dict2items | sort(attribute='key') }}"
 
 # Voor toekomstige Claude gebruikers: onderstaande construct levert aan het eind
 # een string representatie van de dict op, die niet meer gebruikt kan worden
@@ -321,11 +251,11 @@
     rid: >-
       rid={}
       provider="{}"
-      searchbase="{{ ldap_services_dn.basedn }}"
+      searchbase="{{ sram_ldap_services_dn.basedn }}"
       type=refreshAndPersist
       bindmethod=simple
-      binddn="{{ ldap_services_dn.binddn }}"
-      credentials={{ ldap_services_password }}
+      binddn="{{ sram_ldap_services_dn.binddn }}"
+      credentials={{ sram_ldap_services_password }}
       retry="30 +"
       timeout=30
       network-timeout=5
@@ -341,29 +271,29 @@
       olcSyncrepl: "{{ rids }}"
       olcMultiProvider: "TRUE"
     bind_dn: "cn=admin,cn=config"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ ldap_uri }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
 
 # We now have Syncrepl in place, so only write to primary
 - name: Initialize DIT
   community.general.ldap_entry:
-    dn: "{{ ldap_services_dn.basedn }}"
+    dn: "{{ sram_ldap_services_dn.basedn }}"
     state: "present"
     objectClass:
       - "top"
       - "dcObject"
       - "organization"
     attributes:
-      dc: "{{ ldap_services_dn.basedn | regex_replace('^dc=([^,]+).*', '\\1') }}"
-      o: "{{ ldap_services_dn.o }}"
-    bind_dn: "{{ ldap_services_dn.binddn }}"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ ldap_uri }}"
+      dc: "{{ sram_ldap_services_dn.basedn | regex_replace('^dc=([^,]+).*', '\\1') }}"
+      o: "{{ sram_ldap_services_dn.o }}"
+    bind_dn: "{{ sram_ldap_services_dn.binddn }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
   when: >
-      inventory_hostname in groups['ldap_primary']
+      inventory_hostname in groups['sram_ldap_primary']
 
 # We now have Syncrepl in place, so only write to primary
 - name: Add ldap admins
   include_tasks: "admins.yml"
   when: >
-      inventory_hostname in groups['ldap_primary']
+      inventory_hostname in groups['sram_ldap_primary']

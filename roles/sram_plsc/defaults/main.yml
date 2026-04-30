@@ -1,12 +1,12 @@
 ---
-plsc_image: "ghcr.io/surfscz/sram-plsc:main"
-plsc_conf_dir: "{{current_release_appdir}}/sram/plsc"
-plsc_ansible_nolog: false
-plsc_ldap_uri: "ldap://ldap:389/"
-plsc_ldap_basedn: "dc=services,dc=vnet"
-plsc_ldap_binddn: "cn=admin,dc=vnet"
-plsc_ldap_password: "secret"
-plsc_sbs_host: "http://sbs-server:8080"
-plsc_sbs_user: "sysread"
-plsc_sbs_password: "secret"
-plsc_retry: 3
+sram_plsc_image: "ghcr.io/surfscz/sram-plsc:main"
+sram_plsc_conf_dir: "{{current_release_appdir}}/sram/plsc"
+sram_plsc_ansible_nolog: false
+sram_plsc_ldap_uri: "ldap://ldap:389/"
+sram_plsc_ldap_basedn: "dc=services,dc=vnet"
+sram_plsc_ldap_binddn: "cn=admin,dc=vnet"
+sram_plsc_ldap_password: "secret"
+sram_plsc_sbs_host: "http://sbs-server:8080"
+sram_plsc_sbs_user: "sysread"
+sram_plsc_sbs_password: "secret"
+sram_plsc_retry: 3
