@@ -54,7 +54,7 @@
         - replica_status_minimal.failed
 
     # Get the replicaset status votes
-    - name: Check replicaset status ninimal
+    - name: Check replicaset status minimal
       community.mongodb.mongodb_status:
         login_host: localhost
         login_user: admin
@@ -71,7 +71,7 @@
     - name: Fail when you misconfigured your replica cluster
       ansible.builtin.fail:
         msg: |
-          Your mongo cluster doensn't have the right amount of members, 
+          Your mongo cluster doesn't have the right amount of members, 
           perhaps you are adding new nodes one by one, 
           in that case add the next node to cluster_members and run the play again. 
           The error message is: {{ replica_status_votes.msg }}."
