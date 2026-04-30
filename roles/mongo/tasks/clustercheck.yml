@@ -1,32 +1,54 @@
 ---
 # task file to check if cluster is up and running
 
-# Get the replicaset status and then lookup the primary's hostname and save to a variable
-- name: Check replicaset status
-  community.mongodb.mongodb_status:
-    login_host: localhost
-    login_user: admin
-    login_port: "{{ mongo_port }}"
-    login_password: "{{ mongo_admin_password }}"
-    replica_set: "{{ mongo_replica_set_name }}"
-    poll: 3
-    interval: 10
-  register: replica_status
-  ignore_errors: true
+- name: Cluster check when we are not in cluster config mode
+  when: not mongo_configure_cluster | bool
+  block:
+    # Get the replicaset status and fail on minimal (everything but even number of nodes)
+    - name: Check replicaset status
+      community.mongodb.mongodb_status:
+        login_host: localhost
+        login_user: admin
+        login_port: "{{ mongo_port }}"
+        login_password: "{{ mongo_admin_password }}"
+        replica_set: "{{ mongo_replica_set_name }}"
+        poll: 3
+        interval: 10
+      register: replica_status
+      ignore_errors: true
 
-- name: Debug replica set status
-  ansible.builtin.debug:
-    msg: "{{ replica_status }}"
+    - name: Debug replica set status
+      ansible.builtin.debug:
+        msg: "{{ replica_status }}"
+        verbose: 2
 
-- name: Fail when there is no cluster reconfiguration options set
-  ansible.builtin.fail:
-    msg: "Your mongo cluster is broken or non existent and mongo_configure_cluster is disabled, consider enabling it and fix your cluster. The error: {{ replica_status.msg }}."
-  when:
-    - replica_status.failed
-    - not mongo_configure_cluster | bool
+    # Message for non cluster config mode
+    - name: Fail when there is no cluster reconfiguration options set
+      ansible.builtin.fail:
+        msg: "Your mongo cluster is broken or non existent and mongo_configure_cluster is disabled, consider enabling it and fix your cluster. The error: {{ replica_status.msg }}."
+      when:
+        - replica_status_minimal.failed
 
-- name: Fail when you misconfigured your replica cluster
-  ansible.builtin.fail:
-    msg: "Your mongo cluster is broken, error: {{ replica_status.msg }}."
-  when:
-    - replica_status.failed
+- name: Cluster check when we are in cluster config mode
+  when: mongo_configure_cluster | bool
+  block:
+    # Get the replicaset status and fail on minimal (everything but even number of nodes)
+    - name: Check replicaset status
+      community.mongodb.mongodb_status:
+        login_host: localhost
+        login_user: admin
+        login_port: "{{ mongo_port }}"
+        login_password: "{{ mongo_admin_password }}"
+        replica_set: "{{ mongo_replica_set_name }}"
+        poll: 3
+        interval: 10
+        validate: minimal
+      register: replica_status_minimal
+      ignore_errors: true
+
+    # Message for cluster config mode gone wrong
+    - name: Fail when you misconfigured your replica cluster
+      ansible.builtin.fail:
+        msg: "Your mongo cluster is broken, error: {{ replica_status_minimal.msg }}."
+      when:
+        - replica_status_minimal.failed
