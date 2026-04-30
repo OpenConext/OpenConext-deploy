@@ -20,14 +20,14 @@
     - name: Debug replica set status
       ansible.builtin.debug:
         msg: "{{ replica_status }}"
-        verbose: 2
+        verbosity: 2
 
     # Message for non cluster config mode
     - name: Fail when there is no cluster reconfiguration options set
       ansible.builtin.fail:
         msg: "Your mongo cluster is broken or non existent and mongo_configure_cluster is disabled, consider enabling it and fix your cluster. The error: {{ replica_status.msg }}."
       when:
-        - replica_status_minimal.failed
+        - replica_status.failed
 
 - name: Cluster check when we are in cluster config mode
   when: mongo_configure_cluster | bool
