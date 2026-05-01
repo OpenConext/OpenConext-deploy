@@ -37,3 +37,7 @@ Warning: the cluster reconfiguration option in the mongodb_replicationset module
 - [ ] check mode for writeconcern change tasks does not report change () same for any other mongodb_shell task "remote module (community.mongodb.mongodb_shell) does not support check mode"}
 - [ ] Check replication role of a host in host_vars against the settings in the cluster_members array
 - [X] Clearer error messaging for even number of votes
+- [ ] Role refuses to add users when a new cluster is built (3 nodes) (cannot add users on a broken cluster)
+- [ ] it would be helpfull if role (for example primary) is not defined in host_vars but in the mongo_cluster_members array
+- [ ] removing primary from the cluster will not work but the error is unclear, this is related to the todo above
+- [ ] is it necessary to make votes configurable?
