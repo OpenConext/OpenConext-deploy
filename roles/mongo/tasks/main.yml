@@ -44,9 +44,9 @@
         - mongo_mode == "cluster"
         - mongo_configure_cluster | bool # safest option is to set this to false and enable with -e mongo_configure_cluster=true
 
-    - name: Include cluster check tasks
+    - name: Include cluster health check tasks
       ansible.builtin.include_tasks:
-        file: clustercheck.yml
+        file: clusterhealthcheck.yml
       when:
         - mongo_mode == "cluster"
         - mongo_replication_role == 'primary'
