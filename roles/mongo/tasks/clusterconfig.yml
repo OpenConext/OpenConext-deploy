@@ -35,8 +35,6 @@
   ansible.builtin.set_fact:
     mongo_primary_host: "{{ (mongo_cluster_members | max(attribute='priority')).host }}"
 
-# Loop over cluster members and check for multiple primaries and if so fail
-
 - name: Debug primary settings
   ansible.builtin.debug:
     msg: "Primary is {{ mongo_primary_host }}"
@@ -111,10 +109,12 @@
     - name: Debug members list
       ansible.builtin.debug:
         msg: "{{ mongo_cluster_members }}"
+        verbosity: 2
 
     - name: Debug formatted members list
       ansible.builtin.debug:
         msg: "{{ mongo_cluster_members_formatted }}"
+        verbosity: 2
 
     # Reconfigure cluster
     # todo: this always returns changed even when nothing changes
