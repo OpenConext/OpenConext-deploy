@@ -33,7 +33,7 @@
   when: mongo_configure_cluster | bool
   block:
     # Get the replicaset status and fail on minimal (everything but even number of nodes)
-    - name: Check replicaset status ninimal
+    - name: Check replicaset status minimal
       community.mongodb.mongodb_status:
         login_host: localhost
         login_user: admin
@@ -54,7 +54,7 @@
         - replica_status_minimal.failed
 
     # Get the replicaset status votes
-    - name: Check replicaset status minimal
+    - name: Check replicaset status votes
       community.mongodb.mongodb_status:
         login_host: localhost
         login_user: admin
