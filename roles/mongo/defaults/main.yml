@@ -13,16 +13,15 @@ mongo_servers: [] # Set this in group_vars
 # Not all mongo servers in the inventory are cluster members, so we use a separate list for this.
 # Set this in group_vars of your environment(s). The arbiter should go first, or change the mongo_arbiter_index.
 # mongo_cluster_members:
-#   - host: "mongoarbiter.example.com:27017"
+#   - host: "mongoarbiter.example.com"
 #     priority: 1 # can vote, cannot become primary
-#   - host: "mongo2.example.com:27017"
+#     port: 27017
+#   - host: "mongo2.example.com"
 #     priority: 2
-#   - host: "mongo1.example.com:27017"
+#     port: 27017
+#   - host: "mongo1.example.com"
 #     priority: 3
-# mongo_arbiter_index: 0
-
-# The replication role
-# mongo_replication_role: # Set this in host_vars, it can have the values: "primary", "secondary" or arbiter
+#     port: 27017
 
 # Todo: there is a link between mongo_replication_role and priority (arbiter is priority 1, primary the highest) so
 # setting them separately is not ideal.
