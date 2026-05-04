@@ -13,35 +13,37 @@ mongo_servers: [] # Set this in group_vars
 # Not all mongo servers in the inventory are cluster members, so we use a separate list for this.
 # Set this in group_vars of your environment(s). The arbiter should go first, or change the mongo_arbiter_index.
 # mongo_cluster_members:
-#   - host: "mongoarbiter.example.com:27017"
+#   - host: "mongoarbiter.example.com"
 #     priority: 1 # can vote, cannot become primary
-#   - host: "mongo2.example.com:27017"
+#     port: 27017
+#   - host: "mongo2.example.com"
 #     priority: 2
-#   - host: "mongo1.example.com:27017"
+#     port: 27017
+#   - host: "mongo1.example.com"
 #     priority: 3
-# mongo_arbiter_index: 0
-
-# The replication role
-# mongo_replication_role: # Set this in host_vars, it can have the values: "primary", "secondary" or arbiter
+#     port: 27017
 
 # Todo: there is a link between mongo_replication_role and priority (arbiter is priority 1, primary the highest) so
 # setting them separately is not ideal.
 
 # The port for mongo server
-mongod_port: 27017
+mongo_port: 27017
 
 # The password for admin user
-mongo_admin_pass: "{{ mongo_admin_password }}" # Set this in secrets
+# mongo_admin_password: # set this in secrets
+
+# Are we using a cluster?
+mongo_mode: "cluster" # cluster or standalone
 
 # The name of the replication set
-replica_set_name: "{{ instance_name }}" # Set this in group_vars
+mongo_replica_set_name: "{{ instance_name }}" # Set this in group_vars
 
 # Add a database
 mongo:
   users:
-    - { name: managerw, db_name: metadata, password: "{{ mongo_passwords.manage }}" }
-    - { name: oidcsrw, db_name: oidc, password: "{{ mongo_passwords.oidcng }}" }
-    - { name: myconextrw, db_name: myconext, password: "{{ mongo_passwords.myconext }}" }
+    - { name: managerw, db_name: metadata, password: "{{ mongo_passwords.manage }}", role: "readWrite" }
+    - { name: oidcsrw, db_name: oidc, password: "{{ mongo_passwords.oidcng }}", role: "readWrite"}
+    - { name: myconextrw, db_name: myconext, password: "{{ mongo_passwords.myconext }}", role: "readWrite" }
 
 # Listen on all addresses by default
 mongo_bind_listen_address: "0.0.0.0"
@@ -53,3 +55,28 @@ mongo_pki_dir: "/etc/pki/mongo"
 
 # Users and groups
 mongo_group: "mongod"
+
+# Paths
+mongo_config_file: "/etc/mongod.conf"
+mongo_data_path: "/var/lib/mongo"
+mongo_pymongo_version: 4.16.0
+
+# cluster members
+# set in group_vars
+# mongo_cluster_members:
+#   - host: mongo1.example.com:{{ mongo_port }}
+#     priority: 3
+#     votes: 1
+#   - host: mongo2.example.com:{{ mongo_port }}
+#     priority: 2
+#     votes: 1
+#   - host: mongo3.example.com:{{ mongo_port }}
+#     priority: 1
+#     votes: 1
+#     arbiterOnly: true
+
+mongo_cluster_write_concern: "majority"
+mongo_cluster_write_timeout: 5000
+
+# to avoid surprises only initiate or reconfigure cluster if this is true (safest option is to use -e mongo_configure_cluster=true with your deployment when cluster configuration is necessary)
+mongo_configure_cluster: false

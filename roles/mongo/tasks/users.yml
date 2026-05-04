@@ -1,14 +1,33 @@
-- name: Create mongo database users # requires pymongo 4+
+- name: Create mongo database users cluster # requires pymongo 4+
+  when:
+    - mongo_mode == "cluster"
+    - mongo_replication_role == "primary"
   community.mongodb.mongodb_user:
     login_database: admin
     database: "{{ item.db_name }}"
     login_user: admin
-    login_password: "{{ mongo_admin_pass }}"
+    login_password: "{{ mongo_admin_password }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    roles: readWrite
-    replica_set: "{{ replica_set_name }}"
-  no_log: true
+    roles: "{{ item.role | default('readWrite')}}"
+    replica_set: "{{ mongo_replica_set_name }}"
+  #no_log: true todo enable
+  run_once: true
+  with_items: "{{ mongo.users }}"
+  changed_when: false
+  tags: mongo_users
+
+- name: Create mongo database users single server # requires pymongo 4+
+  when: mongo_mode != "cluster"
+  community.mongodb.mongodb_user:
+    login_database: admin
+    database: "{{ item.db_name }}"
+    login_user: admin
+    login_password: "{{ mongo_admin_password }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    roles: "{{ item.role }}"
+  #no_log: true todo enable
   run_once: true
   with_items: "{{ mongo.users }}"
   changed_when: false

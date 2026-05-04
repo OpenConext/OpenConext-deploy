@@ -15,29 +15,32 @@
     group: root
     mode: "0700"
 
-- name: Install the backup script
-  ansible.builtin.template:
-    src: "backup_mongo.pl.j2"
-    dest: "/usr/local/sbin/backup_mongo.pl"
-    mode: "0700"
-    owner: root
-    group: root
-  when: mongo_replication_role != 'arbiter'
+- name: Configure backup
+  when: mongo_replication_role is not defined or mongo_replication_role != 'arbiter'
+  block:
+    - name: Install the backup script
+      ansible.builtin.template:
+        src: "backup_mongo.pl.j2"
+        dest: "/usr/local/sbin/backup_mongo.pl"
+        mode: "0700"
+        owner: root
+        group: root
 
+    - name: Create cron symlink for backup script
+      ansible.builtin.file:
+        src: "/usr/local/sbin/backup_mongo.pl"
+        dest: "/etc/cron.daily/mongodb_backup"
+        state: link
+        mode: "0700"
+        owner: root
 
-- name: Create cron symlink for backup script
-  ansible.builtin.file:
-    src: "/usr/local/sbin/backup_mongo.pl"
-    dest: "/etc/cron.daily/mongodb_backup"
-    state: link
-    mode: "0700"
-    owner: root
-  when: mongo_replication_role != 'arbiter'
+- name: Debug mongo_cluster_members
+  debug:
+    msg: "{{ item.host }}"
+    verbosity: 2
+  loop:
+    "{{ mongo_cluster_members }}"
 
-# TODO: this template gets mongo_servers from
-# the inventory, maybe change that to group vars
-# this is not on an per app basis. These are mongoservers
-# in the same cluster.
 - name: Create mongosh config file
   ansible.builtin.template:
     src: mongoshrc.js.j2
