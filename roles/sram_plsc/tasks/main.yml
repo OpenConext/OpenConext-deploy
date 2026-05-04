@@ -1,28 +1,28 @@
 ---
 - name: Make sure clients sync directory exists
   file:
-    path: "{{ plsc_conf_dir }}"
+    path: "{{ sram_plsc_conf_dir }}"
     state: directory
     mode: "0755"
 
 - name: "Create plsc.yml source if it doesn't exist"
   template:
     src: "plsc.yml.j2"
-    dest: "{{ plsc_conf_dir }}/plsc.yml"
+    dest: "{{ sram_plsc_conf_dir }}/plsc.yml"
     mode: "0640"
-  no_log: "{{plsc_ansible_nolog}}"
+  no_log: "{{ sram_plsc_ansible_nolog }}"
   notify: "Restart the plsc container"
 
 - name: Create the plsc container
   community.docker.docker_container:
     name: "sram-plsc"
-    image: "{{ plsc_image }}"
+    image: "{{ sram_plsc_image }}"
     restart_policy: "always"
     state: started
     pull: true
     mounts:
       - type: bind
-        source: "{{ plsc_conf_dir }}/plsc.yml"
+        source: "{{ sram_plsc_conf_dir }}/plsc.yml"
         target: "/opt/plsc/plsc.yml"
     networks:
       # TODO: Should this not be parametrized?

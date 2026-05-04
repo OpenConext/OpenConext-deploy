@@ -1,6 +1,6 @@
 ---
 - name: Restart the ldap container
   community.docker.docker_container:
-    name: "{{ containers.ldap }}"
+    name: "sram-ldap"
     restart: true
     state: started

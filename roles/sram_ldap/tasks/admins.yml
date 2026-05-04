@@ -1,54 +1,34 @@
 ---
-# - name: Initialize DIT admin
-#   community.general.ldap_entry:
-#     dn: "{{ ldap_services_dn.binddn }}"
-#     objectClass: organizationalRole
-#     attributes:
-#       cn: "{{ ldap_services_dn.binddn | regex_replace('^cn=([^,]+).*', '\\1') }}"
-
-# determine which users need to be admin
-# check for each role of each user if it leads to membership of group {{ldap_admin_group}}
-# - name: determine ldap admins
-#   set_fact:
-#     ldap_admins: "{{ ldap_admins | default([]) + [item.0] }}"
-#   when: ldap_admin_group in role_to_groups[item.1] or ldap_admin_group in item.0.groups
-#   loop: "{{ users | subelements('roles') }}"
-
 - name: determine ldap admins
   set_fact:
-    ldap_admins: "{{ ldap_admins }}"
+    ldap_admins: "{{ sram_ldap_admins }}"
 
 # Find existing ldap admins
 - name: Initialize admins (I)
   community.general.ldap_search:
-    dn: "{{ ldap_services_dn.basedn }}"
+    dn: "{{ sram_ldap_services_dn.basedn }}"
     scope: "onelevel"
     filter: "(objectClass=organizationalRole)"
     attrs:
       - "cn"
-    bind_dn: "{{ ldap_services_dn.binddn }}"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ldap_uri }}"
+    bind_dn: "{{ sram_ldap_services_dn.binddn }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{sram_ldap_uri }}"
   register: "existing_ldap_admins_result"
 
-# ansible sucks like this: we need to extract the results from the result
+# ansible trips over stuff like this: we need to extract the results from the result
 - name: Initialize admins (Ia)
   set_fact:
     existing_ldap_admins: "{{ existing_ldap_admins_result.results }}"
 
-- debug:
-    var: "existing_ldap_admins"
-- debug:
-    var: "ldap_admins"
-
 # Remove LDAP non-admins
 - name: Initialize admins (II)
   community.general.ldap_entry:
-    dn: "cn={{ item.cn }},{{ ldap_services_dn.basedn }}"
+    dn: "cn={{ item.cn }},{{ sram_ldap_services_dn.basedn }}"
     state: absent
-    bind_dn: "{{ ldap_services_dn.binddn }}"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ldap_uri }}"
+    bind_dn: "{{ sram_ldap_services_dn.binddn }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
   when: >
     item.cn not in ldap_admins | map(attribute='uid')
     and item.cn != 'admin'
@@ -57,26 +37,26 @@
 # Insert LDAP admins
 - name: Initialize admins (III)
   community.general.ldap_entry:
-    dn: "cn={{ item.uid }},{{ ldap_services_dn.basedn }}"
+    dn: "cn={{ item.uid }},{{ sram_ldap_services_dn.basedn }}"
     objectClass:
       - simpleSecurityObject
       - organizationalRole
     attributes:
       description: An LDAP administrator
       userPassword: "{{ item.pw_hash }}"
-    bind_dn: "{{ ldap_services_dn.binddn }}"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ldap_uri }}"
+    bind_dn: "{{ sram_ldap_services_dn.binddn }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
   loop: "{{ ldap_admins }}"
 
 # Make sure passwords are updated for existing admins
 - name: Initialize admins (IV)
   community.general.ldap_attrs:
-    dn: "cn={{ item.uid }},{{ ldap_services_dn.basedn }}"
+    dn: "cn={{ item.uid }},{{ sram_ldap_services_dn.basedn }}"
     attributes:
       userPassword: "{{ item.pw_hash }}"
-    bind_dn: "{{ ldap_services_dn.binddn }}"
-    bind_pw: "{{ ldap_services_password }}"
-    server_uri: "{{ldap_uri }}"
+    bind_dn: "{{ sram_ldap_services_dn.binddn }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
   loop: "{{ ldap_admins }}"
 

@@ -1,25 +1,25 @@
 ---
 ldap:
   src:
-    uri: "{{ plsc_ldap_uri }}"
-    basedn: "{{ plsc_ldap_basedn }}"
-    binddn: "{{ plsc_ldap_binddn }}"
-    passwd: "{{ plsc_ldap_password }}"
+    uri: "{{ sram_plsc_ldap_uri }}"
+    basedn: "{{ sram_plsc_ldap_basedn }}"
+    binddn: "{{ sram_plsc_ldap_binddn }}"
+    passwd: "{{ sram_plsc_ldap_password }}"
     sizelimit: 500
   dst:
-    uri: "{{ plsc_ldap_uri }}"
-    basedn: "{{ plsc_ldap_basedn }}"
-    binddn: "{{ plsc_ldap_binddn }}"
-    passwd: "{{ plsc_ldap_password }}"
+    uri: "{{ sram_plsc_ldap_uri }}"
+    basedn: "{{ sram_plsc_ldap_basedn }}"
+    binddn: "{{ sram_plsc_ldap_binddn }}"
+    passwd: "{{ sram_plsc_ldap_password }}"
     sizelimit: 500
 sbs:
   src:
-    host: "{{ plsc_sbs_host }}"
-    user: "{{ plsc_sbs_user }}"
-    passwd: "{{ plsc_sbs_password }}"
+    host: "{{ sram_plsc_sbs_host }}"
+    user: "{{ sram_plsc_sbs_user }}"
+    passwd: "{{ sram_plsc_sbs_password }}"
     verify_ssl: {{ false if env=='vm' else true }}
     timeout: 60
-    retry: {{ plsc_retry }}
+    retry: {{ sram_plsc_retry }}
 pwd: "{CRYPT}!"
 uid: 1000
 gid: 1000

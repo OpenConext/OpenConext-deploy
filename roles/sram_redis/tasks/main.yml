@@ -1,7 +1,7 @@
 ---
 - name: "Create redis group"
   group:
-    name: "{{ redis_group }}"
+    name: "{{ sram_redis_group }}"
     state: "present"
   register: "result"
 
@@ -11,12 +11,12 @@
 
 - name: "Create redis user"
   user:
-    name: "{{ redis_user }}"
-    group: "{{ redis_group }}"
+    name: "{{ sram_redis_user }}"
+    group: "{{ sram_redis_group }}"
     comment: "User to run SRAM Redis service"
     shell: "/bin/false"
     password: "!"
-    home: "{{ redis_conf_dir }}"
+    home: "{{ sram_redis_conf_dir }}"
     create_home: false
     state: "present"
   register: "result"
@@ -29,34 +29,34 @@
   file:
     path: "{{item.path}}"
     state: "directory"
-    owner: "{{ redis_user }}"
-    group: "{{ redis_group }}"
+    owner: "{{ sram_redis_user }}"
+    group: "{{ sram_redis_group }}"
     mode: "{{item.mode}}"
   with_items:
-    - { path: "{{redis_conf_dir}}", mode: "0755" }
-    - { path: "{{redis_data_dir}}", mode: "0755" }
+    - { path: "{{sram_redis_conf_dir}}", mode: "0755" }
+    - { path: "{{sram_redis_data_dir}}", mode: "0755" }
 
 - name: "Create redis config"
   template:
     src: "redis.conf.j2"
-    dest: "{{ redis_conf_dir }}/redis.conf"
-    owner: "{{ redis_user }}"
-    group: "{{ redis_group }}"
+    dest: "{{ sram_redis_conf_dir }}/redis.conf"
+    owner: "{{ sram_redis_user }}"
+    group: "{{ sram_redis_group }}"
     mode: "0644"
   notify: "Restart redis container"
 
 - name: "Create redis container"
   community.docker.docker_container:
     name: "sram-redis"
-    image: "{{ redis_image }}"
+    image: "{{ sram_redis_image }}"
     restart_policy: "always"
     state: "started"
     user: "{{ redis_user_uid }}:{{ redis_group_gid }}"
     command: |
       redis-server /usr/local/etc/redis/redis.conf
     volumes:
-      - "{{ redis_conf_dir }}:/usr/local/etc/redis"
-      - "{{ redis_data_dir }}:/data"
+      - "{{ sram_redis_conf_dir }}:/usr/local/etc/redis"
+      - "{{ sram_redis_data_dir }}:/data"
     networks:
       # TODO: Should this not be parametrized?
       - name: loadbalancer
