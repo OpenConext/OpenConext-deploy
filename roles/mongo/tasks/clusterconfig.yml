@@ -18,19 +18,24 @@
     msg: "Replica set name {{ mongo_replica_set_name }}"
     verbosity: 2
 
-# Who is primary
-- name: Identify designated primary
+# Loop over cluster members and check their presence in mong_servers group and their mode (not standalone)
+
+- name: Check if mongo_cluster_members exist in inventory group
+  ansible.builtin.assert:
+    that:
+      - item.host in groups['mongo_servers']
+    fail_msg: "Server '{{ item.host }}' is not in the mongo_servers inventory group"
+    success_msg: "Server '{{ item.host }}' found in mongo_servers inventory group"
+  run_once: true
+  loop: "{{ mongo_cluster_members }}"
+
+# Loop over cluster members and check for primary
+
+- name: Set primary host fact
   ansible.builtin.set_fact:
-    mongo_primary_host: >-
-      {{
-        groups['mongo_servers']
-        | map('extract', hostvars)
-        | selectattr('mongo_replication_role', 'defined')
-        | selectattr('mongo_replication_role', 'equalto', 'primary')
-        | map(attribute='inventory_hostname')
-        | first
-      }}
-  failed_when: mongo_primary_host is not defined or mongo_primary_host == ''
+    mongo_primary_host: "{{ (mongo_cluster_members | max(attribute='priority')).host }}"
+
+# Loop over cluster members and check for multiple primaries and if so fail
 
 - name: Debug primary settings
   ansible.builtin.debug:
@@ -83,7 +88,7 @@
             _id: "{{ mongo_replica_set_name }}",
             members: [
               {% for m in mongo_cluster_members %}
-              { _id: {{ loop.index0 }}, host: "{{ m.host }}", priority: {{ m.priority }}, votes: {{ m.votes }}{% if m.arbiterOnly is defined and m.arbiterOnly and m.arbiterOnly == true %}, arbiterOnly: true {% endif %} }{{ "," if not loop.last else "" }}
+              { _id: {{ loop.index0 }}, host: "{{ m.host }}:{{ m.port }}", priority: {{ m.priority }}, votes: {{ m.votes }}{% if m.arbiterOnly is defined and m.arbiterOnly and m.arbiterOnly == true %}, arbiterOnly: true {% endif %} }{{ "," if not loop.last else "" }}
               {% endfor %}
             ]
           })
@@ -96,8 +101,23 @@
         msg: "{{ rs_init }}"
         verbosity: 2
 
+    - name: Format members list
+      ansible.builtin.set_fact:
+        mongo_cluster_members_formatted: "{{ mongo_cluster_members_formatted | default([]) + [m | combine({'host': m.host ~ ':' ~ (m.port | string)}) | dict2items | rejectattr('key', 'eq', 'port') | list | items2dict] }}"
+      loop: "{{ mongo_cluster_members }}"
+      loop_control:
+        loop_var: m
+
+    - name: Debug members list
+      ansible.builtin.debug:
+        msg: "{{ mongo_cluster_members }}"
+
+    - name: Debug formatted members list
+      ansible.builtin.debug:
+        msg: "{{ mongo_cluster_members_formatted }}"
+
     # Reconfigure cluster
-    # todo: this alwasy returns changed even wehn nothing changes
+    # todo: this always returns changed even when nothing changes
     - name: Reconfigure cluster if necessary
       community.mongodb.mongodb_replicaset:
         login_host: localhost
@@ -106,7 +126,7 @@
         login_port: "{{ mongo_port }}"
         reconfigure: true
         replica_set: "{{ mongo_replica_set_name }}"
-        members: "{{ mongo_cluster_members }}"
+        members: "{{ mongo_cluster_members_formatted }}"
       register: rs_reconfigure
 
     - name: Debug cluster reconfiguration
