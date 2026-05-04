@@ -77,3 +77,12 @@
           The error message is: {{ replica_status_votes.msg }}."
       when:
         - replica_status_votes.failed
+
+    # In non cluster config mode we use replica_status
+    # and here replica_status_votes and replica_status_minimal
+    # for better error messages, but we need a general replica_status 
+    # for for example users.yml, so lets set it here
+    - name: Set a value for replica_status
+      ansible.builtin.set_fact:
+        replica_status:
+          failed: False
