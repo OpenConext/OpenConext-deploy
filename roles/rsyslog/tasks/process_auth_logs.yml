@@ -9,103 +9,16 @@
     - log_logins.sql
     - lastseen.sql
 
-- name: Create log_logins table for each log_login environment
-  community.mysql.mysql_db:
-    name: "{{ item.db_loglogins_name }}"
-    login_user: "{{ item.db_loglogins_user }}"
-    login_password: "{{ item.db_loglogins_password }}"
-    login_host: "{{ item.db_loglogins_host }}"
-    state: import
-    target: /var/tmp/log_logins.sql
-  changed_when: false
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Create lastseen table for each log_login environment
-  community.mysql.mysql_db:
-    name: "{{ item.db_lastseen_name }}"
-    login_user: "{{ item.db_lastseen_user }}"
-    login_password: "{{ item.db_lastseen_password }}"
-    login_host: "{{ item.db_lastseen_host }}"
-    state: import
-    target: /var/tmp/lastseen.sql
-  changed_when: false
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
 - name: add python mysql module for parse_ebauth_to_mysql script
   apt:
     name: python3-mysqldb
     state: present
   when: ansible_os_family == "Debian"
 
-- name: Create a python script that parses eb log_logins per environment
-  ansible.builtin.template:
-    src: parse_ebauth_to_mysql.py.j2
-    dest: /usr/local/sbin/parse_ebauth_to_mysql_{{ item.name }}.py
-    mode: 0740
-    owner: root
-    group: root
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Create a python script that parses stepup log_logins per environment
-  ansible.builtin.template:
-    src: parse_stepupauth_to_mysql.py.j2
-    dest: /usr/local/sbin/parse_stepupauth_to_mysql_{{ item.name }}.py
-    mode: 0740
-    owner: root
-    group: root
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Put log_logins logrotate scripts for eb
-  ansible.builtin.template:
-    src: logrotate_ebauth.j2
-    dest: /etc/logrotate.d/logrotate_ebauth_{{ item.name }}
-    mode: 0644
-    owner: root
-    group: root
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Put log_logins logrotate scripts for stepup
-  ansible.builtin.template:
-    src: logrotate_stepupauth.j2
-    dest: /etc/logrotate.d/logrotate_stepupauth_{{ item.name }}
-    mode: 0644
-    owner: root
-    group: root
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Create logdirectory for log_logins cleanup script
-  ansible.builtin.file:
-    path: "{{ rsyslog_dir }}/apps/{{ item.name }}/loglogins_cleanup/"
-    state: directory
-    owner: root
-    group: "{{ rsyslog_read_group }}"
-    mode: 0750
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Put log_logins cleanup script
-  ansible.builtin.template:
-    src: clean_loglogins.j2
-    dest: /usr/local/sbin/clean_loglogins_{{ item.name }}
-    owner: root
-    group: root
-    mode: 0700
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
-
-- name: Create cronjobs to run the log_logins script
-  ansible.builtin.cron:
-    name: Delete old {{ item.name }} log_login data
-    user: root
-    minute: "20"
-    hour: "02"
-    job: "/usr/local/sbin/clean_loglogins_{{ item.name }}"
-    cron_file: loglogins_cleanup_{{ item.name }}
-  with_items: "{{ rsyslog_environments }}"
-  when: item.db_loglogins_name is defined
+- name: Process auth logs for each rsyslog environment
+  ansible.builtin.include_tasks: process_auth_log_for_environment.yml
+  loop: "{{ rsyslog_environments }}"
+  loop_control:
+    loop_var: rsyslog_environment
+    label: "{{ rsyslog_environment.name }}"
+  when: rsyslog_environment.db_loglogins_name is defined
