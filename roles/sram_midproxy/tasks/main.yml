@@ -29,7 +29,7 @@
 - name: Create the SATOSA container
   community.docker.docker_container:
     name: sram-midproxy
-    image: docker.io/satosa:{{ sram_midproxy_satosa_version }}
+    image: "{{ sram_midproxy_satosa_image }}"
     pull: true
     restart_policy: "always"
     state: started
