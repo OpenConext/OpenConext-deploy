@@ -12,8 +12,8 @@
     - "/opt/openconext/manage/policies"
 
 - name: Copy Stepup stepup_config.json from inventory
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/manage/stepup_config.json"
+  ansible.builtin.template:
+    src: "stepup_config.json.j2"
     dest: "/opt/openconext/manage/stepup_config.json"
     owner: "root"
     group: "root"
