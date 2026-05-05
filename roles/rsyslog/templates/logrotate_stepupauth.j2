@@ -10,7 +10,9 @@
     delaycompress
     create 0640 root {{ rsyslog_read_group }}
     postrotate
-      /usr/local/sbin/parse_stepupauth_to_mysql_{{ item.name }}.py > /dev/null
+      # PiMe: temporarily disable parsing of the rotated stepup authentication log because to MySQL lastseen
+      # because the first rotated log will be huge
+      # /usr/local/sbin/parse_stepupauth_to_mysql_{{ item.name }}.py > /dev/null
       systemctl kill -s HUP rsyslog.service
     endscript
 }
