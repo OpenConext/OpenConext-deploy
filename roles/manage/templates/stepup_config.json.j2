@@ -1,5 +1,7 @@
 {
-  "sraa": "[ {{ manage_stepup_raas | quote | join(",") }} ]",
+  "sraa": {{ manage_stepup_raas | tojson() }},
+{# part below is a literal template that is to be filled in by Manage, not by anisble -#}
+{% raw -%}
   "email_templates": {
     "confirm_email": {
       "en_GB": "<p>Dear {{ commonName }},</p> <p>Thank you for registering your token. Please visit this link to verify your email address:</p> <p><a href='{{ verificationUrl }}'>{{ verificationUrl }}</a></p> <p>If you can not click on the URL, please copy the link and paste it in the address bar of your browser.</p> <p>SURFnet</p>",
@@ -39,3 +41,4 @@
     }
   }
 }
+{% endraw %}
