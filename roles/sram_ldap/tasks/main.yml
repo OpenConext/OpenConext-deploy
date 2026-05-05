@@ -78,11 +78,11 @@
       traefik.tcp.routers.ldap.tls: "true"
       traefik.tcp.services.ldap.loadbalancer.server.port: "389"
     healthcheck:
-      test: "-S /var/run/slapd/ldapi"
-        # - "CMD"
-        # - "bash"
-        # - "-c"
-        # - "[[ -S /var/run/slapd/ldapi ]]"
+      test:
+        - "CMD"
+        - "bash"
+        - "-c"
+        - "[[ -S /var/run/slapd/ldapi ]]"
   register: "ldap_container"
 
 - name: Wait for LDAP initialization
