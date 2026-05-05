@@ -1,0 +1,62 @@
+---
+- name: "Create redis group"
+  group:
+    name: "{{ sram_redis_group }}"
+    state: "present"
+  register: "result"
+
+- name: "Save redis group gid"
+  set_fact:
+    redis_group_gid: "{{ result.gid }}"
+
+- name: "Create redis user"
+  user:
+    name: "{{ sram_redis_user }}"
+    group: "{{ sram_redis_group }}"
+    comment: "User to run SRAM Redis service"
+    shell: "/bin/false"
+    password: "!"
+    home: "{{ sram_redis_conf_dir }}"
+    create_home: false
+    state: "present"
+  register: "result"
+
+- name: "Save redis user uid"
+  set_fact:
+    redis_user_uid: "{{ result.uid }}"
+
+- name: "Create directories"
+  file:
+    path: "{{item.path}}"
+    state: "directory"
+    owner: "{{ sram_redis_user }}"
+    group: "{{ sram_redis_group }}"
+    mode: "{{item.mode}}"
+  with_items:
+    - { path: "{{sram_redis_conf_dir}}", mode: "0755" }
+    - { path: "{{sram_redis_data_dir}}", mode: "0755" }
+
+- name: "Create redis config"
+  template:
+    src: "redis.conf.j2"
+    dest: "{{ sram_redis_conf_dir }}/redis.conf"
+    owner: "{{ sram_redis_user }}"
+    group: "{{ sram_redis_group }}"
+    mode: "0644"
+  notify: "Restart redis container"
+
+- name: "Create redis container"
+  community.docker.docker_container:
+    name: "sram-redis"
+    image: "{{ sram_redis_image }}"
+    restart_policy: "always"
+    state: "started"
+    user: "{{ redis_user_uid }}:{{ redis_group_gid }}"
+    command: |
+      redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - "{{ sram_redis_conf_dir }}:/usr/local/etc/redis"
+      - "{{ sram_redis_data_dir }}:/data"
+    networks:
+      # TODO: Should this not be parametrized?
+      - name: loadbalancer

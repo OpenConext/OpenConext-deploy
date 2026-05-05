@@ -1,0 +1,9 @@
+---
+sram_redis_image: "docker.io/library/redis:7"
+sram_redis_conf_dir: "{{ current_release_appdir }}/sram/redis"
+sram_redis_data_dir: "{{ current_release_appdir }}/sram/redis/data"
+sram_redis_user: redis
+sram_redis_group: redis
+sram_redis_redis_user: default
+sram_redis_redis_password: changethispassword
+sram_redis_max_memory: 100mb

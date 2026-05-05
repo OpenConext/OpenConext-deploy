@@ -1,0 +1,6 @@
+{% if env!="prd" -%}
+body::after {
+    background: {{ sram_sbs_disclaimer_color }};
+    content: "{{ sram_sbs_disclaimer_label }}";
+}
+{% endif %}

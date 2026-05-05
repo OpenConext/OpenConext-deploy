@@ -1,0 +1,299 @@
+---
+# playbook to install and configure all components of the LDAP
+- name: Install LDAP utils
+  apt:
+    state: "present"
+    name:
+      - "python3-ldap"  # for ansible ldap modules
+    install_recommends: false
+
+- name: Ensure that a number of directories exist
+  file:
+    path: "{{ item.path }}"
+    state: "directory"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { path: "{{sram_ldap_ldif_dir}}",  mode: "0755" }
+    - { path: "{{sram_ldap_certs_dir}}", mode: "0755" }
+    - { path: "{{sram_ldap_data_dir}}",  mode: "0777" }
+  notify: Restart the ldap container
+
+- name: Copy schemas
+  copy:
+    src: "{{ item }}"
+    dest: "{{ sram_ldap_ldif_dir }}/{{ item }}"
+    mode: "0644"
+  with_items:
+    - sczGroup.ldif
+    - groupOfMembers.ldif
+    - eduPerson.ldif
+    - ldapPublicKey.ldif
+    - eduMember.ldif
+    - voPerson.ldif
+    - sramPerson.ldif
+  notify: Restart the ldap container
+
+- name: Copying ldap-add script
+  copy:
+    src: "{{ item }}"
+    dest: "{{ sram_ldap_conf_dir }}/{{ item }}"
+    mode: "0755"
+  with_items:
+    - ldap-add
+
+- name: Setup ldap hosts
+  vars:
+    host:
+      key: "%s.{{ sram_ldap_base_domain }}"
+      value: "%s"
+    etc_hosts: {}
+  set_fact:
+    etc_hosts: >-
+      {{ etc_hosts |
+      combine({ host.key | format(item.key): host.value | format(item.value) }) }}
+  with_dict: "{{ sram_ldap_hosts }}"
+
+- name: Create the ldap container
+  community.docker.docker_container:
+    name: "sram-ldap"
+    image: "{{ sram_ldap_image }}"
+    restart_policy: "always"
+    state: started
+    # pull: true
+    ports:
+      - 0.0.0.0:389:389
+    env:
+      LDAP_ORGANISATION: "{{ env }}"
+      LDAP_DOMAIN: "{{ sram_ldap_base_domain }}"
+      LDAP_ROOTPASS: "{{ sram_ldap_services_password }}"
+    etc_hosts: "{{ etc_hosts }}"
+    volumes:
+      - "{{ sram_ldap_conf_dir }}:/opt/ldap"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.enable: "true"
+      traefik.tcp.routers.ldap.entrypoints: "ldaps"
+      traefik.tcp.routers.ldap.rule: "HostSNI(`*`)"
+      traefik.tcp.routers.ldap.tls: "true"
+      traefik.tcp.services.ldap.loadbalancer.server.port: "389"
+    healthcheck:
+      test:
+        - "CMD"
+        - "bash"
+        - "-c"
+        - "[[ -S /var/run/slapd/ldapi ]]"
+  register: "ldap_container"
+
+- name: Wait for LDAP initialization
+  ansible.builtin.wait_for:
+    port: 389
+    delay: 5
+
+- name: Wait for 5 seconds
+  ansible.builtin.wait_for:
+    timeout: 5
+  when: "ldap_container is changed"
+
+- name: Ensure the schemas are added to LDAP
+  ansible.builtin.shell:
+    cmd: "docker exec sram-ldap /opt/ldap/ldap-add /opt/ldap/schema/{{ item }}"
+  register: "result"
+  failed_when: "result.rc not in [0,80]"
+  changed_when: "result.rc != 80"
+  become: true
+  loop:
+    - "sczGroup.ldif"
+    - "groupOfMembers.ldif"
+    - "eduPerson.ldif"
+    - "ldapPublicKey.ldif"
+    - "eduMember.ldif"
+    - "voPerson.ldif"
+    - "sramPerson.ldif"
+
+- name: Set indices
+  community.general.ldap_attrs:
+    dn: "olcDatabase={1}mdb,cn=config"
+    attributes:
+      olcDbIndex: "{{item}}"
+    state: "present"
+    bind_dn: "cn=admin,cn=config"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
+  with_items:
+    - "entryUUID eq"
+    - "o eq"
+    - "dc eq"
+    - "entryCSN eq"
+
+- name: Set olcDatabase={-1}frontend olcSizeLimit
+  community.general.ldap_attrs:
+    dn: "olcDatabase={-1}frontend,cn=config"
+    state: "exact"
+    attributes:
+      olcSizeLimit: "unlimited"
+    bind_dn: "cn=admin,cn=config"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
+
+- name: Set config
+  community.general.ldap_attrs:
+    dn: "cn=config"
+    state: "present"
+    attributes:
+      olcServerID: "{{ sram_ldap_server_id }}"
+      olcSizeLimit: "unlimited"
+      olcLogLevel: "{{ sram_ldap_loglevel }}"
+      olcAttributeOptions: "time-"
+    bind_dn: "cn=admin,cn=config"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
+
+- name: Setup Modules
+  community.general.ldap_attrs:
+    dn: cn=module{0},cn=config
+    attributes:
+      olcModuleLoad:
+        - syncprov
+        - dynlist.so
+    bind_dn: "cn=admin,cn=config"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
+
+- name: Setup Dynlist
+  community.general.ldap_entry:
+    dn: olcOverlay=dynlist,olcDatabase={1}mdb,cn=config
+    objectClass:
+      - olcOverlayConfig
+      - olcDynamicList
+    attributes:
+      olcDlAttrSet: "voPerson labeledURI member+memberOf@groupOfMembers"
+    bind_dn: "cn=admin,cn=config"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
+
+- name: Setup Syncprov
+  community.general.ldap_entry:
+    dn: olcOverlay=syncprov,olcDatabase={1}mdb,cn=config
+    objectClass:
+      - olcOverlayConfig
+      - olcSyncProvConfig
+    attributes:
+      olcSpCheckpoint: 100 10
+      olcSpSessionLog: 100
+    bind_dn: "cn=admin,cn=config"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
+
+- name: Set ACLs
+  community.general.ldap_attrs:
+    dn: "olcDatabase={1}mdb,cn=config"
+    attributes:
+      olcAccess:
+        - >-
+          to dn.regex="(([^,]+),{{ sram_ldap_services_dn.basedn }})$"
+          by dn.exact="{{ sram_ldap_services_dn.binddn }}" write
+          by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth write
+          by dn.exact,expand="cn=admin,$1" read
+          by * break
+        - >-
+          to *
+          by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage
+          by dn.regex="cn=[^,]+,{{ sram_ldap_services_dn.basedn }}" read
+          {% if env=="vm" %}
+          by dn.exact=gidNumber=1000+uidNumber=1000,cn=peercred,cn=external,cn=auth manage
+          {% endif %}
+          by * break
+        - >-
+          to attrs=userPassword
+          by self write
+          by anonymous auth
+          by * break
+    state: exact
+    ordered: true
+    bind_dn: "cn=admin,cn=config"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
+
+# sram_ldap_rids:
+#   101: ldaps://ldap1.scz-vm.net/
+#   102: ldaps://ldap2.scz-vm.net/
+
+- name: Set rids
+  vars:
+    start: 101
+    rid:
+      key: "%d"
+      value: "{{ sram_ldap_rid_prefix }}%s.{{ sram_ldap_base_domain }}/"
+    ldap_rids: {}
+  set_fact:
+    ldap_rids: >-
+      {{ ldap_rids | combine({ rid.key | format(start|int):
+      rid.value | format(item.key) }) }}
+    start: "{{ start|int + 1 }}"
+  with_dict: "{{ sram_ldap_hosts | dict2items | sort(attribute='key') }}"
+
+# Voor toekomstige Claude gebruikers: onderstaande construct levert aan het eind
+# een string representatie van de dict op, die niet meer gebruikt kan worden
+# in de hieropvolgende 'Setup rids' task...
+# - name: Set rids
+#   set_fact:
+#     ldap_rids: >-
+#       {%- set result = {} %}
+#       {%- for host in (ldap_hosts | dict2items | sort(attribute='key')) %}
+#       {%-   set _ = result.update({(101 + loop.index0)|string: \
+#         ldap_rid_prefix ~ host.key ~ '.' ~ base_domain ~ '/'}) %}
+#       {%- endfor %}
+#       {{ result }}
+
+- name: Setup rids
+  vars:
+    rid: >-
+      rid={}
+      provider="{}"
+      searchbase="{{ sram_ldap_services_dn.basedn }}"
+      type=refreshAndPersist
+      bindmethod=simple
+      binddn="{{ sram_ldap_services_dn.binddn }}"
+      credentials={{ sram_ldap_services_password }}
+      retry="30 +"
+      timeout=30
+      network-timeout=5
+    rids: []
+  set_fact:
+    rids: "{{ rids  + [ rid.format(item.key, item.value) ] }}"
+  with_dict: "{{ dict(ldap_rids) }}"
+
+- name: Setup Syncrepl
+  community.general.ldap_attrs:
+    dn: olcDatabase={1}mdb,cn=config
+    attributes:
+      olcSyncrepl: "{{ rids }}"
+      olcMultiProvider: "TRUE"
+    bind_dn: "cn=admin,cn=config"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
+
+# We now have Syncrepl in place, so only write to primary
+- name: Initialize DIT
+  community.general.ldap_entry:
+    dn: "{{ sram_ldap_services_dn.basedn }}"
+    state: "present"
+    objectClass:
+      - "top"
+      - "dcObject"
+      - "organization"
+    attributes:
+      dc: "{{ sram_ldap_services_dn.basedn | regex_replace('^dc=([^,]+).*', '\\1') }}"
+      o: "{{ sram_ldap_services_dn.o }}"
+    bind_dn: "{{ sram_ldap_services_dn.binddn }}"
+    bind_pw: "{{ sram_ldap_services_password }}"
+    server_uri: "{{ sram_ldap_uri }}"
+  when: >
+      inventory_hostname in groups['sram_ldap_primary']
+
+# We now have Syncrepl in place, so only write to primary
+- name: Add ldap admins
+  include_tasks: "admins.yml"
+  when: >
+      inventory_hostname in groups['sram_ldap_primary']

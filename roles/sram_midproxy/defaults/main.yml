@@ -1,0 +1,7 @@
+---
+sram_midproxy_satosa_version: 8
+sram_midproxy_state_encryption_key: 'secret'
+sram_midproxy_issuer: 'issuer'
+sram_midproxy_client_id: 'client'
+sram_midproxy_client_secret: 'secret'
+sram_midproxy_sp_metadata: 'eb-metadata.xml'
