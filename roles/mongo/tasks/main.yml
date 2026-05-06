@@ -60,7 +60,7 @@
         file: users.yml
       # Cannot add users on a broken cluster
       when: >
-        (mongo_replication_role == 'primary' and not replica_status.failed)
+        (mongo_mode == 'cluster' and mongo_replication_role is defined and mongo_replication_role == 'primary' and not replica_status.failed)
         or mongo_mode == 'standalone'
 
     - name: Include postinstallation tasks
