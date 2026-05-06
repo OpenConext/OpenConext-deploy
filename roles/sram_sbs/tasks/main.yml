@@ -72,11 +72,11 @@
   with_items:
     - "{{ sram_sbs_client_image }}"
     - "{{ sram_sbs_server_image }}"
-  register: "sram_sbs_image"
+  register: "sbs_images"
 
 - name: "Migration"
   # For some reason --check breaks this block
-  when: "sram_sbs_image is changed and not ansible_check_mode"
+  when: "sbs_images is changed and not ansible_check_mode"
   block:
     - name: "Run SBS migrations"
       throttle: 1
@@ -110,8 +110,6 @@
       community.docker.docker_container:
         name: "sram-sbs-migration"
         state: "absent"
-      # TODO: fix this by only running this if "sram_sbs_image is changed"
-      changed_when: false
 
 - name: "Start sbs client container"
   community.docker.docker_container:
@@ -120,6 +118,7 @@
     pull: "never"
     restart_policy: "always"
     state: "started"
+    restart: "{{ sbs_images is changed}}"
     volumes:
       - "{{ sram_sbs_conf_dir }}/sbs-apache.conf:/etc/apache2/sites-enabled/sbs.conf:ro"
       - "{{ sram_sbs_conf_dir }}/disclaimer.css:/opt/sbs/client/dist/disclaimer.css:ro"
@@ -136,6 +135,7 @@
     image: "{{ sram_sbs_server_image }}"
     restart_policy: "always"
     state: "started"
+    restart: "{{ sbs_images is changed}}"
     env:
       RUNAS_UID: "{{ sbs_user_uid | string }}"
       RUNAS_GID: "{{ sbs_group_gid | string }}"
@@ -149,7 +149,5 @@
       - "/tmp/ci-runner:/tmp/ci-runner"
     networks:
       - name: "loadbalancer"
-    # TODO: fix this: this is only for dev
     etc_hosts:
-      oidc-op.scz-vm.net: "172.20.1.24"
       host.docker.internal: host-gateway

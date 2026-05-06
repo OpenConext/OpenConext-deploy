@@ -1,39 +1,70 @@
 ---
+- name: "Create midproxy group"
+  group:
+    name: "{{ sram_midproxy_group }}"
+    state: "present"
+  register: "result"
+
+- name: "Create midproxy user"
+  user:
+    name: "{{ sram_midproxy_user }}"
+    group: "{{ sram_midproxy_group }}"
+    comment: "User to run Midproxy service"
+    shell: "/bin/false"
+    password: "!"
+    create_home: false
+    state: "present"
+  register: "result"
+
+- name: "Save midproxy user uid"
+  set_fact:
+    # --check fails on result.uid if user was never provisioned
+    midproxy_user_uid: "{{ result.uid | default(1000) }}"
+
 - name: Create directory to keep configfile
   ansible.builtin.file:
     dest: "/opt/sram/midproxy"
     state: directory
-    owner: 1000
-    group: 1000
-    mode: "0770"
+    owner: "{{ sram_midproxy_user }}"
+    group: "{{ sram_midproxy_group }}"
+    # mkdir: cannot create directory '.': Permission denied
+    mode: "0777"
 
 - name: Copy EB SP metadata
   ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/midproxy/{{ sram_midproxy_sp_metadata }}"
+    src: "{{ inventory_dir }}/files/sram_midproxy/{{ sram_midproxy_sp_metadata }}"
     dest: "/opt/sram/midproxy/{{ sram_midproxy_sp_metadata }}"
-    owner: 1000
-    group: 1000
-    mode: "0740"
+    owner: "{{ sram_midproxy_user }}"
+    group: "{{ sram_midproxy_group }}"
+    # mkdir: cannot create directory '.': Permission denied
+    mode: "0644"
 
 - name: Copy SATOSA conf files
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "/opt/sram/midproxy/{{ item }}"
-    owner: 1000
-    group: 1000
+    owner: "{{ sram_midproxy_user }}"
+    group: "{{ sram_midproxy_group }}"
   with_items:
     - internal_attributes.yaml
     - proxy_conf.yaml
     - plugins/
 
+- name: "Pull satosa image"
+  community.docker.docker_image_pull:
+    name: "{{ sram_midproxy_satosa_image }}"
+  register: "satosa_image"
+
 - name: Create the SATOSA container
   community.docker.docker_container:
     name: sram-midproxy
     image: "{{ sram_midproxy_satosa_image }}"
-    pull: true
+    pull: never
     restart_policy: "always"
     state: started
-    restart: true
+    restart: "{{ satosa_image is changed }}"
+    # 2026-05-21 07:25:44 +0000] [1] [ERROR] Control server error: [Errno 13] Permission denied: '/.gunicorn'
+    # user: "{{ midproxy_user_uid }}"
     networks:
       - name: "loadbalancer"
     env:
