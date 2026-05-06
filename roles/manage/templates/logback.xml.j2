@@ -20,6 +20,7 @@
     </filter>
   </appender>
 
+{% if manage_logback_json | bool -%}
   <appender name="JSON_SYSLOG" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
     <destination>host.docker.internal:514</destination>
     <encoder class="net.logstash.logback.encoder.LogstashEncoder">
@@ -32,7 +33,7 @@
       </fieldNames>
     </encoder>
   </appender>
-
+{%- endif %}
 
   <logger name="manage" level="DEBUG"/>
   <logger name="com.github.cloudyrock" level="INFO"/>
@@ -42,7 +43,7 @@
     <appender-ref ref="EMAIL"/>
     {% if manage_logback_json | bool -%}
       <appender-ref ref="JSON_SYSLOG"/>
-    {% endif %}
+    {%- endif %}
   </root>
 
 </configuration>
