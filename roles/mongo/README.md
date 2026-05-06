@@ -41,3 +41,4 @@ Warning: the cluster reconfiguration option in the mongodb_replicationset module
 - [X] removing primary from the cluster will not work but the error is unclear, this is related to the todo above
 - [ ] is it necessary to make votes configurable?
 - [X] preflight check are cluster members in the inventory and monog_servers group
+- [ ] Standalone mongo also requires cluster certificates, not logical although it doens't hurt
