@@ -5,8 +5,8 @@ $RuleSet {{ item.name }}
 
 {% for app, config in rsyslog_central_apps.items() %}
 if $programname == "{{ config.program }}"
-  {%- if 'contains'   in config %} and $msg contains   {{ config.contains   }} {% endif -%}
-  {%- if 'startswith' in config %} and $msg startswith {{ config.startswith }} {% endif %}
+  {%- if 'contains'   in config %} and $msg contains   '{{ config.contains   }}' {% endif -%}
+  {%- if 'startswith' in config %} and $msg startswith '{{ config.startswith }}' {% endif %}
   then { action(type="omfile" DynaFile="{{ app }}-{{ item.name }}") stop }}
 {% endfor %}
 
