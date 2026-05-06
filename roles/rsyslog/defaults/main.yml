@@ -1,3 +1,4 @@
+---
 rsyslog_ca: /etc/pki/rsyslog/rsyslog_ca.pem
 rsyslog_dir: /opt/openconext/logs
 rsyslog_read_group: adm
@@ -40,3 +41,60 @@ rsyslog_checkemptylogs_cron_minute: "0"
 rsyslog_checkemptylogs_cron_hour: "9"
 rsyslog_checkemptylogs_cron_weekdays: "1-5"
 rsyslog_checkemptylogs_dir: "/usr/local/bin"
+
+# "program" matches the syslog identifier
+# "contains" and "startswith" match the syslog message
+rsyslog_central_apps:
+  haproxy:            { program: "haproxy",                target: "haproxy/haproxy.log" }
+  keepalived:         { program: "Keepalived_vrrp",        target: "keepalived/keepalived.log" }
+  galera:             { program: "mariadb",                target: "galera/galera.log" }
+  galera_garb:        { program: "garb-systemd",           target: "galera/galera_garb.log" }
+  mongo:              { program: "mongod",                 target: "mongo/mongo.log" }
+  traefik:            { program: "loadbalancer",           target: "traefik/traefik.log" }
+  eb_auth:            { program: "engineblock", contains: '"channel":"authentication"',
+                        dir: "log_logins",                 target: "eb-authentication.log" }
+  stepup_auth1:       { program: "gateway", contains: '"message":"Second Factor Authenticated"',
+                      dir: "log_logins",                 target: "stepup-authentication.log" }
+  stepup_auth2:       { program: "gateway", contains: '"message":"Intrinsic Loa Requested"',
+                        dir: "log_logins",                 target: "stepup-authentication.log" }
+  stepup_auth3:       { program: "stepup-authentication",
+                        dir: "log_logins",                 target: "stepup-authentication.log" }
+  eb_apache:          { program: "engineblock", startswith: "engine",
+                                                           target: "eb/apache.log" }
+  eb:                 { program: "engineblock",            target: "eb/eb.log" }
+  eb_log:             { program: "EBLOG",                  target: "eb/eb.log" }
+  eb_apache2:         { program: "Apache-EB",              target: "eb/apache.log" }  # probabaly ununsed
+  eb_api:             { program: "Apache-EBAPI",           target: "eb-api/apache.log" }  # probabaly ununsed
+  oidcng_server:      { program: "oidcngserver",           target: "oidcng/oidcng.log" }
+  oidcng_json:        { program: "oicdngjson",             target: "oidcng/oidcngjson.log" }
+  oidc_play_server:   { program: "oidcplaygroundserver",   target: "oidc-playground/oidc-playground.log" }
+  oidc_play_gui:      { program: "oidcplaygroundgui",      target: "oidc-playground/oidc-playground-apache.log" }
+  manage_server:      { program: "manageserver",           target: "manage/manage.log" }
+  manage_gui:         { program: "managegui",              target: "manage/apache.log" }
+  aa_server:          { program: "aaserver",               target: "aa/aa.log" }
+  aa_gui:             { program: "aagui",                  target: "aa/apache.log" }
+  aa_link:            { program: "aalink",                 target: "aa/apache.log" }
+  pdp:                { program: "pdp",                    target: "pdp/pdp.log" }
+  voot:               { program: "vootserver",             target: "voot/voot.log" }
+  eduid_server:       { program: "myconextserver",         target: "eduid/myconext.log" }
+  eduid_json:         { program: "myconextjson",           target: "eduid/myconextjson.log" }
+  eduid_gui:          { program: "myconextgui",            target: "eduid/myconext-apache.log" }
+  eduid_account:      { program: "accountgui",             target: "eduid/account-apache.log" }
+  eduid_servicedesk:  { program: "servicedeskgui",         target: "eduid/servicedesk-apache.log" }
+  invite_client:      { program: "inviteclient",           target: "invite/inviteclient.log" }
+  invite_welcome:     { program: "invitewelcome",          target: "invite/invitewelcome.log" }
+  invite_server:      { program: "inviteserver",           target: "invite/inviteserver.log" }
+  invite_json:        { program: "invitejson",             target: "invite/invitejson.log" }
+  invite_provmock:    { program: "inviteprovisioningmock", target: "invite/inviteprovisioningmock.log" }
+  teams_server:       { program: "teamsserver",            target: "teams/teams.log" }
+  teams_gui:          { program: "teamsgui",               target: "teams/apache.log" }
+  profile:            { program: "profile", startwith: "{",
+                                                           target: "profile/profile.log" }
+  profile_apache:     { program: "profile",                target: "profile/apache.log" }
+  spdashboard:        { program: "spdashboard", startwith: "spdashboard",
+                                                           target: "spdashboard/spdashboard.log" }
+  spdashboard_apache: { program: "spdashboard",            target: "spdashboard/apache.log" }
+  dashboard_server:   { program: "dashboardserver",        target: "dashboard/dashboard.log" }
+  dashboard_gui:      { program: "dashboardgui",           target: "dashboard/apache.log" }
+  static:             { program: "Apache-STATIC",          target: "static/apache.log" }
+  metadata:           { program: "Apache-METADATA",        target: "metadata/apache.log" }
