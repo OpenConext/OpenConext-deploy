@@ -27,7 +27,7 @@ mongo_servers: [] # Set this in group_vars
 # setting them separately is not ideal.
 
 # The port for mongo server
-mongo_port: 27017
+mongo_default_port: 27017
 
 # The password for admin user
 # mongo_admin_password: # set this in secrets
@@ -64,15 +64,18 @@ mongo_pymongo_version: 4.16.0
 # cluster members
 # set in group_vars
 # mongo_cluster_members:
-#   - host: mongo1.example.com:{{ mongo_port }}
+#   - host: mongo1.example.com
 #     priority: 3
 #     votes: 1
-#   - host: mongo2.example.com:{{ mongo_port }}
+#     port: 27017
+#   - host: mongo2.example.com
 #     priority: 2
 #     votes: 1
-#   - host: mongo3.example.com:{{ mongo_port }}
+#     port: 27017
+#   - host: mongo3.example.com
 #     priority: 1
 #     votes: 1
+#     port: 27017
 #     arbiterOnly: true
 
 mongo_cluster_write_concern: "majority"

@@ -1,5 +1,5 @@
 {% if mongo_mode == "cluster" %}
-db = connect("mongodb://admin:{{ mongo_admin_password }}@{% for mongo_server in mongo_cluster_members %}{{ mongo_server.host }}{% if not loop.last %},{% endif %}{% endfor %}?ssl=true&tlsCAFile=/etc/pki/mongo/mongoca.pem")
+db = connect("mongodb://admin:{{ mongo_admin_password }}@{% for mongo_server in mongo_cluster_members %}{{ mongo_server.host }}:{{ mongo_server.port }}{% if not loop.last %},{% endif %}{% endfor %}?ssl=true&tlsCAFile=/etc/pki/mongo/mongoca.pem")
 {% else %}
-db = connect("mongodb://admin:{{ mongo_admin_password }}@{{ ansible_facts['fqdn'] }}?ssl=true&tlsCAFile=/etc/pki/mongo/mongoca.pem")
+db = connect("mongodb://admin:{{ mongo_admin_password }}@{{ ansible_facts['fqdn'] }}:{{ mongo_standalone_port }}?ssl=true&tlsCAFile=/etc/pki/mongo/mongoca.pem")
 {% endif %}
