@@ -88,10 +88,10 @@ rsyslog_central_apps:
   invite_provmock:    { program: "inviteprovisioningmock", target: "invite/inviteprovisioningmock.log" }
   teams_server:       { program: "teamsserver",            target: "teams/teams.log" }
   teams_gui:          { program: "teamsgui",               target: "teams/apache.log" }
-  profile:            { program: "profile", startwith: "{",
+  profile:            { program: "profile", startswith: "{",
                                                            target: "profile/profile.log" }
   profile_apache:     { program: "profile",                target: "profile/apache.log" }
-  spdashboard:        { program: "spdashboard", startwith: "spdashboard",
+  spdashboard:        { program: "spdashboard", startswith: "spdashboard",
                                                            target: "spdashboard/spdashboard.log" }
   spdashboard_apache: { program: "spdashboard",            target: "spdashboard/apache.log" }
   dashboard_server:   { program: "dashboardserver",        target: "dashboard/dashboard.log" }
