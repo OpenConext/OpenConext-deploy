@@ -1,5 +1,3 @@
-global({{ rsyslog_dir_file_modes }})
-
 $RuleSet {{ item.name }}
 {% if item.name != "mgnt_sc" %}
 
@@ -7,24 +5,24 @@ $RuleSet {{ item.name }}
 if $programname == "{{ config.program }}"
   {%- if 'contains'   in config %} and $msg contains   '{{ config.contains   }}' {% endif -%}
   {%- if 'startswith' in config %} and $msg startswith '{{ config.startswith }}' {% endif %}
-  then { action(type="omfile" DynaFile="{{ app }}-{{ item.name }}") stop }}
+  then { action(type="omfile" DynaFile="{{ app }}-{{ item.name }}" {{ rsyslog_dir_file_modes }}) stop }}
 {% endfor %}
 
 {% for stepupapp in stepupapps %}
-if $programname == "stepup-{{ stepupapp }}"                                then { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
-if $programname == "{{ stepupapp }}" and $msg startswith "{{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
-if $programname == "{{ stepupapp }}"                                       then { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}") stop }
-if $programname == "Apache-{{ stepupapp }}"                                then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}") stop }
+if $programname == "stepup-{{ stepupapp }}"                                then { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }}) stop }
+if $programname == "{{ stepupapp }}" and $msg startswith "{{ stepupapp }}" then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }}) stop }
+if $programname == "{{ stepupapp }}"                                       then { action(type="omfile" DynaFile="stepup-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }}) stop }
+if $programname == "Apache-{{ stepupapp }}"                                then { action(type="omfile" DynaFile="apache-{{ stepupapp }}-{{item.name }}" {{ rsyslog_dir_file_modes }}) stop }
 {% endfor %}
-if $programname == "Apache-azuremfa"                                       then { action(type="omfile" DynaFile="apache-azure-mfa-{{ item.name }}") stop }
+if $programname == "Apache-azuremfa"                                       then { action(type="omfile" DynaFile="apache-azure-mfa-{{ item.name }}" {{ rsyslog_dir_file_modes }}) stop }
 
 
 {% endif %}
-if $programname == "audispd"       then { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
-if $programname == "audit"         then { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
-if $programname == "audisp-syslog" then { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
-if $programname == "-bash"         then { action(type="omfile" DynaFile="bash-{{ item.name }}") stop }
-if $programname == "authpriv"      then { action(type="omfile" dynafile="secure-{{ item.name }}") stop }
-if $msg contains "-- MARK --"      then { action(type="omfile" DynaFile="MARK-{{ item.name }}") stop }
+if $programname == "audispd"       then { action(type="omfile" DynaFile="auditd-{{ item.name }}" {{ rsyslog_dir_file_modes }}) stop }
+if $programname == "audit"         then { action(type="omfile" DynaFile="auditd-{{ item.name }}" {{ rsyslog_dir_file_modes }}) stop }
+if $programname == "audisp-syslog" then { action(type="omfile" DynaFile="auditd-{{ item.name }}" {{ rsyslog_dir_file_modes }}) stop }
+if $programname == "-bash"         then { action(type="omfile" DynaFile="bash-{{   item.name }}" {{ rsyslog_dir_file_modes }}) stop }
+if $programname == "authpriv"      then { action(type="omfile" Dynafile="secure-{{ item.name }}" {{ rsyslog_dir_file_modes }}) stop }
+if $msg contains "-- MARK --"      then { action(type="omfile" DynaFile="MARK-{{   item.name }}" {{ rsyslog_dir_file_modes }}) stop }
 
 *.* ?hostleft-{{ item.name }}
