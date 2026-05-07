@@ -11,7 +11,7 @@
     password: "{{ item.password }}"
     roles: "{{ item.role | default('readWrite')}}"
     replica_set: "{{ mongo_replica_set_name }}"
-  #no_log: true todo enable
+  no_log: true
   run_once: true
   with_items: "{{ mongo.users }}"
   changed_when: false
@@ -26,8 +26,8 @@
     login_password: "{{ mongo_admin_password }}"
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    roles: "{{ item.role }}"
-  #no_log: true todo enable
+    roles: "{{ item.role | default("readWrite") }}"
+  no_log: true
   run_once: true
   with_items: "{{ mongo.users }}"
   changed_when: false
