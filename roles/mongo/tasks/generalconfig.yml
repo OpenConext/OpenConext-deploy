@@ -17,7 +17,7 @@
 
 - name: Debug mongodb authentication check
   ansible.builtin.debug:
-    msg: "{{ mongo_authentication_disabled.stdout }}"
+    msg: "{{ mongo_authentication_disabled }}"
     verbosity: 2
 
 - name: configure primary or standalone
