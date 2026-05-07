@@ -5,7 +5,7 @@ $RuleSet {{ item.name }}
 if $programname == "{{ config.program }}"
   {%- if 'contains'   in config %} and $msg contains   '{{ config.contains   }}' {% endif -%}
   {%- if 'startswith' in config %} and $msg startswith '{{ config.startswith }}' {% endif %}
-  then { action(type="omfile" DynaFile="{{ app }}-{{ item.name }}" {{ rsyslog_dir_file_modes }}) stop }}
+  then { action(type="omfile" DynaFile="{{ app }}-{{ item.name }}" {{ rsyslog_dir_file_modes }}) stop }
 {% endfor %}
 
 {% for stepupapp in stepupapps %}
