@@ -40,6 +40,7 @@
     verbosity: 2
   loop:
     "{{ mongo_cluster_members }}"
+  when: mongo_mode == "cluster"
 
 - name: Create mongosh config file
   ansible.builtin.template:
