@@ -18,7 +18,7 @@ ERROR_MAIL_TO="{{ error_mail_to }}"
 ANSIBLE_HOSTNAME="{{ ansible_hostname }}"
 
 LOG_FILE="${RSYSLOG_DIR}/apps/${RSYSLOG_ENVIRONMENT_NAME}/loglogins_cleanup/loglogins_cleanup.log"
-FORCE=0 # Whether to run if than ${MAX_DELETE_DAYS} days of log data would be removed.
+FORCE=0 # Whether to run if more than ${MAX_DELETE_DAYS} days of log data would be removed.
 
 SCRIPT_NAME=$0
 
