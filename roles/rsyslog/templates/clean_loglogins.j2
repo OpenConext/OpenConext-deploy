@@ -77,12 +77,13 @@ QUERY=(
 if ! OLDEST_TIMESTAMP=$( "${QUERY[@]}" ); then
   log_message "Error running mysql query (OLDEST_TIMESTAMP)"
   send_mail "Error running mysql query (OLDEST_TIMESTAMP)"
-  exit
+  exit 1
 fi
 if [ -z "$OLDEST_TIMESTAMP" ]; then
-  log_message "No logins found in log_logins"
-  send_mail "No logins found in log_logins"
-  exit
+  log_message "No logins found in log_logins. Nothing to cleanup."
+  send_mail "No logins found in log_logins. Nothing to cleanup."
+  # The log_logins table is empty. Not treating this as an error. Exit normally,
+  exit 0
 fi
 
 # If we are going to delete more than ${MAX_DELETE_DAYS} days, something might be wrong
@@ -93,14 +94,14 @@ TIMESTAMP_DIFF=$(( (LOGIN_STAMP_UNIX-OLDEST_TIMESTAMP_UNIX)/3600/24 ))
 log_message "The oldest timestamp in the database is $OLDEST_TIMESTAMP"
 if [ "$TIMESTAMP_DIFF" -lt "0" ]; then
   log_message "There is no data to delete. We're done."
-  exit
+  exit 0
 fi
 
 log_message "We will delete $TIMESTAMP_DIFF days of log_logins data"
 if [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ]; then
   log_message "Something is up, you need to delete more than ${MAX_DELETE_DAYS} days worth of login data"
   send_mail "The ${SCRIPT_NAME} script wants to delete more than ${MAX_DELETE_DAYS} days of logins on ${ANSIBLE_HOSTNAME}. Please investigate"
-  exit
+  exit 0
 fi
 if [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -eq 1 ]; then
   log_message "Force option provided; deleting more than ${MAX_DELETE_DAYS} days worth of login data"
@@ -119,7 +120,7 @@ QUERY=(
 if ! DELETED_ROWS=$( "${QUERY[@]}" ); then
   echo "Error running mysql query (DELETED_ROWS)"
   send_mail "Error running mysql query (DELETED_ROWS)"
-  exit
+  exit 1
 fi
 
 log_message "We have deleted $DELETED_ROWS rows. Done."
