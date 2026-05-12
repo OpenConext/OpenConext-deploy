@@ -1,7 +1,12 @@
 #!/usr/bin/python3
-# This script parses the files produced by engineblock and inserts them into a mySQL table where the SURFconext stats module will analyse the data further
-# This script is intended to be used during logrotate
-# It picks up all files starting with ebauth- (all rotated files) and parses them
+# This script parses the authentication log files produced by engineblock and inserts them into two tables:
+# - log_logins: contains login events from engineblock and stepup-gateway, and is there for use manually querying logins.
+#               There is no further processing done on this table.
+#               A daily cronjob runs clean_loglogins.j2 to remove old logins from the log_logins table.
+# - last_login: contains the last login date for each user. This is used for deprovisioning (lifecycle)
+#
+# This script is intended to be used during logrotate with the delaycompress option set.
+# It picks up all files starting with ebauth- that do not end in .gz and parses them
 
 import os
 import sys

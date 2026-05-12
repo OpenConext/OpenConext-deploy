@@ -1,8 +1,12 @@
 #!/usr/bin/python3
-# This script parses rotated stepup-authentication.log files produced by engineblock.
-# It filters for successful logins (authentication_result:OK) and inserts the data
-# into the log_logins and last_login MySQL tables.
-# This script is intended to be run separately during logrotate.
+# This script parses the authentication log files produced by stepup-gateway and inserts them into two tables:
+# - log_logins: contains login events from engineblock and stepup-gateway, and is there for use manually querying logins.
+#               There is no further processing done on this table.
+#               A daily cronjob runs clean_loglogins.j2 to remove old logins from the log_logins table.
+# - last_login: contains the last login date for each user. This is used for deprovisioning (lifecycle)
+#
+# This script is intended to be used during logrotate with the delaycompress option set.
+# It picks up all files starting with stepup-authentication.log- that do not end in .gz and parses them
 
 import os
 import sys
