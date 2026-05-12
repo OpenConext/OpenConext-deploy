@@ -118,7 +118,7 @@ QUERY=(
 # DEBUG: Print query
 # echo "${QUERY[@]}"
 if ! DELETED_ROWS=$( "${QUERY[@]}" ); then
-  echo "Error running mysql query (DELETED_ROWS)"
+  log_message "Error running mysql query (DELETED_ROWS)"
   send_mail "Error running mysql query (DELETED_ROWS)"
   exit 1
 fi
