@@ -51,6 +51,9 @@
     dest: /etc/rsyslog.d/templates/{{ item.name }}.conf
     backup: true
   with_items: "{{ rsyslog_environments }}"
+  loop_control:
+    label: "{{ item.name }}"
+
   notify:
     - "restart rsyslog"
 
@@ -60,6 +63,8 @@
     dest: /etc/rsyslog.d/rulesets/{{ item.name }}.conf
     backup: true
   with_items: "{{ rsyslog_environments }}"
+  loop_control:
+    label: "{{ item.name }}"
   notify:
     - "restart rsyslog"
 
@@ -69,6 +74,8 @@
     dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
     backup: true
   with_items: "{{ rsyslog_environments }}"
+  loop_control:
+    label: "{{ item.name }}"
   notify:
     - "restart rsyslog"
 
@@ -77,7 +84,7 @@
     src: centralsyslog.j2
     dest: /etc/logrotate.d/centralsyslog
 
-- name: Put ryslog config file
+- name: Put rsyslog config file
   template:
     src: "rsyslog.conf.j2"
     dest: "/etc/rsyslog.conf"
