@@ -84,7 +84,7 @@
     src: centralsyslog.j2
     dest: /etc/logrotate.d/centralsyslog
 
-- name: Put ryslog config file
+- name: Put rsyslog config file
   template:
     src: "rsyslog.conf.j2"
     dest: "/etc/rsyslog.conf"
