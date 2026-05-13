@@ -156,15 +156,15 @@ voot:
     - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
     - {
-        type: "teams",
-        url: "https://teams.{{ base_domain }}/api/voot",
-        credentials: {
-         username: "{{ teams.voot_api_user }}",
-         secret: "{{ external_group_provider_secrets.teams }}"
-        },
-        schacHomeOrganization: "{{ base_domain}}",
-        name: "SURFteams",
-        timeoutMillis: 15000
+          type: "invite",
+          url: "https://invite.{{ base_domain }}/api/external/v1/voot",
+          credentials: {
+              username: "{{ invite.vootuser }}",
+              secret: "{{ invite.vootsecret }}"
+          },
+          schacHomeOrganization: "N/A",
+          name: "Invite",
+          timeoutMillis: 3000
       }
 
 oidc_playground:
@@ -338,6 +338,7 @@ manage:
   features: push, validation, push_preview, orphans, find_my_data, edugain, auto_refresh
   environment: template
   super_user_team_names: "urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:surfconext_tpm_core"
+  sram_rp_entity_id: "sbs.test.sram.surf.nl"
   apiUsers:
     - {
         name: "dashboard",

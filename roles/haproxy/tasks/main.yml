@@ -16,7 +16,7 @@
 - name: Install haproxy and socat
   ansible.builtin.apt:
     name:
-      - "haproxy=3.0.*"
+      - "haproxy"
       - "socat"
       - "git"
     state: "present"
@@ -87,17 +87,6 @@
     owner: haproxy
     group: haproxy
     mode: "0770"
-
-- name: Create combined key and certificate file for HAproxy
-  ansible.builtin.copy:
-    content: >
-      {{ item.key_content }}{{ lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}') }}
-    dest: "/etc/haproxy/certs/{{ item.name }}_haproxy.pem"
-    mode: "0600"
-  with_items: "{{ haproxy_sni_ip.certs }}"
-  when: haproxy_sni_ip.certs is defined
-  notify:
-    - "reload haproxy"
 
 - name: Create backend CA directory
   ansible.builtin.file:
