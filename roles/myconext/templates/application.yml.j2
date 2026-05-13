@@ -89,11 +89,13 @@ mongodb_db: {{ myconext.mongo_database }}
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
 base_path: https://mijn.{{ myconext_base_domain }}
+base_path_service_desk: https://servicedesk.{{ myconext_base_domain }}
 continue_after_login_url: https://login.{{ myconext_base_domain }}/saml/guest-idp/continue
 idp_redirect_url: https://login.{{ myconext_base_domain }}
 rp_id: login.{{ myconext_base_domain }}
 rp_origin: https://login.{{ myconext_base_domain }}
 sp_redirect_url: https://mijn.{{ myconext_base_domain }}
+sp_servicedesk_redirect_url: https://servicedesk.{{ myconext_base_domain }}
 sp_entity_id: {{ myconext.sp_entity_id }}
 sp_entity_metadata_url: {{ myconext.sp_entity_metadata_url }}
 guest_idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
@@ -303,12 +305,20 @@ spring:
     oauth2:
       client:
         registration:
-          oidcng:
-            client-id: "{{ myconext.oidc_client_id }}"
-            client-secret: "{{ myconext.oidc_secret }}"
-            redirect-uri: "https://{baseHost}{basePort}{basePath}/login/oauth2/code/{registrationId}"
+          mijn_eduid:
+            client-id: "{{ myconext.mijn_eduid_oidc_client_id }}"
+            client-secret: "{{ myconext.mijn_eduid_oidc_secret }}"
+            redirect-uri: "https://mijn.{{ myconext_base_domain }}/login/oauth2/code/{registrationId}"
             authorization-grant-type: "authorization_code"
             scope: openid
+            provider: oidcng
+          service_desk:
+            client-id: "{{ myconext.service_desk_oidc_client_id }}"
+            client-secret: "{{ myconext.service_desk_oidc_secret }}"
+            redirect-uri: "https://servicedesk.{{ myconext_base_domain }}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: "authorization_code"
+            scope: openid
+            provider: oidcng
         provider:
           oidcng:
             authorization-uri: "https://connect.{{ base_domain }}/oidc/authorize"
