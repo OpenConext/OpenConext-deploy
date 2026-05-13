@@ -16,6 +16,8 @@ server:
 spring:
   main:
     banner-mode: "off"
+  cache:
+    type: simple
   session:
     jdbc:
       cleanup-cron: "-"
@@ -108,6 +110,7 @@ config:
   sram: "https://{{ env }}.sram.surf.nl/"
   service_desk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
   feedback_widget_enabled: true
+  test_environment: {{ openconextaccess.test_environment }}
   # For other environments, move to group_vars
   identity_providers:
       - name: "SXS IdP"
@@ -147,6 +150,8 @@ gui:
 
 feature:
   enable-performance-seed: False
+  statistics-enabled: False
+  stepup-required: False
 
 email:
   from: "{{ noreply_email }}"
@@ -158,17 +163,10 @@ email:
 
 manage:
   enabled: True
-  activeManage: TEST
-  test:
-    url: {{ openconextaccess.managetest.url }}
-    user: {{ openconextaccess.managetest.user }}
-    password: {{ openconextaccess.managetest.password }}
-    defaultState: prodaccepted
-  prod:
-    url: {{ openconextaccess.manageprod.url }}
-    user: {{ openconextaccess.manageprod.user }}
-    password: {{ openconextaccess.managetest.password }}
-    defaultState: testaccepted
+  url: {{ openconextaccess.managetest.url }}
+  user: {{ openconextaccess.managetest.user }}
+  password: {{ openconextaccess.managetest.password }}
+  defaultState: testaccepted
   # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
   # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
   staticManageDirectory: classpath:/manage
@@ -180,18 +178,36 @@ invite:
   user: {{ invite.access_user }}
   password: "{{ invite.access_secret }}"
 
-s3storage:
-  url: {{ openconextaccess.s3_storage.url }}
-  key: {{ openconextaccess.s3_storage.key }}
-  secret: {{ openconextaccess.s3_storage.secret }}
-  bucket: {{ openconextaccess.s3_storage.bucket }}
-
 statistics:
   enabled: {{ openconextaccess.statistics.enabled }}
   url: {{ openconextaccess.statistics.url }}
   user: {{ openconextaccess.statistics.user }}
   password: {{ openconextaccess.statistics.password }}
 
+s3storage:
+  url: {{ openconextaccess.s3_storage.url }}
+  key: {{ openconextaccess.s3_storage.key }}
+  secret: {{ openconextaccess.s3_storage.secret }}
+  bucket: {{ openconextaccess.s3_storage.bucket }}
+
+ohdear:
+  apiKey: "test-token"
+  baseUrl: http://localhost:8089/api
+  enabled: false
+
+springdoc:
+  pathsToMatch: "/api/v1/**"
+  api-docs:
+    path: "/ui/api-docs"
+    enabled: false
+  swagger-ui:
+    path: "/ui/api-ui.html"
+    enabled: false
+    operationsSorter: method
+    oauth:
+      client-id: ${spring.security.oauth2.client.registration.oidcng.client-id}
+      client-secret: ${spring.security.oauth2.client.registration.oidcng.client-secret}
+      use-basic-authentication-with-access-code-grant: true
 
 management:
   health:
