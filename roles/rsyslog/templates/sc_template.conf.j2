@@ -1,59 +1,20 @@
 {% if item.name != "mgnt_sc" %}
-$template haproxy-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/haproxy/haproxy.log"
-$template aa-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/aa/aa.log"
-$template apache-aa-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/aa/apache.log"
-$template apache-aalink-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/link/apache.log"
-$template dashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/dashboard/dashboard.log"
-$template apache-dashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/dashboard/apache.log"
-$template eb-api-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eb-api/eb-api.log"
-$template apache-eb-api-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eb-api/apache.log"
-$template manage-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/manage/manage.log"
-$template apache-manage-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/manage/apache.log"
-$template pdp-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/pdp/pdp.log"
-$template pdpanalytics-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/pdp/pdpanalytics.log"
-$template apache-pdp-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/pdp/apache.log"
-$template profile-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/profile/profile.log"
-$template apache-profile-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/profile/apache.log"
-$template teams-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/teams/teams.log"
-$template apache-teams-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/teams/apache.log"
-$template voot-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/voot/voot.log"
-$template apache-voot-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/voot/apache.log"
-$template galera-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/galera/galera.log"
-$template garb-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/galera/galera_garb.log"
-$template keepalived-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/keepalived/keepalived.log"
-$template mongo-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/mongo/mongo.log"
-$template apache-static-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/static/apache.log"
-$template apache-eb-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eb/apache.log"
-$template eblog-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eb/eb.log"
-$template apache-metadata-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/metadata/apache.log"
-$template ebauth-{{ item.name }}, "{{ rsyslog_dir }}/log_logins/{{ item.name }}/eb-authentication.log"
-$template oidcng-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/oidcng/oidcng.log"
-$template oidcngjson-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/oidcng/oidcngjson.log"
-$template apache-oidcng-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/oidcng/apache.log"
-$template oidc-playground-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/oidc-playground/oidc-playground.log"
-$template apache-oidcplayground-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/oidc-playground/oidc-playground-apache.log"
-$template myconext-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/myconext.log"
-$template myconextjson-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/myconextjson.log"
-$template apache-myconext-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/myconext-apache.log"
-$template apache-account-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/account-apache.log"
-$template apache-servicedesk-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/servicedeskgui/servicedesk-apache.log
-$template apache-eduid-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/eduid/eduid-apache.log"
-$template spdashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/spdashboard/spdashboard.log"
-$template apache-spdashboard-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/spdashboard/apache.log"
-$template inviteclient-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite//inviteclient.log"
-$template invitewelcome-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite//invitewelcome.log"
-$template inviteserver-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite//inviteserver.log"
-$template invitejson-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite/invitejson.log"
-$template inviteprovisioningmock-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/invite//inviteprovisioningmock.log"
-$template loadbalancer-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/traefik/traefik.log"
+
+{% for app, config in rsyslog_central_apps.items() %}
+{% set dir = config.dir if 'dir' in config else 'apps' %}
+$template {{ app }}-{{ item.name }}, "{{ rsyslog_dir }}/{{ dir }}/{{ item.name }}/{{  config.target }}"
+{% endfor %}
+
 {% for stepupapp in stepupapps %}
 $template stepup-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}.log
 $template apache-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log
 {% endfor %}
-$template stepup-authentication-{{ item.name }}, "{{ rsyslog_dir }}/log_logins/{{ item.name }}/stepup-authentication.log"
+
 {% endif %}
+
 $template auditd-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/auditd/%HOSTNAME%/auditd.log"
 $template bash-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/bash/%HOSTNAME%/bash.log"
 $template secure-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/secure/%HOSTNAME%/secure.log"
 $template MARK-{{ item.name }}, "{{ rsyslog_dir }}/monitoring/%HOSTNAME%"
+
 $template hostleft-{{ item.name }}, "{{ rsyslog_dir }}/hosts/{{ item.name }}/%HOSTNAME%/%SYSLOGFACILITY-TEXT%"
