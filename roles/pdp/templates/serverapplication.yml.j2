@@ -41,9 +41,9 @@ email:
 voot:
   serviceUrl: https://voot.{{ base_domain }}
 sab:
-  password: {{ aa.sab_rest_password }}
-  userName: {{ aa.sab_rest_username }}
-  endpoint: {{ aa.sab_rest_endpoint }}
+  password: {{ pdp.sab_rest_secret }}
+  userName: {{ pdp.sab_rest_user }}
+  endpoint: {{ pdp.sab_rest_endpoint }}
 policies:
   cachePolicies: {{ pdp.cache_policies }}
 manage:
