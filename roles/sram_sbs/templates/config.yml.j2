@@ -3,11 +3,7 @@ database:
   uri: {{ sram_sbs_db_connection_sbs }}
 
 redis:
-{% if environment_shortname == 'test2' %}
-  uri: "redis://{{ sram_sbs_redis_user }}:{{ sram_sbs_redis_password }}@{{ sram_sbs_redis_host }}/"
-{% else %}
   uri: "redis{% if sram_sbs_redis_ssl %}s{% endif %}://{{ sram_sbs_redis_user }}:{{ sram_sbs_redis_password }}@{{ sram_sbs_redis_host }}:{{ sram_sbs_redis_port }}/"
-{% endif %}
 
 # add a per-release suffix here to invalidate sessions on new releases
 secret_key: {{ sram_sbs_db_secret }}{{ sram_sbs_secret_key_suffix }}
@@ -54,11 +50,7 @@ eppn_scope: " {{ sram_sbs_eppn_scope }}"
 scim_schema_sram: "urn:mace:surf.nl:sram:scim:extension"
 collaboration_creation_allowed_entitlement: "urn:mace:surf.nl:sram:allow-create-co"
 
-{% if env == "prd" %}
-environment_disclaimer: ""
-{% else %}
 environment_disclaimer: "{{ sram_sbs_disclaimer_label }}"
-{% endif %}
 
 # All services in the white list can be requested in the create-restricted-co API
 # The default organisation is a fallback for when the administrator has no schac_home_org

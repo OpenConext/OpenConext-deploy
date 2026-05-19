@@ -3,7 +3,7 @@ ServerName {{ sram_sbs_base_domain }}
 #CustomLog /proc/self/fd/1 common
 DocumentRoot /opt/sbs/client/dist
 
-Header set Content-Security-Policy "default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'none'; form-action 'self' https://*.{{ base_domain }}; frame-ancestors 'none'; block-all-mixed-content;"
+Header set Content-Security-Policy "{{ httpd_csp.sram }}"
 Header set Permissions-Policy      "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(self), gamepad=(), speaker-selection=()"
 
 RewriteEngine On
