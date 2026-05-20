@@ -106,9 +106,11 @@ mobile_app_rp_entity_id: {{ myconext.mobile_app_rp_entity_id }}
 
 create-from-institution:
   return-url-allowed-domains:
-  {% for url in create_from_institution_return_url_allowed_domains %}
+{% for url in myconext.create_from_institution_return_url_allowed_domains | default([]) %}
     - "{{ url }}"
-  {% endfor %}
+{% else %}
+    []        # lege lijst wanneer er geen URLs zijn
+{% endfor %}
 
 # The host headers to identify the service the user is logged in
 host_headers:

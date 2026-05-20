@@ -1,0 +1,78 @@
+---
+
+- name: Create log_logins table for each log_login environment
+  community.mysql.mysql_db:
+    name: "{{ rsyslog_environment.db_loglogins_name }}"
+    login_user: "{{ rsyslog_environment.db_loglogins_user }}"
+    login_password: "{{ rsyslog_environment.db_loglogins_password }}"
+    login_host: "{{ rsyslog_environment.db_loglogins_host }}"
+    state: import
+    target: /var/tmp/log_logins.sql
+  changed_when: false
+
+- name: Create lastseen table for each log_login environment
+  community.mysql.mysql_db:
+    name: "{{ rsyslog_environment.db_lastseen_name }}"
+    login_user: "{{ rsyslog_environment.db_lastseen_user }}"
+    login_password: "{{ rsyslog_environment.db_lastseen_password }}"
+    login_host: "{{ rsyslog_environment.db_lastseen_host }}"
+    state: import
+    target: /var/tmp/lastseen.sql
+  changed_when: false
+
+- name: Create a python script that parses eb log_logins per environment
+  ansible.builtin.template:
+    src: parse_ebauth_to_mysql.py.j2
+    dest: /usr/local/sbin/parse_ebauth_to_mysql_{{ rsyslog_environment.name }}.py
+    mode: 0740
+    owner: root
+    group: root
+
+- name: Create a python script that parses stepup log_logins per environment
+  ansible.builtin.template:
+    src: parse_stepupauth_to_mysql.py.j2
+    dest: /usr/local/sbin/parse_stepupauth_to_mysql_{{ rsyslog_environment.name }}.py
+    mode: 0740
+    owner: root
+    group: root
+
+- name: Put log_logins logrotate scripts for eb
+  ansible.builtin.template:
+    src: logrotate_ebauth.j2
+    dest: /etc/logrotate.d/logrotate_ebauth_{{ rsyslog_environment.name }}
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Put log_logins logrotate scripts for stepup
+  ansible.builtin.template:
+    src: logrotate_stepupauth.j2
+    dest: /etc/logrotate.d/logrotate_stepupauth_{{ rsyslog_environment.name }}
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Create logdirectory for log_logins cleanup script
+  ansible.builtin.file:
+    path: "{{ rsyslog_dir }}/apps/{{ rsyslog_environment.name }}/loglogins_cleanup/"
+    state: directory
+    owner: root
+    group: "{{ rsyslog_read_group }}"
+    mode: 0750
+
+- name: Put log_logins cleanup script
+  ansible.builtin.template:
+    src: clean_loglogins.j2
+    dest: /usr/local/sbin/clean_loglogins_{{ rsyslog_environment.name }}
+    owner: root
+    group: root
+    mode: 0700
+
+- name: Create cronjobs to run the log_logins script
+  ansible.builtin.cron:
+    name: Delete old {{ rsyslog_environment.name }} log_login data
+    user: root
+    minute: "20"
+    hour: "02"
+    job: "/usr/local/sbin/clean_loglogins_{{ rsyslog_environment.name }}"
+    cron_file: loglogins_cleanup_{{ rsyslog_environment.name }}
