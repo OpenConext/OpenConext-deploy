@@ -44,3 +44,4 @@ Warning: the cluster reconfiguration option in the mongodb_replicationset module
 - [ ] is it necessary to make votes configurable?
 - [X] preflight check are cluster members in the inventory and monog_servers group
 - [ ] Standalone mongo also requires cluster certificates, not logical although it doens't hurt
+- [ ] Changes to mongo users are executed but not reported as an ansible change
