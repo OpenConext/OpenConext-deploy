@@ -8,8 +8,8 @@
 - name: "Create midproxy user"
   user:
     name: "{{ sram_midproxy_user }}"
-    group: "{{ midproxy_group }}"
-    comment: "User to run Mailpit service"
+    group: "{{ sram_midproxy_group }}"
+    comment: "User to run Midproxy service"
     shell: "/bin/false"
     password: "!"
     create_home: false
@@ -18,7 +18,8 @@
 
 - name: "Save midproxy user uid"
   set_fact:
-    midproxy_user_uid: "{{ result.uid }}"
+    # --check fails on result.uid if user was never provisioned
+    midproxy_user_uid: "{{ result.uid | default(1000) }}"
 
 - name: Create directory to keep configfile
   ansible.builtin.file:
@@ -26,7 +27,8 @@
     state: directory
     owner: "{{ sram_midproxy_user }}"
     group: "{{ sram_midproxy_group }}"
-    mode: "0770"
+    # mkdir: cannot create directory '.': Permission denied
+    mode: "0777"
 
 - name: Copy EB SP metadata
   ansible.builtin.copy:
@@ -34,7 +36,8 @@
     dest: "/opt/sram/midproxy/{{ sram_midproxy_sp_metadata }}"
     owner: "{{ sram_midproxy_user }}"
     group: "{{ sram_midproxy_group }}"
-    mode: "0740"
+    # mkdir: cannot create directory '.': Permission denied
+    mode: "0644"
 
 - name: Copy SATOSA conf files
   ansible.builtin.copy:
@@ -47,15 +50,21 @@
     - proxy_conf.yaml
     - plugins/
 
+- name: "Pull satosa image"
+  community.docker.docker_image_pull:
+    name: "{{ sram_midproxy_satosa_image }}"
+  register: "satosa_image"
+
 - name: Create the SATOSA container
   community.docker.docker_container:
     name: sram-midproxy
     image: "{{ sram_midproxy_satosa_image }}"
-    pull: true
+    pull: never
     restart_policy: "always"
     state: started
-    restart: true
-    user: "{{ midproxy_user_uid }}"
+    restart: "{{ satosa_image is changed }}"
+    # 2026-05-21 07:25:44 +0000] [1] [ERROR] Control server error: [Errno 13] Permission denied: '/.gunicorn'
+    # user: "{{ midproxy_user_uid }}"
     networks:
       - name: "loadbalancer"
     env:

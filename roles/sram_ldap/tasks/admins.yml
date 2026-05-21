@@ -4,7 +4,7 @@
     ldap_admins: "{{ sram_ldap_admins }}"
 
 # Find existing ldap admins
-- name: Initialize admins (I)
+- name: Initialize admins (Ia)
   community.general.ldap_search:
     dn: "{{ sram_ldap_services_dn.basedn }}"
     scope: "onelevel"
@@ -17,7 +17,7 @@
   register: "existing_ldap_admins_result"
 
 # ansible trips over stuff like this: we need to extract the results from the result
-- name: Initialize admins (Ia)
+- name: Initialize admins (Ib)
   set_fact:
     existing_ldap_admins: "{{ existing_ldap_admins_result.results }}"
 
