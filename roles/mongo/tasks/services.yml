@@ -1,0 +1,6 @@
+---
+- name: Enable and start mongod
+  ansible.builtin.service:
+    name: mongod.service
+    enabled: true
+    state: started
