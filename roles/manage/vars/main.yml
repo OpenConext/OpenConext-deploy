@@ -1,0 +1,2 @@
+---
+manage_tabs_enabled: "{{ manage_tabs_available | reject('in', manage_tabs_disabled) | list }}"
