@@ -15,7 +15,8 @@
     "value": "urn:mace:dir:attribute-def:eduPersonAffiliation",
     "validationRegex": "^(student|staff|faculty|employee|member)$",
     "allowedInDenyRule": true,
-    "label": "Edu person affiliation"
+    "label": "Edu person affiliation",
+    "enum": true
   },
   {
     "value": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
@@ -45,7 +46,8 @@
     "value": "urn:collab:sab:surfnet.nl",
     "validationRegex": "^(Superuser|Instellingsbevoegde|OperationeelBeheerder|SURFconextbeheerder|DNS-Beheerder)$",
     "allowedInDenyRule": false,
-    "label": "SAB role"
+    "label": "SAB role",
+    "enum": true
   },
   {
     "value": "urn:mace:dir:attribute-def:mail",
