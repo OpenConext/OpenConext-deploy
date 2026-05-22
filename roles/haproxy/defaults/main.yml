@@ -48,3 +48,6 @@ haproxy_acmedns:
 
 # on which weekday (cron, 0==sunday) to run the renewal script
 haproxy_acme_cronjob_dow: 1
+
+# optional monitoring url for acme cron
+haproxy_acme_cronjob_monitor_url:
