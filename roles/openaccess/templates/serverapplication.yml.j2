@@ -191,9 +191,9 @@ s3storage:
   bucket: {{ openconextaccess.s3_storage.bucket }}
 
 ohdear:
-  apiKey: "test-token"
-  baseUrl: http://localhost:8089/api
-  enabled: false
+  apiKey: {{ openconextaccess_ohdear_apikey }}
+  baseUrl: "https://ohdear.app/api"
+  enabled: true
 
 springdoc:
   pathsToMatch: "/api/v1/**"
