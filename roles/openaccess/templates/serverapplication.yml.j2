@@ -110,6 +110,7 @@ config:
   sram: "https://{{ env }}.sram.surf.nl/"
   service_desk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
   feedback_widget_enabled: true
+  demo_seed_enabled: {{ openconextaccess.demo_seed_enabled }}
   test_environment: {{ openconextaccess.test_environment }}
   # For other environments, move to group_vars
   identity_providers:
