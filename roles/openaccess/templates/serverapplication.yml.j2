@@ -20,8 +20,12 @@ spring:
     type: simple
   session:
     jdbc:
+      initialize-schema: never
+{% if openaccess_cronjobmaster is defined and openaccess_cronjobmaster == false  %}
       cleanup-cron: "-"
-      initialize-schema: always
+{% else %}
+      cleanup-cron: "0 */5 * * * *"
+{% endif %}
       flush-mode: on_save
       save-mode: on_set_attribute
     store-type: jdbc
