@@ -148,6 +148,7 @@ oidc_playground:
   jwt_secret: "{{ oidc_playground_jwt_secret }}"
   resource_server_id: resource-server-playground-client
   resource_server_secret: "{{ oidc_playground_resource_server_secret }}"
+  api_endpoint_enabled: True
   gui_disclaimer:
     background_color: red
     content: "{{ env }}"

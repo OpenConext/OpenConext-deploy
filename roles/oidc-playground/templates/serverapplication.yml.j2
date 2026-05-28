@@ -43,6 +43,9 @@ oidc:
   redirect_uri_form_post: "https://oidc-playground.{{ base_domain }}/oidc/api/redirect"
   client_redirect_uri: "https://oidc-playground.{{ base_domain }}/redirect"
 
+features:
+  api_endpoint_enabled: {{ oidc_playground.api_endpoint_enabled }}
+
 gui:
   disclaimer:
     background-color: "{{ environment_ribbon_colour }}"
