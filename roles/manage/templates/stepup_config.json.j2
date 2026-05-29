@@ -40,5 +40,74 @@
       "nl_NL": "<p>Beste {{ commonName }},</p> <p> {% if isRevokedByRa %} Je SURFsecureID herstelmethode is verwijderd door een beheerder. {% else %} Je SURFsecureID herstelmethode is verwijderd. Neem direct contact op met de helpdesk van je instelling als je dit niet zelf gedaan hebt, omdat dit kan betekenen dat je account gecompromitteerd is. {% endif %} </p> <p>Je kunt deze herstelmethode niet meer gebruiken om een SURFsecureID token te activeren.</p> <p>Zorg er altijd voor dat je tenminste één herstelmethode beschikbaar hebt.</p> <p>Met vriendelijke groet,</p> <p>SURF</p>"
     }
   }
+  "service_providers": [
+      {# START SP DEFINITIONS #}
+        {# The Stepup-RA SP
+           Required to allow the RA to authenticate to the SA-GW #}
+        {
+          "entity_id": "https://{{ ra_vhost_name }}/authentication/metadata",
+          "public_key": "{{ ra_saml_sp_publickey | depem }}",
+          "acs": [
+            "https://{{ ra_vhost_name }}/authentication/consume-assertion"
+          ],
+          "loa": {
+            "__default__": "{{ stepup_uri_loa1 }}"
+          },
+          "assertion_encryption_enabled": false,
+          "second_factor_only": false,
+          "second_factor_only_nameid_patterns": [],
+          "blacklisted_encryption_algorithms": []
+        },
+        {# The Stepup-SelfService SP
+           Required to allow the SS to authenticate to the SA-GW #}
+        {
+          "entity_id": "https://{{ selfservice_vhost_name }}/authentication/metadata",
+          "public_key": "{{ selfservice_saml_sp_publickey | depem }}",
+          "acs": [
+            "https://{{ selfservice_vhost_name }}/authentication/consume-assertion"
+          ],
+          "loa": {
+            "__default__": "{{ stepup_uri_loa1 }}"
+          },
+          "assertion_encryption_enabled": false,
+          "second_factor_only": false,
+          "second_factor_only_nameid_patterns": [],
+          "blacklisted_encryption_algorithms": []
+        },
+
+      {# START: GSSP SPs for SS and RA
+         These entries are required for authentication and ragistration of GSSP tokens fromt the SP and
+         RA interfaces. #}
+  {% for key, value in stepup_enabled_generic_second_factors.items() %}
+        {
+          "entity_id": "https://{{ selfservice_vhost_name }}/registration/gssf/{{ key }}/metadata",
+          "public_key": "{{ selfservice_gssp_sp_publickey | depem }}",
+          "acs": [
+            "https://{{ selfservice_vhost_name }}/registration/gssf/{{ key }}/consume-assertion"
+          ],
+          "loa": {
+            "__default__": "{{ stepup_uri_loa1 }}"
+          },
+          "assertion_encryption_enabled": false,
+          "second_factor_only": false,
+          "second_factor_only_nameid_patterns": [],
+          "blacklisted_encryption_algorithms": []
+        },
+        {
+         "entity_id": "https://{{ ra_vhost_name }}/vetting-procedure/gssf/{{ key }}/metadata",
+          "public_key": "{{ ra_gssp_sp_publickey | depem }}",
+          "acs": [
+            "https://{{ ra_vhost_name }}/vetting-procedure/gssf/{{ key }}/verify"
+          ],
+          "loa": {
+            "__default__": "{{ stepup_uri_loa1 }}"
+          },
+          "assertion_encryption_enabled": false,
+          "second_factor_only": false,
+          "second_factor_only_nameid_patterns": [],
+          "blacklisted_encryption_algorithms": []
+        },
+  {% endfor %}
+  ]
 }
 {% endraw %}
