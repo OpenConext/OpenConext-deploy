@@ -20,7 +20,6 @@
     - "aa.vm.openconext.org"
     - "link.vm.openconext.org"
     - "connect.vm.openconext.org"
-    - "teams.vm.openconext.org"
     - "manage.vm.openconext.org"
 
 - name: Set logstash in hostsfile
