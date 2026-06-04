@@ -1,12 +1,6 @@
-# General setup for the virtual host, inherited from global configuration
-ServerName https://{{ access_dashboard_base_domain }}
+ServerName access_dashboard_client
 
-ErrorLog "|/usr/bin/logger -S 32k -p local3.err  -t 'Apache-access'"
-CustomLog "|/usr/bin/logger -S 32k -p local3.info  -t 'Apache-access'" combined
-
-RewriteEngine on
-
-RewriteCond %{REQUEST_URI} !\.html$
+RewriteEngine On
 RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
 RewriteCond %{REQUEST_URI} !\.svg$
 RewriteCond %{REQUEST_URI} !\.png$
@@ -14,56 +8,51 @@ RewriteCond %{REQUEST_URI} !\.ico$
 RewriteCond %{REQUEST_URI} !\.woff$
 RewriteCond %{REQUEST_URI} !\.woff2$
 RewriteCond %{REQUEST_URI} !\.ttf$
+RewriteCond %{REQUEST_URI} !\.wav$
 RewriteCond %{REQUEST_URI} !\.eot$
 RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
-RewriteCond %{REQUEST_URI} !^/access
-RewriteCond %{REQUEST_URI} !^/spDashboard
-RewriteCond %{REQUEST_URI} !^/health
-RewriteCond %{REQUEST_URI} !^/info
-RewriteCond %{REQUEST_URI} !^/internal
-RewriteCond %{REQUEST_URI} !^/login
-RewriteCond %{REQUEST_URI} !^/startSSO
-RewriteCond %{REQUEST_URI} !^/fonts
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_URI} !^/login/
+RewriteCond %{REQUEST_URI} !^/oauth2/
+RewriteCond %{REQUEST_URI} !^/ui/
+RewriteCond %{REQUEST_URI} !^/internal/
+RewriteCond %{REQUEST_URI} !^/fonts/
 RewriteRule (.*) /index.html [L]
 
-ProxyPreserveHost On
-ProxyPass /Shibboleth.sso !
-ProxyPass /access/api http://access_dashboard_server:8080/access/api retry=0
-ProxyPassReverse /access/api http://access_dashboard_server:8080/access/api
-
-ProxyPass /health http://access_dashboard_server:8080/internal/health retry=0
-ProxyPass /info http://access_dashboard_server:8080/internal/info retry=0
-ProxyPass /login http://access_dashboard_server:8080/login retry=0
-ProxyPass /startSSO http://access_dashboard_server:8080/startSSO retry=0
-
-ProxyPass /internal http://access_dashboard_server:8080/internal retry=0
+ProxyPass /api http://access_dashboard_server:8080/api retry=0
+ProxyPassReverse /api http://access_dashboard_server:8080/api
+ProxyPassMatch ^/oauth2(.*)$ http://access_dashboard_server:8080
+ProxyPassReverse /oauth2 http://access_dashboard_server:8080/oauth2
+ProxyPassMatch ^/internal(.*)$ http://access_dashboard_server:8080
 ProxyPassReverse /internal http://access_dashboard_server:8080/internal
+ProxyPassMatch ^/login(.*)$ http://access_dashboard_server:8080
+ProxyPassReverse /login http://access_dashboard_server:8080/login
+ProxyPassMatch ^/ui(.*)$ http://access_dashboard_server:8080
+ProxyPassReverse /ui http://access_dashboard_server:8080/ui
 
-<Location />
-  AuthType shibboleth
-  ShibUseHeaders On
-  ShibRequireSession On
-  ShibRequestSetting REMOTE_ADDR X-Forwarded-For
-  Require valid-user
+DocumentRoot /var/www/
+
+<Location "/api">
+    ProxyPreserveHost On
 </Location>
-
-DocumentRoot "/var/www/"
-
-<Directory "/var/www/">
+<Location "/oauth2">
+    ProxyPreserveHost On
+</Location>
+<Location "/internal">
+    ProxyPreserveHost On
+</Location>
+<Location "/login">
+    ProxyPreserveHost On
+</Location>
+<Directory /var/www>
   Require all granted
+  Options -Indexes
 </Directory>
 
-<Location ~ "/(health|info)">
-  Require all granted
-</Location>
-
-<Location ~ "/internal/(health|info)">
-  Require all granted
-</Location>
-
-<Location ~ "^/(?!startSSO)">
-  Require all granted
-</Location>
+<FilesMatch "\.html$">
+Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+Header set Expires "Sun, 8 Jun 1986 08:06:00 GMT"
+</FilesMatch>
 
 Header always set X-Frame-Options "DENY"
 Header always set Referrer-Policy "strict-origin-when-cross-origin"
