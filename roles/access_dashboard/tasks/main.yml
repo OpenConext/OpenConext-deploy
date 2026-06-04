@@ -18,7 +18,7 @@
     - "logback.xml"
     - "serverapplication.yml"
     - "apache_gui.conf"
-  notify: "Restart accessserver"
+  notify: "Restart access dashboard server"
 
 - name: "Place the gui configfiles"
   ansible.builtin.template:
@@ -29,7 +29,7 @@
     mode: "0600"
   with_items:
     - "apache_gui.conf"
-  notify: "Restart accessserver"
+  notify: "Restart access dashboard gui"
 
 - name: "Add the MariaDB docker network to the list of networks when MariaDB runs in Docker"
   ansible.builtin.set_fact:
@@ -94,3 +94,4 @@
       S3_STORAGE_KEY: "{{ access_dashboard.s3_storage.key }}"
       S3_STORAGE_SECRET: "{{ access_dashboard.s3_storage.secret }}"
       S3_STORAGE_BUCKET: "{{ access_dashboard.s3_storage.bucket }}"
+  register: "access_dashboard_gui_container"

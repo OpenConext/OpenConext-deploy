@@ -1,5 +1,5 @@
 ---
-- name: "Restart accessserver"
+- name: "Restart access dashboard server"
   community.docker.docker_container:
     name: "access_dashboard_server"
     state: "started"
@@ -8,3 +8,13 @@
     comparisons:
       '*': "ignore"
   when: "access_dashboard_server_container is success and access_dashboard_server_container is not change"
+
+- name: "Restart access dashboard gui"
+  community.docker.docker_container:
+    name: "access_dashboard_gui"
+    state: "started"
+    restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': "ignore"
+  when: "access_dashboard_gui_container is success and access_dashboard_gui_container is not change"
