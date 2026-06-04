@@ -1,26 +1,126 @@
 #!/bin/bash
-# Script to clean up the log_logins from mySQL
-LOGFILE="{{ rsyslog_dir }}/apps/{{ rsyslog_environment.name }}/loglogins_cleanup/loglogins_cleanup.log"
-echo `date '+%h %d %H:%M:%S'` Starting cleanup of log_logins | tee -a $LOGFILE
-LOGINSTAMP=$(date -d "-{{ loglogins_max_age }} months" +%Y-%m-%d)
-OLDESTTIMESTAMP=$(mysql -u {{ rsyslog_environment.db_loglogins_user }} -p{{ rsyslog_environment.db_loglogins_password }} -h {{ rsyslog_environment.db_loglogins_host }} {{ rsyslog_environment.db_loglogins_name }} -se "select (DATE_FORMAT(loginstamp,'%Y-%m-%d')) from log_logins order by loginstamp asc limit 1")
-if [ -z "$OLDESTTIMESTAMP" ]
-        then echo "No logins found in log_logins" | tee -a $LOGFILE
-        exit
+# Script to remove logins that are older than LOG_LOGINS_MAX_AGE months from the log_logins table
+# in the ${DB_LOG_LOGINS_NAME} database on the ${DB_LOG_LOGINS_HOST} host
+# As a failsafe, the script will refuse to run if more than ${MAX_DELETE_DAYS} days worth of logins would be removed,
+# unless the --force option is provided.
+# The script is intended to be run daily from a cron job.
+
+MAX_DELETE_DAYS=5
+LOG_LOGINS_MAX_AGE="{{ loglogins_max_age }}" # Number of MONTHS of logins to keep
+RSYSLOG_DIR="{{ rsyslog_dir }}"
+RSYSLOG_ENVIRONMENT_NAME="{{ rsyslog_environment.name }}"
+DB_LOG_LOGINS_NAME="{{ rsyslog_environment.db_loglogins_name }}"
+DB_LOG_LOGINS_USER="{{ rsyslog_environment.db_loglogins_user }}"
+DB_LOG_LOGINS_PASSWORD="{{ rsyslog_environment.db_loglogins_password }}"
+DB_LOG_LOGINS_HOST="{{ rsyslog_environment.db_loglogins_host }}"
+NOREPLY_EMAIL="{{ noreply_email }}"
+ERROR_MAIL_TO="{{ error_mail_to }}"
+ANSIBLE_HOSTNAME="{{ ansible_hostname }}"
+
+LOG_FILE="${RSYSLOG_DIR}/apps/${RSYSLOG_ENVIRONMENT_NAME}/loglogins_cleanup/loglogins_cleanup.log"
+FORCE=0 # Whether to run if more than ${MAX_DELETE_DAYS} days of log data would be removed.
+
+SCRIPT_NAME=$0
+
+for ARG in "$@"; do
+  case "$ARG" in
+    --force)
+      FORCE=1
+      ;;
+    *)
+      echo "Usage: $0 [--force]"
+      exit 1
+      ;;
+  esac
+done
+
+log_message() {
+  echo "$(date '+%h %d %H:%M:%S')" "$@" | tee -a "$LOG_FILE"
+}
+
+send_mail() {
+  local message="$*"
+
+  log_message "Mailing error to ${ERROR_MAIL_TO}"
+
+  echo "$message" | mail \
+    -r "${NOREPLY_EMAIL}" \
+    -s "log_login script on ${ANSIBLE_HOSTNAME} needs attention" \
+    "${ERROR_MAIL_TO}"
+}
+
+
+log_message "Starting cleanup of old log_logins data"
+
+LOGIN_STAMP=$(date -d "-${LOG_LOGINS_MAX_AGE} months" +%Y-%m-%d)
+log_message "Removing all logins older than ${LOG_LOGINS_MAX_AGE} months (before ${LOGIN_STAMP})"
+
+log_message "Using database: ${DB_LOG_LOGINS_USER}@${DB_LOG_LOGINS_HOST}:${DB_LOG_LOGINS_NAME}"
+
+MYSQL_DB=(
+  "mysql"
+  "-u" "${DB_LOG_LOGINS_USER}"
+  "-p${DB_LOG_LOGINS_PASSWORD}"
+  "-h" "${DB_LOG_LOGINS_HOST}"
+)
+
+# Find the oldest timestamp in the log_logins table:
+#   SELECT (DATE_FORMAT(loginstamp,'%Y-%m-%d')) FROM log_logins ORDER BY loginstamp ASC LIMIT 1
+QUERY=(
+  "${MYSQL_DB[@]}"
+  # -s: silent; -e: query
+  "-se" "SELECT (DATE_FORMAT(loginstamp,'%Y-%m-%d')) FROM log_logins ORDER BY loginstamp ASC LIMIT 1"
+  "${DB_LOG_LOGINS_NAME}"
+)
+# DEBUG: Print query
+# echo "${QUERY[@]}"
+if ! OLDEST_TIMESTAMP=$( "${QUERY[@]}" ); then
+  log_message "Error running mysql query (OLDEST_TIMESTAMP)"
+  send_mail "Error running mysql query (OLDEST_TIMESTAMP)"
+  exit 1
+fi
+if [ -z "$OLDEST_TIMESTAMP" ]; then
+  log_message "No logins found in log_logins. Nothing to cleanup."
+  send_mail "No logins found in log_logins. Nothing to cleanup."
+  # The log_logins table is empty. Not treating this as an error. Exit normally,
+  exit 0
 fi
 
-# If we are going to delete more than 5 days, something is wrong
-LOGINSTAMPUNIX=$(date -d $LOGINSTAMP +%s)
-OLDESTTIMESTAMPUNIX=$(date -d $OLDESTTIMESTAMP +%s)
-TIMESTAMPDIFF=$(( ($LOGINSTAMPUNIX-$OLDESTTIMESTAMPUNIX)/3600/24   ))
-echo `date '+%h %d %H:%M:%S'` We will delete $TIMESTAMPDIFF days of log_logins data | tee -a $LOGFILE
-if [ "$TIMESTAMPDIFF" -gt 5 ]
-	then
-	echo `date '+%h %d %H:%M:%S'` Something is up, you need to delete more than 5 days worth of logindata | tee -a $LOGFILE
-
-        echo "The log_login cleanup script wants to delete more than 5 days of logins on the {{ ansible_hostname }}. Please investigate" | mail -r "{{ noreply_email }}" -s "log_login script on {{ ansible_hostname }} needs attention" "{{ error_mail_to }}"	
-	exit
-else
-	DELETEDROWS=$(mysql -u {{ rsyslog_environment.db_loglogins_user }} -p{{ rsyslog_environment.db_loglogins_password }} -h {{ rsyslog_environment.db_loglogins_host }} -sNe "delete from log_logins where loginstamp < '$LOGINSTAMP'; select row_count();" {{ rsyslog_environment.db_loglogins_name }})
-	echo `date '+%h %d %H:%M:%S'` We have deleted $DELETEDROWS rows.  | tee -a $LOGFILE
+# If we are going to delete more than ${MAX_DELETE_DAYS} days, something might be wrong
+# Warn and exit if this is the case, unless FORCE==1
+LOGIN_STAMP_UNIX=$(date -d "$LOGIN_STAMP" +%s)
+OLDEST_TIMESTAMP_UNIX=$(date -d "$OLDEST_TIMESTAMP" +%s)
+TIMESTAMP_DIFF=$(( (LOGIN_STAMP_UNIX-OLDEST_TIMESTAMP_UNIX)/3600/24 ))
+log_message "The oldest timestamp in the database is $OLDEST_TIMESTAMP"
+if [ "$TIMESTAMP_DIFF" -lt "0" ]; then
+  log_message "There is no data to delete. We're done."
+  exit 0
 fi
+
+log_message "We will delete $TIMESTAMP_DIFF days of log_logins data"
+if [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ]; then
+  log_message "Something is up, you need to delete more than ${MAX_DELETE_DAYS} days worth of login data"
+  send_mail "The ${SCRIPT_NAME} script wants to delete more than ${MAX_DELETE_DAYS} days of logins on ${ANSIBLE_HOSTNAME}. Please investigate"
+  exit 0
+fi
+if [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -eq 1 ]; then
+  log_message "Force option provided; deleting more than ${MAX_DELETE_DAYS} days worth of login data"
+fi
+
+# Delete rows
+#   DELETE FROM log_logins WHERE loginstamp < '$LOGIN_STAMP'; SELECT row_count();"
+QUERY=(
+  "${MYSQL_DB[@]}"
+  # -s: silent; -N: Don't write column names in results; -e: query;
+  "-sNe" "DELETE FROM log_logins WHERE loginstamp < '${LOGIN_STAMP}'; SELECT row_count();"
+  "${DB_LOG_LOGINS_NAME}"
+)
+# DEBUG: Print query
+# echo "${QUERY[@]}"
+if ! DELETED_ROWS=$( "${QUERY[@]}" ); then
+  log_message "Error running mysql query (DELETED_ROWS)"
+  send_mail "Error running mysql query (DELETED_ROWS)"
+  exit 1
+fi
+
+log_message "We have deleted $DELETED_ROWS rows. Done."
