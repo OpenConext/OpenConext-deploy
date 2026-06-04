@@ -17,7 +17,6 @@
   with_items:
     - "logback.xml"
     - "serverapplication.yml"
-    - "apache_gui.conf"
   notify: "Restart access dashboard server"
 
 - name: "Place the gui configfiles"
