@@ -37,7 +37,7 @@
     name: accessserver
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-access/accessserver:{{ openconextaccess_server_version }}
+    image: ghcr.io/openconext/openconext-access/accessserver:{{ openconextaccess_version }}
     pull: true
     restart_policy: "{{ openaccess_server_restart_policy }}"
     restart_retries: "{{ openaccess_server_restart_retries }}" # Only for restart policy on-failure
@@ -72,7 +72,7 @@
 - name: Create the access client container
   community.docker.docker_container:
     name: accessgui
-    image: ghcr.io/openconext/openconext-access/accessclient:{{ openconextaccess_client_version }}
+    image: ghcr.io/openconext/openconext-access/accessclient:{{ openconextaccess_version }}
     pull: true
     restart_policy: "always"
     state: started
