@@ -1,7 +1,7 @@
 ---
 - name: "Create directory to keep configfile"
   ansible.builtin.file:
-    dest: "/opt/openconext/openaccess"
+    dest: "/opt/openconext/access_dashboard"
     state: "directory"
     owner: "root"
     group: "root"
@@ -10,7 +10,7 @@
 - name: "Place the serverapplication configfiles"
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: "/opt/openconext/openaccess/{{ item }}"
+    dest: "/opt/openconext/access_dashboard/{{ item }}"
     owner: "root"
     group: "root"
     mode: "0644"
@@ -37,11 +37,11 @@
     state: "started"
     networks: "{{ access_dashboard_docker_networks }}"
     mounts:
-      - source: "/opt/openconext/openaccess/serverapplication.yml"
+      - source: "/opt/openconext/access_dashboard/serverapplication.yml"
         target: "/application.yml"
         type: "bind"
         read_only: true
-      - source: "/opt/openconext/openaccess/logback.xml"
+      - source: "/opt/openconext/access_dashboard/logback.xml"
         target: "/logback.xml"
         type: "bind"
         read_only: true
