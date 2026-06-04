@@ -199,12 +199,12 @@
     - oidc-playground
   tags: ['oidc-playground']
 
-- name: Deploy openaccess app & server
+- name: Deploy access_dashboard app & server
   hosts: docker_openaccess
   become: true
   roles:
-    - openaccess
-  tags: ['openaccess']
+    - access_dashboard
+  tags: ['access_dashboard']
 
 - name: Deploy pdp app
   hosts: docker_pdp
@@ -302,4 +302,3 @@
   roles:
     - { role: mariadbdocker, tags: ['mariadbdocker']}
     - { role: mongodbdocker, tags: ['mongodbdocker']}
-
