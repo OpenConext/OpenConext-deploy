@@ -28,22 +28,22 @@
 
 - name: "Create and start the access server container"
   community.docker.docker_container:
-    name: "accessserver"
+    name: "access_dashboard_server"
     env:
       TZ: "{{ timezone }}"
     image: "ghcr.io/openconext/openconext-access/accessserver:{{ openconextaccess_version }}"
     pull: true
-    restart_policy: "{{ openaccess_server_restart_policy }}"
-    restart_retries: "{{ openaccess_server_restart_retries }}" # Only for restart policy on-failure
     state: "started"
     networks: "{{ openaccess_docker_networks }}"
     mounts:
       - source: "/opt/openconext/openaccess/serverapplication.yml"
         target: "/application.yml"
         type: "bind"
+        read_only: true
       - source: "/opt/openconext/openaccess/logback.xml"
         target: "/logback.xml"
         type: "bind"
+        read_only: true
     command: "-Xmx512m --spring.config.location=./"
     etc_hosts:
       host.docker.internal: "host-gateway"
@@ -73,9 +73,11 @@
       - source: "/etc/localtime"
         target: "/etc/localtime"
         type: "bind"
+        read_only: true
       - source: "/opt/openconext/common/favicon.ico"
         target: "/var/www/favicon.ico"
         type: "bind"
+        read_only: true
     env:
       S3_STORAGE_URL: "{{ openconextaccess.s3_storage.url }}"
       S3_STORAGE_KEY: "{{ openconextaccess.s3_storage.key }}"

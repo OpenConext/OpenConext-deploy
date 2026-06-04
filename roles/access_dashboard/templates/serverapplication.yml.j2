@@ -6,8 +6,8 @@ server:
   port: 8080
   error:
     path: "/error"
-    include-message: always
-  forward-headers-strategy: framework
+    include-message: "always"
+  forward-headers-strategy: "framework"
   servlet:
     session:
       cookie:
@@ -26,10 +26,10 @@ spring:
 {% else %}
       cleanup-cron: "0 */5 * * * *"
 {% endif %}
-      flush-mode: on_save
-      save-mode: on_set_attribute
-    store-type: jdbc
-    timeout: 8h
+      flush-mode: "on_save"
+      save-mode: "on_set_attribute"
+    store-type: "jdbc"
+    timeout: "8h"
   mvc:
     log-request-details: false
   security:
@@ -41,40 +41,41 @@ spring:
             client-secret: {{ openconextaccess.oidcng.secret }}
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: "authorization_code"
-            scope: openid
+            scope: "openid"
         provider:
           oidcng:
             authorization-uri: {{ openconextaccess.oidcng.authorization_uri }}
             token-uri: {{ openconextaccess.oidcng.token_uri }}
             user-info-uri: {{ openconextaccess.oidcng.user_info_uri }}
             jwk-set-uri: {{ openconextaccess.oidcng.jwk_set_uri }}
-            user-name-attribute: sub
-            user-info-authentication-method: client_secret_basic
+            user-name-attribute: "sub"
+            user-info-authentication-method: "client_secret_basic"
   jpa:
     properties:
       hibernate:
-        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        naming-strategy: "org.hibernate.cfg.ImprovedNamingStrategy"
         format_sql: false
         show_sql: false
     open-in-view: false
     show-sql: false
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://{{ openconextaccess.db.host }}/openconextaccess?autoReconnect=true
     username: {{ openconextaccess.db.user }}
     password: {{ openconextaccess.db.secret }}
+    driver-class-name: "org.mariadb.jdbc.Driver"
   flyway:
-    locations: classpath:db/mysql/migration
+    locations: "classpath:db/mysql/migration"
     fail-on-missing-locations: true
   mail:
-    host: {{ smtp_server }}
+    host: "{{ smtp_server }}"
 
 oidcng:
-  discovery-url: {{ openconextaccess.oidcng.discovery_url }}
-  introspect-url: {{ openconextaccess.oidcng.introspect_url }}
-  resource-server-id: myconext.rs
-  resource-server-secret: secret
-  base-url: {{ openconextaccess_base_domain }}
+  discovery-url: "{{ access_dashboard.oidcng.discovery_url }}"
+  introspect-url: "{{ access_dashboard.oidcng.introspect_url }}"
+  #TODO
+  resource-server-id: "myconext.rs"
+  resource-server-secret: "secret"
+  base-url: "{{ access_dashboard_base_domain }}"
 
 cron:
   user-cleaner-cron: "PT60M"
@@ -87,8 +88,8 @@ cron:
   user-inactivity-delete-days: 1095
 
 lifecycle:
-  user: lifecycle
   password: {{ openconextaccess_lifecycle_secret }}
+  user: "lifecycle"
 
 jira:
   enabled: true
@@ -120,22 +121,30 @@ config:
   identity_providers:
       - name: "SXS IdP"
         entityid: "http://mock-idp"
-        descriptionEN: "A test IdP that allows you to simulate attribute sets yourself. You can find the metadata <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>here</a>"
-        descriptionNL: "Een test-IdP waarmee je zelf attributen-sets kunt simuleren. De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>"
+        descriptionEN: >
+          A test IdP that allows you to simulate attribute sets yourself. 
+          You can find the metadata <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>here</a>
+        descriptionNL: >
+          Een test-IdP waarmee je zelf attributen-sets kunt simuleren. 
+          De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>
       - name: "SXS Dummy"
         entityid: "https://idp.diy.surfconext.nl"
-        descriptionEN: "A test IdP with <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictitious user accounts</a>. You can find the metadata <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>here</a>"
-        descriptionNL: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
-  idp_proxy_meta_data: {{ openconextaccess.idp_proxy_meta_data }}
+        descriptionEN: >
+          A test IdP with <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictitious user accounts</a>.
+          You can find the metadata <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>here</a>"
+        descriptionNL: >
+          Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>.
+          De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
+  idp_proxy_meta_data: "{{ access_dashboard.idp_proxy_meta_data }}"
   minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
   features:
-    - name: idp
+    - name: "idp"
       enabled: true
-    - name: invite
+    - name: "invite"
       enabled: true
-    - name: sram
+    - name: "sram"
       enabled: true
-    - name: mfa
+    - name: "mfa"
       enabled: true
   acr_values:
   {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}
@@ -154,9 +163,9 @@ gui:
     content: {{ environment_shortname }}
 
 feature:
-  enable-performance-seed: False
-  statistics-enabled: False
-  stepup-required: False
+  enable-performance-seed: false
+  statistics-enabled: false
+  stepup-required: false
 
 email:
   from: "{{ noreply_email }}"
@@ -171,14 +180,14 @@ manage:
   url: {{ openconextaccess.manage.url }}
   user: {{ openconextaccess.manage.user }}
   password: {{ openconextaccess.manage.password }}
-  defaultState: testaccepted
+  defaultState: "testaccepted"
   # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
   # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
-  staticManageDirectory: classpath:/manage
+  staticManageDirectory: "classpath:/manage"
   #  staticManageDirectory: file:///usr/local/etc/manage
 
 invite:
-  enabled: True
+  enabled: true
   url: "https://invite.{{ base_domain }}"
   user: {{ invite.access_user }}
   password: "{{ invite.access_secret }}"
@@ -208,10 +217,10 @@ springdoc:
   swagger-ui:
     path: "/ui/api-ui.html"
     enabled: false
-    operationsSorter: method
+    operationsSorter: "method"
     oauth:
-      client-id: ${spring.security.oauth2.client.registration.oidcng.client-id}
-      client-secret: ${spring.security.oauth2.client.registration.oidcng.client-secret}
+      client-id: "${spring.security.oauth2.client.registration.oidcng.client-id}"
+      client-secret: "${spring.security.oauth2.client.registration.oidcng.client-secret}"
       use-basic-authentication-with-access-code-grant: true
 
 management:
@@ -225,17 +234,17 @@ management:
       base-path: "/internal"
   endpoint:
     info:
-      access: unrestricted
+      access: "unrestricted"
     health:
-      access: unrestricted
-      show-details: always
+      access: "unrestricted"
+      show-details: "always"
     mappings:
-      access: none
+      access: "none"
     metrics:
-      access: none
+      access: "none"
   info:
     git:
-      mode: full
+      mode: "full"
 
 # used by the git plugin
 info:
