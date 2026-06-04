@@ -21,7 +21,7 @@ spring:
   session:
     jdbc:
       initialize-schema: never
-{% if openaccess_cronjobmaster is defined and openaccess_cronjobmaster == false  %}
+{% if access_dashboard_cronjobmaster is defined and access_dashboard_cronjobmaster == false  %}
       cleanup-cron: "-"
 {% else %}
       cleanup-cron: "0 */5 * * * *"
@@ -37,17 +37,17 @@ spring:
       client:
         registration:
           oidcng:
-            client-id: {{ openconextaccess.oidcng.client_id }}
-            client-secret: {{ openconextaccess.oidcng.secret }}
+            client-id: "{{ access_dashboard.oidcng.client_id }}"
+            client-secret: "{{ access_dashboard.oidcng.secret }}"
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: "authorization_code"
             scope: "openid"
         provider:
           oidcng:
-            authorization-uri: {{ openconextaccess.oidcng.authorization_uri }}
-            token-uri: {{ openconextaccess.oidcng.token_uri }}
-            user-info-uri: {{ openconextaccess.oidcng.user_info_uri }}
-            jwk-set-uri: {{ openconextaccess.oidcng.jwk_set_uri }}
+            authorization-uri: "{{ access_dashboard.oidcng.authorization_uri }}"
+            token-uri: "{{ access_dashboard.oidcng.token_uri }}"
+            user-info-uri: "{{ access_dashboard.oidcng.user_info_uri }}"
+            jwk-set-uri: "{{ access_dashboard.oidcng.jwk_set_uri }}"
             user-name-attribute: "sub"
             user-info-authentication-method: "client_secret_basic"
   jpa:
@@ -59,10 +59,10 @@ spring:
     open-in-view: false
     show-sql: false
   datasource:
-    url: jdbc:mariadb://{{ openconextaccess.db.host }}/openconextaccess?autoReconnect=true
-    username: {{ openconextaccess.db.user }}
-    password: {{ openconextaccess.db.secret }}
     driver-class-name: "org.mariadb.jdbc.Driver"
+    url: "jdbc:mariadb://{{ access_dashboard.db.host }}/access_dashboard?autoReconnect=true"
+    username: "{{ access_dashboard.db.user }}"
+    password: "{{ access_dashboard.db.secret }}"
   flyway:
     locations: "classpath:db/mysql/migration"
     fail-on-missing-locations: true
@@ -88,16 +88,16 @@ cron:
   user-inactivity-delete-days: 1095
 
 lifecycle:
-  password: {{ openconextaccess_lifecycle_secret }}
   user: "lifecycle"
+  password: "{{ access_dashboard_lifecycle_secret }}"
 
 jira:
   enabled: true
-  base-url: {{ openconextaccess.jira.base_url }}
-  user-name: {{ openconextaccess.jira.username }}
-  project-key: {{ openconextaccess.jira.project_key }}
-  environment: {{ openconextaccess.jira.environment }}
-  api-key: {{ openconextaccess.jira.api_key }}
+  base-url: "{{ access_dashboard.jira.base_url }}"
+  user-name: "{{ access_dashboard.jira.username }}"
+  project-key: "{{ access_dashboard.jira.project_key }}"
+  environment: "{{ access_dashboard.jira.environment }}"
+  api-key: "{{ access_dashboard.jira.api_key }}"
   # Timeout in milliseconds
   connection-timeout: 10000
 
@@ -106,7 +106,7 @@ institution-admin:
   organization-guid-prefix: "urn:mace:surfnet.nl:surfnet.nl:sab:organizationGUID:"
 
 config:
-  client-url: "https://{{ openconextaccess_base_domain }}"
+  client-url: "https://{{ access_dashboard_base_domain }}"
   base-url: "{{ base_domain }}"
   edu_id_schac_home_organization: "eduid.nl"
   surf_schac_home_organization: "example.com"
@@ -115,8 +115,8 @@ config:
   sram: "https://{{ env }}.sram.surf.nl/"
   service_desk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
   feedback_widget_enabled: true
-  demo_seed_enabled: {{ openconextaccess.demo_seed_enabled }}
-  test_environment: {{ openconextaccess.test_environment }}
+  demo_seed_enabled: "{{ access_dashboard.demo_seed_enabled }}"
+  test_environment: "{{ access_dashboard.test_environment }}"
   # For other environments, move to group_vars
   identity_providers:
       - name: "SXS IdP"
@@ -151,16 +151,17 @@ config:
   - "{{ loa }}"
   {% endfor %}
 
-eduid-idp-entity-id: {{ openconextaccess.eduid_idp_entity_id }}
+eduid-idp-entity-id: "{{ access_dashboard.eduid_idp_entity_id }}"
 
+# TODO
 super-admin:
   users:
     - "urn:collab:person:example.com:admin"
 
 gui:
   disclaimer:
-    background-color: {{ environment_ribbon_colour }}
-    content: {{ environment_shortname }}
+    background-color: "{{ environment_ribbon_colour }}"
+    content: "{{ environment_shortname }}"
 
 feature:
   enable-performance-seed: false
@@ -176,10 +177,10 @@ email:
   environment: "{{ environment_shortname }}"
 
 manage:
-  enabled: True
-  url: {{ openconextaccess.manage.url }}
-  user: {{ openconextaccess.manage.user }}
-  password: {{ openconextaccess.manage.password }}
+  enabled: true
+  url: "{{ access_dashboard.manage.url }}"
+  user: "{{ access_dashboard.manage.user }}"
+  password: "{{ access_dashboard.manage.password }}"
   defaultState: "testaccepted"
   # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
   # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
@@ -189,23 +190,23 @@ manage:
 invite:
   enabled: true
   url: "https://invite.{{ base_domain }}"
-  user: {{ invite.access_user }}
-  password: "{{ invite.access_secret }}"
+  user: "{{ invite.access_dashboard_user }}"
+  password: "{{ invite.access_dashboard_secret }}"
 
 statistics:
-  enabled: {{ openconextaccess.statistics.enabled }}
-  url: {{ openconextaccess.statistics.url }}
-  user: {{ openconextaccess.statistics.user }}
-  password: {{ openconextaccess.statistics.password }}
+  enabled: "{{ access_dashboard.statistics.enabled }}"
+  url: "{{ access_dashboard.statistics.url }}"
+  user: "{{ access_dashboard.statistics.user }}"
+  password: "{{ access_dashboard.statistics.password }}"
 
 s3storage:
-  url: {{ openconextaccess.s3_storage.url }}
-  key: {{ openconextaccess.s3_storage.key }}
-  secret: {{ openconextaccess.s3_storage.secret }}
-  bucket: {{ openconextaccess.s3_storage.bucket }}
+  url: "{{ access_dashboard.s3_storage.url }}"
+  key: "{{ access_dashboard.s3_storage.key }}"
+  secret: "{{ access_dashboard.s3_storage.secret }}"
+  bucket: "{{ access_dashboard.s3_storage.bucket }}"
 
 ohdear:
-  apiKey: {{ openconextaccess_ohdear_apikey }}
+  apiKey: "{{ access_dashboard_ohdear_apikey }}"
   baseUrl: "https://ohdear.app/api"
   enabled: true
 

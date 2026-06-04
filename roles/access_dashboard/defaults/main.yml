@@ -1,5 +1,4 @@
 ---
-openaccess_server_restart_policy: always
-openaccess_server_restart_retries: 0
-openaccess_docker_networks:
+access_dashboard_docker_networks:
   - name: "loadbalancer"
+access_dashboard_cronjobmaster: true

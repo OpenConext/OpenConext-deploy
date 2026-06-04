@@ -7,4 +7,4 @@
     # avoid restarting it creates unexpected data loss according to docker_container_module notes
     comparisons:
       '*': "ignore"
-  when: "accessservercontainer is success and accessservercontainer is not change"
+  when: "access_dashboard_server_container is success and access_dashboard_server_container is not change"
