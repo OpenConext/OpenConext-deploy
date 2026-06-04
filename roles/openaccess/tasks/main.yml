@@ -1,75 +1,61 @@
 ---
-- name: Create directory to keep configfile
+- name: "Create directory to keep configfile"
   ansible.builtin.file:
     dest: "/opt/openconext/openaccess"
-    state: directory
-    owner: root
-    group: root
+    state: "directory"
+    owner: "root"
+    group: "root"
     mode: "0770"
 
-- name: Place the serverapplication configfiles
+- name: "Place the serverapplication configfiles"
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: /opt/openconext/openaccess/{{ item }}
-    owner: root
-    group: root
+    dest: "/opt/openconext/openaccess/{{ item }}"
+    owner: "root"
+    group: "root"
     mode: "0644"
   with_items:
-    - logback.xml
-    - serverapplication.yml
-  notify: restart accessserver
+    - "logback.xml"
+    - "serverapplication.yml"
+  notify: "Restart accessserver"
 
-- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+- name: "Add the MariaDB docker network to the list of networks when MariaDB runs in Docker"
   ansible.builtin.set_fact:
     openaccess_docker_networks:
-      - name: loadbalancer
-      - name: openconext_mariadb
-  when: mariadb_in_docker | default(false) | bool
+      - name: "loadbalancer"
+      - name: "openconext_mariadb"
+  when: "mariadb_in_docker | default(false) | bool"
 
-- name: Create and start the access server container
+- name: "Create and start the access server container"
   community.docker.docker_container:
-    name: accessserver
+    name: "accessserver"
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-access/accessserver:{{ openconextaccess_version }}
+    image: "ghcr.io/openconext/openconext-access/accessserver:{{ openconextaccess_version }}"
     pull: true
     restart_policy: "{{ openaccess_server_restart_policy }}"
     restart_retries: "{{ openaccess_server_restart_retries }}" # Only for restart policy on-failure
-    state: started
+    state: "started"
     networks: "{{ openaccess_docker_networks }}"
     mounts:
-      - source: /opt/openconext/openaccess/serverapplication.yml
-        target: /application.yml
-        type: bind
-      - source: /opt/openconext/openaccess/logback.xml
-        target: /logback.xml
-        type: bind
+      - source: "/opt/openconext/openaccess/serverapplication.yml"
+        target: "/application.yml"
+        type: "bind"
+      - source: "/opt/openconext/openaccess/logback.xml"
+        target: "/logback.xml"
+        type: "bind"
     command: "-Xmx512m --spring.config.location=./"
     etc_hosts:
-      host.docker.internal: host-gateway
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "-no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:8080/internal/health",
-        ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-  register: accessservercontainer
+      host.docker.internal: "host-gateway"
+  register: "accessservercontainer"
 
-- name: Create the access client container
+- name: "Create the access client container"
   community.docker.docker_container:
-    name: accessgui
-    image: ghcr.io/openconext/openconext-access/accessclient:{{ openconextaccess_version }}
+    name: "accessgui"
+    image: "ghcr.io/openconext/openconext-access/accessclient:{{ openconextaccess_version }}"
     pull: true
     restart_policy: "always"
-    state: started
+    state: "started"
     networks:
       - name: "loadbalancer"
     labels:
@@ -78,18 +64,18 @@
       traefik.enable: "true"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost/internal/health"]
-      interval: 10s
-      timeout: 10s
+      interval: "10s"
+      timeout: "10s"
       retries: 3
-      start_period: 10s
-    hostname: access
+      start_period: "10s"
+    hostname: "access"
     mounts:
-      - source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - source: /opt/openconext/common/favicon.ico
-        target: /var/www/favicon.ico
-        type: bind
+      - source: "/etc/localtime"
+        target: "/etc/localtime"
+        type: "bind"
+      - source: "/opt/openconext/common/favicon.ico"
+        target: "/var/www/favicon.ico"
+        type: "bind"
     env:
       S3_STORAGE_URL: "{{ openconextaccess.s3_storage.url }}"
       S3_STORAGE_KEY: "{{ openconextaccess.s3_storage.key }}"
