@@ -1,0 +1,80 @@
+---
+- name: "Create directory to keep configfile"
+  ansible.builtin.file:
+    dest: "/opt/openconext/openaccess"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0770"
+
+- name: "Place the serverapplication configfiles"
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/opt/openconext/openaccess/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items:
+    - "logback.xml"
+    - "serverapplication.yml"
+  notify: "Restart accessserver"
+
+- name: "Add the MariaDB docker network to the list of networks when MariaDB runs in Docker"
+  ansible.builtin.set_fact:
+    access_dashboard_docker_networks:
+      - name: "loadbalancer"
+      - name: "openconext_mariadb"
+  when: "mariadb_in_docker | default(false) | bool"
+
+- name: "Create and start the access server container"
+  community.docker.docker_container:
+    name: "access_dashboard_server"
+    env:
+      TZ: "{{ timezone }}"
+    image: "ghcr.io/openconext/openconext-access/accessserver:{{ access_dashboard_version }}"
+    pull: true
+    restart_policy: "always"
+    state: "started"
+    networks: "{{ access_dashboard_docker_networks }}"
+    mounts:
+      - source: "/opt/openconext/openaccess/serverapplication.yml"
+        target: "/application.yml"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/openaccess/logback.xml"
+        target: "/logback.xml"
+        type: "bind"
+        read_only: true
+    command: "-Xmx512m --spring.config.location=./"
+    etc_hosts:
+      host.docker.internal: "host-gateway"
+  register: "access_dashboard_server_container"
+
+- name: "Create the access client container"
+  community.docker.docker_container:
+    name: "access_dashboard_gui"
+    image: "ghcr.io/openconext/openconext-access/accessclient:{{ access_dashboard_version }}"
+    pull: true
+    restart_policy: "always"
+    state: "started"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.accessclient.rule: "Host(`{{ access_dashboard_base_domain }}`)"
+      traefik.http.routers.accessclient.tls: "true"
+      traefik.enable: "true"
+    hostname: "access"
+    mounts:
+      - source: "/etc/localtime"
+        target: "/etc/localtime"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/common/favicon.ico"
+        target: "/var/www/favicon.ico"
+        type: "bind"
+        read_only: true
+    env:
+      S3_STORAGE_URL: "{{ access_dashboard.s3_storage.url }}"
+      S3_STORAGE_KEY: "{{ access_dashboard.s3_storage.key }}"
+      S3_STORAGE_SECRET: "{{ access_dashboard.s3_storage.secret }}"
+      S3_STORAGE_BUCKET: "{{ access_dashboard.s3_storage.bucket }}"
