@@ -7,16 +7,28 @@
     group: "root"
     mode: "0770"
 
-- name: "Place the serverapplication configfiles"
+- name: "Place the server configfiles"
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/access_dashboard/{{ item }}"
     owner: "root"
     group: "root"
-    mode: "0644"
+    mode: "0600"
   with_items:
     - "logback.xml"
     - "serverapplication.yml"
+    - "apache_gui.conf"
+  notify: "Restart accessserver"
+
+- name: "Place the gui configfiles"
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/opt/openconext/access_dashboard/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+  with_items:
+    - "apache_gui.conf"
   notify: "Restart accessserver"
 
 - name: "Add the MariaDB docker network to the list of networks when MariaDB runs in Docker"
@@ -67,6 +79,10 @@
     mounts:
       - source: "/etc/localtime"
         target: "/etc/localtime"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/access_dashboard/apache_gui.conf"
+        target: "/etc/apache2/sites-enabled/appconf.conf"
         type: "bind"
         read_only: true
       - source: "/opt/openconext/common/favicon.ico"
