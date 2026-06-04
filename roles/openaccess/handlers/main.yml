@@ -1,4 +1,4 @@
-- name: restart accessserver
+- name: Restart accessserver
   community.docker.docker_container:
     name: accessserver
     state: started
