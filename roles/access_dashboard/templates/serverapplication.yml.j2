@@ -16,10 +16,16 @@ server:
 spring:
   main:
     banner-mode: "off"
+  cache:
+    type: simple
   session:
     jdbc:
+      initialize-schema: never
+{% if openaccess_cronjobmaster is defined and openaccess_cronjobmaster == false  %}
       cleanup-cron: "-"
-      initialize-schema: always
+{% else %}
+      cleanup-cron: "0 */5 * * * *"
+{% endif %}
       flush-mode: on_save
       save-mode: on_set_attribute
     store-type: jdbc
@@ -108,15 +114,17 @@ config:
   sram: "https://{{ env }}.sram.surf.nl/"
   service_desk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
   feedback_widget_enabled: true
+  demo_seed_enabled: {{ openconextaccess.demo_seed_enabled }}
+  test_environment: {{ openconextaccess.test_environment }}
   # For other environments, move to group_vars
   identity_providers:
       - name: "SXS IdP"
         entityid: "http://mock-idp"
-        descriptionEN: "Een test-IdP waarmee je zelf attributen-sets kunt simuleren. De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>"
+        descriptionEN: "A test IdP that allows you to simulate attribute sets yourself. You can find the metadata <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>here</a>"
         descriptionNL: "Een test-IdP waarmee je zelf attributen-sets kunt simuleren. De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>"
       - name: "SXS Dummy"
         entityid: "https://idp.diy.surfconext.nl"
-        descriptionEN: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
+        descriptionEN: "A test IdP with <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictitious user accounts</a>. You can find the metadata <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>here</a>"
         descriptionNL: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
   idp_proxy_meta_data: {{ openconextaccess.idp_proxy_meta_data }}
   minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
@@ -147,6 +155,8 @@ gui:
 
 feature:
   enable-performance-seed: False
+  statistics-enabled: False
+  stepup-required: False
 
 email:
   from: "{{ noreply_email }}"
@@ -158,17 +168,10 @@ email:
 
 manage:
   enabled: True
-  activeManage: TEST
-  test:
-    url: {{ openconextaccess.managetest.url }}
-    user: {{ openconextaccess.managetest.user }}
-    password: {{ openconextaccess.managetest.password }}
-    defaultState: prodaccepted
-  prod:
-    url: {{ openconextaccess.manageprod.url }}
-    user: {{ openconextaccess.manageprod.user }}
-    password: {{ openconextaccess.managetest.password }}
-    defaultState: testaccepted
+  url: {{ openconextaccess.manage.url }}
+  user: {{ openconextaccess.manage.user }}
+  password: {{ openconextaccess.manage.password }}
+  defaultState: testaccepted
   # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
   # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
   staticManageDirectory: classpath:/manage
@@ -180,18 +183,36 @@ invite:
   user: {{ invite.access_user }}
   password: "{{ invite.access_secret }}"
 
-s3storage:
-  url: {{ openconextaccess.s3_storage.url }}
-  key: {{ openconextaccess.s3_storage.key }}
-  secret: {{ openconextaccess.s3_storage.secret }}
-  bucket: {{ openconextaccess.s3_storage.bucket }}
-
 statistics:
   enabled: {{ openconextaccess.statistics.enabled }}
   url: {{ openconextaccess.statistics.url }}
   user: {{ openconextaccess.statistics.user }}
   password: {{ openconextaccess.statistics.password }}
 
+s3storage:
+  url: {{ openconextaccess.s3_storage.url }}
+  key: {{ openconextaccess.s3_storage.key }}
+  secret: {{ openconextaccess.s3_storage.secret }}
+  bucket: {{ openconextaccess.s3_storage.bucket }}
+
+ohdear:
+  apiKey: {{ openconextaccess_ohdear_apikey }}
+  baseUrl: "https://ohdear.app/api"
+  enabled: true
+
+springdoc:
+  pathsToMatch: "/api/v1/**"
+  api-docs:
+    path: "/ui/api-docs"
+    enabled: false
+  swagger-ui:
+    path: "/ui/api-ui.html"
+    enabled: false
+    operationsSorter: method
+    oauth:
+      client-id: ${spring.security.oauth2.client.registration.oidcng.client-id}
+      client-secret: ${spring.security.oauth2.client.registration.oidcng.client-secret}
+      use-basic-authentication-with-access-code-grant: true
 
 management:
   health:
