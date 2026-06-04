@@ -1,7 +1,7 @@
 ---
 - name: "Restart accessserver"
   community.docker.docker_container:
-    name: "accessserver"
+    name: "access_dashboard_server"
     state: "started"
     restart: true
     # avoid restarting it creates unexpected data loss according to docker_container_module notes
