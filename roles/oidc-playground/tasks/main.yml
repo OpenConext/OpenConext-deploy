@@ -25,7 +25,7 @@
     name: oidcplaygroundserver
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-oidc-playground/oidc-playground-server:{{ oidc_playground_server_version }}
+    image: ghcr.io/openconext/openconext-oidc-playground/oidc-playground-server:{{ oidc_playground_version }}
     pull: true
     restart_policy: "{{ oidc_playground_server_restart_policy }}"
     restart_retries: "{{ oidc_playground_server_restart_retries }}" # Only for restart policy on-failure
@@ -58,7 +58,7 @@
 - name: Create the gui container
   community.docker.docker_container:
     name: oidcplaygroundgui
-    image: ghcr.io/openconext/openconext-oidc-playground/oidc-playground-gui:{{ oidc_playground_client_version }}
+    image: ghcr.io/openconext/openconext-oidc-playground/oidc-playground-gui:{{ oidc_playground_version }}
     pull: true
     restart_policy: "always"
     state: started
