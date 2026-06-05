@@ -61,16 +61,16 @@
   with_items:
     - "{{ databases.names }}"
 
-- name: Create database users
+- name: "Create database users"
   community.mysql.mysql_user:
     name: "{{ item[0].name }}"
     host: "{{ item[1] }}"
     password: "{{ item[0].password }}"
     priv: "{{ item[0].db_name }}.*:{{ item[0].privilege }}"
-    state: present
+    state: "present"
     append_privs: true
-    login_user: root
-    login_host: localhost
+    login_user: "root"
+    login_host: "localhost"
     login_password: "{{ mariadb_root_password }}"
   loop: "{{ databases.users | product(database_clients) | list }}"
   loop_control:
