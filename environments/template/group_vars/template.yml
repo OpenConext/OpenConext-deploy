@@ -28,8 +28,8 @@ relp_remote:
 php_display_errors: 1
 
 attribute_aggregation_version: "3.0.6"
-oidc_playground_client_version: "3.0.0"
-oidc_playground_server_version: "3.0.0"
+oidc_playground_client_version: "4.2.0"
+oidc_playground_server_version: "4.2.0"
 engine_version: "6.15.0"
 manage_version: "9.6.0"
 lifecycle_version: "0.1.1"
@@ -154,6 +154,7 @@ oidc_playground:
   jwt_secret: "{{ oidc_playground_jwt_secret }}"
   resource_server_id: resource-server-playground-client
   resource_server_secret: "{{ oidc_playground_resource_server_secret }}"
+  api_endpoint_enabled: True
   gui_disclaimer:
     background_color: red
     content: "{{ env }}"
