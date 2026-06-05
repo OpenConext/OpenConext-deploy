@@ -1,4 +1,8 @@
 ---
+- name: "Check that we're running on test"
+  ansible.builtin.meta: "noop"
+  failed_when: "env != 'test'"
+
 - name: Create MariaDB volume
   community.docker.docker_volume:
     name: openconext_mariadb
