@@ -1,60 +1,191 @@
 ---
-# todo this weorks only for new deployments
-# rewrite so mongo config can be changed and cluster members can be added or removed
-- name: Check if hosts are in clustered
-  ansible.builtin.command: mongosh --port {{ mongod_port }} --quiet --eval 'db.isMaster().hosts'
-  register: check_cluster
-  changed_when: false
-  check_mode: false
+# In this task file the cluster is configured
 
-- name: Debug check_cluster variable
+# priority moet matchen met replication role, of replication role uit cluster mebers halen?
+# todo write concern zetten
+
+# Do some preflight checks
+- name: Check some cluster related variables
+  when: mongo_mode == "cluster"
+  block:
+    - name: Fail on undefined mongo_replica_set_name
+      when: mongo_replica_set_name is not defined
+      ansible.builtin.fail:
+        msg: "Something is wrong, mongo_mode was set to cluster but mongo_replica_set_name is undefined."
+
+- name: Debug replica settings
   ansible.builtin.debug:
-    msg: "{{ check_cluster }}"
+    msg: "Replica set name {{ mongo_replica_set_name }}"
     verbosity: 2
 
-- name: Debug mongo_cluster_members variable
-  ansible.builtin.debug:
-    msg: "{{ mongo_cluster_members }}"
-    verbosity: 2
+# Loop over cluster members and check their presence in mong_servers group and their mode (not standalone)
 
-- name: Debug mongo_replication_role variable
-  ansible.builtin.debug:
-    msg: "{{ mongo_replication_role }}"
-    verbosity: 2
-
-- name: Initial cluster initialisation
-  community.mongodb.mongodb_replicaset:
-    login_host: localhost
-    login_user: admin
-    login_port: "{{ mongod_port }}"
-    login_password: "{{ mongo_admin_password }}"
-    replica_set: "{{ replica_set_name }}"
-    members: "{{ mongo_cluster_members }}"
-    arbiter_at_index: "{{ mongo_arbiter_index | default(0) }}"
-    validate: false
+- name: Check if mongo_cluster_members exist in inventory group
+  ansible.builtin.assert:
+    that:
+      - item.host in groups['mongo_servers']
+    fail_msg: "Server '{{ item.host }}' is not in the mongo_servers inventory group"
+    success_msg: "Server '{{ item.host }}' found in mongo_servers inventory group"
   run_once: true
-  when: mongo_replication_role == 'primary'
+  loop: "{{ mongo_cluster_members }}"
 
-- name: Wait until cluster health is ok
-  community.mongodb.mongodb_status:
-    login_user: admin
-    login_password: "{{ mongo_admin_password }}"
-    login_database: admin
-    login_port: "{{ mongod_port }}"
-    validate: default
-    poll: 5
-    interval: 12
-    replica_set: "{{ replica_set_name }}"
-  when: mongo_replication_role == 'primary'
+# Loop over cluster members and check for primary
 
-- name: Add the admin user
-  community.mongodb.mongodb_user:
-    database: admin
-    name: admin
-    password: "{{ mongo_admin_password }}"
-    login_port: "{{ mongod_port }}"
-    roles: root
-    state: present
-  when: check_cluster.stdout == ""
-  no_log: true
-  run_once: true
+- name: Set primary host fact
+  ansible.builtin.set_fact:
+    mongo_primary_host: "{{ (mongo_cluster_members | max(attribute='priority')).host }}"
+
+- name: Debug primary settings
+  ansible.builtin.debug:
+    msg: "Primary is {{ mongo_primary_host }}"
+    verbosity: 2
+
+# What is the replication role of the current host
+- name: Debug replication role settings
+  ansible.builtin.debug:
+    msg: "This nodes replication role is {{ mongo_replication_role }}"
+    verbosity: 2
+
+# Cannot initialise a cluster without starting.......
+- name: Enable and start mongod
+  ansible.builtin.service:
+    name: mongod.service
+    enabled: true
+    state: started
+
+# Initialise cluster block
+- name: Initialise or reconfigure cluster block
+  when: mongo_replication_role == 'primary'
+  block:
+    - name: Check if replica set is already initialised
+      community.mongodb.mongodb_shell:
+        login_host: localhost
+        login_user: admin
+        login_port: "{{ mongo_port }}"
+        login_password: "{{ mongo_admin_password }}"
+        eval: "rs.status().ok"
+        db: admin
+      register: rs_already_init
+      ignore_errors: true
+
+    - name: Debug cluster initialization check
+      ansible.builtin.debug:
+        msg: "{{ rs_already_init }}"
+        verbosity: 2
+
+    # This should be possible with community.mongodb.mongodb_replicaset
+    # But we keep getting authenticatione error so leave it like this for now
+    - name: Initialise replica set if necessary
+      community.mongodb.mongodb_shell:
+        login_host: localhost
+        login_user: admin
+        login_port: "{{ mongo_port }}"
+        login_password: "{{ mongo_admin_password }}"
+        eval: |
+          rs.initiate({
+            _id: "{{ mongo_replica_set_name }}",
+            members: [
+              {% for m in mongo_cluster_members %}
+              { _id: {{ loop.index0 }}, host: "{{ m.host }}:{{ m.port }}", priority: {{ m.priority }}, votes: {{ m.votes }}{% if m.arbiterOnly is defined and m.arbiterOnly and m.arbiterOnly == true %}, arbiterOnly: true {% endif %} }{{ "," if not loop.last else "" }}
+              {% endfor %}
+            ]
+          })
+        db: admin
+      when: rs_already_init.failed
+      register: rs_init
+
+    - name: Debug cluster initialization
+      ansible.builtin.debug:
+        msg: "{{ rs_init }}"
+        verbosity: 2
+
+    - name: Format members list
+      ansible.builtin.set_fact:
+        mongo_cluster_members_formatted: "{{ mongo_cluster_members_formatted | default([]) + [m | combine({'host': m.host ~ ':' ~ (m.port | string)}) | dict2items | rejectattr('key', 'eq', 'port') | list | items2dict] }}"
+      loop: "{{ mongo_cluster_members }}"
+      loop_control:
+        loop_var: m
+
+    - name: Debug members list
+      ansible.builtin.debug:
+        msg: "{{ mongo_cluster_members }}"
+        verbosity: 2
+
+    - name: Debug formatted members list
+      ansible.builtin.debug:
+        msg: "{{ mongo_cluster_members_formatted }}"
+        verbosity: 2
+
+    # Reconfigure cluster
+    # todo: this always returns changed even when nothing changes
+    - name: Reconfigure cluster if necessary
+      community.mongodb.mongodb_replicaset:
+        login_host: localhost
+        login_user: admin
+        login_password: "{{ mongo_admin_password }}"
+        login_port: "{{ mongo_port }}"
+        reconfigure: true
+        replica_set: "{{ mongo_replica_set_name }}"
+        members: "{{ mongo_cluster_members_formatted }}"
+      register: rs_reconfigure
+
+    - name: Debug cluster reconfiguration
+      ansible.builtin.debug:
+        msg: "{{ rs_reconfigure }}"
+        verbosity: 2
+
+    - name: Wait for the replicaset to stabilise
+      community.mongodb.mongodb_status:
+        replica_set: "{{ mongo_replica_set_name }}"
+        login_host: localhost
+        login_user: admin
+        login_password: "{{ mongo_admin_password }}"
+        login_port: "{{ mongo_port }}"
+        poll: 5
+        interval: 30
+        validate: minimal # default fails on even number of servers and although this is not a great situation, it is sometimes the temporary situation because we can onlye add or remove 1 node at a time
+
+    # Cluster settings that cannot be changed with mongodb_replicaset
+
+    - name: Get current default write concern
+      community.mongodb.mongodb_shell:
+        login_host: localhost
+        login_port: 27017
+        login_user: admin
+        login_password: "{{ mongo_admin_password }}"
+        eval: "db.adminCommand({ getDefaultRWConcern: 1 })"
+      register: current_write_concern
+      changed_when: false
+
+    - name: Debug write concern check
+      ansible.builtin.debug:
+        msg: "{{ current_write_concern.transformed_output.defaultWriteConcern }}"
+        verbosity: 2
+      when: current_write_concern.transformed_output.defaultWriteConcern is defined
+
+    - name: Set default write concern
+      when: >
+          current_write_concern.transformed_output.defaultWriteConcern is defined
+          and
+          (current_write_concern.transformed_output.defaultWriteConcern.w | string != mongo_cluster_write_concern | default('majority') | string
+          or
+          current_write_concern.transformed_output.defaultWriteConcern.wtimeout | int != mongo_cluster_write_timeout | default(5000) | int)
+          or current_write_concern.transformed_output.defaultWriteConcern is not defined
+      block:
+        - name: "set write concern majority"
+          when: mongo_cluster_write_concern == "majority"
+          community.mongodb.mongodb_shell:
+            login_host: localhost
+            login_user: admin
+            login_password: "{{ mongo_admin_password }}"
+            login_port: "{{ mongo_port }}"
+            eval: "db.adminCommand({ setDefaultRWConcern: 1, defaultWriteConcern: { w: \"{{ mongo_cluster_write_concern | default('majority') }}\", wtimeout: {{ mongo_cluster_write_timeout | default(5000) }} } })"
+        # could not get this to work with either majority with quotes or number without quotes so for now an ugly fix
+        - name: "set write concern numeric"
+          when: mongo_cluster_write_concern != "majority"
+          community.mongodb.mongodb_shell:
+            login_host: localhost
+            login_user: admin
+            login_password: "{{ mongo_admin_password }}"
+            login_port: "{{ mongo_port }}"
+            eval: "db.adminCommand({ setDefaultRWConcern: 1, defaultWriteConcern: { w: {{ mongo_cluster_write_concern | default('majority') }}, wtimeout: {{ mongo_cluster_write_timeout | default(5000) }} } })"

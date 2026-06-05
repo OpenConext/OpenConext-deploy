@@ -1,7 +1,12 @@
 #!/usr/bin/python3
-# This script parses the files produced by engineblock and inserts them into a mySQL table where the SURFconext stats module will analyse the data further
-# This script is intended to be used during logrotate
-# It picks up all files starting with ebauth- (all rotated files) and parses them
+# This script parses the authentication log files produced by engineblock and inserts them into two tables:
+# - log_logins: contains login events from engineblock and stepup-gateway, and is there for use manually querying logins.
+#               There is no further processing done on this table.
+#               A daily cronjob runs clean_loglogins.j2 to remove old logins from the log_logins table.
+# - last_login: contains the last login date for each user. This is used for deprovisioning (lifecycle)
+#
+# This script is intended to be used during logrotate with the delaycompress option set.
+# It picks up all files starting with ebauth- that do not end in .gz and parses them
 
 import os
 import sys
@@ -10,11 +15,11 @@ import json
 import MySQLdb
 from dateutil.parser import parse
 
-mysql_host="{{ item.db_loglogins_host }}"
-mysql_user="{{ item.db_loglogins_user }}"
-mysql_password="{{ item.db_loglogins_password }}"
-mysql_db="{{ item.db_loglogins_name }}"
-workdir="{{ rsyslog_dir }}/log_logins/{{ item.name}}/"
+mysql_host="{{ rsyslog_environment.db_loglogins_host }}"
+mysql_user="{{ rsyslog_environment.db_loglogins_user }}"
+mysql_password="{{ rsyslog_environment.db_loglogins_password }}"
+mysql_db="{{ rsyslog_environment.db_loglogins_name }}"
+workdir="{{ rsyslog_dir }}/log_logins/{{ rsyslog_environment.name}}/"
 
 db = MySQLdb.connect(mysql_host,mysql_user,mysql_password,mysql_db )
 cursor = db.cursor()

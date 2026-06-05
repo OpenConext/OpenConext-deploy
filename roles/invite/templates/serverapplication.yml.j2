@@ -161,6 +161,7 @@ external-api-configuration:
       password: "{{ invite_attribute_aggregation_secret }}"
       scopes:
         - attribute_aggregation
+        - crm
     - username: {{ invite.lifecycle_user }}
       password: "{{ invite.lifecycle_secret }}"
       scopes:
@@ -173,6 +174,14 @@ external-api-configuration:
       password: "{{ invite.profile_secret }}"
       scopes:
         - profile
+    - username: {{ invite.pdp_user }}
+      password: "{{ invite.pdp_secret }}"
+      scopes:
+        - crm
+    - username: {{ invite.idp_dashboard_user }}
+      password: "{{ invite.idp_dashboard_secret }}"
+      scopes:
+        - crm
     - username: {{ invite.sp_dashboard_user }}
       password: "{{ invite.sp_dashboard_secret }}"
       organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
