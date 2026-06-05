@@ -28,8 +28,7 @@ relp_remote:
 php_display_errors: 1
 
 attribute_aggregation_version: "3.0.6"
-oidc_playground_client_version: "4.2.0"
-oidc_playground_server_version: "4.2.0"
+oidc_playground_version: "4.2.0"
 engine_version: "6.15.0"
 manage_version: "9.6.0"
 lifecycle_version: "0.1.1"
