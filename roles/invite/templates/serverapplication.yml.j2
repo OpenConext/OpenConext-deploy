@@ -182,6 +182,10 @@ external-api-configuration:
       password: "{{ invite.idp_dashboard_secret }}"
       scopes:
         - crm
+    - username: "{{ invite.tools_user }}"
+      password: "{{ invite.tools_secret }}"
+      scopes:
+        - "crm"
     - username: {{ invite.sp_dashboard_user }}
       password: "{{ invite.sp_dashboard_secret }}"
       organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
@@ -190,8 +194,8 @@ external-api-configuration:
       applications:
         - manageId: {{ invite.sp_dashboard_manage_id }}
           manageType: SAML20_SP
-    - username: {{ invite.access_user }}
-      password: "{{ invite.access_secret }}"
+    - username: "{{ invite.access_dashboard_user }}"
+      password: "{{ invite.access_dashboard_secret }}"
       organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
       scopes:
         - access
