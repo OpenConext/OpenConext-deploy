@@ -92,7 +92,7 @@ lifecycle:
   password: "{{ access_dashboard_lifecycle_secret }}"
 
 jira:
-  enabled: true
+  enabled: "{{ access_dashboard.jira.enabled }}"
   base-url: "{{ access_dashboard.jira.base_url }}"
   user-name: "{{ access_dashboard.jira.username }}"
   project-key: "{{ access_dashboard.jira.project_key }}"
