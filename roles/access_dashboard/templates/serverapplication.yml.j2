@@ -108,8 +108,12 @@ institution-admin:
 config:
   client-url: "https://{{ access_dashboard_base_domain }}"
   base-url: "{{ base_domain }}"
-  edu_id_schac_home_organization: "eduid.nl"
-  surf_schac_home_organization: "example.com"
+  external_schac_home_organizations:
+    - "eduid.nl"
+    - "surfguest.nl"
+  owner_schac_home_orgs:
+    - "surfnet.nl"
+    - "example.com"
   discovery: "https://connect.surfconext.nl/oidc/.well-known/openid-configuration"
   invite: "https://invite.{{ base_domain }}"
   sram: "https://{{ env }}.sram.surf.nl/"
