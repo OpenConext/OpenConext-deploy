@@ -1,0 +1,6 @@
+---
+- name: "Check and attach policies"
+  become: false # No mc client actions as root
+  block:
+    - debug:
+        var: username

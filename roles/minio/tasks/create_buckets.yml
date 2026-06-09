@@ -1,0 +1,101 @@
+---
+- name: "Check and create buckets"
+  become: false # No mc client actions as root
+  block:
+    - name: "Check whether bucket already exists"
+      ansible.builtin.command:
+        cmd: '{{ minio_mc }} anonymous get "{{ minio_alias }}/{{ bucket.name }}"'
+      register: "minio_bucket_present"
+      changed_when: false
+      failed_when: "minio_bucket_present.rc > 1"  # rc 1 means bucket does not exist
+      check_mode: false
+
+    - name: "Create bucket"
+      when: '"The specified bucket does not exist" in minio_bucket_present.stderr'
+      ansible.builtin.command:
+        cmd: '{{ minio_mc }} mb "{{ minio_alias }}/{{ bucket.name }}"'
+      register: "minio_add_bucket"
+      failed_when: "minio_add_bucket.rc > 1"  # rc==1 means bucket already exists
+      changed_when: "minio_add_bucket.rc == 0"
+
+    - name: "Set anonymous permission for bucket"
+      when: '"is `download`" not in minio_bucket_present.stdout'
+      ansible.builtin.command:
+        cmd: '{{ minio_mc }} anonymous set download "{{ minio_alias }}/{{ bucket.name }}"'
+      changed_when: true
+
+    - name: "Policy name"
+      ansible.builtin.set_fact:
+        minio_policy_name: "rw-{{ bucket.name }}"
+
+    - name: "Policy file"
+      ansible.builtin.set_fact:
+        minio_policy_file: "{{ minio_dir }}/policy-{{ minio_policy_name }}.json"
+
+    - name: "Write policy"
+      become: true
+      ansible.builtin.copy:
+        dest: "{{ minio_policy_file }}"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+        content: |
+          { "Version": "2012-10-17",
+            "Statement": [ {
+                "Effect": "Allow",
+                "Action": ["s3:*"],
+                "Resource": [
+                  "arn:aws:s3:::{{ bucket.name }}",
+                  "arn:aws:s3:::{{ bucket.name }}/*"
+              ] }
+          ] }
+
+    - name: "Check if policy exists"
+      ansible.builtin.shell:
+        executable: "/bin/bash"  # default dash does not support process substitution
+        cmd: |
+          {{ minio_mc }} admin policy info {{ minio_alias }} {{ minio_policy_name }} > "/tmp/{{ minio_policy_name }}-upstream"
+      register: minio_policy_exists
+      failed_when: false
+      changed_when: false
+      check_mode: false
+
+    - name: "Check if policy is changed"
+      when: "minio_policy_exists.rc == 0"
+      ansible.builtin.shell:
+        executable: "/bin/bash"  # default dash does not support process substitution
+        cmd: >
+          diff \
+            <(jq '.Policy' "/tmp/{{ minio_policy_name }}-upstream") \
+            <(jq '.' '{{ minio_policy_file }}' )
+      register: "minio_policy_changed"
+      failed_when: false
+      changed_when: false
+      check_mode: false
+
+    - name: "Upload policy"
+      when: 'minio_policy_exists.rc == 1 or minio_policy_changed.rc == 1'
+      ansible.builtin.command:
+        cmd: '{{ minio_mc }} admin policy create {{ minio_alias }} "{{ minio_policy_name }}" "{{ minio_policy_file }}"'
+      register: "minio_policy_upload"
+      changed_when: "'Created policy `' + minio_policy_name + '` successfully' in minio_policy_upload.stdout"
+
+    - name: "Check policy mappings"
+      #language=Shell
+      ansible.builtin.shell:
+        cmd: >
+          {{ minio_mc }} admin policy entities '{{ minio_alias }}' --policy '{{ minio_policy_name }}' --json |
+          jq '[.result.policyMappings[]?.users // []] | flatten(1)'
+      register: "minio_policy_attached"
+      changed_when: false
+      check_mode: false
+
+    - name: "Attach policy to user"
+      when: 'username not in minio_policy_attached.stdout | from_json'
+      ansible.builtin.command:
+        cmd: '{{ minio_mc }} admin policy attach {{ minio_alias }} "{{ minio_policy_name }}" --user={{ username }}'
+      register: "minio_attach_policy"
+      changed_when: "'Added user `' + username + '` successfully" in minio_attach_policy.stdout'"
+      loop: "{{ bucket.write_users }}"
+      loop_control:
+        loop_var: "username"

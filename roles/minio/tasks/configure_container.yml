@@ -18,14 +18,18 @@
     - config.env
   notify: Restart minio
 
-- name: Create a docker volume
-  community.docker.docker_volume:
-    name: minio_data
+- name: Create data directory
+  ansible.builtin.file:
+    path: "{{ minio_dir }}/data"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0700"
 
 - name: Create and start the server container
   community.docker.docker_container:
     name: minio
-    image: quay.io/minio/minio:{{ minio_version }}
+    image: "quay.io/minio/minio:{{ minio_version }}"
     pull: true
     restart_policy: "always"
     state: started
