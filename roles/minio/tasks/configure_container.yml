@@ -13,7 +13,7 @@
     dest: "{{ minio_dir }}/{{ item }}"
     owner: root
     group: root
-    mode: "0644"
+    mode: "0600"
   with_items:
     - config.env
   notify: Restart minio
