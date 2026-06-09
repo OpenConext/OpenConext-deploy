@@ -38,11 +38,12 @@
       - name: "loadbalancer"
     mounts:
       - source: "{{ minio_dir }}/config.env"
-        target: /etc/config.env
-        type: bind
-      - source: minio_data
+        target: "/etc/config.env"
+        type: "bind"
+        read_only: true
+      - source: "{{ minio_dir }}/data"
         target: "{{ minio_data_dir_oncontainer }}"
-        type: volume
+        type: "bind"
 
     command: server --console-address ":9090" {{ minio_data_dir_oncontainer }}
     labels:
