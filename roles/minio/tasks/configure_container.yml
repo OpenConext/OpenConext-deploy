@@ -1,41 +1,65 @@
 ---
-- name: Create minio files directory
+- name: "Create minio user"
+  ansible.builtin.group:
+    name: "container_minio"
+    # not supported in our ansible version
+    #gid_min: "{{ container_gid_min }}"
+    #gid_max: "{{ container_gid_max }}"
+    gid: "{{ container_ids.minio }}"
+    system: true
+
+- name: "Create minio user"
+  ansible.builtin.user:
+    name: "container_minio"
+    group: "container_minio"
+    home: "{{ minio_dir }}"
+    create_home: false
+    password: "!"
+    shell: "/bin/false"
+    # not supported in our ansible version
+    #uid_min: "{{ container_uid_min }}"
+    #uid_max: "{{ container_uid_max }}"
+    uid: "{{ container_ids.minio }}"
+    system: true
+
+- name: "Create minio files directory"
   ansible.builtin.file:
-    state: directory
+    state: "directory"
     path: "{{ minio_dir }}"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0755"
 
-- name: Place the serverapplication configfiles
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "{{ minio_dir }}/{{ item }}"
-    owner: root
-    group: root
-    mode: "0600"
-  with_items:
-    - config.env
-  notify: Restart minio
-
-- name: Create data directory
+- name: "Create data directory"
   ansible.builtin.file:
     path: "{{ minio_dir }}/data"
     state: "directory"
-    owner: "root"
-    group: "root"
-    mode: "0700"
+    owner: "container_minio"
+    group: "container_minio"
+    mode: "0750"
 
-- name: Create and start the server container
+- name: "Place the serverapplication configfiles"
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ minio_dir }}/{{ item }}"
+    owner: "root"
+    group: "container_minio"
+    mode: "0640"
+  with_items:
+    - "config.env"
+  notify: "Restart minio"
+
+- name: "Create and start the server container"
   community.docker.docker_container:
-    name: minio
+    name: "minio"
     image: "quay.io/minio/minio:{{ minio_version }}"
+    user: "{{ container_ids.minio }}:{{ container_ids.minio }}"
     pull: true
     restart_policy: "always"
-    state: started
+    state: "started"
     env:
       MINIO_CONFIG_ENV_FILE: "/etc/config.env"
-    ports:
+    published_ports:
       # Publish container port 9000 for mc client commands
       - "9000:9000"
     networks:
@@ -48,8 +72,7 @@
       - source: "{{ minio_dir }}/data"
         target: "{{ minio_data_dir_oncontainer }}"
         type: "bind"
-
-    command: server --console-address ":9090" {{ minio_data_dir_oncontainer }}
+    command: 'server --console-address ":9090" {{ minio_data_dir_oncontainer }}'
     labels:
       traefik.http.routers.minio.rule: "Host(`minio.{{ base_domain }}`)"
       traefik.http.routers.minio.tls: "true"
@@ -72,9 +95,9 @@
       timeout: 10s
       retries: 3
       start_period: 10s
-  register: minio_container
+  register: "minio_container"
 
-- name: Show container debug info
+- name: "Show container debug info"
   ansible.builtin.debug:
     msg: "{{ minio_container }}"
     verbosity: 2
