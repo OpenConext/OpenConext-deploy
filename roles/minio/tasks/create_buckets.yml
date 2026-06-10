@@ -95,7 +95,7 @@
       ansible.builtin.command:
         cmd: '{{ minio_mc }} admin policy attach {{ minio_alias }} "{{ minio_policy_name }}" --user={{ username }}'
       register: "minio_attach_policy"
-      changed_when: "'Added user `' + username + '` successfully" in minio_attach_policy.stdout'"
+      changed_when: "'Added user `' + username + '` successfully' in minio_attach_policy.stdout"
       loop: "{{ bucket.write_users }}"
       loop_control:
         loop_var: "username"
