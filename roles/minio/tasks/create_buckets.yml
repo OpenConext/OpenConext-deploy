@@ -66,8 +66,8 @@
         executable: "/bin/bash"  # default dash does not support process substitution
         cmd: >
           diff \
-            <(jq '.Policy' "/tmp/{{ minio_policy_name }}-upstream") \
-            <(jq '.' '{{ minio_policy_file }}' )
+            <(jq --sort-keys '.Policy' "/tmp/{{ minio_policy_name }}-upstream") \
+            <(jq --sort-keys '.' '{{ minio_policy_file }}' )
       register: "minio_policy_changed"
       failed_when: false
       changed_when: false
