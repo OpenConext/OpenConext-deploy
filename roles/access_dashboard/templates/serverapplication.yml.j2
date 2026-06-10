@@ -108,12 +108,8 @@ institution-admin:
 config:
   client-url: "https://{{ access_dashboard_base_domain }}"
   base-url: "{{ base_domain }}"
-  external_schac_home_organizations:
-    - "eduid.nl"
-    - "surfguest.nl"
-  owner_schac_home_orgs:
-    - "surfnet.nl"
-    - "example.com"
+  external_schac_home_organizations: "{{ access_dashboard_external_sho }}"
+  owner_schac_home_orgs: "{{ access_dashboard_owner_sho }}"
   discovery: "https://connect.surfconext.nl/oidc/.well-known/openid-configuration"
   invite: "https://invite.{{ base_domain }}"
   sram: "https://{{ env }}.sram.surf.nl/"
@@ -159,8 +155,7 @@ eduid-idp-entity-id: "{{ access_dashboard.eduid_idp_entity_id }}"
 
 # TODO
 super-admin:
-  users:
-    - "urn:collab:person:example.com:admin"
+  users: "{{ access_dashboard_super_admins }}"
 
 gui:
   disclaimer:

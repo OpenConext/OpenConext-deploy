@@ -2,3 +2,6 @@
 access_dashboard_docker_networks:
   - name: "loadbalancer"
 access_dashboard_cronjobmaster: true
+access_dashboard_external_sho: ["eduid.nl"]
+access_dashboard_owner_sho: ["example.com"]
+access_dashboard_super_admins: ["urn:collab:person:example.com:admin"]
