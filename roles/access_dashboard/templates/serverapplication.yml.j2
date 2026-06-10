@@ -153,9 +153,8 @@ config:
 
 eduid-idp-entity-id: "{{ access_dashboard.eduid_idp_entity_id }}"
 
-# TODO
 super-admin:
-  users: "{{ access_dashboard_super_admins }}"
+  users: {{ access_dashboard_super_admins | to_yaml}}
 
 gui:
   disclaimer:
