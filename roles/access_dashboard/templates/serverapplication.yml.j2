@@ -108,8 +108,14 @@ institution-admin:
 config:
   client-url: "https://{{ access_dashboard_base_domain }}"
   base-url: "{{ base_domain }}"
-  external_schac_home_organizations: {{ access_dashboard_external_sho | to_json }}
-  owner_schac_home_orgs: {{ access_dashboard_owner_sho | to_json }}
+  external_schac_home_organizations:
+{% for sho in access_dashboard_external_sho %}{# Note: spring yaml parser is wonky #}
+    - {{ sho }}
+{% endfor %}
+  owner_schac_home_orgs:
+{% for sho in access_dashboard_owner_sho %}{# Note: spring yaml parser is wonky #}
+    - {{ sho }}
+{% endfor %}
   discovery: "https://connect.surfconext.nl/oidc/.well-known/openid-configuration"
   invite: "https://invite.{{ base_domain }}"
   sram: "https://{{ env }}.sram.surf.nl/"
@@ -147,14 +153,17 @@ config:
     - name: "mfa"
       enabled: true
   acr_values:
-  {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}
+  {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}{# Note: spring yaml parser is wonky #}
     - "{{ loa }}"
   {% endfor %}
 
 eduid-idp-entity-id: "{{ access_dashboard.eduid_idp_entity_id }}"
 
 super-admin:
-  users: {{ access_dashboard_super_admins | to_json}}
+  users:
+{% for sub in access_dashboard_super_admins %}{# Note: spring yaml parser is wonky #}
+    - {{ sub }}
+{% endfor %}
 
 gui:
   disclaimer:
