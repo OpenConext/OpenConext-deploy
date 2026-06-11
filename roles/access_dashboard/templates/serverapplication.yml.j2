@@ -110,11 +110,11 @@ config:
   base-url: "{{ base_domain }}"
   external_schac_home_organizations:
 {% for sho in access_dashboard_external_sho %}{# Note: spring yaml parser is wonky #}
-    - {{ sho }}
+    - "{{ sho }}"
 {% endfor %}
   owner_schac_home_orgs:
 {% for sho in access_dashboard_owner_sho %}{# Note: spring yaml parser is wonky #}
-    - {{ sho }}
+    - "{{ sho }}"
 {% endfor %}
   discovery: "https://connect.surfconext.nl/oidc/.well-known/openid-configuration"
   invite: "https://invite.{{ base_domain }}"
@@ -162,7 +162,7 @@ eduid-idp-entity-id: "{{ access_dashboard.eduid_idp_entity_id }}"
 super-admin:
   users:
 {% for sub in access_dashboard_super_admins %}{# Note: spring yaml parser is wonky #}
-    - {{ sub }}
+    - "{{ sub }}"
 {% endfor %}
 
 gui:
