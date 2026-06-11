@@ -1,9 +1,10 @@
-- name: Install rsyslog
+- name: Install rsyslog and python modules
   ansible.builtin.package:
     name:
       - rsyslog
       - rsyslog-gnutls
       - rsyslog-relp
+      - python3-dateutil
     state: present
   notify:
     - "restart rsyslog"

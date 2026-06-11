@@ -11,6 +11,15 @@
     - "/opt/openconext/manage/metadata_templates"
     - "/opt/openconext/manage/policies"
 
+- name: Copy Stepup stepup_config.json from inventory
+  ansible.builtin.template:
+    src: "stepup_config.json.j2"
+    dest: "/opt/openconext/manage/stepup_config.json"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: restart manageserver
+
 - name: Import the mongo CA file
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
@@ -31,14 +40,14 @@
 - name: Place the serverapplication configfiles
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: /opt/openconext/manage/{{ item }}
-    owner: root
-    group: root
+    dest: "/opt/openconext/manage/{{ item }}"
+    owner: "root"
+    group: "root"
     mode: "0644"
   with_items:
-    - application.yml
-    - logback.xml
-    - manage-api-users.yml
+    - "application.yml"
+    - "logback.xml"
+    - "manage-api-users.yml"
   notify: restart manageserver
 
 - name: Place old __cacert_entrypoint.sh script
@@ -53,8 +62,8 @@
   ansible.builtin.template:
     src: "metadata_configuration/{{ item }}.schema.json.j2"
     dest: "/opt/openconext/manage/metadata_configuration/{{ item }}.schema.json"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0640"
   with_items:
     - "{{ manage_tabs_enabled }}"
@@ -81,18 +90,17 @@
     group: root
     mode: "0640"
   with_items:
-    - allowed_attributes.json
-    - extra_saml_attributes.json
+    - "allowed_attributes.json"
+    - "extra_saml_attributes.json"
   notify:
     - "restart manageserver"
 
 - name: Add the mongodb and mariadb  docker network to the list of networks when MongoDB runs in Docker
   ansible.builtin.set_fact:
     manage_docker_networks:
-      - name: loadbalancer
-      - name: openconext_mongodb
-      - name: openconext_mariadb
-  when: mongodb_in_docker | default(false) | bool
+      - name: "loadbalancer"
+      - name: "openconext_mariadb"
+  when: mariadb_in_docker | default(false) | bool
 
 - name: Create and start the server container
   community.docker.docker_container:
@@ -105,15 +113,22 @@
     state: started
     networks: "{{ manage_docker_networks }}"
     mounts:
-      - source: /opt/openconext/manage/
-        target: /config/
-        type: bind
-      - source: /opt/openconext/manage/mongoca.pem
-        target: /certificates/mongoca.crt
-        type: bind
-      - source: /opt/openconext/manage/__cacert_entrypoint.sh
-        target: /__cacert_entrypoint.sh
-        type: bind
+      - source: "/opt/openconext/manage/"
+        target: "/config/"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/manage/mongoca.pem"
+        target: "/certificates/mongoca.crt"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/manage/__cacert_entrypoint.sh"
+        target: "/__cacert_entrypoint.sh"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/manage/stepup_config.json"
+        target: "/stepup_config.json"
+        type: "bind"
+        read_only: true
     command: "java -jar /app.jar -Xmx512m --spring.config.location=./config/"
     etc_hosts:
       host.docker.internal: host-gateway
@@ -170,6 +185,8 @@
       - source: /etc/localtime
         target: /etc/localtime
         type: bind
+        read_only: true
       - source: /opt/openconext/common/favicon.ico
         target: /var/www/favicon.ico
         type: bind
+        read_only: true

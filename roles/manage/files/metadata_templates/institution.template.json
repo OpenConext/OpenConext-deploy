@@ -1,0 +1,19 @@
+{
+  "entityid": "",
+  "metaDataFields": {},
+  "identifier": "",
+  "use_ra_locations": true,
+  "show_raa_contact_information": true,
+  "verify_email": true,
+  "allowed_second_factors": [
+    "tiqr"
+  ],
+  "number_of_tokens_per_identity": 3,
+  "use_ra": [],
+  "use_raa": [],
+  "select_raa": [],
+  "self_vet": true,
+  "allow_self_asserted_tokens": false,
+  "sso_on_2fa": false,
+  "stepup-client": "full"
+}
