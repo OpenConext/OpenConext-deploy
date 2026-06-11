@@ -153,9 +153,9 @@ config:
     - name: "mfa"
       enabled: true
   acr_values:
-  {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}{# Note: spring yaml parser is wonky #}
+{% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}{# Note: spring yaml parser is wonky #}
     - "{{ loa }}"
-  {% endfor %}
+{% endfor %}
 
 eduid-idp-entity-id: "{{ access_dashboard.eduid_idp_entity_id }}"
 
