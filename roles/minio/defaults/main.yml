@@ -13,7 +13,7 @@ minio_client_version: "RELEASE.2025-08-13T08-35-41Z"
 
 minio_users:
   - { username: "openconext",       password: "minio_user_openconext_password",       full_access: true }
-  - { username: "access-dashboard", password: "minio_user_access_dashboard_password", full_access: true }
+  - { username: "access-dashboard", password: "minio_user_access_dashboard_password", full_access: false    }
 
 minio_buckets:
   - name: "test-bucket"
