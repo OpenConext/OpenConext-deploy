@@ -12,10 +12,15 @@ minio_client_checksum: "sha256:01f866e9c5f9b87c2b09116fa5d7c06695b106242d829a8bb
 minio_client_version: "RELEASE.2025-08-13T08-35-41Z"
 
 minio_users:
-  - { name: "openconext", password: "minio_user_openconext_password", full_access: true }
+  - { username: "openconext",       password: "minio_user_openconext_password",       full_access: true }
+  - { username: "access-dashboard", password: "minio_user_access_dashboard_password", full_access: true }
 
 minio_buckets:
   - name: "test-bucket"
     public: true
     write_users:
       - "openconext"
+  - name: "access-dashboard-images"
+    public: true
+    write_users:
+      - "access-dashboard"
