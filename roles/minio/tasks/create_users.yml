@@ -18,13 +18,13 @@
             {{ minio_mc }} admin user add {{ minio_alias }} {{ user.username }} {{ user.password }}
           register: "minio_add_user"
           changed_when: >
-             "Added user " + user.username + "` successfully" in minio_add_user.stdout
+             "Added user `" + user.username + "` successfully" in minio_add_user.stdout
 #          no_log: true
 
-        - name: "Attach read write policy"
+        - name: "Attach readwrite policy"
           when: "'full_access' in user and user.full_access"
           ansible.builtin.command: >
             {{ minio_mc }} admin policy attach {{ minio_alias }} readwrite --user={{ user.username }}
           register: "minio_attach_user"
           changed_when: >
-             "Added user `" + user.username + "` successfully" in minio_add_user.stdout
+             'Attached Policies: [readwrite]' in minio_add_user.stdout
