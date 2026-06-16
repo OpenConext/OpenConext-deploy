@@ -1,0 +1,48 @@
+---
+- name: Ensure target directory is absent
+  ansible.builtin.file:
+    path: "{{ target_dir }}"
+    state: absent
+  become: true
+
+- name: Ensure target directory exists
+  ansible.builtin.file:
+    path: "{{ target_dir }}"
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Download the correct zip‑file from the Maven repo
+  community.general.maven_artifact:
+    group_id:    "{{ maven_group }}"
+    artifact_id: "{{ maven_artifact }}"
+    version:     "{{ myconext_version }}"
+    repository_url: "{{ repo_url }}/{{ myconext_version | regex_replace('(-SNAPSHOT)$', '\\1') }}"
+    dest: "{{ target_dir }}/{{ maven_artifact }}.zip"
+    # Voor snapshots moet de module weten dat het een snapshot‑versie is
+    snapshot: "{{ myconext_version is search('-SNAPSHOT$') }}"
+    # Forceer een checksum‑check (optioneel, maakt de taak idempotent)
+    checksum: "sha256"
+  register: download_result
+
+- name: Unpack the zip‑file in place
+  unarchive:
+    src: "{{ download_result.dest }}"
+    dest: "{{ target_dir }}"
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+  become: true
+
+- name: Create internal info directory
+  file:
+    path: "{{ target_dir }}/internal"
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Write version‑informatie bestand
+  copy:
+    dest: "{{ target_dir }}/internal/info"
+    content: "{'version':'{{ myconext_version }}','file':'{{ download_result.dest | basename }}'}"
+    mode: "0644"
+  become: true

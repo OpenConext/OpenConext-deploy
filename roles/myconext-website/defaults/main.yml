@@ -1,0 +1,11 @@
+---
+myconext_version: "2.4.0-SNAPSHOT"
+
+# Maven‑coördinaten van het public‑gui‑artefact
+maven_group:   "org.openconext"
+maven_artifact: "public-gui"
+# De repository‑base‑URL (zonder trailing slash)
+repo_url: "https://build.openconext.org/repository/public"
+
+# Doelpad waar de inhoud moet komen
+target_dir: "/opt/openconext/staticdata/data/eduid"
