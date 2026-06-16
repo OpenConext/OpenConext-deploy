@@ -27,4 +27,4 @@
             {{ minio_mc }} admin policy attach {{ minio_alias }} readwrite --user={{ user.username }}
           register: "minio_attach_user"
           changed_when: >
-             'Attached Policies: [readwrite]' in minio_add_user.stdout
+             'Attached Policies: [readwrite]' in minio_attach_user.stdout
