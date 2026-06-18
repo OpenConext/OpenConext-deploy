@@ -99,9 +99,8 @@
   ansible.builtin.set_fact:
     manage_docker_networks:
       - name: "loadbalancer"
-      - name: "openconext_mongodb"
       - name: "openconext_mariadb"
-  when: mongodb_in_docker | default(false) | bool
+  when: mariadb_in_docker | default(false) | bool
 
 - name: Create and start the server container
   community.docker.docker_container:
