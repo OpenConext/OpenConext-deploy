@@ -113,4 +113,4 @@
         minute: "{{ rsyslog_touchoidcplaygroundlog_cron_minute }}"
         hour: "{{ rsyslog_touchoidcplaygroundlog_cron_hour }}"
         weekday: "{{ rsyslog_touchoidcplaygroundlog_cron_weekdays }}"
-        job: "echo '==========MARK==========' >>  {{ rsyslog_dir }}/apps/prod_sc/oidc-playground/oidc-playground.log && echo '==========MARK==========' >>  {{ rsyslog_dir }}/apps/prod_sc/oidc-playground/oidc-playground-apache.log"
+        job: "echo '==========MARK==========' >>  {{ rsyslog_dir }}/apps/prod_sc/oidc-playground/oidc-playground.log"
