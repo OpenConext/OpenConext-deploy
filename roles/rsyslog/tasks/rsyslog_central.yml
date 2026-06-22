@@ -107,9 +107,10 @@
         weekday: "{{ rsyslog_checkemptylogs_cron_weekdays }}"
         job: "{{ rsyslog_checkemptylogs_dir }}/warn-empty-log.sh -m"
       # oidc-playground false positives, this is not visited frequently
+    - name: Create cronjob for oidc playground empty logs
       ansible.builtin.cron:
         name: "log something to oidc playground"
         minute: "{{ rsyslog_touchoidcplaygroundlog_cron_minute }}"
         hour: "{{ rsyslog_touchoidcplaygroundlog_cron_hour }}"
         weekday: "{{ rsyslog_touchoidcplaygroundlog_cron_weekdays }}"
-        job: "echo '==========MARK==========' >  {{ rsyslog_dir }}/apps/prod_sc/oidc-playground/oidc-playground.log && echo '==========MARK==========' >  {{ rsyslog_dir }}/apps/prod_sc/oidc-playground/oidc-playground-apache.log"
+        job: "echo '==========MARK==========' >>  {{ rsyslog_dir }}/apps/prod_sc/oidc-playground/oidc-playground.log && echo '==========MARK==========' >>  {{ rsyslog_dir }}/apps/prod_sc/oidc-playground/oidc-playground-apache.log"
