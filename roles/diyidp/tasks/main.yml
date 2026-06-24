@@ -1,8 +1,4 @@
 ---
-- name: "Debug"
-  ansible.builtin.debug:
-    msg: "{{ diyidp }}"
-
 - name: "Create directories"
   ansible.builtin.file:
     path: "/opt/openconext/diyidp/{{ item }}"
