@@ -105,6 +105,7 @@ mijn_eduid_service_name: "Mijn eduID"
 mobile_app_redirect: eduid:///client/mobile
 # For this RP we nudge the user to use the magic link
 mobile_app_rp_entity_id: {{ myconext.mobile_app_rp_entity_id }}
+mijn_eduid_service_name: "Mijn eduID"
 
 create-from-institution:
   return-url-allowed-domains:
@@ -262,6 +263,9 @@ account_linking_context_class_ref:
   validate_names_mfa: https://eduid.nl/trust/validate-names/mfa
   validate_names_external_mfa: https://eduid.nl/trust/validate-names-external/mfa
   affiliation_student_mfa: https://eduid.nl/trust/affiliation-student/mfa
+
+account_linking:
+  myconext_sp_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
 
 eduid_api:
   oidcng_introspection_uri: https://connect.{{ base_domain }}/oidc/introspect
