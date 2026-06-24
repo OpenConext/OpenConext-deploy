@@ -40,3 +40,7 @@ rsyslog_checkemptylogs_cron_minute: "0"
 rsyslog_checkemptylogs_cron_hour: "9"
 rsyslog_checkemptylogs_cron_weekdays: "1-5"
 rsyslog_checkemptylogs_dir: "/usr/local/bin"
+
+rsyslog_touchoidcplaygroundlog_cron_minute: "0"
+rsyslog_touchoidcplaygroundlog_cron_hour: "8"
+rsyslog_touchoidcplaygroundlog_cron_weekdays: "1-5"
