@@ -17,3 +17,6 @@ diyidp_remotesp:
     acslocation: "https://engine.{{ base_domain }}/authentication/sp/consume-assertion"
 diyidp_docker_networks:
   - name: "loadbalancer"
+
+# set this to add extra users to the default.  See vars/main.yml
+diyidp_users_extra: []

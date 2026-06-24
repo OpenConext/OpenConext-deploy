@@ -7,9 +7,9 @@ $config = array(
         'core:AdminPassword',
     ),
 
-    // be careful: diyidp_users has weird characters and quotes inside the strings
+    // be careful: diyidp_users has weird characters and quotes inside the strings, se we need to use a nowdoc to expand the variable
     'user_chooser' => [ 'exampleauth:UserClick', 'users' => json_decode(<<<'ENDJSON'
-{{ diyidp_users | to_json }}
+{{ (diyidp_users + diyidp_users_extra) | to_json }}
 ENDJSON
         , true),
     ]
