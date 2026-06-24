@@ -1,116 +1,117 @@
 ---
-- debug:
+- name: "Debug"
+  ansible.builtin.debug:
     msg: "{{ diyidp }}"
 
-- name: Create directories
+- name: "Create directories"
   ansible.builtin.file:
     path: "/opt/openconext/diyidp/{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: "0775"
+    state: "directory"
+    owner: "root"
+    group: "root"
     mode: "0775"
   with_items:
-    - www
-    - metadata
-    - cert
+    - "www"
+    - "metadata"
+    - "cert"
 
-- name: Put metadata certificate in place
+- name: "Put metadata certificate in place"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/{{ diyidp_cert }}"
     dest: "/opt/openconext/diyidp/cert/server.crt"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0644"
 
-- name: Put metadata key in place
+- name: "Put metadata key in place"
   ansible.builtin.copy:
     content: "{{ diyidp_private_key }}"
     dest: "/opt/openconext/diyidp/cert/server.key"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0444"
-  notify: restart diyidp
+  notify: "Restart diyidp"
 
-- name: Copy simplesamlphp configuration files
+- name: "Copy simplesamlphp configuration files"
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/diyidp/{{ item }}"
     mode: "0644"
   with_items:
-    - config-override.php
-    - authsources.php
-  notify: restart diyidp
+    - "config-override.php"
+    - "authsources.php"
+  notify: "Restart diyidp"
 
-- name: Copy simplesamlphp metadata files
+- name: "Copy simplesamlphp metadata files"
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/diyidp/metadata/{{ item }}"
     mode: "0644"
   with_items:
-    - saml20-idp-hosted.php
-    - saml20-sp-remote.php
-  notify: restart diyidp
+    - "saml20-idp-hosted.php"
+    - "saml20-sp-remote.php"
+  notify: "Restart diyidp"
 
-- name: Copy showusers php script
+- name: "Copy showusers php script"
   ansible.builtin.template:
     src: "showusers.php.j2"
     dest: "/opt/openconext/diyidp/www/showusers.php"
-    owner: root
+    owner: "root"
     mode: "0644"
-  notify: restart diyidp
+  notify: "Restart diyidp"
 
-- name: Copy the apache config
+- name: "Copy the apache config"
   ansible.builtin.template:
     src: "000-default.conf.j2"
     dest: "/opt/openconext/diyidp/000-default.conf"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0644"
-  notify: restart diyidp
+  notify: "Restart diyidp"
 
-- name: Add the mariadb docker network to the list of networks when MariaDB runs in Docker
+- name: "Add the mariadb docker network to the list of networks when MariaDB runs in Docker"
   ansible.builtin.set_fact:
     diyidp_docker_networks:
-      - name: loadbalancer
-      - name: openconext_mariadb
-  when: mariadb_in_docker | default(false) | bool
+      - name: "loadbalancer"
+      - name: "openconext_mariadb"
+  when: "mariadb_in_docker | default(false) | bool"
 
-- name: Create the container
+- name: "Create the container"
   community.docker.docker_container:
-    name: diyidp
-    image: cirrusid/simplesamlphp:v2.2.2
+    name: "diyidp"
+    image: "cirrusid/simplesamlphp:v2.2.2"
     pull: true
     restart_policy: "always"
-    state: started
+    state: "started"
+    hostname: "diyidp"
     networks: "{{ diyidp_docker_networks }}"
+    env:
+      SSP_ENABLED_MODULES: "sqlauth themesurf"
+      SSP_LOG_HANDLER: "stderr"
+      COMPOSER_REQUIRE: "simplesamlphp/simplesamlphp-module-sqlauth surfnet/simplesamlphp-module-themesurf:dev-main"
+      SSP_ENABLE_IDP: "true"
+      SSP_SECRET_SALT: "{{ diyidp_secretsalt }}"
     labels:
       traefik.http.routers.diyidp.rule: "Host(`{{ diyidp_domain }}`)"
       traefik.http.routers.diyidp.tls: "true"
       traefik.enable: "true"
-    hostname: diyidp
     mounts:
-      - source: /opt/openconext/diyidp/config-override.php
-        target: /var/simplesamlphp/config/config-override.php
-        type: bind
-      - source: /opt/openconext/diyidp/authsources.php
-        target: /var/simplesamlphp/config/authsources.php
-        type: bind
-      - source: /opt/openconext/diyidp/metadata
-        target: /var/simplesamlphp/config/metadata
-        type: bind
-      - source: /opt/openconext/diyidp/cert
-        target: /var/simplesamlphp/config/cert
-        type: bind
-      - source: /opt/openconext/diyidp/www/showusers.php
-        target: /var/simplesamlphp/public/showusers.php
-        type: bind
-      - source: /opt/openconext/diyidp/000-default.conf
-        target: /etc/apache2/sites-enabled/000-default.conf
-        type: bind
-    env:
-      SSP_ENABLED_MODULES: "sqlauth themesurf"
-      SSP_LOG_HANDLER: stderr
-      COMPOSER_REQUIRE: "simplesamlphp/simplesamlphp-module-sqlauth surfnet/simplesamlphp-module-themesurf:dev-main"
-      SSP_ENABLE_IDP: "true"
-      SSP_SECRET_SALT: "{{ diyidp_secretsalt }}"
+      - source: "/opt/openconext/diyidp/config-override.php"
+        target: "/var/simplesamlphp/config/config-override.php"
+        type: "bind"
+      - source: "/opt/openconext/diyidp/authsources.php"
+        target: "/var/simplesamlphp/config/authsources.php"
+        type: "bind"
+      - source: "/opt/openconext/diyidp/metadata"
+        target: "/var/simplesamlphp/config/metadata"
+        type: "bind"
+      - source: "/opt/openconext/diyidp/cert"
+        target: "/var/simplesamlphp/config/cert"
+        type: "bind"
+      - source: "/opt/openconext/diyidp/www/showusers.php"
+        target: "/var/simplesamlphp/public/showusers.php"
+        type: "bind"
+      - source: "/opt/openconext/diyidp/000-default.conf"
+        target: "/etc/apache2/sites-enabled/000-default.conf"
+        type: "bind"
+  register: "diyidp_container"
