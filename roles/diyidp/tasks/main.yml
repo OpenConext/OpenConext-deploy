@@ -32,29 +32,30 @@
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/diyidp/{{ item }}"
+    owner: "root"
+    group: "root"
     mode: "0644"
   with_items:
     - "config-override.php"
     - "authsources.php"
+    - "saml20-idp-hosted.php"
+    - "saml20-sp-remote.php"
   notify: "Restart diyidp"
 
 - name: "Copy simplesamlphp metadata files"
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/opt/openconext/diyidp/metadata/{{ item }}"
+    owner: "root"
+    group: "root"
     mode: "0644"
   with_items:
-    - "saml20-idp-hosted.php"
-    - "saml20-sp-remote.php"
   notify: "Restart diyidp"
 
-- name: "Copy showusers php script"
-  ansible.builtin.template:
-    src: "showusers.php.j2"
-    dest: "/opt/openconext/diyidp/www/showusers.php"
-    owner: "root"
-    mode: "0644"
-  notify: "Restart diyidp"
+- name: "Remove showusers php script"
+  ansible.builtin.file:
+    path: "/opt/openconext/diyidp/www/showusers.php"
+    state: "absent"
 
 - name: "Copy the apache config"
   ansible.builtin.template:
@@ -75,7 +76,7 @@
 - name: "Create the container"
   community.docker.docker_container:
     name: "diyidp"
-    image: "cirrusid/simplesamlphp:v2.5.0"
+    image: "docker.io/cirrusid/simplesamlphp:v2.5.0"
     pull: true
     restart_policy: "always"
     state: "started"
@@ -95,19 +96,21 @@
       - source: "/opt/openconext/diyidp/config-override.php"
         target: "/var/simplesamlphp/config/config-override.php"
         type: "bind"
+        read_only: true
       - source: "/opt/openconext/diyidp/authsources.php"
         target: "/var/simplesamlphp/config/authsources.php"
         type: "bind"
-      - source: "/opt/openconext/diyidp/metadata"
-        target: "/var/simplesamlphp/config/metadata"
+        read_only: true
+      - source: "/opt/openconext/diyidp/"
+        target: "/var/simplesamlphp/config/metadata/"
         type: "bind"
+        read_only: true
       - source: "/opt/openconext/diyidp/cert"
         target: "/var/simplesamlphp/config/cert"
         type: "bind"
-      - source: "/opt/openconext/diyidp/www/showusers.php"
-        target: "/var/simplesamlphp/public/showusers.php"
-        type: "bind"
+        read_only: true
       - source: "/opt/openconext/diyidp/000-default.conf"
         target: "/etc/apache2/sites-enabled/000-default.conf"
         type: "bind"
+        read_only: true
   register: "diyidp_container"
