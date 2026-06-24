@@ -1,0 +1,7 @@
+- only deploy filebeat role to server in auth_processor?
+- deploy certificates
+- add handlers for systemctl
+- install mysql?
+- fix playbook, it is now a copy of the deployhost playbook
+- warning for rhel family servers
+- replace logdir in paths with rsyslog variable if this is in groupvars

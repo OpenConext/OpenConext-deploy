@@ -1,25 +1,64 @@
 ---
-- name: Add Elasticsearch GPG key.
-  rpm_key:
-    key: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
-    state: present
+- name: Install filebeat on Debian
+  when: ansible_os_family == "Debian"
+  block:
 
-- name: Add elasticsearch yum repo
-  copy:
-     src: elasticsearch.repo
-     dest: /etc/yum.repos.d/elasticsearch.repo
-     mode: 0644
+  - name: Gather installed package facts
+    package_facts:
+      manager: apt
 
-- name: Install Filebeat
-  yum: name=filebeat state=present
+  - name: Determine if Filebeat install is needed
+    set_fact:
+      filebeat_install_needed: "{{ 'filebeat' not in ansible_facts.packages or ansible_facts.packages['filebeat'][0].version != '9.4.2' }}"
 
-  #- name: Install cacert certificate
-  #copy: src={{ inventory_dir }}/files/certs/elastic_ca.pem dest=/etc/pki/elastic/
+  - name: Install or upgrade filebeat when it is not installed already
+    when: filebeat_install_needed
+    block:
 
-- name: Install filebeat.yml
-  template: src=filebeat.yml.j2 dest=/etc/filebeat/filebeat.yml
-  notify:
-    - restart filebeat
+      - name: Download Filebeat .deb package
+        ansible.builtin.get_url:
+          url: "{{ filebeat_download_url }}/{{ filebeat_package }}"
+          dest: "/tmp/{{ filebeat_package }}"
+          mode: '0644'
 
-- name: Enable and start filebeat
-  service: name=filebeat state=started enabled=yes
+      - name: Install Filebeat
+        ansible.builtin.apt:
+          deb: "/tmp/{{ filebeat_package }}"
+
+
+- name: Create configuration directories for all instances
+  ansible.builtin.file:
+    path: "/etc/{{ item.name }}"
+    state: directory
+    owner: root
+    group: root
+    permissions: "0755"
+  loop: "{{ filebeat_instances }}"
+
+- name: Create configuration files for all instances
+  ansible.builtin.template:
+    dest: "/etc/{{ item.name }}/filebeat.yml"
+    src: filebeat.yml.j2
+    owner: root
+    group: root
+    permissions: "0644"
+  loop: "{{ filebeat_instances }}"
+
+- name: Create custom systemd files in /etc/systemd/system
+  ansible.builtin.template:
+    dest: "/etc/systemd/system/{{ item.name }}.service"
+    src: filebeat.service.j2
+    owner: root
+    group: root
+    permissions: "0755"
+  loop: "{{ filebeat_instances }}"
+#   #- name: Install cacert certificate
+#   #copy: src={{ inventory_dir }}/files/certs/elastic_ca.pem dest=/etc/pki/elastic/
+
+# - name: Install filebeat.yml
+#   template: src=filebeat.yml.j2 dest=/etc/filebeat/filebeat.yml
+#   notify:
+#     - restart filebeat
+
+# - name: Enable and start filebeat
+#   service: name=filebeat state=started enabled=yes

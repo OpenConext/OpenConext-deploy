@@ -1,29 +1,26 @@
-filebeat.prospectors:
-
-{% if filebeat_eblog %}
+filebeat.inputs:
 - type: log
   paths:
-    - /var/log/messages
-  include_lines: ["EBLOG"]
+  {%- for logpath in item.logpaths %}
+    - {{ logpath -}}
+  {% endfor %}
+
   fields:
-    prog: EBLOG
-    env: {{ env }}
+  {%- for field in item.fields %}
+    - {{ field -}}
+  {% endfor %}
   fields_under_root: true
-{% endif %}
-
-- type: log
-  paths: 
-    - /var/log/messages
-  include_lines: ['EBAUTH']
-  exclude_lines: ['influxd']
-  fields:
-    prog: EBAUTH
-    env: {{ env }}
-  fields_under_root: true
-
-
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+setup.template.settings:
+  index.number_of_shards: 1
+setup.kibana:
+processors:
+   - drop_fields:
+       fields: ["host"]
 output.logstash:
-  hosts: ["logstash.{{ base_domain }}:5044"]
-  {% if filebeat_tls %}
-  ssl.certificate_authorities: ["/etc/pki/filebeat/filebeat_ca.pem"]
+  hosts: {% item.logstash_hosts %}
+  {% if item.logstash_ca is defined %}
+  ssl.certificate_authorities: {% item.logstash_ca %}
   {% endif %}
