@@ -7,6 +7,7 @@
 # When a password must be sha-encoded, the clear-text password must be set before the sha-encoded
 # Key for the sha-encoded password must be the same as the clear-text password with the '_sha'
 #
+# todo: If goup_vars exampels are complete this is probably not necessary? investigate
 
 # ----- configuration
 	ENV_DIR="environments"

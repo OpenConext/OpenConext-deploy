@@ -8,4 +8,4 @@
     # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#notes
     comparisons:
       '*': ignore
-  when: miniocontainer is success and miniocontainer is not change
+  when: minio_container is success and minio_container is not change

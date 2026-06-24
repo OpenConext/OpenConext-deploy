@@ -1,34 +1,21 @@
 ---
 - name: Create the repository for mongodb
-  ansible.builtin.copy:
-    src: "mongo.repo"
+  ansible.builtin.template:
+    src: "mongo.repo.j2"
     dest: "/etc/yum.repos.d/mongo.repo"
     owner: root
     mode: "0640"
 
-- name: Install the mongodb package
+- name: Install the mongodb package and some helper packages
   ansible.builtin.yum:
     name:
       - mongodb-org
+      - pip
     state: present
-
-- name: Slurp the private key
-  ansible.builtin.slurp:
-    path: "/etc/pki/mongo/mongo.key"
-  register: mongo_key
-
-- name: Create combined key and certificate file
-  ansible.builtin.copy:
-    content: "{{ mongo_key['content'] | b64decode }}{{ certificate.certificate }}"
-    dest: "/etc/pki/mongo/keyandcert.pem"
-    owner: root
-    group: mongod
-    mode: "0440"
-  ignore_errors: '{{ ansible_check_mode }}'
 
 - name: Install pymongo
   ansible.builtin.pip:
-    name: pymongo
+    name: pymongo=={{ mongo_pymongo_version }}
 
 - name: Install kernel settings script
   ansible.builtin.copy:
@@ -63,17 +50,3 @@
     value: 128000
     state: present
 
-- name: Install mongodb.conf file
-  ansible.builtin.template:
-    src: "mongod.conf.j2"
-    dest: "/etc/mongod.conf"
-    owner: root
-    group: root
-    mode: "0644"
-  notify: restart mongod
-
-- name: Enable and start mongod
-  ansible.builtin.service:
-    name: mongod.service
-    enabled: true
-    state: started

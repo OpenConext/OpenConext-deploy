@@ -1,0 +1,60 @@
+---
+- name: Configure minio client
+  block:
+
+  - name: Create directory for minio client
+    ansible.builtin.file:
+      path: "{{ minio_client_path }}"
+      state: directory
+      mode: '0700'
+
+  # without these checks (is mc there and is it the desired version) the download minio client task will fail if
+  # the version we have defined is non existent in the minio repository, so lets check those before we
+  # continue to our Download Minio Client
+
+  - name: Check for presence Minio Client
+    ansible.builtin.stat:
+      path: "{{ minio_mc }}"
+    register: minio_client_presence
+
+  - name: Check version Minio Client
+    ansible.builtin.shell:
+      cmd: "{{ minio_mc }} --version | head -1 | awk -F ' ' '{ print $3 }'"
+    args:
+      executable: /bin/bash
+    changed_when: false
+    register: minio_client_current_version
+
+  - name: Debug check version Minio Client
+    ansible.builtin.debug:
+      msg: "{{ minio_client_current_version }}"
+      verbosity: 2
+
+  - name: Download Minio Client
+    ansible.builtin.get_url:
+      url: "https://dl.min.io/client/mc/release/linux-amd64/mc.{{ minio_client_version }}"
+      dest: "{{ minio_mc }}"
+      mode: '0700'
+      checksum: "{{ minio_client_checksum }}"
+      backup: true # always nice to have a backup
+    when: not minio_client_presence.stat.exists or minio_client_current_version.stdout != minio_client_version
+
+  - name: Check if minio alias is set
+    ansible.builtin.command: "{{ minio_mc }} alias list {{ minio_alias }}"
+    changed_when: false
+    register: minio_alias_present
+    check_mode: false # always run its safe
+    failed_when: minio_alias_present.rc > 1 # rc 1 means alias not present thjats what we wanted to know
+
+  - name: Debug alias list
+    ansible.builtin.debug:
+      msg: "{{ minio_alias_present.rc }}" # stdout can contain password
+      verbosity: 2
+
+  - name: Configure minio connection alias
+    ansible.builtin.command: "{{ minio_mc }} alias set {{ minio_alias }} {{ minio_url_local }} {{ minio_root_user }} {{ minio_root_password }}"
+    register: alias_command
+    failed_when: '"Added `" + minio_alias + "` successfully" not in alias_command.stdout'
+    when: minio_alias_present.rc == 1
+
+  become: false # No mc client actions as root

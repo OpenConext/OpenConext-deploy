@@ -1,38 +1,75 @@
 ---
-- name: Use temporarily python3 as remote interpreter, this fixes pymongo
-  ansible.builtin.set_fact:
-    ansible_python_interpreter: "/usr/bin/python3"
-  tags: mongo_users
+# Main task file mongo role
 
-- name: Include CA tasks
-  ansible.builtin.include_tasks:
-    file: ca.yml
-    apply:
-      delegate_to: localhost
-      run_once: true
-      become: false
+- name: Message for non redhat family servers
+  when: ansible_facts['os_family'] != 'RedHat'
+  ansible.builtin.fail:
+    msg: "Sorry, this role only works on RedHat family servers"
 
-- name: Include Certificate tasks
-  ansible.builtin.include_tasks:
-    file: certs.yml
+- name: Install and configure mongo on redhat family servers
+  when:
+    - ansible_facts['os_family'] == 'RedHat'
+  block:
+    - name: Debug standalone or cluster mode
+      ansible.builtin.debug:
+        msg: "{{ mongo_mode }}"
+        verbosity: 2
 
-- name: Include installation tasks
-  ansible.builtin.include_tasks:
-    file: install.yml
+    - name: Debug cluster reconfiguration is allowed
+      ansible.builtin.debug:
+        msg: "{{ mongo_configure_cluster }}"
+        verbosity: 2
 
-- name: Include cluster installation tasks
-  ansible.builtin.include_tasks:
-    file: cluster.yml
+    - name: Use temporarily python3 as remote interpreter, this fixes pymongo # todo is this still necessary?
+      ansible.builtin.set_fact:
+        ansible_python_interpreter: "/usr/bin/python3"
+      tags: mongo_users
 
-- name: Include user creation
-  ansible.builtin.include_tasks:
-    file: users.yml
+    - name: Include installation tasks
+      ansible.builtin.include_tasks:
+        file: install.yml
 
-- name: Include postinstallation tasks
-  ansible.builtin.include_tasks:
-    file: postinstall.yml
+    - name: Include Certificate tasks
+      ansible.builtin.include_tasks:
+        file: certs.yml
 
-- name: Use python2 again as remote interpreter
-  ansible.builtin.set_fact:
-    ansible_python_interpreter: "/usr/bin/python"
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+    - name: Include General config tasks
+      ansible.builtin.include_tasks:
+        file: generalconfig.yml
+
+    - name: Include cluster configuration tasks
+      ansible.builtin.include_tasks:
+        file: clusterconfig.yml
+      when:
+        - mongo_mode == "cluster"
+        - mongo_configure_cluster | bool # safest option is to set this to false and enable with -e mongo_configure_cluster=true
+
+    - name: Include cluster health check tasks
+      ansible.builtin.include_tasks:
+        file: clusterhealthcheck.yml
+      when:
+        - mongo_mode == "cluster"
+        - mongo_replication_role == 'primary'
+
+    - name: Include Service tasks
+      ansible.builtin.include_tasks:
+        file: services.yml
+
+    - name: Include user creation
+      ansible.builtin.include_tasks:
+        file: users.yml
+      # Cannot add users on a broken cluster
+      when: >
+        (mongo_mode == 'cluster' and mongo_replication_role is defined and mongo_replication_role == 'primary' and not replica_status.failed)
+        or mongo_mode == 'standalone'
+
+    - name: Include postinstallation tasks
+      ansible.builtin.include_tasks:
+        file: postinstall.yml
+
+    - name: Use python2 again as remote interpreter on centos 7
+      ansible.builtin.set_fact:
+        ansible_python_interpreter: "/usr/bin/python"
+      when:
+        - ansible_facts['distribution'] == 'CentOS'
+        - ansible_facts['distribution_major_version'] == '7'

@@ -1,9 +1,0 @@
-- name: restart teamsserver
-  community.docker.docker_container:
-    name: teamsserver
-    state: started
-    restart: true
-    # avoid restarting it creates unexpected data loss according to docker_container_module notes
-    comparisons:
-      '*': ignore
-  when: teamsserverontainer is success and teamsserverontainer is not change

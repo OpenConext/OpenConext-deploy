@@ -1,0 +1,10 @@
+---
+- name: Restart engine
+  community.docker.docker_container:
+    name: engineblock
+    state: started
+    restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
+  when: engine_container is success and engine_container is not change

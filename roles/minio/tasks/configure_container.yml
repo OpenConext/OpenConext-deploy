@@ -1,0 +1,75 @@
+---
+- name: Create minio files directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ minio_dir }}"
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Place the serverapplication configfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ minio_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - config.env
+  notify: Restart minio
+
+- name: Create a docker volume
+  community.docker.docker_volume:
+    name: minio_data
+
+- name: Create and start the server container
+  community.docker.docker_container:
+    name: minio
+    image: quay.io/minio/minio:{{ minio_version }}
+    pull: true
+    restart_policy: "always"
+    state: started
+    env:
+      MINIO_CONFIG_ENV_FILE: "/etc/config.env"
+    ports:
+      # Publish container port 9000 for mc client commands
+      - "9000:9000"
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: "{{ minio_dir }}/config.env"
+        target: /etc/config.env
+        type: bind
+      - source: minio_data
+        target: "{{ minio_data_dir_oncontainer }}"
+        type: volume
+
+    command: server --console-address ":9090" {{ minio_data_dir_oncontainer }}
+    labels:
+      traefik.http.routers.minio.rule: "Host(`minio.{{ base_domain }}`)"
+      traefik.http.routers.minio.tls: "true"
+      traefik.http.routers.minio.service: "minio"
+      traefik.http.services.minio.loadbalancer.server.port: "9090"
+      traefik.http.routers.minioapi.rule: "Host(`minioapi.{{ base_domain }}`)"
+      traefik.http.routers.minioapi.tls: "true"
+      traefik.http.routers.minioapi.service: "minioapi"
+      traefik.http.services.minioapi.loadbalancer.server.port: "9000"
+      traefik.enable: "true"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "http://localhost:9000/minio/health/live"
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  register: minio_container
+
+- name: Show container debug info
+  ansible.builtin.debug:
+    msg: "{{ minio_container }}"
+    verbosity: 2

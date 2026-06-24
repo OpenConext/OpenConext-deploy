@@ -1,0 +1,19 @@
+- name: "Restart attribute-aggregationserver"
+  community.docker.docker_container:
+    name: aaserver
+    state: started
+    restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
+  when: "aa_servercontainer is success and aa_servercontainer is not changed"
+
+- name: "Restart attribute-aggregationlink"
+  community.docker.docker_container:
+    name: aalink
+    state: started
+    restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': ignore
+  when: "aa_linkcontainer is success and aa_linkcontainer is not changed"

@@ -26,15 +26,16 @@
     - "{{ current_release_config_dir_name }}"
     - "{{ current_release_appdir }}/public/images"
 
-- name: Create federation-metadata cache dir
+- name: Create and empty the federation-metadata cache dir
   ansible.builtin.file:
-    state: directory
-    dest: "{{ item }}"
+    state: "{{ item }}"
+    dest: "{{ current_release_appdir }}/federation-metadata"
     owner: "{{ appname }}"
     group: root
     mode: "0755"
   with_items:
-    - "{{ current_release_appdir }}/federation-metadata"
+    - absent
+    - directory
 
 - name: Install images
   ansible.builtin.include_role:

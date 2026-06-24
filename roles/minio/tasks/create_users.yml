@@ -1,0 +1,25 @@
+- name: Check and create users
+  block:
+  - name: Check whether user is already configured
+    ansible.builtin.command: "{{ minio_mc }} admin user info {{ minio_alias }} {{ user.name }}"
+    register: minio_user_present
+    changed_when: false
+    ignore_errors: true
+    failed_when: minio_user_present.rc > 1 # rc 1 means alias not present thjats what we wanted to know
+
+  - name: create and configure users
+    when:
+      - minio_user_present.rc==1
+      - '"Unable to get user info" in minio_user_present.stderr'
+    block:
+      - name: Create users
+        ansible.builtin.command: "{{ minio_mc }} admin user add {{ minio_alias }} {{ user.name }} {{ user.password }}"
+        register: minio_add_user
+        changed_when: '"Added user `" + user.name + "` successfully" in minio_add_user.stdout'
+        no_log: true
+
+      - name: Attach read write policy
+        ansible.builtin.command: "{{ minio_mc }} admin policy attach {{ minio_alias }} readwrite --user={{ user.name }}"
+        register: minio_attach_user
+        changed_when: '"Added user `" + user.name + "` successfully" in minio_add_user.stdout'
+  become: false # No mc client actions as root

@@ -1,0 +1,39 @@
+ServerName https://${HTTPD_SERVERNAME}
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !\.html$
+RewriteCond %{REQUEST_URI} !^/aa/
+RewriteCond %{REQUEST_URI} !^/internal/
+RewriteCond %{REQUEST_URI} !^/redirect
+RewriteCond %{REQUEST_URI} !^/fonts/
+RewriteCond %{REQUEST_URI} !^/orcid
+RewriteRule (.*) /index.html [L]
+
+Redirect /orcid https://link.{{ base_domain }}/aa/api/client/information.html
+ProxyPass /Shibboleth.sso !
+
+ProxyPass /redirect http://aaserver:8080/aa/api/redirect
+ProxyPass /internal/health http://aaserver:8080/internal/health
+ProxyPass /internal/info http://aaserver:8080/internal/info
+
+ProxyPass /aa/api http://aaserver:8080/aa/api
+ProxyPassReverse /aa/api http://aaserver:8080/aa/api
+ProxyPassReverse /aa/api/client http://aaserver:8080/aa/api/client
+
+Header always set X-Frame-Options "DENY"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set X-Content-Type-Options "nosniff"
+
+<Location />
+  AuthType shibboleth
+  ShibUseHeaders On
+  ShibRequireSession On
+  Require valid-user
+</Location>
+
+<Location ~ "/internal/(health|info)">
+  Require all granted
+</Location>
+
+<Location ~ "/aa/api/internal/">
+  Require all denied
+</Location>

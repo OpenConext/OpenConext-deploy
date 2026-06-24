@@ -7,6 +7,7 @@ logging:
     org.springframework.security: WARN
     com.zaxxer.hikari: ERROR
     invite: DEBUG
+    net.javacrumbs.shedlock: DEBUG
 
 server:
   port: 8080
@@ -24,7 +25,7 @@ spring:
     banner-mode: "off"
   session:
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
 {% if invite_cronjobmaster is defined and invite_cronjobmaster == false  %}
       cleanup-cron: "-"
 {% else %}
@@ -74,15 +75,24 @@ crypto:
   private-key-location: file:///private_key_pkcs8.pem
 
 cron:
-  node-cron-job-responsible: {{ invite_cronjobmaster }}
-  user-cleaner-expression: "0 0/30 * * * *"
+  user-cleaner-cron: "PT30M"
+  user-cleaner-cron-initial-delay: "PT10M"
+  user-cleaner-lock-at-least-for: "PT5M"
+  user-cleaner-lock-at-most-for: "PT28M"
   last-activity-duration-days: 1000
-  role-expiration-notifier-expression: "0 0/30 * * * *"
+  role-expiration-notifier-cron: "PT30M"
+  role-expiration-notifier-cron-initial-delay: "PT15M"
   # Set to -1 to suppress role expiry notifications
   role-expiration-notifier-duration-days: 5
+  role-expiration-notifier-lock-at-least-for: "PT5M"
+  role-expiration-notifier-lock-at-most-for: "PT28M"
   metadata-resolver-initial-delay-milliseconds: 1
   metadata-resolver-fixed-rate-milliseconds: 86_400_000
   metadata-resolver-url: "https://metadata.{{ base_domain }}/idps-metadata.xml"
+  # A value of 0 means no logs will be deleted
+  purge-audit-log-days: 0
+  # A value of 0 means no invitations will be deleted
+  purge-expired-invitations-days: 365
 
 myconext:
   uri: "https://login.{{ myconext_base_domain }}/myconext/api/invite/provision-eduid"
@@ -95,6 +105,14 @@ oidcng:
   resource-server-id: {{ invite.resource_server_id }}
   resource-server-secret: "{{ invite.resource_server_secret }}"
   base-url: https://invite.{{ base_domain }}
+
+crm:
+  api-key-header: "{{ invite_crm_api_key_header }}"
+  collab-person-prefix: "urn:collab:person"
+  inviter-name: "SURF CRM"
+  # The crm-config-resource can an absolute file path, e.g. file:///opt/openconext/invite/crm_config.json or
+  # a classpath entry
+  crm-config-resource: "file:///crm_config.json"
 
 super-admin:
   users: {{ invite.super_admins }}
@@ -118,10 +136,15 @@ config:
   past-date-allowed: {{ invite.past_date_allowed }}
   performance-seed-allowed: {{ invite.performance_seed_allowed }}
   eduid-idp-schac-home-organization: {{ invite.eduid_idp_schac_home_organization }}
+  # Determines the languages available for switching language, supported are 'nl', 'en' and 'pt'
+  languages: "nl, en"
+  environment: {{ environment_shortname }}
+
 
 feature:
-  limit-institution-admin-role-visibility: {{ invite.limit_institution_admin_role_visibility }}
   enable-performance-seed: False
+  # Allow non-eduID accounts to accept invites for rolemanager and inviter
+  allow-for-eduid-only-enforcement-for-non-guests: False
 
 # We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
 external-api-configuration:
@@ -138,6 +161,7 @@ external-api-configuration:
       password: "{{ invite_attribute_aggregation_secret }}"
       scopes:
         - attribute_aggregation
+        - crm
     - username: {{ invite.lifecycle_user }}
       password: "{{ invite.lifecycle_secret }}"
       scopes:
@@ -150,15 +174,29 @@ external-api-configuration:
       password: "{{ invite.profile_secret }}"
       scopes:
         - profile
+    - username: {{ invite.pdp_user }}
+      password: "{{ invite.pdp_secret }}"
+      scopes:
+        - crm
+    - username: {{ invite.idp_dashboard_user }}
+      password: "{{ invite.idp_dashboard_secret }}"
+      scopes:
+        - crm
+    - username: "{{ invite.tools_user }}"
+      password: "{{ invite.tools_secret }}"
+      scopes:
+        - "crm"
     - username: {{ invite.sp_dashboard_user }}
       password: "{{ invite.sp_dashboard_secret }}"
+      organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
       scopes:
         - sp_dashboard
       applications:
         - manageId: {{ invite.sp_dashboard_manage_id }}
           manageType: SAML20_SP
-    - username: {{ invite.access_user }}
-      password: "{{ invite.access_secret }}"
+    - username: "{{ invite.access_dashboard_user }}"
+      password: "{{ invite.access_dashboard_secret }}"
+      organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
       scopes:
         - access
       applications:
@@ -186,7 +224,11 @@ manage:
   #  staticManageDirectory: file:///usr/local/etc/manage
 
 springdoc:
-  pathsToMatch: "/api/external/v1/**"
+  pathsToMatch:
+    - "/api/external/v1/**"
+    - "/crm/profile"
+    - "/api/profile"
+    - "/crm/api/v1/**"
   api-docs:
     path: "/ui/api-docs"
   swagger-ui:

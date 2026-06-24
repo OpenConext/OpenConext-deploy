@@ -20,6 +20,8 @@ spring:
     jdbc:
       cleanup-cron: "-"
       initialize-schema: always
+      flush-mode: on_save
+      save-mode: on_set_attribute
     store-type: jdbc
     timeout: 8h
   mvc:
@@ -29,17 +31,17 @@ spring:
       client:
         registration:
           oidcng:
-            client-id: {{ oidc_playground.client_id }}
-            client-secret: {{ oidc_playground.secret }}
+            client-id: {{ openconextaccess.oidcng.client_id }}
+            client-secret: {{ openconextaccess.oidcng.secret }}
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: "authorization_code"
             scope: openid
         provider:
           oidcng:
-            authorization-uri: "https://connect.{{ base_domain }}/oidc/authorize"
-            token-uri: "https://connect.{{ base_domain }}/oidc/token"
-            user-info-uri: "https://connect.{{ base_domain }}/oidc/userinfo"
-            jwk-set-uri: "https://connect.{{ base_domain }}/oidc/certs"
+            authorization-uri: {{ openconextaccess.oidcng.authorization_uri }}
+            token-uri: {{ openconextaccess.oidcng.token_uri }}
+            user-info-uri: {{ openconextaccess.oidcng.user_info_uri }}
+            jwk-set-uri: {{ openconextaccess.oidcng.jwk_set_uri }}
             user-name-attribute: sub
             user-info-authentication-method: client_secret_basic
   jpa:
@@ -62,11 +64,21 @@ spring:
     host: {{ smtp_server }}
 
 oidcng:
-  discovery-url: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
-  introspect-url: "https://connect.test2.surfconext.nl/oidc/introspect"
+  discovery-url: {{ openconextaccess.oidcng.discovery_url }}
+  introspect-url: {{ openconextaccess.oidcng.introspect_url }}
   resource-server-id: myconext.rs
   resource-server-secret: secret
   base-url: {{ openconextaccess_base_domain }}
+
+cron:
+  user-cleaner-cron: "PT60M"
+  user-cleaner-cron-initial-delay: "PT10M"
+  user-cleaner-lock-at-least-for: "PT5M"
+  user-cleaner-lock-at-most-for: "PT28M"
+  org-contact-reminder-days: 365
+  org-delete-after-days: 365
+  user-inactivity-warn-days: 365
+  user-inactivity-delete-days: 1095
 
 lifecycle:
   user: lifecycle
@@ -90,12 +102,39 @@ config:
   client-url: "https://{{ openconextaccess_base_domain }}"
   base-url: "{{ base_domain }}"
   edu_id_schac_home_organization: "eduid.nl"
-  discovery: "https://connect.test2.surfconext.nl/oidc/.well-known/openid-configuration"
+  surf_schac_home_organization: "example.com"
+  discovery: "https://connect.surfconext.nl/oidc/.well-known/openid-configuration"
   invite: "https://invite.{{ base_domain }}"
   sram: "https://{{ env }}.sram.surf.nl/"
-  serviceDesk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
+  service_desk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
+  feedback_widget_enabled: true
+  # For other environments, move to group_vars
+  identity_providers:
+      - name: "SXS IdP"
+        entityid: "http://mock-idp"
+        descriptionEN: "Een test-IdP waarmee je zelf attributen-sets kunt simuleren. De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>"
+        descriptionNL: "Een test-IdP waarmee je zelf attributen-sets kunt simuleren. De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>"
+      - name: "SXS Dummy"
+        entityid: "https://idp.diy.surfconext.nl"
+        descriptionEN: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
+        descriptionNL: "Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>. De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>"
+  idp_proxy_meta_data: {{ openconextaccess.idp_proxy_meta_data }}
+  minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
+  features:
+    - name: idp
+      enabled: true
+    - name: invite
+      enabled: true
+    - name: sram
+      enabled: true
+    - name: mfa
+      enabled: true
+  acr_values:
+  {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}
+  - "{{ loa }}"
+  {% endfor %}
 
-eduid-idp-entity-id: "https://login.{{ myconext_base_domain }}"
+eduid-idp-entity-id: {{ openconextaccess.eduid_idp_entity_id }}
 
 super-admin:
   users:
@@ -113,6 +152,8 @@ email:
   from: "{{ noreply_email }}"
   contactEmail: "{{ support_email }}"
   serviceDeskEmail: "{{ support_email }}"
+  supportEmail: "support@surfconext.nl"
+  jiraErrorEmail: "{{ support_email }}"
   environment: "{{ environment_shortname }}"
 
 manage:
@@ -133,11 +174,24 @@ manage:
   staticManageDirectory: classpath:/manage
   #  staticManageDirectory: file:///usr/local/etc/manage
 
+invite:
+  enabled: True
+  url: "https://invite.{{ base_domain }}"
+  user: {{ invite.access_user }}
+  password: "{{ invite.access_secret }}"
+
 s3storage:
   url: {{ openconextaccess.s3_storage.url }}
   key: {{ openconextaccess.s3_storage.key }}
   secret: {{ openconextaccess.s3_storage.secret }}
   bucket: {{ openconextaccess.s3_storage.bucket }}
+
+statistics:
+  enabled: {{ openconextaccess.statistics.enabled }}
+  url: {{ openconextaccess.statistics.url }}
+  user: {{ openconextaccess.statistics.user }}
+  password: {{ openconextaccess.statistics.password }}
+
 
 management:
   health:
