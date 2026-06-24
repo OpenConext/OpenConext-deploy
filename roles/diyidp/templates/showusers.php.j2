@@ -1,10 +1,10 @@
 <?php
 
 // Db connection data
-$dbuser = "{{ diyidp.db_user }}";
-$dbpass = "{{ diyidp.db_password }}";
-$dbhost = "{{ diyidp.db_host }}";
-$dbname = "{{ diyidp.db_name }}";
+$dbuser = "{{ diyidp_db.db_user }}";
+$dbpass = "{{ diyidp_db.db_password }}";
+$dbhost = "{{ diyidp_db.db_host }}";
+$dbname = "{{ diyidp_db.db_name }}";
 
 function doQuery($qryString, $dbuser, $dbpass, $dbhost, $dbname) {
     try {
@@ -12,7 +12,7 @@ function doQuery($qryString, $dbuser, $dbpass, $dbhost, $dbname) {
         $dsn = "mysql:host=$dbhost;dbname=$dbname;charset=utf8";
         $pdo = new PDO($dsn, $dbuser, $dbpass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
+
         // Prepare and execute the query
         $stmt = $pdo->prepare($qryString);
         $stmt->execute();
@@ -21,10 +21,10 @@ function doQuery($qryString, $dbuser, $dbpass, $dbhost, $dbname) {
         while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $rows[] = $r;
         }
-    
+
         return $rows;
- 
-    } 
+
+    }
     catch (PDOException $e) {
         die("PDO Error: " . $e->getMessage());
     }
@@ -46,14 +46,14 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
     if (empty($array) || !is_array($array)) {
         return false;
     }
- 
+
     if (!isset($array[0]) || !is_array($array[0])) {
         $array = array($array);
     }
- 
+
     // Start the table
     $table = "<table cellspacing='3' cellpadding='3'>\n";
- 
+
     // The header
     $table .= "\t<tr>";
     // Take the keys from the first row as the headings
@@ -65,16 +65,16 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
     // The body
 	$x=0;
     foreach ($array as $row) {
-		$x++; 
+		$x++;
 		$bgcolor = ($x%2 == 0)? '#FFFFFF': '#E0E0E0';
-		
+
         $table .= "\t<tr bgcolor='". $bgcolor. "'>" ;
         foreach ($row as $cell) {
             $table .= '<td valign="top">';
- 
+
             // Cast objects
             if (is_object($cell)) { $cell = (array) $cell; }
-             
+
             if ($recursive === true && is_array($cell) && !empty($cell)) {
                 // Recursive mode
                 $table .= "\n" . array2table($cell, true, true) . "\n";
@@ -83,39 +83,39 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
                     htmlspecialchars((string) $cell) :
                     $null;
             }
- 
+
             $table .= '</td>';
         }
- 
+
         $table .= "</tr>\n";
     }
- 
+
     $table .= '</table>';
     return $table;
 }
 
-	$sqlString = "SELECT 
+	$sqlString = "SELECT
 	username as 'username',
 	password as 'password',
 	diy.uid as 'urn:oid:0.9.2342.19200300.100.1.1 (uid)',
-	schacHomeOrganization as 'urn:oid:1.3.6.1.4.1.25178.1.2.9 (schacHomeOrganization)', 
+	schacHomeOrganization as 'urn:oid:1.3.6.1.4.1.25178.1.2.9 (schacHomeOrganization)',
 	CONCAT(diy.uid, '@', schacHomeOrganization) as 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6 (eduPersonPrincipalName)',
 	cn.cn as 'urn:oid:2.5.4.3 (cn)',
 	gn.givenName as 'urn:oid:2.5.4.42 (givenName)',
 	sn.sn as 'urn:oid:2.5.4.4 (sn)',
 	dn.displayName as 'urn:oid:2.16.840.1.113730.3.1.241 (displayName)',
-	mail.mail as 'urn:oid:0.9.2342.19200300.100.1.3 (mail)', 
+	mail.mail as 'urn:oid:0.9.2342.19200300.100.1.3 (mail)',
 	epa.eduPersonAffiliation as 'urn:oid:1.3.6.1.4.1.5923.1.1.1.1 (eduPersonAffiliation)',
 	epe.eduPersonEntitlement as 'urn:oid:1.3.6.1.4.1.5923.1.1.1.7 (eduPersonEntitlement)',
 	imo.isMemberOf as 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1 (isMemberOf)',
         spuc.schacPersonalUniqueCode as 'urn:oid:1.3.6.1.4.1.25178.1.2.14 (schacPersonalUniqueCode)',
         epsa.eduPersonScopedAffiliation as 'urn:oid:1.3.6.1.4.1.5923.1.1.1.9 (eduPersonScopedAffiliation)'
-	
 
-	FROM {{ diyidp.db_name }}.users diy
+
+	FROM {{ diyidp_db.db_name }}.users diy
 	LEFT JOIN
-	(	SELECT uid, GROUP_CONCAT(cn SEPARATOR ', ') as cn from 
-		( SELECT uid, cn FROM {{ diyidp.db_name }}.users
+	(	SELECT uid, GROUP_CONCAT(cn SEPARATOR ', ') as cn from
+		( SELECT uid, cn FROM {{ diyidp_db.db_name }}.users
 		  GROUP BY uid, cn
 		  ORDER BY UID
 		) cn
@@ -124,8 +124,8 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	ON diy.uid = cn.uid
 
 	LEFT JOIN
-	(	SELECT uid, GROUP_CONCAT(eduPersonEntitlement SEPARATOR ', ') as eduPersonEntitlement from 
-		( SELECT uid, eduPersonEntitlement FROM {{ diyidp.db_name }}.users
+	(	SELECT uid, GROUP_CONCAT(eduPersonEntitlement SEPARATOR ', ') as eduPersonEntitlement from
+		( SELECT uid, eduPersonEntitlement FROM {{ diyidp_db.db_name }}.users
 		  WHERE length(eduPersonEntitlement) <> 0
 		  GROUP BY uid, eduPersonEntitlement
 		  ORDER BY UID
@@ -135,8 +135,8 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	ON diy.uid = epe.uid
 
 	LEFT JOIN
-	(	SELECT uid, GROUP_CONCAT(displayName SEPARATOR ', ') as displayName from 
-		( SELECT uid, displayName FROM {{ diyidp.db_name }}.users
+	(	SELECT uid, GROUP_CONCAT(displayName SEPARATOR ', ') as displayName from
+		( SELECT uid, displayName FROM {{ diyidp_db.db_name }}.users
 		  GROUP BY uid, displayName
 		  ORDER BY UID
 		) dn
@@ -145,8 +145,8 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	ON diy.uid = dn.uid
 
 	LEFT JOIN
-	(	SELECT uid, GROUP_CONCAT(sn SEPARATOR ', ') as sn from 
-		( SELECT uid, sn FROM {{ diyidp.db_name }}.users
+	(	SELECT uid, GROUP_CONCAT(sn SEPARATOR ', ') as sn from
+		( SELECT uid, sn FROM {{ diyidp_db.db_name }}.users
 		  GROUP BY uid, sn
 		  ORDER BY UID
 		) sn
@@ -155,8 +155,8 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	ON diy.uid = sn.uid
 
 	LEFT JOIN
-	(	SELECT uid, GROUP_CONCAT(givenName SEPARATOR ', ') as givenName from 
-		( SELECT uid, givenName FROM {{ diyidp.db_name }}.users
+	(	SELECT uid, GROUP_CONCAT(givenName SEPARATOR ', ') as givenName from
+		( SELECT uid, givenName FROM {{ diyidp_db.db_name }}.users
 		  GROUP BY uid, givenName
 		  ORDER BY UID
 		) givenName
@@ -165,8 +165,8 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	ON diy.uid = gn.uid
 
 	LEFT JOIN
-	(	SELECT uid, GROUP_CONCAT(mail SEPARATOR ', ') as mail from 
-		( SELECT uid, mail FROM {{ diyidp.db_name }}.users
+	(	SELECT uid, GROUP_CONCAT(mail SEPARATOR ', ') as mail from
+		( SELECT uid, mail FROM {{ diyidp_db.db_name }}.users
 		  GROUP BY uid, mail
 		  ORDER BY UID
 		) mail
@@ -175,8 +175,8 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	ON diy.uid = mail.uid
 
 	LEFT JOIN
-	(	SELECT uid, GROUP_CONCAT(eduPersonAffiliation SEPARATOR ', ') as eduPersonAffiliation from 
-		( SELECT uid, eduPersonAffiliation FROM {{ diyidp.db_name }}.users
+	(	SELECT uid, GROUP_CONCAT(eduPersonAffiliation SEPARATOR ', ') as eduPersonAffiliation from
+		( SELECT uid, eduPersonAffiliation FROM {{ diyidp_db.db_name }}.users
 		  GROUP BY uid, eduPersonAffiliation
 		  ORDER BY UID
 		) eduPersonAffiliation
@@ -185,8 +185,8 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	ON diy.uid = epa.uid
 
 	LEFT JOIN
-	(	SELECT uid, GROUP_CONCAT(isMemberOf SEPARATOR ', ') as isMemberOf from 
-		( SELECT uid, isMemberOf FROM {{ diyidp.db_name }}.users
+	(	SELECT uid, GROUP_CONCAT(isMemberOf SEPARATOR ', ') as isMemberOf from
+		( SELECT uid, isMemberOf FROM {{ diyidp_db.db_name }}.users
 		  GROUP BY uid, isMemberOf
 		  ORDER BY UID
 		) isMemberOf
@@ -195,18 +195,18 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 	ON diy.uid = imo.uid
 
         LEFT JOIN
-        (       SELECT uid, GROUP_CONCAT(schacPersonalUniqueCode SEPARATOR ', ') as schacPersonalUniqueCode from 
-                ( SELECT uid, schacPersonalUniqueCode FROM diyidp.users
+        (       SELECT uid, GROUP_CONCAT(schacPersonalUniqueCode SEPARATOR ', ') as schacPersonalUniqueCode from
+                ( SELECT uid, schacPersonalUniqueCode FROM diyidp_db.users
                   GROUP BY uid, schacPersonalUniqueCode
                   ORDER BY UID
                 ) schacPersonalUniqueCode
                 GROUP BY uid
         ) AS spuc
         ON diy.uid = spuc.uid
-        
-        LEFT JOIN 
-        (       SELECT uid, GROUP_CONCAT(eduPersonScopedAffiliation SEPARATOR ', ') as eduPersonScopedAffiliation from 
-                ( SELECT uid, eduPersonScopedAffiliation FROM diyidp.users
+
+        LEFT JOIN
+        (       SELECT uid, GROUP_CONCAT(eduPersonScopedAffiliation SEPARATOR ', ') as eduPersonScopedAffiliation from
+                ( SELECT uid, eduPersonScopedAffiliation FROM diyidp_db.users
                   GROUP BY uid, eduPersonScopedAffiliation
                   ORDER BY UID
                 ) eduPersonScopedAffiliation
@@ -217,9 +217,9 @@ function array2table($array, $recursive = false, $null = '&nbsp;', $bgcolor='#cc
 
 GROUP BY diy.uid
 ORDER BY LPAD(lower(username), 2,0), LPAD(lower(username), 10,0)";
-	
+
 	// Run the query
 	$rows = doQuery($sqlString, $dbuser, $dbpass, $dbhost, $dbname);
-	
+
 	$htmlTable = array2table($rows);
 	print_r($htmlTable);

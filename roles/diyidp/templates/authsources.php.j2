@@ -10,15 +10,15 @@ $config = array(
 		'core:AdminPassword',
 	),
 
-	
+
 	'sql_user' => array(
     'core:loginpage_links' => [
             'users' => ['href' => '/showusers.php', 'text' => 'List of available users'],
     ],
 		'sqlauth:SQL',
-		'dsn' => 'mysql:host={{ diyidp.db_host}};port=3306;dbname={{ diyidp.db_name }}',
-		'username' => '{{ diyidp.db_user}}',
-		'password' => '{{ diyidp.db_password}}',
+		'dsn' => 'mysql:host={{ diyidp_db.db_host}};port=3306;dbname={{ diyidp_db.db_name }}',
+		'username' => '{{ diyidp_db.db_user}}',
+		'password' => '{{ diyidp_db.db_password}}',
  		'query' => "SELECT uid,givenName,sn,cn, mail,displayName,schacHomeOrganization, CONCAT(uid, '@', schacHomeOrganization) as eduPersonPrincipalName,eduPersonEntitlement,eduPersonAffiliation,isMemberOf,schacPersonalUniqueCode,eduPersonScopedAffiliation
                             FROM users WHERE username = :username AND password = :password",
 	),

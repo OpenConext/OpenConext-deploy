@@ -3,14 +3,14 @@ diyidp_domain: "diyidp.{{ base_domain }}"
 diyidp_cert: "diyidp.crt"
 diyidp:
   db_host: "{{ mariadb_host }}"
-  db_name: diyidp
-  db_user: diyidprw
+  db_name: "diyidp"
+  db_user: "diyidprw"
   db_password: "{{ mysql_passwords.diyidp }}"
   secretsalt: "{{ diyidp_secret_salt }} "
   admin_password: "{{ diyidp_secret }}"
 diyidp_theme: "default"
-diyidp_secret_salt: secretsecret
-diyidp_secret: secret
+diyidp_secret_salt: "diyidp_secretsecret"
+diyidp_secret: "diyidp_secret"
 diyidp_remotesp:
   - name: "{{ instance_name }} SP metadata"
     metadataurl: "https://engine.{{ base_domain }}/authentication/sp/metadata"

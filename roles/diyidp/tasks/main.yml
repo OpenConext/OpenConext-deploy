@@ -9,6 +9,7 @@
     owner: root
     group: root
     mode: "0775"
+    mode: "0775"
   with_items:
     - www
     - metadata
@@ -112,4 +113,4 @@
       SSP_LOG_HANDLER: stderr
       COMPOSER_REQUIRE: "simplesamlphp/simplesamlphp-module-sqlauth surfnet/simplesamlphp-module-themesurf:dev-main"
       SSP_ENABLE_IDP: "true"
-      SSP_SECRET_SALT: "{{ diyidp.secretsalt }}"
+      SSP_SECRET_SALT: "{{ diyidp_secretsalt }}"
