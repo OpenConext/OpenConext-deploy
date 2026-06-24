@@ -2,24 +2,15 @@
 
 $config = array(
 
-	// This is a authentication source which handles admin authentication.
-	'admin' => array(
-		// The default is to use core:AdminPassword, but it can be replaced with
-		// any authentication source.
+    // This is a authentication source which handles admin authentication.
+    'admin' => array(
+        'core:AdminPassword',
+    ),
 
-		'core:AdminPassword',
-	),
-
-
-	'sql_user' => array(
-    'core:loginpage_links' => [
-            'users' => ['href' => '/showusers.php', 'text' => 'List of available users'],
-    ],
-		'sqlauth:SQL',
-		'dsn' => 'mysql:host={{ diyidp_db.db_host}};port=3306;dbname={{ diyidp_db.db_name }}',
-		'username' => '{{ diyidp_db.db_user}}',
-		'password' => '{{ diyidp_db.db_password}}',
- 		'query' => "SELECT uid,givenName,sn,cn, mail,displayName,schacHomeOrganization, CONCAT(uid, '@', schacHomeOrganization) as eduPersonPrincipalName,eduPersonEntitlement,eduPersonAffiliation,isMemberOf,schacPersonalUniqueCode,eduPersonScopedAffiliation
-                            FROM users WHERE username = :username AND password = :password",
-	),
+    // be careful: diyidp_users has weird characters and quotes inside the strings
+    'user_chooser' => [ 'exampleauth:UserClick', 'users' => json_decode(<<<'ENDJSON'
+{{ diyidp_users | to_json }}
+ENDJSON
+        , true),
+    ]
 );

@@ -75,14 +75,14 @@
 - name: "Create the container"
   community.docker.docker_container:
     name: "diyidp"
-    image: "cirrusid/simplesamlphp:v2.2.2"
+    image: "cirrusid/simplesamlphp:v2.5.0"
     pull: true
     restart_policy: "always"
     state: "started"
     hostname: "diyidp"
     networks: "{{ diyidp_docker_networks }}"
     env:
-      SSP_ENABLED_MODULES: "sqlauth themesurf"
+      SSP_ENABLED_MODULES: "sqlauth themesurf exampleauth"
       SSP_LOG_HANDLER: "stderr"
       COMPOSER_REQUIRE: "simplesamlphp/simplesamlphp-module-sqlauth surfnet/simplesamlphp-module-themesurf:dev-main"
       SSP_ENABLE_IDP: "true"
