@@ -2,4 +2,4 @@
 - deploy certificates
 - add handlers for systemctl
 - install mysql?
-- fix playbook, it is now a copy of the deployhost playbook
+- wat te doen met de bestanande filebeat service? nu ook custom?

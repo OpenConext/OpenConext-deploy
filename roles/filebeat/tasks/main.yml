@@ -48,22 +48,27 @@
     group: root
     mode: "0644"
   loop: "{{ filebeat_instances }}"
+  notify: "Restart filebeat"
 
 - name: Create custom systemd files in /etc/systemd/system
   ansible.builtin.template:
     dest: "/etc/systemd/system/{{ item.name }}.service"
+    src: filebeat.item.service.j2
+    owner: root
+    group: root
+    mode: "0755"
+  loop: "{{ filebeat_instances }}"
+  notify: "Restart filebeat"
+
+- name: Create systemd file in /etc/systemd/system for managing all filebeat services
+  ansible.builtin.template:
+    dest: "/etc/systemd/system/filebeat.service"
     src: filebeat.service.j2
     owner: root
     group: root
     mode: "0755"
   loop: "{{ filebeat_instances }}"
-#   #- name: Install cacert certificate
-#   #copy: src={{ inventory_dir }}/files/certs/elastic_ca.pem dest=/etc/pki/elastic/
-
-# - name: Install filebeat.yml
-#   template: src=filebeat.yml.j2 dest=/etc/filebeat/filebeat.yml
-#   notify:
-#     - restart filebeat
+  notify: "Restart filebeat"
 
 # - name: Enable and start filebeat
 #   service: name=filebeat state=started enabled=yes
