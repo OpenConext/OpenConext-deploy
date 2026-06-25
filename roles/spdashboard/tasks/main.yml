@@ -36,7 +36,7 @@
       traefik.enable: "true"
       traefik.port: "8080"
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost"]
+      test: ["CMD", "curl", "--fail", "http://localhost/health"]
       interval: 10s
       timeout: 10s
       retries: 3
