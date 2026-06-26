@@ -1,8 +1,5 @@
 systemLog:
-  destination: file
-  logRotate: reopen
-  logAppend: true
-  path: /var/log/mongodb/mongod.log
+  destination: syslog
 
 net:
   bindIp: {{ mongo_bind_listen_address }}
@@ -14,10 +11,12 @@ net:
     allowConnectionsWithoutCertificates: true
 
 storage:
-  dbPath: /var/lib/mongo
+  dbPath: {{ mongo_data_path }}
 
+{% if mongo_replica_set_name is defined and mongo_mode == "cluster" %}
 replication:
-  replSetName: {{ replica_set_name }}
+  replSetName: {{ mongo_replica_set_name }}
+{% endif %}
 
 security:
     authorization: enabled

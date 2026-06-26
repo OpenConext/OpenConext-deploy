@@ -75,13 +75,13 @@ crypto:
   private-key-location: file:///private_key_pkcs8.pem
 
 cron:
+  delay_min: 200000
+  delay_max: 1200001
   user-cleaner-cron: "PT30M"
-  user-cleaner-cron-initial-delay: "PT10M"
   user-cleaner-lock-at-least-for: "PT5M"
   user-cleaner-lock-at-most-for: "PT28M"
   last-activity-duration-days: 1000
   role-expiration-notifier-cron: "PT30M"
-  role-expiration-notifier-cron-initial-delay: "PT15M"
   # Set to -1 to suppress role expiry notifications
   role-expiration-notifier-duration-days: 5
   role-expiration-notifier-lock-at-least-for: "PT5M"
@@ -149,47 +149,7 @@ feature:
 # We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
 external-api-configuration:
   remote-users:
-    - username: {{ invite.vootuser }}
-      password: "{{ invite.vootsecret }}"
-      scopes:
-        - voot
-    - username: {{ invite.teamsuser}}
-      password: "{{ invite.teamssecret }}"
-      scopes:
-        - teams
-    - username: {{ aa.invite_username }}
-      password: "{{ invite_attribute_aggregation_secret }}"
-      scopes:
-        - attribute_aggregation
-        - crm
-    - username: {{ invite.lifecycle_user }}
-      password: "{{ invite.lifecycle_secret }}"
-      scopes:
-        - lifecycle
-    - username: internal
-      password: "{{ invite.internal_secret }}"
-      scopes:
-        - actuator
-    - username: {{ invite.profile_user }}
-      password: "{{ invite.profile_secret }}"
-      scopes:
-        - profile
-    - username: {{ invite.sp_dashboard_user }}
-      password: "{{ invite.sp_dashboard_secret }}"
-      organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
-      scopes:
-        - sp_dashboard
-      applications:
-        - manageId: {{ invite.sp_dashboard_manage_id }}
-          manageType: SAML20_SP
-    - username: {{ invite.access_user }}
-      password: "{{ invite.access_secret }}"
-      organizationGUIDFallback: {{ invite.surf_idp_organization_guid }}
-      scopes:
-        - access
-      applications:
-        - manageId: {{ invite.access_manage_id }}
-          manageType: OIDC10_RP
+    {{ invite.api_users | to_nice_yaml(indent=2) | indent(4, first=false) }}
 
 voot:
   group_urn_domain: "{{ invite.group_urn_domain }}"

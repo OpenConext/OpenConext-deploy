@@ -54,7 +54,6 @@ engine_attribute_aggregation_password: "{{ aa.eb_password }}"
 
 # Some deprovision variables are shared between applications
 authz_server_api_lifecycle_username: authz_server_api_lifecycle_user
-teams_api_lifecycle_username: teams_api_lifecycle_user
 attribute_aggregator_api_lifecycle_username: attribute_aggregator_api_lifecycle_user
 engine_api_deprovision_user: lifecycle
 lifecycle_api_username: lifecycle

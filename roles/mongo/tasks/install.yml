@@ -1,6 +1,5 @@
 ---
 - name: Create the repository for mongodb
-  when: ansible_os_family == 'RedHat'
   ansible.builtin.template:
     src: "mongo.repo.j2"
     dest: "/etc/yum.repos.d/mongo.repo"
@@ -8,7 +7,6 @@
     mode: "0640"
 
 - name: Install the mongodb package and some helper packages
-  when: ansible_os_family == 'RedHat'
   ansible.builtin.yum:
     name:
       - mongodb-org
@@ -17,7 +15,7 @@
 
 - name: Install pymongo
   ansible.builtin.pip:
-    name: pymongo
+    name: pymongo=={{ mongo_pymongo_version }}
 
 - name: Install kernel settings script
   ansible.builtin.copy:
@@ -52,17 +50,3 @@
     value: 128000
     state: present
 
-- name: Install mongodb.conf file
-  ansible.builtin.template:
-    src: "mongod.conf.j2"
-    dest: "/etc/mongod.conf"
-    owner: root
-    group: root
-    mode: "0644"
-  notify: Restart mongod
-
-- name: Enable and start mongod
-  ansible.builtin.service:
-    name: mongod.service
-    enabled: true
-    state: started
