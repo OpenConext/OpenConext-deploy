@@ -1,0 +1,164 @@
+---
+sram_sbs_base_domain: "test2.sram.surf.nl"
+sram_sbs_ansible_nolog: true
+sram_sbs_base_url: "https://{{ sram_sbs_base_domain }}"
+sram_sbs_server_image:  "ghcr.io/surfscz/sram-sbs-server:main"
+sram_sbs_client_image: "ghcr.io/surfscz/sram-sbs-client:main"
+
+sram_sbs_openidc_timeout: 86400
+sram_sbs_sram_conf_dir: "{{ current_release_appdir }}/sram"
+
+sram_sbs_work_dir: "{{ sram_sbs_sram_conf_dir }}/sbs"
+sram_sbs_git_dir: "{{ sram_sbs_work_dir }}/sbs"
+sram_sbs_env_dir: "{{ sram_sbs_work_dir }}/sbs-env"
+sram_sbs_conf_dir: "{{ sram_sbs_work_dir }}/config"
+sram_sbs_log_dir: "{{ sram_sbs_work_dir }}/log"
+sram_sbs_apache_conf: "{{ sram_sbs_work_dir }}/sbs.conf"
+sram_sbs_nginx_conf: "{{ sram_sbs_work_dir }}/nginx.conf"
+
+sram_sbs_db_name: "sbs"
+sram_sbs_db_user: "sbsrw"
+sram_sbs_migration_user: "sbsmigrate"
+
+sram_sbs_db_connection: "\
+  mysql+mysqldb://%s:%s@{{ mariadb_host }}/{{ sram_sbs_db_name }}\
+  ?ssl=true&charset=utf8mb4"
+sram_sbs_db_connection_sbs: "{{ sram_sbs_db_connection | format(sram_sbs_db_user, mysql_passwords.sbs) }}"
+sram_sbs_db_connection_migration: "\
+  {{ sram_sbs_db_connection | format(sram_sbs_migration_user, mysql_passwords.sbsmigrate) }}"
+
+sram_sbs_db_secret: secret
+sram_sbs_secret_key_suffix: suffix
+sram_sbs_encryption_key: encryption_key
+
+sram_sbs_redis_host: sram-redis
+sram_sbs_redis_port: 6379
+sram_sbs_redis_ssl: false
+sram_sbs_redis_user: default
+
+sram_sbs_mail_host: "host.docker.internal"
+sram_sbs_mail_port: 25
+
+sram_sbs_user: "sbs"
+sram_sbs_group: "sbs"
+
+sram_sbs_session_lifetime: 1440
+sram_sbs_secret_key_suffix: ""
+
+sram_sbs_oidc_crypto_password: "CHANGEME"
+sram_sbs_uid_attribute: "sub"
+
+sram_sbs_disclaimer_color: "#a29c13"
+sram_sbs_disclaimer_label: wsgi
+
+sram_sbs_urn_namespace: "urn:example:sbs"
+sram_sbs_eppn_scope: "sbs.example.edu"
+sram_sbs_restricted_co_default_org: "example.org"
+
+sram_sbs_mail_sender_name: "SURF"
+sram_sbs_mail_sender_email: "no-reply@localhost"
+sram_sbs_exceptions_mail: "root@localhost"
+
+sram_sbs_support_email: "sram-support@localhost"
+sram_sbs_admin_email: "sram-beheer@localhost"
+sram_sbs_ticket_email: "sram-support@surf.nl"
+sram_sbs_eduteams_email: "eduteams@localhost"
+
+sram_sbs_suppress_mails: False
+
+sram_sbs_wiki_link: "https://www.example.org/wiki"
+
+sram_sbs_cron_hour_of_day: 4
+sram_sbs_seed_allowed: True
+sram_sbs_api_keys_enabled: True
+sram_sbs_feedback_enabled: True
+sram_sbs_audit_trail_notifications_enabled: True
+sram_sbs_send_exceptions: False
+sram_sbs_send_js_exceptions: False
+sram_sbs_second_factor_authentication_required: True
+sram_sbs_totp_token_name: "SRAM-example"
+sram_sbs_notifications_enabled: True
+sram_sbs_invitation_reminders_enabled: True
+sram_sbs_invitation_expirations_enabled: True
+sram_sbs_open_requests_enabled: True
+sram_sbs_scim_sweep: False
+sram_sbs_impersonation_allowed: True
+sram_sbs_admin_platform_backdoor_totp: True
+sram_sbs_past_dates_allowed: True
+sram_sbs_mock_scim_enabled: True
+sram_sbs_log_to_stdout: True
+
+sram_sbs_delete_orphaned: True
+sram_sbs_suspension_inactive_days: 365
+sram_sbs_suspension_reminder_days: 14
+sram_sbs_suspension_notify_admin: False
+
+sram_sbs_oidc_config_url: "http://localhost/.well-known/openid-configuration"
+sram_sbs_oidc_authz_endpoint: "http://localhost/OIDC/authorization"
+sram_sbs_oidc_token_endpoint: "http://localhost/OIDC/token"
+sram_sbs_oidc_userinfo_endpoint: "http://localhost/OIDC/userinfo"
+sram_sbs_oidc_jwks_endpoint: "http://localhost/OIDC/jwks.json"
+sram_sbs_oidc_redirect_uri: "https://{{sram_sbs_base_domain}}/api/users/resume-session"
+sram_sbs_oidc_jwt_audience: "https://localhost"
+sram_sbs_continue_eduteams_redirect_uri: "https://localhost/continue"
+sram_sbs_oidc_verify_peer: False
+sram_sbs_oidc_scopes:
+  - openid
+
+sram_sbs_mfa_idp_allowed: false
+sram_sbs_eduteams_continue_endpoint: "https://localhost/continue"
+sram_sbs_eb_continue_endpoint: "https://engine.(.*)surfconext.nl(.*)"
+
+sram_sbs_manage_base_enabled: False
+sram_sbs_manage_base_url: "https://manage.{{base_domain}}"
+sram_sbs_manage_sram_rp_entity_id: "sbs.{{sram_sbs_base_domain}}"
+sram_sbs_manage_verify_peer: False
+
+sram_sbs_idp_metadata_url: "https://metadata.surfconext.nl/signed/2023/edugain-downstream-idp.xml "
+# backup_dir: "{{backup_base}}/sbs"
+
+sram_sbs_swagger_enabled: true
+
+sram_sbs_ssid_identity_providers: []
+sram_sbs_surf_secure_id:
+  environment: "unknown.example.org"
+  sp_entity_id: "https://sbs.{{sram_sbs_base_domain}}"
+  acs_url: "https://{{sram_sbs_base_domain}}/api/users/acs"
+  sa_gw_environment: "sa-gw.unknown.example.org"
+  sa_idp_certificate: |
+    -----BEGIN CERTIFICATE-----
+    12345
+    -----END CERTIFICATE-----
+  priv: |
+    -----BEGIN RSA PRIVATE KEY-----
+    abcde
+    -----END RSA PRIVATE KEY-----
+  pub: |
+    -----BEGIN CERTIFICATE-----
+    12345
+    -----END CERTIFICATE-----
+
+sram_sbs_ssid_authncontext: "\
+  http://{{ sram_sbs_surf_secure_id.environment }}/assurance/sfo-level2"
+sram_sbs_ssid_entityid: "\
+  https://{{ sram_sbs_surf_secure_id.sa_gw_environment }}/second-factor-only/metadata"
+sram_sbs_ssid_sso_endpoint: "\
+  https://{{ sram_sbs_surf_secure_id.sa_gw_environment }}/second-factor-only/single-sign-on"
+
+sram_sbs_mfa_sso_minutes: 10
+sram_sbs_mfa_fallback_enabled: true
+
+sram_sbs_ldap_url: "ldap://ldap.example.com/dc=example,dc=com"
+sram_sbs_ldap_bind_account: "cn=admin,dc=entity_id,dc=services,dc=sram-tst,dc=surf,dc=nl"
+
+sram_sbs_csp_style_hashes:
+  - 'sha256-0+ANsgYUJdh56RK8gGvTF2vnriYqvFHfWqtA8xXa+bA='
+  - 'sha256-3SnfHQolDHbZMbDAPmhrZf1keHiXfj/KJyh2phhFAAY='
+  - 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+  - 'sha256-Ng6y+QCkPChG4Q49SIfXB5ToIDcDhITtQNFkDBPpCTw='
+  - 'sha256-orBPipbqpMvkNi+Z+m6qEn0XS6ymmAQE6+FwCNs1FbQ='
+  - 'sha256-vFt3L2qLqpJmRpcXGbYr2UVSmgSp9VCUzz2lnqWIATw='
+  - 'sha256-SU3XCwbQ/8qgzoGOWCYdkwIr3xRrl5rsvdFcpw8NSiE='  # on /new-service-request
+  - 'sha256-WTC9gHKjIpzl5ub1eg/YrRy/k+jlzeyRojah9dxAApc='  # on /new-service-request
+
+sram_sbs_engine_block_api_token: secret
