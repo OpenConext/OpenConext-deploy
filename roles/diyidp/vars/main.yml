@@ -551,4 +551,7 @@ diyidp_users:
     eduPersonEntitlement: ["urn:mace:terena.org:tcs:personal-user-example"]
     isMemberOf: ["urn:collab:org:surf.nl"]
     schacPersonalUniqueCode: ["urn:schac:personalUniqueCode:nl:local:stanford-example.edu:employeeid:1013456"]
-    eduPersonScopedAffiliation: ["employee@student.95.stanford-example.edu", "member@ca.stanford-example.edu", "faculty@cs.stanford-example.edu"]
+    eduPersonScopedAffiliation:
+      - "employee@student.95.stanford-example.edu"
+      - "member@ca.stanford-example.edu"
+      - "faculty@cs.stanford-example.edu"
