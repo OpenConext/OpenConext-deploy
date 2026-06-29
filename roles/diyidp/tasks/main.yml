@@ -7,8 +7,6 @@
     group: "root"
     mode: "0775"
   with_items:
-    - "www"
-    - "metadata"
     - "cert"
 
 - name: "Put metadata certificate in place"
@@ -42,20 +40,31 @@
     - "saml20-sp-remote.php"
   notify: "Restart diyidp"
 
-- name: "Copy simplesamlphp metadata files"
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "/opt/openconext/diyidp/metadata/{{ item }}"
+- name: "Copy DIY IdP theme"
+  ansible.builtin.copy:
+    src: "theme_diyidp"
+    dest: "/opt/openconext/diyidp/"
     owner: "root"
     group: "root"
     mode: "0644"
-  with_items:
-  notify: "Restart diyidp"
+    directory_mode: "0755"
 
-- name: "Remove showusers php script"
+- name: "Remove obsolete files"
   ansible.builtin.file:
-    path: "/opt/openconext/diyidp/www/showusers.php"
+    path: "/opt/openconext/diyidp/{{  item  }}"
     state: "absent"
+  with_items:
+    - "metadata"
+    - "www"
+
+- name: "Showusers"
+  ansible.builtin.copy:
+    dest: "/opt/openconext/diyidp/alive.php"
+    content: |
+      <?php print("It's alive!");
+    owner: "root"
+    group: "root"
+    mode: "0644"
 
 - name: "Copy the apache config"
   ansible.builtin.template:
@@ -83,7 +92,7 @@
     hostname: "diyidp"
     networks: "{{ diyidp_docker_networks }}"
     env:
-      SSP_ENABLED_MODULES: "sqlauth themesurf exampleauth"
+      SSP_ENABLED_MODULES: "sqlauth themesurf theme_diyidp exampleauth"
       SSP_LOG_HANDLER: "stderr"
       COMPOSER_REQUIRE: "simplesamlphp/simplesamlphp-module-sqlauth surfnet/simplesamlphp-module-themesurf:dev-main"
       SSP_ENABLE_IDP: "true"
@@ -111,6 +120,14 @@
         read_only: true
       - source: "/opt/openconext/diyidp/000-default.conf"
         target: "/etc/apache2/sites-enabled/000-default.conf"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/diyidp/alive.php"
+        target: "/var/simplesamlphp/public/showusers.php"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/diyidp/theme_diyidp"
+        target: "/var/simplesamlphp/modules/theme_diyidp"
         type: "bind"
         read_only: true
   register: "diyidp_container"

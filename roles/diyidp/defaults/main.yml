@@ -8,7 +8,7 @@ diyidp_db:
   db_password: "{{ mysql_passwords.diyidp }}"
   secretsalt: "{{ diyidp_secret_salt }} "
   admin_password: "{{ diyidp_secret }}"
-diyidp_theme: "default"
+diyidp_theme: "theme_diyidp:diyidp"
 diyidp_secret_salt: "diyidp_secretsecret"
 diyidp_secret: "diyidp_secret"
 diyidp_remotesp:
