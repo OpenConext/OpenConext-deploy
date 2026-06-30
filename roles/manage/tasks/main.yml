@@ -36,7 +36,7 @@
     group: "root"
     mode: "0640"
   notify:
-    - "restart manageserver"
+    - "Restart manageserver"
 
 - name: "Place the serverapplication configfiles"
   ansible.builtin.template:
@@ -94,7 +94,7 @@
     - "allowed_attributes.json"
     - "extra_saml_attributes.json"
   notify:
-    - "restart manageserver"
+    - "Restart manageserver"
 
 - name: "Add the mongodb and mariadb  docker network to the list of networks when MongoDB runs in Docker"
   ansible.builtin.set_fact:
