@@ -14,3 +14,7 @@ filebeat_apt_url: "https://artifacts.elastic.co/packages/oss-9.x/apt"
 #     - "env: prod_sc"
 #    logstash_hosts: '["logstashserver.example.com:5044","logstashserver2.example.com:5044"]'
 #    logstash_ca: '["/etc/pki/tls/certs/logstash-prod-ca.pem"]'
+#    cacert_content: |
+#      -----BEGIN CERTIFICATE-----
+#      MIIEKzCCAxOgAwIBAgIJAMjE1SXBf9RJMA0GCSqGSIb3DQEBBQUAMIGqMQswCQYD
+#      VQQGEwJOTDEQMA4GA1UECAwHVXRyZWNodDEQMA4GA1UEBwwHVXRyZWNodDEVMBMG

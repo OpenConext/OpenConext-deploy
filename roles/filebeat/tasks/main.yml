@@ -78,6 +78,17 @@
   loop: "{{ filebeat_instances }}"
   notify: "Restart filebeat"
 
+- name: Create pem file if necessary
+  ansible.builtin.template:
+    dest: "{{ item.logstash_ca }}"
+    src: ca_cert.j2
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ filebeat_instances }}"
+  when: item.logstash_ca is defined
+  notify: "Restart filebeat"
+
 - name: Create custom systemd files in /etc/systemd/system
   ansible.builtin.template:
     dest: "/etc/systemd/system/{{ item.name }}.service"

@@ -1,3 +1,2 @@
-- deploy certificates
-- config aanpassen, doen we versie 8 of 9?
+- deploy certificates 
 - fix warnings
