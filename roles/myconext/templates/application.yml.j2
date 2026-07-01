@@ -88,21 +88,19 @@ manage:
 mongodb_db: {{ myconext.mongo_database }}
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
-base_path: https://mijn.{{ myconext_base_domain }}
-base_path_service_desk: https://servicedesk.{{ myconext_base_domain }}
+myconext_base_path: https://mijn.{{ myconext_base_domain }}
+servicedesk_base_path: https://servicedesk.{{ myconext_base_domain }}
 continue_after_login_url: https://login.{{ myconext_base_domain }}/saml/guest-idp/continue
-idp_redirect_url: https://login.{{ myconext_base_domain }}
-rp_id: login.{{ myconext_base_domain }}
-rp_origin: https://login.{{ myconext_base_domain }}
-mijn_eduid_entity_id: https://mijn.{{ myconext_base_domain }}
-sp_redirect_url: https://mijn.{{ myconext_base_domain }}
-sp_servicedesk_redirect_url: https://servicedesk.{{ myconext_base_domain }}
+account_redirect_url: https://login.{{ myconext_base_domain }}
+account_id: login.{{ myconext_base_domain }}
+account_origin: https://login.{{ myconext_base_domain }}
+myconext_entityid: https://mijn.{{ myconext_base_domain }}
+myconext_redirect_url: https://mijn.{{ myconext_base_domain }}
+servicedesk_redirect_url: https://servicedesk.{{ myconext_base_domain }}
 sp_entity_id: {{ myconext.sp_entity_id }}
-sp_entity_metadata_url: {{ myconext.sp_entity_metadata_url }}
-guest_idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
-my_conext_url: https://mijn.{{ myconext_base_domain }}
-domain: {{ myconext_base_domain }}
-mijn_eduid_service_name: "Mijn eduID"
+account_metadata_url: {{ myconext.sp_entity_metadata_url }}
+proxy_idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+myconext_service_name: "Mijn eduID"
 mobile_app_redirect: eduid:///client/mobile
 # For this RP we nudge the user to use the magic link
 mobile_app_rp_entity_id: {{ myconext.mobile_app_rp_entity_id }}
