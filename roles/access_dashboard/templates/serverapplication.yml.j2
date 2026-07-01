@@ -1,0 +1,261 @@
+---
+logging:
+  config: classpath:/logback-spring.xml
+
+server:
+  port: 8080
+  error:
+    path: "/error"
+    include-message: "always"
+  forward-headers-strategy: "framework"
+  servlet:
+    session:
+      cookie:
+        secure: false
+
+spring:
+  main:
+    banner-mode: "off"
+  cache:
+    type: simple
+  session:
+    jdbc:
+      initialize-schema: never
+{% if access_dashboard_cronjobmaster is defined and access_dashboard_cronjobmaster == false  %}
+      cleanup-cron: "-"
+{% else %}
+      cleanup-cron: "0 */5 * * * *"
+{% endif %}
+      flush-mode: "on_save"
+      save-mode: "on_set_attribute"
+    store-type: "jdbc"
+    timeout: "8h"
+  mvc:
+    log-request-details: false
+  security:
+    oauth2:
+      client:
+        registration:
+          oidcng:
+            client-id: "{{ access_dashboard.oidcng.client_id }}"
+            client-secret: "{{ access_dashboard.oidcng.secret }}"
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: "authorization_code"
+            scope: "openid"
+        provider:
+          oidcng:
+            authorization-uri: "{{ access_dashboard.oidcng.authorization_uri }}"
+            token-uri: "{{ access_dashboard.oidcng.token_uri }}"
+            user-info-uri: "{{ access_dashboard.oidcng.user_info_uri }}"
+            jwk-set-uri: "{{ access_dashboard.oidcng.jwk_set_uri }}"
+            user-name-attribute: "sub"
+            user-info-authentication-method: "client_secret_basic"
+  jpa:
+    properties:
+      hibernate:
+        naming-strategy: "org.hibernate.cfg.ImprovedNamingStrategy"
+        format_sql: false
+        show_sql: false
+    open-in-view: false
+    show-sql: false
+  datasource:
+    driver-class-name: "org.mariadb.jdbc.Driver"
+    url: "jdbc:mariadb://{{ access_dashboard.db.host }}/access_dashboard?autoReconnect=true"
+    username: "{{ access_dashboard.db.user }}"
+    password: "{{ access_dashboard.db.secret }}"
+  flyway:
+    locations: "classpath:db/mysql/migration"
+    fail-on-missing-locations: true
+  mail:
+    host: "{{ smtp_server }}"
+
+oidcng:
+  discovery-url: "{{ access_dashboard.oidcng.discovery_url }}"
+  introspect-url: "{{ access_dashboard.oidcng.introspect_url }}"
+  #TODO
+  resource-server-id: "myconext.rs"
+  resource-server-secret: "secret"
+  base-url: "{{ access_dashboard_base_domain }}"
+
+cron:
+  user-cleaner-cron: "PT60M"
+  user-cleaner-cron-initial-delay: "PT10M"
+  user-cleaner-lock-at-least-for: "PT5M"
+  user-cleaner-lock-at-most-for: "PT28M"
+  org-contact-reminder-days: 365
+  org-delete-after-days: 365
+  user-inactivity-warn-days: 365
+  user-inactivity-delete-days: 1095
+
+lifecycle:
+  user: "lifecycle"
+  password: "{{ access_dashboard_lifecycle_secret }}"
+
+jira:
+  enabled: "{{ access_dashboard.jira.enabled }}"
+  base-url: "{{ access_dashboard.jira.base_url }}"
+  user-name: "{{ access_dashboard.jira.username }}"
+  project-key: "{{ access_dashboard.jira.project_key }}"
+  environment: "{{ access_dashboard.jira.environment }}"
+  api-key: "{{ access_dashboard.jira.api_key }}"
+  # Timeout in milliseconds
+  connection-timeout: 10000
+
+institution-admin:
+  entitlement: "urn:mace:surfnet.nl:surfnet.nl:sab:role:SURFconextverantwoordelijke"
+  organization-guid-prefix: "urn:mace:surfnet.nl:surfnet.nl:sab:organizationGUID:"
+
+config:
+  client-url: "https://{{ access_dashboard_base_domain }}"
+  base-url: "{{ base_domain }}"
+  external_schac_home_organizations:
+{% for sho in access_dashboard_external_sho %}{# Note: spring yaml parser is wonky #}
+    - "{{ sho }}"
+{% endfor %}
+  owner_schac_home_orgs:
+{% for sho in access_dashboard_owner_sho %}{# Note: spring yaml parser is wonky #}
+    - "{{ sho }}"
+{% endfor %}
+  discovery: "https://connect.surfconext.nl/oidc/.well-known/openid-configuration"
+  invite: "https://invite.{{ base_domain }}"
+  sram: "https://{{ env }}.sram.surf.nl/"
+  service_desk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
+  feedback_widget_enabled: true
+  demo_seed_enabled: "{{ access_dashboard.demo_seed_enabled }}"
+  test_environment: "{{ access_dashboard.test_environment }}"
+  # For other environments, move to group_vars
+  identity_providers:
+    - name: "SXS IdP"
+      entityid: "http://mock-idp"
+      descriptionEN: >
+        A test IdP that allows you to simulate attribute sets yourself.
+        You can find the metadata <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>here</a>
+      descriptionNL: >
+        Een test-IdP waarmee je zelf attributen-sets kunt simuleren.
+        De metadata vind je <a href='https://mujina-idp.test.surfconext.nl/metadata' target='_blank'>hier</a>
+    - name: "SXS Dummy"
+      entityid: "https://idp.diy.surfconext.nl"
+      descriptionEN: >
+        A test IdP with <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictitious user accounts</a>.
+        You can find the metadata <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>here</a>
+      descriptionNL: >
+        Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>.
+        De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>
+  idp_proxy_meta_data: "{{ access_dashboard.idp_proxy_meta_data }}"
+  minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
+  features:
+    - name: "idp"
+      enabled: true
+    - name: "invite"
+      enabled: true
+    - name: "sram"
+      enabled: true
+    - name: "mfa"
+      enabled: true
+  acr_values:
+{% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}{# Note: spring yaml parser is wonky #}
+    - "{{ loa }}"
+{% endfor %}
+
+eduid-idp-entity-id: "{{ access_dashboard.eduid_idp_entity_id }}"
+
+super-admin:
+  users:
+{% for sub in access_dashboard_super_admins %}{# Note: spring yaml parser is wonky #}
+    - "{{ sub }}"
+{% endfor %}
+
+gui:
+  disclaimer:
+    background-color: "{{ environment_ribbon_colour }}"
+    content: "{{ environment_shortname }}"
+
+feature:
+  enable-performance-seed: false
+  statistics-enabled: false
+  stepup-required: false
+
+email:
+  from: "{{ noreply_email }}"
+  contactEmail: "{{ support_email }}"
+  serviceDeskEmail: "{{ support_email }}"
+  supportEmail: "support@surfconext.nl"
+  jiraErrorEmail: "{{ support_email }}"
+  environment: "{{ environment_shortname }}"
+
+manage:
+  enabled: true
+  url: "{{ access_dashboard.manage.url }}"
+  user: "{{ access_dashboard.manage.user }}"
+  password: "{{ access_dashboard.manage.password }}"
+  defaultState: "testaccepted"
+  # If manage is disabled (e.g. enabled: False) the staticManageDirectory is the directory where the {metadata_type}.json files
+  # are located. This can also be an absolute file path, e.g. file:///opt/openconext/invite/manage
+  staticManageDirectory: "classpath:/manage"
+  #  staticManageDirectory: file:///usr/local/etc/manage
+
+invite:
+  enabled: true
+  url: "https://invite.{{ base_domain }}"
+  user: "{{ invite.access_dashboard_user }}"
+  password: "{{ invite.access_dashboard_secret }}"
+
+statistics:
+  enabled: "{{ access_dashboard.statistics.enabled }}"
+  url: "{{ access_dashboard.statistics.url }}"
+  user: "{{ access_dashboard.statistics.user }}"
+  password: "{{ access_dashboard.statistics.password }}"
+
+s3storage:
+  url: "{{ access_dashboard.s3_storage.url }}"
+  key: "{{ access_dashboard.s3_storage.key }}"
+  secret: "{{ access_dashboard.s3_storage.secret }}"
+  bucket: "{{ access_dashboard.s3_storage.bucket }}"
+
+ohdear:
+  apiKey: "{{ access_dashboard_ohdear_apikey }}"
+  baseUrl: "https://ohdear.app/api"
+  enabled: true
+
+springdoc:
+  pathsToMatch: "/api/v1/**"
+  api-docs:
+    path: "/ui/api-docs"
+    enabled: false
+  swagger-ui:
+    path: "/ui/api-ui.html"
+    enabled: false
+    operationsSorter: "method"
+    oauth:
+      client-id: "${spring.security.oauth2.client.registration.oidcng.client-id}"
+      client-secret: "${spring.security.oauth2.client.registration.oidcng.client-secret}"
+      use-basic-authentication-with-access-code-grant: true
+
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,mappings,metrics"
+      base-path: "/internal"
+  endpoint:
+    info:
+      access: "unrestricted"
+    health:
+      access: "unrestricted"
+      show-details: "always"
+    mappings:
+      access: "none"
+    metrics:
+      access: "none"
+  info:
+    git:
+      mode: "full"
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"
