@@ -2,3 +2,4 @@
 - install mysql?
 - daemon reload
 - config aanpassen, doen we versie 8 of 9?
+- fix warnings
