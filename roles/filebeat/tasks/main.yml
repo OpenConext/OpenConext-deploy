@@ -15,21 +15,49 @@
 
     - name: Determine if Filebeat install is needed
       ansible.builtin.set_fact:
-        filebeat_install_needed: "{{ 'filebeat' not in ansible_facts.packages or ansible_facts.packages['filebeat'][0].version != '9.4.2' }}"
+        filebeat_install_needed: "{{ 'filebeat' not in ansible_facts.packages or ansible_facts.packages['filebeat'][0].version != filebeat_version }}"
 
     - name: Install or upgrade filebeat when it is not installed already
       when: filebeat_install_needed
       block:
+        - name: Debug ansible facts packages
+          ansible.builtin.debug:
+            msg: "ansible facts packages: {{ ansible_facts.packages }}"
+            verbosity: 3
 
-        - name: Download Filebeat .deb package
+        - name: Debug file install needed
+          ansible.builtin.debug:
+            msg: "filebeat_install_needed: {{ filebeat_install_needed }}"
+            verbosity: 2
+
+        - name: Ensure keyrings directory exists
+          ansible.builtin.file:
+            path: /etc/apt/keyrings
+            state: directory
+            mode: '0755'
+
+        - name: Download Elasticsearch GPG key
           ansible.builtin.get_url:
-            url: "{{ filebeat_download_url }}/{{ filebeat_package }}"
-            dest: "/tmp/{{ filebeat_package }}"
+            url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+            dest: /tmp/GPG-KEY-elasticsearch
             mode: '0644'
 
-        - name: Install Filebeat
+        - name: Dearmor and install Elasticsearch GPG key
+          ansible.builtin.command: gpg --dearmor -o /etc/apt/keyrings/elasticsearch.gpg /tmp/GPG-KEY-elasticsearch
+          args:
+            creates: /etc/apt/keyrings/elasticsearch.gpg
+
+        - name: Add Elasticsearch repository
+          ansible.builtin.template:
+            src: "elastic.list.j2"
+            dest: "/etc/apt/sources.list.d/elastic-9.x.list"
+            mode: '0644'
+
+        - name: Update the repository cache and install filebeat
           ansible.builtin.apt:
-            deb: "/tmp/{{ filebeat_package }}"
+            name: filebeat
+            state: present
+            update_cache: true
 
 - name: Create configuration directories for all instances
   ansible.builtin.file:
@@ -62,13 +90,21 @@
 
 - name: Create systemd file in /etc/systemd/system for managing all filebeat services
   ansible.builtin.template:
-    dest: "/etc/systemd/system/filebeat.service"
+    dest: "/etc/systemd/system/filebeat_all.service"
     src: filebeat.service.j2
     owner: root
     group: root
-    mode: "0755"
-  loop: "{{ filebeat_instances }}"
+    mode: "0644"
   notify: "Restart filebeat"
 
-# - name: Enable and start filebeat
-#   service: name=filebeat state=started enabled=yes
+- name: Disable and stop service filebeat # Because we have custom instances
+  ansible.builtin.service:
+    name: filebeat
+    state: stopped
+    enabled: false
+
+- name: Enable and start service filebeat_all
+  ansible.builtin.service:
+    name: filebeat_all
+    state: started
+    enabled: true

@@ -1,26 +1,40 @@
 filebeat.inputs:
-- type: log
-  paths:
-  {%- for logpath in item.logpaths %}
-    - {{ logpath -}}
-  {% endfor %}
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/*.log
 
-  fields:
-  {%- for field in item.fields %}
-    - {{ field -}}
-  {% endfor %}
-  fields_under_root: true
-filebeat.config.modules:
-  path: ${path.config}/modules.d/*.yml
-  reload.enabled: false
-setup.template.settings:
-  index.number_of_shards: 1
-setup.kibana:
-processors:
-   - drop_fields:
-       fields: ["host"]
-output.logstash:
-  hosts: {% item.logstash_hosts %}
-  {% if item.logstash_ca is defined %}
-  ssl.certificate_authorities: {% item.logstash_ca %}
-  {% endif %}
+output.file:
+  path: "/tmp/filebeat-output"
+  filename: filebeat.json
+
+#filebeat.inputs:
+#- type: log
+#  allow_deprecated_use: true # voor versie 8/9 ?? of meteen filestream
+#  paths:
+#  {%- for logpath in item.logpaths %}
+#
+#    - {{ logpath -}}
+#  {% endfor %}
+#
+#  fields:
+#  {%- for field in item.fields %}
+#
+#    - {{ field -}}
+#  {% endfor %}
+#
+#  fields_under_root: true
+#filebeat.config.modules:
+#  path: ${path.config}/modules.d/*.yml
+#  reload.enabled: false
+#setup.template.settings:
+#  index.number_of_shards: 1
+#setup.kibana:
+#processors:
+#   - drop_fields:
+#       fields: ["host"]
+#output.logstash:
+#  hosts: {{ item.logstash_hosts }}
+#  {% if item.logstash_ca is defined %}
+#  ssl.certificate_authorities: {{ item.logstash_ca }}
+#  {% endif %}

@@ -1,5 +1,4 @@
-- only deploy filebeat role to server in auth_processor?
 - deploy certificates
-- add handlers for systemctl
 - install mysql?
-- wat te doen met de bestanande filebeat service? nu ook custom?
+- daemon reload
+- config aanpassen, doen we versie 8 of 9?
