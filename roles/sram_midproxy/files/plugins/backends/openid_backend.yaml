@@ -1,0 +1,14 @@
+module: satosa.backends.openid_connect.OpenIDConnectBackend
+name: myaccessid
+config:
+  provider_metadata:
+    issuer: !ENV SATOSA_ISSUER
+  client:
+    verify_ssl: yes
+    auth_req_params:
+      response_type: code
+      scope: [openid, profile, email, schac_home_organization]
+    client_metadata:
+      client_id: !ENV SATOSA_CLIENT_ID
+      client_secret: !ENV SATOSA_CLIENT_SECRET
+      redirect_uris: [<base_url>/<name>]
