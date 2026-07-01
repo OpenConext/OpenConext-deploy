@@ -88,18 +88,19 @@ manage:
 mongodb_db: {{ myconext.mongo_database }}
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
-base_path: https://mijn.{{ myconext_base_domain }}
+myconext_base_path: https://mijn.{{ myconext_base_domain }}
+servicedesk_base_path: https://servicedesk.{{ myconext_base_domain }}
 continue_after_login_url: https://login.{{ myconext_base_domain }}/saml/guest-idp/continue
-idp_redirect_url: https://login.{{ myconext_base_domain }}
-rp_id: login.{{ myconext_base_domain }}
-rp_origin: https://login.{{ myconext_base_domain }}
-sp_redirect_url: https://mijn.{{ myconext_base_domain }}
+account_redirect_url: https://login.{{ myconext_base_domain }}
+account_id: login.{{ myconext_base_domain }}
+account_origin: https://login.{{ myconext_base_domain }}
+myconext_entityid: https://mijn.{{ myconext_base_domain }}
+myconext_redirect_url: https://mijn.{{ myconext_base_domain }}
+servicedesk_redirect_url: https://servicedesk.{{ myconext_base_domain }}
 sp_entity_id: {{ myconext.sp_entity_id }}
-sp_entity_metadata_url: {{ myconext.sp_entity_metadata_url }}
-guest_idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
-my_conext_url: https://mijn.{{ myconext_base_domain }}
-domain: {{ myconext_base_domain }}
-mijn_eduid_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
+account_metadata_url: {{ myconext.sp_entity_metadata_url }}
+proxy_idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+myconext_service_name: "Mijn eduID"
 mobile_app_redirect: eduid:///client/mobile
 # For this RP we nudge the user to use the magic link
 mobile_app_rp_entity_id: {{ myconext.mobile_app_rp_entity_id }}
@@ -256,6 +257,10 @@ account_linking_context_class_ref:
   validate_names_external: https://eduid.nl/trust/validate-names-external
   affiliation_student: https://eduid.nl/trust/affiliation-student
   profile_mfa: https://refeds.org/profile/mfa
+  linked_institution_mfa: https://eduid.nl/trust/linked-institution/mfa
+  validate_names_mfa: https://eduid.nl/trust/validate-names/mfa
+  validate_names_external_mfa: https://eduid.nl/trust/validate-names-external/mfa
+  affiliation_student_mfa: https://eduid.nl/trust/affiliation-student/mfa
 
 account_linking:
   myconext_sp_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
@@ -294,6 +299,32 @@ spring:
     port: 25
   main:
     banner-mode: "off"
+  security:
+    oauth2:
+      client:
+        registration:
+          my_conext:
+            client-id: "{{ myconext.mijn_eduid_oidc_client_id }}"
+            client-secret: "{{ myconext.mijn_eduid_oidc_secret }}"
+            redirect-uri: "https://mijn.{{ myconext_base_domain }}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: "authorization_code"
+            scope: openid
+            provider: oidcng
+          service_desk:
+            client-id: "{{ myconext.service_desk_oidc_client_id }}"
+            client-secret: "{{ myconext.service_desk_oidc_secret }}"
+            redirect-uri: "https://servicedesk.{{ myconext_base_domain }}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: "authorization_code"
+            scope: openid
+            provider: oidcng
+        provider:
+          oidcng:
+            authorization-uri: "https://connect.{{ base_domain }}/oidc/authorize"
+            token-uri: "https://connect.{{ base_domain }}/oidc/token"
+            user-info-uri: "https://connect.{{ base_domain }}/oidc/userinfo"
+            jwk-set-uri: "https://connect.{{ base_domain }}/oidc/certs"
+            user-name-attribute: sub
+            user-info-authentication-method: client_secret_basic
 
 service_desk_role_auto_provisioning: False
 service_desk_roles: {{ myconext.service_desk_roles | join(",") }}
