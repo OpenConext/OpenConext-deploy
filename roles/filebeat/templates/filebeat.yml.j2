@@ -1,5 +1,6 @@
 filebeat.inputs:
   - type: log
+    allow_deprecated_use: true
     enabled: true
     paths:
       - /var/log/*.log

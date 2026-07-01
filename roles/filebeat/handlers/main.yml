@@ -1,5 +1,9 @@
 ---
 - name: Restart filebeat
   ansible.builtin.service:
-    name: filebeat_all
+    name: filebeat_all.target
     state: restarted
+
+- name: Reload systemd
+  ansible.builtin.systemd_service:
+    daemon_reload: true
