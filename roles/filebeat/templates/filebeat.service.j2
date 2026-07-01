@@ -1,5 +1,0 @@
-[Unit]
-{%- for filebeat_instance in filebeat_instances %}
-
-Wants={{ filebeat_instance.name }}.service
-{%- endfor -%}
