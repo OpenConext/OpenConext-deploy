@@ -197,8 +197,8 @@ manage:
 invite:
   enabled: true
   url: "https://invite.{{ base_domain }}"
-  user: "{{ invite.access_dashboard_user }}"
-  password: "{{ invite.access_dashboard_secret }}"
+  user: "{{ invite_access_dashboard_user }}"
+  password: "{{ invite_access_dashboard_secret }}"
 
 statistics:
   enabled: "{{ access_dashboard.statistics.enabled }}"
