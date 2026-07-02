@@ -76,7 +76,7 @@
     group: root
     mode: "0644"
   loop: "{{ filebeat_instances }}"
-  ### notify: "Restart filebeat"
+  notify: "Restart filebeat"
 
 - name: Create pem file if necessary
   ansible.builtin.template:
@@ -87,7 +87,7 @@
     mode: "0644"
   loop: "{{ filebeat_instances }}"
   when: item.logstash_ca is defined
-  ### notify: "Restart filebeat"
+  notify: "Restart filebeat"
 
 - name: Create custom systemd files in /etc/systemd/system
   ansible.builtin.template:
@@ -97,9 +97,9 @@
     group: root
     mode: "0755"
   loop: "{{ filebeat_instances }}"
-  ### notify:
-  ###  - "Restart filebeat"
-  ####  - "Reload systemd"
+  notify:
+    - "Restart filebeat"
+    - "Reload systemd"
 
 - name: Create systemd file in /etc/systemd/system for managing all filebeat services
   ansible.builtin.template:
@@ -108,9 +108,9 @@
     owner: root
     group: root
     mode: "0644"
-  ### notify:
-  ###  - "Restart filebeat"
-  ####  - "Reload systemd"
+  notify:
+    - "Restart filebeat"
+    - "Reload systemd"
 
 - name: Disable and stop service filebeat # Because we have custom instances
   ansible.builtin.service:
@@ -118,14 +118,14 @@
     state: stopped
     enabled: false
 
-# - name: Enable filebeat instances services
-#   ansible.builtin.service:
-#     name: "{{ item.name }}"
-#     enabled: true
-#   loop: "{{ filebeat_instances }}"
+- name: Enable filebeat instances services
+  ansible.builtin.service:
+    name: "{{ item.name }}"
+    enabled: true
+  loop: "{{ filebeat_instances }}"
 
-# - name: Enable and start service filebeat_all
-#   ansible.builtin.service:
-#     name: filebeat_all.target
-#     state: started
-#     enabled: true
+- name: Enable and start service filebeat_all
+  ansible.builtin.service:
+    name: filebeat_all.target
+    state: started
+    enabled: true
