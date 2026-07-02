@@ -1,25 +1,131 @@
 ---
-- name: Add Elasticsearch GPG key.
-  rpm_key:
-    key: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
-    state: present
 
-- name: Add elasticsearch yum repo
-  copy:
-     src: elasticsearch.repo
-     dest: /etc/yum.repos.d/elasticsearch.repo
-     mode: 0644
+- name: Message for non redhat family servers
+  when: ansible_facts['os_family'] != 'Debian'
+  ansible.builtin.fail:
+    msg: "Sorry, this role only works on Debian family servers"
 
-- name: Install Filebeat
-  yum: name=filebeat state=present
+- name: Install filebeat on Debian
+  when: ansible_facts["os_family"] == "Debian"
+  block:
 
-  #- name: Install cacert certificate
-  #copy: src={{ inventory_dir }}/files/certs/elastic_ca.pem dest=/etc/pki/elastic/
+    - name: Gather installed package facts
+      ansible.builtin.package_facts:
+        manager: apt
 
-- name: Install filebeat.yml
-  template: src=filebeat.yml.j2 dest=/etc/filebeat/filebeat.yml
+    - name: Determine if Filebeat install is needed
+      ansible.builtin.set_fact:
+        filebeat_install_needed: "{{ 'filebeat' not in ansible_facts.packages or ansible_facts.packages['filebeat'][0].version != filebeat_version }}"
+
+    - name: Install or upgrade filebeat when it is not installed already
+      when: filebeat_install_needed
+      block:
+        - name: Debug ansible facts packages
+          ansible.builtin.debug:
+            msg: "ansible facts packages: {{ ansible_facts.packages }}"
+            verbosity: 3
+
+        - name: Debug file install needed
+          ansible.builtin.debug:
+            msg: "filebeat_install_needed: {{ filebeat_install_needed }}"
+            verbosity: 2
+
+        - name: Ensure keyrings directory exists
+          ansible.builtin.file:
+            path: /etc/apt/keyrings
+            state: directory
+            mode: '0755'
+
+        - name: Download Elasticsearch GPG key
+          ansible.builtin.get_url:
+            url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+            dest: /tmp/GPG-KEY-elasticsearch
+            mode: '0644'
+
+        - name: Dearmor and install Elasticsearch GPG key
+          ansible.builtin.command: gpg --dearmor -o /etc/apt/keyrings/elasticsearch.gpg /tmp/GPG-KEY-elasticsearch
+          args:
+            creates: /etc/apt/keyrings/elasticsearch.gpg
+
+        - name: Add Elasticsearch repository
+          ansible.builtin.template:
+            src: "elastic.list.j2"
+            dest: "/etc/apt/sources.list.d/elastic-9.x.list"
+            mode: '0644'
+
+        - name: Update the repository cache and install filebeat
+          ansible.builtin.apt:
+            name: filebeat
+            state: present
+            update_cache: true
+
+- name: Create configuration directories for all instances
+  ansible.builtin.file:
+    path: "/etc/{{ item.name }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop: "{{ filebeat_instances }}"
+
+- name: Create configuration files for all instances
+  ansible.builtin.template:
+    dest: "/etc/{{ item.name }}/filebeat.yml"
+    src: filebeat.yml.j2
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ filebeat_instances }}"
+  notify: "Restart filebeat"
+
+- name: Create pem file if necessary
+  ansible.builtin.template:
+    dest: "{{ item.logstash_ca }}"
+    src: ca_cert.j2
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ filebeat_instances }}"
+  when: item.logstash_ca is defined
+  notify: "Restart filebeat"
+
+- name: Create custom systemd files in /etc/systemd/system
+  ansible.builtin.template:
+    dest: "/etc/systemd/system/{{ item.name }}.service"
+    src: filebeat.item.service.j2
+    owner: root
+    group: root
+    mode: "0755"
+  loop: "{{ filebeat_instances }}"
   notify:
-    - restart filebeat
+    - "Restart filebeat"
+    - "Reload systemd"
 
-- name: Enable and start filebeat
-  service: name=filebeat state=started enabled=yes
+- name: Create systemd file in /etc/systemd/system for managing all filebeat services
+  ansible.builtin.template:
+    dest: "/etc/systemd/system/filebeat_all.target"
+    src: filebeat.target.j2
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - "Restart filebeat"
+    - "Reload systemd"
+
+- name: Disable and stop service filebeat # Because we have custom instances
+  ansible.builtin.service:
+    name: filebeat
+    state: stopped
+    enabled: false
+
+- name: Enable filebeat instances services
+  ansible.builtin.service:
+    name: "{{ item.name }}"
+    enabled: true
+  loop: "{{ filebeat_instances }}"
+
+- name: Enable and start service filebeat_all
+  ansible.builtin.service:
+    name: filebeat_all.target
+    state: started
+    enabled: true

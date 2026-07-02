@@ -1,2 +1,20 @@
-filebeat_tls: False
-filebeat_eblog: False
+filebeat_tls: false
+filebeat_eblog: false
+filebeat_version: 9.4.3
+filebeat_package: filebeat-{{ filebeat_version }}-{{ ansible_architecture }}.deb
+filebeat_apt_url: "https://artifacts.elastic.co/packages/oss-9.x/apt"
+# add instances to group or host vars:
+# filebeat_instances:
+#  - name: filebeat_sc_prd
+#    description: "Filebeat instance to send logs to logstash" # description for systemd unit file
+#    logpaths:
+#     - "/opt/openconext/logs/apps/prod_sc/eb/eb.log"
+#     - "/opt/openconext/logs/log_logins/prod_sc/eb-authentication.log"
+#    fields:
+#     - "env: prod_sc"
+#    logstash_hosts: '["logstashserver.example.com:5044","logstashserver2.example.com:5044"]'
+#    logstash_ca: '["/etc/pki/tls/certs/logstash-prod-ca.pem"]'
+#    cacert_content: |
+#      -----BEGIN CERTIFICATE-----
+#      MIIEKzCCAxOgAwIBAgIJAMjE1SXBf9RJMA0GCSqGSIb3DQEBBQUAMIGqMQswCQYD
+#      VQQGEwJOTDEQMA4GA1UECAwHVXRyZWNodDEQMA4GA1UEBwwHVXRyZWNodDEVMBMG
