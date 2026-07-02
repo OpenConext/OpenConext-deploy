@@ -23,7 +23,6 @@ sram_ldap_services_password: secret
 sram_ldap_monitor_password: secret
 sram_ldap_ldap_monitor_password: secret
 
-sram_ldap_uri: "ldap://localhost/"
 sram_ldap_rid_prefix: "ldap://"
 
 sram_ldap_base_domain: "{{ base_domain }}"
