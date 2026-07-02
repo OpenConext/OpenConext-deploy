@@ -43,7 +43,6 @@ sram_sbs_user: "sbs"
 sram_sbs_group: "sbs"
 
 sram_sbs_session_lifetime: 1440
-sram_sbs_secret_key_suffix: ""
 
 sram_sbs_oidc_crypto_password: "CHANGEME"
 sram_sbs_uid_attribute: "sub"
