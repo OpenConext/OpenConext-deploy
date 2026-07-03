@@ -145,6 +145,8 @@ feature:
   enable-performance-seed: False
   # Allow non-eduID accounts to accept invites for rolemanager and inviter
   allow-for-eduid-only-enforcement-for-non-guests: False
+  # Add login hint, set to False to disable this feature
+  invite-accept-add-login_hint: True
 
 # We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
 external-api-configuration:
