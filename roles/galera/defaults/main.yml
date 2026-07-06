@@ -33,3 +33,7 @@ galera_handler_restart: True
 
 #Install memcached on the cluster nodes
 memcached_cluster: False
+
+# define in group_vars or host_vars
+# innodb_buffer_pool_size: 8G
+# mariadb_cluster_name: "galera_cluster_openconext"
