@@ -22,6 +22,7 @@ engine_api_feature_deprovision: true
 # Cutoff point for showing unfiltered IdPs on the WAYF
 engine_wayf_cutoff_point_for_showing_unfiltered_idps: 50
 engine_wayf_show_remember_choice: false
+engine_wayf_preferred_idp_entity_ids: []
 
 # Required for the Symfony routing.
 engine_base_domain: "{{ base_domain }}"

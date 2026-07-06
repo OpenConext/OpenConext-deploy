@@ -1,3 +1,4 @@
+---
 parameters:
   ##########################################################################################
   ## GLOBAL SETTINGS
@@ -55,6 +56,9 @@ parameters:
   ## Add RequestedAttributes to the AttributeConsumingService of the SP Proxy metadata of Engineblock, default is all
   ## Options are 'all' (optional and required attributes), 'required' (only required attributes) or 'none'
   metadata_add_requested_attributes: all
+
+  ## The number of seconds a Metadata document is deemed valid (default 24h). Must be a positive integer.
+  metadata_expiration_time: 86400
 
   ##########################################################################################
   ## PHP SETTINGS
@@ -182,6 +186,9 @@ parameters:
   ## Toggle the default IdP quick link banner on the WAYF.
   wayf.display_default_idp_banner_on_wayf: true
   wayf.default_idp_entity_id: "https://login.{{ myconext_base_domain }}"
+
+  ## set the IdPs that need to be displayed prominently
+  wayf.preferred_idp_entity_ids: {{ engine_wayf_preferred_idp_entity_ids }}
 
   ## Toggle display & content of global site notice
   global.site_notice.show: {{ engine_site_notice_show }}
