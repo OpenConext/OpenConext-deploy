@@ -50,6 +50,10 @@ engine_attribute_aggregation_baseurl: "https://aa.{{ base_domain }}/aa/api/inter
 
 engine_api_deprovision_user: lifecycle
 
+engine_api_nameid_lookup_enabled: true
+engine_api_nameid_lookup_user: "nameid"
+
+
 # Minimum execution time in milliseconds when a received response is deemed invalid
 engine_minimum_execution_time_on_invalid_received_response: 5000
 

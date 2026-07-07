@@ -82,6 +82,11 @@ parameters:
   api.users.deprovision.username: {{ engine_api_deprovision_user }}
   api.users.deprovision.password: {{ engine_api_deprovision_password | replace("%","%%") }}
 
+  ## nameid lookup api
+  feature_api_users_nameid_lookup: {{ engine_api_nameid_lookup_enabled }}
+  api.users.nameidlookup.username: {{ engine_api_nameid_lookup_user }}
+  api.users.nameidlookup.password: {{ engine_api_nameid_lookup_password if engine_api_nameid_lookup_enabled else '' }}
+
   ##########################################################################################
   ## CLIENT SETTINGS
   ##########################################################################################
