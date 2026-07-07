@@ -45,18 +45,13 @@
     mode: "0644"
   notify: "Restart redis container"
 
-- name: "Pull redis image"
-  community.docker.docker_image_pull:
-    name: "{{ sram_redis_image }}"
-  register: "redis_image"
-
 - name: "Create redis container"
   community.docker.docker_container:
     name: "sram-redis"
     image: "{{ sram_redis_image }}"
+    pull: true
     restart_policy: "always"
     state: "started"
-    restart: "{{ redis_image is changed }}"
     user: "{{ redis_user_uid }}:{{ redis_group_gid }}"
     command: |
       redis-server /usr/local/etc/redis/redis.conf
@@ -66,3 +61,4 @@
     networks:
       # TODO: Should this not be parametrized?
       - name: loadbalancer
+  register: rediscontainer
