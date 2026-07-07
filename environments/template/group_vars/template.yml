@@ -260,6 +260,8 @@ myconext:
   feature_dry_run_email_cron: true
   feature_enable_account_linking: true
   feature_use_app: true
+  feature_use_global_uid: true
+  feature_force_global_uid_entities: "dummy_non_existing_entity,playground_client"
   sms_api_url: "https://rest.spryngsms.com/v1/messages"
   sms_api_route: "default"
   sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
