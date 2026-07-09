@@ -1,0 +1,7 @@
+---
+- name: Restart the satosa container
+  community.docker.docker_container:
+    name: sram-satosa
+    restart: true
+    state: started
+  when: satosa_container is success and satosa_container is not change

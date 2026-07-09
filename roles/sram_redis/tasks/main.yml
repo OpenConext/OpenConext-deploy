@@ -61,4 +61,4 @@
     networks:
       # TODO: Should this not be parametrized?
       - name: loadbalancer
-  register: rediscontainer
+  register: redis_container

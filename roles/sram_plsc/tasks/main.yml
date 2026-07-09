@@ -13,19 +13,19 @@
   no_log: "{{ sram_plsc_ansible_nolog }}"
   notify: "Restart the plsc container"
 
-- name: "Pull plsc image"
-  community.docker.docker_image_pull:
-    name: "{{ sram_plsc_image }}"
-  register: "plsc_image"
+# - name: "Pull plsc image"
+#   community.docker.docker_image_pull:
+#     name: "{{ sram_plsc_image }}"
+#   register: "plsc_image"
 
 - name: Create the plsc container
   community.docker.docker_container:
     name: "sram-plsc"
     image: "{{ sram_plsc_image }}"
     restart_policy: "always"
-    state: started
-    restart: "{{ plsc_image is changed }}"
-    pull: never
+    state: "started"
+    # restart: "{{ plsc_image is changed }}"
+    pull: true
     mounts:
       - type: bind
         source: "{{ sram_plsc_conf_dir }}/plsc.yml"
@@ -33,3 +33,4 @@
     networks:
       # TODO: Should this not be parametrized?
       - name: "loadbalancer"
+  register: "plsc_container"

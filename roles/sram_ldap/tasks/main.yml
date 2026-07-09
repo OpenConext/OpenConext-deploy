@@ -53,10 +53,10 @@
       combine({ host.key | format(item.key): host.value | format(item.value) }) }}
   with_dict: "{{ sram_ldap_hosts }}"
 
-- name: "Pull ldap image"
-  community.docker.docker_image_pull:
-    name: "{{ sram_ldap_image }}"
-  register: "ldap_image"
+# - name: "Pull ldap image"
+#   community.docker.docker_image_pull:
+#     name: "{{ sram_ldap_image }}"
+#   register: "ldap_image"
 
 - name: Create the ldap container
   community.docker.docker_container:
@@ -89,7 +89,7 @@
         - "bash"
         - "-c"
         - "[[ -S /var/run/slapd/ldapi ]]"
-  register: "ldap_container"
+  register: ldap_container
 
 - name: Wait for LDAP initialization
   ansible.builtin.wait_for:

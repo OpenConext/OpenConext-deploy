@@ -66,24 +66,25 @@
   no_log: "{{ sram_sbs_ansible_nolog }}"
   notify: "Restart sbs containers"
 
-- name: "Pull sbs image"
-  community.docker.docker_image_pull:
-    name: "{{ item }}"
-  with_items:
-    - "{{ sram_sbs_client_image }}"
-    - "{{ sram_sbs_server_image }}"
-  register: "sbs_images"
+# - name: "Pull sbs image"
+#   community.docker.docker_image_pull:
+#     name: "{{ item }}"
+#   with_items:
+#     - "{{ sram_sbs_client_image }}"
+#     - "{{ sram_sbs_server_image }}"
+#   register: "sbs_images"
 
 - name: "Migration"
   # For some reason --check breaks this block
-  when: "sbs_images is changed and not ansible_check_mode"
+  # when: "sbs_images is changed and not ansible_check_mode"
+  when: "not ansible_check_mode"
   block:
     - name: "Run SBS migrations"
       throttle: 1
       community.docker.docker_container:
         name: "sram-sbs-migration"
         image: "{{ sram_sbs_server_image }}"
-        pull: "never"
+        pull: true
         state: "started"
         restart_policy: "no"
         detach: false
@@ -99,7 +100,7 @@
         networks:
           # TODO: Should we parametrize this?
           - name: "loadbalancer"
-      register: "result"
+      register: "sbs_container"
       failed_when: "'container' not in result or result.container.State.ExitCode != 0"
       changed_when: "'[alembic.runtime.migration] Running upgrade' in result.container.Output | default('')"
       notify: "Restart sbs containers"
@@ -115,10 +116,10 @@
   community.docker.docker_container:
     name: "sram-sbs-client"
     image: "{{ sram_sbs_client_image }}"
-    pull: "never"
+    pull: true
     restart_policy: "always"
     state: "started"
-    restart: "{{ sbs_images is changed}}"
+    # restart: "{{ sbs_images is changed}}"
     volumes:
       - "{{ sram_sbs_conf_dir }}/sbs-apache.conf:/etc/apache2/sites-enabled/sbs.conf:ro"
       - "{{ sram_sbs_conf_dir }}/disclaimer.css:/opt/sbs/client/dist/disclaimer.css:ro"
@@ -128,6 +129,7 @@
       traefik.http.routers.sbsclient.rule: "Host(`{{ sram_sbs_base_domain }}`)"
       traefik.http.routers.sbsclient.tls: "true"
       traefik.enable: "true"
+  notify: "Restart sbs containers"
 
 - name: "Start SBS server container"
   community.docker.docker_container:
@@ -135,7 +137,7 @@
     image: "{{ sram_sbs_server_image }}"
     restart_policy: "always"
     state: "started"
-    restart: "{{ sbs_images is changed}}"
+    # restart: "{{ sbs_images is changed}}"
     env:
       RUNAS_UID: "{{ sbs_user_uid | string }}"
       RUNAS_GID: "{{ sbs_group_gid | string }}"
@@ -151,3 +153,4 @@
       - name: "loadbalancer"
     etc_hosts:
       host.docker.internal: host-gateway
+  notify: "Restart sbs containers"

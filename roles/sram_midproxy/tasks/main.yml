@@ -38,6 +38,7 @@
     group: "{{ sram_midproxy_group }}"
     # mkdir: cannot create directory '.': Permission denied
     mode: "0644"
+  notify: Restart the satosa container
 
 - name: Copy SATOSA conf files
   ansible.builtin.copy:
@@ -49,20 +50,21 @@
     - internal_attributes.yaml
     - proxy_conf.yaml
     - plugins/
+  notify: Restart the satosa container
 
-- name: "Pull satosa image"
-  community.docker.docker_image_pull:
-    name: "{{ sram_midproxy_satosa_image }}"
-  register: "satosa_image"
+# - name: "Pull satosa image"
+#   community.docker.docker_image_pull:
+#     name: "{{ sram_midproxy_satosa_image }}"
+#   register: "satosa_image"
 
 - name: Create the SATOSA container
   community.docker.docker_container:
     name: sram-midproxy
     image: "{{ sram_midproxy_satosa_image }}"
-    pull: never
+    pull: true
     restart_policy: "always"
     state: started
-    restart: "{{ satosa_image is changed }}"
+    # restart: "{{ satosa_image is changed }}"
     # 2026-05-21 07:25:44 +0000] [1] [ERROR] Control server error: [Errno 13] Permission denied: '/.gunicorn'
     # user: "{{ midproxy_user_uid }}"
     networks:
@@ -88,3 +90,4 @@
     #   timeout: 10s
     #   retries: 3
     #   start_period: 10s
+  register: satosa_container
