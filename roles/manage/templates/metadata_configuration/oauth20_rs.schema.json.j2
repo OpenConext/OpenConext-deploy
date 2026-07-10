@@ -188,6 +188,18 @@
             "fetch": "scopes"
           },
           "info": "The allowed scopes for this Resource Server."
+        },
+        "alliance": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "EWUU",
+              "LDE",
+              "KOM"
+            ]
+          },
+          "info": "Specifies the alliance(s) this Resource Server belongs to"
         }
       },
       "patternProperties": {
