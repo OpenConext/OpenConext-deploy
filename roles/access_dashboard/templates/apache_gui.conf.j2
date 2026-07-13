@@ -1,0 +1,59 @@
+ServerName access_dashboard_client
+
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !\.(js|css)(\.map)?$
+RewriteCond %{REQUEST_URI} !\.svg$
+RewriteCond %{REQUEST_URI} !\.png$
+RewriteCond %{REQUEST_URI} !\.ico$
+RewriteCond %{REQUEST_URI} !\.woff$
+RewriteCond %{REQUEST_URI} !\.woff2$
+RewriteCond %{REQUEST_URI} !\.ttf$
+RewriteCond %{REQUEST_URI} !\.wav$
+RewriteCond %{REQUEST_URI} !\.eot$
+RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_URI} !^/login/
+RewriteCond %{REQUEST_URI} !^/oauth2/
+RewriteCond %{REQUEST_URI} !^/ui/
+RewriteCond %{REQUEST_URI} !^/internal/
+RewriteCond %{REQUEST_URI} !^/fonts/
+RewriteRule (.*) /index.html [L]
+
+ProxyPass /api http://access_dashboard_server:8080/api retry=0
+ProxyPassReverse /api http://access_dashboard_server:8080/api
+ProxyPassMatch ^/oauth2(.*)$ http://access_dashboard_server:8080
+ProxyPassReverse /oauth2 http://access_dashboard_server:8080/oauth2
+ProxyPassMatch ^/internal(.*)$ http://access_dashboard_server:8080
+ProxyPassReverse /internal http://access_dashboard_server:8080/internal
+ProxyPassMatch ^/login(.*)$ http://access_dashboard_server:8080
+ProxyPassReverse /login http://access_dashboard_server:8080/login
+ProxyPassMatch ^/ui(.*)$ http://access_dashboard_server:8080
+ProxyPassReverse /ui http://access_dashboard_server:8080/ui
+
+DocumentRoot /var/www/
+
+<Location "/api">
+    ProxyPreserveHost On
+</Location>
+<Location "/oauth2">
+    ProxyPreserveHost On
+</Location>
+<Location "/internal">
+    ProxyPreserveHost On
+</Location>
+<Location "/login">
+    ProxyPreserveHost On
+</Location>
+<Directory /var/www>
+  Require all granted
+  Options -Indexes
+</Directory>
+
+<FilesMatch "\.html$">
+Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+Header set Expires "Sun, 8 Jun 1986 08:06:00 GMT"
+</FilesMatch>
+
+Header always set X-Frame-Options "DENY"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set X-Content-Type-Options "nosniff"
