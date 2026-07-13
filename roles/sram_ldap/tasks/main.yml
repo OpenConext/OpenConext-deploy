@@ -53,18 +53,12 @@
       combine({ host.key | format(item.key): host.value | format(item.value) }) }}
   with_dict: "{{ sram_ldap_hosts }}"
 
-# - name: "Pull ldap image"
-#   community.docker.docker_image_pull:
-#     name: "{{ sram_ldap_image }}"
-#   register: "ldap_image"
-
 - name: Create the ldap container
   community.docker.docker_container:
     name: "sram-ldap"
     image: "{{ sram_ldap_image }}"
     restart_policy: "always"
     state: started
-    restart: "{{ ldap_image is changed }}"
     pull: never
     ports:
       - 0.0.0.0:389:389

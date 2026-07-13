@@ -52,11 +52,6 @@
     - plugins/
   notify: Restart the satosa container
 
-# - name: "Pull satosa image"
-#   community.docker.docker_image_pull:
-#     name: "{{ sram_midproxy_satosa_image }}"
-#   register: "satosa_image"
-
 - name: Create the SATOSA container
   community.docker.docker_container:
     name: sram-midproxy
