@@ -51,7 +51,7 @@
     host: "{{ item.label }}"
     fail_on_not_found: true
     socket: /var/lib/haproxy/haproxy.stats
-    weight: "{{ item.weight }}%"
+    weight: "{{ item.weight }}"
     backend: "{{ app_name }}_be"
   with_items: "{{ server_labels_with_weights }}"
   register: "haproxy_weights"
