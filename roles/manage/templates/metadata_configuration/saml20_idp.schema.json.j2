@@ -367,9 +367,10 @@
           "default": false,
           "info": "if set for this Identity Provider, then this Identity Provider is listed as test IdP in Access."
         },
-        "coin:policy_enforcement_decision_required": {
-          "type": "boolean",
-          "info": "Set to activate the user policy engine (PDP) for this IdP."
+        "coin:azure_domain_hint": {
+          "type": "string",
+          "default": "",
+          "info": "the domain set here is sent to the IdP; Microsoft EntraID uses it to skip the account picker."
         }
       },
       "patternProperties": {

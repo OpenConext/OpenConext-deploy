@@ -13,6 +13,7 @@ engine_feature_stepup_override_entityid: false
 engine_feature_idp_initiated_flow: true
 engine_feature_send_user_attributes: false
 engine_feature_enable_sbs_interrupt: false
+engine_feature_hide_bookmarkable_url: false
 engine_api_feature_metadata_push: true
 engine_api_feature_consent_listing: true
 engine_api_feature_consent_remove: false
@@ -22,6 +23,7 @@ engine_api_feature_deprovision: true
 # Cutoff point for showing unfiltered IdPs on the WAYF
 engine_wayf_cutoff_point_for_showing_unfiltered_idps: 50
 engine_wayf_show_remember_choice: false
+engine_wayf_preferred_idp_entity_ids: []
 
 # Required for the Symfony routing.
 engine_base_domain: "{{ base_domain }}"
@@ -47,6 +49,10 @@ engine_pdp_path: /pdp/api/decide/policy
 engine_attribute_aggregation_baseurl: "https://aa.{{ base_domain }}/aa/api/internal/attribute/aggregation"
 
 engine_api_deprovision_user: lifecycle
+
+engine_api_nameid_lookup_enabled: true
+engine_api_nameid_lookup_user: "nameid"
+
 
 # Minimum execution time in milliseconds when a received response is deemed invalid
 engine_minimum_execution_time_on_invalid_received_response: 5000
