@@ -6,7 +6,7 @@ logging:
     org.springframework.web: WARN
     org.springframework.security: WARN
     com.zaxxer.hikari: ERROR
-    invite: DEBUG
+    invite: "{{ invite_logback_loglevel }}"
     net.javacrumbs.shedlock: DEBUG
 
 server:
