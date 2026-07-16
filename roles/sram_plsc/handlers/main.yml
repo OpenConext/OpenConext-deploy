@@ -4,3 +4,4 @@
     name: sram-plsc
     restart: true
     state: started
+  when: plsc_container is success and plsc_container is not change
