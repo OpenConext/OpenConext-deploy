@@ -78,6 +78,16 @@
   loop: "{{ filebeat_instances }}"
   notify: "Restart filebeat"
 
+- name: "Create pem directory if necessary"
+  ansible.builtin.file:
+    dest: "{{ item.logstash_ca_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop: "{{ filebeat_instances }}"
+  when: item.logstash_ca_path is defined
+
 - name: Create pem file if necessary
   ansible.builtin.template:
     dest: "{{ item.logstash_ca }}"
