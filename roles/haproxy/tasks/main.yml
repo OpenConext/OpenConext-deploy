@@ -68,7 +68,7 @@
 
 - name: Create haproxy SSL key directory
   ansible.builtin.file:
-    dest: "/etc/haproxy/certs"
+    path: "/etc/haproxy/certs"
     state: directory
     owner: haproxy
     group: haproxy
