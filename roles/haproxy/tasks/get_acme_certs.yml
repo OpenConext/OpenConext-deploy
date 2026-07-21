@@ -5,9 +5,9 @@
       {{
         (
           [base_domain]
-          + (haproxy_applications | map(attribute='vhost_name') | list)
-          + (haproxy_ldap_servers | map(attribute='vhost_name') | list)
-          + (haproxy_redirects    | map(attribute='hostname')   | list)
+          + (haproxy_applications               | map(attribute='vhost_name') | list)
+          + (haproxy_ldap_servers | default([]) | map(attribute='vhost_name') | list)
+          + (haproxy_redirects                  | map(attribute='hostname')   | list)
         )
         | unique | sort
       }}
