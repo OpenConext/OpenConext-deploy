@@ -17,15 +17,17 @@
   ansible.builtin.git:
     repo: "https://github.com/acmesh-official/acme.sh.git"
     dest: "/opt/acmesh/"
-    version: "3.1.0"
+    version: "{{ haproxy_acmesh_version }}"
     update: true
+  register: "haproxy_acme_update"
 
-- name: Install the acme.sh script
-  ansible.builtin.shell:
+- name: "Install the acme.sh script"
+  ansible.builtin.command:
     cmd: |
       sh /opt/acmesh/acme.sh --install --accountemail "{{ admin_email }}"
     chdir: "/opt/acmesh"
-    creates: "/home/acme/.acme.sh/acme.sh"
+  when: "haproxy_acme_update.changed"
+  changed_when: true
   become: true
   become_user: "acme"
 
