@@ -68,11 +68,14 @@
 
 - name: Create haproxy SSL key directory
   ansible.builtin.file:
-    path: "/etc/haproxy/certs"
+    path: "/etc/haproxy/{{ item }}"
     state: directory
     owner: haproxy
     group: haproxy
     mode: "0770"
+  loop:
+   - "certs"
+   - "certs-backup"
 
 - name: Create backend CA directory
   ansible.builtin.file:

@@ -25,13 +25,23 @@
     patterns: "*.pem"
   register: "haproxy_current_certs_disk"
 
+- name: "Backup obsolete certificates"
+  ansible.builtin.copy:
+    src: "/etc/haproxy/certs/{{ item }}.pem"
+    dest: "/etc/haproxy/certs-backup/{{ item }}.pem.{{ now().strftime('%Y%m%d-%H%M%S') }}"
+    remote_src: true
+    mode: "0600"
+    owner: "root"
+    group: "root"
+  when: "item not in haproxy_ssl_hosts"
+  loop: "{{ haproxy_current_certs_disk.files | map(attribute='path') | map('basename') | map('regex_replace', '\\.pem$', '') }}"
+
 - name: "Remove obsolete certificates from disk"
   ansible.builtin.file:
     path: "/etc/haproxy/certs/{{ item }}.pem"
     state: "absent"
   when: "item not in haproxy_ssl_hosts"
   loop: "{{ haproxy_current_certs_disk.files | map(attribute='path') | map('basename') | map('regex_replace', '\\.pem$', '') }}"
-
 
 - name: "Get list of all current certificates known to acme"
   ansible.builtin.command:
