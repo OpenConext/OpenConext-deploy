@@ -1,31 +1,31 @@
 ---
-- name: Create oidc-playground directory
+- name: "Create oidc-playground directory"
   ansible.builtin.file:
-    dest: "{{ oidc_playground_dir }}"
-    state: directory
-    owner: root
-    group: root
+    path: "{{ oidc_playground_dir }}"
+    state: "directory"
+    owner: "root"
+    group: "root"
     mode: "0750"
 
-- name: Copy config
+- name: "Copy config"
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ oidc_playground_dir }}/{{ item }}"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0740"
   with_items:
-    - logback.xml
-    - serverapplication.yml
+    - "logback.xml"
+    - "serverapplication.yml"
   notify:
-    - "restart oidc-playground-docker"
+    - "Restart oidc-playground-docker"
 
-- name: Create and start the server container
+- name: "Create and start the server container"
   community.docker.docker_container:
-    name: oidcplaygroundserver
+    name: "oidcplaygroundserver"
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-oidc-playground/oidc-playground-server:{{ oidc_playground_version }}
+    image: "ghcr.io/openconext/openconext-oidc-playground/oidc-playground-server:{{ oidc_playground_version }}"
     pull: true
     restart_policy: "{{ oidc_playground_server_restart_policy }}"
     restart_retries: "{{ oidc_playground_server_restart_retries }}" # Only for restart policy on-failure
@@ -33,11 +33,11 @@
       - name: "loadbalancer"
     mounts:
       - source: "{{ oidc_playground_dir }}/serverapplication.yml"
-        target: /application.yml
-        type: bind
+        target: "/application.yml"
+        type: "bind"
       - source: "{{ oidc_playground_dir }}/logback.xml"
-        target: /logback.xml
-        type: bind
+        target: "/logback.xml"
+        type: "bind"
     command: "-Xmx128m --spring.config.location=./"
     healthcheck:
       test:
@@ -49,19 +49,19 @@
           "--spider",
           "http://localhost:8080/internal/health",
         ]
-      interval: 10s
-      timeout: 10s
+      interval: "10s"
+      timeout: "10s"
       retries: 3
-      start_period: 10s
-  register: oidcplaygroundservercontainer
+      start_period: "10s"
+  register: "oidcplaygroundservercontainer"
 
-- name: Create the gui container
+- name: "Create the gui container"
   community.docker.docker_container:
-    name: oidcplaygroundgui
-    image: ghcr.io/openconext/openconext-oidc-playground/oidc-playground-gui:{{ oidc_playground_version }}
+    name: "oidcplaygroundgui"
+    image: "ghcr.io/openconext/openconext-oidc-playground/oidc-playground-gui:{{ oidc_playground_version }}"
     pull: true
     restart_policy: "always"
-    state: started
+    state: "started"
     networks:
       - name: "loadbalancer"
     labels:
@@ -71,17 +71,17 @@
       traefik.http.services.oidc-playgroundgui.loadbalancer.server.port: "80"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost/internal/health"]
-      interval: 10s
-      timeout: 10s
+      interval: "10s"
+      timeout: "10s"
       retries: 3
-      start_period: 10s
+      start_period: "10s"
     mounts:
-      - source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - source: /opt/openconext/common/favicon.ico
-        target: /var/www/html/favicon.ico
-        type: bind
+      - source: "/etc/localtime"
+        target: "/etc/localtime"
+        type: "bind"
+      - source: "/opt/openconext/common/favicon.ico"
+        target: "/var/www/html/favicon.ico"
+        type: "bind"
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient }}"
 

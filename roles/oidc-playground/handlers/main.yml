@@ -1,9 +1,10 @@
-- name: restart oidc-playground-docker
+---
+- name: "Restart oidc-playground-docker"
   community.docker.docker_container:
-    name: oidcplaygroundserver
-    state: started
+    name: "oidcplaygroundserver"
+    state: "started"
     restart: true
     # avoid restarting it creates unexpected data loss according to docker_container_module notes
     comparisons:
-      '*': ignore
-  when: oidcplaygroundservercontainer is success and oidcplaygroundservercontainer is not change
+      '*': "ignore"
+  when: "oidcplaygroundservercontainer is success and oidcplaygroundservercontainer is not change"
