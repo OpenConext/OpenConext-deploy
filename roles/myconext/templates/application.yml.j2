@@ -160,6 +160,12 @@ feature:
   enable_account_linking: {{ myconext.feature_enable_account_linking }}
   # Set to true to show the app login option
   use_app: {{ myconext.feature_use_app }}
+  # When true (default) release the global uid in the uid and eduPersonPrincipalName SAML attributes.
+  # When false, release the per-SP targeted eduID instead.
+  use_global_uid: {{ myconext.feature_use_global_uid }}
+  # SP entityIds that always receive the global uid in the uid and eduPersonPrincipalName SAML attributes,
+  # even when use_global_uid is false.
+  force_global_uid_entities: "{{ myconext.feature_force_global_uid_entities }}"
 
 default_affiliate_email_domain: eduid.nl
 
