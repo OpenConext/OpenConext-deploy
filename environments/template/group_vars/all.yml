@@ -30,6 +30,8 @@ admin_email: "openconext-admin@example.edu"
 environment_shortname: ""
 environment_ribbon_colour: ""
 
+current_release_appdir: /opt/openconext
+
 httpd_csp:
   lenient: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
   lenient_with_static_img: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
@@ -52,7 +54,6 @@ engine_attribute_aggregation_password: "{{ aa.eb_password }}"
 
 # Some deprovision variables are shared between applications
 authz_server_api_lifecycle_username: authz_server_api_lifecycle_user
-teams_api_lifecycle_username: teams_api_lifecycle_user
 attribute_aggregator_api_lifecycle_username: attribute_aggregator_api_lifecycle_user
 engine_api_deprovision_user: lifecycle
 lifecycle_api_username: lifecycle

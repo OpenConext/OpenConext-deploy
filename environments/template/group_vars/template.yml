@@ -28,8 +28,7 @@ relp_remote:
 php_display_errors: 1
 
 attribute_aggregation_version: "3.0.6"
-oidc_playground_client_version: "3.0.0"
-oidc_playground_server_version: "3.0.0"
+oidc_playground_version: "4.2.0"
 engine_version: "6.15.0"
 manage_version: "9.6.0"
 lifecycle_version: "0.1.1"
@@ -38,8 +37,6 @@ mujina_version: "8.0.2"
 oidcng_version: "6.1.6"
 pdp_version: "7.3.0"
 profile_version: "3.1.4"
-teams_gui_version: "9.1.3"
-teams_server_version: "9.1.3"
 voot_version: "6.2.0"
 myconext_version: "8.1.12-1"
 dashboard_version: "13.0.11"
@@ -53,14 +50,12 @@ statistics_version: "1.1.7"
 
 databases:
   names:
-    - teams
     - "{{ engine_database_name }}"
     - pdp-server
     - aaserver
     - shibboleth
     - eb_logins
   users:
-    - { name: teamsrw, db_name: teams, password: "{{ mysql_passwords.teams }}" }
     - { name: "{{ engine_database_user }}", db_name: "{{ engine_database_name }}", password: "{{ mysql_passwords.eb }}" }
     - { name: pdp-serverrw, db_name: pdp-server, password: "{{ mysql_passwords.pdp_server }}" }
     - { name: aa-serverrw, db_name: aaserver, password: "{{ mysql_passwords.aa_server }}" }
@@ -100,31 +95,9 @@ engine_trusted_proxy_ips:
   - 192.168.1.1
   - 10.0.0.1
 #
-engine_keys:
-  default:
-    privateFile: /etc/openconext/engineblock.pem
-    publicKey: engineblock.crt
-    publicFile: /etc/openconext/engineblock.crt
-
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:
 engine_profile_idp_certificate: /etc/openconext/engineblock.crt
-
-teams:
-  db_name: "teams"
-  db_user: "teamsrw"
-  db_password: "{{ mysql_passwords.teams }}"
-  db_host: "{{ mariadb_host }}"
-  group_name_context: "urn:collab:group:{{ base_domain }}:"
-  voot_api_user: "voot"
-  spdashboard_api_user: "spdashboard"
-  spdashboard_person_urn: "urn:collab:person:surfnet.nl:sp-dashboard-C133A36F-CFCA-4F3D-87CE-7ECE29773FE0"
-  product_name: "OpenConext Teams"
-  default_stem_name: "demo:openconext:org"
-  feature_invite_migration_on: False
-  super_admins_team_urns:
-    - "nl:surfnet:diensten:teams_super_users"
-    - "nl:surfnet:diensten:teams_super_admin_users"
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
@@ -156,15 +129,15 @@ voot:
     - { name: "voot", level: "DEBUG" }
   externalGroupProviders:
     - {
-        type: "teams",
-        url: "https://teams.{{ base_domain }}/api/voot",
-        credentials: {
-         username: "{{ teams.voot_api_user }}",
-         secret: "{{ external_group_provider_secrets.teams }}"
-        },
-        schacHomeOrganization: "{{ base_domain}}",
-        name: "SURFteams",
-        timeoutMillis: 15000
+          type: "invite",
+          url: "https://invite.{{ base_domain }}/api/external/v1/voot",
+          credentials: {
+              username: "{{ invite.vootuser }}",
+              secret: "{{ invite.vootsecret }}"
+          },
+          schacHomeOrganization: "N/A",
+          name: "Invite",
+          timeoutMillis: 3000
       }
 
 oidc_playground:
@@ -174,6 +147,7 @@ oidc_playground:
   jwt_secret: "{{ oidc_playground_jwt_secret }}"
   resource_server_id: resource-server-playground-client
   resource_server_secret: "{{ oidc_playground_resource_server_secret }}"
+  api_endpoint_enabled: True
   gui_disclaimer:
     background_color: red
     content: "{{ env }}"
@@ -210,7 +184,7 @@ aa:
   sab_username: coin-test
   sab_rest_username: surfconexttest
   sab_rest_password: "{{ aa_sab_rest_password }}"
-  sab_rest_endpoint: https://sab.acc.surfaccess.nl/api/profile
+  sab_rest_endpoint: https://invite.acc.surfconext.nl/api/profile
   surfmarket_url: https://example.org
   surfmarket_username: example@example.org
   surfmarket_password: "{{ aa_surfmarket_password }}"
@@ -338,6 +312,7 @@ manage:
   features: push, validation, push_preview, orphans, find_my_data, edugain, auto_refresh
   environment: template
   super_user_team_names: "urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:surfconext_tpm_core"
+  sram_rp_entity_id: "sbs.test.sram.surf.nl"
   apiUsers:
     - {
         name: "dashboard",
@@ -400,9 +375,6 @@ loadbalancing:
 
   metadata:
     port: 409
-
-  teams:
-    port: 601
 
   oidc_playground:
     port: 619
@@ -481,13 +453,6 @@ haproxy_applications:
     port: "{{ loadbalancing.engine_api.port }}"
     servers: "{{docker_servers}}"
     restricted: yes
-
-  - name: teams
-    vhost_name: teams.{{ base_domain }}
-    ha_method: "GET"
-    ha_url: "/api/teams/health"
-    port: "{{ loadbalancing.teams.port }}"
-    servers: "{{docker_servers}}"
 
   - name: oidc_playground
     vhost_name: "oidc-playground.{{ base_domain }}"

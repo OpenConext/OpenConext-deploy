@@ -2,25 +2,28 @@
 engine_version: ""
 # Be aware that if you enable this option that NPM, Node.js and Composer are installed
 # Feature toggles
-engine_feature_encrypted_assertions: 1
-engine_feature_encrypted_assertions_require_outer_signature: 1
-engine_feature_run_all_manipulations_prior_to_consent: 0
-engine_feature_block_user_on_violation: 0
-engine_feature_enable_sso_notification: 0
-engine_feature_enable_sso_session_cookie: 0
-engine_feature_enable_consent: 1
-engine_feature_stepup_override_entityid: 0
-engine_feature_idp_initiated_flow: 1
-engine_api_feature_metadata_push: 1
-engine_api_feature_consent_listing: 1
-engine_api_feature_consent_remove: 0
-engine_api_feature_metadata_api: 1
-engine_api_feature_deprovision: 1
-engine_feature_send_user_attributes: 0
+engine_feature_encrypted_assertions: true
+engine_feature_encrypted_assertions_require_outer_signature: true
+engine_feature_run_all_manipulations_prior_to_consent: false
+engine_feature_block_user_on_violation: false
+engine_feature_enable_sso_notification: false
+engine_feature_enable_sso_session_cookie: false
+engine_feature_enable_consent: true
+engine_feature_stepup_override_entityid: false
+engine_feature_idp_initiated_flow: true
+engine_feature_send_user_attributes: false
+engine_feature_enable_sbs_interrupt: false
+engine_feature_hide_bookmarkable_url: false
+engine_api_feature_metadata_push: true
+engine_api_feature_consent_listing: true
+engine_api_feature_consent_remove: false
+engine_api_feature_metadata_api: true
+engine_api_feature_deprovision: true
 
 # Cutoff point for showing unfiltered IdPs on the WAYF
 engine_wayf_cutoff_point_for_showing_unfiltered_idps: 50
 engine_wayf_show_remember_choice: false
+engine_wayf_preferred_idp_entity_ids: []
 
 # Required for the Symfony routing.
 engine_base_domain: "{{ base_domain }}"
@@ -46,6 +49,10 @@ engine_pdp_path: /pdp/api/decide/policy
 engine_attribute_aggregation_baseurl: "https://aa.{{ base_domain }}/aa/api/internal/attribute/aggregation"
 
 engine_api_deprovision_user: lifecycle
+
+engine_api_nameid_lookup_enabled: true
+engine_api_nameid_lookup_user: "nameid"
+
 
 # Minimum execution time in milliseconds when a received response is deemed invalid
 engine_minimum_execution_time_on_invalid_received_response: 5000
@@ -75,6 +82,14 @@ engine_stepup_gateway_loa3: "http://{{ engine_stepup_base_domain }}/assurance/lo
 engine_stepup_gateway_sfo_entity_id: "https://{{ engine_stepup_gateway_domain }}/second-factor-only/metadata"
 # The single sign-on endpoint used for Stepup Gateway SFO callouts
 engine_stepup_gateway_sfo_sso_location: "https://{{ engine_stepup_gateway_domain }}/second-factor-only/single-sign-on"
+
+# SBS interrupt settings
+engine_sbs_base_url: "sbs.{{ base_domain }}"
+engine_sbs_attributes_allowed:
+  - 'urn:mace:dir:attribute-def:eduPersonEntitlement'
+  - 'urn:mace:dir:attribute-def:uid'
+  - 'urn:mace:dir:attribute-def:eduPersonPrincipalName'
+  - 'urn:oid:1.3.6.1.4.1.24552.500.1.1.1.13'
 
 ## The minimum priority of messages that will be logged
 engine_logging_passthru_level: NOTICE

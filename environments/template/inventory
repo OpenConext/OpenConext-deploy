@@ -84,9 +84,6 @@ docker2.example.com
 [docker_invite:children]
 docker_apps1
 
-[docker_teams:children]
-docker_apps1
-
 [docker_pdp:children]
 docker_apps1
 

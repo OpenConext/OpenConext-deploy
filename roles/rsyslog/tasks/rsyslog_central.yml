@@ -1,44 +1,44 @@
 ---
 # The server uses a different set of keys as the client
-- name: put rsyslog server key
-  copy:
-    content: "{{ rsyslogserverkey }}" 
+- name: Put rsyslog server key
+  ansible.builtin.copy:
+    content: "{{ rsyslogserverkey }}"
     dest: "/etc/pki/rsyslog/rsyslogserver.key"
-    mode: 0400
+    mode: "0400"
     owner: root
 
 - name: Create the group that is allowed to read the logs
-  group: 
+  ansible.builtin.group:
     name: "{{ rsyslog_read_group }}"
     state: present
 
 - name: Create directory to save the logs
-  file:
+  ansible.builtin.file:
     path: "{{ rsyslog_dir }}"
     owner: root
     group: "{{ rsyslog_read_group }}"
     mode: "0750"
-    recurse: true
+    # recurse: true # this makes everything very slow and not sure if it is necessary
 
 - name: Put rsyslog client certificate
-  copy:
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogserver.crt"
     dest: "/etc/pki/rsyslog/rsyslogserver.crt"
-    mode: 0644
+    mode: "0644"
     owner: root
     group: adm
 
-- name: place rsyslog CA file
-  copy:
+- name: Place rsyslog CA file
+  ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/rsyslog_ca.pem"
-    dest: "{{ rsyslog_ca }}" 
-    mode: 0644
+    dest: "{{ rsyslog_ca }}"
+    mode: "0644"
 
 - name: Create directories to keep configuration file
-  file:
+  ansible.builtin.file:
     path: "/etc/rsyslog.d/{{ item }}"
     owner: root
-    mode: 0755
+    mode: "0755"
     state: directory
   with_items:
     - listeners
@@ -46,39 +46,46 @@
     - templates
 
 - name: Create template configurations
-  template:
+  ansible.builtin.template:
     src: sc_template.conf.j2
     dest: /etc/rsyslog.d/templates/{{ item.name }}.conf
     backup: true
   with_items: "{{ rsyslog_environments }}"
+  loop_control:
+    label: "{{ item.name }}"
+
   notify:
     - "restart rsyslog"
 
 - name: Create ruleset configurations
-  template:
+  ansible.builtin.template:
     src: sc_ruleset.conf.j2
     dest: /etc/rsyslog.d/rulesets/{{ item.name }}.conf
     backup: true
   with_items: "{{ rsyslog_environments }}"
+  loop_control:
+    label: "{{ item.name }}"
   notify:
     - "restart rsyslog"
 
 - name: Create sc listener configurations
-  template:
+  ansible.builtin.template:
     src: listener.conf.j2
     dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
     backup: true
   with_items: "{{ rsyslog_environments }}"
+  loop_control:
+    label: "{{ item.name }}"
   notify:
     - "restart rsyslog"
 
 - name: Create logrotate file for apps and host logs
-  template:
+  ansible.builtin.template:
     src: centralsyslog.j2
     dest: /etc/logrotate.d/centralsyslog
 
-- name: Put ryslog config file
-  template:
+- name: Put rsyslog config file
+  ansible.builtin.template:
     src: "rsyslog.conf.j2"
     dest: "/etc/rsyslog.conf"
   notify:
