@@ -34,6 +34,7 @@ haproxy_redirects:
 
 haproxy_acme: true
 haproxy_acme_renewal_days: 60
+haproxy_acmesh_version: "3.1.4"
 
 haproxy_acme_server: "not_defined"
 haproxy_acme_eab_kid: "key_id"
@@ -46,8 +47,12 @@ haproxy_acmedns:
   subdomain: "a_subdomain"
   fulldomain: "a_subdomain.acme-dns.example.org"
 
+# at which time should renewal script run?  (cron-style wildcards like */6 ate allowed)
+haproxy_acme_cronjob_min: "30"
+haproxy_acme_cronjob_hour: "07"
 # on which weekday (cron, 0==sunday) to run the renewal script
 haproxy_acme_cronjob_dow: 1
+
 
 # optional monitoring url for acme cron
 haproxy_acme_cronjob_monitor_url:

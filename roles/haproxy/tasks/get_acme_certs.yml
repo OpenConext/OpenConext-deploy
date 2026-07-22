@@ -5,13 +5,80 @@
       {{
         (
           [base_domain]
-          + (haproxy_applications | map(attribute='vhost_name') | list)
-          + (haproxy_ldap_servers | map(attribute='vhost_name') | list)
-          + (haproxy_redirects    | map(attribute='hostname')   | list)
+          + (haproxy_applications               | map(attribute='vhost_name') | list)
+          + (haproxy_ldap_servers | default([]) | map(attribute='vhost_name') | list)
+          + (haproxy_redirects                  | map(attribute='hostname')   | list)
         )
         | unique | sort
       }}
 
+- name: "print all active TLS hosts"
+  debug:
+    var: "haproxy_ssl_hosts"
+
+##############################################################################
+## cleaning up
+##############################################################################
+- name: "Get list of all current certificates on disk"
+  ansible.builtin.find:
+    paths: "/etc/haproxy/certs"
+    patterns: "*.pem"
+  register: "haproxy_current_certs_disk"
+
+- name: "Backup obsolete certificates"
+  ansible.builtin.copy:
+    src: "/etc/haproxy/certs/{{ item }}.pem"
+    dest: "/etc/haproxy/certs-backup/{{ item }}.pem.{{ now().strftime('%Y%m%d-%H%M%S') }}"
+    remote_src: true
+    mode: "0600"
+    owner: "root"
+    group: "root"
+  when: "item not in haproxy_ssl_hosts"
+  loop: "{{ haproxy_current_certs_disk.files | map(attribute='path') | map('basename') | map('regex_replace', '\\.pem$', '') }}"
+
+- name: "Remove obsolete certificates from disk"
+  ansible.builtin.file:
+    path: "/etc/haproxy/certs/{{ item }}.pem"
+    state: "absent"
+  when: "item not in haproxy_ssl_hosts"
+  loop: "{{ haproxy_current_certs_disk.files | map(attribute='path') | map('basename') | map('regex_replace', '\\.pem$', '') }}"
+
+- name: "Get list of all current certificates known to acme"
+  ansible.builtin.command:
+    cmd: >
+      /home/acme/.acme.sh/acme.sh --list
+  changed_when: false
+  failed_when: 'haproxy_acme_certs_raw.rc != 0'
+  check_mode: false  # this is safe run run, even in check mode
+  become_user: "acme"
+  become: true
+  register: "haproxy_acme_certs_raw"
+
+# parse the output from acme.sh (skip header line, extract first column)
+- name: "Extract list of certificate names known to acme"
+  ansible.builtin.set_fact:
+    haproxy_current_acme_certs: >-
+      {{ haproxy_acme_certs_raw.stdout_lines[1:]
+         | reject('equalto', '')
+         | map('regex_replace', '^(\S+)\s.*$', '\1')
+         | list }}
+
+- name: "Remove obsolete certs from acme.sh"
+  ansible.builtin.command:
+    cmd: >
+      /home/acme/.acme.sh/acme.sh --remove --domain '{{ item }}'
+  changed_when: "haproxy_acme_remove_certs.rc == 0"
+  failed_when: 'haproxy_acme_remove_certs.rc != 0'
+  when: "item not in haproxy_ssl_hosts"
+  loop: "{{ haproxy_current_acme_certs }}"
+  become_user: "acme"
+  become: true
+  register: "haproxy_acme_remove_certs"
+
+
+##############################################################################
+## get new certs
+##############################################################################
 - name: Check existence of acme CNAME records
   ansible.builtin.command:
     cmd: "dig +short -t CNAME '_acme-challenge.{{ item }}'"
