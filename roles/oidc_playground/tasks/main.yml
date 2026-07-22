@@ -53,7 +53,7 @@
       timeout: "10s"
       retries: 3
       start_period: "10s"
-  register: "oidcplaygroundservercontainer"
+  register: "oidc_playground_servercontainer"
 
 - name: "Create the gui container"
   community.docker.docker_container:
@@ -85,13 +85,13 @@
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient }}"
 
-# - name: Include the role manage_provision_entities to provision oidc-playground resource server to Manage
+# - name: Include the role manage_provision_entities to provision oidc_playground resource server to Manage
 #   include_role:
 #     name: manage_provision_entities
 #   vars:
 #     entity_type: oauth20_rs
 #
-# - name: Include the role manage_provision_entities to provision oidc-playground client to Manage
+# - name: Include the role manage_provision_entities to provision oidc_playground client to Manage
 #   include_role:
 #     name: manage_provision_entities
 #   vars:
