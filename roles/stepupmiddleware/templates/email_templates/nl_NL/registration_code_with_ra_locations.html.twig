@@ -1,0 +1,27 @@
+<p>Beste {{ commonName }},</p>
+
+<p>Bedankt voor het registreren van je token. Ga binnen 14 dagen naar een van de onderstaande locaties om je token te laten activeren. Je activatiecode is geldig tot en met {{ expirationDate | format_date('full', locale=locale) }}.</p>
+
+<p>Neem daarbij het volgende mee:</p>
+<ul>
+    <li>Je token</li>
+    <li>Een geldig legitimatiebewijs (paspoort, rijbewijs of nationale ID-kaart)</li>
+    <li>De activatiecode uit deze e-mail</li>
+</ul>
+
+<p style='font-size: 150%; text-align: center'>Activatiecode: <code>{{ registrationCode }}</code></p>
+
+<p>Locatie(s) om je token te activeren:</p>
+{% if raLocations is empty %}
+    <p>Er zijn geen Locaties bekend.</p>
+{% else %}
+    <ul>
+        {% for ra in raLocations %}
+            <li><address>
+                <strong>{{ ra.name }}</strong><br />
+                {{ ra.location }}<br />
+                {{ ra.contactInformation }}
+            </address></li>
+        {% endfor %}
+    </ul>
+{% endif %}
