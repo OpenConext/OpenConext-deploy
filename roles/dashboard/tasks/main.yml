@@ -25,7 +25,7 @@
     name: dashboardserver
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-dashboard/dashboard-server:{{ dashboard_server_version }}
+    image: ghcr.io/openconext/openconext-dashboard/dashboard-server:{{ dashboard_version }}
     pull: true
     restart_policy: "{{ dashboard_server_restart_policy }}"
     restart_retries: "{{ dashboard_server_restart_retries }}" # Only for restart policy on-failure
@@ -61,7 +61,7 @@
 - name: Create the gui container
   community.docker.docker_container:
     name: dashboardgui
-    image: ghcr.io/openconext/openconext-dashboard/dashboard-gui:{{ dashboard_gui_version }}
+    image: ghcr.io/openconext/openconext-dashboard/dashboard-gui:{{ dashboard_version }}
     pull: true
     restart_policy: "always"
     state: started

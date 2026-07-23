@@ -27,8 +27,8 @@ spDashboard.password={{ dashboard_sp_dashboard_password }}
 
 # SAB connection details
 sab-rest.endpoint={{ dashboard.sab_rest_endpoint }}
-sab-rest.username=cdk
-sab-rest.password={{ dashboard_sab_rest_password }}
+sab-rest.username={{ dashboard.sab_rest_username }}
+sab-rest.password={{ dashboard.sab_rest_password }}
 
 # SAB roles
 admin.surfconext.idp.sabRole=SURFconextverantwoordelijke
@@ -80,6 +80,7 @@ dashboard.feature.consent={{ dashboard.feature_consent }}
 # Valid choices are 'MOCK', 'PDP' or 'MANAGE', 'MOCK' is for local development
 dashboard.feature.pdpSource={{ dashboard.pdp_source }}
 dashboard.feature.statistics=true
+dashboard.feature.statisticsDown={{ dashboard.feature_statsdown }}
 dashboard.feature.mail={{ dashboard.feature_mail }}
 dashboard.feature.oidc={{ dashboard.feature_oidc }}
 dashboard.feature.stepup={{ dashboard.feature_stepup }}

@@ -16,7 +16,7 @@
 - name: Install haproxy and socat
   ansible.builtin.apt:
     name:
-      - "haproxy=3.0.*"
+      - "haproxy"
       - "socat"
       - "git"
     state: "present"
@@ -36,20 +36,6 @@
 - name: Include get_acme_certs
   ansible.builtin.include_tasks: get_acme_certs.yml
   when: haproxy_acme | bool
-
-
-- name: Check if we need to load additional certificates for migration
-  ansible.builtin.find:
-    paths: "/etc/haproxy/certs"
-    patterns: "{{ base_domain }}.pem"
-  register: haproxy_extra_certs_found
-  when: "base_domain not in haproxy_ssl_hosts"
-
-- name: Set additional certificates to load
-  ansible.builtin.set_fact:
-    haproxy_extra_certs: |
-        {{ haproxy_extra_certs_found.files | map(attribute='path') | list }}
-  when: "base_domain not in haproxy_ssl_hosts"
 
 - name: Copy haproxy sysconfig file
   ansible.builtin.copy:
@@ -82,22 +68,14 @@
 
 - name: Create haproxy SSL key directory
   ansible.builtin.file:
-    dest: "/etc/haproxy/certs"
+    path: "/etc/haproxy/{{ item }}"
     state: directory
     owner: haproxy
     group: haproxy
     mode: "0770"
-
-- name: Create combined key and certificate file for HAproxy
-  ansible.builtin.copy:
-    content: >
-      {{ item.key_content }}{{ lookup('file', '{{ inventory_dir }}/files/certs/{{ item.crt_name }}') }}
-    dest: "/etc/haproxy/certs/{{ item.name }}_haproxy.pem"
-    mode: "0600"
-  with_items: "{{ haproxy_sni_ip.certs }}"
-  when: haproxy_sni_ip.certs is defined
-  notify:
-    - "reload haproxy"
+  loop:
+   - "certs"
+   - "certs-backup"
 
 - name: Create backend CA directory
   ansible.builtin.file:

@@ -1,47 +1,57 @@
 ---
-- name: Create metadata directories
+- name: "Create metadata directories"
   ansible.builtin.file:
     path: "{{ item }}"
-    state: directory
-    owner: root
-    group: root
+    state: "directory"
+    owner: "root"
+    group: "root"
     mode: "0750"
   with_items:
     - "/opt/openconext/manage/metadata_configuration"
     - "/opt/openconext/manage/metadata_templates"
     - "/opt/openconext/manage/policies"
 
-- name: Import the mongo CA file
+- name: "Copy Stepup stepup_config.json from inventory"
+  ansible.builtin.template:
+    src: "stepup_config.json.j2"
+    dest: "/opt/openconext/manage/stepup_config.json"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: "Restart manageserver"
+
+- name: "Import the mongo CA file"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/secrets/mongo/mongoca.pem"
     dest: "/opt/openconext/manage"
-    owner: root
+    owner: "root"
+    group: "root"
     mode: "0644"
 
-- name: Copy certificate for invite secrets encryption
+- name: "Copy certificate for invite secrets encryption"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/invite/public_key.pem"
     dest: "/opt/openconext/manage/public_invite_key.pem"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0640"
   notify:
-    - "restart manageserver"
+    - "Restart manageserver"
 
-- name: Place the serverapplication configfiles
+- name: "Place the serverapplication configfiles"
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: /opt/openconext/manage/{{ item }}
-    owner: root
-    group: root
+    dest: "/opt/openconext/manage/{{ item }}"
+    owner: "root"
+    group: "root"
     mode: "0644"
   with_items:
-    - application.yml
-    - logback.xml
-    - manage-api-users.yml
-  notify: restart manageserver
+    - "application.yml"
+    - "logback.xml"
+    - "manage-api-users.yml"
+  notify: "Restart manageserver"
 
-- name: Place old __cacert_entrypoint.sh script
+- name: "Place old __cacert_entrypoint.sh script"
   ansible.builtin.copy:
     src: "__cacert_entrypoint.sh"
     dest: "/opt/openconext/manage"
@@ -49,78 +59,84 @@
     group: "root"
     mode: "0755"
 
-- name: copy metadata configuration
+- name: "Copy metadata configuration"
   ansible.builtin.template:
     src: "metadata_configuration/{{ item }}.schema.json.j2"
     dest: "/opt/openconext/manage/metadata_configuration/{{ item }}.schema.json"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0640"
   with_items:
     - "{{ manage_tabs_enabled }}"
   notify:
-    - "restart manageserver"
+    - "Restart manageserver"
 
-- name: copy metadata templates
-  copy:
+- name: "Copy metadata templates"
+  ansible.builtin.copy:
     src: "metadata_templates/{{ item }}.template.json"
     dest: "/opt/openconext/manage/metadata_templates/{{ item }}.template.json"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0640"
   with_items:
     - "{{ manage_tabs_enabled }}"
   notify:
-    - "restart manageserver"
+    - "Restart manageserver"
 
-- name: copy policies configuration
-  copy:
+- name: "Copy policies configuration"
+  ansible.builtin.copy:
     src: "policies/{{ item }}"
     dest: "/opt/openconext/manage/policies/{{ item }}"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0640"
   with_items:
-    - allowed_attributes.json
-    - extra_saml_attributes.json
+    - "allowed_attributes.json"
+    - "extra_saml_attributes.json"
   notify:
-    - "restart manageserver"
+    - "Restart manageserver"
 
-- name: Add the mongodb and mariadb  docker network to the list of networks when MongoDB runs in Docker
+- name: "Add the mongodb and mariadb  docker network to the list of networks when MongoDB runs in Docker"
   ansible.builtin.set_fact:
     manage_docker_networks:
-      - name: loadbalancer
-      - name: openconext_mongodb
-      - name: openconext_mariadb
-  when: mongodb_in_docker | default(false) | bool
+      - name: "loadbalancer"
+      - name: "openconext_mariadb"
+  when: "mariadb_in_docker | default(false) | bool"
 
-- name: Create and start the server container
+- name: "Create and start the server container"
   community.docker.docker_container:
-    name: manageserver
-    image: ghcr.io/openconext/openconext-manage/manage-server:{{ manage_version }}
-    entrypoint: /__cacert_entrypoint.sh
+    name: "manageserver"
+    image: "ghcr.io/openconext/openconext-manage/manage-server:{{ manage_version }}"
+    entrypoint: "/__cacert_entrypoint.sh"
     pull: true
     restart_policy: "{{ manage_server_restart_policy }}"
     restart_retries: "{{ manage_server_restart_retries }}" # Only for restart policy on-failure
-    state: started
+    state: "started"
     networks: "{{ manage_docker_networks }}"
     mounts:
-      - source: /opt/openconext/manage/
-        target: /config/
-        type: bind
-      - source: /opt/openconext/manage/mongoca.pem
-        target: /certificates/mongoca.crt
-        type: bind
-      - source: /opt/openconext/manage/__cacert_entrypoint.sh
-        target: /__cacert_entrypoint.sh
-        type: bind
+      - source: "/opt/openconext/manage/"
+        target: "/config/"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/manage/mongoca.pem"
+        target: "/certificates/mongoca.crt"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/manage/__cacert_entrypoint.sh"
+        target: "/__cacert_entrypoint.sh"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/manage/stepup_config.json"
+        target: "/stepup_config.json"
+        type: "bind"
+        read_only: true
     command: "java -jar /app.jar -Xmx512m --spring.config.location=./config/"
     etc_hosts:
-      host.docker.internal: host-gateway
+      host.docker.internal: "host-gateway"
     env:
       USE_SYSTEM_CA_CERTS: "true"
       TZ: "{{ timezone }}"
-    hostname: manage
+    hostname: "manage"
     healthcheck:
       test:
         [
@@ -131,19 +147,19 @@
           "--spider",
           "http://localhost:8080/internal/health",
         ]
-      interval: 10s
-      timeout: 10s
+      interval: "10s"
+      timeout: "10s"
       retries: 3
-      start_period: 10s
-  register: manageservercontainer
+      start_period: "10s"
+  register: "manage_servercontainer"
 
-- name: Create the gui container
+- name: "Create the gui container"
   community.docker.docker_container:
-    name: managegui
-    image: ghcr.io/openconext/openconext-manage/manage-gui:{{ manage_version }}
+    name: "managegui"
+    image: "ghcr.io/openconext/openconext-manage/manage-gui:{{ manage_version }}"
     pull: true
     restart_policy: "always"
-    state: started
+    state: "started"
     networks:
       - name: "loadbalancer"
     labels:
@@ -152,11 +168,11 @@
       traefik.enable: "true"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost/internal/health"]
-      interval: 10s
-      timeout: 10s
+      interval: "10s"
+      timeout: "10s"
       retries: 3
-      start_period: 10s
-    hostname: managegui
+      start_period: "10s"
+    hostname: "managegui"
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient_with_static_img_with_surfconext }}"
       HTTPD_SERVERNAME: "manage.{{ base_domain }}"
@@ -167,9 +183,11 @@
       SHIB_REMOTE_ENTITYID: "https://engine.{{ base_domain }}/authentication/idp/metadata"
       SHIB_REMOTE_METADATA: "{{ shibboleth_metadata_sources.engine }}"
     mounts:
-      - source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - source: /opt/openconext/common/favicon.ico
-        target: /var/www/favicon.ico
-        type: bind
+      - source: "/etc/localtime"
+        target: "/etc/localtime"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/common/favicon.ico"
+        target: "/var/www/favicon.ico"
+        type: "bind"
+        read_only: true
