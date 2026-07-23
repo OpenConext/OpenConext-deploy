@@ -1,0 +1,27 @@
+<p>Dear {{ commonName }},</p>
+
+<p>You have registered, but not yet activated, a token. Please visit one of the locations below to get your token activated. After {{ expirationDate | format_date('full', locale=locale) }} your activation code is no longer valid.</p>
+
+<p>Please bring the following:</p>
+<ul>
+    <li>Your token</li>
+    <li>A valid proof of identity (passport, drivers license or national ID-card)</li>
+    <li>The activation code from this e-mail</li>
+</ul>
+
+<p style='font-size: 150%; text-align: center'>Activation code: <code>{{ registrationCode }}</code></p>
+
+<p>Location(s) to activate your token:</p>
+{% if raLocations is empty %}
+    <p>No locations known.</p>
+{% else %}
+    <ul>
+        {% for ra in raLocations %}
+            <li><address>
+                <strong>{{ ra.name }}</strong><br />
+                {{ ra.location }}<br />
+                {{ ra.contactInformation }}
+            </address></li>
+        {% endfor %}
+    </ul>
+{% endif %}

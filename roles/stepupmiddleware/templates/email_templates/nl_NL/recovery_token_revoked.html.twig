@@ -1,0 +1,13 @@
+<p>Beste {{ commonName }},</p>
+
+<p>
+{% if isRevokedByRa %}
+    Je herstelmethode is verwijderd door een beheerder.
+{% else %}
+    Je herstelmethode is verwijderd. Neem direct contact op met de helpdesk van je instelling als je dit niet zelf gedaan hebt, omdat dit kan betekenen dat je account gecompromitteerd is.
+{% endif %}
+</p>
+
+<p>Je kunt deze herstelmethode niet meer gebruiken om een token te activeren.</p>
+
+<p>Zorg er altijd voor dat je tenminste één herstelmethode beschikbaar hebt.</p>

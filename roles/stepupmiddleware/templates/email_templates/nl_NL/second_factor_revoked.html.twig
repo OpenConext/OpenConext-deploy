@@ -1,0 +1,13 @@
+<p>Beste {{ commonName }},</p>
+
+<p>
+{% if isRevokedByRa %}
+    De registratie van je {{ tokenType }} token met ID {{ tokenIdentifier }} is verwijderd door een beheerder.
+{% else %}
+    Je hebt de registratie voor je {{ tokenType }} token met ID {{ tokenIdentifier }} verwijderd. Neem direct contact op met de helpdesk van je instelling als je dit zelf niet gedaan hebt, omdat dit kan betekenen dat je account gecompromitteerd is.
+{% endif %}
+</p>
+
+<p>Je kunt dit token niet meer gebruiken om in te loggen bij services die een tweede inlogstap vereisen.</p>
+
+<p>Wil je een nieuw token aanvragen? Ga dan naar <a href='{{ selfServiceUrl }}'>{{ selfServiceUrl }}</a> en doorloop het registratieproces opnieuw.</p>
