@@ -161,3 +161,4 @@ sram_sbs_csp_style_hashes:
   - 'sha256-WTC9gHKjIpzl5ub1eg/YrRy/k+jlzeyRojah9dxAApc='  # on /new-service-request
 
 sram_sbs_engine_block_api_token: secret
+sram_sbs_engine_block_entity_id: ""
