@@ -1,8 +1,9 @@
 filebeat_tls: false
 filebeat_eblog: false
-filebeat_version: 9.4.3
+filebeat_major_version: 7
+filebeat_version: 7.17.29
 filebeat_package: filebeat-{{ filebeat_version }}-{{ ansible_architecture }}.deb
-filebeat_apt_url: "https://artifacts.elastic.co/packages/oss-9.x/apt"
+filebeat_apt_url: "https://artifacts.elastic.co/packages/oss-{{ filebeat_major_version }}.x/apt"
 # add instances to group or host vars:
 # filebeat_instances:
 #  - name: filebeat_sc_prd
