@@ -15,7 +15,7 @@
 
     - name: "Determine if Filebeat install is needed"
       ansible.builtin.set_fact:
-        filebeat_install_needed: "{{ 'filebeat' not in ansible_facts.packages or ansible_facts.packages['filebeat'][0].version != filebeat_version }}"
+        filebeat_install_needed: "{{ 'filebeat' not in ansible_facts.packages }}"
 
     - name: "Install or upgrade filebeat when it is not installed already"
       when: filebeat_install_needed
