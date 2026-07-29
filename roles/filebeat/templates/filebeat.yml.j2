@@ -36,5 +36,5 @@ processors:
 output.logstash:
   hosts: {{ item.logstash_hosts }}
 {% if item.logstash_ca is defined %}
-  ssl.certificate_authorities: {{ item.logstash_ca }}
+  ssl.certificate_authorities: ["{{ item.logstash_ca }}"]
 {% endif %}
