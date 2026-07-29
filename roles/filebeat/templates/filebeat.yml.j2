@@ -21,7 +21,7 @@ filebeat.inputs:
   fields:
   {%- for field in item.fields %}
 
-    - {{ field -}}
+    {{ field -}}
   {% endfor %}
 
   fields_under_root: true
