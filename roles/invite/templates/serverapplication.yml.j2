@@ -161,7 +161,7 @@ feature:
 # We don't encode in-memory passwords, but they are reused so do NOT prefix them with {noop}
 external-api-configuration:
   remote-users:
-    {{ invite.api_users | to_nice_yaml(indent=2) | indent(4, first=false) }}
+    {{ invite.api_users | to_nice_yaml(indent=2, sort_keys=false) | indent(4, first=false) }}
 
 voot:
   group_urn_domain: "{{ invite.group_urn_domain }}"
