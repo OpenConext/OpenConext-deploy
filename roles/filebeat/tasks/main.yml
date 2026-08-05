@@ -36,9 +36,9 @@
             state: "directory"
             mode: '0755'
 
-        - name: "Download Elasticsearch GPG key"
-          ansible.builtin.get_url:
-            url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+        - name: "Copy Elasticsearch GPG key"
+          ansible.builtin.copy:
+            src: "/files/GPG-KEY-elasticsearch"
             dest: "/tmp/GPG-KEY-elasticsearch"
             mode: '0644'
 
