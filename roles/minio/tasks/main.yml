@@ -1,14 +1,21 @@
-- name: Configure and start container
+---
+- name: "Configure and start container"
   ansible.builtin.include_tasks: "configure_container.yml"
 
-- name: Configure minio client
+- name: "Configure minio client"
   ansible.builtin.include_tasks: "configure_minio_client.yml"
 
-- name: Configure minio server
+- name: "Configure minio server"
   ansible.builtin.include_tasks: "configure_minio_server.yml"
 
-- name: Add minio users
+- name: "Add minio users"
   ansible.builtin.include_tasks: "create_users.yml"
   loop: "{{ minio_users }}"
   loop_control:
     loop_var: "user"
+
+- name: "Add minio buckets"
+  ansible.builtin.include_tasks: "create_buckets.yml"
+  loop: "{{  minio_buckets }}"
+  loop_control:
+    loop_var: "bucket"

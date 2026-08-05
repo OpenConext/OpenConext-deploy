@@ -1,14 +1,14 @@
-- name: Create database user
-  mysql_user:
+---
+- name: "Create database users"
+  community.mysql.mysql_user:
     name: "{{ item[0].name }}"
     host: "{{ item[1] }}"
     password: "{{ item[0].password }}"
-    priv: "{{ item[0].db_name }}.*:{{item[0].privilege}}"
-    state: present
-    login_unix_socket: /var/lib/mysql/mysql.sock
+    priv: "{{ item[0].db_name }}.*:{{ item[0].privilege }}"
+    state: "present"
     append_privs: true
-  with_nested:
-    - "{{ databases.users }}"
-    - "{{ database_clients }}"
+    login_unix_socket: "/var/lib/mysql/mysql.sock"
   run_once: true
-  no_log: true
+  loop: "{{ databases.users | product(database_clients) | list }}"
+  loop_control:
+    label: "{{ item[0].name }}@{{ item[1] }}"

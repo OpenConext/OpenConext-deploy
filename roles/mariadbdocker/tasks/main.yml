@@ -1,4 +1,8 @@
 ---
+- name: "Check that we're running on test"
+  ansible.builtin.meta: "noop"
+  failed_when: "env != 'test'"
+
 - name: Create MariaDB volume
   community.docker.docker_volume:
     name: openconext_mariadb
@@ -57,21 +61,20 @@
   with_items:
     - "{{ databases.names }}"
 
-- name: Create database user
+- name: "Create database users"
   community.mysql.mysql_user:
     name: "{{ item[0].name }}"
     host: "{{ item[1] }}"
     password: "{{ item[0].password }}"
     priv: "{{ item[0].db_name }}.*:{{ item[0].privilege }}"
-    state: present
+    state: "present"
     append_privs: true
-    login_user: root
-    login_host: localhost
+    login_user: "root"
+    login_host: "localhost"
     login_password: "{{ mariadb_root_password }}"
-  no_log: true
-  with_nested:
-    - "{{ databases.users }}"
-    - "{{ database_clients }}"
+  loop: "{{ databases.users | product(database_clients) | list }}"
+  loop_control:
+    label: "{{ item[0].name }}@{{ item[1] }}"
 
 - name: Add mariadb backup user
   community.mysql.mysql_user:

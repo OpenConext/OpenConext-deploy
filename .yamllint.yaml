@@ -1,0 +1,27 @@
+---
+extends: "default"
+
+rules:
+  # 80 chars should be enough, but don't fail if a line is longer
+  line-length:
+    max: 160
+    level: "warning"
+
+  quoted-strings:
+    quote-type: "any"
+    required: true
+    allow-quoted-quotes: false
+    check-keys: false
+
+# ansible-lint compatibility:
+  comments:
+    min-spaces-from-content: 1
+
+  comments-indentation: false
+
+  braces:
+    max-spaces-inside: 1
+
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true

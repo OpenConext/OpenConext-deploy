@@ -1,24 +1,24 @@
 ---
-- name: Add group engine
+- name: "Add group engine"
   ansible.builtin.group:
     name: "engine"
-    state: present
-  register: engine_guid
+    state: "present"
+  register: "engine_guid"
 
-- name: Add user engine
+- name: "Add user engine"
   ansible.builtin.user:
     name: "engine"
     group: "engine"
-    createhome: false
-    state: present
-  register: engine_uid
+    create_home: false
+    state: "present"
+  register: "engine_uid"
 
-- name: Create some dirs
+- name: "Create some dirs"
   ansible.builtin.file:
-    state: directory
-    dest: "{{ item }}"
-    owner: root
-    group: root
+    path: "{{ item }}"
+    state: "directory"
+    owner: "root"
+    group: "root"
     mode: "0755"
   with_items:
     - "{{ _engine_config_dir }}"
@@ -27,7 +27,7 @@
     - "{{ _engine_config_dir }}/images"
     - "{{ _engine_config_dir }}/languages"
 
-- name: Place parameters.yml
+- name: "Place parameters.yml"
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ _engine_config_dir }}/configs/{{ item }}"
@@ -39,157 +39,157 @@
     - "monolog.yml"
   notify: "Restart engine"
 
-- name: Check presence of environment specific attributes.json
+- name: "Check presence of environment specific attributes.json"
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/eb/attributes.json"
-  register: engine_attributes_json_present
+  register: "engine_attributes_json_present"
   become: false
-  delegate_to: localhost
+  delegate_to: "localhost"
 
-- name: Copy environment specific attributes.json
+- name: "Copy environment specific attributes.json"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/eb/attributes.json"
     dest: "{{ _engine_config_dir }}/configs/"
     mode: "0644"
-    owner: root
-    group: engine
-  when: engine_attributes_json_present.stat.exists
+    owner: "root"
+    group: "engine"
+  when: "engine_attributes_json_present.stat.exists"
 
-- name: Check presence of language specific overrides
+- name: "Check presence of language specific overrides"
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/eb/languages/"
-  register: engine_overrides_present
+  register: "engine_overrides_present"
   become: false
-  delegate_to: localhost
+  delegate_to: "localhost"
 
-- name: Copy language specific overrides
+- name: "Copy language specific overrides"
   ansible.builtin.template:
     src: "{{ item }}"
     dest: "{{ _engine_config_dir }}/languages/"
-    owner: root
-    group: engine
+    owner: "root"
+    group: "engine"
     mode: "0644"
-  when: engine_overrides_present.stat.exists
+  when: "engine_overrides_present.stat.exists"
   with_fileglob:
     - "{{ inventory_dir }}/files/eb/languages/*"
   notify: "Restart engine"
 
-- name: Check if we have a custom logo
+- name: "Check if we have a custom logo"
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/logo.png"
-  register: engine_customlogo
+  register: "engine_customlogo"
   become: false
-  delegate_to: localhost
+  delegate_to: "localhost"
 
-- name: Install environment specific logo
+- name: "Install environment specific logo"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/logo.png"
     dest: "{{ _engine_config_dir }}/images/"
-    owner: root
-    group: engine
+    owner: "root"
+    group: "engine"
     mode: "0644"
-  when: engine_customlogo.stat.exists
+  when: "engine_customlogo.stat.exists"
 
-- name: Check if we have a custom favicon
+- name: "Check if we have a custom favicon"
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/favicon.ico"
-  register: engine_customfavicon
+  register: "engine_customfavicon"
   become: false
-  delegate_to: localhost
+  delegate_to: "localhost"
 
-- name: Install environment specific favicon
+- name: "Install environment specific favicon"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/favicon.ico"
     dest: "/opt/openconext/common/"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0644"
-  when: engine_customfavicon.stat.exists
+  when: "engine_customfavicon.stat.exists"
 
-- name: Check if we have a custom background back image for the feedback page
+- name: "Check if we have a custom background back image for the feedback page"
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/eb/background-back.svg"
-  register: engine_customfeedbackbackground
+  register: "engine_customfeedbackbackground"
   become: false
-  delegate_to: localhost
+  delegate_to: "localhost"
 
-- name: Install environment specific background back image
+- name: "Install environment specific background back image"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/eb/background-back.svg"
     dest: "{{ _engine_config_dir }}/images/"
-    owner: root
-    group: engine
+    owner: "root"
+    group: "engine"
     mode: "0644"
-  when: engine_customfeedbackbackground.stat.exists
+  when: "engine_customfeedbackbackground.stat.exists"
 
-- name: Check if we have a custom background front image for the feedback page
+- name: "Check if we have a custom background front image for the feedback page"
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/eb/background-front.svg"
-  register: engine_customfeedbackforeground
+  register: "engine_customfeedbackforeground"
   become: false
-  delegate_to: localhost
+  delegate_to: "localhost"
 
-- name: Install environment specific background front image
+- name: "Install environment specific background front image"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/eb/background-front.svg"
     dest: "{{ _engine_config_dir }}/images/"
-    owner: root
-    group: engine
+    owner: "root"
+    group: "engine"
     mode: "0644"
-  when: engine_customfeedbackforeground.stat.exists
+  when: "engine_customfeedbackforeground.stat.exists"
 
-- name: Check if we have a Stepup GW certificate
+- name: "Check if we have a Stepup GW certificate"
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/certs/stepup_gateway.pem"
-  register: engine_stepupgwcert
+  register: "engine_stepupgwcert"
   become: false
-  delegate_to: localhost
+  delegate_to: "localhost"
 
-- name: Install Stepup GW certificate
+- name: "Install Stepup GW certificate"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/stepup_gateway.pem"
     dest: "{{ _engine_config_dir }}/certs/"
-    owner: root
-    group: engine
+    owner: "root"
+    group: "engine"
     mode: "0644"
-  when: engine_stepupgwcert.stat.exists
+  when: "engine_stepupgwcert.stat.exists"
 
-- name: Copy over the engineblock keys
+- name: "Copy over the engineblock keys"
   ansible.builtin.copy:
     content: "{{ item.private_key }}"
     dest: "{{ _engine_config_dir }}/certs/{{ item.name }}.key"
-    owner: root
-    group: engine
+    owner: "root"
+    group: "engine"
     mode: "0440"
   no_log: true
   loop: "{{ engine_key_and_certs }}"
 
-- name: Copy engineblock certificates to correct location
+- name: "Copy engineblock certificates to correct location"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/{{ item.crt_name }}"
     dest: "{{ _engine_config_dir }}/certs/{{ item.name }}.crt"
-    owner: root
-    group: engine
+    owner: "root"
+    group: "engine"
     mode: "0644"
   no_log: true
   loop: "{{ engine_key_and_certs }}"
 
-- name: Create Docker volume to contain the sessions
+- name: "Create Docker volume to contain the sessions"
   community.docker.docker_volume:
-    name: engineblock_sessions
-    state: present
+    volume_name: "engineblock_sessions"
+    state: "present"
 
-- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+- name: "Add the MariaDB docker network to the list of networks when MariaDB runs in Docker"
   ansible.builtin.set_fact:
     engine_docker_networks:
-      - name: loadbalancer
-      - name: openconext_mariadb
-  when: mariadb_in_docker | default(false) | bool
+      - name: "loadbalancer"
+      - name: "openconext_mariadb"
+  when: "mariadb_in_docker | default(false) | bool"
 
-- name: Create the container
+- name: "Create the container"
   community.docker.docker_container:
     name: "engineblock"
-    image: ghcr.io/openconext/openconext-engineblock/openconext-engineblock:{{ engine_version }}
+    image: "ghcr.io/openconext/openconext-engineblock/openconext-engineblock:{{ engine_version }}"
     pull: true
     restart_policy: "always"
     networks: "{{ engine_docker_networks }}"
@@ -208,53 +208,47 @@
       PHP_MEMORY_LIMIT: "{{ engine_php_memory }}"
       APP_ENV: "prod"
       APP_SECRET: "{{ engine_parameters_secret }}"
-      APP_DEBUG: "{{ engine_debug | bool | int }}"
+      APP_DEBUG: "{{ engine_debug | bool | int | string }}"
     etc_hosts:
-      host.docker.internal: host-gateway
+      host.docker.internal: "host-gateway"
     mounts:
       - source: "{{ _engine_config_dir }}/configs/"
         target: "{{ _engine_container_config_dir }}"
-        type: bind
+        type: "bind"
         read_only: true
       - source: "{{ _engine_config_dir }}/languages/overrides.en.php"
         target: "/var/www/html/languages/overrides.en.php"
-        type: bind
+        type: "bind"
         read_only: true
       - source: "{{ _engine_config_dir }}/languages/overrides.nl.php"
         target: "/var/www/html/languages/overrides.nl.php"
-        type: bind
+        type: "bind"
         read_only: true
       - source: "{{ _engine_config_dir }}/configs/attributes.json"
         target: "{{ _engine_container_config_dir }}/attributes.json"
-        type: bind
+        type: "bind"
         read_only: true
       - source: "{{ _engine_config_dir }}/images/background-back.svg"
         target: "/var/www/html/public/images/background-back.svg"
-        type: bind
+        type: "bind"
         read_only: true
       - source: "{{ _engine_config_dir }}/images/background-front.svg"
         target: "/var/www/html/public/images/background-front.svg"
-        type: bind
+        type: "bind"
         read_only: true
       - source: "{{ _engine_config_dir }}/images/logo.png"
         target: "/var/www/html/public/images/logo.png"
-        type: bind
+        type: "bind"
         read_only: true
       - source: "{{ _engine_config_dir }}/certs/"
         target: "/var/www/html/certs/"
-        type: bind
+        type: "bind"
         read_only: true
       - source: "/opt/openconext/common/favicon.ico"
         target: "/var/www/html/public/favicon.ico"
-        type: bind
+        type: "bind"
         read_only: true
       - source: "engineblock_sessions"
         target: "/tmp/"
-        type: volume
-    healthcheck:
-      test: ["CMD-SHELL", "curl --fail -s http://localhost/internal/health | grep -q '\"status\":\"UP\"'"]
-      start_period: 60s
-      interval: 10s
-      timeout: 1s
-      retries: 20
+        type: "volume"
   register: "engine_container"

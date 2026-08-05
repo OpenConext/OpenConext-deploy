@@ -8,7 +8,19 @@ minio_url_local: "http://127.0.0.1:9000"
 minio_alias: "openconext"
 minio_client_path: $HOME/minio-binaries
 minio_mc: "{{ minio_client_path }}/mc"
-minio_users:
-    - { name: 'openconext', password: "{{ minio_passwords.openconext }}" } # set passwords in vault
 minio_client_checksum: "sha256:01f866e9c5f9b87c2b09116fa5d7c06695b106242d829a8bb32990c00312e891"
 minio_client_version: "RELEASE.2025-08-13T08-35-41Z"
+
+minio_users:
+  - { username: "openconext",       password: "minio_user_openconext_password",       full_access: true }
+  - { username: "access-dashboard", password: "minio_user_access_dashboard_password", full_access: false    }
+
+minio_buckets:
+  - name: "test-bucket"
+    public: true
+    write_users:
+      - "openconext"
+  - name: "access-dashboard-images"
+    public: true
+    write_users:
+      - "access-dashboard"
