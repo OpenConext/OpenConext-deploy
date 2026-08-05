@@ -1,3 +1,4 @@
+---
 parameters:
   ##########################################################################################
   ## GLOBAL SETTINGS
@@ -56,6 +57,9 @@ parameters:
   ## Options are 'all' (optional and required attributes), 'required' (only required attributes) or 'none'
   metadata_add_requested_attributes: all
 
+  ## The number of seconds a Metadata document is deemed valid (default 24h). Must be a positive integer.
+  metadata_expiration_time: 86400
+
   ##########################################################################################
   ## PHP SETTINGS
   ##########################################################################################
@@ -77,6 +81,11 @@ parameters:
   api.users.profile.password: {{ engine_api_profile_password | replace("%","%%") }}
   api.users.deprovision.username: {{ engine_api_deprovision_user }}
   api.users.deprovision.password: {{ engine_api_deprovision_password | replace("%","%%") }}
+
+  ## nameid lookup api
+  feature_api_users_nameid_lookup: {{ engine_api_nameid_lookup_enabled }}
+  api.users.nameidlookup.username: {{ engine_api_nameid_lookup_user }}
+  api.users.nameidlookup.password: {{ engine_api_nameid_lookup_password if engine_api_nameid_lookup_enabled else '' }}
 
   ##########################################################################################
   ## CLIENT SETTINGS
@@ -183,6 +192,9 @@ parameters:
   wayf.display_default_idp_banner_on_wayf: true
   wayf.default_idp_entity_id: "https://login.{{ myconext_base_domain }}"
 
+  ## set the IdPs that need to be displayed prominently
+  wayf.preferred_idp_entity_ids: {{ engine_wayf_preferred_idp_entity_ids }}
+
   ## Toggle display & content of global site notice
   global.site_notice.show: {{ engine_site_notice_show }}
   global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'
@@ -229,6 +241,7 @@ parameters:
   feature_enable_idp_initiated_flow: {{ engine_feature_idp_initiated_flow | bool | to_json }}
   feature_stepup_send_user_attributes: {{ engine_feature_send_user_attributes | bool | to_json }}
   feature_enable_sram_interrupt: {{ engine_feature_enable_sbs_interrupt | bool | to_json }}
+  feature_hide_bookmarkable_url: {{ engine_feature_hide_bookmarkable_url | bool | to_json }}
   ##########################################################################################
   ## PROFILE SETTINGS
   ##########################################################################################
