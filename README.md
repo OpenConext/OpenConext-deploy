@@ -19,7 +19,6 @@ Every application has a seperate role to install it. The following roles can be 
 | myconext              | eduID                          |
 | profile               | Profile page                   |
 | manage                | Entity registration            |
-| teams                 | Group membership app           |
 | mujina                | Mujina IdP                     |
 | voot                  | Voot membership API            |
 | pdp                   | Policy Decicions API           |

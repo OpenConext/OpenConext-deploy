@@ -283,13 +283,6 @@
     - role: stepupwebauthn
   tags: ['stepupwebauthn', 'stepup']
 
-- name: Deploy teams app
-  hosts: docker_teams
-  become: true
-  roles:
-    - teams
-  tags: ['teams']
-
 - name: Deploy voot app
   hosts: docker_voot
   become: true

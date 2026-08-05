@@ -19,8 +19,6 @@ if $programname == "engineblock" and $msg contains '{"channel":"authentication"'
 :programname, isequal, "pdp" { action(type="omfile" DynaFile="pdp-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 if $programname == "profile" and $msg startswith "{" then { action(type="omfile" DynaFile="profile-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "profile" { action(type="omfile" DynaFile="apache-profile-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
-:programname, isequal, "teamsserver" { action(type="omfile" DynaFile="teams-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
-:programname, isequal, "teamsgui" { action(type="omfile" DynaFile="apache-teams-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "vootserver" { action(type="omfile" DynaFile="voot-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "mariadbd" { action(type="omfile" DynaFile="galera-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }
 :programname, isequal, "garb-systemd" { action(type="omfile" DynaFile="haproxy-{{ item.name }}" {{ rsyslog_dir_file_modes }} ) stop }

@@ -1,0 +1,88 @@
+---
+# task file to check if cluster is up and running
+
+- name: Cluster check when we are not in cluster config mode
+  when: not mongo_configure_cluster | bool
+  block:
+    # Get the replicaset status and fail on minimal (everything but even number of nodes)
+    - name: Check replicaset status
+      community.mongodb.mongodb_status:
+        login_host: localhost
+        login_user: admin
+        login_port: "{{ mongo_port }}"
+        login_password: "{{ mongo_admin_password }}"
+        replica_set: "{{ mongo_replica_set_name }}"
+        poll: 3
+        interval: 10
+      register: replica_status
+      ignore_errors: true
+
+    - name: Debug replica set status
+      ansible.builtin.debug:
+        msg: "{{ replica_status }}"
+        verbosity: 2
+
+    # Message for non cluster config mode
+    - name: Fail when there is no cluster reconfiguration options set
+      ansible.builtin.fail:
+        msg: "Your mongo cluster is broken or non existent and mongo_configure_cluster is disabled, consider enabling it and fix your cluster. The error: {{ replica_status.msg }}."
+      when:
+        - replica_status.failed
+
+- name: Cluster check when we are in cluster config mode
+  when: mongo_configure_cluster | bool
+  block:
+    # Get the replicaset status and fail on minimal (everything but even number of nodes)
+    - name: Check replicaset status minimal
+      community.mongodb.mongodb_status:
+        login_host: localhost
+        login_user: admin
+        login_port: "{{ mongo_port }}"
+        login_password: "{{ mongo_admin_password }}"
+        replica_set: "{{ mongo_replica_set_name }}"
+        poll: 3
+        interval: 10
+        validate: minimal
+      register: replica_status_minimal
+      ignore_errors: true
+
+    # Message for cluster config mode gone wrong
+    - name: Fail when you misconfigured your replica cluster
+      ansible.builtin.fail:
+        msg: "Your mongo cluster is broken, error: {{ replica_status_minimal.msg }}."
+      when:
+        - replica_status_minimal.failed
+
+    # Get the replicaset status votes
+    - name: Check replicaset status votes
+      community.mongodb.mongodb_status:
+        login_host: localhost
+        login_user: admin
+        login_port: "{{ mongo_port }}"
+        login_password: "{{ mongo_admin_password }}"
+        replica_set: "{{ mongo_replica_set_name }}"
+        poll: 3
+        interval: 10
+        validate: votes
+      register: replica_status_votes
+      ignore_errors: true
+
+    # Message for cluster config mode wrong amount of votes
+    - name: Fail when you misconfigured your replica cluster
+      ansible.builtin.fail:
+        msg: |
+          Your mongo cluster doesn't have the right amount of members, 
+          perhaps you are adding new nodes one by one, 
+          in that case add the next node to cluster_members and run the play again. 
+          The error message is: {{ replica_status_votes.msg }}."
+      when:
+        - replica_status_votes.failed
+
+    # In non cluster config mode we use replica_status
+    # and here replica_status_votes and replica_status_minimal
+    # for better error messages, but we need a general replica_status 
+    # for for example users.yml, so lets set it here
+    - name: Set a value for replica_status
+      ansible.builtin.set_fact:
+        replica_status:
+          failed: False

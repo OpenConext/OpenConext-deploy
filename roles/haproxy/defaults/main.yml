@@ -45,3 +45,9 @@ haproxy_acmedns:
   password: "password"
   subdomain: "a_subdomain"
   fulldomain: "a_subdomain.acme-dns.example.org"
+
+# on which weekday (cron, 0==sunday) to run the renewal script
+haproxy_acme_cronjob_dow: 1
+
+# optional monitoring url for acme cron
+haproxy_acme_cronjob_monitor_url:

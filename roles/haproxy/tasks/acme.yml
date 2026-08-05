@@ -54,3 +54,21 @@
   register: "acme_account"
   become: true
   become_user: "acme"
+
+- name: Remove default cronjob for renewal
+  ansible.builtin.file:
+    path: "/var/spool/cron/crontabs/acme"
+    state: "absent"
+
+- name: Install cronjob for renewal
+  ansible.builtin.copy:
+    dest: "/etc/cron.d/acme-renew"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    content: |
+      MAILTO=surfconext-beheer@surf.nl
+      30 07    * *   {{ haproxy_acme_cronjob_dow }}    acme    /home/acme/.acme.sh/acme.sh --cron --home /home/acme/.acme.sh > /dev/null
+      {%- if haproxy_acme_cronjob_monitor_url | default('') -%}
+         {# #} && curl -fsS --retry 3 -o /dev/null {{ haproxy_acme_cronjob_monitor_url }}
+      {%- endif %}

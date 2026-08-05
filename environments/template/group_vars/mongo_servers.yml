@@ -1,5 +1,5 @@
 ---
-replica_set_name: my_mongo_cluster
+mongo_replica_set_name: my_mongo_cluster
 
 mongo_cluster_members:
   - host: "mongo3.example.com:{{ mongo_port }}" # arbiter first or change mongo_arbiter_index
