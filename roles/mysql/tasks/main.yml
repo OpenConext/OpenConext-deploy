@@ -1,204 +1,180 @@
 ---
-- name: Message for non redhat family servers
+- name: "Message for non redhat family servers"
   when: ansible_facts['os_family'] != 'RedHat'
   ansible.builtin.fail:
     msg: "Sorry, this role only works on RedHat family servers"
 
-- name: Install and configure mongo on redhat family servers
+- name: "Install and configure mongo on redhat family servers"
   when:
     - ansible_facts['os_family'] == 'RedHat'
   block:
     # Add MariaDB repo and key
-    - name: Add MariaDB.org repository
-      template:
+    - name: "Add MariaDB.org repository"
+      ansible.builtin.template:
         src: "mariadb.repo.j2"
         dest: "/etc/yum.repos.d/mariadb.repo"
+        mode: "0644"
 
-    - name: Install mariadb server
-      yum:
+    - name: "Install mariadb server"
+      ansible.builtin.dnf:
         name:
-          - MariaDB-server
-          - MariaDB-client
-          - python2-PyMySQL
-        state: present
-      tags:
-        - mysql
+          - "MariaDB-server"
+          - "MariaDB-client"
+          - "python2-PyMySQL"
+        state: "present"
 
-    - name: Start and enable mariadb
-      service:
-        name: mariadb
-        state: started
-        enabled: yes
-      tags:
-        - mysql
+    - name: "Start and enable mariadb"
+      ansible.builtin.service:
+        name: "mariadb"
+        state: "started"
+        enabled: true
 
-    - name: Set mysql root password for all root accounts
-      run_once: 1
-      mysql_user:
-        name: root
+    - name: "Set mysql root password for all root accounts"
+      run_once: true
+      ansible.mysql.mysql_user:
+        name: "root"
         password: "{{ mysql_root_password }}"
         priv: "*.*:ALL,GRANT"
-        login_unix_socket: /var/lib/mysql/mysql.sock
-      tags:
-        - mysql
+        login_unix_socket: "/var/lib/mysql/mysql.sock"
 
-    - name: MySQL my.cnf
-      template:
+    - name: "MySQL my.cnf"
+      ansible.builtin.template:
         src: "my.cnf.j2"
         dest: "/root/.my.cnf"
-        mode: 0600
-        owner: root
-        group: root
-      tags:
-        - mysql
+        mode: "0400"
+        owner: "root"
+        group: "root"
 
-    - name: delete anonymous MySQL server user
-      run_once: 1
-      mysql_user:
+    - name: "Delete anonymous MySQL server user"
+      run_once: true
+      ansible.mysql.mysql_user:
         user: ""
-        state: absent
-        login_user: root
+        state: "absent"
+        login_user: "root"
         host: "{{ mariadb_host }}"
         login_password: "{{ mysql_root_password }}"
-      tags:
-        - mysql
 
-    - name: delete anonymous MySQL server user for localhost
-      run_once: 1
-      mysql_user:
+    - name: "Delete anonymous MySQL server user for localhost"
+      run_once: true
+      ansible.mysql.mysql_user:
         user: ""
-        state: absent
-        login_user: root
+        state: "absent"
+        login_user: "root"
         host: "{{ mariadb_host }}"
         login_password: "{{ mysql_root_password }}"
-      tags:
-        - mysql
 
-    - name: delete test MySQL server user
-      run_once: 1
-      mysql_user:
+    - name: "Delete test MySQL server user"
+      run_once: true
+      ansible.mysql.mysql_user:
         user: "{{ item }}"
-        state: absent
-        login_user: root
+        state: "absent"
+        login_user: "root"
         login_password: "{{ mysql_root_password }}"
-      tags:
-        - mysql
       with_items:
-        - test
-        - test_%
+        - "test"
+        - "test_%"
 
-    - name: delete anonymous MySQL server user for localhost
-      run_once: 1
-      mysql_user:
+    - name: "Delete anonymous MySQL server user for localhost"
+      run_once: true
+      ansible.mysql.mysql_user:
         user: ""
-        state: absent
-        login_user: root
+        state: "absent"
+        login_user: "root"
         login_password: "{{ mysql_root_password }}"
-      tags:
-        - mysql
 
-    - name: remove the MySQL test database
-      run_once: 1
-      mysql_db:
-        db: test
-        state: absent
-        login_user: root
+    - name: "Remove the MySQL test database"
+      run_once: true
+      ansible.mysql.mysql_db:
+        db: "test"
+        state: "absent"
+        login_user: "root"
         login_password: "{{ mysql_root_password }}"
-      tags:
-        - mysql
 
-    - name: Create database
-      run_once: 1
-      mysql_db:
+    - name: "Create databases"
+      run_once: true
+      ansible.mysql.mysql_db:
         name: "{{ item }}"
-        state: present
+        state: "present"
       with_items:
         - "{{ databases.names }}"
-      tags:
-        - mysql
 
-    - name: Create database user
-      run_once: 1
-      mysql_user:
+    - name: "Create database users"
+      run_once: true
+      ansible.mysql.mysql_user:
         name: "{{ item[0].name }}"
         host: "{{ item[0].hosts | join(',') if item[0].hosts is defined and (item[0].hosts | length>0) else item[1] }}"
         password: "{{ item[0].password }}"
         priv: "{{ item[0].db_name }}.*:ALL"
-        state: present
+        state: "present"
         append_privs: true
       no_log: true
       with_nested:
         - "{{ databases.users }}"
         - "{{ database_clients }}"
-      tags:
-        - mysql
 
-    - name: Create development database user
-      run_once: 1
-      mysql_user:
+    - name: "Create development database users"
+      run_once: true
+      ansible.mysql.mysql_user:
         name: "{{ item.name}}"
         host: "%"
         password: "{{ item.password }}"
         priv: "*.*:ALL"
-        state: present
+        state: "present"
       no_log: true
       with_items:
         - "{{ databases.development_user|default([]) }}"
       when:
         - develop | bool
-      tags:
-        - mysql
 
-    - name: Allow external connections when in development
-      lineinfile:
+    - name: "Allow external connections when in development"
+      ansible.builtin.lineinfile:
         dest: "/etc/my.cnf.d/server.cnf"
         insertafter: '\\[mysqld\\]'
-        state: present
+        state: "present"
         line: "bind-address=0.0.0.0"
       when:
         - develop | bool
-      tags:
-        - mysql
 
     # Add backup user
-    - name: add mariadb backup user
-      run_once: 1
-      mysql_user:
+    - name: "Add mariadb backup user"
+      run_once: true
+      ansible.mysql.mysql_user:
         name: "{{ mysql_backup_user }}"
         password: "{{ mysql_backup_password  }}"
-        login_user: root
+        login_user: "root"
         login_password: "{{ mysql_root_password }}"
         priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
-        state: present
+        state: "present"
       no_log: true
       when:
         - backup_node | bool
 
-    - name: Create the backup directory
-      file:
-        path: /home/backup
-        state: directory
-        owner: root
-        group: root
-        mode: 0700
+    - name: "Create the backup directory"
+      ansible.builtin.file:
+        path: "/home/backup"
+        state: "directory"
+        owner: "root"
+        group: "root"
+        mode: "0700"
       when:
         - backup_node | bool
 
-    - name: Put mariadb_backup script
-      template:
+    - name: "Put mariadb_backup script"
+      ansible.builtin.template:
         src: "mariadb_backup.sh.j2"
         dest: "/usr/local/sbin/mariadb_backup.sh"
-        mode: 0700
-        owner: root
+        mode: "0700"
+        owner: "root"
       when:
         - backup_node | bool
 
-    - name: Create cron symlink for backup script
-      file:
-        src: /usr/local/sbin/mariadb_backup.sh
-        dest: /etc/cron.daily/db_backup
-        state: link
-        mode: 0700
-        owner: root
+    - name: "Create cron symlink for backup script"
+      # todo: use cron task
+      ansible.builtin.file:
+        src: "/usr/local/sbin/mariadb_backup.sh"
+        dest: "/etc/cron.daily/db_backup"
+        state: "link"
+        mode: "0700"
+        owner: "root"
       when:
         - backup_node | bool
