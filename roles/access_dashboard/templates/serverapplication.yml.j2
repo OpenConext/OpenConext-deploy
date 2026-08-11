@@ -156,6 +156,9 @@ config:
 {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}{# Note: spring yaml parser is wonky #}
     - "{{ loa }}"
 {% endfor %}
+  metadata_url_max_bytes: 20971520
+  metadata_url_connect_timeout_ms: 10000
+  metadata_url_read_timeout_ms: 15000
 
 eduid-idp-entity-id: "{{ access_dashboard.eduid_idp_entity_id }}"
 
