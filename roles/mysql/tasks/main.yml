@@ -48,7 +48,7 @@
     - name: "Delete anonymous MySQL server user"
       run_once: true
       ansible.mysql.mysql_user:
-        user: ""
+        name: ""
         state: "absent"
         login_user: "root"
         host: "{{ mariadb_host }}"
@@ -57,7 +57,7 @@
     - name: "Delete anonymous MySQL server user for localhost"
       run_once: true
       ansible.mysql.mysql_user:
-        user: ""
+        name: ""
         state: "absent"
         login_user: "root"
         host: "{{ mariadb_host }}"
@@ -66,7 +66,7 @@
     - name: "Delete test MySQL server user"
       run_once: true
       ansible.mysql.mysql_user:
-        user: "{{ item }}"
+        name: "{{ item }}"
         state: "absent"
         login_user: "root"
         login_password: "{{ mysql_root_password }}"
@@ -77,7 +77,7 @@
     - name: "Delete anonymous MySQL server user for localhost"
       run_once: true
       ansible.mysql.mysql_user:
-        user: ""
+        name: ""
         state: "absent"
         login_user: "root"
         login_password: "{{ mysql_root_password }}"
