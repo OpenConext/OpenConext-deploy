@@ -20,7 +20,7 @@
         name:
           - "MariaDB-server"
           - "MariaDB-client"
-          - "python2-PyMySQL"
+          - "{{ mariadb_python_mysql_version }}"
         state: "present"
 
     - name: "Start and enable mariadb"
