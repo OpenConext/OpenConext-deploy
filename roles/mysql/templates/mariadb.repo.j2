@@ -1,6 +1,6 @@
 # http://mariadb.org/mariadb/repositories/
 [mariadb]
 name=MariaDB
-baseurl=http://yum.mariadb.org/{{ mariadb_version }}/rocky$releasever_major-$basearch
+baseurl=http://yum.mariadb.org/{{ mariadb_version }}/{{ ansible_distribution | ansible.builtin.lower }}{{ ansible_distribution_major_version }}-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
