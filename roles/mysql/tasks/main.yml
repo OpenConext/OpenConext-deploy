@@ -31,7 +31,7 @@
 
     - name: "Set mysql root password for all root accounts"
       run_once: true
-      ansible.mysql.mysql_user:
+      community.mysql.mysql_user:
         name: "root"
         password: "{{ mysql_root_password }}"
         priv: "*.*:ALL,GRANT"
@@ -47,7 +47,7 @@
 
     - name: "Delete anonymous MySQL server user"
       run_once: true
-      ansible.mysql.mysql_user:
+      community.mysql.mysql_user:
         name: ""
         state: "absent"
         login_user: "root"
@@ -56,7 +56,7 @@
 
     - name: "Delete anonymous MySQL server user for localhost"
       run_once: true
-      ansible.mysql.mysql_user:
+      community.mysql.mysql_user:
         name: ""
         state: "absent"
         login_user: "root"
@@ -65,7 +65,7 @@
 
     - name: "Delete test MySQL server user"
       run_once: true
-      ansible.mysql.mysql_user:
+      community.mysql.mysql_user:
         name: "{{ item }}"
         state: "absent"
         login_user: "root"
@@ -76,7 +76,7 @@
 
     - name: "Delete anonymous MySQL server user for localhost"
       run_once: true
-      ansible.mysql.mysql_user:
+      community.mysql.mysql_user:
         name: ""
         state: "absent"
         login_user: "root"
@@ -84,7 +84,7 @@
 
     - name: "Remove the MySQL test database"
       run_once: true
-      ansible.mysql.mysql_db:
+      community.mysql.mysql_db:
         db: "test"
         state: "absent"
         login_user: "root"
@@ -92,7 +92,7 @@
 
     - name: "Create databases"
       run_once: true
-      ansible.mysql.mysql_db:
+      community.mysql.mysql_db:
         name: "{{ item }}"
         state: "present"
       with_items:
@@ -100,7 +100,7 @@
 
     - name: "Create database users"
       run_once: true
-      ansible.mysql.mysql_user:
+      community.mysql.mysql_user:
         name: "{{ item[0].name }}"
         host: "{{ item[0].hosts | join(',') if item[0].hosts is defined and (item[0].hosts | length>0) else item[1] }}"
         password: "{{ item[0].password }}"
@@ -114,7 +114,7 @@
 
     - name: "Create development database users"
       run_once: true
-      ansible.mysql.mysql_user:
+      community.mysql.mysql_user:
         name: "{{ item.name}}"
         host: "%"
         password: "{{ item.password }}"
@@ -138,7 +138,7 @@
     # Add backup user
     - name: "Add mariadb backup user"
       run_once: true
-      ansible.mysql.mysql_user:
+      community.mysql.mysql_user:
         name: "{{ mysql_backup_user }}"
         password: "{{ mysql_backup_password  }}"
         login_user: "root"
