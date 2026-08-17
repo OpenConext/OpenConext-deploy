@@ -96,3 +96,4 @@ rsyslog_central_apps:
   dashboard_gui:      { program: "dashboardgui",           target: "dashboard/apache.log" }
   static:             { program: "Apache-STATIC",          target: "static/apache.log" }
   metadata:           { program: "Apache-METADATA",        target: "metadata/apache.log" }
+  acme:               { program: "acme.sh",                target: "haproxy/acme.log" }
