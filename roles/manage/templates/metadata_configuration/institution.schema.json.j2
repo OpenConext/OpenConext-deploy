@@ -7,10 +7,6 @@
     "eid": {
       "type": "number"
     },
-    "name": {
-      "type": "string",
-      "minLength": 1
-    },
     "entityid": {
       "type": "string",
       "minLength": 1
@@ -28,6 +24,9 @@
     "verify_email": {
       "type": "boolean"
     },
+    "sso_registration_bypass": {
+      "type": "boolean"
+    },
     "allowed_second_factors": {
       "type": "array",
       "items": {
@@ -36,7 +35,8 @@
           "yubikey",
           "tiqr",
           "webauthn",
-          "sms"
+          "sms",
+          "azuremfa"
         ]
       }
     },
@@ -74,7 +74,8 @@
       "type": "string",
       "enum": [
         "freerider",
-        "full"
+        "full",
+        "freerider met azuremfa"
       ],
       "default": "freerider"
     },
@@ -106,7 +107,6 @@
     }
   },
   "required": [
-    "name",
     "entityid",
     "identifier",
     "stepup-client"
