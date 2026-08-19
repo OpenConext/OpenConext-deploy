@@ -43,3 +43,6 @@ profile_manage_provision_samlsp_metadata_url: "https://profile.{{ base_domain }}
 profile_manage_provision_samlsp_sp_cert: ""
 profile_manage_provision_samlsp_trusted_proxy: false
 profile_manage_provision_samlsp_sign: false
+
+profile_invite_api_username: "profile"
+# profile_invite_api_secret: "invite_profile_secret" # changeme
