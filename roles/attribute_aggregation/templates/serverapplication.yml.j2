@@ -29,6 +29,8 @@ orcid:
   client_secret: "{{ aa.orcid_secret }}"
   redirect_uri: https://link.{{ base_domain }}/redirect
 
+version: {{ pdp_version }}
+
 security:
   internal_user_name: {{ aa.eb_username }}
   internal_password: {{ aa.eb_password }}
