@@ -38,14 +38,8 @@ sp:
   protocol_binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
   # Do we sign the authnRequest
   needs_signing: true
+  # Are endpoints compared. If so then pay notice to the base_url when behind a load balancer
   compare_endpoints: true
-
-spring:
-  mvc:
-    favicon:
-      enabled: false
-  velocity:
-    check-template-location: False
 
 # We disable all endpoints except health for the load-balancer and info for git information.
 endpoints:
