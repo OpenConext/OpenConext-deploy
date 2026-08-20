@@ -20,19 +20,13 @@
     mode: "0750"
     # recurse: true # this makes everything very slow and not sure if it is necessary
 
-- name: Put rsyslog client certificate
+- name: Put rsyslog server certificate
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogserver.crt"
     dest: "/etc/pki/rsyslog/rsyslogserver.crt"
     mode: "0644"
     owner: root
     group: adm
-
-- name: Place rsyslog CA file
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/certs/rsyslog_ca.pem"
-    dest: "{{ rsyslog_ca }}"
-    mode: "0644"
 
 - name: Create directories to keep configuration file
   ansible.builtin.file:

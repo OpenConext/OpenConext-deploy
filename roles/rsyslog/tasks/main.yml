@@ -1,3 +1,12 @@
+- name: remove old files:
+  ansible.builtin.file:
+    path: "/etc/pki/rsyslog/{{  item }}"
+    state: "absent"
+  loop:
+    - "rsyslogclientca.crt"
+    - "rsyslogclientcaprd.crt"
+    - "rsyslogclientprd.crt"
+
 - name: Install rsyslog and python modules
   ansible.builtin.package:
     name:
@@ -23,7 +32,6 @@
     enabled: true
 
 - name: Forwarding journalctl to rsyslog forward syslog to central logserver
-  when: "'centrallog_servers' not in group_names"
   block:
 
     # journald forwards logs to rsyslog
@@ -74,17 +82,17 @@
       ansible.builtin.copy:
         src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclient.crt"
         dest: "{{ rsyslog_certifcate_dir }}/rsyslogclient.crt"
-        mode: "0744"
+        mode: "0644"
         owner: root
         group: adm
       notify:
         - "restart rsyslog"
 
-    - name: Put rsyslog CA file (new location)
+    - name: Put rsyslog CA file
       ansible.builtin.copy:
-        src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclientca.crt"
-        dest: "{{ rsyslog_certifcate_dir }}/rsyslogclientca.crt"
-        mode: "0744"
+        src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslog_ca.crt"
+        dest: "{{ rsyslog_ca }}"
+        mode: "0644"
         owner: root
         group: adm
 
