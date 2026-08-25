@@ -1,6 +1,4 @@
-# Where to place auxiliary files
-global(workDirectory="{{ rsyslog_workdirectory | default('/var/spool/rsyslog') }}")
-
+#### MODULES ####
 {% if 'docker' in group_names %}
 module(load="imptcp")
 input(type="imptcp" port="514")
@@ -8,45 +6,56 @@ input(type="imptcp" port="514")
 {% if ansible_os_family == "RedHat" %}
 module(load="imuxsock")
 {% endif %}
+
+# Reads journald logs
 module(load="imjournal"             # provides access to the systemd journal
        UsePid="system" # PID number is retrieved as the ID of the process the journal entry originates from
        StateFile="{{ rsyslog_imjournal_statefile | default('imjournal.state') }}"
        ratelimit.interval="{{ rsyslog_imjournal_ratelimitinterval | default('60') }}"
-       ratelimit.burst="{{ rsyslog_imjournal_ratelimitburst | default('20000') }}")  # Reads journald logs
+       ratelimit.burst="{{ rsyslog_imjournal_ratelimitburst | default('20000') }}"
+)
 module(load="imklog")   # provides kernel logging support
 module(load="immark" interval="300" )  # provides --MARK-- message capability
 module(load="omrelp")
 
+
+#### GLOBAL DIRECTIVES ####
+# where to place aux file (spool, etc)
+global(workDirectory="{{ rsyslog_workdirectory | default('/var/spool/rsyslog') }}")
+# Keep fully qualified hostnames instead of stripping the local domain.
+global(preserveFQDN="on")
+# Support large messages
+global(maxMessageSize="{{ rsyslog_maxmessagesize }}")
+
+
+#### TEMPLATES ####
 template(name="CustomRelpFormat" type="string"
   string="<%PRI%>%TIMESTAMP% {{ ansible_fqdn }} %syslogtag%%msg%\n")
 
-$PreserveFQDN on
 
-*.emerg                         :omusrmsg:*
-{% if rsyslog_maxmessagesize is defined %}
-$MaxMessageSize {{ rsyslog_maxmessagesize }}
-{% endif %}
+#### LOCAL RULES ####
+# emergency messages to the console
+*.emerg    action(type="omusrmsg" users="*")
 
-{% if  'centrallog_servers' not in group_names %}
 {% for relp_host in relp_remote %}
 # Logs are forwarded to {{ relp_host.name }}
 action(type="omrelp"
-target="{{ relp_host.host }}"
-port="{{ relp_host.port }}"
-tls="on"
-tls.caCert="{{ rsyslog_ca }}"
-tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
-tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
-tls.authmode="name"
-tls.permittedpeer=["{{ relp_host.peer }}"]
-queue.type="LinkedList"
-queue.filename="{{ relp_host.name }}"
-queue.spoolDirectory="{{ rsyslog_queue_dir }}"
-queue.maxdiskspace="1G"
-queue.saveonshutdown="on"
-action.resumeRetryCount="-1"
-action.resumeInterval="5"
-action.writeAllMarkMessages="on"
-template="CustomRelpFormat")
+       target="{{ relp_host.host }}"
+       port="{{ relp_host.port }}"
+       tls="on"
+       tls.caCert="{{ rsyslog_ca }}"
+       tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
+       tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
+       tls.authmode="name"
+       tls.permittedpeer=["{{ relp_host.peer }}"]
+       queue.type="LinkedList"
+       queue.filename="{{ relp_host.name }}"
+       queue.spoolDirectory="{{ rsyslog_queue_dir }}"
+       queue.maxdiskspace="1G"
+       queue.saveonshutdown="on"
+       action.resumeRetryCount="-1"
+       action.resumeInterval="5"
+       action.writeAllMarkMessages="on"
+       template="CustomRelpFormat"
+)
 {% endfor %}
-{% endif %}

@@ -1,17 +1,3 @@
-{% if item.name != "mgnt_sc" %}
-
-{% for app, config in rsyslog_central_apps.items() %}
-{% set dir = config.dir if 'dir' in config else 'apps' %}
-$template {{ app }}-{{ item.name }}, "{{ rsyslog_dir }}/{{ dir }}/{{ item.name }}/{{  config.target }}"
-{% endfor %}
-
-{% for stepupapp in stepupapps %}
-$template stepup-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}.log
-$template apache-{{ stepupapp }}-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log
-{% endfor %}
-
-{% endif %}
-
 $template auditd-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/auditd/%HOSTNAME%/auditd.log"
 $template bash-{{ item.name }},   "{{ rsyslog_dir }}/apps/{{ item.name }}/bash/%HOSTNAME%/bash.log"
 $template secure-{{ item.name }}, "{{ rsyslog_dir }}/apps/{{ item.name }}/secure/%HOSTNAME%/secure.log"

@@ -6,19 +6,8 @@
     dest: "/etc/pki/rsyslog/rsyslogserver.key"
     mode: "0400"
     owner: root
-
-- name: Create the group that is allowed to read the logs
-  ansible.builtin.group:
-    name: "{{ rsyslog_read_group }}"
-    state: present
-
-- name: Create directory to save the logs
-  ansible.builtin.file:
-    path: "{{ rsyslog_dir }}"
-    owner: root
-    group: "{{ rsyslog_read_group }}"
-    mode: "0750"
-    # recurse: true # this makes everything very slow and not sure if it is necessary
+  notify:
+    - "restart rsyslog"
 
 - name: Put rsyslog server certificate
   ansible.builtin.copy:
@@ -27,15 +16,16 @@
     mode: "0644"
     owner: root
     group: adm
+  notify:
+    - "restart rsyslog"
 
-- name: Put rsyslog CA file
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslog_ca.crt"
-    dest: "{{ rsyslog_ca }}"
-    mode: "0644"
+- name: Create directory to save the logs
+  ansible.builtin.file:
+    path: "{{ rsyslog_dir }}"
     owner: root
-    group: adm
-
+    group: "{{ rsyslog_read_group }}"
+    mode: "0750"
+    # recurse: true # this makes everything very slow and not sure if it is necessary
 
 - name: Create directories to keep configuration file
   ansible.builtin.file:
@@ -56,7 +46,6 @@
   with_items: "{{ rsyslog_environments }}"
   loop_control:
     label: "{{ item.name }}"
-
   notify:
     - "restart rsyslog"
 
@@ -87,13 +76,6 @@
     src: centralsyslog.j2
     dest: /etc/logrotate.d/centralsyslog
 
-- name: Put rsyslog config file
-  ansible.builtin.template:
-    src: "rsyslog.conf.j2"
-    dest: "/etc/rsyslog.conf"
-  notify:
-    - "restart rsyslog"
-
 - name: Put log empty warn script and cronjob
   when: rsyslog_enable_warn_empty_script
   block:
@@ -102,10 +84,11 @@
         src: warn-empty-log.sh.j2
         dest: "{{ rsyslog_checkemptylogs_dir }}/warn-empty-log.sh"
         backup: True
+
     - name: Create cronjob
       ansible.builtin.cron:
         name: "check empty logs"
-        minute: "{{ rsyslog_checkemptylogs_cron_minute }}"
-        hour: "{{ rsyslog_checkemptylogs_cron_hour }}"
+        minute: "{{ rsyslog_checkemptylogs_cron_minute | str }}"
+        hour: "{{ rsyslog_checkemptylogs_cron_hour| str }}"
         weekday: "{{ rsyslog_checkemptylogs_cron_weekdays }}"
         job: "{{ rsyslog_checkemptylogs_dir }}/warn-empty-log.sh -m"
