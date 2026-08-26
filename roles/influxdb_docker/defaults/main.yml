@@ -1,3 +1,2 @@
-#SPDX-License-Identifier: MIT-0
 ---
-# defaults file for influxdbcontainer
+influxdb_host: "localhost"
