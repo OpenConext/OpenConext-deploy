@@ -1,4 +1,21 @@
 ---
+# Assert if database_clients is a list or the ip will be chopped into characters and
+# a user will be created for each character
+- name: Assert if database_clients is a list
+  ansible.builtin.assert:
+    that:
+      - database_clients is defined
+      - database_clients is iterable
+      - database_clients is not string
+
+- name: "Debug create database users"
+  ansible.builtin.debug:
+    msg: "{{ item }}"
+    verbosity: 2
+  loop: "{{ databases.users | product(database_clients) | list }}"
+  loop_control:
+    label: "{{ item[0].name }}@{{ item[1] }}"
+
 - name: "Create database users"
   community.mysql.mysql_user:
     name: "{{ item[0].name }}"
