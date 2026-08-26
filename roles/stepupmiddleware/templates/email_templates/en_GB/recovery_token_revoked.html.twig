@@ -1,0 +1,13 @@
+<p>Dear {{ commonName }},</p>
+
+<p>
+{% if isRevokedByRa %}
+    Your recovery method was removed by an administrator.
+{% else %}
+    Your recovery method has been removed. Please contact your institution's helpdesk immediately if you did not do this yourself, as this could mean that your account has been compromised.
+{% endif %}
+</p>
+
+<p>You can no longer use this recovery method to activate a token.</p>
+
+<p>Always make sure you have at least one recovery method available.</p>

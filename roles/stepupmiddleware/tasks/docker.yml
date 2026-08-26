@@ -25,6 +25,7 @@
     mode: "0755"
   with_items:
     - "{{ current_release_config_dir_name }}"
+    - "{{ current_release_config_dir_name }}/email_templates"
 
 - name: Place parameters.yml
   ansible.builtin.template:
@@ -32,6 +33,16 @@
     dest: "{{ current_release_config_dir_name }}/parameters.yaml"
     mode: "0640"
     owner: root
+    group: "{{ appname }}"
+  notify:
+    - restart {{ appname }}
+
+- name: Copy email templates to the release config directory
+  copy:
+    src: templates/email_templates/
+    dest: "{{ current_release_config_dir_name }}/email_templates"
+    mode: "0640"
+    owner: "{{ appname }}"
     group: "{{ appname }}"
   notify:
     - restart {{ appname }}

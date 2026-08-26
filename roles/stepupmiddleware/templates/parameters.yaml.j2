@@ -88,3 +88,14 @@ parameters:
     {% for key in skip_prove_possession_second_factors %}
       - {{ key }}
     {% endfor %}
+
+    # List of name_ids for Super Registration Authority Administrators (SRAA).
+    # Replaces the sraa field previously pushed via the management API.
+    sraa:
+    {% for sraa in middleware_sraa %}
+      - "{{ sraa.nameid }}"
+    {% endfor %}
+
+    # Directory containing email templates (one .html.twig file per template name and locale).
+    # Structure: <dir>/<locale>/<template_name>.html.twig
+    email_templates_dir: '%kernel.project_dir%/config/openconext/email_templates'
