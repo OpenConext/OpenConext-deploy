@@ -39,17 +39,17 @@
     </filter>
   </appender>
 
-  <logger name="oidc" level="INFO"/>
-  <logger name="com.github.cloudyrock.mongock" level="INFO"/>
-  <logger name="org.springframework" level="INFO"/>
-  <root level="WARN">
-    {% if oidcng_logback_email |bool %}
-      <appender-ref ref="EMAIL"/>
-    {% endif %}
-    <appender-ref ref="STDOUT"/>
-    {% if oidcng_logback_json |bool %}
-      <appender-ref ref="JSON_SYSLOG"/>
-    {% endif %}
-  </root>
+ <logger name="oidc" level="{{ oidcng_loglevel }}" />
+ <logger name="com.github.cloudyrock.mongock" level="INFO" />
+ <logger name="org.springframework" level="INFO" />
+ <root level="WARN">
+{%if oidcng_logback_email |bool  %}
+   <appender-ref ref="EMAIL" />
+{%endif%}
+   <appender-ref ref="STDOUT" />
+{%if oidcng_logback_json |bool  %}
+   <appender-ref ref="JSON_SYSLOG" />
+{%endif%}
+ </root>
 
 </configuration>
