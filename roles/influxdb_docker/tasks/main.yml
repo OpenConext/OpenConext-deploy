@@ -31,7 +31,7 @@
         target: /etc/influxdb
         type: bind
     env:
-      INFLUXDB_DB: "{{ influxdb_stats_db }}"
+      INFLUXDB_DB: "{{ influx_stats_db }}"
       INFLUXDB_ADMIN_USER: "{{ influxdb_admin_user }}"
       INFLUXDB_ADMIN_PASSWORD: "{{ influxdb_admin_password }}"
       INFLUXDB_READ_USER: "{{ influxdb_stats_user }}"
