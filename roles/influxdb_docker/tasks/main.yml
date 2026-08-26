@@ -1,0 +1,68 @@
+---
+- name: Create influx user
+  ansible.builtin.user:
+    name: influxdb
+    uid: 1500
+
+- name: Ensure required host directories exists
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "influxdb"
+    group: "influxdb"
+    mode: "0755"
+  with_items:
+    - "/etc/influxdb"
+    - "/var/lib/influxdb"
+
+- name: Create influx container
+  community.docker.docker_container:
+    name: "influxdb"
+    image: "influxdb:1.12"
+    state: started
+    restart_policy: "always"
+    ports:
+      - "8086:8086"
+    mounts:
+      - source: /var/lib/influxdb
+        target: /var/lib/influxdb
+        type: bind
+      - source: /etc/influxdb
+        target: /etc/influxdb
+        type: bind
+    env:
+      INFLUXDB_DB: "{{ influxdb_stats_db }}"
+      INFLUXDB_ADMIN_USER: "{{ influxdb_admin_user }}"
+      INFLUXDB_ADMIN_PASSWORD: "{{ influxdb_admin_password }}"
+      INFLUXDB_READ_USER: "{{ influxdb_stats_user }}"
+      INFLUXDB_READ_USER_PASSWORD: "{{ influxdb_stats_password }}"
+      INFLUXDB_WRITE_USER: "{{ influxdb_stats_user }}"
+      INFLUXDB_WRITE_USER_PASSWORD: "{{ influxdb_stats_password }}"
+      INFLUXDB_HTTP_AUTH_ENABLED: "True"
+
+- name: Wait for influx to start
+  ansible.builtin.wait_for:
+    port: 8086
+    host: localhost
+    state: started
+    delay: 5
+
+- name: Wait for infludb init script to run
+  ansible.builtin.pause:
+    seconds: 20
+
+- name: Grant stats user required access to InfluxDB database
+  ansible.builtin.uri:
+    url: "http://{{ influxdb_host }}:8086/query"
+    method: POST
+    url_username: "{{ influxdb_admin_user }}"
+    url_password: "{{ influxdb_admin_password }}"
+    force_basic_auth: true
+    body_format: form-urlencoded
+    body:
+      q: 'GRANT ALL PRIVILEGES TO "{{ influxdb_stats_user }}"'
+    status_code: 200
+    return_content: true
+  register: influxdb_grant
+  changed_when: false
+  #no_log: true

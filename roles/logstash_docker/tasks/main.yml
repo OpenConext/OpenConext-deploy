@@ -1,0 +1,56 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: 1000
+    group: 1000
+    mode: 0750
+  with_items:
+    - /opt/logstash/config
+    - /opt/logstash/conf.d/core
+    - /data/logstash
+
+- name: Place logstash settings files
+  ansible.builtin.copy:
+    src: "files/{{ item }}"
+    dest: "/opt/logstash/config/{{ item }}"
+    owner: 1000
+    group: 1000
+    mode: 0644
+  with_items:
+    - logstash.yml
+    - jvm.options
+    - pipelines.yml
+    - log4j2.properties
+
+- name: Place core config files
+  ansible.builtin.copy:
+    src: "files/core/{{ item }}"
+    dest: "/opt/logstash/conf.d/core/{{ item }}"
+    owner: 1000
+    group: 1000
+    mode: 0644
+  with_items:
+    - 02-filebeat-input.conf
+    - 13-core-ebauth.conf
+    - 33-core-influxdb-output.conf
+
+- name: Create logstash container
+  community.docker.docker_container:
+    name: "logstash"
+    image: "ghcr.io/openconext/openconext-basecontainers/logstash8:latest"
+    state: started
+    restart_policy: "always"
+    ports:
+      - 5044:5044
+    mounts:
+      - source: /opt/logstash/config/
+        target: /usr/share/logstash/config/
+        type: bind
+      - source: /opt/logstash/conf.d/
+        target: /etc/logstash/conf.d/
+        type: bind
+      - source: /data/logstash/
+        target: /data/logstash/
+        type: bind
