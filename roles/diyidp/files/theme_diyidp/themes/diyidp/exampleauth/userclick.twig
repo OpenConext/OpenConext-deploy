@@ -1,0 +1,89 @@
+{% set pagetitle = 'Continue as persona' %}
+
+{% extends "@core/base.twig" %}
+
+{% block preload %}
+  <link rel="stylesheet" href="{{ asset('css/default.css', 'exampleauth') }}">
+  <link rel="stylesheet" href="{{ asset('userpicker.css', 'themesurf') }}">
+{% endblock %}
+
+{% block content %}
+
+  <h2>Sandbox IdP</h2>
+  <p>Please select one of the following test users to log in. Hoover over the user to see their attributes.</p>
+
+  {# Show list of users of attribtue table on hoover #}
+  <div id="single_user">
+    <table>
+      {% for id, attributes in users %}
+        <tr class="example_user" id="tr_{{ id }}">
+          <td class="username">
+            <a href="{{ usersLinks[id] }}">{{ attributes['username'][0] }}</a>
+          </td>
+          <td class="displayname">
+            <a href="{{ usersLinks[id] }}">{{ attributes['displayName'][0] }}</a>
+          </td>
+        </tr>
+      {%- endfor %}
+    </table>
+
+    {% for id, attributes in users %}
+      <table id="table_{{ id }}">
+        {% for name, values in attributes %}
+          <tr class="attribute">
+            <td class="attribute_name">{{ name }}</td>
+            <td class="attribute_values">
+                {{ values | join('<br/>') }}
+{#
+              {% for v in values %}
+                <span class="values">{{ v }}</span>
+              {% endfor %}
+#}
+            </td>
+          </tr>
+        {%- endfor %}
+      </table>
+    {%- endfor %}
+  </div>
+
+  {#  create a list of all used attributes.  We'll print them in columns #}
+  {# inital value make sure the ocmmon attributes are ordered correctly #}
+  {% set all_attributes = ['username', 'displayName', 'cn', 'sn', 'givenName', 'mail', 'uid', 'schacHomeOrganiztion'] %}
+  {% for user in users %}
+    {% for key, value in user %}
+      {% if key not in all_attributes %}
+        {% set all_attributes = all_attributes|merge([key]) %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {# Show table of all users and all values #}
+  <div id="all_users">
+    <table>
+      <thead>
+      <tr>
+        {% for a in all_attributes %}
+          <th>{{ a }}</th>
+        {% endfor %}
+      </tr>
+      </thead>
+      <tbody>
+      {% for id, attributes in users %}
+        <tr>
+          {% for a in all_attributes %}
+            <td>
+              {% if attributes[a] is defined %}
+                {{ attributes[a] | join(', ') }}
+              {% else %}
+                &ndash;
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}
+{# vi:sw=4:ts=4:expanddtab #}

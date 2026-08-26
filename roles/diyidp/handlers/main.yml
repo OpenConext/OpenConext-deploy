@@ -1,3 +1,10 @@
 ---
-- name: restart diyidp
-  command: docker restart diyidp
+- name: "Restart diyidp"
+  community.docker.docker_container:
+    name: "diyidp"
+    state: "started"
+    restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': "ignore"
+  when: "diyidp_container is success and diyidp_container is not change"
