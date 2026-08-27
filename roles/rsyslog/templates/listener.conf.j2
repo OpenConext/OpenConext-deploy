@@ -1,10 +1,10 @@
-# define rsyslog listener for environment {{ item.name }}
-input(type="imrelp" port="{{ item.port }}"
-      ruleset="{{ item.name }}"
+# define rsyslog listener for environment {{ env_name }}
+input(type="imrelp" port="{{ port }}"
+      ruleset="{{ env_name }}"
       tls="on"
       tls.mycert="/etc/pki/rsyslog/rsyslogserver.crt"
       tls.myprivkey="/etc/pki/rsyslog/rsyslogserver.key"
       tls.caCert="{{ rsyslog_ca }}"
       tls.authmode="name"
-      tls.permittedpeer="{{ item.permittedpeer }}"
+      tls.permittedpeer="{{ peer }}"
 )
