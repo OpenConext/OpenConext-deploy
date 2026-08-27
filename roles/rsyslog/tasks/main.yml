@@ -1,3 +1,5 @@
+---
+
 - name: remove old files:
   ansible.builtin.file:
     path: "/etc/pki/rsyslog/{{  item }}"
@@ -50,7 +52,7 @@
       ansible.builtin.lineinfile:
         path: /etc/systemd/journald.conf
         search_string: 'ForwardToSyslog='
-        line: 'ForwardToSyslog=no' # commenting out ForwardToSyslog=yes still results in enabling the option on debian
+        line: 'ForwardToSyslog=no'
       notify:
         - "Restart journald"
 

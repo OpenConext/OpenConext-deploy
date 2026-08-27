@@ -65,7 +65,7 @@ rsyslog_central_apps:
   eb_auth:            { program: "engineblock", contains: '"channel":"authentication"',
                         dir: "log_logins",                 target: "eb-authentication.log" }
   stepup_auth1:       { program: "gateway", contains: '"message":"Second Factor Authenticated"',
-                      dir: "log_logins",                 target: "stepup-authentication.log" }
+                        dir: "log_logins",                 target: "stepup-authentication.log" }
   stepup_auth2:       { program: "gateway", contains: '"message":"Intrinsic Loa Requested"',
                         dir: "log_logins",                 target: "stepup-authentication.log" }
   stepup_auth3:       { program: "stepup-authentication",
