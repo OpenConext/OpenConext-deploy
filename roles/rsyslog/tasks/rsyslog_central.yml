@@ -22,6 +22,8 @@
     mode: "0644"
     owner: root
     group: adm
+  notify:
+    - "restart rsyslog"
 
 - name: Create directories to keep configuration file
   ansible.builtin.file:
