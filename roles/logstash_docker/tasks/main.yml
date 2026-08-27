@@ -47,8 +47,8 @@
     ports:
       - 5044:5044
     mounts:
-      - source: /var/lib/logstash/
-        target: /usr/share/logstash/
+      - source: /var/lib/logstash/config
+        target: /usr/share/logstash/config
         type: bind
       - source: /etc/logstash/conf.d/
         target: /etc/logstash/conf.d/
