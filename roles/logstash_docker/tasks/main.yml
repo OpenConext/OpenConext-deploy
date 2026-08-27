@@ -7,14 +7,14 @@
     group: 1000
     mode: 0750
   with_items:
-    - /var/lib/logstash/config
-    - /etc/logstash/conf.d/core
+    - /opt/openconext/logstash/config
+    - /opt/openconext/logstash/conf.d/core
     - /data/logstash
 
 - name: Place logstash settings files
   ansible.builtin.copy:
     src: "files/{{ item }}"
-    dest: "/var/lib/logstash/config/{{ item }}"
+    dest: "/opt/openconext/logstash/config/{{ item }}"
     owner: 1000
     group: 1000
     mode: 0644
@@ -26,7 +26,7 @@
 - name: Place logstash config file
   ansible.builtin.template:
     src: templates/logstash.yml.j2
-    dest: /var/lib/logstash/config/logstash.yml
+    dest: /opt/openconext/logstash/config/logstash.yml
     owner: 1000
     group: 1000
     mode: 0644
@@ -34,7 +34,7 @@
 - name: Place core config files
   ansible.builtin.copy:
     src: "files/core/{{ item }}"
-    dest: "/etc/logstash/conf.d/core/{{ item }}"
+    dest: "/opt/openconext/logstash/conf.d/core/{{ item }}"
     owner: 1000
     group: 1000
     mode: 0644
@@ -45,7 +45,7 @@
 - name: Place core config file for influxdb
   ansible.builtin.template:
     src: templates/33-core-influxdb-output.conf.j2
-    dest: /etc/logstash/conf.d/core/33-core-influxdb-output.conf
+    dest: /opt/openconext/logstash/conf.d/core/33-core-influxdb-output.conf
     owner: 1000
     group: 1000
     mode: 0644
@@ -61,10 +61,10 @@
     ports:
       - 5044:5044
     mounts:
-      - source: /var/lib/logstash/config
+      - source: /opt/openconext/logstash/config
         target: /usr/share/logstash/config
         type: bind
-      - source: /etc/logstash/conf.d/
+      - source: /opt/openconext/logstash/conf.d/
         target: /etc/logstash/conf.d/
         type: bind
       - source: /data/logstash/

@@ -12,8 +12,8 @@
     group: "influxdb"
     mode: "0755"
   with_items:
-    - "/etc/influxdb"
-    - "/var/lib/influxdb"
+    - "/opt/openconext/influxdb/etc"
+    - "/opt/openconext/influxdb/varlib"
 
 - name: Create influx container
   community.docker.docker_container:
@@ -27,10 +27,10 @@
     ports:
       - "8086:8086"
     mounts:
-      - source: /var/lib/influxdb
+      - source: /opt/openconext/influxdb/varlib
         target: /var/lib/influxdb
         type: bind
-      - source: /etc/influxdb
+      - source: /opt/openconext/influxdb/etc
         target: /etc/influxdb
         type: bind
     env:
@@ -48,10 +48,6 @@
     state: started
     delay: 5
 
-- name: Wait for infludb init script to run
-  ansible.builtin.pause:
-    seconds: 20
-
 - name: Grant stats user required access to InfluxDB database
   ansible.builtin.uri:
     url: "http://{{ influxdb_host }}:8086/query"
@@ -66,4 +62,4 @@
     return_content: true
   register: influxdb_grant
   changed_when: false
-  #no_log: true
+  no_log: true
