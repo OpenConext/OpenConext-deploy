@@ -21,6 +21,7 @@
     image: "influxdb:1.12"
     state: started
     restart_policy: "always"
+    recreate: false
     networks:
       - name: "loadbalancer"
     ports:
@@ -38,8 +39,6 @@
       INFLUXDB_ADMIN_PASSWORD: "{{ influxdb_admin_password }}"
       INFLUXDB_READ_USER: "{{ influxdb_stats_user }}"
       INFLUXDB_READ_USER_PASSWORD: "{{ influxdb_stats_password }}"
-      INFLUXDB_WRITE_USER: "{{ influxdb_stats_user }}"
-      INFLUXDB_WRITE_USER_PASSWORD: "{{ influxdb_stats_password }}"
       INFLUXDB_HTTP_AUTH_ENABLED: "True"
 
 - name: Wait for influx to start
