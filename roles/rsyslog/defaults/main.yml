@@ -12,7 +12,15 @@ stepupapps:
   - tiqr
   - azure-mfa
   - azuremfa
-rsyslog_dir_file_modes: 'dirCreateMode="0755" fileCreateMode="0640" FileGroup="surfsudo"'
+
+rsyslog_dir_file_modes: >
+  dirCreateMode="0755"
+  DirOwner="root"
+  DirGroup="root"
+  fileCreateMode="0640"
+  FileOwner="root"
+  FileGroup="{{ rsyslog_read_group }}"
+
 # Define relp_remote in group vars for rsyslog remote logging
 # relp_remote:
 #   - name: '' # name of the central syslog server
@@ -41,6 +49,9 @@ rsyslog_checkemptylogs_cron_minute: "0"
 rsyslog_checkemptylogs_cron_hour: "9"
 rsyslog_checkemptylogs_cron_weekdays: "1-5"
 rsyslog_checkemptylogs_dir: "/usr/local/bin"
+
+# messages can become quote large; e.g., Engineblock sometimes dumps large SAMLResponses
+rsyslog_maxmessagesize: "32k"
 
 # "program" matches the syslog identifier
 # "contains" and "startswith" match the syslog message

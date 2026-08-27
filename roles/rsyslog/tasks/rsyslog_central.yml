@@ -7,11 +7,6 @@
     mode: "0400"
     owner: root
 
-- name: Create the group that is allowed to read the logs
-  ansible.builtin.group:
-    name: "{{ rsyslog_read_group }}"
-    state: present
-
 - name: Create directory to save the logs
   ansible.builtin.file:
     path: "{{ rsyslog_dir }}"
@@ -77,13 +72,6 @@
   ansible.builtin.template:
     src: centralsyslog.j2
     dest: /etc/logrotate.d/centralsyslog
-
-- name: Put rsyslog config file
-  ansible.builtin.template:
-    src: "rsyslog.conf.j2"
-    dest: "/etc/rsyslog.conf"
-  notify:
-    - "restart rsyslog"
 
 - name: Put log empty warn script and cronjob
   when: rsyslog_enable_warn_empty_script
