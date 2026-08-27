@@ -7,14 +7,14 @@
     group: 1000
     mode: 0750
   with_items:
-    - /opt/logstash/config
-    - /opt/logstash/conf.d/core
+    - /var/lib/logstash/config
+    - /var/lib/logstash/conf.d/core
     - /data/logstash
 
 - name: Place logstash settings files
   ansible.builtin.copy:
     src: "files/{{ item }}"
-    dest: "/opt/logstash/config/{{ item }}"
+    dest: "/var/lib/logstash/config/{{ item }}"
     owner: 1000
     group: 1000
     mode: 0644
@@ -27,7 +27,7 @@
 - name: Place core config files
   ansible.builtin.copy:
     src: "files/core/{{ item }}"
-    dest: "/opt/logstash/conf.d/core/{{ item }}"
+    dest: "/var/lib/logstash/conf.d/core/{{ item }}"
     owner: 1000
     group: 1000
     mode: 0644
@@ -47,10 +47,10 @@
     ports:
       - 5044:5044
     mounts:
-      - source: /opt/logstash/config/
+      - source: /var/lib/logstash/config/
         target: /usr/share/logstash/config/
         type: bind
-      - source: /opt/logstash/conf.d/
+      - source: /var/lib/logstash/conf.d/
         target: /etc/logstash/conf.d/
         type: bind
       - source: /data/logstash/
