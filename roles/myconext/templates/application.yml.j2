@@ -133,6 +133,10 @@ feature:
     allow_location: "classpath:/deny-allow/allowed.json"
   # Do we allow the create-from-institution flow
   create_eduid_institution_enabled: {{ myconext.feature_create_eduid_institution_enabled }}
+  # Do we email the eduID account when an institutional account gets linked to it
+  send_link_notification_to_eduid_account: True
+  # Do we email the institutional account when it gets linked to an eduID account
+  send_link_notification_to_linked_account: True
   # Do we show the landing page for the create-from-institution flow
   create_eduid_institution_landing: {{ myconext.feature_create_eduid_institution_landing }}
   # Do we default remember the user for a longer period
