@@ -5,6 +5,9 @@ attributes:
   givenname:
     openid: [given_name]
     saml: [givenName]
+  familyname:
+    openid: [family_name]
+    saml: [surname]
   mail:
     openid: [email]
     saml: [mail]
@@ -20,3 +23,9 @@ attributes:
   schachomeorganization:
     openid: [schac_home_organization]
     saml: [schacHomeOrganization]
+  eppn:
+    openid: [eduperson_principal_name]
+    saml: [eduPersonPrincipalName]
+  vopersonid:
+    openid: [voperson_id]
+    saml: [voPersonId]
