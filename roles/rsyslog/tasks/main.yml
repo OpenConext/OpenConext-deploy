@@ -31,6 +31,22 @@
     name: rsyslog
     enabled: true
 
+- name: Create the group that is allowed to read the logs
+  ansible.builtin.group:
+    name: "{{ rsyslog_read_group }}"
+    state: present
+
+# note: this config file supports both local-log-only and central syslog hosts
+- name: Put rsyslog config file
+  ansible.builtin.template:
+    src: "rsyslog.conf.j2"
+    dest: "/etc/rsyslog.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - "restart rsyslog"
+
 - name: Forwarding journalctl to rsyslog forward syslog to central logserver
   block:
 
@@ -95,14 +111,6 @@
         mode: "0644"
         owner: root
         group: adm
-
-    - name: Put rsyslog config file for logforwarding
-      ansible.builtin.template:
-        src: "rsyslog_onlyforward.conf.j2"
-        dest: "/etc/rsyslog.conf"
-        mode: "0644"
-        owner: root
-        group: root
       notify:
         - "restart rsyslog"
 
