@@ -26,11 +26,6 @@
   notify:
     - "restart rsyslog"
 
-- name: Enable rsyslog
-  ansible.builtin.service:
-    name: rsyslog
-    enabled: true
-
 - name: Create the group that is allowed to read the logs
   ansible.builtin.group:
     name: "{{ rsyslog_read_group }}"
@@ -63,7 +58,9 @@
       ansible.builtin.file:
         path: "{{ rsyslog_service_dropindir }}/logging.conf"
         state: absent
-      notify: "Reload systemd"
+      notify:
+        - "Reload systemd"
+        - "restart rsyslog"
 
     # Since we specify queue.spoolDirectory, lets make sure it exists
     - name: Create queue dir
@@ -135,3 +132,8 @@
     - name: Include tasks for authentication log processing
       ansible.builtin.include_tasks: process_auth_logs.yml
       when: "'auth_processor' in group_names"
+
+- name: Enable rsyslog
+  ansible.builtin.service:
+    name: rsyslog
+    enabled: true
