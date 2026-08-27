@@ -23,7 +23,7 @@ filter {
 output {
     if [prog] == "EBAUTH" {
         influxdb {
-            host => "localhost"
+            host => "{{ influx_stats_dbhost }}"
             port => 8086
             db => "log_logins"
             measurement => "EBAUTH"

@@ -41,7 +41,14 @@
   with_items:
     - 02-filebeat-input.conf
     - 13-core-ebauth.conf
-    - 33-core-influxdb-output.conf
+
+- name: Place core config file for influxdb
+  ansible.builtin.template:
+    src: templates/33-core-influxdb-output.conf.j2
+    dest: /etc/logstash/conf.d/core/33-core-influxdb-output.conf
+    owner: 1000
+    group: 1000
+    mode: 0644
 
 - name: Create logstash container
   community.docker.docker_container:
