@@ -1,6 +1,7 @@
 ---
 front_controller: app.php
 develop_spd: False
+spdashboard_db_server: "{{ dbcluster_ip }}"
 spdashboard_fpm_user: spdashboard
 spdashboard_domain: spdashboard.{{ base_domain }}
 spdashboard_data_dir: /opt/openconext/spdashboard
