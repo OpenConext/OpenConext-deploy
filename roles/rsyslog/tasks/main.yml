@@ -77,7 +77,7 @@
     state: directory
     owner: root
     group: root
-    mode: "0700"
+    mode: "0755"
 
 # We need a key and client certificate to when using RELP
 - name: Put rsyslog client key
@@ -106,7 +106,7 @@
     dest: "{{ rsyslog_ca }}"
     mode: "0644"
     owner: root
-    group: adm
+    group: root
   notify:
     - "restart rsyslog"
 
