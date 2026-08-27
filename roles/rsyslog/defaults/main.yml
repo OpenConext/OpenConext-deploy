@@ -54,20 +54,24 @@ rsyslog_maxmessagesize: "32k"
 # "contains" and "startswith" match the syslog message
 # order is important!  First matching rule wins.
 rsyslog_central_apps:
+  # infra
   -  { program: "haproxy",                target: "haproxy/haproxy.log" }
-  -  { program: "Keepalived_vrrp",        target: "keepalived/keepalived.log" }
+  -  { program: "acme.sh",                target: "haproxy/acme.log" }
   -  { program: "mariadb",                target: "galera/galera.log" }
-  -  { program: "garb-systemd",           target: "galera/galera_garb.log" }
   -  { program: "mongod",                 target: "mongo/mongo.log" }
+  -  { program: "garb-systemd",           target: "galera/galera_garb.log" }
+  -  { program: "Keepalived_vrrp",        target: "keepalived/keepalived.log" }
   -  { program: "loadbalancer",           target: "traefik/traefik.log" }
+
+  # core
   -  { program: "engineblock",            contains: '"channel":"authentication"',              dir: "log_logins", target: "eb-authentication.log" }
-  -  { program: "gateway",                contains: '"message":"Second Factor Authenticated"', dir: "log_logins", target: "stepup-authentication.log" }
-  -  { program: "gateway",                contains: '"message":"Intrinsic Loa Requested"',     dir: "log_logins", target: "stepup-authentication.log" }
   -  { program: "stepup-authentication",                                                       dir: "log_logins", target: "stepup-authentication.log" }
+
   -  { program: "engineblock",            startswith: "engine",   target: "eb/apache.log" }
+  -  { program: "Apache-EB",              target: "eb/apache.log" }  # probably ununsed
+
   -  { program: "engineblock",            target: "eb/eb.log" }
   -  { program: "EBLOG",                  target: "eb/eb.log" }
-  -  { program: "Apache-EB",              target: "eb/apache.log" }  # probably ununsed
   -  { program: "Apache-EBAPI",           target: "eb-api/apache.log" }  # probably ununsed
   -  { program: "oidcngserver",           target: "oidcng/oidcng.log" }
   -  { program: "oicdngjson",             target: "oidcng/oidcngjson.log" }
@@ -75,27 +79,38 @@ rsyslog_central_apps:
   -  { program: "oidcplaygroundgui",      target: "oidc-playground/oidc-playground-apache.log" }
   -  { program: "manageserver",           target: "manage/manage.log" }
   -  { program: "managegui",              target: "manage/apache.log" }
+
+  # core-supporting
   -  { program: "aaserver",               target: "aa/aa.log" }
   -  { program: "aagui",                  target: "aa/apache.log" }
   -  { program: "aalink",                 target: "aa/apache.log" }
-  -  { program: "pdp",                    target: "pdp/pdp.log" }
   -  { program: "vootserver",             target: "voot/voot.log" }
-  -  { program: "myconextserver",         target: "eduid/myconext.log" }
-  -  { program: "myconextjson",           target: "eduid/myconextjson.log" }
-  -  { program: "myconextgui",            target: "eduid/myconext-apache.log" }
-  -  { program: "accountgui",             target: "eduid/account-apache.log" }
-  -  { program: "servicedeskgui",         target: "eduid/servicedesk-apache.log" }
+  -  { program: "pdp",                    target: "pdp/pdp.log" }
+
+  # Invite
   -  { program: "inviteclient",           target: "invite/inviteclient.log" }
   -  { program: "invitewelcome",          target: "invite/invitewelcome.log" }
   -  { program: "inviteserver",           target: "invite/inviteserver.log" }
   -  { program: "invitejson",             target: "invite/invitejson.log" }
   -  { program: "inviteprovisioningmock", target: "invite/inviteprovisioningmock.log" }
+
+  # dashboards
+  -  { program: "dashboardgui",           target: "dashboard/apache.log" }
+  -  { program: "dashboardserver",        target: "dashboard/dashboard.log" }
   -  { program: "profile",                startswith: "{",               target: "profile/profile.log" }
   -  { program: "profile",                target: "profile/apache.log" }
-  -  { program: "spdashboard",            startswith: "spdashboard",    target: "spdashboard/spdashboard.log" }
-  -  { program: "spdashboard",            target: "spdashboard/apache.log" }
-  -  { program: "dashboardserver",        target: "dashboard/dashboard.log" }
-  -  { program: "dashboardgui",           target: "dashboard/apache.log" }
+
+  # static
   -  { program: "Apache-STATIC",          target: "static/apache.log" }
   -  { program: "Apache-METADATA",        target: "metadata/apache.log" }
-  -  { program: "acme.sh",                target: "haproxy/acme.log" }
+
+  # MyConext
+  -  { program: "myconextserver",         target: "eduid/myconext.log" }
+  -  { program: "myconextjson",           target: "eduid/myconextjson.log" }
+  -  { program: "myconextgui",            target: "eduid/myconext-apache.log" }
+  -  { program: "accountgui",             target: "eduid/account-apache.log" }
+  -  { program: "servicedeskgui",         target: "eduid/servicedesk-apache.log" }
+  -  { program: "gateway",                contains: '"message":"Second Factor Authenticated"', dir: "log_logins", target: "stepup-authentication.log" }
+  -  { program: "gateway",                contains: '"message":"Intrinsic Loa Requested"',     dir: "log_logins", target: "stepup-authentication.log" }
+  -  { program: "spdashboard",            startswith: "spdashboard",    target: "spdashboard/spdashboard.log" }
+  -  { program: "spdashboard",            target: "spdashboard/apache.log" }
