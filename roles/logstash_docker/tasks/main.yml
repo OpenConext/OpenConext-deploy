@@ -42,6 +42,8 @@
     image: "ghcr.io/openconext/openconext-basecontainers/logstash8:latest"
     state: started
     restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
     ports:
       - 5044:5044
     mounts:

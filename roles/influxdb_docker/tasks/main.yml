@@ -21,6 +21,8 @@
     image: "influxdb:1.12"
     state: started
     restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
     ports:
       - "8086:8086"
     mounts:
