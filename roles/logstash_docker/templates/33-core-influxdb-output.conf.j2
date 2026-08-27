@@ -26,6 +26,8 @@ output {
             host => "{{ influx_stats_dbhost }}"
             port => 8086
             db => "log_logins"
+            user => "{{ influxdb_stats_user }}"
+            password => "{{ influxdb_stats_password }}"
             measurement => "EBAUTH"
             retention_policy => "autogen"
             use_event_fields_for_data_points => false
