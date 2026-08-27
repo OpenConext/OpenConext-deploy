@@ -2,24 +2,24 @@ ruleset(name="{{ env_name }}") {
 
   {% if env_name != "mgnt_sc" %}
 
-  {% for config in rsyslog_central_apps %}
-  {% set dir = config.dir if 'dir' in config else 'apps' %}
+  {% for config in rsyslog_central_apps -%}
+  {%- set dir = config.dir if 'dir' in config else 'apps' -%}
   if $programname == "{{ config.program }}"
-    {%- if 'contains'   in config %} and $msg contains   '{{ config.contains   }}' {% endif -%}
-    {%- if 'startswith' in config %} and $msg startswith '{{ config.startswith }}' {% endif %}
-    then { action(type="omfile" File="{{ rsyslog_dir }}/{{ dir }}/{{ env_name }}/{{  config.target }}") stop }
+    {%- if 'contains'   in config %} and $msg contains '{{ config.contains   }}'{% endif %}
+    {%- if 'startswith' in config %} and $msg startswith '{{ config.startswith }}'{% endif -%}
+    {# #} then { action(type="omfile" File="{{ rsyslog_dir }}/{{ dir }}/{{ env_name }}/{{  config.target }}") stop }
   {% endfor %}
 
   ## stepup
-  {% for stepupapp in stepupapps %}
+  {%- for stepupapp in stepupapps -%}
   # {{ stepupapp }}
-  if $programname == "stepup-{{ stepupapp }}"
+  if $programname == "stepup-{{ stepupapp }}" {# -#}
     then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ env_name }}/{{ stepupapp }}/{{ stepupapp }}.log") stop }
-  if $programname == "{{ stepupapp }}" and $msg startswith "{{ stepupapp }}"
+  if $programname == "{{ stepupapp }}" and $msg startswith "{{ stepupapp }}" {# -#}
     then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ env_name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log") stop }
-  if $programname == "{{ stepupapp }}"
+  if $programname == "{{ stepupapp }}" {# -#}
     then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ env_name }}/{{ stepupapp }}/{{ stepupapp }}.log") stop }
-  if $programname == "Apache-{{ stepupapp }}"
+  if $programname == "Apache-{{ stepupapp }}" {# -#}
     then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ env_name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log") stop }
   {% endfor %}
 
@@ -35,5 +35,5 @@ ruleset(name="{{ env_name }}") {
 
   # default action
   action(type="omfile" dynaFile="hostleft-{{ env_name }}")
-
+  stop
 }

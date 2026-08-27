@@ -1,6 +1,6 @@
 $template auditd-{{ env_name }}, "{{ rsyslog_dir }}/apps/{{ env_name }}/auditd/%HOSTNAME%/auditd.log"
-$template bash-{{ env_name }},   "{{ rsyslog_dir }}/apps/{{ env_name }}/bash/%HOSTNAME%/bash.log"
+$template bash-{{ env_name }}, "{{ rsyslog_dir }}/apps/{{ env_name }}/bash/%HOSTNAME%/bash.log"
 $template secure-{{ env_name }}, "{{ rsyslog_dir }}/apps/{{ env_name }}/secure/%HOSTNAME%/secure.log"
-$template MARK-{{ env_name }},   "{{ rsyslog_dir }}/monitoring/%HOSTNAME%"
+$template MARK-{{ env_name }}, "{{ rsyslog_dir }}/monitoring/%HOSTNAME%"
 
 $template hostleft-{{ env_name }}, "{{ rsyslog_dir }}/hosts/{{ env_name }}/%HOSTNAME%/%SYSLOGFACILITY-TEXT%"
