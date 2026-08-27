@@ -1,39 +1,39 @@
-ruleset(name="{{ item.name }}") {
+ruleset(name="{{ env_name }}") {
 
-  {% if item.name != "mgnt_sc" %}
+  {% if env_name != "mgnt_sc" %}
 
-  {% for app, config in rsyslog_central_apps.items() %}
+  {% for config in rsyslog_central_apps %}
   {% set dir = config.dir if 'dir' in config else 'apps' %}
   if $programname == "{{ config.program }}"
     {%- if 'contains'   in config %} and $msg contains   '{{ config.contains   }}' {% endif -%}
     {%- if 'startswith' in config %} and $msg startswith '{{ config.startswith }}' {% endif %}
-    then { action(type="omfile" File="{{ rsyslog_dir }}/{{ dir }}/{{ item.name }}/{{  config.target }}") stop }
+    then { action(type="omfile" File="{{ rsyslog_dir }}/{{ dir }}/{{ env_name }}/{{  config.target }}") stop }
   {% endfor %}
 
   ## stepup
   {% for stepupapp in stepupapps %}
   # {{ stepupapp }}
   if $programname == "stepup-{{ stepupapp }}"
-    then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}.log") stop }
+    then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ env_name }}/{{ stepupapp }}/{{ stepupapp }}.log") stop }
   if $programname == "{{ stepupapp }}" and $msg startswith "{{ stepupapp }}"
-    then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log") stop }
+    then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ env_name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log") stop }
   if $programname == "{{ stepupapp }}"
-    then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}.log") stop }
+    then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ env_name }}/{{ stepupapp }}/{{ stepupapp }}.log") stop }
   if $programname == "Apache-{{ stepupapp }}"
-    then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ item.name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log") stop }
+    then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ env_name }}/{{ stepupapp }}/{{ stepupapp }}-apache.log") stop }
   {% endfor %}
 
   {% endif %}
 
   # per-host specials
-  if $programname == "audispd"       then { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
-  if $programname == "audit"         then { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
-  if $programname == "audisp-syslog" then { action(type="omfile" DynaFile="auditd-{{ item.name }}") stop }
-  if $programname == "-bash"         then { action(type="omfile" DynaFile="bash-{{   item.name }}") stop }
-  if $programname == "authpriv"      then { action(type="omfile" Dynafile="secure-{{ item.name }}") stop }
-  if $msg contains "-- MARK --"      then { action(type="omfile" DynaFile="MARK-{{   item.name }}") stop }
+  if $programname == "audispd"       then { action(type="omfile" DynaFile="auditd-{{ env_name }}") stop }
+  if $programname == "audit"         then { action(type="omfile" DynaFile="auditd-{{ env_name }}") stop }
+  if $programname == "audisp-syslog" then { action(type="omfile" DynaFile="auditd-{{ env_name }}") stop }
+  if $programname == "-bash"         then { action(type="omfile" DynaFile="bash-{{   env_name }}") stop }
+  if $programname == "authpriv"      then { action(type="omfile" Dynafile="secure-{{ env_name }}") stop }
+  if $msg contains "-- MARK --"      then { action(type="omfile" DynaFile="MARK-{{   env_name }}") stop }
 
   # default action
-  action(type="omfile" dynaFile="hostleft-{{ item.name }}")
+  action(type="omfile" dynaFile="hostleft-{{ env_name }}")
 
 }

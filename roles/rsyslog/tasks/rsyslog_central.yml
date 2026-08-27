@@ -41,7 +41,9 @@
     src: sc_template.conf.j2
     dest: /etc/rsyslog.d/templates/{{ item.name }}.conf
     backup: true
-  with_items: "{{ rsyslog_environments }}"
+  vars:  # use a semantic name in the template
+    env_name: "{{ item.name }}"
+  loop: "{{ rsyslog_environments }}"
   loop_control:
     label: "{{ item.name }}"
   notify:
@@ -52,7 +54,9 @@
     src: sc_ruleset.conf.j2
     dest: /etc/rsyslog.d/rulesets/{{ item.name }}.conf
     backup: true
-  with_items: "{{ rsyslog_environments }}"
+  vars:  # use a semantic name in the template
+    env_name: "{{ item.name }}"
+  loop: "{{ rsyslog_environments }}"
   loop_control:
     label: "{{ item.name }}"
   notify:
@@ -63,7 +67,11 @@
     src: listener.conf.j2
     dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
     backup: true
-  with_items: "{{ rsyslog_environments }}"
+  vars:  # use a semantic name in the template
+    env_name: "{{ item.name }}"
+    port: "{{ item.port }}"
+    peer: "{{ item.permittedpeer }}"
+  loop: "{{ rsyslog_environments }}"
   loop_control:
     label: "{{ item.name }}"
   notify:
