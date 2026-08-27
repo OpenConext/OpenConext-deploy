@@ -19,10 +19,17 @@
     group: 1000
     mode: 0644
   with_items:
-    - logstash.yml
     - jvm.options
     - pipelines.yml
     - log4j2.properties
+
+- name: Place logstash config file
+  ansible.builtin.template:
+    src: templates/logstash.yml.j2
+    dest: /var/lib/logstash/config/logstash.yml
+    owner: 1000
+    group: 1000
+    mode: 0644
 
 - name: Place core config files
   ansible.builtin.copy:

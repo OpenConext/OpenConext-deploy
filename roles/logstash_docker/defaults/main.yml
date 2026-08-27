@@ -1,3 +1,2 @@
-#SPDX-License-Identifier: MIT-0
 ---
-# defaults file for logstash
+logstash_memory_gb: 4
