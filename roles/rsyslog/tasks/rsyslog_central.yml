@@ -77,8 +77,8 @@
     mode: "0644"
   vars:  # use a semantic name in the template
     env_name: "{{ item.name }}"
-    port: "{{ item.port }}"
-    peer: "{{ item.permittedpeer }}"
+    listener_port: "{{ item.port }}"
+    listener_peer: "{{ item.permittedpeer }}"
   loop: "{{ rsyslog_environments }}"
   loop_control:
     label: "{{ item.name }}"
