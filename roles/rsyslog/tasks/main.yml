@@ -94,10 +94,11 @@
 # but seems to work
 - name: "Allow extra port rsyslog_tls_port_t"
   community.general.seport:
-    ports: "{{ rsyslog_remote_relp_port }}"
+    ports: "{{ item }}"
     proto: "tcp"
     setype: "syslog_tls_port_t"
     state: "present"
+  loop: "{{  relp_remote | map(attribute='port') | unique }}"
   when: "ansible_selinux.mode is defined  and  ansible_selinux.mode == 'enforcing'"
 
 #### central logserver
