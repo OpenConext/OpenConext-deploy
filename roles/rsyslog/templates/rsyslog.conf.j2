@@ -11,7 +11,7 @@ input(type="imptcp" port="514")
 # Provides the ability to import structured log messages from systemd journal to syslog.
 module(load="imjournal"
        UsePid="system" # PID number is retrieved as the ID of the process the journal entry originates from
-       StateFile="{{ rsyslog_imjournal_statefile | default('imjournal.state') }}"
+       StateFile="{{ rsyslog_imjournal_statefile }}"
        ratelimit.interval="{{ rsyslog_imjournal_ratelimitinterval }}"
        ratelimit.burst="{{ rsyslog_imjournal_ratelimitburst }}"
 )
@@ -38,7 +38,7 @@ module(load="builtin:omfile"
 
 #### GLOBAL DIRECTIVES ####
 # where to place aux file (spool, etc)
-global(workDirectory="/var/lib/rsyslog")
+global(workDirectory="{{ rsyslog_workdirectory }}")
 
 # Support large messages
 global(maxMessageSize="{{ rsyslog_maxmessagesize }}")
