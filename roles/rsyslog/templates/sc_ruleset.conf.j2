@@ -11,7 +11,7 @@ ruleset(name="{{ env_name }}") {
   {% endfor %}
 
   ## stepup
-  {%- for stepupapp in stepupapps -%}
+  {%- for stepupapp in rsyslog_stepupapps -%}
   # {{ stepupapp }}
   if $programname == "stepup-{{ stepupapp }}" {# -#}
     then { action(type="omfile" File="{{ rsyslog_dir }}/apps/{{ env_name }}/{{ stepupapp }}/{{ stepupapp }}.log") stop }

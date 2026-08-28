@@ -1,24 +1,24 @@
 ---
-- name: Copy the log_logins and lastseen database table definitions
-  copy:
+- name: "Copy the log_logins and lastseen database table definitions"
+  ansible.builtin.copy:
     src: "{{ item }}"
-    dest: /var/tmp/{{ item }}
-    owner: root
-    mode: 0744
+    dest: "/var/tmp/{{ item }}"
+    mode: "0744"
   with_items:
-    - log_logins.sql
-    - lastseen.sql
+    - "log_logins.sql"
+    - "lastseen.sql"
 
-- name: add python mysql module for parse_ebauth_to_mysql script
-  apt:
-    name: python3-mysqldb
-    state: present
-  when: ansible_os_family == "Debian"
+- name: "Add python mysql module for parse_ebauth_to_mysql script"
+  ansible.builtin.apt:
+    name: "python3-mysqldb"
+    state: "present"
+  when: "ansible_os_family == 'Debian'"
 
-- name: Process auth logs for each rsyslog environment
-  ansible.builtin.include_tasks: process_auth_log_for_environment.yml
+- name: "Process auth logs for each rsyslog environment"
+  ansible.builtin.include_tasks:
+    file: "process_auth_log_for_environment.yml"
   loop: "{{ rsyslog_environments }}"
   loop_control:
-    loop_var: rsyslog_environment
+    loop_var: "rsyslog_environment"
     label: "{{ rsyslog_environment.name }}"
-  when: rsyslog_environment.db_loglogins_name is defined
+  when: "rsyslog_environment.db_loglogins_name is defined"
