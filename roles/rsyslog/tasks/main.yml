@@ -79,8 +79,6 @@
     src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogclient.crt"
     dest: "{{ rsyslog_certifcate_dir }}/rsyslogclient.crt"
     mode: "0644"
-    owner: "root"
-    group: "adm"
   notify:
     - "Restart rsyslog"
 
