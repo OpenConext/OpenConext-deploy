@@ -69,6 +69,7 @@ if prifilt("*.emerg") then {
 action(type="omrelp"
        target="{{ relp_host.host }}"
        port="{{ relp_host.port }}"
+       timeout="10"  {#- needed because otherwise exiting rsyslogd will take the default 90 second timeout #}
        tls="on"
        tls.caCert="{{ rsyslog_ca }}"
        tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
