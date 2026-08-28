@@ -1,4 +1,9 @@
 ---
+
+- name: "Set variable to note centrallog server"
+  ansible.builtin.set_fact:
+    rsyslog_is_centrallog_server: true
+
 - name: "Install python modules"
   ansible.builtin.package:
     name:

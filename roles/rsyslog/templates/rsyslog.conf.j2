@@ -93,7 +93,7 @@ action(type="omfile" file="/var/log/syslog")
 stop
 
 
-{% if 'centrallog_servers' in group_names %}
+{% if rsyslog_is_centrallog_server %}
 #### TEMPLATE, RULES AND LISTENERS FOR REMOTE MESSAGES
 # Each listener (on a specific port) binds to a specific ruleset for a specific environment.
 # Only the rules from that specific ruleset are applied.  The default ruleset defined above
