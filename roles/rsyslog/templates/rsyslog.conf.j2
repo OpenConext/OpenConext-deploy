@@ -1,11 +1,6 @@
 #### MODULES ####
 
 ## input modules
-# This module provides the ability to accept syslog messages from applications running on the local system via Unix sockets
-module(load="imuxsock"
-       syssock.use="off" # Turn off message reception via local log socket; local messages are retrieved through imjournal now.
-)
-
 {% if 'docker' in group_names %}
 # for docker hosts, we support logging directly from inside the docker host to a TCP socket on the container host
 # Provides the ability to receive syslog messages via TCP
