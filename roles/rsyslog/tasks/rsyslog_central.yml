@@ -1,4 +1,12 @@
 ---
+- name: "Install python modules"
+  ansible.builtin.package:
+    name:
+      - "python3-dateutil"
+    state: "present"
+  notify:
+    - "Restart rsyslog"
+
 # The server uses a different set of keys than the client
 - name: "Put rsyslog server key"
   ansible.builtin.copy:
