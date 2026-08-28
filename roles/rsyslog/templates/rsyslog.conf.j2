@@ -37,14 +37,16 @@ module(load="builtin:omfile"
 
 
 #### GLOBAL DIRECTIVES ####
-# where to place aux file (spool, etc)
-global(workDirectory="{{ rsyslog_workdirectory }}")
+global(
+       # where to place aux file (spool, etc)
+       workDirectory="{{ rsyslog_workdirectory }}"
 
-# Support large messages
-global(maxMessageSize="{{ rsyslog_maxmessagesize }}")
+       # Support large messages
+       maxMessageSize="{{ rsyslog_maxmessagesize }}"
 
-# Keep fully qualified hostnames instead of stripping the local domain.
-global(preserveFQDN="on")
+       # Keep fully qualified hostnames instead of stripping the local domain.
+       preserveFQDN="on"
+)
 
 
 #### LOCAL TEMPLATES AND RULES ####
@@ -71,13 +73,13 @@ action(type="omrelp"
        tls.caCert="{{ rsyslog_ca }}"
        tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
        tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
-       tls.authmode="name"
-       tls.permittedpeer=["{{ relp_host.peer }}"]
+       tls.authMode="name"
+       tls.permittedPeer=["{{ relp_host.peer }}"]  {#- CN of the certificate of the server #}
        queue.type="LinkedList"
        queue.filename="{{ relp_host.name }}"
        queue.spoolDirectory="{{ rsyslog_queue_dir }}"
-       queue.maxdiskspace="1G"
-       queue.saveonshutdown="on"
+       queue.maxDiskSpace="1G"
+       queue.saveOnShutdown="on"
        action.resumeRetryCount="-1"
        action.resumeInterval="5"
        action.writeAllMarkMessages="on"
