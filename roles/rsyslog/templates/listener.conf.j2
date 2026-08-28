@@ -1,5 +1,6 @@
 # define rsyslog listener for environment {{ env_name }}
-input(type="imrelp" port="{{ listener_port }}"
+input(type="imrelp"
+      port="{{ listener_port }}"
       ruleset="{{ env_name }}"
       tls="on"
       tls.myCert="/etc/pki/rsyslog/rsyslogserver.crt"
