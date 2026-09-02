@@ -365,6 +365,12 @@ management:
     health:
       access: unrestricted
       show-details: always
+      status:
+        http-mapping:
+          down: 200
+          out_of_service: 200
+          unknown: 200
+          warning: 200
     prometheus:
       access: read_only
     mappings:
