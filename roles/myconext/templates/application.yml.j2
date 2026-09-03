@@ -371,6 +371,8 @@ management:
           out-of-service: 200
           unknown: 200
           warning: 200
+      probes:
+        enabled: false
     prometheus:
       access: read_only
     mappings:
@@ -378,10 +380,10 @@ management:
     metrics:
       access: unrestricted
   health:
-      ssl:
-        enabled: false
-      readinessstate:
-        enabled: false
+    ssl:
+      enabled: false
+    readinessstate:
+      enabled: off
   info:
     git:
       mode: full
