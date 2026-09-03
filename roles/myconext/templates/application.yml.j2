@@ -172,7 +172,7 @@ feature:
   use_global_uid: {{ myconext.feature_use_global_uid }}
   # SP entityIds that always receive the global uid in the uid and eduPersonPrincipalName SAML attributes,
   # even when use_global_uid is false.
-  force_global_uid_entities: "{{ myconext.feature_force_global_uid_entities }}"
+  force_global_uid_entities: {{ myconext.feature_force_global_uid_entities + ['mijn.' + myconext_base_domain] }}
 
 default_affiliate_email_domain: eduid.nl
 
