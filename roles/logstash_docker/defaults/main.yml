@@ -1,0 +1,6 @@
+---
+logstash_memory_gb: 4
+# The following variables are not provided but required to run this role. Define these in your inventory or vault:
+# influx_stats_dbhost:
+# influxdb_stats_user:
+# influxdb_stats_password:
