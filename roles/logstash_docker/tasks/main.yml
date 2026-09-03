@@ -72,6 +72,7 @@
       - source: /data/logstash/
         target: /data/logstash/
         type: bind
+  register: logstash_container_created
 
 - name: Change logstash UID
   community.docker.docker_container_exec:
@@ -81,6 +82,7 @@
       sh -c '
         groupmod -g {{ container_ids.logstash }} logstash &&
         usermod -u {{ container_ids.logstash }} -g {{ container_ids.logstash }} logstash'
+  when: logstash_container_created.changed
 
 - name: Check if running user needs to be changed
   community.docker.docker_container_info:
