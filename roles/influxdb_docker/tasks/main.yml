@@ -2,7 +2,7 @@
 - name: Create influx user
   ansible.builtin.user:
     name: influxdb
-    uid: 1500
+    uid: "1500"
 
 - name: Ensure required host directories exists
   ansible.builtin.file:
@@ -14,6 +14,7 @@
   with_items:
     - "/opt/openconext/influxdb/etc"
     - "/opt/openconext/influxdb/varlib"
+    - "/data/influxdb-backup"
 
 - name: Create influx container
   community.docker.docker_container:
@@ -33,6 +34,9 @@
       - source: /opt/openconext/influxdb/etc
         target: /etc/influxdb
         type: bind
+      - source: /data/influxdb-backup
+        target: /data/influxdb-backup
+        type: bind
     env:
       INFLUXDB_DB: "{{ influx_stats_db }}"
       INFLUXDB_ADMIN_USER: "{{ influxdb_admin_user }}"
@@ -40,6 +44,9 @@
       INFLUXDB_READ_USER: "{{ influxdb_stats_user }}"
       INFLUXDB_READ_USER_PASSWORD: "{{ influxdb_stats_password }}"
       INFLUXDB_HTTP_AUTH_ENABLED: "True"
+      INFLUXDB_META_DIR: "/var/lib/influxdb/meta"
+      INFLUXDB_DATA_DIR: "/var/lib/influxdb/data"
+      INFLUXDB_COORDINATOR_WAL_DIR: "/var/lib/influxdb/wal"
 
 - name: Wait for influx to start
   ansible.builtin.wait_for:
@@ -63,3 +70,20 @@
   register: influxdb_grant
   changed_when: false
   no_log: true
+
+- name: Import continuous queries through the InfluxDB Docker container
+  community.docker.docker_container_exec:
+    container: "influxdb"
+    command: >
+      influx
+      -host {{ influxdb_host }}
+      -port 8086
+      -username {{ influxdb_admin_user }}
+      -password {{ influxdb_admin_password }}
+    stdin: "{{ lookup('ansible.builtin.file', 'files/continuous_queries.sql') }}"
+  no_log: true
+
+- name: Create cron file for making the backups and cleaning them up after 7 days
+  ansible.builtin.copy:
+    src: files/influxdb_backup
+    dest: /etc/cron.d/influxdb_backup

@@ -3,11 +3,13 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: 1000
-    group: 1000
+    owner: "{{ container_ids.logstash }}"
+    group: "{{ container_ids.logstash }}"
     mode: 0750
   with_items:
+    - /opt/openconext/logstash
     - /opt/openconext/logstash/config
+    - /opt/openconext/logstash/conf.d
     - /opt/openconext/logstash/conf.d/core
     - /data/logstash
 
@@ -15,8 +17,8 @@
   ansible.builtin.copy:
     src: "files/{{ item }}"
     dest: "/opt/openconext/logstash/config/{{ item }}"
-    owner: 1000
-    group: 1000
+    owner: "{{ container_ids.logstash }}"
+    group: "{{ container_ids.logstash }}"
     mode: 0644
   with_items:
     - jvm.options
@@ -27,16 +29,16 @@
   ansible.builtin.template:
     src: templates/logstash.yml.j2
     dest: /opt/openconext/logstash/config/logstash.yml
-    owner: 1000
-    group: 1000
+    owner: "{{ container_ids.logstash }}"
+    group: "{{ container_ids.logstash }}"
     mode: 0644
 
 - name: Place core config files
   ansible.builtin.copy:
     src: "files/core/{{ item }}"
     dest: "/opt/openconext/logstash/conf.d/core/{{ item }}"
-    owner: 1000
-    group: 1000
+    owner: "{{ container_ids.logstash }}"
+    group: "{{ container_ids.logstash }}"
     mode: 0644
   with_items:
     - 02-filebeat-input.conf
@@ -46,8 +48,8 @@
   ansible.builtin.template:
     src: templates/33-core-influxdb-output.conf.j2
     dest: /opt/openconext/logstash/conf.d/core/33-core-influxdb-output.conf
-    owner: 1000
-    group: 1000
+    owner: "{{ container_ids.logstash }}"
+    group: "{{ container_ids.logstash }}"
     mode: 0644
 
 - name: Create logstash container
@@ -70,3 +72,40 @@
       - source: /data/logstash/
         target: /data/logstash/
         type: bind
+
+- name: Change logstash UID
+  community.docker.docker_container_exec:
+    container: logstash
+    user: "root"
+    command:
+      sh -c '
+        groupmod -g {{ container_ids.logstash }} logstash &&
+        usermod -u {{ container_ids.logstash }} -g {{ container_ids.logstash }} logstash'
+
+- name: Check if running user needs to be changed
+  community.docker.docker_container_info:
+    name: "logstash"
+  register: logstash_container
+
+- name: Update logstash container to run as non root
+  community.docker.docker_container:
+    name: "logstash"
+    image: "ghcr.io/openconext/openconext-basecontainers/logstash8:latest"
+    state: started
+    restart_policy: "always"
+    networks:
+      - name: "loadbalancer"
+    ports:
+      - 5044:5044
+    user: "{{ container_ids.logstash }}"
+    mounts:
+      - source: /opt/openconext/logstash/config
+        target: /usr/share/logstash/config
+        type: bind
+      - source: /opt/openconext/logstash/conf.d/
+        target: /etc/logstash/conf.d/
+        type: bind
+      - source: /data/logstash/
+        target: /data/logstash/
+        type: bind
+  when: logstash_container.container.Config.User | default('') != container_ids.logstash
