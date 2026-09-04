@@ -176,7 +176,7 @@ gui:
 
 feature:
   enable-performance-seed: false
-  statistics-enabled: false
+  statistics-enabled: true
   stepup-required: false
 
 email:
@@ -207,8 +207,8 @@ invite:
 statistics:
   enabled: "{{ access_dashboard.statistics.enabled }}"
   url: "{{ access_dashboard.statistics.url }}"
-  user: "{{ access_dashboard.statistics.user }}"
-  password: "{{ access_dashboard.statistics.password }}"
+  user: "access_dashboard"
+  password: "{{ stats_access_dashboard_api_password }}"
 
 s3storage:
   url: "{{ access_dashboard.s3_storage.url }}"
