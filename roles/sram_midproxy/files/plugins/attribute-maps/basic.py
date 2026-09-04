@@ -1,5 +1,6 @@
 DEF = "urn:mace:dir:attribute-def:"
 TERENA = "urn:mace:terena.org:attribute-def:"
+OID = "urn:oid:"
 
 MAP = {
     "identifier": "urn:oasis:names:tc:SAML:2.0:attrname-format:basic",
@@ -13,17 +14,17 @@ MAP = {
         f"{DEF}eduPersonScopedAffiliation": "eduPersonScopedAffiliation",
         f"{DEF}eduPersonTargetedID": "eduPersonTargetedID",
         f"{DEF}eduPersonAssurance": "eduPersonAssurance",
-        f"{DEF}email": "email",
+        f"{DEF}mail": "mail",
         f"{DEF}emailAddress": "emailAddress",
         f"{DEF}givenName": "givenName",
         f"{DEF}gn": "gn",
         f"{DEF}isMemberOf": "isMemberOf",
-        f"{DEF}mail": "mail",
         f"{DEF}member": "member",
         f"{DEF}name": "name",
         f"{DEF}sn": "sn",
         f"{DEF}surname": "surname",
         f"{DEF}uid": "uid",
+        f"{OID}1.3.6.1.4.1.25178.4.1.6": "voPersonId",
     },
     "to": {
         "schacHomeOrganization": f"{TERENA}schacHomeOrganization",
@@ -36,16 +37,16 @@ MAP = {
         "eduPersonTargetedID": f"{DEF}eduPersonTargetedID",
         "eduPersonAssurance": f"{DEF}eduPersonAssurance",
         "eduPersonOrcid": f"{DEF}eduPersonOrcid",
-        "email": f"{DEF}email",
+        "mail": f"{DEF}mail",
         "emailAddress": f"{DEF}emailAddress",
         "givenName": f"{DEF}givenName",
         "gn": f"{DEF}gn",
         "isMemberOf": f"{DEF}isMemberOf",
-        "mail": f"{DEF}mail",
         "member": f"{DEF}member",
         "name": f"{DEF}name",
         "sn": f"{DEF}sn",
         "surname": f"{DEF}surname",
         "uid": f"{DEF}uid",
+        "voPersonId": f"{OID}1.3.6.1.4.1.25178.4.1.6",
     },
 }
