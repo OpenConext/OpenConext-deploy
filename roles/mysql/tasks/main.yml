@@ -9,6 +9,12 @@
     - ansible_facts['os_family'] == 'RedHat'
   block:
     # Add MariaDB repo and key
+
+    - name: "Fix distro name for repo base url"
+      ansible.builtin.set_fact:
+        ansible_distribution: "rockylinux"
+      when: ansible_distribution == "Rocky"
+
     - name: "Add MariaDB.org repository"
       ansible.builtin.template:
         src: "mariadb.repo.j2"
