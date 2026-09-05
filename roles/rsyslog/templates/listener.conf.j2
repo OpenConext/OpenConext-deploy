@@ -1,9 +1,13 @@
-input(type="imrelp" port="{{ item.port }}"
-ruleset="{{ item.name }}"
-tls="on"
-tls.mycert="/etc/pki/rsyslog/rsyslogserver.crt"
-tls.myprivkey="/etc/pki/rsyslog/rsyslogserver.key"
-tls.caCert="{{ rsyslog_ca }}"
-tls.authmode="name"
-tls.permittedpeer="{{ item.permittedpeer }}")
-
+# define rsyslog listener for environment {{ env_name }}
+input(type="imrelp"
+      port="{{ listener_port }}"
+      ruleset="{{ env_name }}"
+      tls="on"
+      tls.myCert="/etc/pki/rsyslog/rsyslogserver.crt"
+      tls.myPrivKey="/etc/pki/rsyslog/rsyslogserver.key"
+      tls.caCert="{{ rsyslog_ca }}"
+      tls.authMode="name"
+      {# CN of certificate of clients that are allowed to connect.
+       # All clients use the same cert and thus the same "peer name" #}
+      tls.permittedPeer=["{{ listener_peer }}"]
+)
