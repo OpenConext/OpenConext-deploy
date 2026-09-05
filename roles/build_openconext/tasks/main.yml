@@ -62,6 +62,25 @@
 
 
 #########################################################
+## acme
+#########################################################
+- name: "Install ACME scripts"
+  ansible.builtin.include_role:
+    name: "haproxy"
+    tasks_from: "acme.yml"
+  vars:
+    haproxy_acme_server: "{{ build_openconext_acme_server }}"
+    haproxy_acme_eab_kid: "{{ build_openconext_acme_eab_kid }}"
+    haproxy_acme_eab_hmac_key: "{{ build_openconext_acme_eab_hmac_key }}"
+
+- name: "Request and install ACME cert"
+  ansible.builtin.include_tasks:
+    file: "get_cert.yml"
+  vars:
+    build_openconext_acme_hosts: ["build.openconext.org"]
+
+
+#########################################################
 ## finish
 #########################################################
 - name: "Start apache"

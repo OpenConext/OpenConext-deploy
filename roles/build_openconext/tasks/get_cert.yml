@@ -1,0 +1,95 @@
+---
+##############################################################################
+## NB: duplicated code from haproxy/tasks/get_acme_certs.yml
+## TODO: make common tasks for ACME for haproxy and apache/build.openconext.org
+##############################################################################
+
+##############################################################################
+## Set up destonation paths
+##############################################################################
+- name: "Create ssl dir"
+  ansible.builtin.file:
+    path: "/etc/ssl/"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: "Create target dir for certificates"
+  ansible.builtin.file:
+    path: "/etc/ssl/{{ item }}"
+    state: "directory"
+    owner: "acme"
+    group: "ssl-cert"
+    mode: "0750"
+  loop: "{{ build_openconext_acme_hosts }}"
+
+- name: "Allow acme to reload apache"
+  community.general.sudoers:
+    name: "acme-may-reload-apache"
+    commands: "/bin/systemctl reload apache2"
+    user: "acme"
+    nopassword: true
+
+
+##############################################################################
+## get new certs
+##############################################################################
+- name: "Check existence of acme CNAME records"
+  ansible.builtin.command:
+    cmd: "dig +short -t CNAME '_acme-challenge.{{ item }}'"
+  register: "build_openconext_acme_cname"
+  failed_when: "build_openconext_acme_cname.stdout == ''"
+  changed_when: false
+  loop: "{{ build_openconext_acme_hosts }}"
+  become: false
+  delegate_to: "localhost"
+  check_mode: false  # this is safe run run, even in check mode
+  run_once: true
+
+- name: "Update certificates on one host at a time"
+  throttle: 1
+  become_user: "acme"
+  become: true
+  block:
+    - name: "Issue the certificates using acme"
+      ansible.builtin.command:
+        cmd: |
+          /home/acme/.acme.sh/acme.sh
+            --issue
+            --ecc
+            --keylength ec-256
+            --days "{{ build_openconext_acme_renewal_days }}"
+            --dns dns_acmedns
+            --stateless
+            --dnssleep 3
+            --server "{{ build_openconext_acme_server }}"
+            --domain "{{ item }}"
+            {{ acme_account.changed | ternary('--force', '') }}
+      environment:
+        ACMEDNS_BASE_URL: "{{ build_openconext_acmedns.baseurl }}"
+        ACMEDNS_USERNAME: "{{ build_openconext_acmedns.username }}"
+        ACMEDNS_PASSWORD: "{{ build_openconext_acmedns.password }}"
+        ACMEDNS_SUBDOMAIN: "{{ build_openconext_acmedns.subdomain }}"
+      loop: "{{ build_openconext_acme_hosts }}"
+      register: "acme_issue"
+      changed_when: "acme_issue.rc == 0"
+      failed_when: 'acme_issue.rc != 0 and acme_issue.rc != 2'
+
+    - name: "Deploy cert to Apache"
+      ansible.builtin.command:
+        cmd: |
+          /home/acme/.acme.sh/acme.sh
+            --install-cert
+            --domain "{{ item }}"
+            --cert-file      "/etc/ssl/{{ item }}/cert.pem"
+            --key-file       "/etc/ssl/{{ item }}/key.pem"
+            --fullchain-file "/etc/ssl/{{ item }}/fullchain.pem"
+            --reloadcmd "sudo /bin/systemctl reload apache2"
+      when: "acme_issue.results[loop_idx].changed"
+      register: "acme_install"
+      changed_when: "'Running reload cmd' in acme_install.stdout"
+      failed_when: "'Reload successful' not in acme_install.stdout"
+      loop: "{{ build_openconext_acme_hosts }}"
+      loop_control:
+        index_var: "loop_idx"
