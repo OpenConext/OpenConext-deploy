@@ -1,0 +1,66 @@
+# modern configuration
+SSLProtocol             -all +TLSv1.3
+SSLOpenSSLConfCmd       Curves X25519:prime256v1:secp384r1
+SSLCipherSuite          TLSv1.3 TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+SSLHonorCipherOrder     off
+SSLSessionTickets       off
+
+<VirtualHost *:80>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge/
+    RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=308,QSA,L]
+</VirtualHost>
+
+
+<VirtualHost *:443>
+    ServerName "{{ build_openconext_apache_hostnames[0] }}"
+    {% for h in build_openconext_apache_hostnames[1:] %}
+    ServerAlias {{ h }}
+    {% endfor %}
+
+    ServerAdmin "{{ build_openconext_admin_email }}"
+    DocumentRoot /srv/www
+
+    Protocols h2 http/1.1
+    SSLEngine On
+    SSLCertificateKeyFile  /etc/ssl/build.openconext.org/key.pem
+    SSLCertificateFile     /etc/ssl/build.openconext.org/fullchain.pem
+
+    Header always set Strict-Transport-Security "max-age=63072000"
+
+    ErrorLog syslog:local7:apache2-error
+    CustomLog "|/usr/bin/logger -p local7.info -t apache2-access" combined
+
+    <Directory "/srv/www">
+        Require all granted
+        AllowOverride None
+    </Directory>
+
+    <Directory "/srv/www/repository">
+        Options +Indexes
+        AllowOverride None
+
+        Dav on
+
+        AuthType Basic
+        AuthName "Build"
+        AuthUserFile /etc/apache2/htpasswd
+        <RequireAny>
+            Require method GET
+            Require valid-user
+        </RequireAny>
+    </Directory>
+
+    <Directory "/srv/www/vagrant_boxes">
+        # ancient stuff, remove if noone complains by June 2027
+        Require all denied
+        AllowOverride None
+    </Directory>
+
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Content-Security-Policy "default-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'; img-src 'self';"
+    Header always set Referrer-Policy "same-origin"
+    Header always set X-Frame-Options "DENY"
+
+    Redirect /.well-known/security.txt https://www.surf.nl/.well-known/security.txt
+</VirtualHost>
