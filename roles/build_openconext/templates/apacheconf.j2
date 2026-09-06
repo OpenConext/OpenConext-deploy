@@ -52,8 +52,8 @@ SSLSessionTickets       off
     </Directory>
 
     <Directory "/srv/www/vagrant_boxes">
-        Require all granted
-         Options +Indexes
+        # ancient stuff, remove if noone complains by June 2027
+        Require all denied
         AllowOverride None
     </Directory>
 
