@@ -211,7 +211,6 @@ external-api-configuration:
       password: "{{ myconext_api_attribute_aggregation_password }}"
       scopes:
         - attribute-aggregation
-        - system
     -
       username: oidcng
       password: "{{ myconext_api_attribute_manipulation_password }}"
@@ -234,6 +233,7 @@ external-api-configuration:
       password: "{{ myconext_api_internal_password }}"
       scopes:
         - actuator
+        - system
 
 oidc-token-api:
   token-url: https://connect.{{ base_domain }}/tokens
