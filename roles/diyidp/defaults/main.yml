@@ -1,18 +1,22 @@
 ---
 diyidp_domain: "diyidp.{{ base_domain }}"
 diyidp_cert: "diyidp.crt"
-diyidp:
+diyidp_db:
   db_host: "{{ mariadb_host }}"
-  db_name: diyidp
-  db_user: diyidprw
+  db_name: "diyidp"
+  db_user: "diyidprw"
   db_password: "{{ mysql_passwords.diyidp }}"
   secretsalt: "{{ diyidp_secret_salt }} "
   admin_password: "{{ diyidp_secret }}"
-diyidp_secret_salt: secretsecret
-diyidp_secret: secret
+diyidp_theme: "theme_diyidp:diyidp"
+diyidp_secret_salt: "diyidp_secretsecret"
+diyidp_secret: "diyidp_secret"
 diyidp_remotesp:
   - name: "{{ instance_name }} SP metadata"
     metadataurl: "https://engine.{{ base_domain }}/authentication/sp/metadata"
     acslocation: "https://engine.{{ base_domain }}/authentication/sp/consume-assertion"
 diyidp_docker_networks:
   - name: "loadbalancer"
+
+# set this to add extra users to the default.  See vars/main.yml
+diyidp_users_extra: []
