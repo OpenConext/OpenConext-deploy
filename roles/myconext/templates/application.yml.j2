@@ -10,8 +10,6 @@ logging:
 server:
   # The port to where this Spring Boot application listens to.
   port: 8080
-  error:
-    path: "/error"
   server-header:
   servlet:
     # We serve from the root. Do not change this
@@ -343,6 +341,10 @@ spring:
             jwk-set-uri: "https://connect.{{ base_domain }}/oidc/certs"
             user-name-attribute: sub
             user-info-authentication-method: client_secret_basic
+  web:
+    error:
+      path: "/error"
+      include-binding-errors: always
 
 service_desk_role_auto_provisioning: False
 service_desk_roles: {{ myconext.service_desk_roles | join(",") }}
