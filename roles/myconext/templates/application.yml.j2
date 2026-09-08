@@ -356,20 +356,17 @@ management:
   endpoint:
     info:
       access: unrestricted
-    health:
-      access: unrestricted
-      show-details: always
     prometheus:
       access: read_only
     mappings:
       access: none
     metrics:
       access: unrestricted
-  health:
-    ssl:
-      enabled: false
-    readinessstate:
-      enabled: off
+    health:
+      access: unrestricted
+      show-details: always
+      probes:
+        enabled: false          # ← readiness (en liveness)  uitgeschakeld  
   info:
     git:
       mode: full
