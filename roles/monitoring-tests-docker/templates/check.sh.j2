@@ -1,0 +1,17 @@
+#!/bin/bash
+
+JSON=`curl -s 'http://localhost:{{ item.port }}/actuator/health'`
+ss=`echo $JSON | python3 -c "import sys, json; print(json.load(sys.stdin)['status'])"`
+mms=`echo $JSON | python3 -c "import sys, json; print(json.load(sys.stdin)['components']['metadataMonitor']['status'])"`
+sps=`echo $JSON | python3 -c "import sys, json; print(json.load(sys.stdin)['components']['samlProxyMonitor']['status'])"`
+pms=`echo $JSON | python3 -c "import sys, json; print(json.load(sys.stdin)['components']['pdPMonitor']['status'])"`
+vmo=`echo $JSON | python3 -c "import sys, json; print(json.load(sys.stdin)['components']['vootOidcMonitor']['status'])"`
+vma=`echo $JSON | python3 -c "import sys, json; print(json.load(sys.stdin)['components']['oidcNGMonitor']['status'])"`
+
+if [ "$ss" == "UP" ] && [ "$mms" == "UP" ] && [ "$sps" == "UP" ] && [ "$pms" == "UP" ] && [ "$vmo" == "UP" ] && [ "$vma" == "UP" ] ; then
+  echo "OK - $JSON"
+  exit 0
+else
+  echo "CRITICAL $JSON"
+  exit 2
+fi
