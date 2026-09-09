@@ -17,20 +17,25 @@
     group: root
     mode: 0755
   with_items: "{{ health_checks }}"
+  when: health_checks is defined
 
 - name: Make sure nrpe directory exists
   ansible.builtin.file:
     state: directory
     path: /etc/nrpe.d
+  when: health_checks is defined
 
 - name: Place health scripts
   ansible.builtin.template:
     src: templates/check.sh.j2
     dest: "/opt/health_check_{{ item.name }}/check.sh"
+    mode: 0755
   with_items: "{{ health_checks }}"
+  when: health_checks is defined
 
 - name: Place nrpe config file
   ansible.builtin.lineinfile:
     line: "command[check_health_prd]=/opt/health_check_{{ item.name }}/check.sh"
     dest: "/etc/nrpe.d/check_components.cfg"
   with_items: "{{ health_checks }}"
+  when: health_checks is defined
