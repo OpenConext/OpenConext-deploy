@@ -1,31 +1,30 @@
 ---
-- name: Create directory to keep configfile
-  file:
-    dest: "/opt/openconext/spdashboard"
-    state: directory
-    owner: root
-    group: root
-    mode: 0770
+- name: "Create directory to keep configfile"
+  ansible.builtin.file:
+    path: "/opt/openconext/spdashboard"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0750"
 
-- name: Place the configfile
-  template:
-    src: env.j2
-    dest: /opt/openconext/spdashboard/env
-    owner: root
-    group: root
-    mode: 0644
+- name: "Place the configfile"
+  ansible.builtin.template:
+    src: "env.j2"
+    dest: "/opt/openconext/spdashboard/env"
+    owner: "root"
+    mode: "0644"
 
-- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+- name: "Add the MariaDB docker network to the list of networks when MariaDB runs in Docker"
   ansible.builtin.set_fact:
     spdashboard_docker_networks:
-      - name: loadbalancer
-      - name: openconext_mariadb
-  when: mariadb_in_docker | default(false) | bool
+      - name: "loadbalancer"
+      - name: "openconext_mariadb"
+  when: "mariadb_in_docker | default(false) | bool"
 
-- name: Create the container
-  docker_container:
-    name: spdashboard
-    image: ghcr.io/surfnet/sp-dashboard/spdashboard:{{ spdashboard_version }}
+- name: "Create the container"
+  community.docker.docker_container:
+    name: "spdashboard"
+    image: "ghcr.io/surfnet/sp-dashboard/spdashboard:{{ spdashboard_version }}"
     env_file: "/opt/openconext/spdashboard/env"
     pull: true
     restart_policy: "always"
@@ -36,8 +35,8 @@
       traefik.enable: "true"
       traefik.port: "8080"
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost"]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+      test: ["CMD", "curl", "--fail", "http://localhost/health"]
+      interval: "10s"
+      timeout: "10s"
+      retries: "3"
+      start_period: "10s"
