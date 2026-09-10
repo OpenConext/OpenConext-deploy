@@ -1,41 +1,26 @@
 ---
-- name: Start monitoring tests docker container
-  community.docker.docker_container:
-    name: "monitoring"
-    image: "ghcr.io/openconext/openconext-monitoring/monitoring:latest"
-    state: started
-    restart_policy: "always"
-    recreate: false
-    networks:
-      - name: "loadbalancer"
-
-- name: Create required directories for health check scripts
+- name: Create required directories for health check scripts in /opt
   ansible.builtin.file:
     state: directory
-    path: "/opt/health_check_{{ item.name }}"
+    path: "/opt/openconext/health_check_{{ item }}"
     owner: root
     group: root
     mode: 0755
   with_items: "{{ health_checks }}"
-  when: health_checks is defined
 
 - name: Make sure nrpe directory exists
   ansible.builtin.file:
     state: directory
     path: /etc/nrpe.d
-  when: health_checks is defined
 
-- name: Place health scripts
-  ansible.builtin.template:
-    src: templates/check.sh.j2
-    dest: "/opt/health_check_{{ item.name }}/check.sh"
-    mode: 0755
+- name: Place monitoring files per environment
+  include_tasks: create_monitoring.yml
   with_items: "{{ health_checks }}"
-  when: health_checks is defined
+  loop_control:
+    loop_var: "env"
 
-- name: Place nrpe config file
+- name: Place nagios config file
   ansible.builtin.lineinfile:
-    line: "command[check_health_prd]=/opt/health_check_{{ item.name }}/check.sh"
+    line: "command[check_health_prd]=/opt/openconext/health_check_{{ item }}/check.sh"
     dest: "/etc/nrpe.d/check_components.cfg"
   with_items: "{{ health_checks }}"
-  when: health_checks is defined

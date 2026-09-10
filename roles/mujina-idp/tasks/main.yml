@@ -25,7 +25,7 @@
 
 - name: Create and start the server container
   community.docker.docker_container:
-    name: mujina-idp
+    name: "{{ mujina_idp_container | default ('mujina-idp') }}"
     image: ghcr.io/openconext/mujina/mujina-idp:{{ mujina_version }}
     pull: true
     restart_policy: "always"
@@ -45,7 +45,7 @@
     labels:
       traefik.http.routers.mujina-idp.rule: "Host(`mujina-idp.{{ base_domain }}`)"
       traefik.http.routers.mujina-idp.tls: "true"
-      traefik.http.services.mujina-idp.loadbalancer.server.port: "8080"
+      traefik.http.services.mujina-idp.loadbalancer.server.port: "{{ mujina_idp_port | default('8080') }}"
       traefik.enable: "true"
     healthcheck:
       test:
@@ -55,7 +55,7 @@
           "-no-verbose",
           "--tries=1",
           "--spider",
-          "http://localhost:8080/internal/health",
+          "http://localhost:{{ mujina_idp_port | default('8080') }}/internal/health",
         ]
       interval: 10s
       timeout: 10s

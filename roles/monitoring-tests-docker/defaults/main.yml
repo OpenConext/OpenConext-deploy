@@ -1,6 +1,4 @@
 ---
-#health_checks:
-#  - name: env1
-#    port: 80
-#  - name: env2
-#    port: 8080 
+health_checks:
+  - acc
+  - prd

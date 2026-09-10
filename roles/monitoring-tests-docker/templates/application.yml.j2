@@ -1,0 +1,58 @@
+logging:
+  config: classpath:logback.xml
+
+server:
+  # The port to where this Spring Boot application listens to.
+  port: {{ monitoring_tests.port }}
+
+eb:
+  metadata_sp_url: {{ monitoring_tests.metadata_sp_url }}
+  metadata_idp_url: {{ monitoring_tests.metadata_idp_url }}
+  mujina_sp_base_url: http://localhost:{{ monitoring_tests.mujina_sp_port }}
+  mujina_idp_entity_id: {{ mujina_idp.entity_id }}
+  mujina_username: monitor-user
+
+pdp:
+  user: {{ pdp.username }}
+  password: {{ pdp.password }}
+  idp_entity_id: https://engine.{{ base_domain }}/authentication/idp/metadata
+  sp_entity_id: https://engine.{{ base_domain }}/authentication/sp/metadata
+  base_url: https://pdp.{{ base_domain }}
+
+voot:
+  oidc:
+    authorization_url: https://connect.{{ base_domain }}/oidc/token
+    voot_base_url: https://voot.{{ base_domain }}
+    client_id: monitoring.{{ base_domain }}
+    secret: {{ monitoring_tests_oidcng_client_secret }}
+    person_id: {{ monitoring_tests.person_id }}
+
+oidcng:
+  base_url: https://connect.{{ base_domain }}/oidc
+  client_id: {{ monitoring_tests.oidcng_client_id }}
+  secret: {{ monitoring_tests_oidcng_client_secret }}
+  resource_server_id: {{ monitoring_tests.oidcng_resource_server_id }}
+  resource_server_secret: {{ monitoring_tests_oidcng_resource_server_secret }}
+
+# We disable all endpoints except health for the load-balancer and info for git information.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      show-details: always
+    mappings:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"

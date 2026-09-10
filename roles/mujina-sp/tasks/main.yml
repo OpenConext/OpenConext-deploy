@@ -25,7 +25,7 @@
 
 - name: Create and start the server container
   community.docker.docker_container:
-    name: mujina-sp
+    name: "{{ mujina_sp_container | default ('mujina-sp') }}"
     image: ghcr.io/openconext/mujina/mujina-sp:{{ mujina_version }}
     pull: true
     restart_policy: "always"
@@ -45,7 +45,7 @@
     labels:
       traefik.http.routers.mujina-sp.rule: "Host(`mujina-sp.{{ base_domain }}`)"
       traefik.http.routers.mujina-sp.tls: "true"
-      traefik.http.services.mujina-sp.loadbalancer.server.port: "9090"
+      traefik.http.services.mujina-sp.loadbalancer.server.port: "{{ mujina_sp_port | default('9090') }}"
       traefik.enable: "true"
     healthcheck:
       test:
@@ -55,7 +55,7 @@
           "-no-verbose",
           "--tries=1",
           "--spider",
-          "http://localhost:9090/internal/health",
+          "http://localhost:{{ mujina_sp_port | default('9090') }}/internal/health",
         ]
       interval: 10s
       timeout: 10s
