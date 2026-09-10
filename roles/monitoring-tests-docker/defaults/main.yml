@@ -1,0 +1,4 @@
+---
+health_checks:
+  - acc
+  - prd

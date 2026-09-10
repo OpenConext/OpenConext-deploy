@@ -1,0 +1,47 @@
+- name: Retrieve vars from environments inventory
+  ansible.builtin.include_vars: 
+    dir: "{{ inventory_dir }}/../{{ env }}/group_vars/"
+
+- name: Retrieve secrets from environments inventory
+  ansible.builtin.include_vars: 
+    file: "{{ inventory_dir }}/../{{ env }}/secrets/secrets.yml"
+
+- name: Create mujina idp container
+  ansible.builtin.include_role:
+    name: mujina-idp
+  vars:
+    mujina_idp_container: "mujina-idp-{{ env }}"
+    mujina_idp_dir_docker: "/opt/openconext/mujina_idp_{{ env }}"
+
+- name: Create mujina sp container
+  ansible.builtin.include_role:
+    name: mujina-sp
+  vars:
+    mujina_sp_container: "mujina-sp-{{ env }}"
+    mujina_sp_dir_docker: "/opt/openconext/mujina_sp_{{ env }}"
+
+- name: Place health scripts
+  ansible.builtin.template:
+    src: templates/check.sh.j2
+    dest: "/opt/openconext/health_check_{{ env }}/check.sh"
+    mode: 0755
+
+- name: Place application.yml for set environments
+  ansible.builtin.template:
+    src: templates/application.yml.j2
+    dest: "/opt/openconext/health_check_{{ env }}/application.yml"
+    mode: 0644
+
+- name: Start monitoring tests docker container(s)
+  community.docker.docker_container:
+    name: "monitoring-{{ env }}"
+    image: "ghcr.io/openconext/openconext-monitoring/monitoring:latest"
+    state: started
+    restart_policy: "always"
+    recreate: false
+    ports: 
+      - "{{ monitoring_tests.port }}:{{ monitoring_tests.port }}"
+    mounts: 
+      - type: bind
+        source: "/opt/openconext/health_check_{{ env }}/application.yml"
+        target: /application.yml

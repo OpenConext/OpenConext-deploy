@@ -1,0 +1,26 @@
+---
+- name: Create required directories for health check scripts in /opt
+  ansible.builtin.file:
+    state: directory
+    path: "/opt/openconext/health_check_{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items: "{{ health_checks }}"
+
+- name: Make sure nrpe directory exists
+  ansible.builtin.file:
+    state: directory
+    path: /etc/nrpe.d
+
+- name: Place monitoring files per environment
+  include_tasks: create_monitoring.yml
+  with_items: "{{ health_checks }}"
+  loop_control:
+    loop_var: "env"
+
+- name: Place nagios config file
+  ansible.builtin.lineinfile:
+    line: "command[check_health_prd]=/opt/openconext/health_check_{{ item }}/check.sh"
+    dest: "/etc/nrpe.d/check_components.cfg"
+  with_items: "{{ health_checks }}"
