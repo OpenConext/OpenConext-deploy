@@ -11,9 +11,6 @@ logging:
 
 server:
   port: 8080
-  error:
-    path: "/error"
-    include-message: always
   forward-headers-strategy: native
   servlet:
     session:
@@ -35,6 +32,11 @@ spring:
     timeout: 8h
   mvc:
     log-request-details: false
+  jackson:
+    use-jackson2-defaults: true
+  http:
+    converters:
+      preferred-json-mapper: jackson2
   security:
     oauth2:
       client:
@@ -56,8 +58,9 @@ spring:
   jpa:
     properties:
       hibernate:
-        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-        dialect: org.hibernate.dialect.MariaDBDialect
+        query:
+          native:
+            prefer_jdbc_datetime_types: true
     open-in-view: false
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -69,6 +72,10 @@ spring:
     fail-on-missing-locations: true
   mail:
     host: {{ smtp_server }}
+  web:
+    error:
+      path: "/error"
+      include-message: always
 
 crypto:
   development-mode: False
@@ -78,12 +85,10 @@ cron:
   delay_min: 200000
   delay_max: 1200001
   user-cleaner-cron: "PT30M"
-  user-cleaner-cron-initial-delay: "PT10M" ## remove after version 1.2.0
   user-cleaner-lock-at-least-for: "PT5M"
   user-cleaner-lock-at-most-for: "PT28M"
   last-activity-duration-days: 1000
   role-expiration-notifier-cron: "PT30M"
-  role-expiration-notifier-cron-initial-delay: "PT15M" ## remove after version 1.2.0
   # Set to -1 to suppress role expiry notifications
   role-expiration-notifier-duration-days: 5
   role-expiration-notifier-lock-at-least-for: "PT5M"
