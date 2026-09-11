@@ -1,0 +1,8 @@
+---
+influxdb_host: "localhost"
+# The following variables are not provided but required to run this role. Define these in your inventory or vault:
+# influx_stats_db:
+# influxdb_admin_user:
+# influxdb_admin_password:
+# influxdb_stats_user:
+# influxdb_stats_password:

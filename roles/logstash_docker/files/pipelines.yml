@@ -1,0 +1,4 @@
+- pipeline.id: core
+  path.config: "/etc/logstash/conf.d/core"
+  pipeline.workers: 2
+  queue.type: persisted
