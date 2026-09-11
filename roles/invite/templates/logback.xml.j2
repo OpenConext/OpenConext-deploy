@@ -27,10 +27,11 @@
   </appender>
 
   <logger name="invite" level="{{ invite_logback_loglevel }}"/>
-  <logger name="org.springframework.security" level="WARN"/>
   <logger name="org.springframework" level="WARN"/>
+  <logger name="org.springframework.web" level="WARN"/>
   <logger name="org.springframework.security" level="WARN"/>
   <logger name="com.zaxxer.hikari" level="ERROR"/>
+  <logger name="net.javacrumbs.shedlock" level="DEBUG"/>
 
   <root level="WARN">
     <appender-ref ref="STDOUT"/>
