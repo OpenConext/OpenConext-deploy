@@ -174,8 +174,6 @@ aa:
   authz_client_id: "aa.{{base_domain}}"
   authz_resource_server_id: aa
   authz_secret: "{{ aa_authz_client_secret }}"
-  idin_client_id: am_aa_client
-  idin_secret: "{{ aa_idin_client_secret }}"
   orcid_authorization_uri: "https://sandbox.orcid.org/oauth/authorize"
   orcid_client_id: "anonymous"
   orcid_secret: "{{ aa_orcid_password }}"
@@ -185,11 +183,6 @@ aa:
   sab_rest_username: surfconexttest
   sab_rest_password: "{{ aa_sab_rest_password }}"
   sab_rest_endpoint: https://invite.acc.surfconext.nl/api/profile
-  surfmarket_url: https://example.org
-  surfmarket_username: example@example.org
-  surfmarket_password: "{{ aa_surfmarket_password }}"
-  sbs_username: sbs_aa
-  sbs_password: "{{ aa_sbs_password }}"
   manage_url: https://manage.test.surfconext.nl
   manage_username: attribute-aggregation
   manage_password: "{{ aa_manage_password }}"
