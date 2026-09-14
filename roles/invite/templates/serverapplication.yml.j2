@@ -1,13 +1,6 @@
 ---
 logging:
   config: file:///logback.xml
-  level:
-    org.springframework: WARN
-    org.springframework.web: WARN
-    org.springframework.security: WARN
-    com.zaxxer.hikari: ERROR
-    invite: "{{ invite_logback_loglevel }}"
-    net.javacrumbs.shedlock: DEBUG
 
 server:
   port: 8080
