@@ -38,7 +38,7 @@
 
         - name: "Copy Elasticsearch GPG key"
           ansible.builtin.copy:
-            src: "/files/GPG-KEY-elasticsearch"
+            src: "files/GPG-KEY-elasticsearch"
             dest: "/tmp/GPG-KEY-elasticsearch"
             mode: '0644'
 
