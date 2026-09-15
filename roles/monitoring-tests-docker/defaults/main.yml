@@ -1,4 +1,10 @@
 ---
-health_checks:
-  - acc
-  - prd
+#health_checks:
+#  - name: acc
+#    port: 1010
+#    port_idp: 1011
+#    port_sp: 1012
+#  - name: prd
+#    port: 1020
+#    port_idp: 1021
+#    port_sp: 1022
