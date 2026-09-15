@@ -23,4 +23,5 @@
   ansible.builtin.lineinfile:
     line: "command[check_health_prd]=/opt/openconext/health_check_{{ item.name }}/check.sh"
     dest: "/etc/nrpe.d/check_components.cfg"
+    create: true
   with_items: "{{ health_checks }}"
