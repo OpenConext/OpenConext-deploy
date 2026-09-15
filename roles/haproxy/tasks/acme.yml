@@ -1,4 +1,13 @@
 ---
+# to make role reusable, make sure these groups exist
+- name: "Make sure groups exist"
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - "lbops"
+    - "haproxy"
+
 - name: Create acme user
   ansible.builtin.user:
     name: "acme"
@@ -10,7 +19,9 @@
 
 - name: Install acl package so ansible can run as an unprivilegd user
   ansible.builtin.package:
-    name: "acl"
+    name:
+      - "acl"
+      - "bind9-dnsutils"
     state: "present"
 
 - name: Clone the acme.sh repo
