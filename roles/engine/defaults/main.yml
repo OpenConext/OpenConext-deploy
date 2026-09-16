@@ -89,10 +89,10 @@ engine_sbs_attributes_allowed:
   - 'urn:mace:dir:attribute-def:eduPersonEntitlement'
   - 'urn:mace:dir:attribute-def:uid'
   - 'urn:mace:dir:attribute-def:eduPersonPrincipalName'
-  - 'urn:mace:surf.nl:attribute-def:ssh-key' # ssh-key
-  - 'urn:oid:1.3.6.1.4.1.25178.4.1.5' # voPersonExternalID
-  - 'urn:oid:1.3.6.1.4.1.25178.4.1.6' # voPersonID
-  - 'urn:oid:1.3.6.1.4.1.25178.4.1.8' # voPersonSoRID
+  - 'urn:mace:surf.nl:attribute-def:ssh-key'
+  - 'urn:mace:dir:attribute-def:voPersonExternalID'
+  - 'urn:mace:dir:attribute-def:voPersonID'
+  - 'urn:mace:dir:attribute-def:voPersonSoRID'
 
 ## The minimum priority of messages that will be logged
 engine_logging_passthru_level: NOTICE
