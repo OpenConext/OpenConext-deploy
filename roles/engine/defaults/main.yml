@@ -89,8 +89,7 @@ engine_sbs_attributes_allowed:
   - 'urn:mace:dir:attribute-def:eduPersonEntitlement'
   - 'urn:mace:dir:attribute-def:uid'
   - 'urn:mace:dir:attribute-def:eduPersonPrincipalName'
-  - 'urn:oid:1.3.6.1.4.1.24552.500.1.1.1.13'
-  - 'urn:mace:surf.nl:attribute-def:ssh-key'
+  - 'urn:mace:surf.nl:attribute-def:ssh-key' # ssh-key
   - 'urn:oid:1.3.6.1.4.1.25178.4.1.5' # voPersonExternalID
   - 'urn:oid:1.3.6.1.4.1.25178.4.1.6' # voPersonID
   - 'urn:oid:1.3.6.1.4.1.25178.4.1.8' # voPersonSoRID
