@@ -103,8 +103,8 @@ rsyslog_central_apps:
   # dashboards
   - { program: "dashboardgui",           target: "dashboard/apache.log" }
   - { program: "dashboardserver",        target: "dashboard/dashboard.log" }
-  - { program: "spdashboard",            startswith: "spdashboard",    target: "spdashboard/spdashboard.log" }
-  - { program: "spdashboard",            target: "spdashboard/apache.log" }
+  - { program: "spdashboard",            startswith: "spdashboard",    target: "spdashboard/apache.log" }
+  - { program: "spdashboard",            target: "spdashboard/spdashboard.log" }
   - { program: "profile",                startswith: "{",               target: "profile/profile.log" }
   - { program: "profile",                target: "profile/apache.log" }
 
