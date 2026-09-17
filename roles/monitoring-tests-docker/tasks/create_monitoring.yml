@@ -12,6 +12,7 @@
   vars:
     mujina_idp_container: "mujina-idp-{{ env.name }}"
     mujina_idp_dir_docker: "/opt/openconext/mujina_idp_{{ env.name }}"
+    mujina_version: "{{ mujina_version_override }}"
 
 - name: Create mujina sp container
   ansible.builtin.include_role:
@@ -19,6 +20,7 @@
   vars:
     mujina_sp_container: "mujina-sp-{{ env.name }}"
     mujina_sp_dir_docker: "/opt/openconext/mujina_sp_{{ env.name }}"
+    mujina_version: "{{ mujina_version_override }}"
 
 - name: Place health scripts
   ansible.builtin.template:

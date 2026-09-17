@@ -13,6 +13,10 @@
     state: directory
     path: /etc/nrpe.d
 
+- name: Use mujina_version as defined in the current inventory
+  ansible.builtin.set_fact:
+    mujina_version_override: "{{ mujina_version }}"
+
 - name: Place monitoring files and containers per environment
   include_tasks: create_monitoring.yml
   with_items: "{{ health_checks }}"
