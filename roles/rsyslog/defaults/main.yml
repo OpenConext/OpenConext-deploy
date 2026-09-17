@@ -50,6 +50,8 @@ rsyslog_checkemptylogs_dir: "/usr/local/bin"
 # messages can become quote large; e.g., Engineblock sometimes dumps large SAMLResponses
 rsyslog_maxmessagesize: "32k"
 
+# default is false, is overridden in rsyslog_central.yml task
+rsyslog_is_centrallog_server: false
 
 # matching rules for distributing logs on central loghost
 # order is important!  First matching rule wins.
