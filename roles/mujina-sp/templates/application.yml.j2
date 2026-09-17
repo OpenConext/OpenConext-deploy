@@ -6,7 +6,7 @@ logging:
 
 server:
   # The port to where this Spring Boot application listens to. e.g. http://localhost:80
-  port: 9090
+  port: {{ mujina_sp_port | default('9090') }}
   # The context path of the server. You can skip this value in the overriding application.properties on the classpath
   contextPath:
   session:
