@@ -1,10 +1,10 @@
 ---
 #health_checks:
-#  - name: acc
+#  - name: env1
 #    port: 1010
 #    port_idp: 1011
 #    port_sp: 1012
-#  - name: prd
+#  - name: env2
 #    port: 1020
 #    port_idp: 1021
 #    port_sp: 1022

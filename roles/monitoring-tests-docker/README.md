@@ -11,12 +11,29 @@ Access to the OpenConext-monitoring-tests container so it can be deployed. The h
 Role Variables
 --------------
 
-Provide the health_checks variable to create the checks for your environments. Provide the environment name and the port in the monitoring where the scripts can retrieve this information. The scripts will be located at /opt/health_check_ENVIRONMENT/check.sh. The running of these scripts require python3. The following format for providing this information is required: 
+Provide the health_checks variable to create the checks for your environments. Provide the environment name and the ports for the monitoring, mujina sp and mujina idp containers. Any port that your infrastructure allows can be used here. The scripts will be located at /opt/health_check_ENV/check.sh. The running of these scripts require python3. The following format for providing this information is required: 
+
 health_checks:
   - name: env1
-    port: 999
+    port: 1010
+    port_idp: 1011
+    port_sp: 1012
   - name: env2
-    port: 9999 
+    port: 1020
+    port_idp: 1021
+    port_sp: 1022
+
+This role assumes your ansible inventory structure is setup as followes:
+├── Inventory (named env1)
+│   ├── group_vars
+│   ├── inventory.json / inventroy.yml
+│   └── secrets
+│       └── group_vars
+└── OpenConext-Deploy
+    └── roles
+        ├── mujina_sp
+        ├── mujina_idp
+        └── monitoring-tests-docker
 
 License
 --------------
