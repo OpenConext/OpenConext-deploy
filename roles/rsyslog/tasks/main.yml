@@ -24,15 +24,6 @@
     name: "{{ rsyslog_read_group }}"
     state: "present"
 
-# note: this config file supports both local-log-only and central syslog hosts
-- name: "Put rsyslog config file"
-  ansible.builtin.template:
-    src: "rsyslog.conf.j2"
-    dest: "/etc/rsyslog.conf"
-    mode: "0644"
-  notify:
-    - "Restart rsyslog"
-
 # journald forwards logs to rsyslog
 - name: "When using imjournal no forwarding necessary"
   ansible.builtin.lineinfile:
@@ -114,6 +105,16 @@
       ansible.builtin.include_tasks:
         file: "process_auth_logs.yml"
       when: "'auth_processor' in group_names"
+
+# note: this config file supports both local-log-only and central syslog hosts
+# needs to come after the central log host, because it relies on rsyslog_is_centrallog_server which is ste in the subtask
+- name: "Put rsyslog config file"
+  ansible.builtin.template:
+    src: "rsyslog.conf.j2"
+    dest: "/etc/rsyslog.conf"
+    mode: "0644"
+  notify:
+    - "Restart rsyslog"
 
 ### and enable
 
