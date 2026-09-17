@@ -53,3 +53,11 @@ spdashboard_oidcng_playground_uri_prod: "https://oidc-playground.dev.support.sur
 
 spdashboard_docker_networks:
   - name: "loadbalancer"
+
+spdashboard_fetched_blocked_ips: >
+   {{
+   (ansible_interfaces | map('extract', ansible_facts, 'ipv4') | selectattr('prefix', 'defined') | map(attribute='network') | list)
+      | zip(ansible_interfaces | map('extract', ansible_facts, 'ipv4') | selectattr('prefix', 'defined') | map(attribute='prefix') | list)
+      | map('join', '/')
+      | unique | list
+   }}
