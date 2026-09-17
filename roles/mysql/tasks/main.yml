@@ -58,7 +58,7 @@
   ansible.builtin.template:
     src: "my.cnf.j2"
     dest: "/root/.my.cnf"
-    mode: "0400"
+    mode: "0600"
     owner: "root"
     group: "root"
 
