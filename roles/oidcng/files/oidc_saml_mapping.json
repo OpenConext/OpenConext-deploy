@@ -126,17 +126,17 @@
     "multiValue": false
   },
   {
-    "saml": "urn:oid:1.3.6.1.4.1.25178.4.1.5",
+    "saml": "urn:mace:dir:attribute-def:voPersonExternalID",
     "oidc": "voperson_external_id",
     "multiValue": true
   },
   {
-    "saml": "urn:oid:1.3.6.1.4.1.25178.4.1.6",
+    "saml": "urn:mace:dir:attribute-def:voPersonID",
     "oidc": "voperson_id",
     "multiValue": true
   },
   {
-    "saml": "urn:oid:1.3.6.1.4.1.25178.4.1.8",
+    "saml": "urn:mace:dir:attribute-def:voPersonSoRID",
     "oidc": "voperson_sor_id",
     "multiValue": true
   },
