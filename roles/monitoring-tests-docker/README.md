@@ -23,6 +23,21 @@ health_checks:
     port_idp: 1021
     port_sp: 1022
 
+The following variables must be provided:
+ - monitoring_tests.metadata_sp_url
+ - monitoring_tests.metadata_idp_url
+ - monitoring_tests.person_id
+ - monitoring_tests.oidcng_client_id
+ - monitoring_tests.oidcng_resource_server_id
+ - mujina_idp.entity_id
+ - base_domain
+ - pdp.username
+
+The following password must be provided as variables:
+ - monitoring_tests_oidcng_client_secret
+ - monitoring_tests_oidcng_resource_server_secret
+ - pdp.password
+
 This role assumes your ansible inventory structure is setup as followes:
 ├── Inventory (named env1)
 │   ├── group_vars
