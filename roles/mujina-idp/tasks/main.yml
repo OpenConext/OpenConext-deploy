@@ -30,6 +30,7 @@
     pull: true
     restart_policy: "always"
     state: started
+    ports: "{{ mujina_idp_port | default('8080') }}:{{ mujina_idp_port | default('8080') }}"
     env:
       TZ: "{{ timezone }}"
     networks:
