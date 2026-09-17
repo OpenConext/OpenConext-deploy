@@ -1,13 +1,7 @@
 ---
 #health_checks:
-#  - name: env1
-#    port: 1010
-#    port_idp: 1011
-#    port_sp: 1012
-#  - name: env2
-#    port: 1020
-#    port_idp: 1021
-#    port_sp: 1022
+#  - env1
+#  - env2
 #monitoring_tests:
 #  mujina_idp_entity_id: "https://metadata.server.local/idp-metdata.xml"
 #  mujina_sp_base_url: "https://metadata.server.local/sp-metdata.xml" 

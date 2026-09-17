@@ -2,7 +2,7 @@
 - name: Create required directories for health check scripts in /opt
   ansible.builtin.file:
     state: directory
-    path: "/opt/openconext/health_check_{{ item.name }}"
+    path: "/opt/openconext/health_check_{{ item }}"
     owner: root
     group: root
     mode: 0755
@@ -25,7 +25,7 @@
 
 - name: Place nagios config file
   ansible.builtin.lineinfile:
-    line: "command[check_health_prd]=/opt/openconext/health_check_{{ item.name }}/check.sh"
+    line: "command[check_health_prd]=/opt/openconext/health_check_{{ item }}/check.sh"
     dest: "/etc/nrpe.d/check_components.cfg"
     create: true
   with_items: "{{ health_checks }}"
