@@ -29,12 +29,14 @@
     src: templates/check.sh.j2
     dest: "/opt/openconext/health_check_{{ env }}/check.sh"
     mode: 0755
+  register: health_scripts
 
 - name: Place application.yml for set environments
   ansible.builtin.template:
     src: templates/application.yml.j2
     dest: "/opt/openconext/health_check_{{ env }}/application.yml"
     mode: 0644
+  register: application_yml
 
 - name: Start monitoring tests docker container(s)
   community.docker.docker_container:
@@ -49,3 +51,15 @@
       - type: bind
         source: "/opt/openconext/health_check_{{ env }}/application.yml"
         target: /application.yml
+  register: create_monitoring_container
+
+- name: Restart container on config change
+  community.docker.docker_container:
+    name: "monitoring-{{ env }}"
+    state: started
+    restart: true
+  when: 
+    - health_scripts.changed and not create_monitoring_container
+    - application_yml.changed and not create_monitoring_container
+
+
