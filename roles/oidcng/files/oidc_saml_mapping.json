@@ -141,6 +141,11 @@
     "multiValue": true
   },
   {
+    "saml": "urn:mace:dir:attribute-def:voPersonExternalAffiliation",
+    "oidc": "voperson_external_affiliation",
+    "multiValue": true
+  },
+  {
     "saml": "urn:mace:surf.nl:attribute-def:ssh-key",
     "oidc": "ssh_public_key",
     "multiValue": true
