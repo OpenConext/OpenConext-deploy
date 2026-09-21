@@ -1,7 +1,4 @@
 {
-{% if docker_config_extraops is defined-%}
-  {{ docker_config_extraops }}
-  {% endif %}
   "live-restore": true,
   "log-driver": "journald",
   "log-opts" : { 
