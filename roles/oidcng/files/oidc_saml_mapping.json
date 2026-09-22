@@ -124,5 +124,30 @@
     "saml": "urn:mace:dir:attribute-def:preferredLanguage",
     "oidc": "locale",
     "multiValue": false
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:voPersonExternalID",
+    "oidc": "voperson_external_id",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:voPersonID",
+    "oidc": "voperson_id",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:voPersonSoRID",
+    "oidc": "voperson_sor_id",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:mace:dir:attribute-def:voPersonExternalAffiliation",
+    "oidc": "voperson_external_affiliation",
+    "multiValue": true
+  },
+  {
+    "saml": "urn:mace:surf.nl:attribute-def:ssh-key",
+    "oidc": "ssh_public_key",
+    "multiValue": true
   }
 ]
