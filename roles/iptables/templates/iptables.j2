@@ -28,7 +28,7 @@
 {# select all variables that start with iptables_incoming_ and put them in a dict #}
 {% set iptables_all = vars | dict2items | selectattr('key', 'match', '^iptables_incoming_') | list | items2dict %}
 
-{% for name, rules in iptables_all.iteritems() %}
+{% for name, rules in iptables_all.items() %}
 ### Rules from {{ name }}
 {% for service in rules %}
 {{'##'|e }} {{ service.name }}
