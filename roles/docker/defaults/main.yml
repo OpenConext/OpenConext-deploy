@@ -11,3 +11,4 @@ docker_traefik_ldaps: false
 docker_traefik_version: 3.6.10
 docker_traefik_ports:
   - 0.0.0.0:443:443
+# docker_config_extraops # extra options for daemon.json

@@ -37,7 +37,6 @@
 {% endfor %}
 {% endfor %}
 
-
 {% if 'loadbalancer' in group_names %}
 ### Allow VRRP
 -A INPUT -d 224.0.0.0/8 -p vrrp -j ACCEPT
