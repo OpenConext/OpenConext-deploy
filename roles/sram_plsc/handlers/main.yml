@@ -1,0 +1,6 @@
+---
+- name: Restart the plsc container
+  community.docker.docker_container:
+    name: sram-plsc
+    restart: true
+    state: started

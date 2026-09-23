@@ -70,8 +70,8 @@
     restart_policy: "always"
     state: "started"
     env:
-      RUNAS_UID: "{{ stats_uid.uid }}"
-      RUNAS_GID: "{{ stats_gid.gid }}"
+      RUNAS_UID: "{{ stats_uid.uid | string }}"
+      RUNAS_GID: "{{ stats_gid.gid | string }}"
     networks:
       - name: "loadbalancer"
     mounts:

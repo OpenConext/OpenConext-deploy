@@ -1,0 +1,2 @@
+0 3 * * * root docker exec influxdb influxd backup -portable /data/influxdb-backup/$(date +\%F)
+0 4 * * * root find /data/influxdb-backup/ -type f -mtime +1 -exec rm {} \;

@@ -39,7 +39,7 @@ $MarkMessagePeriod 600
 
 $PreserveFQDN on
 # Order is important here: First the templates, then rules, then listerers, then forwarders 
-{% if 'sysloghost' in group_names %}
+{% if 'centrallog_servers' in group_names %}
 # This directory contains templates for a central syslog host
 $IncludeConfig /etc/rsyslog.d/templates/*.conf
 {% endif %}
@@ -71,7 +71,7 @@ uucp,news.crit                                          /var/log/spooler
 # Save boot messages also to boot.log
 local7.*                                                /var/log/boot.log
 
-{% if 'sysloghost' in group_names %}
+{% if 'centrallog_servers' in group_names %}
 # Make the logs readable
 $DirCreateMode 0775
 $FileCreateMode 0640
@@ -88,7 +88,7 @@ module(load="imudp")
 input(type="imudp" port="514")
 
 
-{% if 'sysloghost' in group_names %}
+{% if 'centrallog_servers' in group_names %}
 # Now we include all the listeners
 module(load="imrelp" )
 $IncludeConfig /etc/rsyslog.d/listeners/*.conf
@@ -101,7 +101,7 @@ $IncludeConfig /etc/rsyslog.d/listeners/*.conf
 # Remote Logging (we use TCP for reliable delivery)
 #
 
-{% if rsyslog_remote_server_relp is defined and 'sysloghost' not in group_names %}
+{% if rsyslog_remote_server_relp is defined and 'centrallog_servers' not in group_names %}
 # Forward all logs to the central logging server using relp
 module(load="omrelp")
 action(type="omrelp" 

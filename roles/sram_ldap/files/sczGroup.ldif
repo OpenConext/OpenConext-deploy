@@ -1,0 +1,23 @@
+# Internet X.500 Schema for Ldappc
+# Includes the sczGroup ObjectClass schema
+#
+# An auxiliary object class, "sczGroup," is a convenient container
+# for an extensible set of attributes concerning group memberships.
+# At this time, the only attribute specified as belonging to the
+# object class is "sczMember."
+#
+# It is specifically configured to support the memberOf overlay.
+#
+dn: cn=sczGroup,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: sczGroup
+olcAttributeTypes: ( 1.3.6.1.4.1.1076.20.40.50.1.1
+  NAME 'sczMember'
+  DESC 'DN identifiers for entities that are members of the group'
+  EQUALITY distinguishedNameMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.12 )
+olcObjectClasses: ( 1.3.6.1.4.1.1076.20.40.50.1
+  NAME 'sczGroup'
+  AUXILIARY
+  MAY ( sczMember )
+  )
