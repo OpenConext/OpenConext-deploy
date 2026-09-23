@@ -95,6 +95,7 @@
 -A INPUT  -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }}  -j ACCEPT
 {% endfor %}
 {% endif %}
+
 {% if iptables_incoming_hostspecific is defined %}
 ### Host specific rules
 {% for service in iptables_incoming_hostspecific %}
