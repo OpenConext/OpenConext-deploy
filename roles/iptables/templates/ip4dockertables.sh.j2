@@ -92,7 +92,6 @@ done
 /sbin/iptables -t filter -A INPUT -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }} -j ACCEPT
 {% endfor %}
 {% endif %}
-
 {% if iptables_hostspecific is defined %}
 {% for service in iptables_hostspecific %}
 {{'##'|e }} {{ service.name }}
@@ -100,7 +99,6 @@ done
 /sbin/iptables -t filter -A INPUT -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }} -j ACCEPT
 {% endfor %}
 {% endif %}
-
 {% if iptables_incoming_monitoring_server is defined %}
 {% for service in iptables_incoming_monitoring_server %}
 {{'##'|e }} {{ service.name }}
@@ -108,7 +106,6 @@ done
 /sbin/iptables -t filter -A INPUT -p {{ service.protocol | default('tcp') }} {{ '-s '+service.source if service.source is defined else '' }} -m multiport --dports {{ service.port }} -j ACCEPT
 {% endfor %}
 {% endif %}
-
 {% if iptables_incoming_monitoring_agent is defined %}
 {% for service in iptables_incoming_monitoring_agent %}
 {{'##'|e }} {{ service.name }}
