@@ -103,6 +103,8 @@ rsyslog_central_apps:
   - { program: "inviteprovisioningmock", target: "invite/inviteprovisioningmock.log" }
 
   # dashboards
+  - { program: "access_dashboard_gui",                               target: "accessdashboard/apache.log" }
+  - { program: "access_dashboard_server",                            target: "accessdashboard/dashboard.log" }
   - { program: "dashboardgui",                                       target: "dashboard/apache.log" }
   - { program: "dashboardserver",                                    target: "dashboard/dashboard.log" }
   - { program: "spdashboard",            startswith: "spdashboard",  target: "spdashboard/apache.log" }
@@ -111,6 +113,7 @@ rsyslog_central_apps:
   - { program: "profile",                                            target: "profile/apache.log" }
 
   # static
+  - { program: "staticdata",             target: "static/apache.log" }
   - { program: "Apache-STATIC",          target: "static/apache.log" }
   - { program: "Apache-METADATA",        target: "metadata/apache.log" }
 
@@ -124,3 +127,12 @@ rsyslog_central_apps:
   # SSID log_logins
   - { program: "gateway",                contains: '"message":"Second Factor Authenticated"', dir: "log_logins", target: "stepup-authentication.log" }
   - { program: "gateway",                contains: '"message":"Intrinsic Loa Requested"',     dir: "log_logins", target: "stepup-authentication.log" }
+
+  # SRAM
+  - { program: "sram-midproxy"           target: "midproxy/midproxy.log" }
+  - { program: "sram-sbs-client"         target: "sbs/apache.log" }
+  - { program: "sram-sbs-server"         target: "sbs/sbs.log" }
+
+  # test/demo
+  - { program: "diyidp",                 target: "diyidp/apache.log" }
+  - { program: "demosp",                 target: "demosp/apache.log" }
