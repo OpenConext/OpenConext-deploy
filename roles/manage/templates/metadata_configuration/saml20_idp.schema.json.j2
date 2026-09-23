@@ -39,6 +39,14 @@
       ],
       "default": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
       "info": "This indicates whether the nameID is set to something random or the same every time the user logs in. Transient can be used if the user does not need to be identified in a new session."
+    },
+    "AuthnContextClassRef": {
+      "type": "string",
+      "enum": [
+      {% for mfa in mfa_values_supported %}
+        "{{ mfa }}"{{ "," if not loop.last else ""}}
+      {% endfor %}
+      ]
     }
   },
   "type": "object",
@@ -167,6 +175,13 @@
       ],
       "additionalProperties": false
     },
+    "supported_authncontext": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/AuthnContextClassRef"
+      },
+      "info": "The AuthnContext Class References (ACR) that this IdP supports in the RequestedAuthnContext of an AuthnRequest."
+    },
     "mfaEntities": {
       "type": "array",
       "items": {
@@ -176,15 +191,8 @@
             "type": "string"
           },
           "level": {
-            "type": [
-              "string"
-            ],
-            "enum": [
-              {% for mfa in mfa_values_supported %}
-              "{{ mfa }}"{{ "," if not loop.last else ""}}
-              {% endfor %}
-            ],
-            "default": "{{ mfa_values_supported[0] }}"
+            "$ref": "#/definitions/AuthnContextClassRef",
+            "default": "http://schemas.microsoft.com/claims/multipleauthn"
           }
         }
       },
