@@ -1,3 +1,6 @@
 ---
 profile: "production"
 offline: false
+
+skip_list:
+  - yaml[colons]

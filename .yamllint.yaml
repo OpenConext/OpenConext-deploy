@@ -13,7 +13,7 @@ rules:
     allow-quoted-quotes: false
     check-keys: false
 
-# ansible-lint compatibility:
+  # ansible-lint compatibility:
   comments:
     min-spaces-from-content: 1
 
@@ -25,3 +25,8 @@ rules:
   octal-values:
     forbid-implicit-octal: true
     forbid-explicit-octal: true
+
+  commas:
+    ignore: |
+      # uses spaces for outlining
+      /roles/rsyslog/defaults/main.yml

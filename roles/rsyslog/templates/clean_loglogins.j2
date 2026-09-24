@@ -6,7 +6,7 @@
 # The script is intended to be run daily from a cron job.
 
 MAX_DELETE_DAYS=5
-LOG_LOGINS_MAX_AGE="{{ loglogins_max_age }}" # Number of MONTHS of logins to keep
+LOG_LOGINS_MAX_AGE="{{ rsyslog_loglogins_max_age }}" # Number of MONTHS of logins to keep
 RSYSLOG_DIR="{{ rsyslog_dir }}"
 RSYSLOG_ENVIRONMENT_NAME="{{ rsyslog_environment.name }}"
 DB_LOG_LOGINS_NAME="{{ rsyslog_environment.db_loglogins_name }}"
