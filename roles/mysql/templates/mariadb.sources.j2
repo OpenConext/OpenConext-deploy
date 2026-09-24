@@ -1,0 +1,11 @@
+# MariaDB Server
+# To use a different major version of the server, or to pin to a specific minor version, change URI below.
+X-Repolib-Name: MariaDB Server
+Enabled: yes
+Types: deb
+URIs: https://dlm.mariadb.com/repo/mariadb-server/{{ ansible_distribution_major_version }}.rolling/repo/debian
+Suites: {{ ansible_distribution_release }}
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/mariadb-keyring.gpg
+
