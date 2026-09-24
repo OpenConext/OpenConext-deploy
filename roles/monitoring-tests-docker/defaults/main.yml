@@ -1,0 +1,21 @@
+---
+#health_checks:
+#  - env1
+#  - env2
+#monitoring_tests:
+#  mujina_idp_entity_id: "https://metadata.server.local/idp-metdata.xml"
+#  mujina_sp_base_url: "https://metadata.server.local/sp-metdata.xml" 
+#  person_id: urn:collab:person:example.com:user
+#  user: user
+#  password: "{{ monitoring_tests_password }}"
+#  oidcng_client_id: monitoring.server.local
+#  oidcng_resource_server_id: monitoring.server.local
+#pdp
+#  username: user
+#  password: "{{ pdp_password }}"
+#mujina_version: "latest"
+#base_domain: ".local"
+#pdp_password: secret
+#monitoring_tests_password: secret
+#monitoring_tests_oidcng_client_secret: secret
+#monitoring_tests_oidcng_resource_server_secret: secret
