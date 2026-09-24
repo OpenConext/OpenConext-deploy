@@ -33,7 +33,7 @@
         login_password: "{{ mongo_admin_password }}"
         login_port: 27017
         database: "{{ item.database }}"                  # the DB where the role lives
-        role_name: "{{ item.role_name }}"
+        name: "{{ item.role_name }}"
         privileges: "{{ item.privileges }}"
         roles: "{{ item.roles | default([]) }}"
         replica_set: "{{ mongo_replica_set_name }}"
@@ -67,7 +67,7 @@
         login_password: "{{ mongo_admin_password }}"
         login_port: 27017
         database: "{{ item.database }}"                  # the DB where the role lives
-        role_name: "{{ item.role_name }}"
+        name: "{{ item.role_name }}"
         privileges: "{{ item.privileges }}"
         roles: "{{ item.roles | default([]) }}"
         state: present
