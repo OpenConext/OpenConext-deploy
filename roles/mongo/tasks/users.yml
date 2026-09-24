@@ -19,6 +19,12 @@
       changed_when: false
       tags: mongo_users
 
+    - name: Custom roles debugging
+      when: mongo_custom_roles is defined
+      ansible.builtin.debug:               # ← module documented here \ue202turn1search1
+        msg: "{{ item }}"        # credentials for a user that can manage roles
+        verbosity: 2
+
     - name: Ensure custom MongoDB roles are present on cluster
       when: mongo_custom_roles is defined
       community.mongodb.mongodb_role:               # ← module documented here \ue202turn1search1
