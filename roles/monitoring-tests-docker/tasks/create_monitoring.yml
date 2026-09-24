@@ -47,6 +47,8 @@
     recreate: false
     ports: 
       - "{{ monitoring_tests_port }}:{{ monitoring_tests_port }}"
+    networks:
+      - name: "loadbalancer"
     mounts: 
       - type: bind
         source: "/opt/openconext/health_check_{{ env }}/application.yml"
