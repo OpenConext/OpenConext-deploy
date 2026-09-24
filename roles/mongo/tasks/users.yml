@@ -1,34 +1,69 @@
-- name: Create mongo database users cluster # requires pymongo 4+
+- name: Create mongo database users and roles cluster # requires pymongo 4+
   when:
     - mongo_mode == "cluster"
     - mongo_replication_role == "primary"
-  community.mongodb.mongodb_user:
-    login_database: admin
-    database: "{{ item.db_name }}"
-    login_user: admin
-    login_password: "{{ mongo_admin_password }}"
-    name: "{{ item.name }}"
-    password: "{{ item.password }}"
-    roles: "{{ item.role | default('readWrite')}}"
-    replica_set: "{{ mongo_replica_set_name }}"
-  no_log: true
-  run_once: true
-  with_items: "{{ mongo.users }}"
-  changed_when: false
-  tags: mongo_users
+  block:
+    - name: Create mongo database users cluster # requires pymongo 4+
+      community.mongodb.mongodb_user:
+        login_database: admin
+        database: "{{ item.db_name }}"
+        login_user: admin
+        login_password: "{{ mongo_admin_password }}"
+        name: "{{ item.name }}"
+        password: "{{ item.password }}"
+        roles: "{{ item.role | default('readWrite')}}"
+        replica_set: "{{ mongo_replica_set_name }}"
+      no_log: true
+      run_once: true
+      with_items: "{{ mongo.users }}"
+      changed_when: false
+      tags: mongo_users
 
-- name: Create mongo database users single server # requires pymongo 4+
+    - name: Ensure custom MongoDB roles are present on cluster
+      when: mongo_custom_roles is defined
+      community.mongodb.mongodb_role:               # ← module documented here \ue202turn1search1
+        login_user: admin        # credentials for a user that can manage roles
+        login_password: "{{ mongo_admin_password }}"
+        login_port: 27017
+        database: "{{ item.db }}"                  # the DB where the role lives
+        role_name: "{{ item.role_name }}"
+        privileges: "{{ item.privileges }}"
+        roles: "{{ item.roles | default([]) }}"
+        replica_set: "{{ mongo_replica_set_name }}"
+        state: present
+      loop: "{{ mongo_custom_roles }}"             # iterate over the variable defined above
+      loop_control:
+        label: "{{ item.role_name }}"               # makes the output easier to read
+
+- name: Create mongo database users and roles cluster # requires pymongo 4+
   when: mongo_mode != "cluster"
-  community.mongodb.mongodb_user:
-    login_database: admin
-    database: "{{ item.db_name }}"
-    login_user: admin
-    login_password: "{{ mongo_admin_password }}"
-    name: "{{ item.name }}"
-    password: "{{ item.password }}"
-    roles: "{{ item.role | default('readWrite') }}"
-  no_log: true
-  run_once: true
-  with_items: "{{ mongo.users }}"
-  changed_when: false
-  tags: mongo_users
+  block:
+    - name: Create mongo database users single server # requires pymongo 4+
+      community.mongodb.mongodb_user:
+        login_database: admin
+        database: "{{ item.db_name }}"
+        login_user: admin
+        login_password: "{{ mongo_admin_password }}"
+        name: "{{ item.name }}"
+        password: "{{ item.password }}"
+        roles: "{{ item.role | default('readWrite') }}"
+      no_log: true
+      run_once: true
+      with_items: "{{ mongo.users }}"
+      changed_when: false
+      tags: mongo_users
+
+    - name: Ensure custom MongoDB roles are present on standalone mongo
+      when: mongo_custom_roles is defined
+      community.mongodb.mongodb_role:               # ← module documented here \ue202turn1search1
+        login_user: admin        # credentials for a user that can manage roles
+        login_password: "{{ mongo_admin_password }}"
+        login_port: 27017
+        database: "{{ item.db }}"                  # the DB where the role lives
+        role_name: "{{ item.role_name }}"
+        privileges: "{{ item.privileges }}"
+        roles: "{{ item.roles | default([]) }}"
+        state: present
+      loop: "{{ mongo_custom_roles }}"             # iterate over the variable defined above
+      loop_control:
+        label: "{{ item.role_name }}"               # makes the output easier to read
