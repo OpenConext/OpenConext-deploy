@@ -62,13 +62,6 @@
   notify:
     - restart tiqr
 
-- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
-  ansible.builtin.set_fact:
-    tiqr_docker_networks:
-      - name: loadbalancer
-      - name: openconext_mariadb
-  when: mariadb_in_docker | default(false) | bool
-
 - name: Create the container
   community.docker.docker_container:
     name: "{{ appname }}"
