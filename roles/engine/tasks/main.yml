@@ -179,13 +179,6 @@
     volume_name: "engineblock_sessions"
     state: "present"
 
-- name: "Add the MariaDB docker network to the list of networks when MariaDB runs in Docker"
-  ansible.builtin.set_fact:
-    engine_docker_networks:
-      - name: "loadbalancer"
-      - name: "openconext_mariadb"
-  when: "mariadb_in_docker | default(false) | bool"
-
 - name: "Create the container"
   community.docker.docker_container:
     name: "engineblock"
