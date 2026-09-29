@@ -8,6 +8,8 @@ Requirements
 
 Access to the OpenConext-monitoring-tests container so it can be deployed. The health check scripts require a nagios instance running on the same host where the scripts can retrieve the information from.
 
+This role has been tested with the monitoring-tests container version 9.1.0 and mujina version 10.0.1. Older versions of these containers have issues which prevent these from working together. Use the listed or newer versions of these containers.
+
 Role Variables
 --------------
 
@@ -15,22 +17,28 @@ Provide the health_checks variable to create the checks for your environments. P
 
 health_checks:
   - name: env1
-    port: 1010
-    port_idp: 1011
-    port_sp: 1012
   - name: env2
-    port: 1020
-    port_idp: 1021
-    port_sp: 1022
 
-See this roles defaults/main.yml comments for all the required variables. Make sure your secrets are stored in a safe manner and not in plain text.
+See this roles defaults/main.yml comments for all the required variables for the host(s) this role runs on. Make sure your secrets are stored in a safe manner and not in plain text. The following vars are required within the set health_checks environments:
+ - monitoring_tests_mujina_sp_port
+ - monitoring_tests_mujina_idp_port
+
+This role also runs the mujina-sp and mujina-idp roles based on the vars in the health_checks environments. Check these roles for their own requirements for running them.
 
 This role assumes your ansible inventory structure is setup as followes:
+├── Inventory (containing the host that runs the tests)
+│   ├── group_vars
+│   ├── inventory.json / inventroy.yml
 ├── Inventory (named env1)
 │   ├── group_vars
 │   ├── inventory.json / inventroy.yml
-│   └── secrets
-│       └── group_vars
+│   └── secrets (looks in this directory for .yml files with vault secrets)
+│       └── vault.yml
+├── Inventory (named env2)
+│   ├── group_vars
+│   ├── inventory.json / inventroy.yml
+│   └── secrets (looks in this directory for .yml files with vault secrets)
+│       └── vault.yml
 └── OpenConext-Deploy
     └── roles
         ├── mujina_sp
