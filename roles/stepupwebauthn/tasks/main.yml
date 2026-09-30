@@ -97,13 +97,6 @@
   with_items:
     - "01-webauthn-db_init.sh"
 
-- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
-  ansible.builtin.set_fact:
-    webauthn_docker_networks:
-      - name: loadbalancer
-      - name: openconext_mariadb
-  when: mariadb_in_docker | default(false) | bool
-
 - name: Create the container
   community.docker.docker_container:
     name: "{{ appname }}"

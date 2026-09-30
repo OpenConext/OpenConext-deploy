@@ -1,0 +1,22 @@
+{
+    "strict": true,
+    "debug": true,
+    "sp": {
+        "entityId": "{{ sram_sbs_surf_secure_id.sp_entity_id }}",
+        "assertionConsumerService": {
+            "url": "{{ sram_sbs_surf_secure_id.acs_url }}",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        },
+        "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+        "x509cert": "{{ sram_sbs_surf_secure_id.pub | barepem }}",
+        "privateKey": "{{ sram_sbs_surf_secure_id.priv | barepem }}"
+    },
+    "idp": {
+        "entityId": "{{ sram_sbs_ssid_entityid }}",
+        "singleSignOnService": {
+            "url": "{{ sram_sbs_ssid_sso_endpoint }}",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "x509cert": "{{ sram_sbs_surf_secure_id.sa_idp_certificate | barepem }}"
+    }
+}

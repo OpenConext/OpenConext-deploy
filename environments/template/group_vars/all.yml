@@ -30,6 +30,8 @@ admin_email: "openconext-admin@example.edu"
 environment_shortname: ""
 environment_ribbon_colour: ""
 
+current_release_appdir: /opt/openconext
+
 httpd_csp:
   lenient: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
   lenient_with_static_img: "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://{{ static_vhost }} http://localhost:* data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"

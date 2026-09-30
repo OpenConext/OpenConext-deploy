@@ -1,0 +1,5 @@
+---
+mailpit_image: "axllent/mailpit"
+mailpit_hostname: "mailpit.{{ base_domain }}"
+mailpit_user: "mailpit"
+mailpit_group: "mailpit"
