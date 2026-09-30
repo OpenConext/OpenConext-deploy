@@ -61,7 +61,7 @@
 
 - name: "Copy metadata configuration"
   ansible.builtin.template:
-    src: "metadata_configuration/{{ item }}.schema.json.j2"
+    src: "manage/metadata_configuration/{{ item }}.schema.json.j2"
     dest: "/opt/openconext/manage/metadata_configuration/{{ item }}.schema.json"
     owner: "root"
     group: "root"
