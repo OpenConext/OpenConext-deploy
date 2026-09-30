@@ -73,7 +73,7 @@
 
 - name: "Copy metadata templates"
   ansible.builtin.copy:
-    src: "metadata_templates/{{ item }}.template.json"
+    src: "manage/metadata_templates/{{ item }}.template.json"
     dest: "/opt/openconext/manage/metadata_templates/{{ item }}.template.json"
     owner: "root"
     group: "root"
@@ -85,7 +85,7 @@
 
 - name: "Copy policies configuration"
   ansible.builtin.copy:
-    src: "policies/{{ item }}"
+    src: "manage/policies/{{ item }}"
     dest: "/opt/openconext/manage/policies/{{ item }}"
     owner: "root"
     group: "root"
