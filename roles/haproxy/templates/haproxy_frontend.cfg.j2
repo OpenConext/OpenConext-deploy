@@ -5,6 +5,14 @@
 frontend stats
    bind 127.0.0.1:8404
    http-request use-service prometheus-exporter if { path /metrics }
+{% if haproxy_prometheus -%}
+# --- Prometheus exporter configuration ---
+frontend prometheus
+  bind :8405
+  mode http
+  http-request use-service prometheus-exporter
+  no log
+{% endif -%}
 
 
 #--------------------------------------------------------------------
