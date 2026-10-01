@@ -43,14 +43,21 @@ log_message() {
   echo "$(date '+%h %d %H:%M:%S')" "$@" | tee -a "$LOG_FILE"
 }
 
-send_mail() {
+send_mail_warning() {
   local message="$*"
-
-  log_message "Mailing error to ${ERROR_MAIL_TO}"
-
+  log_message "Mailing warning to ${ERROR_MAIL_TO}"
   echo "$message" | mail \
     -r "${NOREPLY_EMAIL}" \
-    -s "log_login script on ${ANSIBLE_HOSTNAME} for environment ${RSYSLOG_ENVIRONEMTN_NAME} has failed." \
+    -s "Warning - log_login script on ${ANSIBLE_HOSTNAME} for environment ${RSYSLOG_ENVIRONEMTN_NAME} has failed." \
+    "${ERROR_MAIL_TO}"
+}
+
+send_mail_error() {
+  local message="$*"
+  log_message "Mailing warning to ${ERROR_MAIL_TO}"
+  echo "$message" | mail \
+    -r "${NOREPLY_EMAIL}" \
+    -s "ERROR - log_login script on ${ANSIBLE_HOSTNAME} for environment ${RSYSLOG_ENVIRONEMTN_NAME} has failed." \
     "${ERROR_MAIL_TO}"
 }
 
@@ -80,12 +87,13 @@ QUERY=(
 # echo "${QUERY[@]}"
 if ! OLDEST_TIMESTAMP=$( "${QUERY[@]}" ); then
   QUERY_FAIL=$("${QUERY[@]}" 2>&1)
-  log_message "Error running mysql query, was trying to read from the database. The following error occured: $QUERY_FAIL"
-  send_mail "Error running mysql query, was trying to read from the database. The following error occured: $QUERY_FAIL"
+  log_message "Error running mysql query, immediate action is required! Was trying to read from the database. The following error occured: $QUERY_FAIL"
+  send_mail_error "Error running mysql query, immediate action is required! Was trying to read from the database. The following error occured: $QUERY_FAIL"
   exit 1
 fi
 if [ -z "$OLDEST_TIMESTAMP" ]; then
   log_message "No logins found in log_logins. Nothing to cleanup."
+  send_mail_warning "No logins found in log_logins. Nothing to cleanup. Take action if the database should not be empty."
   # The log_logins table is empty. Not treating this as an error. Exit normally,
   exit 0
 fi
@@ -110,16 +118,16 @@ while [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ] && [ $D
   QUERY_DELETE=("${MYSQL_DB[@]}" "-sNe" "DELETE FROM log_logins WHERE loginstamp LIKE '${OLDEST_TIMESTAMP}%'; SELECT row_count();" "${DB_LOG_LOGINS_NAME}")
   if ! DELETED_ROWS=$( "${QUERY_DELETE[@]}" ); then
     QUERY_FAIL=$("${QUERY_DELETE[@]}" 2>&1)
-    log_message "Error running mysql query, was trying to delete from the database within the loop. The following error occured: $QUERY_FAIL"
-    send_mail "Error running mysql query, was trying to delete from the database within the loop. The following error occured: $QUERY_FAIL"
+    log_message "Error running mysql query, immediate action is required! Was trying to delete from the database within the loop. The following error occured: $QUERY_FAIL"
+    send_mail_error "Error running mysql query, immediate action is required! Was trying to delete from the database within the loop. The following error occured: $QUERY_FAIL"
     exit 1
   fi
   log_message "Cleaning up data in a loop for the date: $OLDEST_TIMESTAMP succeeded, deleted $DELETED_ROWS rows."
   QUERY_READ=("${MYSQL_DB[@]}" "-se" "SELECT (DATE_FORMAT(loginstamp,'%Y-%m-%d')) FROM log_logins ORDER BY loginstamp ASC LIMIT 1" "${DB_LOG_LOGINS_NAME}")
   if ! OLDEST_TIMESTAMP=$( "${QUERY_READ[@]}" ); then
     QUERY_FAIL=$("${QUERY_READ[@]}" 2>&1)
-    log_message "Error running mysql query, was trying to read from the database within the loop. The following error occured: $QUERY_FAIL"
-    send_mail "Error running mysql query, was trying to read from the database within the loop. The following error occured: $QUERY_FAIL"
+    log_message "Error running mysql query, immediate action is required! Was trying to read from the database within the loop. The following error occured: $QUERY_FAIL"
+    send_mail_error "Error running mysql query, immediate action is required! Was trying to read from the database within the loop. The following error occured: $QUERY_FAIL"
     exit 1
   fi
   OLDEST_TIMESTAMP_UNIX=$(date -d "$OLDEST_TIMESTAMP" +%s)
@@ -130,10 +138,10 @@ done
 # Log and/or e-mail what happend in the loop, if it ran.
 if [ "$DELETE_COUNT" -gt 0 ] && [ "$DELETE_COUNT" -lt 10 ]; then
   log_message "Ran a loop to cleanup data older then is allowed to be removed in one command. No further action is required if this message only appears once."
-  send_mail "Ran a loop to cleanup data older then is allowed to be removed in one command. No further action is required if this message only appears once."
+  send_mail_warning "Ran a loop to cleanup data older then is allowed to be removed in one command. No further action is required if this message only appears once."
 elif [ "$DELETE_COUNT" -ge 10 ]; then
   log_message "Ran a loop to cleanup data older then is allowed to be removed in one command. There is so much data that this cannot be done at once. Admin intervention is required to solve this issue manually if this message appears multiple times. The oldest data in the database is from $OLDEST_TIMESTAMP"
-  send_mail "Ran a loop to cleanup data older then is allowed to be removed in one command. There is so much data that this cannot be done at once. Admin intervention is required to solve this issue manually if this message appears multiple times. The oldest data in the database is from $OLDEST_TIMESTAMP"
+  send_mail_error "Ran a loop to cleanup data older then is allowed to be removed in one command. There is so much data that this cannot be done at once. Admin intervention is required to solve this issue manually if this message appears multiple times. The oldest data in the database is from $OLDEST_TIMESTAMP"
 fi
 
 # Log if force option is ran.
@@ -152,8 +160,8 @@ QUERY=(
 # echo "${QUERY[@]}"
 if ! DELETED_ROWS=$( "${QUERY[@]}" ); then
   QUERY_FAIL=$("${QUERY[@]}" 2>&1)
-  log_message "Error running mysql query, was trying to delete rows from the database. The following error occured: $QUERY_FAIL"
-  send_mail "Error running mysql query, was trying to delete rows from the database. The following error occured: $QUERY_FAIL"
+  log_message "Error running mysql query, immediate action is required! Was trying to delete rows from the database. The following error occured: $QUERY_FAIL"
+  send_mail_error "Error running mysql query, immediate action is required! Was trying to delete rows from the database. The following error occured: $QUERY_FAIL"
   exit 1
 fi
 
