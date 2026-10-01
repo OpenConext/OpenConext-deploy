@@ -1,31 +1,33 @@
 ---
-- name: Create required directories for health check scripts in /opt
+- name: "Create required directories for health check scripts in /opt"
   ansible.builtin.file:
-    state: directory
+    state: "directory"
     path: "/opt/openconext/health_check_{{ item }}"
-    owner: root
-    group: root
-    mode: 0755
+    owner: "root"
+    group: "root"
+    mode: '0755'
   with_items: "{{ health_checks }}"
 
-- name: Make sure nrpe directory exists
+- name: "Make sure nrpe directory exists"
   ansible.builtin.file:
-    state: directory
-    path: /etc/nrpe.d
+    state: "directory"
+    mode: '0755'
+    path: "/etc/nrpe.d"
 
-- name: Use mujina_version as defined in the current inventory
+- name: "Use mujina_version as defined in the current inventory"
   ansible.builtin.set_fact:
     mujina_version_override: "{{ mujina_version }}"
 
-- name: Place monitoring files and containers per environment
-  include_tasks: create_monitoring.yml
+- name: "Place monitoring files and containers per environment"
+  ansible.builtin.include_tasks: "create_monitoring.yml"
   with_items: "{{ health_checks }}"
   loop_control:
     loop_var: "env"
 
-- name: Place nagios config file
+- name: "Place nagios config file"
   ansible.builtin.lineinfile:
     line: "command[check_health_prd]=/opt/openconext/health_check_{{ item }}/check.sh"
     dest: "/etc/nrpe.d/check_components.cfg"
     create: true
+    mode: '0644'
   with_items: "{{ health_checks }}"

@@ -1,10 +1,11 @@
-springapp_artifact_id: mujina-idp
-springapp_artifact_type: jar
-springapp_artifact_group_dir: org/openconext
+---
+springapp_artifact_id: "mujina-idp"
+springapp_artifact_type: "jar"
+springapp_artifact_group_dir: "org/openconext"
 springapp_version: "{{ mujina_version }}"
 springapp_dir: "{{ mujina_idp_dir }}"
-springapp_user: mujina-idp
-springapp_service_name: mujina-idp
+springapp_user: "mujina-idp"
+springapp_service_name: "mujina-idp"
 springapp_jar: "{{ mujina_idp_jar }}"
 springapp_tcpport: 9390
 springapp_random_source: "file:///dev/urandom"
