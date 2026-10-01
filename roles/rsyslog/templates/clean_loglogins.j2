@@ -50,10 +50,9 @@ send_mail() {
 
   echo "$message" | mail \
     -r "${NOREPLY_EMAIL}" \
-    -s "log_login script on ${ANSIBLE_HOSTNAME} needs attention" \
+    -s "log_login script on ${ANSIBLE_HOSTNAME} for environment ${RSYSLOG_ENVIRONEMTN_NAME} has failed." \
     "${ERROR_MAIL_TO}"
 }
-
 
 log_message "Starting cleanup of old log_logins data"
 
@@ -80,13 +79,13 @@ QUERY=(
 # DEBUG: Print query
 # echo "${QUERY[@]}"
 if ! OLDEST_TIMESTAMP=$( "${QUERY[@]}" ); then
-  log_message "Error running mysql query (OLDEST_TIMESTAMP)"
-  send_mail "Error running mysql query (OLDEST_TIMESTAMP)"
+  QUERY_FAIL=$("${QUERY[@]}" 2>&1)
+  log_message "Error running mysql query, was trying to read from the database. The following error occured: $QUERY_FAIL"
+  send_mail "Error running mysql query, was trying to read from the database. The following error occured: $QUERY_FAIL"
   exit 1
 fi
 if [ -z "$OLDEST_TIMESTAMP" ]; then
   log_message "No logins found in log_logins. Nothing to cleanup."
-  send_mail "No logins found in log_logins. Nothing to cleanup."
   # The log_logins table is empty. Not treating this as an error. Exit normally,
   exit 0
 fi
@@ -102,30 +101,45 @@ if [ "$TIMESTAMP_DIFF" -lt "0" ]; then
   exit 0
 fi
 
-log_message "We will delete $TIMESTAMP_DIFF days of log_logins data"
-SINGLE_DAY_DELETE_COUNT=0
-while [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ] && [ "$SINGLE_DAY_DELETE_COUNT" -lt 10]; do
-  log_message "Something is up, you need to delete more than ${MAX_DELETE_DAYS} days worth of login data"
+log_message "We will delete $TIMESTAMP_DIFF days of log_logins data, the oldest data is from $OLDEST_TIMESTAMP"
+
+# Checking if there is to much data to be removed at once. If so a loop will run which will cleanup the last day of data running up to 10 times or until ${MAX_DELETE_DAYS} is reached.
+DELETE_COUNT=0
+while [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ] && [ $DELETE_COUNT -le 10 ]; do
   QUERY_DELETE=$("${MYSQL_DB[@]}" "-sNe" "DELETE FROM log_logins WHERE loginstamp LIKE '${OLDEST_TIMESTAMP}%'; SELECT row_count();" "${DB_LOG_LOGINS_NAME}")
+  log_message "Cleaning up data in a loop for: $OLDEST_TIMESTAMP"
+  if ! $( "${QUERY_DELETE[@]}" ); then
+    QUERY_FAIL=$("${QUERY[@]}" 2>&1)
+    log_message "Error running mysql query, was trying to delete from the database within the loop. The following error occured: $QUERY_FAIL"
+    exit 1
+  fi
   QUERY_READ=$("${MYSQL_DB[@]}" "-se" "SELECT (DATE_FORMAT(loginstamp,'%Y-%m-%d')) FROM log_logins ORDER BY loginstamp ASC LIMIT 1" "${DB_LOG_LOGINS_NAME}")
+  if ! $( "${QUERY_READ[@]}" ); then
+    QUERY_FAIL=$("${QUERY_READ[@]}" 2>&1)
+    log_message "Error running mysql query, was trying to read from the database within the loop. The following error occured: $QUERY_FAIL"
+    exit 1
+  fi
   OLDEST_TIMESTAMP=${QUERY_READ[@]}
   OLDEST_TIMESTAMP_UNIX=$(date -d "$OLDEST_TIMESTAMP" +%s)
   TIMESTAMP_DIFF=$(( (LOGIN_STAMP_UNIX-OLDEST_TIMESTAMP_UNIX)/3600/24 ))
-  SINGLE_DAY_DELETE_COUNT=$SINGLE_DAY_DELETE_COUNT+1
+  ((DELETE_COUNT++))
 done
 
-
-if [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ]; then
-  log_message "Something is up, you need to delete more than ${MAX_DELETE_DAYS} days worth of login data"
-  send_mail "The ${SCRIPT_NAME} script wants to delete more than ${MAX_DELETE_DAYS} days of logins on ${ANSIBLE_HOSTNAME}. Please investigate"
-  exit 0
+# Log and/or e-mail what happend in the loop, if it ran.
+if [ "$DELETE_COUNT" -gt 0 ] && [ "$DELETE_COUNT" -lt 10 ]; then
+  log_message "Ran a loop to cleanup data older then is allowed to be removed in one command. No further action is required if this message only appears once."
+  send_mail "Ran a loop to cleanup data older then is allowed to be removed in one command. No further action is required if this message only appears once."
+elif [ "$DELETE_COUNT" -ge 10 ]; then
+  log_message "Ran a loop to cleanup data older then is allowed to be removed in one command. There is so much data that this cannot be done at once. Admin intervention is required to solve this issue manually if this message appears multiple times. The oldest data in the database is from $OLDEST_TIMESTAMP"
+  send_mail "Ran a loop to cleanup data older then is allowed to be removed in one command. There is so much data that this cannot be done at once. Admin intervention is required to solve this issue manually if this message appears multiple times. The oldest data in the database is from $OLDEST_TIMESTAMP"
 fi
+
+# Log if force option is ran.
 if [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -eq 1 ]; then
-  log_message "Force option provided; deleting more than ${MAX_DELETE_DAYS} days worth of login data"
+  log_message "Force option provided; deleting more than ${MAX_DELETE_DAYS} days worth of login data in one go."
 fi
 
 # Delete rows
-#   DELETE FROM log_logins WHERE loginstamp < '$LOGIN_STAMP'; SELECT row_count();"
 QUERY=(
   "${MYSQL_DB[@]}"
   # -s: silent; -N: Don't write column names in results; -e: query;
@@ -135,8 +149,9 @@ QUERY=(
 # DEBUG: Print query
 # echo "${QUERY[@]}"
 if ! DELETED_ROWS=$( "${QUERY[@]}" ); then
-  log_message "Error running mysql query (DELETED_ROWS)"
-  send_mail "Error running mysql query (DELETED_ROWS)"
+  QUERY_FAIL=$("${QUERY[@]}" 2>&1)
+  log_message "Error running mysql query, was trying to delete rows from the database. The following error occured: $QUERY_FAIL"
+  send_mail "Error running mysql query, was trying to delete rows from the database. The following error occured: $QUERY_FAIL"
   exit 1
 fi
 
