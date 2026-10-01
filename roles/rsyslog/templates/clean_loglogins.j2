@@ -48,7 +48,7 @@ send_mail_warning() {
   log_message "Mailing warning to ${ERROR_MAIL_TO}"
   echo "$message" | mail \
     -r "${NOREPLY_EMAIL}" \
-    -s "Warning - log_login script on ${ANSIBLE_HOSTNAME} for environment ${RSYSLOG_ENVIRONEMTN_NAME} has failed." \
+    -s "Warning - log_login script on ${ANSIBLE_HOSTNAME} for environment ${RSYSLOG_ENVIRONEMTN_NAME} has an issue." \
     "${ERROR_MAIL_TO}"
 }
 
