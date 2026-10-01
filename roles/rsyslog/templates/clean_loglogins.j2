@@ -91,6 +91,8 @@ if ! OLDEST_TIMESTAMP=$( "${QUERY[@]}" ); then
   send_mail_error "Error running mysql query, immediate action is required! Was trying to read from the database. The following error occured: $QUERY_FAIL"
   exit 1
 fi
+
+# Log and e-mail if the read query has failed.
 if [ -z "$OLDEST_TIMESTAMP" ]; then
   log_message "No logins found in log_logins. Nothing to cleanup."
   send_mail_warning "No logins found in log_logins. Nothing to cleanup. Take action if the database should not be empty."
@@ -113,16 +115,17 @@ log_message "We will delete $TIMESTAMP_DIFF days of log_logins data, the oldest 
 
 # Checking if there is to much data to be removed at once. If so a loop will run which will cleanup the last day of data running up to 10 times or until ${MAX_DELETE_DAYS} is reached.
 DELETE_COUNT=0
+TOTAL_LOOP_ROWS=0
 while [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ] && [ $DELETE_COUNT -le 10 ]; do
   log_message "The cleanup loop is running because there is to much data. Cleaning up data for: $OLDEST_TIMESTAMP"
   QUERY_DELETE=("${MYSQL_DB[@]}" "-sNe" "DELETE FROM log_logins WHERE loginstamp LIKE '${OLDEST_TIMESTAMP}%'; SELECT row_count();" "${DB_LOG_LOGINS_NAME}")
-  if ! DELETED_ROWS=$( "${QUERY_DELETE[@]}" ); then
+  if ! LOOP_DELETED_ROWS=$( "${QUERY_DELETE[@]}" ); then
     QUERY_FAIL=$("${QUERY_DELETE[@]}" 2>&1)
     log_message "Error running mysql query, immediate action is required! Was trying to delete from the database within the loop. The following error occured: $QUERY_FAIL"
     send_mail_error "Error running mysql query, immediate action is required! Was trying to delete from the database within the loop. The following error occured: $QUERY_FAIL"
     exit 1
   fi
-  log_message "Cleaning up data in a loop for the date: $OLDEST_TIMESTAMP succeeded, deleted $DELETED_ROWS rows."
+  log_message "Cleaning up data in a loop for the date: $OLDEST_TIMESTAMP succeeded, deleted $LOOP_DELETED_ROWS rows."
   QUERY_READ=("${MYSQL_DB[@]}" "-se" "SELECT (DATE_FORMAT(loginstamp,'%Y-%m-%d')) FROM log_logins ORDER BY loginstamp ASC LIMIT 1" "${DB_LOG_LOGINS_NAME}")
   if ! OLDEST_TIMESTAMP=$( "${QUERY_READ[@]}" ); then
     QUERY_FAIL=$("${QUERY_READ[@]}" 2>&1)
@@ -132,6 +135,7 @@ while [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ] && [ $D
   fi
   OLDEST_TIMESTAMP_UNIX=$(date -d "$OLDEST_TIMESTAMP" +%s)
   TIMESTAMP_DIFF=$(( (LOGIN_STAMP_UNIX-OLDEST_TIMESTAMP_UNIX)/3600/24 ))
+  TOTAL_LOOP_ROWS=$((TOTAL_LOOP_ROWS + LOOP_DELETED_ROWS))
   ((DELETE_COUNT++))
 done
 
@@ -158,6 +162,7 @@ QUERY=(
 )
 # DEBUG: Print query
 # echo "${QUERY[@]}"
+# Log and e-mail if the delete query has failed.
 if ! DELETED_ROWS=$( "${QUERY[@]}" ); then
   QUERY_FAIL=$("${QUERY[@]}" 2>&1)
   log_message "Error running mysql query, immediate action is required! Was trying to delete rows from the database. The following error occured: $QUERY_FAIL"
@@ -165,4 +170,8 @@ if ! DELETED_ROWS=$( "${QUERY[@]}" ); then
   exit 1
 fi
 
-log_message "We have deleted $DELETED_ROWS rows. Done."
+if [ "$DELETE_COUNT" -gt 0 ] ; then
+  log_message "We have deleted $DELETED_ROWS rows in the regular way and $TOTAL_LOOP_ROLES rows with the loop to delete days that should have already been removed. Done."
+else
+  log_message "We have deleted $DELETED_ROWS rows. Done."
+fi
