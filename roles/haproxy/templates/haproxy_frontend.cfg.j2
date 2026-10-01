@@ -1,10 +1,6 @@
 #jinja2: lstrip_blocks: True
 ## Frontend configuration
-
-# Stats frontend for exporting prometheus metrics
-frontend stats
-   bind 127.0.0.1:8404
-   http-request use-service prometheus-exporter if { path /metrics }
+ 
 {% if haproxy_prometheus -%}
 # --- Prometheus exporter configuration ---
 frontend prometheus
@@ -12,6 +8,11 @@ frontend prometheus
   mode http
   http-request use-service prometheus-exporter
   no log
+{% else %}
+# Stats frontend for exporting prometheus metrics
+frontend stats
+   bind 127.0.0.1:8404
+   http-request use-service prometheus-exporter if { path /metrics }
 {% endif -%}
 
 
