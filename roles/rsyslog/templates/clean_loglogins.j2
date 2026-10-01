@@ -1,8 +1,13 @@
 #!/bin/bash
 # Script to remove logins that are older than LOG_LOGINS_MAX_AGE months from the log_logins table
 # in the ${DB_LOG_LOGINS_NAME} database on the ${DB_LOG_LOGINS_HOST} host
-# As a failsafe, the script will refuse to run if more than ${MAX_DELETE_DAYS} days worth of logins would be removed,
-# unless the --force option is provided.
+# As a failsafe, the script will refuse to run in one go if more than ${MAX_DELETE_DAYS} days worth of logins would be removed.
+# While ${MAX_DELETE_DAYS} is higher then allowed a loop will run which will delete the DB entries for the last day alone.
+# The loop will stop and exit after removing 10 days as a failsafe for not removing to much.
+# Once the loop has removed enough that the ${MAX_DELETE_DAYS} value is not exceeded the script will run trough normally.
+# If you wish to force the script to run ignoring the ${MAX_DELETE_DAYS} you can provide the --force option.
+# Using this option is not advised as this can take a long time and will use more storage on the DB.
+# This can fill up the DB disk and crash the DB as a result.
 # The script is intended to be run daily from a cron job.
 
 MAX_DELETE_DAYS=5
@@ -98,6 +103,18 @@ if [ "$TIMESTAMP_DIFF" -lt "0" ]; then
 fi
 
 log_message "We will delete $TIMESTAMP_DIFF days of log_logins data"
+SINGLE_DAY_DELETE_COUNT=0
+while [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ] && [ "$SINGLE_DAY_DELETE_COUNT" -lt 10]; do
+  log_message "Something is up, you need to delete more than ${MAX_DELETE_DAYS} days worth of login data"
+  QUERY_DELETE=$("${MYSQL_DB[@]}" "-sNe" "DELETE FROM log_logins WHERE loginstamp LIKE '${OLDEST_TIMESTAMP}%'; SELECT row_count();" "${DB_LOG_LOGINS_NAME}")
+  QUERY_READ=$("${MYSQL_DB[@]}" "-se" "SELECT (DATE_FORMAT(loginstamp,'%Y-%m-%d')) FROM log_logins ORDER BY loginstamp ASC LIMIT 1" "${DB_LOG_LOGINS_NAME}")
+  OLDEST_TIMESTAMP=${QUERY_READ[@]}
+  OLDEST_TIMESTAMP_UNIX=$(date -d "$OLDEST_TIMESTAMP" +%s)
+  TIMESTAMP_DIFF=$(( (LOGIN_STAMP_UNIX-OLDEST_TIMESTAMP_UNIX)/3600/24 ))
+  SINGLE_DAY_DELETE_COUNT=$SINGLE_DAY_DELETE_COUNT+1
+done
+
+
 if [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ]; then
   log_message "Something is up, you need to delete more than ${MAX_DELETE_DAYS} days worth of login data"
   send_mail "The ${SCRIPT_NAME} script wants to delete more than ${MAX_DELETE_DAYS} days of logins on ${ANSIBLE_HOSTNAME}. Please investigate"
