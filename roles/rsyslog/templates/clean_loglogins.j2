@@ -106,20 +106,22 @@ log_message "We will delete $TIMESTAMP_DIFF days of log_logins data, the oldest 
 # Checking if there is to much data to be removed at once. If so a loop will run which will cleanup the last day of data running up to 10 times or until ${MAX_DELETE_DAYS} is reached.
 DELETE_COUNT=0
 while [ "$TIMESTAMP_DIFF" -gt "$MAX_DELETE_DAYS" ] && [ "$FORCE" -ne 1 ] && [ $DELETE_COUNT -le 10 ]; do
-  QUERY_DELETE=$("${MYSQL_DB[@]}" "-sNe" "DELETE FROM log_logins WHERE loginstamp LIKE '${OLDEST_TIMESTAMP}%'; SELECT row_count();" "${DB_LOG_LOGINS_NAME}")
-  log_message "Cleaning up data in a loop for: $OLDEST_TIMESTAMP"
-  if ! $( "${QUERY_DELETE[@]}" ); then
-    QUERY_FAIL=$("${QUERY[@]}" 2>&1)
+  log_message "The cleanup loop is running because there is to much data. Cleaning up data for: $OLDEST_TIMESTAMP"
+  QUERY_DELETE=("${MYSQL_DB[@]}" "-sNe" "DELETE FROM log_logins WHERE loginstamp LIKE '${OLDEST_TIMESTAMP}%'; SELECT row_count();" "${DB_LOG_LOGINS_NAME}")
+  if ! DELETED_ROWS=$( "${QUERY_DELETE[@]}" ); then
+    QUERY_FAIL=$("${QUERY_DELETE[@]}" 2>&1)
     log_message "Error running mysql query, was trying to delete from the database within the loop. The following error occured: $QUERY_FAIL"
+    send_mail "Error running mysql query, was trying to delete from the database within the loop. The following error occured: $QUERY_FAIL"
     exit 1
   fi
-  QUERY_READ=$("${MYSQL_DB[@]}" "-se" "SELECT (DATE_FORMAT(loginstamp,'%Y-%m-%d')) FROM log_logins ORDER BY loginstamp ASC LIMIT 1" "${DB_LOG_LOGINS_NAME}")
-  if ! $( "${QUERY_READ[@]}" ); then
+  log_message "Cleaning up data in a loop for the date: $OLDEST_TIMESTAMP succeeded, deleted $DELETED_ROWS rows."
+  QUERY_READ=("${MYSQL_DB[@]}" "-se" "SELECT (DATE_FORMAT(loginstamp,'%Y-%m-%d')) FROM log_logins ORDER BY loginstamp ASC LIMIT 1" "${DB_LOG_LOGINS_NAME}")
+  if ! OLDEST_TIMESTAMP=$( "${QUERY_READ[@]}" ); then
     QUERY_FAIL=$("${QUERY_READ[@]}" 2>&1)
     log_message "Error running mysql query, was trying to read from the database within the loop. The following error occured: $QUERY_FAIL"
+    send_mail "Error running mysql query, was trying to read from the database within the loop. The following error occured: $QUERY_FAIL"
     exit 1
   fi
-  OLDEST_TIMESTAMP=${QUERY_READ[@]}
   OLDEST_TIMESTAMP_UNIX=$(date -d "$OLDEST_TIMESTAMP" +%s)
   TIMESTAMP_DIFF=$(( (LOGIN_STAMP_UNIX-OLDEST_TIMESTAMP_UNIX)/3600/24 ))
   ((DELETE_COUNT++))
