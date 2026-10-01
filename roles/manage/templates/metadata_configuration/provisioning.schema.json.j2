@@ -112,6 +112,18 @@
           "info": "From the pull down, select the scim identifier used for the user provisioning.",
           "disabledAfterPersisted": false
         },
+        "scim_email_type": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "home",
+              "work",
+              "other"
+            ]
+          },
+          "info": "From the pull down, select one or more email types."
+        },
         "eva_url": {
           "type": "string",
           "format": "url",
