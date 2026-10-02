@@ -318,6 +318,7 @@ manage:
   environment: template
   super_user_team_names: "urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:surfconext_tpm_core"
   sram_rp_entity_id: "sbs.test.sram.surf.nl"
+  jira_base_url: "https://sd-jira-staging.surf.nl/jira/browse/"
   apiUsers:
     - {
         name: "dashboard",
