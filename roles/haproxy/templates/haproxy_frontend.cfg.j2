@@ -1,7 +1,7 @@
 #jinja2: lstrip_blocks: True
 ## Frontend configuration
 
-{% if haproxy_prometheus -%}
+{% if haproxy_prometheus_enabled -%}
 # --- Prometheus exporter configuration ---
 frontend prometheus
   bind :8405
