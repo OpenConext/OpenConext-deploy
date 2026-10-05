@@ -146,6 +146,7 @@ if [ "$DELETE_COUNT" -gt 0 ] && [ "$DELETE_COUNT" -lt 10 ]; then
 elif [ "$DELETE_COUNT" -ge 10 ]; then
   log_message "Ran a loop to cleanup data older then is allowed to be removed in one command. There is so much data that this cannot be done at once. Admin intervention is required to solve this issue manually if this message appears multiple times. The oldest data in the database is from $OLDEST_TIMESTAMP"
   send_mail_error "Ran a loop to cleanup data older then is allowed to be removed in one command. There is so much data that this cannot be done at once. Admin intervention is required to solve this issue manually if this message appears multiple times. The oldest data in the database is from $OLDEST_TIMESTAMP"
+  exit 1
 fi
 
 # Log if force option is ran.
@@ -171,7 +172,7 @@ if ! DELETED_ROWS=$( "${QUERY[@]}" ); then
 fi
 
 if [ "$DELETE_COUNT" -gt 0 ] ; then
-  log_message "We have deleted $DELETED_ROWS rows in the regular way and $TOTAL_LOOP_ROLES rows with the loop to delete days that should have already been removed. Done."
+  log_message "We have deleted $DELETED_ROWS rows in the regular way and $TOTAL_LOOP_ROWS rows with the loop to delete days that should have already been removed. Done."
 else
   log_message "We have deleted $DELETED_ROWS rows. Done."
 fi
