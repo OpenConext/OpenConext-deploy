@@ -26,7 +26,7 @@ then
 fi
 
 # check if env is correct
-if [ "$ENV" != "acc" ] && [ "$ENV" != "prod" ] && [ "$ENV" != "test" ] && [ "$ENV" != "test2" ]
+if [ "$ENV" != "acc" ] && [ "$ENV" != "prod" ] && [ "$ENV" != "test" ] && [ "$ENV" != "test2" ] && [ "$ENV" != "mgnt" ]
 then
     echo "Unknown environment '$ENV'"
     echo "Acceptable are: acc, prod, test, test2"
