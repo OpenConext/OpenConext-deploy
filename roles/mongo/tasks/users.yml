@@ -41,6 +41,7 @@
       loop: "{{ mongo_custom_roles }}"             # iterate over the variable defined above
       loop_control:
         label: "{{ item.role_name }}"               # makes the output easier to read
+      run_once: true
 
 - name: Create mongo database users and roles cluster # requires pymongo 4+
   when: mongo_mode != "cluster"
@@ -74,3 +75,4 @@
       loop: "{{ mongo_custom_roles }}"             # iterate over the variable defined above
       loop_control:
         label: "{{ item.role_name }}"               # makes the output easier to read
+      run_once: true
