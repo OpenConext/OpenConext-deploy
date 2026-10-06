@@ -1,10 +1,11 @@
-springapp_artifact_id: mujina-sp
-springapp_artifact_type: jar
-springapp_artifact_group_dir: org/openconext
+---
+springapp_artifact_id: "mujina-sp"
+springapp_artifact_type: "jar"
+springapp_artifact_group_dir: "org/openconext"
 springapp_version: "{{ mujina_version }}"
 springapp_dir: "{{ mujina_sp_dir }}"
-springapp_user: mujina-sp
-springapp_service_name: mujina-sp
+springapp_user: "mujina-sp"
+springapp_service_name: "mujina-sp"
 springapp_jar: "{{ mujina_sp_jar }}"
 springapp_random_source: "file:///dev/urandom"
 manage_provision_samlsp_client_id: "{{ mujinasp_manage_provision_samlsp_client_id }}"
