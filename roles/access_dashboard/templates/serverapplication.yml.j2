@@ -120,7 +120,7 @@ config:
     - "{{ sho }}"
 {% endfor %}
   discovery: "https://connect.surfconext.nl/oidc/.well-known/openid-configuration"
-  invite: "https://invite.{{ base_domain }}"
+  invite: "https://invite.{{ base_domain }}/home/roles"
   sram: "https://{{ env }}.sram.surf.nl/"
   service_desk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
   feedback_widget_enabled: true
