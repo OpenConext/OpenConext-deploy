@@ -1,0 +1,482 @@
+---
+argument_specs:
+  main:
+    short_description: "Role for installing and configuring HAProxy load balancer"
+    description:
+      - "Installs HAProxy, configures frontends, backends, ACLs, maps, SSL/TLS certificates,"
+      - "rate limiting, and optional ACME Let's Encrypt automation via acme.sh."
+    author:
+      - "SURFconext"
+    options:
+      admin_email:
+        type: "str"
+        required: false
+        description: "Default administrator email address, used as a fallback for ACME registration."
+
+      base_domain:
+        type: "str"
+        required: false
+        description: "Base domain name for constructing default vhosts and certificate filenames."
+
+      tls_backend_ca:
+        type: "str"
+        default: "/etc/pki/haproxy/backend.{{ base_domain }}.pem"
+        description: "Default CA certificate path for backend TLS verification."
+
+      haproxy_cookie_max_idle:
+        type: "raw"
+        default: 3600
+        description: "Maximum idle time for server session cookies inserted by HAProxy."
+
+      haproxy_metricbeat:
+        type: "bool"
+        default: false
+        description: "Whether to enable Metricbeat integration for HAProxy."
+
+      haproxy_global_maxconn:
+        type: "int"
+        required: false
+        description: "Maximum per-process number of concurrent connections in the HAProxy global section."
+
+      haproxy_error_loc:
+        type: "path"
+        default: "/usr/share/haproxy"
+        description: "Directory path containing custom HAProxy error pages (HTTP 400, 403, 408, 500, 502, 503, 504)."
+
+      haproxy_connect_timeout:
+        type: "str"
+        default: "5s"
+        description: "Maximum time to wait for a connection attempt to a server to succeed."
+
+      haproxy_client_timeout:
+        type: "str"
+        default: "10s"
+        description: "Maximum inactivity time on the client side."
+
+      haproxy_http_request_timeout:
+        type: "str"
+        default: "10s"
+        description: "Maximum time to wait for a complete HTTP request from the client."
+
+      haproxy_queue_timeout:
+        type: "str"
+        default: "1m"
+        description: "Maximum time to wait in the queue for a connection slot to become free on a server."
+
+      haproxy_server_timeout:
+        type: "str"
+        default: "30s"
+        description: "Maximum inactivity time on the server side."
+
+      haproxy_http_keepalive_timeout:
+        type: "str"
+        default: "10s"
+        description: "Maximum time to wait for a new HTTP request to appear on a keep-alive connection."
+
+      haproxy_hsts_value:
+        type: "str"
+        default: "max-age=34214400"
+        description: "Strict-Transport-Security header value."
+
+      haproxy_hsts_maxage:
+        type: "int"
+        default: 31536000
+        description: "Strict-Transport-Security max-age header value in seconds."
+
+      haproxy_log_format:
+        type: "str"
+        default: >-
+          %ci:%cp\ [%t]\ %ft\ %b/%s\ %Tq/%Tw/%Tc/%Tr/%Tt\ %ST\ %B\ %CC\ %CS\ %tsc\
+          %ac/%fc/%bc/%sc/%rc\ %sq/%bq\ %hr\ %hs\
+          {\%[ssl_c_verify],%{+Q}[ssl_c_s_dn],%{+Q}[ssl_c_i_dn],%[ssl_fc_sni]}\ %{+Q}r
+        description: "Custom HAProxy HTTP log format specification."
+
+      haproxy_applications:
+        type: "list"
+        elements: "dict"
+        default:
+          - name: "example_vhost"
+            vhost_name: "example-vhost.{{ base_domain }}"
+            ha_method: "GET"
+            ha_url: "/example/health"
+            port: "443"
+            servers: "example-server.local"
+            restricted: true
+            sslbackend: true
+            backend_vhost_name: "example-backend.{{ base_domain }}"
+            backend_ca_file: "put your ca here"
+        description: "List of web application backend configurations for HAProxy."
+        options:
+          name:
+            type: "str"
+            required: true
+            description: "Unique name of the application backend."
+          vhost_name:
+            type: "str"
+            required: true
+            description: "Virtual host / domain name matching incoming HTTP requests for this application."
+          backend_vhost_name:
+            type: "str"
+            required: false
+            description: "Hostname to verify when communicating with backend servers over TLS."
+          backend_ca_file:
+            type: "str"
+            required: false
+            description: "Path to CA certificate file used to verify backend TLS connections."
+          ha_method:
+            type: "str"
+            required: false
+            default: "GET"
+            description: "HTTP method used for health checking the backend (e.g. GET)."
+          ha_url:
+            type: "str"
+            required: false
+            default: "/health"
+            description: "URL path used for backend health check probes."
+          port:
+            type: "raw"
+            required: false
+            description: "Default backend port for the application servers."
+          x_forwarded_port:
+            type: "raw"
+            required: false
+            description: "Port number to set in the X-Forwarded-Port header."
+          sslbackend:
+            type: "bool"
+            required: false
+            default: false
+            description: "Whether backend connections use SSL/TLS."
+          restricted:
+            type: "bool"
+            required: false
+            default: false
+            description: "Whether access to this application is restricted by IP allowlist."
+          maxconn:
+            type: "int"
+            required: false
+            default: 35
+            description: "Maximum number of concurrent connections per backend server."
+          servers:
+            type: "raw"
+            required: false
+            description: "List of primary backend servers for the application."
+          stagingservers:
+            type: "raw"
+            required: false
+            description: "List of staging backend servers for the application."
+
+      haproxy_backend_tls:
+        type: "bool"
+        default: false
+        description: "Whether TLS encryption is enabled for connections to backend servers."
+
+      haproxy_supported_http_methods:
+        type: "str"
+        default: "GET HEAD OPTIONS POST PUT DELETE"
+        description: "Space-separated list of allowed HTTP methods. Requests with other methods receive an HTTP 405 Method Not Allowed response."
+
+      haproxy_max_request_rate:
+        type: "int"
+        default: 1000
+        description: "Maximum allowed HTTP requests per IP per 10 seconds before rate limiting triggers."
+
+      haproxy_max_request_rate_ip:
+        type: "int"
+        required: false
+        description: "Maximum allowed HTTP requests per IP per 10 seconds (overrides haproxy_max_request_rate)."
+
+      haproxy_max_request_rate_ip_path:
+        type: "int"
+        default: 250
+        description: "Maximum allowed HTTP requests per IP and unique path per minute."
+
+      haproxy_max_request_rate_ip_path_exceptions:
+        type: "int"
+        default: 500
+        description: "Rate limit threshold per minute for exempted paths (e.g. OIDC endpoints)."
+
+      haproxy_frontend_rate_limit_enabled:
+        type: "bool"
+        default: true
+        description: "Whether frontend rate limiting rules and stick tables are enabled."
+
+      haproxy_allowlistips:
+        type: "list"
+        elements: "str"
+        default:
+          - ""
+        description: "List of IP addresses and CIDR subnets allowed to access restricted applications and administrative endpoints."
+
+      haproxy_blocklistips:
+        type: "list"
+        elements: "str"
+        default:
+          - ""
+        description: "List of IP addresses and CIDR subnets explicitly blocked from accessing HAProxy."
+
+      haproxy_internalips:
+        type: "list"
+        elements: "str"
+        default:
+          - "0.0.0.0/0"
+          - "::0/0"
+        description: "List of internal IP addresses and CIDR subnets exempted from rate limiting."
+
+      haproxy_stagingips:
+        type: "list"
+        elements: "str"
+        default:
+          - ""
+        description: "List of IP addresses and CIDR subnets permitted to access staging backend environments."
+
+      haproxy_redirects:
+        type: "list"
+        elements: "dict"
+        default:
+          - name: "redirect.example.org"
+            url: "redirect.example.org"
+            redirecturl: "https://www.openconext.org"
+            hostname: "redirect.example.org"
+        description: "List of domain and URL redirection rules."
+        options:
+          name:
+            type: "str"
+            required: false
+            description: "Descriptive name for the redirect rule."
+          hostname:
+            type: "str"
+            required: false
+            description: "Host name to match for the redirect rule in ACLs."
+          url:
+            type: "str"
+            required: true
+            description: "Source URL path or regex pattern to match."
+          redirecturl:
+            type: "str"
+            required: true
+            description: "Destination URL to redirect incoming requests to."
+
+      haproxy_securitytxt_target_url:
+        type: "str"
+        default: ""
+        description: "Target URL to redirect requests for /.well-known/security.txt to. If unset, defaults to SURF security.txt URL."
+
+      haproxy_ldap_servers:
+        type: "list"
+        elements: "dict"
+        required: false
+        description: "List of LDAP/LDAPS backend servers for TCP load balancing."
+        options:
+          name:
+            type: "str"
+            required: false
+            description: "Name of the LDAP service."
+          vhost_name:
+            type: "str"
+            required: false
+            description: "Virtual host name for the LDAP service."
+          label:
+            type: "str"
+            required: true
+            description: "Server label or identifier in HAProxy backend configuration."
+          ip:
+            type: "str"
+            required: true
+            description: "IP address of the LDAP server."
+          port:
+            type: "raw"
+            required: true
+            description: "Port number for the LDAP server connection (e.g. 636)."
+
+      haproxy_ldap_port:
+        type: "int"
+        default: 636
+        description: "Listening port for the HAProxy LDAP TCP frontend."
+
+      haproxy_sni_ip:
+        type: "dict"
+        required: false
+        description: "Public SNI frontend IP addresses and TLS certificate configuration."
+        options:
+          ipv4:
+            type: "str"
+            required: false
+            description: "Public IPv4 address bound to the public frontend."
+          ipv6:
+            type: "str"
+            required: false
+            description: "Public IPv6 address bound to the public frontend."
+          certs:
+            type: "list"
+            elements: "dict"
+            required: false
+            description: "List of SSL/TLS certificates for the public frontend."
+            options:
+              name:
+                type: "str"
+                required: true
+                description: "Certificate identifier/name."
+              key_content:
+                type: "str"
+                required: false
+                description: "Private key PEM content when use_selfsigned_certs is true."
+              crt_name:
+                type: "str"
+                required: false
+                description: "Certificate filename or base name on the server."
+              sni_name:
+                type: "str"
+                required: false
+                description: "Explicit SNI domain name for the certificate."
+
+      haproxy_sni_ip_restricted:
+        type: "dict"
+        required: false
+        description: "Restricted SNI frontend IP addresses and TLS certificate configuration."
+        options:
+          ipv4:
+            type: "str"
+            required: false
+            description: "IPv4 address bound to the restricted frontend."
+          ipv6:
+            type: "str"
+            required: false
+            description: "IPv6 address bound to the restricted frontend."
+          certs:
+            type: "list"
+            elements: "dict"
+            required: false
+            description: "List of SSL/TLS certificates for the restricted frontend."
+            options:
+              name:
+                type: "str"
+                required: true
+                description: "Certificate identifier/name."
+              key_content:
+                type: "str"
+                required: false
+                description: "Private key PEM content when use_selfsigned_certs is true."
+              crt_name:
+                type: "str"
+                required: false
+                description: "Certificate filename or base name on the server."
+              sni_name:
+                type: "str"
+                required: false
+                description: "Explicit SNI domain name for the certificate."
+
+      haproxy_ssl_hosts:
+        type: "list"
+        elements: "dict"
+        required: false
+        description: "List of explicit SSL vhost configurations (used when haproxy_sni_ip is not defined)."
+        options:
+          vhost_name:
+            type: "str"
+            required: true
+            description: "Virtual host / domain name for SSL certificate."
+          cert_file:
+            type: "str"
+            required: false
+            description: "Certificate filename on the server."
+
+      use_selfsigned_certs:
+        type: "bool"
+        default: false
+        description: "Whether to deploy self-signed certificates instead of obtaining certificates via ACME."
+
+      haproxy_acme:
+        type: "bool"
+        default: true
+        description: "Whether to enable automated ACME SSL/TLS certificate management."
+
+      haproxy_acme_renewal_days:
+        type: "int"
+        default: 60
+        description: "Days before certificate expiry when renewal should be attempted."
+
+      haproxy_acme_server:
+        type: "str"
+        default: "not_defined"
+        description: "ACME directory endpoint URL (e.g. Let's Encrypt or Harica ACME server)."
+
+      haproxy_acmedns:
+        type: "dict"
+        default:
+          baseurl: "https://acme-dns.example.org/api"
+          username: "username"
+          password: "password"
+          subdomain: "a_subdomain"
+          fulldomain: "a_subdomain.acme-dns.example.org"
+        description: "Credentials and endpoint configuration for acme-dns DNS challenge automation."
+        options:
+          baseurl:
+            type: "str"
+            required: false
+            description: "Base URL of the acme-dns server API."
+          username:
+            type: "str"
+            required: false
+            description: "Username / API user UUID for acme-dns."
+          password:
+            type: "str"
+            required: false
+            description: "API password / token for acme-dns."
+          subdomain:
+            type: "str"
+            required: false
+            description: "Subdomain identifier registered on the acme-dns server."
+          fulldomain:
+            type: "str"
+            required: false
+            description: "Full CNAME target domain used for DNS-01 challenges."
+          allowfrom:
+            type: "list"
+            elements: "str"
+            required: false
+            description: "List of CIDR subnets allowed to update records on acme-dns."
+
+      haproxy_acmesh_version:
+        type: "str"
+        default: "3.1.4"
+        description: "Version / git release tag of acme.sh to install."
+
+      haproxy_acme_ca_dir:
+        type: "path"
+        default: "/etc/pki/tls/certs"
+        description: "Directory where CA certificates are stored on the host."
+
+      haproxy_acme_cronjob_min:
+        type: "str"
+        default: "30"
+        description: "Minute component for the acme.sh certificate renewal cron job."
+
+      haproxy_acme_cronjob_hour:
+        type: "str"
+        default: "07"
+        description: "Hour component for the acme.sh certificate renewal cron job."
+
+      haproxy_acme_cronjob_dow:
+        type: "raw"
+        default: 1
+        description: "Day of week component for the acme.sh certificate renewal cron job."
+
+      haproxy_acme_cronjob_monitor_url:
+        type: "str"
+        required: false
+        description: "Optional monitoring heartbeat URL to ping on successful certificate renewal cron execution."
+
+      haproxy_acme_eab_kid:
+        type: "str"
+        default: "key_id"
+        description: "Key Identifier (KID) for External Account Binding (EAB) with ACME servers."
+
+      haproxy_acme_eab_hmac_key:
+        type: "str"
+        default: "secret"
+        description: "HMAC key for External Account Binding (EAB) with ACME servers."
+
+      haproxy_acme_email:
+        type: "str"
+        required: false
+        description: "Contact email address for ACME account registration (falls back to admin_email if not specified)."

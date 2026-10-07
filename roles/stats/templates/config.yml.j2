@@ -9,7 +9,7 @@ syslog:
   address: "/dev/log"
 
 log:
-  measurement: {{ influx_ebauth_measurement }} 
+  measurement: {{ influx_ebauth_measurement }}
   user_id: user_id
   sp_id: sp_entity_id
   idp_id: idp_entity_id
@@ -18,6 +18,7 @@ secret_key: {{ stats_api_secret }}
 product: {{ instance_name }}
 supported_language_codes: {{ supported_language_codes }}
 
+# TODO: add new user for access dashboard
 api_users:
   - name: "dashboard"
     password: "{{ stats_dashboard_api_password }}"

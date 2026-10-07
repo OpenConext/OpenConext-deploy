@@ -1,5 +1,5 @@
 ---
-tls_backend_ca: /etc/pki/haproxy/backend.{{ base_domain }}.pem
+tls_backend_ca: "/etc/pki/haproxy/backend.{{ base_domain }}.pem"
 haproxy_cookie_max_idle: 3600
 haproxy_metricbeat: false
 # The default http methods whitelist is meant to disable methods like TRACE or DEBUG.
@@ -19,12 +19,24 @@ haproxy_blocklistips:
   - ''
 # You can protect internal api to allow access from trusted ip's only. Open to the world by default
 haproxy_internalips:
-  - 0.0.0.0/0
-  - ::0/0
+  - "0.0.0.0/0"
+  - "::0/0"
 haproxy_hsts_value: "max-age=34214400"
 # If you have a staging server you want to be accessed from certain ips, and them to this list
 haproxy_stagingips:
   - ''
+
+haproxy_applications:
+  - name: "example_vhost"
+    vhost_name: "example-vhost.{{ base_domain }}"
+    ha_method: "GET"
+    ha_url: "/example/health"
+    port: "443"
+    servers: "example-server.local"
+    restricted: true
+    sslbackend: true
+    backend_vhost_name: "example-backend.{{ base_domain }}"
+    backend_ca_file: "put your ca here"
 
 haproxy_redirects:
   - name: "redirect.example.org"
