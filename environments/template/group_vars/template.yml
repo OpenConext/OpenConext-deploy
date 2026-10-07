@@ -16,7 +16,7 @@ support_email: help@{{ base_domain }}
 noreply_email: no-reply@{{ base_domain }}
 admin_email: admin@{{ base_domain }}
 smtp_server: localhost
-error_mail_to: "{{ support_email }}"
+error_email: "{{ support_email }}"
 
 # Remote logging
 relp_remote:
