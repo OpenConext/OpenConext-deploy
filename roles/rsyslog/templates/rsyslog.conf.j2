@@ -1,122 +1,117 @@
-# rsyslog configuration file
-
-# For more information see /usr/share/doc/rsyslog-*/rsyslog_conf.html
-# If you experience problems, see http://www.rsyslog.com/doc/troubleshoot.html
-
 #### MODULES ####
-$MaxMessageSize 32k
-# The imjournal module below is now used as a message source instead of imuxsock.
-$ModLoad imuxsock # provides support for local system logging (e.g. via logger command)
-$ModLoad imjournal # provides access to the systemd journal
-#$ModLoad imklog # reads kernel messages (the same are read from journald)
-$ModLoad immark  # provides --MARK-- message capability
 
-## Adjust Ratelimit
-$imjournalRatelimitInterval 30
-$imjournalRatelimitBurst 20000
+## input modules
+{% if 'docker' in group_names %}
+# for docker hosts, we support logging directly from inside the docker host to a TCP socket on the container host
+# Provides the ability to receive syslog messages via TCP
+module(load="imptcp")
+input(type="imptcp" port="514")
+{% endif %}
+
+# Provides the ability to import structured log messages from systemd journal to syslog.
+module(load="imjournal"
+       UsePid="system" # PID number is retrieved as the ID of the process the journal entry originates from
+       StateFile="{{ rsyslog_imjournal_statefile }}"
+       ratelimit.interval="{{ rsyslog_imjournal_ratelimitinterval }}"
+       ratelimit.burst="{{ rsyslog_imjournal_ratelimitburst }}"
+)
+
+# Reads messages from the kernel log and submits them to the syslog engine.
+module(load="imklog")
+
+# This module provides the ability to inject periodic “mark” messages to the input of rsyslog.
+module(load="immark"
+       interval="300"
+)
+
+## output modules
+# This module supports sending syslog messages over the reliable RELP protocol
+module(load="omrelp")
+
+# The omfile plug-in provides the core functionality of writing messages to files residing inside the local file system
+module(load="builtin:omfile"
+       template="RSYSLOG_TraditionalFileFormat" # Use default timestamp format
+       {{ rsyslog_dir_file_modes}}            # Set default file permission
+)
+
+
 
 #### GLOBAL DIRECTIVES ####
+global(
+       # where to place aux file (spool, etc)
+       workDirectory="{{ rsyslog_workdirectory }}"
 
-# Where to place auxiliary files
-$WorkDirectory /var/lib/rsyslog
+       # Support large messages
+       maxMessageSize="{{ rsyslog_maxmessagesize }}"
 
-# Use default timestamp format
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
-
-# File syncing capability is disabled by default. This feature is usually not required,
-# not useful and an extreme performance hit
-#$ActionFileEnableSync on
-
-# Turn off message reception via local log socket;
-# local messages are retrieved through imjournal now.
-$OmitLocalLogging on
-
-# File to store the position in the journal
-$IMJournalStateFile imjournal.state
-# MARK messages
-$ActionWriteAllMarkMessages on
-$MarkMessagePeriod 600
-
-$PreserveFQDN on
-# Order is important here: First the templates, then rules, then listerers, then forwarders 
-{% if 'centrallog_servers' in group_names %}
-# This directory contains templates for a central syslog host
-$IncludeConfig /etc/rsyslog.d/templates/*.conf
-{% endif %}
-
-#### RULES ####
-# The rules below make sure all local logging is also logged on local machines
-# Log all kernel messages to the console.
-# Logging much else clutters up the screen.
-#kern.*                                                 /dev/console
-
-# Log anything (except mail) of level info or higher.
-# Don't log private authentication messages!
-*.info;mail.none;authpriv.none;cron.none;local6.none    /var/log/messages
-
-# The authpriv file has restricted access.
-authpriv.*                                              /var/log/secure
-
-# Log all the mail messages in one place.
-mail.*                                                  -/var/log/maillog
-# Log cron stuff
-cron.*                                                  /var/log/cron
-
-# Everybody gets emergency messages
-*.emerg                                                 :omusrmsg:*
-
-# Save news errors of level crit and higher in a special file.
-uucp,news.crit                                          /var/log/spooler
-
-# Save boot messages also to boot.log
-local7.*                                                /var/log/boot.log
-
-{% if 'centrallog_servers' in group_names %}
-# Make the logs readable
-$DirCreateMode 0775
-$FileCreateMode 0640
-$FileOwner root
-$FileGroup {{ rsyslog_read_group }}
-$DirOwner root
-$DirGroup root
-
-# This directory contains all rulesets on the central syslog host
-$IncludeConfig /etc/rsyslog.d/rulesets/*.conf
-{% endif %}
-# Default listener for localhost
-module(load="imudp")
-input(type="imudp" port="514")
+       # Keep fully qualified hostnames instead of stripping the local domain.
+       preserveFQDN="on"
+)
 
 
-{% if 'centrallog_servers' in group_names %}
-# Now we include all the listeners
-module(load="imrelp" )
-$IncludeConfig /etc/rsyslog.d/listeners/*.conf
-{% endif %}
+#### LOCAL TEMPLATES AND RULES ####
+## templates
+template(name="CustomRelpFormat"
+         type="string"
+         string="<%PRI%>%TIMESTAMP% {{ ansible_fqdn }} %syslogtag%%msg%\n"
+)
 
-# ### begin forwarding rule ###
-# The statement between the begin ... end define a SINGLE forwarding
-# rule. They belong together, do NOT split them. If you create multiple
-# forwarding rules, duplicate the whole block!
-# Remote Logging (we use TCP for reliable delivery)
-#
+## rules
+## this is the default ruleset, used for local messages
 
-{% if rsyslog_remote_server_relp is defined and 'centrallog_servers' not in group_names %}
-# Forward all logs to the central logging server using relp
-module(load="omrelp")
-action(type="omrelp" 
-target="{{ rsyslog_remote_server_relp }}" 
-port="{{ rsyslog_remote_relp_port }}" 
-tls="on" 
-tls.caCert="/etc/pki/rsyslog/rsyslogclientca.crt" 
-tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
-tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
-tls.authmode="name" 
-tls.permittedpeer=["{{ rsyslog_remote_server_relp }}"]
-queue.type="LinkedList" 
-queue.filename="rsyslog_relp_q"
-queue.maxdiskspace="1G"
-queue.saveonshutdown="on" 
-action.resumeRetryCount="-1"
-action.resumeInterval="5")
+# emergency messages to the console
+if prifilt("*.emerg") then {
+    action(type="omusrmsg" users="*")
+}
+
+{% for relp_host in relp_remote %}
+# all other local logs are forwarded to {{ relp_host.name }}
+action(type="omrelp"
+       target="{{ relp_host.host }}"
+       port="{{ relp_host.port }}"
+       timeout="10"  {#- needed because otherwise exiting rsyslogd will take the default 90 second timeout #}
+       tls="on"
+       tls.caCert="{{ rsyslog_ca }}"
+       tls.MyCert="/etc/pki/rsyslog/rsyslogclient.crt"
+       tls.MyPrivKey="/etc/pki/rsyslog/rsyslogclient.key"
+       tls.authMode="name"
+       tls.permittedPeer=["{{ relp_host.peer }}"]  {#- CN of the certificate of the server #}
+       queue.type="LinkedList"
+       queue.filename="{{ relp_host.name }}"
+       queue.spoolDirectory="{{ rsyslog_queue_dir }}"
+       queue.maxDiskSpace="1G"
+       queue.saveOnShutdown="on"
+       action.resumeRetryCount="-1"
+       action.resumeInterval="5"
+       action.writeAllMarkMessages="on"
+       template="CustomRelpFormat"
+)
+{% else %}
+{# default if relp_remote is empty #}
+# No relp hosts are available, write everything to /var/log/syslog}
+action(type="omfile" file="/var/log/syslog")
+{% endfor %}
+
+# stop processing local messages
+stop
+
+
+{% if rsyslog_is_centrallog_server %}
+#### TEMPLATE, RULES AND LISTENERS FOR REMOTE MESSAGES
+# Each listener (on a specific port) binds to a specific ruleset for a specific environment.
+# Only the rules from that specific ruleset are applied.  The default ruleset defined above
+# for local messages is not used here
+
+# Provides the ability to receive syslog messages via the reliable RELP protocol.
+module(load="imrelp")
+
+# Templates
+include(file="/etc/rsyslog.d/templates/*.conf")
+
+# Rulesets
+include(file="/etc/rsyslog.d/rulesets/*.conf")
+
+# Listeners
+include(file="/etc/rsyslog.d/listeners/*.conf")
+
 {% endif %}
