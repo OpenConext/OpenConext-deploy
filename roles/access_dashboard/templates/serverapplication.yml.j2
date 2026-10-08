@@ -92,8 +92,10 @@ lifecycle:
 
 jira:
   enabled: "{{ access_dashboard.jira.enabled }}"
+  connection-timeout: 1000  # ms
   base-url: "{{ access_dashboard.jira.base_url }}"
   user-name: "{{ access_dashboard.jira.username }}"
+  api-key: "{{ access_dashboard.jira.api_key }}"
   project-key: "{{ access_dashboard.jira.project_key }}"
   environment: "{{ access_dashboard.jira.environment }}"
   api-key: "{{ access_dashboard.jira.api_key }}"
@@ -102,13 +104,12 @@ jira:
   project-key-qtc: "{{ access_dashboard.jira.project_key_qtc }}"
   api-key-qtc: "{{ access_dashboard.jira.api_key_qtc }}"
 
-
 institution-admin:
   entitlement: "urn:mace:surfnet.nl:surfnet.nl:sab:role:SURFconextverantwoordelijke"
   organization-guid-prefix: "urn:mace:surfnet.nl:surfnet.nl:sab:organizationGUID:"
 
 config:
-  product-name: "SURF Access"
+  product-name: "{{ access_dashboard_product_name }}"
   client-url: "https://{{ access_dashboard_base_domain }}"
   base-url: "{{ base_domain }}"
   external_schac_home_organizations:
@@ -126,7 +127,7 @@ config:
   feedback_widget_enabled: true
   demo_seed_enabled: "{{ access_dashboard.demo_seed_enabled }}"
   test_environment: "{{ access_dashboard.test_environment }}"
-  jira_browse_base_url: "https://sd-jira-staging.surf.nl/jira/browse"
+  jira_browse_base_url: "{{ access_dashboard.jira.browse_base_url }}"
   # For other environments, move to group_vars
   identity_providers:
     - name: "SXS IdP"
@@ -146,6 +147,10 @@ config:
         Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>.
         De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>
   idp_proxy_meta_data: "{{ access_dashboard.idp_proxy_meta_data }}"
+  metadata_url_max_bytes: 655360  # 640kB should be enough for anybody
+  metadata_url_connect_timeout_ms: 1000
+  metadata_url_read_timeout_ms: 5000
+  metadata_url_block_private_networks: true
   minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
   features:
     - name: "idp"
@@ -180,15 +185,15 @@ gui:
 
 feature:
   enable-performance-seed: false
-  statistics-enabled: true
+  statistics-enabled: "{{ access_dashboard.statistics.enabled }}"
   stepup-required: false
 
 email:
   from: "{{ noreply_email }}"
   contactEmail: "{{ support_email }}"
   serviceDeskEmail: "{{ support_email }}"
-  supportEmail: "support@surfconext.nl"
-  jiraErrorEmail: "spam@surfconext.nl"
+  supportEmail: "{{ support_email }}"
+  jiraErrorEmail: "{{ error_email }}"
   environment: "{{ environment_shortname }}"
 
 manage:

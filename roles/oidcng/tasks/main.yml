@@ -40,9 +40,9 @@
   notify:
     - "restart oidcng"
 
-- name: Copy oidc saml mapping
+- name: "Copy oidc saml mapping"
   ansible.builtin.copy:
-    src: oidc_saml_mapping.json
+    src: "oidcng/oidc_saml_mapping.json"
     dest: "{{ oidcng_dir }}"
     owner: "root"
     group: "root"
