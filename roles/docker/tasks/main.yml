@@ -103,6 +103,7 @@
   when: docker_install_traefik | bool
   tags:
     - infracontainer
+    - traefikcontainer
 
 - name: Create OpenConext common files dir
   ansible.builtin.file:
