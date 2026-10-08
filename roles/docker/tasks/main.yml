@@ -101,6 +101,8 @@
       timeout: 10s
       retries: 3
   when: docker_install_traefik | bool
+  tags:
+    - infracontainer
 
 - name: Create OpenConext common files dir
   ansible.builtin.file:
