@@ -91,11 +91,9 @@ lifecycle:
   password: "{{ access_dashboard_lifecycle_secret }}"
 
 jira:
-  enabled: "{{ access_dashboard.jira.enabled }}"
-  connection-timeout: 1000  # ms
+  enabled: {{ access_dashboard.jira.enabled }}
   base-url: "{{ access_dashboard.jira.base_url }}"
   user-name: "{{ access_dashboard.jira.username }}"
-  api-key: "{{ access_dashboard.jira.api_key }}"
   project-key: "{{ access_dashboard.jira.project_key }}"
   environment: "{{ access_dashboard.jira.environment }}"
   api-key: "{{ access_dashboard.jira.api_key }}"
@@ -147,10 +145,6 @@ config:
         Een test-IdP met <a href='https://idp.diy.surfconext.nl/showusers.php' target='_blank'>fictieve gebruikersaccounts</a>.
         De metadata vind je <a href='https://idp.diy.surfconext.nl/saml2/idp/metadata.php' target='_blank'>hier</a>
   idp_proxy_meta_data: "{{ access_dashboard.idp_proxy_meta_data }}"
-  metadata_url_max_bytes: 655360  # 640kB should be enough for anybody
-  metadata_url_connect_timeout_ms: 1000
-  metadata_url_read_timeout_ms: 5000
-  metadata_url_block_private_networks: true
   minimal_stepup_acr_level: "http://{{ base_domain }}/assurance/loa2"
   features:
     - name: "idp"
@@ -165,7 +159,7 @@ config:
 {% for loa in [stepup_intrinsic_loa] + stepup_loa_values_supported %}{# Note: spring yaml parser is wonky #}
     - "{{ loa }}"
 {% endfor %}
-  metadata_url_max_bytes: 20971520
+  metadata_url_max_bytes: 655360  # 640kB should be enough for anybody
   metadata_url_connect_timeout_ms: 10000
   metadata_url_read_timeout_ms: 15000
   metadata_url_block_private_networks: true
