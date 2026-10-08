@@ -31,79 +31,13 @@
   ansible.builtin.setup:
     gather_subset: network
 
-- name: Create the traefik configuration file directory
-  ansible.builtin.file:
-    state: directory
-    path: "/opt/openconext/traefik/{{ item }}"
-    owner: root
-    mode: "0755"
-  with_items:
-    - config
-    - certs
-  when: docker_install_traefik | bool
-
-- name: Place the traefik configuration file
-  ansible.builtin.template:
-    src: traefik.yaml.j2
-    dest: /opt/openconext/traefik/config/traefik.yaml
-    owner: root
-    mode: "0640"
-  when: docker_install_traefik | bool
-
-- name: Place the dynamic configuration
-  ansible.builtin.copy:
-    src: router.yaml
-    dest: /opt/openconext/traefik/config/router.yaml
-    owner: root
-    mode: "0640"
-  when: docker_install_traefik | bool
-
-- name: Create Traefik backend key
-  ansible.builtin.copy:
-    content: "{{ backend_tls_key }}"
-    dest: "/opt/openconext/traefik/certs/backend.key"
-    mode: "0600"
-    owner: root
-  when: docker_install_traefik | bool
-
-- name: Create SSL certificate
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/certs/backend.{{ base_domain }}.pem"
-    dest: "/opt/openconext/traefik/certs/backend.crt"
-    owner: root
-    mode: "0644"
-  when: docker_install_traefik | bool
-
 - name: Create the Traefik loadbalancer network
   community.docker.docker_network:
     name: loadbalancer
   when: docker_install_traefik | bool
 
-- name: Create the Traefik loadbalancer
-  community.docker.docker_container:
-    name: loadbalancer
-    image: traefik:{{ docker_traefik_version }}
-    published_ports: "{{ docker_traefik_ports }}"
-    pull: true
-    restart_policy: "always"
-    networks:
-      - name: "loadbalancer"
-    command: "--configFile=/config/config/traefik.yaml"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /opt/openconext/traefik/:/config/
-    comparisons:
-      published_ports: strict
-      networks: strict
-    healthcheck:
-      test: ["CMD", "traefik", "healthcheck", "--ping"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
-  when: docker_install_traefik | bool
-  tags:
-    - infracontainer
-    - traefikcontainer
+- name: Include Traefik install tasks
+  ansible.builtin.include_tasks: traefik.yml
 
 - name: Create OpenConext common files dir
   ansible.builtin.file:
