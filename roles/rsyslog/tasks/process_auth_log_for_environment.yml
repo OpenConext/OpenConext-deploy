@@ -74,5 +74,5 @@
     user: root
     minute: "20"
     hour: "02"
-    job: "/usr/local/sbin/clean_loglogins_{{ rsyslog_environment.name }}"
+    job: "{{'/usr/local/sbin/clean_loglogins_' ~ rsyslog_environment.name ~ ' && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/f4997315-fcf2-45c9-be1d-15901d3c8743' if rsyslog_environment.name == 'prod_sc' else '/usr/local/sbin/clean_loglogins_' ~ rsyslog_environment.name}}"
     cron_file: loglogins_cleanup_{{ rsyslog_environment.name }}
