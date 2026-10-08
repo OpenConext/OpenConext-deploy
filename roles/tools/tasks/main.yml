@@ -1,0 +1,98 @@
+---
+- name: "Add surfconext user"
+  ansible.builtin.user:
+    name: "surfconext"
+    uid: "108"
+    group: "surfconext"
+    home: "/srv/tools"
+
+- name: "Add surfconext user"
+  ansible.builtin.user:
+    name: "sram"
+    uid: "109"
+    group: "sram"
+    home: "/srv/sram"
+    shell: "/usr/sbin/nologin"
+
+- name: "Create logos directory"
+  ansible.builtin.file:
+    state: "directory"
+    path: "/srv/logos"
+    owner: "surfconext"
+    group: "surfconext"
+    mode: "0755"
+
+- name: "Place log sync script"
+  ansible.builtin.copy:
+    src: "files/sync"
+    dest: "/srv/logos/sync"
+    user: "surfconext"
+    group: "surfconext"
+    mode: "0755"
+
+- name: "Place sram directory"
+  ansible.builtin.file:
+    state: "directory"
+    path: "/srv/sram"
+    owner: "surfconext"
+    group: "surfconext"
+    mode: "0755"
+
+- name: "Install packages"
+  ansible.builtin.package:
+    name:
+      - "php-common"
+      - "certbot"
+      - "python3-certbot"
+      - "python3-apt"
+      - "python3-bs4"
+      - "python3-dateutil"
+      - "python3-mysqldb"
+      - "python3-pymysql"
+      - "python3-requests"
+      - "python3-tzlocal"
+      - "python3-zeep"
+    status: "present"
+
+- name: "Clone logos git repository"
+  ansible.builtin.git:
+    repo: "https://github.com/SURFnet/SURF-member-logos.git"
+    dest: "/srv/logos/SURF-member-logos"
+
+- name: "Clone tools git repository"
+  ansible.builtin.git:
+    repo: "https://gitlab.surf.nl/surfconext/surfconext-tools.git"
+    dest: "/srv/tools/surfconext-tools"
+
+- name: "Clone sram git repository"
+  ansible.builtin.git:
+    repo: "https://gitlab.surf.nl/sram/sram-tools.git"
+    dest: "/srv/sram/sram-tools"
+
+- name: "Make symlink for sram tools"
+  ansible.builtin.file:
+    state: "link"
+    src: "/srv/sram/sram-tools/sram-rapportage"
+    dest: "/src/sram/sram-rapportage"
+
+- name: "Place cron jobs"
+  ansible.builtin.copy:
+    src: "files/{{ item }}"
+    dest: "/etc/cron.d/{{ item }}"
+    mode: "0644"
+  with_items:
+    - "logos-sync"
+    - "sram-managewatch"
+    - "sram-rapportage"
+    - "tools-cert"
+    - "tools-contactexport"
+    - "tools-crmexport"
+    - "tools-edugain"
+    - "tools-geoip"
+    - "tools-manage"
+    - "tools-manage-support"
+    - "tools-monitoridp"
+    - "tools-rapportages"
+    - "tools-sab"
+    - "tools-stats"
+    - "tools-vlan-acls"

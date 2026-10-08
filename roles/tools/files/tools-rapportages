@@ -1,0 +1,8 @@
+MAILTO=surfconext-beheer@surf.nl
+
+# rapportage staat uit.  Of toch aan?  Of toch niet?
+#0 3 1 * * surfconext /srv/tools/surfconext-tools/rapportage/vers `date --date="-1 month" +\%Y-\%m` && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/4743f5c9-1219-4adb-922b-8dfa4cb0ab98
+
+# doesnt work
+#27 2 1 1,4,7,10 *   surfconext cd /srv/tools/surfconext-tools/teams-check && ./surfconext-teams-mail
+

@@ -1,0 +1,2 @@
+MAILTO=coin-logs@surf.nl
+36 11	* * *	surfconext	cd /srv/tools/surfconext-tools/contact_export && ./export_to_csv /srv/tools/www/contacts && ./upload_contacts_to_surfdrive.sh && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/45caa998-c4f9-4e55-8753-6abfbe6b3057

@@ -1,0 +1,2 @@
+MAILTO=sram-beheer@surf.nl
+0 6	1 * *	sram	cd /srv/sram/sram-rapportage/ && ./sram-report-idps.py $(date --date="yesterday" +\%Y-\%m)

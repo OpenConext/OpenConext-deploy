@@ -1,0 +1,3 @@
+MAILTO=sram-beheer@surf.nl
+PATH=/usr/local/bin:/usr/bin:/bin
+*/10 8-17	* * 1-5	sram	cd /srv/sram/sram-rapportage/ && ./watch-manage.sh -m && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/6ab74c74-8e27-4a58-9774-e6fbae1b7d7c

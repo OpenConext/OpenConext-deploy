@@ -1,0 +1,13 @@
+MAILTO=coin-logs@surf.nl
+HOME=/srv/tools/surfconext-tools/manage/
+
+23 04     * *   *   surfconext   ./stepup-users > /srv/tools/www/sp/stepup.html && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/1f568a20-59cb-4f41-8b7d-f2913fbdf5b1
+
+05 16     * *   *   surfconext   ./edugain-consistency && ./edugain-set-autoconnect && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/d8fc00b3-dcb0-4a75-92b5-71346d1f222a
+
+
+30 07,13  * *   *   surfconext   ./edugain-rns-koppel && ./clarin-koppel && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/15fd4203-3b53-4ab0-8934-5c36fbf9b28b
+
+MAILTO=surfconext-beheer@surf.nl
+33 16     * *   *   surfconext   ./edugain-check  && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/5373c35e-f2ca-4d22-bd2e-cd29f669d26e
+15 16     * *   mon surfconext   ./manage-orphan && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/0d673322-2187-4f67-ad7c-f16fc091f3cd
