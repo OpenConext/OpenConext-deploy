@@ -114,6 +114,12 @@ oidcng:
   resource-server-secret: "{{ invite.resource_server_secret }}"
   base-url: https://invite.{{ base_domain }}
 
+# The menu of the (SURF Access) shell is owned by Access. Invite fetches it server-to-server, as Access runs on another domain
+access:
+  menu-uri: "https://test2.surfaccess.nl/api/external/v1/menu"
+  username: invite
+  password: "{{ access_dashboard_invite_secret }}"
+
 crm:
   api-key-header: "{{ invite_crm_api_key_header }}"
   collab-person-prefix: "urn:collab:person"
@@ -147,6 +153,7 @@ config:
   # Determines the languages available for switching language, supported are 'nl', 'en' and 'pt'
   languages: "nl, en"
   environment: {{ environment_shortname }}
+  access-menu-enabled: True
   acr-requirements:
     - key: EduIDLinkedInstitution
       url: "https://eduid.nl/trust/linked-institution"

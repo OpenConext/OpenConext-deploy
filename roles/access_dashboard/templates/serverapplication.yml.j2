@@ -90,6 +90,11 @@ lifecycle:
   user: "lifecycle"
   password: "{{ access_dashboard_lifecycle_secret }}"
 
+# Used by the Invite server to fetch the menu model of a user it has authenticated
+menu:
+  user: invite
+  password: "{{ access_dashboard_invite_secret }}"
+
 jira:
   enabled: {{ access_dashboard.jira.enabled }}
   base-url: "{{ access_dashboard.jira.base_url }}"
@@ -120,6 +125,7 @@ config:
 {% endfor %}
   discovery: "https://connect.surfconext.nl/oidc/.well-known/openid-configuration"
   invite: "https://invite.{{ base_domain }}/home/roles"
+  invite_same_tab: true
   sram: "https://{{ env }}.sram.surf.nl/"
   service_desk: "https://servicedesk.surf.nl/jira/plugins/servlet/desk/user/requests?reporter=all"
   feedback_widget_enabled: true
