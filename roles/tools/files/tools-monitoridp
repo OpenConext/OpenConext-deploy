@@ -1,0 +1,8 @@
+MAILTO=surfconext-beheer@surf.nl
+HOME=/srv/tools/surfconext-tools/monitor-idp/
+
+# run these during the day to prevent overlap with maintenance windows at IdPs
+13  9  * *  mon-fri  surfconext  ./diff-manage-metadata      && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/782af100-daaa-4ad2-94cd-7181eb092c80
+13 10  * *  mon-fri  surfconext  ./skew.py                   && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/782af100-daaa-4ad2-94cd-7181eb092c80
+13 11  * *  mon-fri  surfconext  ./check-idp-metadata-url.py && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/782af100-daaa-4ad2-94cd-7181eb092c80
+

@@ -1,0 +1,11 @@
+MAILTO=support@surfconext.nl
+HOME=/srv/tools/surfconext-tools/manage/
+00 16  * *  1-5   surfconext   ./get-edugain-downstream            && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/8306bc58-4ae3-4b77-b5d8-ed70476d5dc7
+14 17  * *  1-5   surfconext   ./edugain-rs-missing-sps.sh         && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/c0b363c9-1343-43e4-baff-1ed670c3e21b
+16 17  * *  1-5   surfconext   ./edugain-sps-coco+rs_missing       && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/d67dbec0-0940-4233-850d-edd9f9e9994d
+11 16  * *  1-5   surfconext   ./clarin-missing-sps                && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/897da5eb-6e1b-4cf4-a88c-610bd09b619b
+36 09  * *  5     surfconext   ./unused-idps-4-months              && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/75ab797f-7802-4376-aa01-c904b12f697c
+
+# check for problems in manage
+44 04  * *  1-5   surfconext   cd /srv/tools/surfconext-tools/manage && ./manage-checker-mail && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/5dd2799a-2bd5-4302-98f8-9d51e92e1330
+

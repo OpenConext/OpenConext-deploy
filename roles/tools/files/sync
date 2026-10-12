@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# based on surfconext-tools/geoip/geoip-update.sh
+#
+# set -e
+
+cd /srv/logos
+
+DIR="SURF-member-logos/200x200/"
+SYNC_USER="staticsync"
+SYNC_PATH="/opt/openconext/staticdata/data/static/logos/org"
+RSYNC_RSH="ssh -o StrictHostKeyChecking=yes"
+export RSYNC_RSH
+
+declare -A sync_hosts
+sync_hosts=(
+    ["test2"]="docker1.test2.ams.surfconext.nl"
+    ["acc"]="docker1.acc.ams.surfconext.nl docker2.acc.utr.surfconext.nl"
+    ["prd"]="docker1.prd.ams.surfconext.nl docker2.prd.utr.surfconext.nl docker3.prd.ams.surfconext.nl docker4.prd.utr.surfconext.nl dockerstag1.prd.ams.surfconext.nl"
+)
+
+echo "Synching org logos"
+(cd SURF-member-logos/ && git log -1 --format='Last update: %ci (commit %C(auto)%h%Creset by %C(blue)%ce%Creset)')
+
+for env in "test2" "acc" "prd"
+do
+    echo -n "  🔄️ Syncing to ${env}..."
+    for host in ${sync_hosts[$env]}
+    do
+        rsync -4 --quiet --checksum --delete --delete-excluded --mkpath --archive --exclude '.git/' "$DIR" "${SYNC_USER}@${host}:${SYNC_PATH}"
+        echo -n "🌟"
+    done
+    echo "✅"
+done
+
+echo "🏁 finished"
+
+exit 0
+

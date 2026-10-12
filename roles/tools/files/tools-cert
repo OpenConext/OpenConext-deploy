@@ -1,0 +1,2 @@
+MAILTO=cert@surfcert.nl
+#59 6 * * * surfconext : CT Log checker hits; cd /srv/tools/surfconext-tools/cert && ./check-ctlogs

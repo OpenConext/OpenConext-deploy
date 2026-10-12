@@ -1,0 +1,6 @@
+MAILTO=surfconext-beheer@surf.nl
+03 23	* * mon   	surfconext  	cd /srv/tools/surfconext-tools/stats/     && ./crm_manage_sync.py && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/a980a9ef-f8e6-4284-a67a-be91f7c03dd2
+
+MAILTO=coin-logs@surf.nl
+15 03	* * sat 	surfconext  	cd /srv/tools/surfconext-tools/stats/idp/ && ./manage-fetch-idplist > idps-sso.json && ./idpstats > /srv/tools/www/idp/idpstats.html && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/db4ac7a6-d59f-4aa9-89e6-da1bd86e5ebb
+31 16	* * *   	surfconext  	cd /srv/tools/surfconext-tools/stats/idp/ && ./manage-fetch-idplist | ./idplist | ssh -q docker2.test.ams.surfconext.nl "cat > /opt/openconext/staticdata/data/support/stats/idplist.html" && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/6e5dea8f-2f7a-43fe-8bf5-2e3723bd88b9

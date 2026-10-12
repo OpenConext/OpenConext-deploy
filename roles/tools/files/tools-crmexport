@@ -1,0 +1,2 @@
+MAILTO=coin-logs@surf.nl
+16 07	* * *	surfconext	cd /srv/tools/surfconext-tools/stats && ./export-crm.py > /srv/tools/www/crm/crm.csv && ./export-crm.py --members > /srv/tools/www/crm/crm-members.csv && ./export-crm.py --all > /srv/tools/www/crm/crm-all.csv && curl -fsS --retry 3 -o /dev/null https://ping.ohdear.app/010a6462-dcda-458f-b27d-7c092ea62ba1
