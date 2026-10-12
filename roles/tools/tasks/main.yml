@@ -62,13 +62,13 @@
 
 - name: "Clone tools git repository"
   ansible.builtin.git:
-    repo: "https://gitlab.surf.nl/surfconext/surfconext-tools.git"
+    repo: "git@gitlab.surf.nl:surfconext/surfconext-tools.git"
     dest: "/srv/tools/surfconext-tools"
     update: "no"
 
 - name: "Clone sram git repository"
   ansible.builtin.git:
-    repo: "https://gitlab.surf.nl/sram/sram-tools.git"
+    repo: "git@gitlab.surf.nl:sram/sram-tools.git"
     dest: "/srv/sram/sram-tools"
     update: "no"
 
