@@ -75,7 +75,7 @@
 - name: "Make symlink for sram tools"
   ansible.builtin.file:
     state: "link"
-    src: "/srv/sram/sram-tools/sram-rapportage"
+    src: "sram-tools/sram-rapportage"
     dest: "/srv/sram/sram-rapportage"
 
 - name: "Place cron jobs"
