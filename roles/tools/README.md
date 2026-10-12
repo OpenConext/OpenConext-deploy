@@ -1,5 +1,5 @@
 ---
-Role Name
+Tools
 =========
 
 This role is designed to configure a server to run the scripts from the surfconext-tool and sram-tools.
@@ -19,7 +19,7 @@ None.
 Dependencies
 ------------
 
-None
+None.
 
 License
 --------------
