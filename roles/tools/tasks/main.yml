@@ -6,7 +6,7 @@
     group: "surfconext"
     home: "/srv/tools"
 
-- name: "Add surfconext user"
+- name: "Add sram user"
   ansible.builtin.user:
     name: "sram"
     uid: "109"
@@ -34,8 +34,8 @@
   ansible.builtin.file:
     state: "directory"
     path: "/srv/sram"
-    owner: "surfconext"
-    group: "surfconext"
+    owner: "sram"
+    group: "sram"
     mode: "0755"
 
 - name: "Install packages"
@@ -52,7 +52,7 @@
       - "python3-requests"
       - "python3-tzlocal"
       - "python3-zeep"
-    status: "present"
+    state: "present"
 
 - name: "Clone logos git repository"
   ansible.builtin.git:
