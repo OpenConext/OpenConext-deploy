@@ -58,22 +58,25 @@
   ansible.builtin.git:
     repo: "https://github.com/SURFnet/SURF-member-logos.git"
     dest: "/srv/logos/SURF-member-logos"
+    update: "no"
 
 - name: "Clone tools git repository"
   ansible.builtin.git:
     repo: "https://gitlab.surf.nl/surfconext/surfconext-tools.git"
     dest: "/srv/tools/surfconext-tools"
+    update: "no"
 
 - name: "Clone sram git repository"
   ansible.builtin.git:
     repo: "https://gitlab.surf.nl/sram/sram-tools.git"
     dest: "/srv/sram/sram-tools"
+    update: "no"
 
 - name: "Make symlink for sram tools"
   ansible.builtin.file:
     state: "link"
     src: "/srv/sram/sram-tools/sram-rapportage"
-    dest: "/src/sram/sram-rapportage"
+    dest: "/srv/sram/sram-rapportage"
 
 - name: "Place cron jobs"
   ansible.builtin.copy:
