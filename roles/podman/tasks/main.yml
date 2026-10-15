@@ -22,16 +22,22 @@
     group: traefik
     uid: "{{ podman_traefik_uid }}"
 
+- name: Deploy the traefik container
+  containers.podman.podman_container:
+    name: loadbalancer
+    state: present
+    image: "docker.io/library/traefik:{{ podman_traefik_version }}"
+
 - name: Create a traefik systemctl file
   ansible.builtin.template:
     src: traefik-container.service.j2
     dest: /etc/systemd/system/traefik-container.service
     group: root
-    setype: root
-    mode: '0755'
+    owner: root
+    mode: '0644'
 
 - name: Start traefik service
-  ansible.builtin.systemctl:
+  ansible.builtin.systemd:
     name: traefik-container.service
     state: started
     enabled: true

@@ -3,3 +3,4 @@
 
 podman_traefik_uid: 2000
 podman_traefik_gid: 2000
+podman_traefik_version: 3.7.13

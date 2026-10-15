@@ -47,3 +47,7 @@ start servic ehandler
 mkdir /opt/openconext
 spiek even vij docker role
 uid mapping
+selinux
+test met een andere container en de loadbalancer
+doc he bijbehorende journalctl commando
+traefik config (soiek bij docker role)
