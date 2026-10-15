@@ -1,0 +1,10 @@
+[Unit]
+Description=Traefik container
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/podman start loadbalancer
+ExecStop=/usr/bin/podman stop -t loadbalancer
+
+[Install]
+WantedBy=local.target
