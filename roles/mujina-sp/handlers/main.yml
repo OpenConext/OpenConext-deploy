@@ -1,7 +1,7 @@
 ---
-- name: Restart mujina-sp-docker
+- name: "Restart mujina-sp-docker"
   community.docker.docker_container:
-    name: mujina-sp
-    state: started
+    name: "mujina-sp"
+    state: "started"
     restart: true
-  when: mujinaspcontainer is success and mujinaspcontainer is not change
+  when: "mujinaspcontainer is success and mujinaspcontainer is not change"

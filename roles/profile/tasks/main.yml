@@ -62,23 +62,6 @@
   notify:
     - "restart {{ appname }}"
 
-- name: Check if we have a custom favicon
-  ansible.builtin.stat:
-    path: "{{ inventory_dir }}/files/favicon.ico"
-  delegate_to: localhost
-  register: customfavicon
-  become: false
-
-- name: Install environment specific favicon
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/favicon.ico"
-    dest: "{{ current_release_config_dir_name }}/images/"
-    owner: root
-    group: root
-    mode: "0644"
-  when:
-    customfavicon.stat.exists
-
 - name: Create the container
   community.docker.docker_container:
     name: "{{ appname }}"

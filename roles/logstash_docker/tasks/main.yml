@@ -58,6 +58,7 @@
     image: "ghcr.io/openconext/openconext-basecontainers/logstash8:latest"
     state: started
     restart_policy: "always"
+    user: "{{ container_ids.logstash }}"
     networks:
       - name: "loadbalancer"
     ports:
@@ -79,35 +80,9 @@
     container: logstash
     user: "root"
     command:
-      sh -c '
+      /bin/bash -c '
         groupmod -g {{ container_ids.logstash }} logstash &&
         usermod -u {{ container_ids.logstash }} -g {{ container_ids.logstash }} logstash'
+  register: uid_result
+  failed_when: uid_result.rc != 0 and uid_result.rc != 137
   when: logstash_container_created.changed
-
-- name: Check if running user needs to be changed
-  community.docker.docker_container_info:
-    name: "logstash"
-  register: logstash_container
-
-- name: Update logstash container to run as non root
-  community.docker.docker_container:
-    name: "logstash"
-    image: "ghcr.io/openconext/openconext-basecontainers/logstash8:latest"
-    state: started
-    restart_policy: "always"
-    networks:
-      - name: "loadbalancer"
-    ports:
-      - 5044:5044
-    user: "{{ container_ids.logstash }}"
-    mounts:
-      - source: /opt/openconext/logstash/config
-        target: /usr/share/logstash/config
-        type: bind
-      - source: /opt/openconext/logstash/conf.d/
-        target: /etc/logstash/conf.d/
-        type: bind
-      - source: /data/logstash/
-        target: /data/logstash/
-        type: bind
-  when: logstash_container.container.Config.User | default('') != container_ids.logstash
