@@ -39,6 +39,10 @@ An optional section for the role authors to include contact information, or a we
 
 todo
 
+starten van de service gata nog mis
+
+sudo journalctl -xeu traefik-container.service
+
 start traefik as systemctl service
 run traefik as user uid
 doc adding an app
@@ -51,3 +55,4 @@ selinux
 test met een andere container en de loadbalancer
 doc he bijbehorende journalctl commando
 traefik config (soiek bij docker role)
+systemctl daemon-reloa
