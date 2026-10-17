@@ -153,8 +153,6 @@ parameters:
   engineblock.metadata_push_memory_limit: {{ engine_metadata_push_memory_limit }}
   ## Minimum execution time in milliseconds when a received response is deemed invalid (default: 5000 ms)
   minimum_execution_time_on_invalid_received_response: {{ engine_minimum_execution_time_on_invalid_received_response | int }}
-  ## The value for guest qualifier. Can be overridden for specific environments
-  addgueststatus_guestqualifier: '{{ guest_qualifier | default('') }}'
 
   ## Language cookie settings
   cookie.path: {{ cookie_path | default('/') }}
