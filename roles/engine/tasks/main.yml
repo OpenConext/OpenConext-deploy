@@ -1,4 +1,9 @@
 ---
+- name: "Check for conflicting variables"
+  ansible.builtin.assert:
+    that: "not (engine_wayf_show_remember_choice|bool and engine_wayf_show_remember_choice_per_sp|bool)"
+    fail_msg: "`engine_wayf_show_remember_choice` and `engine_wayf_show_remember_choice_per_sp` cannot be both enabled"
+
 - name: "Add group engine"
   ansible.builtin.group:
     name: "engine"
