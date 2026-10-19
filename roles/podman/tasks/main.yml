@@ -1,6 +1,11 @@
 ---
 # tasks file for podman
 
+# config file
+# router file
+# key
+# traefikless network
+
 - name: Message for non redhat family servers
   when: ansible_facts['os_family'] != 'RedHat'
   ansible.builtin.fail:
@@ -11,33 +16,10 @@
     name: podman
     state: present
 
-- name: Add traefik group
-  ansible.builtin.group:
-    name: traefik
-    gid: "{{ podman_traefik_gid }}"
+- include_tasks: podman_traefik_instances.yml
+  when: podman_traefik_instances is defined
+  loop: "{{ podman_traefik_instances }}"
 
-- name: Add traefik user
-  ansible.builtin.user:
-    name: traefik
-    group: traefik
-    uid: "{{ podman_traefik_uid }}"
-
-- name: Deploy the traefik container
-  containers.podman.podman_container:
-    name: loadbalancer
-    state: present
-    image: "docker.io/library/traefik:{{ podman_traefik_version }}"
-
-- name: Create a traefik systemctl file
-  ansible.builtin.template:
-    src: traefik-container.service.j2
-    dest: /etc/systemd/system/traefik-container.service
-    group: root
-    owner: root
-    mode: '0644'
-
-- name: Start traefik service
-  ansible.builtin.systemd:
-    name: traefik-container.service
-    state: started
-    enabled: true
+- include_tasks: podman_instances.yml
+  when: podman_instances is defined
+  loop: "{{ podman_instances }}"

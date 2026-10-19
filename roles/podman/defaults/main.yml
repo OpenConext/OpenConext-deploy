@@ -1,6 +1,13 @@
 ---
 # defaults file for podman
 
-podman_traefik_uid: 2000
-podman_traefik_gid: 2000
 podman_traefik_version: 3.7.13
+
+podman_traefik_instances:
+  - traefik_user: traefik
+    traefik_group: traefik
+    traefik_uid: 2000
+    traefik_gid: 2000
+    traefik_published_ports: 8080
+    traefik_networks: loadbalancer
+    traefik_container: traefik
