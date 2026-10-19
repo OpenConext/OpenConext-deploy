@@ -10,21 +10,40 @@
     uid: "{{ item.traefik_uid }}"
     group: "{{ item.traefik_group }}"
 
-- name: Create the Traefik loadbalancer network
-  become_user: "{{ item.traefik_user }}"
-  containers.podman.podman_network:
-    name: "{{ item.traefik_networks }}"
+- name: Enable lingering to for traefik user
+  # This fixes Failed to connect to bus: No such file or directory
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/loginctl
+      - enable-linger
+      - "{{ item.traefik_user }}"
+    creates: "/var/lib/systemd/linger/{{ item.traefik_user }}"
 
-- name: Deploy the traefik container quadlet
+- name: Create containers and network
   become_user: "{{ item.traefik_user }}"
-  containers.podman.podman_container:
-    name: "{{ item.traefik_container }}"
-    published_ports: "{{item.traefik_published_ports }}"
-    state: quadlet
-    image: "docker.io/library/traefik:{{ podman_traefik_version }}"
-    pull: always
-    # networks: "{{ item.traefik_networks }}"
-    # health_startup_cmd: "traefik healthcheck --ping"
+  block:
+
+  - name: Create the Traefik loadbalancer network
+    containers.podman.podman_network:
+      name: "{{ item.traefik_networks }}"
+
+  - name: Deploy the traefik container quadlet
+    containers.podman.podman_container:
+      name: "{{ item.traefik_container }}"
+      published_ports: "{{item.traefik_published_ports }}"
+      state: quadlet
+      image: "docker.io/library/traefik:{{ podman_traefik_version }}"
+      pull: always
+      # networks: "{{ item.traefik_networks }}"
+      # health_startup_cmd: "traefik healthcheck --ping"
+
+  - name: Run the container service
+    ansible.builtin.systemd_service:
+      name: "{{ item.traefik_container }}"
+      state: started
+      scope: user
+    # environment:
+    #   XDG_RUNTIME_DIR: "/run/user/{{ item.traefik_uid }}"
 
 - name: Gather facts on the traefik container
   become_user: "{{ item.traefik_user }}"
