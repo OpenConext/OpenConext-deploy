@@ -1,0 +1,13 @@
+<p>Dear {{ commonName }},</p>
+
+<p>
+{% if isRevokedByRa %}
+    The registration of your {{ tokenType }} with ID {{ tokenIdentifier }} was deleted by an administrator.
+{% else %}
+    You have deleted the registration of your {{ tokenType }} token with ID {{ tokenIdentifier }}. If you did not delete your token you must immediately contact the support desk of your institution, as this may indicate that your account has been compromised.
+{% endif %}
+</p>
+
+<p>You can no longer use this token to access services that require two-step authentication.</p>
+
+<p>Do you want to replace your token? Please visit <a href='{{ selfServiceUrl }}'>{{ selfServiceUrl }}</a> and register a new token.</p>
