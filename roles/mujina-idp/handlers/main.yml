@@ -1,7 +1,7 @@
 ---
-- name: Restart mujina-idp-docker
+- name: "Restart mujina-idp-docker"
   community.docker.docker_container:
-    name: mujina-idp
-    state: started
+    name: "mujina-idp"
+    state: "started"
     restart: true
-  when: mujinaidpcontainer is success and mujinaidpcontainer is not change
+  when: "mujinaidpcontainer is success and mujinaidpcontainer is not change"

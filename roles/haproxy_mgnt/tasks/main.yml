@@ -16,6 +16,7 @@
   ansible.builtin.set_fact:
     weight_complementing: "{{ 100 - weight | int }}"
 
+# get a list of servers from haproxy_applications, we filter on app_name
 - name: Get the server list from the servers configured in haproxy_applications
   ansible.builtin.set_fact:
     selected_servers: "{{ (haproxy_applications | selectattr('name', 'equalto', app_name) | map(attribute='servers') | first) }}"
@@ -36,6 +37,9 @@
   ansible.builtin.set_fact:
     server_labels_with_weights: []
 
+# Here we set weight for app_filter = app_filtervalue (for example color=blauw) to weight
+# weight_complementing (100 - weight) on other servers (for example color=rood)
+# we get the corresponding label (for example DOCKER2ROOD ) and add this to the list of dictionaries
 - name: Create list with labels and weights as dictionaries
   ansible.builtin.set_fact:
     server_labels_with_weights: "{{ server_labels_with_weights + [{ 'label': item.label, 'weight': (weight if  item[app_filter]  ==  app_filtervalue  else weight_complementing) }] }}"
@@ -45,6 +49,8 @@
   ansible.builtin.debug:
     msg: "{{ server_labels_with_weights }}"
 
+# Now we have a label and the weight we want to set
+# lets write it to the socket
 - name: Set weights for haproxy hosts
   community.general.haproxy:
     state: enabled
