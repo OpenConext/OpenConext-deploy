@@ -35,3 +35,7 @@ parameters:
     fido2_jwt_mds_blob_file_name: '{{ current_release_config_file_dir_name_in_config }}/mds/blob.jwt'
     fido2_jwt_mds_root_certificate_file_name: '{{ current_release_config_file_dir_name_in_config }}/mds/fido2-mds.cer'
     fido2_mds_cache_dir: '{{ current_release_config_file_dir_name_in_config }}/var/mds/'
+
+    webauthn_authenticator_attachment: 'cross-platform'
+    webauthn_registration_user_verification: 'preferred'
+    webauthn_attestation_conveyance: 'direct'
