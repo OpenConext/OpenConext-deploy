@@ -58,7 +58,8 @@
 
 - name: Download metadata service blob
   ansible.builtin.get_url:
-    url: https://mds3.fidoalliance.org/
+    #url: https://mds3.fidoalliance.org/
+    url: https://static.surfconext.nl/blob.jwt
     dest: "{{ current_release_config_file_dir_name }}/mds/blob.jwt"
     mode: '0744'
     force: true
@@ -78,14 +79,6 @@
     owner: root
     group: "{{ appname }}"
   notify: restart webauthn
-
-# - name: Copy trusted certificates
-#   ansible.builtin.copy:
-#     src: "{{ item }}"
-#     dest: "{{ current_release_config_file_dir_name }}/trusted_certificates/"
-#     mode: "444"
-#   with_fileglob:
-#     - "{{ inventory_dir }}/files/stepup-webauthn/trusted_certificates/*"
 
 - name: Put webauthn configuration script in /root/
   ansible.builtin.template:
