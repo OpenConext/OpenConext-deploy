@@ -1,7 +1,7 @@
 ---
 - name: "Create directory to keep configfile"
   ansible.builtin.file:
-    dest: "/opt/openconext/access_dashboard"
+    path: "/opt/openconext/access_dashboard"
     state: "directory"
     owner: "root"
     group: "root"
@@ -30,13 +30,6 @@
     - "apache_gui.conf"
   notify: "Restart access dashboard gui"
 
-- name: "Add the MariaDB docker network to the list of networks when MariaDB runs in Docker"
-  ansible.builtin.set_fact:
-    access_dashboard_docker_networks:
-      - name: "loadbalancer"
-      - name: "openconext_mariadb"
-  when: "mariadb_in_docker | default(false) | bool"
-
 - name: "Create and start the access server container"
   community.docker.docker_container:
     name: "access_dashboard_server"
@@ -46,7 +39,8 @@
     pull: true
     restart_policy: "always"
     state: "started"
-    networks: "{{ access_dashboard_docker_networks }}"
+    networks:
+      - name: "loadbalancer"
     mounts:
       - source: "/opt/openconext/access_dashboard/serverapplication.yml"
         target: "/application.yml"

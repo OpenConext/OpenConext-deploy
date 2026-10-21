@@ -1,0 +1,22 @@
+attributes:
+  displayname:
+    openid: [name]
+    saml: [displayName]
+  givenname:
+    openid: [given_name]
+    saml: [givenName]
+  mail:
+    openid: [email]
+    saml: [mail]
+  name:
+    openid: [name]
+    saml: [cn]
+  surname:
+    openid: [family_name]
+    saml: [sn, surname]
+  uid:
+    openid: [sub]
+    saml: [uid]
+  schachomeorganization:
+    openid: [schac_home_organization]
+    saml: [schacHomeOrganization]

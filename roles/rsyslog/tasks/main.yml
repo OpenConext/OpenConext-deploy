@@ -13,7 +13,7 @@
     name:
       - python3-dateutil
     state: present
-  when: "'sysloghost' in group_names and ansible_distribution_major_version > '7'"
+  when: "'centrallog_servers' in group_names and ansible_distribution_major_version > '7'"
   notify:
     - "restart rsyslog"
 
@@ -23,7 +23,7 @@
     enabled: true
 
 - name: Forwarding journalctl to rsyslog forward syslog to central logserver
-  when: "'sysloghost' not in group_names"
+  when: "'centrallog_servers' not in group_names"
   block:
 
     # journald forwards logs to rsyslog
@@ -110,10 +110,12 @@
 
 # central logserver
 
-- name: Include tasks for central syslog server
-  ansible.builtin.include_tasks: rsyslog_central.yml
-  when: "'sysloghost' in group_names"
+- name: Include tasks for configuring the central log server
+  when: "'centrallog_servers' in group_names"
+  block:
+    - name: Include tasks for central syslog server
+      ansible.builtin.include_tasks: rsyslog_central.yml
 
-- name: Include tasks for authentication log processing
-  ansible.builtin.include_tasks: process_auth_logs.yml
-  when: "'auth_processor' in group_names"
+    - name: Include tasks for authentication log processing
+      ansible.builtin.include_tasks: process_auth_logs.yml
+      when: "'auth_processor' in group_names"

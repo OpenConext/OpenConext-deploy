@@ -1,7 +1,7 @@
 ---
 pdp_email_from: '{{ noreply_email }}'
 pdp_cronjobmaster: true
-pdp_invalid_policies_error_mail_to: '{{ error_mail_to }}'
+pdp_invalid_policies_error_mail_to: '{{ error_email }}'
 pdp_oauth2_clientid: "pdp.{{ base_domain }}"
 pdp_oauth2_token_url: "https://connect.{{ base_domain }}/oidc/token"
 pdp_oauth2_authorize_url: "https://connect.{{ base_domain }}/oidc/authorize"

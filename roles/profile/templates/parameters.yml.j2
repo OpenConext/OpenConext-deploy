@@ -1,6 +1,6 @@
 parameters:
     app_env: prod
-    app_debug: false 
+    app_debug: false
     app_secret: {{ profile_secret }}
 
     locales: [en, nl]
@@ -54,8 +54,8 @@ parameters:
 
     invite_roles_enabled: true
     invite_api_base_url: 'https://invite.{{ base_domain }}/api/external/'
-    invite_api_username: '{{ invite.profile_user }}'
-    invite_api_password: '{{ invite.profile_secret }}'
+    invite_api_username: '{{ profile_invite_api_username }}'
+    invite_api_password: '{{ profile_invite_api_secret }}'
     invite_api_verify_ssl: true
 
     # Session handler override

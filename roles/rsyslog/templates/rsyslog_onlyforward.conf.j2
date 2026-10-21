@@ -27,7 +27,7 @@ $PreserveFQDN on
 $MaxMessageSize {{ rsyslog_maxmessagesize }}
 {% endif %}
 
-{% if  'sysloghost' not in group_names %}
+{% if  'centrallog_servers' not in group_names %}
 {% for relp_host in relp_remote %}
 # Logs are forwarded to {{ relp_host.name }}
 action(type="omrelp"

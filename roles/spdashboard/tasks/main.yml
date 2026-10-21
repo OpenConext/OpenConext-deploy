@@ -15,13 +15,6 @@
     group: root
     mode: 0644
 
-- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
-  ansible.builtin.set_fact:
-    spdashboard_docker_networks:
-      - name: loadbalancer
-      - name: openconext_mariadb
-  when: mariadb_in_docker | default(false) | bool
-
 - name: Create the container
   docker_container:
     name: spdashboard
