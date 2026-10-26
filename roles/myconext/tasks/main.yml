@@ -266,7 +266,7 @@
     networks:
       - name: "loadbalancer"
     labels:
-      traefik.http.routers.eduID-logingui.rule: "Host(`login-new.{{ myconext_base_domain }}`)"
+      traefik.http.routers.eduID-logingui.rule: "Host(`login-nieuw.{{ myconext_base_domain }}`)"
       traefik.http.routers.eduID-logingui.tls: "true"
       traefik.enable: "true"
     healthcheck:
