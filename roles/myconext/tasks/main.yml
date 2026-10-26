@@ -133,7 +133,10 @@
     env:
       USE_SYSTEM_CA_CERTS: "1"
       TZ: "{{ timezone }}"
-    networks: "{{ myconext_docker_networks }}"
+    networks:
+      - name: "{{ myconext_docker_networks }}"
+        aliases:
+            - myconextserver
     mounts:
       - source: /opt/openconext/myconext/
         target: /config/
