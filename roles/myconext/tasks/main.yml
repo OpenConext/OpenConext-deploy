@@ -134,7 +134,7 @@
       USE_SYSTEM_CA_CERTS: "1"
       TZ: "{{ timezone }}"
     networks:
-      - name: "{{ myconext_docker_networks }}"
+      - name: "loadbalancer"
         aliases:
             - myconextserver
     mounts:
@@ -203,8 +203,8 @@
     networks:
       - name: "loadbalancer"
     labels:
-      traefik.http.routers.myconextgui.rule: "Host(`mijn-nieuw.{{ myconext_base_domain }}`)"
-      traefik.http.routers.myconextgui.tls: "true"
+      traefik.http.routers.eduID-mygui.rule: "Host(`mijn-nieuw.{{ myconext_base_domain }}`)"
+      traefik.http.routers.eduID-mygui.tls: "true"
       traefik.enable: "true"
     healthcheck:
       test: ["CMD", "curl", "--fail" , "http://localhost"  ]
@@ -266,8 +266,8 @@
     networks:
       - name: "loadbalancer"
     labels:
-      traefik.http.routers.accountgui.rule: "Host(`login-new.{{ myconext_base_domain }}`)"
-      traefik.http.routers.accountgui.tls: "true"
+      traefik.http.routers.eduID-logingui.rule: "Host(`login-new.{{ myconext_base_domain }}`)"
+      traefik.http.routers.eduID-logingui.tls: "true"
       traefik.enable: "true"
     healthcheck:
       test: ["CMD", "curl", "--fail" , "http://localhost"]
