@@ -200,8 +200,8 @@
     networks:
       - name: "loadbalancer"
     labels:
-      traefik.http.routers.myconextgui.rule: "Host(`mijn-nieuw.{{ myconext_base_domain }}`)"
-      traefik.http.routers.myconextgui.tls: "true"
+      traefik.http.routers.eduidmygui.rule: "Host(`mijn-new.{{ myconext_base_domain }}`)"
+      traefik.http.routers.eduidmygui.tls: "true"
       traefik.enable: "true"
     healthcheck:
       test: ["CMD", "curl", "--fail" , "http://localhost"  ]
@@ -263,8 +263,8 @@
     networks:
       - name: "loadbalancer"
     labels:
-      traefik.http.routers.accountgui.rule: "Host(`login-new.{{ myconext_base_domain }}`)"
-      traefik.http.routers.accountgui.tls: "true"
+      traefik.http.routers.eduidlogingui.rule: "Host(`login-new.{{ myconext_base_domain }}`)"
+      traefik.http.routers.eduidlogingui.tls: "true"
       traefik.enable: "true"
     healthcheck:
       test: ["CMD", "curl", "--fail" , "http://localhost"]
