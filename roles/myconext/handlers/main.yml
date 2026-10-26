@@ -1,9 +1,9 @@
-- name: restart myconextserver
+- name: restart eduID-server
   community.docker.docker_container:
-    name: myconextserver
+    name: eduID-server
     state: started
     restart: true
     # avoid restarting it creates unexpected data loss according to docker_container_module notes
     comparisons:
       '*': ignore
-  when: myconextservercontainer is success and myconextservercontainer is not change
+  when: eduIDservercontainer is success and eduIDservercontainer is not change
