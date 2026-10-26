@@ -38,7 +38,7 @@ email:
   error_mail: {{ error_email }}
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
   my-surfconext-url: https://mijn.{{ myconext_base_domain }}
-  my-gui-url: https://mijn-new.{{ myconext_base_domain }}
+  my-gui-url: https://mijn-nieuw.{{ myconext_base_domain }}
   idp-surfconext-url: https://login.{{ myconext_base_domain }}
   mail-templates-directory: classpath:mail_templates
 
@@ -84,7 +84,7 @@ mongodb_db: {{ myconext.mongo_database }}
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
 myconext_base_path: https://mijn.{{ myconext_base_domain }}
-my_gui_base_path: https://mijn-new.{{ myconext_base_domain }}
+my_gui_base_path: https://mijn-nieuw.{{ myconext_base_domain }}
 servicedesk_base_path: https://servicedesk.{{ myconext_base_domain }}
 continue_after_login_url: https://login.{{ myconext_base_domain }}/saml/guest-idp/continue
 account_redirect_url: https://login.{{ myconext_base_domain }}
@@ -92,7 +92,7 @@ account_id: login.{{ myconext_base_domain }}
 account_origin: https://login.{{ myconext_base_domain }}
 myconext_entityid: https://mijn.{{ myconext_base_domain }}
 myconext_redirect_url: https://mijn.{{ myconext_base_domain }}
-my_gui_redirect_url: https://mijn-new.{{ myconext_base_domain }}
+my_gui_redirect_url: https://mijn-nieuw.{{ myconext_base_domain }}
 servicedesk_redirect_url: https://servicedesk.{{ myconext_base_domain }}
 # sp_entity_id represents the SP's that are allowed to connect -- It is a comma separated list
 sp_entity_id: {{ myconext.sp_entity_id }}
@@ -116,7 +116,7 @@ create-from-institution:
 host_headers:
   service_desk: servicedesk.{{ myconext_base_domain }}
   mijn_ediuid: mijn.{{ myconext_base_domain }}
-  my_gui: mijn-new.{{ myconext_base_domain }}
+  my_gui: mijn-nieuw.{{ myconext_base_domain }}
   #Only for testing purposes
   active: ignore.test.eduid.nl
 
@@ -170,7 +170,7 @@ feature:
   use_global_uid: {{ myconext.feature_use_global_uid }}
   # SP entityIds that always receive the global uid in the uid and eduPersonPrincipalName SAML attributes,
   # even when use_global_uid is false.
-  force_global_uid_entities: {{ myconext.feature_force_global_uid_entities + ['mijn.' + myconext_base_domain, 'mijn-new.' + myconext_base_domain] }}
+  force_global_uid_entities: {{ myconext.feature_force_global_uid_entities + ['mijn.' + myconext_base_domain, 'mijn-nieuw.' + myconext_base_domain] }}
 
 default_affiliate_email_domain: eduid.nl
 
@@ -248,8 +248,8 @@ oidc:
   mobile-flow-redirect-url: https://login.{{ myconext_base_domain }}/myconext/api/mobile/oidc/redirect
 
   sp-create-from-institution-redirect-url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/create-from-institution/oidc-redirect
-  my-gui-sp-flow-redirect-url: https://mijn-new.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
-  my-gui-sp-create-from-institution-redirect-url: https://mijn-new.{{ myconext_base_domain }}/myconext/api/sp/create-from-institution/oidc-redirect
+  my-gui-sp-flow-redirect-url: https://mijn-nieuw.{{ myconext_base_domain }}/myconext/api/sp/oidc/redirect
+  my-gui-sp-create-from-institution-redirect-url: https://mijn-nieuw.{{ myconext_base_domain }}/myconext/api/sp/create-from-institution/oidc-redirect
   base-url: https://connect.{{ base_domain }}
 
 
@@ -302,7 +302,7 @@ verify:
   secret: {{ myconext_verify_secret }}
   base_uri: {{ myconext.verify_base_uri }}
   sp_verify_redirect_url: https://mijn.{{ myconext_base_domain }}/myconext/api/sp/verify/redirect
-  my_gui_sp_verify_redirect_url: https://mijn-new.{{ myconext_base_domain }}/myconext/api/sp/verify/redirect
+  my_gui_sp_verify_redirect_url: https://mijn-nieuw.{{ myconext_base_domain }}/myconext/api/sp/verify/redirect
   idp_verify_redirect_url: https://login.{{ myconext_base_domain }}/myconext/api/idp/verify/redirect
   mobile_verify_redirect_url: https://mijn.{{ myconext_base_domain }}/myconext/api/mobile/verify/redirect
   issuers_path: "classpath:idin/issuers.json"
