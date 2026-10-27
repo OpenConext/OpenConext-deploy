@@ -1,7 +1,7 @@
 ---
 - name: "Create directory to keep configfile"
   ansible.builtin.file:
-    dest: "/opt/openconext/access_dashboard"
+    path: "/opt/openconext/access_dashboard"
     state: "directory"
     owner: "root"
     group: "root"
@@ -39,7 +39,8 @@
     pull: true
     restart_policy: "always"
     state: "started"
-    networks: "{{ access_dashboard_docker_networks }}"
+    networks:
+      - name: "loadbalancer"
     mounts:
       - source: "/opt/openconext/access_dashboard/serverapplication.yml"
         target: "/application.yml"
