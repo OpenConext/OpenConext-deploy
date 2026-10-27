@@ -1,6 +1,7 @@
+---
 # Github action to run syntax check
 
-name: syntax
+name: "syntax"
 on:
   push:
     paths:
@@ -17,17 +18,17 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v7
+      - uses: "actions/checkout@v7"
 
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
           python-version: 3.15
 
-      - name: Installing dependencies
-        run: pip install jinja2 ansible
+      - name: "Installing dependencies"
+        run: "pip install jinja2 ansible"
 
-      - name: Run syntax check
-        run: ./scripts/syntax-check
+      - name: "Run syntax check"
+        run: "./scripts/syntax-check"
