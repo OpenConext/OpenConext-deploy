@@ -4,6 +4,7 @@ logging:
 server:
   # The port to where this Spring Boot application listens to.
   port: 8080
+  forward-headers-strategy: framework
   server-header:
   servlet:
     # We serve from the root. Do not change this
@@ -35,6 +36,7 @@ email:
   from_app_nudge: "{{ myconext.email.from_app_nudge }}"
   from_new_device: "{{ myconext.email.from_new_device }}"
   error: {{ error_email }}
+  support: support@surfconext.nl
   error_mail: {{ error_email }}
   support: "{{ myconext.email.support }}"
   magic-link-url: https://login.{{ myconext_base_domain }}/saml/guest-idp/magic
