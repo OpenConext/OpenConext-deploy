@@ -88,8 +88,6 @@ engine_sbs_base_url: "sbs.{{ base_domain }}"
 ## Attributes allowed in the return of SBS backchannel call
 engine_sbs_attributes_allowed:
   - 'urn:mace:dir:attribute-def:eduPersonEntitlement'
-  - 'urn:mace:dir:attribute-def:uid'
-  - 'urn:mace:dir:attribute-def:eduPersonPrincipalName'
   - 'urn:mace:dir:attribute-def:eduPersonScopedAffiliation'
   - 'urn:mace:surf.nl:attribute-def:voPersonExternalID'
   - 'urn:mace:surf.nl:attribute-def:voPersonID'
