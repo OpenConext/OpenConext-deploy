@@ -2,6 +2,7 @@
 # Mysql vars
 mysql_backup_user: backup_user
 backup_node: false  # todo default true and disable in host_vars
+arbiter_node: false 
 mariadb_version: "10.11"
 mariadb_host: "localhost"
 mariadb_python_mysql_version: "python3-PyMySQL"
