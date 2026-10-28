@@ -35,14 +35,6 @@
     group: "mysql"
     mode: "0770"
 
-- name: "Create mysql run directory"
-  ansible.builtin.file:
-    dest: "/var/run/mysqld"
-    state: "directory"
-    owner: "mysql"
-    group: "mysql"
-    mode: "0770"
-
 - name: "Create mysqlusers group"
   ansible.builtin.group:
     name: "mysqlusers"
@@ -60,7 +52,7 @@
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/galera/{{ item }}"
     dest: "{{ galera_tls_cert_path }}/{{ item }}"
-    mode: "0444"
+    mode: "0644"
   with_items: "{{ galera_tls_ca }}"
   when: "galera_ssl | bool"
 
