@@ -1,0 +1,32 @@
+---
+- name: "Add mariadb backup user"
+  community.mysql.mysql_user:
+    name: "{{ mysql_backup_user }}"
+    password: "{{ mysql_backup_password }}"
+    priv: "*.*:SELECT,LOCK TABLES,SHOW VIEW"
+    state: "present"
+    login_unix_socket: "{{ login_unix_socket }}"
+  no_log: true
+
+- name: "Create the backup directory"
+  ansible.builtin.file:
+    path: "/home/backup"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0700"
+
+- name: "Put mariadb_backup script"
+  ansible.builtin.template:
+    src: "mariadb_backup.sh.j2"
+    dest: "/usr/local/sbin/mariadb_backup.sh"
+    mode: "0700"
+    owner: "root"
+
+- name: "Create cron symlink for backup script"
+  ansible.builtin.file:
+    src: "/usr/local/sbin/mariadb_backup.sh"
+    dest: "/etc/cron.daily/db_backup"
+    state: "link"
+    mode: "0700"
+    owner: "root"

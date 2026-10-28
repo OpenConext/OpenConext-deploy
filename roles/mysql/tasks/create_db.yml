@@ -1,0 +1,82 @@
+---
+- name: "Set MySQL login in my.cnf"
+  ansible.builtin.template:
+    src: "my.cnf.j2"
+    dest: "/root/.my.cnf"
+    mode: "0600"
+    owner: "root"
+    group: "root"
+
+- name: "Set mysql root password for all root accounts"
+  community.mysql.mysql_user:
+    name: "root"
+    password: "{{ mysql_root_password }}"
+    priv: "*.*:ALL,GRANT"
+    login_unix_socket: "{{ login_unix_socket }}"
+
+- name: "Delete anonymous MySQL server user"
+  community.mysql.mysql_user:
+    name: ""
+    state: "absent"
+    login_unix_socket: "{{ login_unix_socket }}"
+
+- name: "Delete test MySQL server user"
+  community.mysql.mysql_user:
+    name: "{{ item }}"
+    state: "absent"
+    login_unix_socket: "{{ login_unix_socket }}"
+  with_items:
+    - "test"
+    - "test_%"
+
+- name: "Delete anonymous MySQL server user for localhost"
+  community.mysql.mysql_user:
+    name: ""
+    state: "absent"
+    login_unix_socket: "{{ login_unix_socket }}"
+
+- name: "Remove the MySQL test database"
+  community.mysql.mysql_db:
+    db: "test"
+    state: "absent"
+    login_unix_socket: "{{ login_unix_socket }}"
+
+- name: "Create databases"
+  community.mysql.mysql_db:
+    name: "{{ item }}"
+    state: "present"
+    login_unix_socket: "{{ login_unix_socket }}"
+  with_items:
+    - "{{ databases.names }}"
+
+- name: "Create database users"
+  community.mysql.mysql_user:
+    name: "{{ item[0].name }}"
+    host: >-
+      {{ item[0].hosts
+       | join(',')
+       if item[0].hosts is defined and
+          (item[0].hosts | length > 0)
+       else item[1] }}
+    password: "{{ item[0].password }}"
+    priv: "{{ item[0].db_name }}.*:ALL"
+    state: "present"
+    append_privs: true
+    login_unix_socket: "{{ login_unix_socket }}"
+  no_log: true
+  with_nested:
+    - "{{ databases.users }}"
+    - "{{ database_clients }}"
+
+- name: "Create development database users"
+  community.mysql.mysql_user:
+    name: "{{ item.name }}"
+    host: "%"
+    password: "{{ item.password }}"
+    priv: "*.*:ALL"
+    state: "present"
+    login_unix_socket: "{{ login_unix_socket }}"
+  no_log: true
+  with_items: "{{ databases.development_user | default([]) }}"
+  when:
+    - develop | bool

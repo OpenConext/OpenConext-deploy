@@ -1,0 +1,51 @@
+---
+- name: "Check if required var is set"
+  ansible.builtin.fail:
+    msg: "mysql_cluster var not set, set to 'True' or 'False' in the hostvars."
+  when: mysql_cluster is not defined
+
+- name: "Fix distro name for repo base url"
+  ansible.builtin.set_fact:
+    ansible_distribution: "rockylinux"
+  when: ansible_distribution == "Rocky"
+
+- name: "Add MariaDB.org repository"
+  ansible.builtin.template:
+    src: "mariadb.repo.j2"
+    dest: "/etc/yum.repos.d/mariadb.repo"
+    mode: "0644"
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: "Add MariaDB repository"
+  ansible.builtin.template:
+    src: "mariadb.sources.j2"
+    dest: "/etc/apt/sources.list.d/mariadb.sources"
+    mode: "0644"
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: "Install mariadb packages"
+  ansible.builtin.package:
+    name:
+      - "MariaDB-server"
+      - "MariaDB-client"
+      - "{{ mariadb_python_mysql_version }}"
+    state: "present"
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: "Install mariadb packages"
+  ansible.builtin.package:
+    name:
+      - "mariadb-server"
+      - "mariadb-client"
+      - "{{ mariadb_python_mysql_version | lower }}"
+    state: "present"
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: "Allow external connections when in development"
+  ansible.builtin.lineinfile:
+    dest: "/etc/my.cnf.d/server.cnf"
+    insertafter: '\\[mysqld\\]'
+    state: "present"
+    line: "bind-address=0.0.0.0"
+  when:
+    - develop | bool

@@ -1,0 +1,57 @@
+---
+- name: "Create the DB"
+  ansible.builtin.command: "mariadb-install-db"
+  changed_when: true
+
+- name: "Bootstrap the first node"
+  ansible.builtin.command: "/bin/galera_new_cluster"
+  changed_when: true
+  when:
+    - "galera_bootstrap_node is defined"
+    - "galera_bootstrap_node == inventory_hostname"
+
+- name: "Start and enable the MariaDB (mysql) service on boot."
+  ansible.builtin.service:
+    name: "mysql"
+    state: "started"
+    enabled: true
+  register: "mysql_service_state"
+  until: "mysql_service_state is succeeded"
+
+- name: "Add mariadb cluster sst user"
+  community.mysql.mysql_user:
+    name: "{{ mariadb_cluster_user }}"
+    password: "{{ mariadb_cluster_password }}"
+    priv: >-
+      {{ mariadb_cluster_user_privs |
+      default('*.*:RELOAD, PROCESS, LOCK TABLES,
+      BINLOG MONITOR, SUPER, REPLICA MONITOR') }}
+    state: "present"
+    login_unix_socket: "/var/lib/mysql/mysql.sock"
+  no_log: true
+
+- name: "Add Galera clustercheck user, used for keepalived to connect"
+  community.mysql.mysql_user:
+    name: "clustercheck"
+    password: "{{ galera_clustercheck_password }}"
+    priv: "*.*:USAGE"
+    state: "present"
+    login_unix_socket: "/var/lib/mysql/mysql.sock"
+  no_log: true
+
+- name: "Place conf file to increase MariaDB service TimeoutStartSec"
+  ansible.builtin.copy:
+    src: "files/timeoutstartsec.conf"
+    dest: "/etc/systemd/system/mariadb.service.d/timeoutstartsec.conf"
+    owner: "root"
+    group: "root"
+    mode: '0644'
+    setype: "systemd_unit_file_t"
+
+- name: "Initialize the database"
+  ansible.builtin.command: "mariadb-install-db"
+  changed_when: true
+
+- name: "Reload systemd config with new TimeoutStartSec value"
+  ansible.builtin.systemd:
+    daemon_reload: "yes"

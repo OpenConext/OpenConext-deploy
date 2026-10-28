@@ -14,9 +14,11 @@ sql_mode=NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
 userstat = ON
 log_slave_updates = ON
 tmpdir = /var/lib/mysqltemp
+{% if galera_ssl %}
 ssl-ca = {{ galera_tls_cert_path }}/{{ galera_tls_ca }}
 ssl-key = {{ galera_tls_cert_path }}/{{ galera_server_key_name }}
 ssl-cert = {{ galera_tls_cert_path }}/{{ galera_server_crt_name }}
+{% endif %}
 binlog_format=ROW
 default_storage_engine=innodb
 innodb_autoinc_lock_mode=2
@@ -44,7 +46,8 @@ join_buffer_size=16M
 innodb_log_file_size=256M
 innodb_file_per_table=1
 innodb_flush_log_at_trx_commit=2
-innodb_data_file_path = ibdata1:32M:autoextend
+#innodb_data_file_path = ibdata1:32M:autoextend
+innodb_data_file_path = ibdata1:12M:autoextend
 innodb_buffer_pool_size = {{ innodb_buffer_pool_size }}
 innodb_log_files_in_group = 2
 innodb_log_buffer_size = 64M
@@ -74,10 +77,15 @@ wsrep_node_address='{{ backend_ipv4 }}:4567'
 wsrep_node_name='{{ inventory_hostname }}'
 wsrep_sst_method=mariabackup
 wsrep_sst_auth={{ mariadb_cluster_user }}:{{ mariadb_cluster_password }}
+{% if galera_ssl %}
 wsrep_provider_options="socket.ssl_key={{ galera_tls_cert_path }}/{{ galera_server_key_name }};socket.ssl_cert={{ galera_tls_cert_path }}/{{ galera_server_crt_name }};socket.ssl_ca={{ galera_tls_cert_path }}/{{ galera_tls_ca }};socket.ssl_cipher=AES128-SHA;gmcast.segment={{ galera_gmcast_segment }};gcache.size=1G;cert.log_conflicts=YES"
+{% endif %}
 wsrep_retry_autocommit = 2
 wsrep_slave_threads = 8
 wsrep_log_conflicts=ON
+binlog_format=row
+default_storage_engine=InnoDB
+innodb_autoinc_lock_mode=2
 
 # this is only for embedded server
 [embedded]
