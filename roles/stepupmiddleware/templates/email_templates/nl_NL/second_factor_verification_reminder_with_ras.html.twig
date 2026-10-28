@@ -1,0 +1,27 @@
+<p>Beste {{ commonName }},</p>
+
+<p>Je hebt een token geregistreerd, maar het nog niet laten activeren. Je kunt tot en met {{ expirationDate | format_date('full', locale=locale) }} bij een van de onderstaande locaties terecht om je token te laten activeren.</p>
+
+<p>Neem daarbij het volgende mee:</p>
+<ul>
+    <li>Je token</li>
+    <li>Een geldig legitimatiebewijs (paspoort, rijbewijs of nationale ID-kaart)</li>
+    <li>De activatiecode uit deze e-mail</li>
+</ul>
+
+<p style='font-size: 150%; text-align: center'>Activatiecode: <code>{{ registrationCode }}</code></p>
+
+<p>Locatie(s) om je token te activeren:</p>
+{% if ras is empty %}
+    <p>Er zijn geen RAs bekend.</p>
+{% else %}
+    <ul>
+        {% for ra in ras %}
+            <li><address>
+                <strong>{{ ra.commonName }}</strong><br />
+                {{ ra.location }}<br />
+                {{ ra.contactInformation }}
+            </address></li>
+        {% endfor %}
+    </ul>
+{% endif %}

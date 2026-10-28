@@ -25,6 +25,7 @@
     mode: "0755"
   with_items:
     - "{{ current_release_config_dir_name }}"
+    - "{{ current_release_config_dir_name }}/email_templates"
 
 - name: Place parameters.yml
   ansible.builtin.template:
@@ -35,6 +36,23 @@
     group: "{{ appname }}"
   notify:
     - restart {{ appname }}
+
+- name: Copy email templates to the release config directory
+  copy:
+    src: templates/email_templates/
+    dest: "{{ current_release_config_dir_name }}/email_templates"
+    mode: "0640"
+    owner: "{{ appname }}"
+    group: "{{ appname }}"
+  notify:
+    - restart {{ appname }}
+
+- name: Add the MariaDB docker network to the list of networks when MariaDB runs in Docker
+  ansible.builtin.set_fact:
+    middelware_docker_networks:
+      - name: loadbalancer
+      - name: openconext_mariadb
+  when: mariadb_in_docker | default(false) | bool
 
 - name: Create the container
   community.docker.docker_container:
