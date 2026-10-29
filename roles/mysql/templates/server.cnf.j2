@@ -82,9 +82,6 @@ wsrep_provider_options="socket.ssl_key={{ galera_tls_cert_path }}/{{ galera_serv
 wsrep_retry_autocommit = 2
 wsrep_slave_threads = 8
 wsrep_log_conflicts=ON
-binlog_format=row
-default_storage_engine=InnoDB
-innodb_autoinc_lock_mode=2
 
 # this is only for embedded server
 [embedded]

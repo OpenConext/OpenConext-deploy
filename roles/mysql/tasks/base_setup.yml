@@ -26,7 +26,7 @@
 
 - name: "Fix distro name for repo base url"
   ansible.builtin.set_fact:
-    ansible_distribution: "rockylinux"
+    ansible_distribution: "rhel"
   when: "ansible_distribution == 'Rocky'"
 
 - name: "Add MariaDB.org repository"
