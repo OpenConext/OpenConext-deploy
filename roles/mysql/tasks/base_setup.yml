@@ -2,26 +2,46 @@
 - name: "Check if required var is set"
   ansible.builtin.fail:
     msg: "mysql_cluster var not set, set to 'True' or 'False' in the hostvars."
-  when: mysql_cluster is not defined
+  when: "mysql_cluster is not defined"
+
+- name: "Create config directory for mariadb"
+  ansible.builtin.file:
+    state: "directory"
+    path: "/etc/my.cnf.d"
+    mode: "0755"
+  when:
+    - "setup_galera_cluster"
+    - "mysql_cluster"
+    - "not arbiter_node"
+
+- name: "Set a base config before package install"
+  ansible.builtin.copy:
+    src: "files/db_init.cnf"
+    dest: "/etc/my.cnf.d/db_init.cnf"
+    mode: "0644"
+  when:
+    - "setup_galera_cluster"
+    - "mysql_cluster"
+    - "not arbiter_node"
 
 - name: "Fix distro name for repo base url"
   ansible.builtin.set_fact:
     ansible_distribution: "rockylinux"
-  when: ansible_distribution == "Rocky"
+  when: "ansible_distribution == 'Rocky'"
 
 - name: "Add MariaDB.org repository"
   ansible.builtin.template:
     src: "mariadb.repo.j2"
     dest: "/etc/yum.repos.d/mariadb.repo"
     mode: "0644"
-  when: ansible_facts['os_family'] == 'RedHat'
+  when: "ansible_facts['os_family'] == 'RedHat'"
 
 - name: "Add MariaDB repository"
   ansible.builtin.template:
     src: "mariadb.sources.j2"
     dest: "/etc/apt/sources.list.d/mariadb.sources"
     mode: "0644"
-  when: ansible_facts['os_family'] == 'Debian'
+  when: "ansible_facts['os_family'] == 'Debian'"
 
 - name: "Install mariadb packages"
   ansible.builtin.package:
@@ -30,7 +50,7 @@
       - "MariaDB-client"
       - "{{ mariadb_python_mysql_version }}"
     state: "present"
-  when: ansible_facts['os_family'] == 'RedHat'
+  when: "ansible_facts['os_family'] == 'RedHat'"
 
 - name: "Install mariadb packages"
   ansible.builtin.package:
@@ -39,7 +59,7 @@
       - "mariadb-client"
       - "{{ mariadb_python_mysql_version | lower }}"
     state: "present"
-  when: ansible_facts['os_family'] == 'Debian'
+  when: "ansible_facts['os_family'] == 'Debian'"
 
 - name: "Allow external connections when in development"
   ansible.builtin.lineinfile:
@@ -47,5 +67,4 @@
     insertafter: '\\[mysqld\\]'
     state: "present"
     line: "bind-address=0.0.0.0"
-  when:
-    - develop | bool
+  when: "develop | bool"

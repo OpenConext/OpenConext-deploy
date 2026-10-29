@@ -52,7 +52,7 @@
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/galera/{{ item }}"
     dest: "{{ galera_tls_cert_path }}/{{ item }}"
-    mode: "0644"
+    mode: "0444"
   with_items: "{{ galera_tls_ca }}"
   when: "galera_ssl | bool"
 

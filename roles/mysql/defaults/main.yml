@@ -1,14 +1,14 @@
 ---
 # Mysql vars
-mysql_backup_user: backup_user
+mysql_backup_user: "backup_user"
 backup_node: false  # todo default true and disable in host_vars
-arbiter_node: false 
+arbiter_node: false
 mariadb_version: "10.11"
 mariadb_host: "localhost"
 mariadb_python_mysql_version: "python3-PyMySQL"
 mariadb_systemd_override:
-  - filename: limits.conf
-    section: Service
+  - filename: "limits.conf"
+    section: "Service"
     options:
       LimitNOFILE: 100000
       LimitMEMLOCK: 100000
@@ -19,15 +19,15 @@ mariadb_systemd_override:
 # Only one node of the cluster must be bootstrapped.
 galera_bootstrap_node: ""
 setup_galera_cluster: false
-mariadb_cluster_user: galera_sst_user
-mariadb_backup_user: backup_user
+mariadb_cluster_user: "galera_sst_user"
+mariadb_backup_user: "backup_user"
 
-percona_url_rpm: https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+percona_url_rpm: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
 
 # Settings for galera TLS
 galera_ssl: true
-galera_tls_cert_path: /etc/pki/mysql
-galera_tls_ca: galera_ca.pem
+galera_tls_cert_path: "/etc/pki/mysql"
+galera_tls_ca: "galera_ca.pem"
 galera_tls:
   - name: "server"
     key_name: "{{ galera_server_key_name }}"
@@ -38,11 +38,11 @@ galera_tls:
     crt_name: "{{ galera_client_crt_name }}"
     key_content: "{{ galera_client_key }}"
 
-galera_server_key_name: galera_server.key
-galera_server_crt_name: galera_server.pem
-galera_client_key_name: galera_client.key
-galera_client_crt_name: galera_client.pem
-galera_sst_crt_name: galera_sst.pem
+galera_server_key_name: "galera_server.key"
+galera_server_crt_name: "galera_server.pem"
+galera_client_key_name: "galera_client.key"
+galera_client_crt_name: "galera_client.pem"
+galera_sst_crt_name: "galera_sst.pem"
 galera_gmcast_segment: 1
 galera_handler_restart: true
 

@@ -1,12 +1,12 @@
 ---
 - name: "Check if cluster creation is allowed to run"
   ansible.builtin.fail:
-    msg: > 
-           You are using variables that will install a cluster without setting 
-           the galera_configure_cluster_areyousure variable to 'yes'. 
-           Make sure you know what you are doing! 
+    msg: >
+           You are using variables that will install a cluster without setting
+           the galera_configure_cluster_areyousure variable to 'yes'.
+           Make sure you know what you are doing!
            Running this code on a running cluster will break the cluster.
-  when: galera_configure_cluster_areyousure is not defined
+  when: "galera_configure_cluster_areyousure is not defined"
 
 - name: "Create the DB"
   ansible.builtin.command: "mariadb-install-db"

@@ -78,5 +78,4 @@
     login_unix_socket: "{{ login_unix_socket }}"
   no_log: true
   with_items: "{{ databases.development_user | default([]) }}"
-  when:
-    - develop | bool
+  when: "develop | bool"
