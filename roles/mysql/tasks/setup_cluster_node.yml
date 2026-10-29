@@ -1,0 +1,145 @@
+---
+- name: "Disable redirects of traffic when VPN gateway is unreachable"
+  ansible.posix.sysctl:
+    name: "net.ipv4.conf.all.accept_redirects"
+    value: "0"
+    state: "present"
+    ignoreerrors: "yes"
+
+- name: "Lower swappiness"
+  ansible.posix.sysctl:
+    name: "vm.swappiness"
+    value: "10"
+    state: "present"
+    ignoreerrors: "yes"
+
+- name: "Install required packages for Galera"
+  ansible.builtin.package:
+    name:
+      - "galera-4"
+      - "MariaDB-backup"
+      - "socat"
+    state: "present"
+
+- name: "Create mysqltmp directory"
+  ansible.builtin.file:
+    dest: "/var/lib/mysqltemp"
+    state: "directory"
+    owner: "mysql"
+    group: "mysql"
+    mode: "0770"
+
+- name: "Create mysqlusers group"
+  ansible.builtin.group:
+    name: "mysqlusers"
+    state: "present"
+
+- name: "Create directory to keep Galera key material"
+  ansible.builtin.file:
+    dest: "/etc/pki/mysql/"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0775"
+
+- name: "Copy ca certificate"
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/certs/galera/{{ item }}"
+    dest: "{{ galera_tls_cert_path }}/{{ item }}"
+    mode: "0444"
+  with_items: "{{ galera_tls_ca }}"
+  when: "galera_ssl | bool"
+
+- name: "Copy server certificates to correct location"
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/certs/galera/{{ item.crt_name }}"
+    dest: "{{ galera_tls_cert_path }}/{{ item.crt_name }}"
+    owner: "mysql"
+    mode: "0400"
+  with_items: "{{ galera_tls }}"
+  no_log: true
+  when:
+    - "galera_ssl | bool"
+    - "item.name == 'server'"
+
+- name: "Copy server private keys to correct location"
+  ansible.builtin.copy:
+    content: "{{ item.key_content }}"
+    dest: "{{ galera_tls_cert_path }}/{{ item.key_name }}"
+    mode: "0400"
+    owner: "mysql"
+  with_items: "{{ galera_tls }}"
+  no_log: true
+  when:
+    - "galera_ssl | bool"
+    - "item.name == 'server'"
+
+- name: "Copy client certificates to correct location"
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/certs/galera/{{ item.crt_name }}"
+    dest: "{{ galera_tls_cert_path }}/{{ item.crt_name }}"
+    owner: "mysql"
+    group: "mysqlusers"
+    mode: "0440"
+  with_items: "{{ galera_tls }}"
+  no_log: true
+  when:
+    - "galera_ssl | bool"
+    - "item.name == 'client'"
+
+- name: "Copy client private keys to correct location"
+  ansible.builtin.copy:
+    content: "{{ item.key_content }}"
+    dest: "{{ galera_tls_cert_path }}/{{ item.key_name }}"
+    mode: "0440"
+    owner: "mysql"
+    group: "mysqlusers"
+  with_items: "{{ galera_tls }}"
+  no_log: true
+  when:
+    - "galera_ssl | bool"
+    - "item.name == 'client'"
+
+- name: "Check if this is a new installation or not"
+  ansible.builtin.stat:
+    path: "/etc/pki/mysql/{{ galera_sst_crt_name }}"
+  register: "mariadb_new_installation"
+
+- name: "Create state transfer key"
+  ansible.builtin.shell: >
+    awk 'FNR==1{print ""}1' /etc/pki/mysql/{{ galera_server_key_name }}
+    /etc/pki/mysql/{{ galera_server_crt_name }} >
+    /etc/pki/mysql/{{ galera_sst_crt_name }}
+  args:
+    creates: "/etc/pki/mysql/{{ galera_sst_crt_name }}"
+  when: "galera_ssl | bool"
+
+- name: "Chmod and chown state transfer key"
+  ansible.builtin.file:
+    path: "/etc/pki/mysql/{{ galera_sst_crt_name }}"
+    mode: "0400"
+    owner: "mysql"
+  when: "galera_ssl | bool"
+
+- name: "Put mariadb config files"
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/my.cnf.d/{{ item }}"
+    mode: "0664"
+    owner: "root"
+    group: "root"
+  with_items:
+    - "server.cnf"
+    - "mysql-clients.cnf"
+
+- name: "Place the plugin config file"
+  ansible.builtin.copy:
+    src: "plugins.cnf"
+    dest: "/etc/my.cnf.d/plugins.cnf"
+    mode: "0664"
+    owner: "root"
+    group: "root"
+
+- name: "Reload systemd config with new TimeoutStartSec value"
+  ansible.builtin.systemd:
+    daemon_reload: "yes"

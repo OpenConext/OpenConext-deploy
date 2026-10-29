@@ -1,0 +1,12 @@
+---
+- name: "Restart garb"
+  ansible.builtin.service:
+    name: "garb"
+    state: "restarted"
+  when: "galera_handler_restart"
+
+- name: "Restart mysql"
+  ansible.builtin.service:
+    name: "mysql"
+    state: "restarted"
+  when: "galera_handler_restart"
