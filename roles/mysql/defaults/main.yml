@@ -6,12 +6,6 @@ arbiter_node: false
 mariadb_version: "10.11"
 mariadb_host: "localhost"
 mariadb_python_mysql_version: "python3-PyMySQL"
-mariadb_systemd_override:
-  - filename: "limits.conf"
-    section: "Service"
-    options:
-      LimitNOFILE: 100000
-      LimitMEMLOCK: 100000
 
 # Galera vars
 # Set galera_bootstrap_node to the inventory_hostname of the node to allow
