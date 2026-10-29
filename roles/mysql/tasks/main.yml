@@ -33,7 +33,9 @@
     name: "mariadb"
     state: "started"
     enabled: "True"
-  when: "galera_bootstrap_node != inventory_hostname"
+  when: 
+    - "galera_bootstrap_node != inventory_hostname"
+    - "not arbiter_node"
 
 - name: "Configure databases"
   ansible.builtin.include_tasks: "create_db.yml"
