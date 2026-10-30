@@ -59,7 +59,7 @@ spring:
     show-sql: false
   datasource:
     driver-class-name: "org.mariadb.jdbc.Driver"
-    url: "jdbc:mariadb://{{ access_dashboard.db.host }}/access_dashboard?autoReconnect=true"
+    url: "jdbc:mariadb://{{ access_dashboard.db.host }}/access_dashboard?autoReconnect=true&sslMode=trust"
     username: "{{ access_dashboard.db.user }}"
     password: "{{ access_dashboard.db.secret }}"
   flyway:
