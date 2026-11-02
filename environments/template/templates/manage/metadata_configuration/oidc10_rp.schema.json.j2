@@ -576,6 +576,11 @@
           "minLength": 32,
           "info": "The JWT secret of this Relying Party for authentication purposes - minimal length 32 characters."
         },
+        "clientSecretJWKSURL": {
+          "type": "string",
+          "format": "url",
+          "info": "The URL of the JWKS endpoint hosting the public keys used to sign the public key."
+        },
         "redirectUrls": {
           "type": "array",
           "items": {
