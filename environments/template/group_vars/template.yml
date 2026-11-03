@@ -97,7 +97,7 @@ engine_trusted_proxy_ips:
 #
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:
-engine_profile_idp_certificate: /etc/openconext/engineblock.crt
+profile_engine_idp_certificate: /etc/openconext/engineblock.crt
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on
