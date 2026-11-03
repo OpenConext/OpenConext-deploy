@@ -2,39 +2,42 @@
 # Default variables used to configure Profile
 # These can be overwritten via group or extra vars
 
+# dit where to install profile
+profile_dir: "/opt/openconext/profile"
+
+# username and group for profile
+profile_user: "profile"
+profile_group: "profile"
+
 # Secret used by application for adding entropy to security related operations
-profile_secret: secret
-engine_api_verify_ssl: true
+profile_secret: "secret"
 profile_vhost_name: "profile.{{ base_domain }}"
 # Language code for user locale to be set by default
 # E.g. profile_default_locale: en
-profile_default_locale: en
+profile_default_locale: "en"
 
 # Paths of public and private key used for sending SAML AuthnRequests
-profile_saml_sp_publickey: /var/www/html/vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer
-profile_saml_sp_privatekey: /var/www/html/vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem
+profile_saml_sp_publickey: "/var/www/html/vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer"
+profile_saml_sp_privatekey: "/var/www/html/vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem"
 
 # Paths of public and private key used for signing metadata
-profile_saml_metadata_publickey: /var/www/html/vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer
-profile_saml_metadata_privatekey: /var/www/html/vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem
+profile_saml_metadata_publickey: "/var/www/html/vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer"
+profile_saml_metadata_privatekey: "/var/www/html/vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem"
 
 # Domain under which EngineBlock can be found
-engine_domain: engine.{{ base_domain }}
+profile_engine_domain: "engine.{{ base_domain }}"
 
 # EntityID of remote identity provider
-engine_profile_idp_entityid: https://{{ engine_domain }}/authentication/idp/metadata
+profile_engine_idp_entityid: "https://{{ profile_engine_domain }}/authentication/idp/metadata"
 
 # URL for remote identity provider's single sign on
-profile_engine_idp_sso_url: https://{{ engine_domain }}/authentication/idp/single-sign-on
+profile_engine_idp_sso_url: "https://{{ profile_engine_domain }}/authentication/idp/single-sign-on"
 # Certificate containting the public SAML signing key of the reomote IDP
-engine_profile_idp_certificate: "/var/www/html/config/openconext/certs/{{ profile_eb_saml_public_key }}"
+profile_engine_idp_certificate: "/var/www/html/config/openconext/certs/{{ profile_eb_saml_public_key }}"
 profile_info_request_email: "{{ support_email }}"
 
 profile_lifecycle_enabled: false
-lifecycle_url: https://lifecycle.{{ base_domain }}/
-
-appname: "profile"
-current_release_config_dir_name: "/opt/openconext/{{ appname }}"
+profile_lifecycle_url: "https://lifecycle.{{ base_domain }}/"
 
 profile_manage_provision_samlsp_client_id: "https://profile.{{ base_domain }}/authentication/metadata"
 profile_manage_provision_samlsp_name_en: "{{ instance_name }} Profile"
