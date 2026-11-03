@@ -25,7 +25,7 @@ engine_domain: engine.{{ base_domain }}
 engine_profile_idp_entityid: https://{{ engine_domain }}/authentication/idp/metadata
 
 # URL for remote identity provider's single sign on
-engine_profile_idp_sso_url: https://{{ engine_domain }}/authentication/idp/single-sign-on
+profile_engine_idp_sso_url: https://{{ engine_domain }}/authentication/idp/single-sign-on
 # Certificate containting the public SAML signing key of the reomote IDP
 engine_profile_idp_certificate: "/var/www/html/config/openconext/certs/{{ profile_eb_saml_public_key }}"
 profile_info_request_email: "{{ support_email }}"
