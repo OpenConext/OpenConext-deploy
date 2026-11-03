@@ -196,8 +196,8 @@ parameters:
   # options for `feature_enable_wayf_remember_choice_per_idp`
   wayf.remember_choice_per_idp_lifetime: 7776000  # 90 days
   wayf.remember_choice_per_idp_max: 16  # do not increase too much; limited by cookie size
-  wayf.reset_choice_per_idp_redirect: "https://profile.openconext.org/"
-  wayf.reset_choice_allowed_redirect_hosts: ["profile.openconext.org"]
+  wayf.reset_choice_per_idp_redirect: "https://profile.{{ base_domain }}/my-profile"
+  wayf.reset_choice_allowed_redirect_hosts: ["profile.{{ base_domain }}"]
 
   ## Toggle display & content of global site notice
   global.site_notice.show: {{ engine_site_notice_show }}
