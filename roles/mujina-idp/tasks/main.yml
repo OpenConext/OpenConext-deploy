@@ -64,8 +64,13 @@
       start_period: "10s"
   register: "mujinaidpcontainer"
 
-- name: "Include the role manage_provision_entities to provision the mujina IdP to Manage"
+- name: "Include the role manage_provision to provision the mujina IdP to Manage"
   ansible.builtin.include_role:
-    name: "manage_provision_entities"
+    name: "manage_provision"
   vars:
-    entity_type: "saml20_idp"  # noqa: var-naming[no-role-prefix] variable is used in several roles
+    manage_provision_entity_type: "saml20_idp"
+    manage_provision_samlidp_entity_id: "{{ mujina_manage_provision_samlidp_entity_id }}"
+    manage_provision_samlidp_description_en: "{{ mujina_manage_provision_samlidp_description_en }}"
+    manage_provision_samlidp_name_en: "{{ mujina_manage_provision_samlidp_name_en }}"
+    manage_provision_samlidp_idp_cert: "{{ mujina_manage_provision_samlidp_idp_cert }}"
+    manage_provision_samlidp_idp_sso_location: "{{ mujina_manage_provision_samlidp_idp_sso_location }}"

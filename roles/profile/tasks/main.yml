@@ -96,11 +96,11 @@
         type: "bind"
   register: "profile_container"
 
-- name: "Include the role manage_provision_entities to provision profile to Manage"
+- name: "Include the role manage_provision to provision profile to Manage"
   ansible.builtin.include_role:
-    name: "manage_provision_entities"
+    name: "manage_provision"
   vars:
-    entity_type: "saml20_sp"
+    manage_provision_entity_type: "saml20_sp"
     manage_provision_samlsp_client_id: "{{ profile_manage_provision_samlsp_client_id }}"
     manage_provision_samlsp_name_en: "{{ profile_manage_provision_samlsp_name_en }}"
     manage_provision_samlsp_description_en: "{{ profile_manage_provision_samlsp_description_en }}"
