@@ -94,6 +94,7 @@ rsyslog_central_apps:
   - { program: "aalink",                 target: "aa/apache.log" }
   - { program: "vootserver",             target: "voot/voot.log" }
   - { program: "pdp",                    target: "pdp/pdp.log" }
+  - { program: "mujina-idp",             target: "mujina/mujina-idp.log" }
 
   # Invite
   - { program: "inviteclient",           target: "invite/inviteclient.log" }
@@ -118,11 +119,18 @@ rsyslog_central_apps:
   - { program: "Apache-METADATA",        target: "metadata/apache.log" }
 
   # MyConext
+  ## Old naming, remove after 9.1 release
   - { program: "myconextserver",         target: "eduid/myconext.log" }
   - { program: "myconextjson",           target: "eduid/myconextjson.log" }
   - { program: "myconextgui",            target: "eduid/myconext-apache.log" }
   - { program: "accountgui",             target: "eduid/account-apache.log" }
   - { program: "servicedeskgui",         target: "eduid/servicedesk-apache.log" }
+  ## New naming
+  - { program: "eduID-logingui",         target: "eduid/eduID-logingui.log" }
+  - { program: "eduID-mygui",            target: "eduid/eduID-mygui.log" }
+  - { program: "eduID-server",           target: "eduid/eduID-server.log" }
+  - { program: "eduID-servicedeskgui",   target: "eduid/eduID-servicedeskgui.log" }
+
 
   # SSID log_logins
   - { program: "gateway",                contains: '"message":"Second Factor Authenticated"', dir: "log_logins", target: "stepup-authentication.log" }
