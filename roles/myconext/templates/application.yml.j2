@@ -1,11 +1,5 @@
 logging:
   config: file:///config/logback.xml
-  level:
-    org.springframework.data.mongodb: INFO
-    org.springframework.data.convert: INFO
-    org.springframework.security: WARN
-    myconext: DEBUG
-    io.mongock: DEBUG
 
 server:
   # The port to where this Spring Boot application listens to.
@@ -133,6 +127,10 @@ feature:
     allow_location: "classpath:/deny-allow/allowed.json"
   # Do we allow the create-from-institution flow
   create_eduid_institution_enabled: {{ myconext.feature_create_eduid_institution_enabled }}
+  # Do we email the eduID account when an institutional account gets linked to it
+  send_link_notification_to_eduid_account: True
+  # Do we email the institutional account when it gets linked to an eduID account
+  send_link_notification_to_linked_account: True
   # Do we show the landing page for the create-from-institution flow
   create_eduid_institution_landing: {{ myconext.feature_create_eduid_institution_landing }}
   # Do we default remember the user for a longer period
@@ -163,6 +161,12 @@ feature:
   enable_account_linking: {{ myconext.feature_enable_account_linking }}
   # Set to true to show the app login option
   use_app: {{ myconext.feature_use_app }}
+  # When true (default) release the global uid in the uid and eduPersonPrincipalName SAML attributes.
+  # When false, release the per-SP targeted eduID instead.
+  use_global_uid: {{ myconext.feature_use_global_uid }}
+  # SP entityIds that always receive the global uid in the uid and eduPersonPrincipalName SAML attributes,
+  # even when use_global_uid is false.
+  force_global_uid_entities: "{{ myconext.force_global_uid_entities }}"
 
 default_affiliate_email_domain: eduid.nl
 
@@ -258,11 +262,15 @@ account_linking_context_class_ref:
   validate_names: https://eduid.nl/trust/validate-names
   validate_names_external: https://eduid.nl/trust/validate-names-external
   affiliation_student: https://eduid.nl/trust/affiliation-student
+  iap_medium: https://refeds.org/assurance/IAP/medium
+  iap_high: https://refeds.org/assurance/IAP/high
   profile_mfa: https://refeds.org/profile/mfa
   linked_institution_mfa: https://eduid.nl/trust/linked-institution/mfa
   validate_names_mfa: https://eduid.nl/trust/validate-names/mfa
   validate_names_external_mfa: https://eduid.nl/trust/validate-names-external/mfa
   affiliation_student_mfa: https://eduid.nl/trust/affiliation-student/mfa
+  iap_medium_mfa: https://refeds.org/assurance/IAP/medium/mfa
+  iap_high_mfa: https://refeds.org/assurance/IAP/high/mfa
 
 account_linking:
   myconext_sp_entity_id: https://mijn.{{ myconext_base_domain }}/shibboleth
@@ -292,9 +300,11 @@ verify:
   issuers_path: "classpath:idin/issuers.json"
 
 spring:
-  data:
-    mongodb:
-      uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for mongo_server in myconext.mongo_servers %}{{ mongo_server }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}
+  http:
+    converters:
+      preferred-json-mapper: jackson2
+  mongodb:
+    uri: mongodb://{{ myconext.mongo_user }}:{{ myconext.mongo_password }}@{% for mongo_server in myconext.mongo_servers %}{{ mongo_server }}:{{ myconext.mongo_port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ myconext.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}
 
   mail:
     host: {{ smtp_server }}
@@ -346,15 +356,17 @@ management:
   endpoint:
     info:
       access: unrestricted
-    health:
-      access: unrestricted
-      show-details: always
     prometheus:
       access: read_only
     mappings:
       access: none
     metrics:
       access: unrestricted
+    health:
+      access: unrestricted
+      show-details: always
+      probes:
+        enabled: false          # ← readiness (en liveness)  uitgeschakeld  
   info:
     git:
       mode: full
