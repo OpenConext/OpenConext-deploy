@@ -1,0 +1,6 @@
+---
+
+- name: "Reload apache"
+  ansible.builtin.systemd:
+    name: "apache2"
+    state: "reloaded"

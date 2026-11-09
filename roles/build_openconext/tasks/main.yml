@@ -1,0 +1,90 @@
+---
+- name: "Install apache"
+  ansible.builtin.apt:
+    name:
+      - "apache2"
+
+- name: "Remove default apache site"
+  ansible.builtin.file:
+    path: "/etc/apache2/sites-enabled/000-default.conf"
+    state: "absent"
+  notify: "Reload apache"
+
+- name: "Install apache config"
+  ansible.builtin.template:
+    dest: "/etc/apache2/sites-enabled/001-build_openconext_org.conf"
+    src: "apacheconf.j2"
+    mode: "0644"
+  notify: "Reload apache"
+
+- name: "Install htpasswd file"
+  ansible.builtin.copy:
+    dest: "/etc/apache2/htpasswd"
+    content: |
+      {% for user, pw_hash in build_openconext_webdav_users.items() -%}
+      {{ user }}:{{ pw_hash }}
+      {% endfor %}
+    owner: "root"
+    group: "www-data"
+    mode: "0640"
+
+- name: "Create web root"
+  ansible.builtin.file:
+    path: "/srv/www"
+    state: "directory"
+    owner: "root"
+    mode: "0755"
+
+- name: "Create webdav directories"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: "directory"
+    owner: "www-data"
+    group: "www-data"
+    mode: "0755"
+  loop:
+    - "/srv/www/repository"
+    - "/srv/www/vagrant_boxes"
+
+- name: "Install logo"
+  ansible.builtin.copy:
+    src: "Openconext-med-transparent.png"
+    dest: "/srv/www/openconext.png"
+    owner: "root"
+    mode: "0644"
+
+- name: "Install index.html"
+  ansible.builtin.copy:
+    dest: "/srv/www/index.html"
+    src: "index.html"
+    owner: "root"
+    mode: "0644"
+
+
+#########################################################
+## acme
+#########################################################
+- name: "Install ACME scripts"
+  ansible.builtin.include_role:
+    name: "haproxy"
+    tasks_from: "acme.yml"
+  vars:
+    haproxy_acme_server: "{{ build_openconext_acme_server }}"
+    haproxy_acme_eab_kid: "{{ build_openconext_acme_eab_kid }}"
+    haproxy_acme_eab_hmac_key: "{{ build_openconext_acme_eab_hmac_key }}"
+
+- name: "Request and install ACME cert"
+  ansible.builtin.include_tasks:
+    file: "get_cert.yml"
+  vars:
+    build_openconext_acme_hosts: ["build.openconext.org"]
+
+
+#########################################################
+## finish
+#########################################################
+- name: "Start apache"
+  ansible.builtin.systemd:
+    name: "apache2"
+    enabled: true
+    state: "started"
