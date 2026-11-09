@@ -1,0 +1,13 @@
+http:
+  routers:
+    nginx:
+      rule: "Host(`piet.example.com`)"
+      entryPoints:
+        - web
+      service: nginx
+
+  services:
+    nginx:
+      loadBalancer:
+        servers:
+          - url: "http://example:80"

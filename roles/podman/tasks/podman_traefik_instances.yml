@@ -9,6 +9,8 @@
     name: "{{ item.traefik_user }}"
     uid: "{{ item.traefik_uid }}"
     group: "{{ item.traefik_group }}"
+    create_home: true
+    home: "{{ item.traefik_homedir }}"
 
 - name: Enable lingering to for traefik user
   # This fixes Failed to connect to bus: No such file or directory
@@ -19,12 +21,54 @@
       - "{{ item.traefik_user }}"
     creates: "/var/lib/systemd/linger/{{ item.traefik_user }}"
 
+- name: Fix failed to connect to bus in ssh sessions
+  ansible.builtin.blockinfile:
+    path: "{{ item.traefik_homedir }}/.bashrc"
+    block: |
+      export XDG_RUNTIME_DIR=/run/user/$(id -u)
+      export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
+
 - name: Create containers and network
   become_user: "{{ item.traefik_user }}"
   block:
 
+  - name: Create the traefik configuration file root directory
+    ansible.builtin.file:
+      state: directory
+      path: "{{ item.traefik_homedir }}/{{ item.traefik_container }}"
+      owner: "{{ item.traefik_user }}"
+      mode: "0755"
+    # add notify container reload
+
+  - name: Create the traefik configuration file directory
+    ansible.builtin.file:
+      state: directory
+      path: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config"
+      owner: "{{ item.traefik_user }}"
+      mode: "0755"
+    # add notify container reload
+
+  - name: Place the traefik configuration file
+    ansible.builtin.template:
+      src: traefik.yaml.j2
+      dest: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml"
+      mode: "0640"
+
+  - name: Place the dynamic configuration directory
+    ansible.builtin.file:
+      state: directory
+      path: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic"
+      mode: "0750"
+
+  - name: Place the dynamic configuration file # dit moet straks dynamisch per container
+    ansible.builtin.template:
+      src: nginx.j2
+      dest: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic/nginx.yaml"
+      mode: "0640"
+
   - name: Create the Traefik loadbalancer network
     containers.podman.podman_network:
+      state: quadlet
       name: "{{ item.traefik_networks }}"
 
   - name: Deploy the traefik container quadlet
@@ -34,14 +78,17 @@
       state: quadlet
       image: "docker.io/library/traefik:{{ podman_traefik_version }}"
       pull: always
-      # networks: "{{ item.traefik_networks }}"
-      # health_startup_cmd: "traefik healthcheck --ping"
+      volumes:
+        - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml:/etc/traefik/traefik.yaml:ro,Z"
+        - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic:/etc/traefik/dynamic:ro,Z"
+      network: "loadbalancer.network"
 
   - name: Run the container service
     ansible.builtin.systemd_service:
       name: "{{ item.traefik_container }}"
       state: started
       scope: user
+      daemon_reload: true
     # environment:
     #   XDG_RUNTIME_DIR: "/run/user/{{ item.traefik_uid }}"
 

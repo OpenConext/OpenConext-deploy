@@ -8,6 +8,22 @@ podman_traefik_instances:
     traefik_group: traefik
     traefik_uid: 2000
     traefik_gid: 2000
-    traefik_published_ports: 8080
+    traefik_published_ports: 8080:8080
     traefik_networks: loadbalancer
     traefik_container: traefik
+    traefik_homedir: "/home/traefik"
+
+podman_instances:
+  - container_user: traefik
+    container_group: traefik
+    container_uid: 2000
+    container_gid: 2000
+    container_networks: loadbalancer
+    container_name: example
+    container_image: nginx
+    container_version: latest
+
+# dubbele code (user id etc)
+# naamgeving container toevoegen aan traefik array
+# nginx straks alleen als voorbeeld
+# firewall op host goed zetten

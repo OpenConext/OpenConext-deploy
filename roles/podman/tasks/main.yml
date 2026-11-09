@@ -23,3 +23,6 @@
 - include_tasks: podman_instances.yml
   when: podman_instances is defined
   loop: "{{ podman_instances }}"
+
+  # zet manual command sin readme
+  #systemctl --user start myserver.service

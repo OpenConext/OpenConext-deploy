@@ -1,0 +1,38 @@
+---
+- name: Create containers and network
+  become_user: "{{ item.container_user }}"
+  block:
+
+  - name: Deploy the container quadlet
+    containers.podman.podman_container:
+      name: "{{ item.container_name }}"
+      state: quadlet
+      image: "docker.io/library/{{ item.container_image }}:{{ item.container_version }}"
+      pull: always
+      labels:
+        traefik.http.routers.example.rule: "Host(`piet.example.com`)"
+        #traefik.http.routers.example.tls: "true"
+        traefik.enable: "true"
+      network: "loadbalancer.network"
+
+  - name: Run the container service
+    ansible.builtin.systemd_service:
+      name: "{{ item.container_name }}"
+      state: started
+      scope: user
+      daemon_reload: true
+
+- name: Gather facts on the container
+  become_user: "{{ item.container_user }}"
+  containers.podman.podman_container_info:
+    name: "{{ item.container_name }}"
+  register: result
+
+- name: Container debug info
+  ansible.builtin.debug:
+    var: result
+    verbosity: 2
+  when: result
+
+# niet alle images komen van docker variabele url
+# vhost variabel niet piet.example.com
