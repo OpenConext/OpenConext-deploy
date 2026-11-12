@@ -61,31 +61,14 @@
 - name: Create and start the server container
   community.docker.docker_container:
     name: inviteserver
-    env:
-      TZ: "{{ timezone }}"
+    env: "{{ {'TZ': timezone | string } | combine(invite_otel_env) }}"
     image: ghcr.io/openconext/openconext-invite/inviteserver:{{ invite_version }}
     pull: true
     restart_policy: "{{ invite_server_restart_policy }}"
     restart_retries: "{{ invite_server_restart_retries }}" # Only for restart policy on-failure
     state: started
     networks: "{{ invite_docker_networks }}"
-    mounts:
-      - source: /opt/openconext/invite/serverapplication.yml
-        target: /application.yml
-        type: bind
-      - source: /opt/openconext/invite/logback.xml
-        target: /logback.xml
-        type: bind
-      - source: /opt/openconext/invite/private_key_pkcs8.pem
-        target: /private_key_pkcs8.pem
-        type: bind
-      - source: /opt/openconext/invite/public_key.pem
-        target: /public_key.pem
-        type: bind
-      - source: /opt/openconext/invite/crm_config.json
-        target: /crm_config.json
-        type: bind
-
+    mounts: “{{ invite_default_mounts + invite_otel_mounts }}”
     command: '-Xmx256M --spring.config.location=./'
     etc_hosts:
       host.docker.internal: host-gateway

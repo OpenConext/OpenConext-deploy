@@ -21,3 +21,22 @@ invite_docker_networks:
   - name: loadbalancer
 invite_server_restart_policy: always
 invite_server_restart_retries: 0
+# monitoring
+invite_otel_env: {}
+invite_otel_mounts: []
+invite_default_mounts:
+  - source: /opt/openconext/invite/serverapplication.yml
+    target: /application.yml
+    type: bind
+  - source: /opt/openconext/invite/logback.xml
+    target: /logback.xml
+    type: bind
+  - source: /opt/openconext/invite/private_key_pkcs8.pem
+    target: /private_key_pkcs8.pem
+    type: bind
+  - source: /opt/openconext/invite/public_key.pem
+    target: /public_key.pem
+    type: bind
+  - source: /opt/openconext/invite/crm_config.json
+    target: /crm_config.json
+    type: bind
