@@ -68,7 +68,7 @@
     restart_retries: "{{ invite_server_restart_retries }}" # Only for restart policy on-failure
     state: started
     networks: "{{ invite_docker_networks }}"
-    mounts: “{{ invite_default_mounts + invite_otel_mounts }}”
+    mounts: "{{ invite_default_mounts + invite_otel_mounts }}"
     command: '-Xmx256M --spring.config.location=./'
     etc_hosts:
       host.docker.internal: host-gateway
