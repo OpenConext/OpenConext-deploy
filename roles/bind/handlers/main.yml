@@ -1,10 +1,10 @@
 ---
-- name: restart bind
-  service:
+- name: "Restart bind"
+  ansible.builtin.service:
     name: "named"
     state: "restarted"
 
-- name: reload bind
-  service:
+- name: "Reload bind"
+  ansible.builtin.service:
     name: "named"
     state: "reloaded"

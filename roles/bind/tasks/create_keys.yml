@@ -1,15 +1,17 @@
 ---
-- name: create KSK
+- name: "Create KSK"
   ansible.builtin.command: |
     dnssec-keygen -K {{ dns_work_dir }}/keys -f KSK -3 -a RSASHA256 -b 2048  -n ZONE "hb.{{ base_domain }}"
-  creates: "{{ dns_work_dir }}/keys/Khb.{{ base_domain }}.+*"
+  args:
+    creates: "{{ dns_work_dir }}/keys/Khb.{{ base_domain }}.+*"
 
-- name: create ZSK
+- name: "Create ZSK"
   ansible.builtin.command: |
     dnssec-keygen -K {{ dns_work_dir }}/keys -3 -a RSASHA256 -b 1024 -n ZONE "hb.{{ base_domain }}"
-  creates: "{{ dns_work_dir }}/keys/Khb.{{ base_domain }}.+*"
+  args:
+    creates: "{{ dns_work_dir }}/keys/Khb.{{ base_domain }}.+*"
 
-- name: chown the keys
+- name: "Set permissions on the keys"
   ansible.builtin.file:
     dest: "{{ dns_work_dir }}/keys"
     owner: "named"
