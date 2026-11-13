@@ -82,6 +82,14 @@ manage:
   base_url: "https://manage.{{ base_domain }}"
   enabled: True
 
+# Invite provides the roles of the eduID users, shown in the service desk. Results are cached per organization
+invite:
+  username: "{{ invite_myconext_user }}"
+  password: "{{ invite_myconext_secret }}"
+  base_url: "https://invite.{{ base_domain }}"
+  cache_minutes: 15
+  enabled: True
+
 mongodb_db: {{ myconext.mongo_database }}
 base_domain: {{ myconext_base_domain }}
 saml_metadata_base_path: https://login.{{ myconext_base_domain }}
