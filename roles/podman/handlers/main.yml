@@ -1,3 +1,26 @@
 ---
 # handlers file for podman
 
+- name: "Container restart"
+  ansible.builtin.systemd_service:
+    name: example
+    state: restarted
+    daemon_reload: true
+    scope: user
+  become_user: traefik # make dynamic
+  become: true
+  # environment:
+  #  XDG_RUNTIME_DIR: "/run/user/2000" # make uid dynanic
+  #  DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/2000/bus" # make uid dynanic
+
+- name: "Container traefik restart"
+  ansible.builtin.systemd_service:
+    name: traefik
+    state: restarted
+    daemon_reload: true
+    scope: user
+  become_user: traefik # make dynamic
+  become: true
+  # environment:
+  #  XDG_RUNTIME_DIR: "/run/user/2000" # make uid dynanic
+  #  DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/2000/bus" # make uid dynanic

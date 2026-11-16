@@ -30,6 +30,7 @@
 
 - name: Create containers and network
   become_user: "{{ item.traefik_user }}"
+  become: true
   block:
 
   - name: Create the traefik configuration file root directory
@@ -80,7 +81,7 @@
           scope: user
 
       - name: "Mount socket by changing the volumes var"
-        ansible.builtin.set fact:
+        ansible.builtin.set_fact:
           podman_traefik_volumes:
             - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml:/etc/traefik/traefik.yaml:ro,Z"
             - "%t/podman/podman.sock:/var/run/docker.sock:ro,z"
@@ -103,6 +104,8 @@
         - |
           [Install]
           WantedBy=default.target
+    notify:
+      - "Container traefik restart" # make dynamic
 
   - name: Run the container service
     ansible.builtin.systemd_service:
@@ -112,6 +115,11 @@
       daemon_reload: true
     # environment:
     #   XDG_RUNTIME_DIR: "/run/user/{{ item.traefik_uid }}"
+    become: true
+    become_user: traefik
+    environment:
+      XDG_RUNTIME_DIR: "/run/user/2000" # make uid dynanic
+      DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/2000/bus" # make uid dynanic
 
 - name: Gather facts on the traefik container
   become_user: "{{ item.traefik_user }}"

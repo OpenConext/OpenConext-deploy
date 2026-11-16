@@ -18,6 +18,8 @@
         - |
           [Install]
           WantedBy=default.target
+    notify:
+     - "Container restart" # make dynamic
 
   - name: Run the container service
     ansible.builtin.systemd_service:

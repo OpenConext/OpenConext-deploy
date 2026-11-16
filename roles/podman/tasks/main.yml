@@ -16,6 +16,11 @@
     name: podman
     state: present
 
+# todo: run deze om te valideren dat alle quadlets kloppen anders
+# faalt de service die je wil starten met service not found en dat is super onduidelijk want de error
+# kan elders zitten
+# /usr/lib/systemd/user-generators/podman-user-generator --dryrun
+
 - include_tasks: podman_traefik_instances.yml
   when: podman_traefik_instances is defined
   loop: "{{ podman_traefik_instances }}"
