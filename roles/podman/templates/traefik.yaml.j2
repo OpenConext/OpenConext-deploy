@@ -2,10 +2,17 @@ entryPoints:
   web:
     address: ":8080"
 
+{% if podman_traefik_conf == "socket" %}
+providers:
+  docker:
+    exposedByDefault: false
+    network: loadbalancer
+{% else %}
 providers:
   file:
     directory: /etc/traefik/dynamic
     watch: true
+{% endif %}
 
 log:
   level: INFO

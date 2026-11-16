@@ -1,7 +1,13 @@
 ---
 # defaults file for podman
 
+podman_traefik_conf: "file" # file for conffiles per container, socket for mounting and reading the podman socket
+
 podman_traefik_version: 3.7.13
+
+podman_traefik_volumes:
+  - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml:/etc/traefik/traefik.yaml:ro,Z"
+  - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic:/etc/traefik/dynamic:ro,Z"
 
 podman_traefik_instances:
   - traefik_user: traefik

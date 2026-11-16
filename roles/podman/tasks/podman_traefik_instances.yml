@@ -48,23 +48,42 @@
       mode: "0755"
     # add notify container reload
 
-  - name: Place the traefik configuration file
-    ansible.builtin.template:
-      src: traefik.yaml.j2
-      dest: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml"
-      mode: "0640"
+  - name: File based configuration
+    when: podman_traefik_conf == "file"
+    block:
+    - name: Place the traefik configuration file
+      ansible.builtin.template:
+        src: traefik.yaml.j2
+        dest: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml"
+        mode: "0640"
 
-  - name: Place the dynamic configuration directory
-    ansible.builtin.file:
-      state: directory
-      path: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic"
-      mode: "0750"
+    - name: Place the dynamic configuration directory
+      ansible.builtin.file:
+        state: directory
+        path: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic"
+        mode: "0750"
 
-  - name: Place the dynamic configuration file # dit moet straks dynamisch per container
-    ansible.builtin.template:
-      src: nginx.j2
-      dest: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic/nginx.yaml"
-      mode: "0640"
+    - name: Place the dynamic configuration file # dit moet straks dynamisch per container
+      ansible.builtin.template:
+        src: nginx.j2
+        dest: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic/nginx.yaml"
+        mode: "0640"
+
+  - name: Socket based configuration
+    when: podman_traefik_conf == "socket"
+    block:
+      - name: "Enable the podman socket"
+        ansible.builtin.systemd_service:
+          name: podman.socket
+          enabled: true
+          state: started
+          scope: user
+
+      - name: "Mount socket by changing the volumes var"
+        ansible.builtin.set fact:
+          podman_traefik_volumes:
+            - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml:/etc/traefik/traefik.yaml:ro,Z"
+            - "%t/podman/podman.sock:/var/run/docker.sock:ro,z"
 
   - name: Create the Traefik loadbalancer network
     containers.podman.podman_network:
@@ -78,9 +97,7 @@
       state: quadlet
       image: "docker.io/library/traefik:{{ podman_traefik_version }}"
       pull: always
-      volumes:
-        - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml:/etc/traefik/traefik.yaml:ro,Z"
-        - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic:/etc/traefik/dynamic:ro,Z"
+      volumes: "{{ podman_traefik_volumes }}"
       network: "loadbalancer.network"
       quadlet_options:
         - |
