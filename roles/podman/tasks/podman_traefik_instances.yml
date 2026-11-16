@@ -103,6 +103,7 @@
       network: "loadbalancer.network"
       quadlet_options:
         - |
+          SecurityLabelDisable=true
           [Install]
           WantedBy=default.target
     notify:

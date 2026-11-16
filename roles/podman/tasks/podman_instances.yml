@@ -13,7 +13,9 @@
         traefik.http.routers.example.rule: "Host(`piet.example.com`)"
         #traefik.http.routers.example.tls: "true"
         traefik.enable: "true"
-      network: "loadbalancer.network"
+      network:
+        - "loadbalancer.network"
+        #- "mariadb.network"
       quadlet_options:
         - |
           [Install]
