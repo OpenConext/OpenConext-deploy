@@ -82,6 +82,10 @@
         - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml:/etc/traefik/traefik.yaml:ro,Z"
         - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/dynamic:/etc/traefik/dynamic:ro,Z"
       network: "loadbalancer.network"
+      quadlet_options:
+        - |
+          [Install]
+          WantedBy=default.target
 
   - name: Run the container service
     ansible.builtin.systemd_service:
