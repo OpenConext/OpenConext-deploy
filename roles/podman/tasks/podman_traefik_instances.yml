@@ -49,14 +49,15 @@
       mode: "0755"
     # add notify container reload
 
+  - name: Place the traefik configuration file
+    ansible.builtin.template:
+      src: traefik.yaml.j2
+      dest: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml"
+      mode: "0640"
+
   - name: File based configuration
     when: podman_traefik_conf == "file"
     block:
-    - name: Place the traefik configuration file
-      ansible.builtin.template:
-        src: traefik.yaml.j2
-        dest: "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml"
-        mode: "0640"
 
     - name: Place the dynamic configuration directory
       ansible.builtin.file:
@@ -84,7 +85,7 @@
         ansible.builtin.set_fact:
           podman_traefik_volumes:
             - "{{ item.traefik_homedir }}/{{ item.traefik_container }}/config/traefik.yaml:/etc/traefik/traefik.yaml:ro,Z"
-            - "%t/podman/podman.sock:/var/run/docker.sock:ro,z"
+            - "%t/podman/podman.sock:/var/run/docker.sock:ro,Z"
 
   - name: Create the Traefik loadbalancer network
     containers.podman.podman_network:
