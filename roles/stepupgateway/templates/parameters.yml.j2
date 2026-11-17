@@ -136,3 +136,7 @@ parameters:
 
     # The user attribute to use to determine the user's home institution
     fallback_gssp_institution_attribute: 'urn:mace:terena.org:attribute-def:schacHomeOrganization'
+
+    # When enabled, Gateway reads mdui:DisplayName from incoming AuthnRequest extensions and forwards
+    # it in the proxy AuthnRequest to the GSSP. Middleware service_name takes priority if set.
+    append_service_name_to_authnrequest: {{ gateway_append_service_name_to_authnrequest | default('false') }}
