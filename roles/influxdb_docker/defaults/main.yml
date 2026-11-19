@@ -1,5 +1,10 @@
 ---
 influxdb_host: "localhost"
+influx_data_dir: "/var/lib/influxdb/data"
+influx_meta_dir: "/var/lib/influxdb/meta"
+influx_wal_dir: "/var/lib/influxdb/wal"
+
+
 # The following variables are not provided but required to run this role. Define these in your inventory or vault:
 # influx_stats_db:
 # influxdb_admin_user:
