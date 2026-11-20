@@ -3,13 +3,6 @@
 {{ application.vhost_name }}
 {% endif %}
 {% endfor %}
-{% if access_dashboard_base_domain is defined %}
-{% for application in haproxy_applications %}
-{%if application.access_dashbord_path is defined %}
-{{ access_dashboard_base_domain }}
-{% endif %}
-{% endfor %}
-{% endif %}
 {%if haproxy_redirects is defined %}
 {% for application in haproxy_redirects %}
 {%if application.hostname is defined %}

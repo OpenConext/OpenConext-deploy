@@ -1,6 +1,0 @@
-{% for application in haproxy_applications %}
-{% if application.access_dashbord_path is defined %}
-{{ application.access_dashbord_path }} {{ application.name }}_be
-{{ application.access_dashbord_path }}/ {{ application.name }}_be
-{% endif %}
-{% endfor %}

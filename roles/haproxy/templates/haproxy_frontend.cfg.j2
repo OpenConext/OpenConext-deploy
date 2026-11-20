@@ -75,11 +75,6 @@ frontend internet_ip
 frontend local_ip
     bind 127.0.0.1:81 accept-proxy
     acl valid_vhost hdr(host) -f /etc/haproxy/acls/validvhostsunrestricted.acl
-    {% if access_dashboard_base_domain is defined %}
-    # Path based virtual hosts on the access dashboard domain
-    acl access_dashboard_host hdr(host) -i {{ access_dashboard_base_domain }}
-    use_backend %[path,lower,map_beg(/etc/haproxy/maps/accessdashboard.map)] if access_dashboard_host { path,lower,map_beg(/etc/haproxy/maps/accessdashboard.map) -m found }
-    {% endif %}
     acl staging req.cook(staging) -m str true
     acl staging src -f /etc/haproxy/acls/stagingips.acl
     acl stagingvhost hdr(host) -i -M -f /etc/haproxy/maps/backendsstaging.map
