@@ -1,11 +1,10 @@
 ---
-- name: install bind packages
+- name: "Install bind packages"
   ansible.builtin.apt:
-    name:
-      - "bind9"
+    name: "bind9"
     state: "present"
 
-- name: create bind directories
+- name: "Create bind directories"
   ansible.builtin.file:
     dest: "{{ dns_work_dir }}/{{ item }}"
     state: "directory"
@@ -16,7 +15,7 @@
     - "master"
     - "keys"
 
-- name: configure bind
+- name: "Configure bind"
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/etc/bind/{{ item }}"
@@ -27,9 +26,25 @@
     - "named.conf.options"
     - "named.conf.local"
   notify:
-    - "restart bind"
+    - "Restart bind"
 
-- name: copy ha zone file
+- name: "Read current ha zone config file"
+  ansible.builtin.slurp:
+    src: "{{ dns_work_dir }}/master/hb.{{ base_domain }}.db"
+  register: "remote_ha_zone_file"
+
+- name: "Compare files while ignoring the selected line"
+  ansible.builtin.set_fact:
+    copy_ha_zone_file: >-
+      {{
+        (lookup('ansible.builtin.template', 'ha_zone_file.j2').splitlines()
+         | reject('search', 'Serial') | list)
+        !=
+        ((remote_ha_zone_file.content | b64decode).splitlines()
+         | reject('search', 'Serial') | list)
+      }}
+
+- name: "Copy ha zone file"
   ansible.builtin.template:
     src: "ha_zone_file.j2"
     dest: "{{ dns_work_dir }}/master/hb.{{ base_domain }}.db"
@@ -37,9 +52,10 @@
     group: "bind"
     mode: "0640"
   notify:
-    - "reload bind"
+    - "Reload bind"
+  when: "copy_ha_zone_file"
 
-- name: enable bind service
+- name: "Enable bind service"
   ansible.builtin.service:
     name: "named"
     state: "started"
