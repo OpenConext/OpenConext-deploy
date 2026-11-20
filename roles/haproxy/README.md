@@ -49,6 +49,7 @@ restricted: If it is present and set to "yes" the application will be served fro
 sslbackend: If it is present and set to "yes" the backend connection will be performed over https. 
 backend_vhost_name: If you have enabled "sslbackend" you need to configure the backend vhost name as well (which should also be present in the certificate on the backend"
 backend_ca_file: If you have enabled "sslbackend" you can use your own CA. Configure that here
+access_dashbord_path (optional): If you set this, the application is also available as a path based virtual host on the access dashboard domain: {{ access_dashboard_base_domain }}/{{ access_dashbord_path }}. Next to the regular vhost_name based virtual host. If the variable is not set, nothing changes. The request path is forwarded unchanged; the application is expected to handle the {{ access_dashbord_path }} prefix itself (eg an Apache vhost accepting both / and /invite/). The Host header is rewritten to the application vhost_name, and root-relative URLs in Location/Content-Location/Link response headers get the prefix prepended.
 
 The backend servers can be in a list as well. If you have two servers in "{{ php_servers }}":
 ```
