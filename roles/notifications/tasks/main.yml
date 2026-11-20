@@ -1,0 +1,85 @@
+---
+- name: "Create directory to keep configfile"
+  ansible.builtin.file:
+    path: "/opt/openconext/notifications"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0770"
+
+- name: "Place the server configfiles"
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/opt/openconext/notifications/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+  with_items:
+    - "logback.xml"
+    - "application.yml"
+  notify: "Restart notifications server"
+
+- name: "Place the gui configfiles"
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/opt/openconext/notifications/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+  with_items:
+    - "apache_gui.conf"
+  notify: "Restart notifications gui"
+
+- name: "Create and start the notifications server container"
+  community.docker.docker_container:
+    name: "notifications_server"
+    env:
+      TZ: "{{ timezone }}"
+    image: "ghcr.io/openconext/openconext-notifications/notificationsserver:{{ notifications_version }}"
+    pull: true
+    restart_policy: "always"
+    state: "started"
+    networks:
+      - name: "loadbalancer"
+    mounts:
+      - source: "/opt/openconext/notifications/application.yml"
+        target: "/application.yml"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/notifications/logback.xml"
+        target: "/logback.xml"
+        type: "bind"
+        read_only: true
+    command: "-Xmx512m --spring.config.location=./"
+    etc_hosts:
+      host.docker.internal: "host-gateway"
+  register: "notifications_server_container"
+
+- name: "Create the notifications client container"
+  community.docker.docker_container:
+    name: "notifications_gui"
+    image: "ghcr.io/openconext/openconext-notifications/notificationsclient:{{ notifications_version }}"
+    pull: true
+    restart_policy: "always"
+    state: "started"
+    networks:
+      - name: "loadbalancer"
+    labels:
+      traefik.http.routers.notificationsclient.rule: "Host(`invite.{{ base_domain }}`)"
+      traefik.http.routers.notificationsclient.tls: "true"
+      traefik.enable: "true"
+    hostname: "notifications"
+    mounts:
+      - source: "/etc/localtime"
+        target: "/etc/localtime"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/notifications/apache_gui.conf"
+        target: "/etc/apache2/sites-enabled/appconf.conf"
+        type: "bind"
+        read_only: true
+      - source: "/opt/openconext/common/favicon.ico"
+        target: "/var/www/favicon.ico"
+        type: "bind"
+        read_only: true
+  register: "notifications_gui_container"
