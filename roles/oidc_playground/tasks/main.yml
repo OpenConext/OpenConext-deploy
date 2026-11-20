@@ -85,14 +85,14 @@
     env:
       HTTPD_CSP: "{{ httpd_csp.lenient }}"
 
-# - name: Include the role manage_provision_entities to provision oidc_playground resource server to Manage
+# - name: Include the role manage_provision to provision oidc_playground resource server to Manage
 #   include_role:
-#     name: manage_provision_entities
+#     name: manage_provision
 #   vars:
-#     entity_type: oauth20_rs
+#     manage_provision_entity_type: oauth20_rs
 #
-# - name: Include the role manage_provision_entities to provision oidc_playground client to Manage
+# - name: Include the role manage_provision to provision oidc_playground client to Manage
 #   include_role:
-#     name: manage_provision_entities
+#     name: manage_provision
 #   vars:
-#     entity_type: oidc10_rp
+#     manage_provision_entity_type: oidc10_rp
