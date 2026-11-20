@@ -16,7 +16,7 @@
     mode: "0700"
 
 - name: Configure backup
-  when: mongo_replication_role is not defined or mongo_replication_role != 'arbiter'
+  when: (mongo_replication_role is not defined or mongo_replication_role != 'arbiter') and mongo_backup
   block:
     - name: Install the backup script
       ansible.builtin.template:

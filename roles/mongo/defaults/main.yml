@@ -2,6 +2,7 @@
 
 mongo_service: "mongod"
 mongo_version: "7.0"
+mongo_backup: true
 
 # In the current mongo role only one cluster per environments
 # is possible, that works for now.
