@@ -1,0 +1,7 @@
+{% for application in haproxy_applications %}
+{% if application.access_dashbord_path is defined %}
+{% set path = application.access_dashbord_path if application.access_dashbord_path.startswith('/') else '/' + application.access_dashbord_path %}
+{{ path }} {{ application.vhost_name }}
+{{ path }}/ {{ application.vhost_name }}
+{% endif %}
+{% endfor %}

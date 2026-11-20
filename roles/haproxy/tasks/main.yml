@@ -149,6 +149,8 @@
   with_items:
     - backends.map
     - backendsstaging.map
+    - accessdashboard.map
+    - accessdashboardhosts.map
     - redirects.map
     - ratelimits.map
     - certlist.lst
