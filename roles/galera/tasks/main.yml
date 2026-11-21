@@ -1,8 +1,0 @@
----
-- name: Include arbiter installation
-  include_tasks: arbiter_node.yml
-  when: arbiter_node is defined
-
-- name: Include cluster node installation
-  include_tasks: cluster_nodes.yml
-  when: arbiter_node is not defined

@@ -1,0 +1,67 @@
+---
+- name: "Disable redirects of traffic when VPN gateway is unreachable"
+  ansible.posix.sysctl:
+    name: "net.ipv4.conf.all.accept_redirects"
+    value: "0"
+    state: "present"
+    ignoreerrors: "yes"
+
+- name: "Install Galera"
+  ansible.builtin.package:
+    name: "galera"
+    state: "installed"
+  when: "ansible_os_family == 'RedHat'"
+
+- name: "Install galera arbritrator"
+  ansible.builtin.package:
+    name: "galera-arbitrator-4"
+    state: "present"
+  when: "ansible_os_family == 'Debian'"
+
+- name: "Create directory to keep Galera key material"
+  ansible.builtin.file:
+    dest: "/etc/pki/mysql/"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0775"
+  when: "galera_ssl | bool"
+
+- name: "Copy ca certificate"
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/certs/galera/{{ item }}"
+    dest: "{{ galera_tls_cert_path }}/{{ item }}"
+    mode: "0444"
+  with_items: "{{ galera_tls_ca }}"
+  when: "galera_ssl | bool"
+
+- name: "Copy certificates to correct location"
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/files/certs/galera/{{ item.crt_name }}"
+    dest: "{{ galera_tls_cert_path }}/{{ item.crt_name }}"
+    owner: "root"
+    mode: "0644"
+  with_items: "{{ galera_tls }}"
+  no_log: true
+  when: "galera_ssl | bool"
+
+- name: "Copy private keys to correct location"
+  ansible.builtin.copy:
+    content: "{{ galera_server_key }}"
+    dest: "{{ galera_tls_cert_path }}/{{ galera_server_key_name }}"
+    mode: "0600"
+    owner: "nobody"
+  when: "galera_ssl | bool"
+
+- name: "Put garb config file"
+  ansible.builtin.template:
+    src: "garb.j2"
+    dest: "/etc/sysconfig/garb"
+    mode: "0644"
+  notify: "Restart garb"
+
+- name: "Start and enable the Galera arbiter service on boot."
+  ansible.builtin.service:
+    name: "garb"
+    state: "started"
+    enabled: "true"
