@@ -36,7 +36,6 @@ ProxyPassReverse /config http://notifications_server:8080/config
 ProxyPassMatch ^/ui(.*)$ http://notifications_server:8080
 ProxyPassReverse /ui http://notifications_server:8080/ui
 
-# Tomcat rejects a Host header with an underscore (the container name): always pass the public host
 ProxyPreserveHost On
 
 DocumentRoot /var/www/
