@@ -185,6 +185,13 @@
     - myconext
   tags: ['myconext']
 
+- name: Deploy notifications app
+  hosts: docker_notifications
+  become: true
+  roles:
+    - notifications
+  tags: ['notifications']
+
 - name: Deploy oidcng app
   hosts: docker_oidcng
   become: true

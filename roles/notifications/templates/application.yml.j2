@@ -1,0 +1,106 @@
+logging:
+  config: file:///logback.xml
+
+server:
+  port: 8080
+  # behind the Apache of the client image / a load balancer, for the OIDC redirect uri
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        secure: true
+  error:
+    include-message: always
+
+spring:
+  main:
+    banner-mode: "off"
+  application:
+    name: notifications
+  datasource:
+    driver-class-name: "org.mariadb.jdbc.Driver"
+    url: "jdbc:mariadb://{{ notifications.db.host }}/notifications?autoReconnect=true&sslMode=trust"
+    username: "{{ notifications.db.user }}"
+    password: "{{ notifications.db.secret }}"
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      # the schema is owned by the Flyway migrations
+      ddl-auto: validate
+    open-in-view: false
+  session:
+    jdbc:
+      initialize-schema: never
+{% if notifications_cronjobmaster is defined and notifications_cronjobmaster == false  %}
+      cleanup-cron: "-"
+{% else %}
+      cleanup-cron: "0 */5 * * * *"
+{% endif %}
+      flush-mode: "on_save"
+      save-mode: "on_set_attribute"
+      store-type: "jdbc"
+      timeout: "8h"
+      mvc:
+        log-request-details: false
+
+  security:
+    oauth2:
+      client:
+        registration:
+          oidcng:
+            client-id: "{{ notifications.oidcng.client_id }}"
+            client-secret: "{{ notifications.oidcng.secret }}"
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: "authorization_code"
+            scope: openid
+            provider: oidcng
+        provider:
+          oidcng:
+            authorization-uri: "{{ notifications.oidcng.authorization_uri }}"
+            token-uri: "{{ notifications.oidcng.token_uri }}"
+            user-info-uri: "{{ notifications.oidcng.user_info_uri }}"
+            jwk-set-uri: "{{ notifications.oidcng.jwk_set_uri }}"
+            user-name-attribute: sub
+            user-info-authentication-method: client_secret_basic
+
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: "/internal"
+  endpoint:
+    info:
+      access: "unrestricted"
+    health:
+      access: "unrestricted"
+      show-details: "always"
+  info:
+    git:
+      mode: "full"
+
+# The applications that notifications can be created for. Each target app is also the
+# (basic authentication) username of the server-to-server API: /api/external/notifications.
+# We don't encode the passwords, they are injected from the deployment.
+notifications:
+  cleanup:
+    # every night at 03:00, notifications that ended more than 5 days ago are removed
+    cron: "0 0 3 * * *"
+    retention-days: 5
+  # Users must have this value in the claim edumember_is_member_of to be allowed to log in
+  required-member-of: "urn:mace:surf.nl:invite.test2.surfconext.nl:12cbb06a-2af8-41e1-ac4e-6175cacd1307:surfconext_tpm_core"
+  target-apps:
+    - name: myconext
+      password: "{{ notifications_secret }}"
+    - name: servicedesk
+      password: "{{ notifications_secret }}"
+
+# used by the git plugin
+info:
+  build:
+    artifact: "@project.artifactId@"
+    version: "@project.version@"
