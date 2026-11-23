@@ -14,7 +14,8 @@ RewriteCond %{REQUEST_URI} !^/(asset-)?manifest.json$
 RewriteCond %{REQUEST_URI} !^/api/
 RewriteCond %{REQUEST_URI} !^/login/
 RewriteCond %{REQUEST_URI} !^/oauth2/
-RewriteCond %{REQUEST_URI} !^/config
+RewriteCond %{REQUEST_URI} !^/config$
+RewriteCond %{REQUEST_URI} !^/logout$
 RewriteCond %{REQUEST_URI} !^/ui/
 RewriteCond %{REQUEST_URI} !^/internal/
 RewriteCond %{REQUEST_URI} !^/fonts/
@@ -28,25 +29,18 @@ ProxyPassMatch ^/internal(.*)$ http://notifications_server:8080
 ProxyPassReverse /internal http://notifications_server:8080/internal
 ProxyPassMatch ^/login(.*)$ http://notifications_server:8080
 ProxyPassReverse /login http://notifications_server:8080/login
-ProxyPassMatch ^/config(.*)$ http://notifications_server:8080
-ProxyPassReverse /config http://notifications_server:8080/login
+ProxyPassMatch ^/config$ http://notifications_server:8080
+ProxyPass /logout http://notifications_server:8080/logout retry=0
+ProxyPassReverse /logout http://notifications_server:8080/logout
+ProxyPassReverse /config http://notifications_server:8080/config
 ProxyPassMatch ^/ui(.*)$ http://notifications_server:8080
 ProxyPassReverse /ui http://notifications_server:8080/ui
 
+# Tomcat rejects a Host header with an underscore (the container name): always pass the public host
+ProxyPreserveHost On
+
 DocumentRoot /var/www/
 
-<Location "/api">
-    ProxyPreserveHost On
-</Location>
-<Location "/oauth2">
-    ProxyPreserveHost On
-</Location>
-<Location "/internal">
-    ProxyPreserveHost On
-</Location>
-<Location "/login">
-    ProxyPreserveHost On
-</Location>
 <Directory /var/www>
   Require all granted
   Options -Indexes

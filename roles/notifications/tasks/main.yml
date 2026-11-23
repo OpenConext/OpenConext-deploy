@@ -19,16 +19,16 @@
     - "application.yml"
   notify: "Restart notifications server"
 
-- name: "Place the gui configfiles"
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "/opt/openconext/notifications/{{ item }}"
-    owner: "root"
-    group: "root"
-    mode: "0600"
-  with_items:
-    - "apache_gui.conf"
-  notify: "Restart notifications gui"
+#- name: "Place the gui configfiles"
+#  ansible.builtin.template:
+#    src: "{{ item }}.j2"
+#    dest: "/opt/openconext/notifications/{{ item }}"
+#    owner: "root"
+#    group: "root"
+#    mode: "0600"
+#  with_items:
+#    - "apache_gui.conf"
+#  notify: "Restart notifications gui"
 
 - name: "Create and start the notifications server container"
   community.docker.docker_container:
@@ -68,18 +68,15 @@
       traefik.http.routers.notificationsclient.rule: "Host(`notifications.{{ base_domain }}`)"
       traefik.http.routers.notificationsclient.tls: "true"
       traefik.enable: "true"
-    hostname: "notifications"
+    healthcheck:
+      test: ["CMD", "curl", "--fail" , "http://localhost"  ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     mounts:
-      - source: "/etc/localtime"
-        target: "/etc/localtime"
-        type: "bind"
-        read_only: true
-      - source: "/opt/openconext/notifications/apache_gui.conf"
-        target: "/etc/apache2/sites-enabled/appconf.conf"
-        type: "bind"
-        read_only: true
-      - source: "/opt/openconext/common/favicon.ico"
-        target: "/var/www/favicon.ico"
-        type: "bind"
-        read_only: true
-  register: "notifications_gui_container"
+      - source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+    env:
+      HTTPD_CSP: "{{ httpd_csp.strict_with_static_and_minio_img_and_data_fonts }}"
