@@ -65,7 +65,7 @@
     networks:
       - name: "loadbalancer"
     labels:
-      traefik.http.routers.notificationsclient.rule: "Host(`invite.{{ base_domain }}`)"
+      traefik.http.routers.notificationsclient.rule: "Host(`notifications.{{ base_domain }}`)"
       traefik.http.routers.notificationsclient.tls: "true"
       traefik.enable: "true"
     hostname: "notifications"
