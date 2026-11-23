@@ -1,7 +1,7 @@
 ---
 - name: "Restart notifications server"
   community.docker.docker_container:
-    name: "notifications_server"
+    name: "notificationsserver"
     state: "started"
     restart: true
     # avoid restarting it creates unexpected data loss according to docker_container_module notes
@@ -11,7 +11,7 @@
 
 - name: "Restart notifications gui"
   community.docker.docker_container:
-    name: "notifications_gui"
+    name: "notificationsgui"
     state: "started"
     restart: true
     # avoid restarting it creates unexpected data loss according to docker_container_module notes
