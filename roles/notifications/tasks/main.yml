@@ -41,7 +41,7 @@
     state: "started"
     networks:
       - name: "loadbalancer"
-        # the Apache of the client image proxies to http://notificationsserver:8082
+        # the Apache of the client image proxies to http://notificationsserver:8080
         aliases:
           - "notificationsserver"
     mounts:
