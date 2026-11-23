@@ -94,10 +94,10 @@ notifications:
   # Users must have this value in the claim edumember_is_member_of to be allowed to log in
   required-member-of: "urn:mace:surf.nl:invite.test2.surfconext.nl:12cbb06a-2af8-41e1-ac4e-6175cacd1307:surfconext_tpm_core"
   target-apps:
-    - name: myconext
+{% for app_name in haproxy_applications | map(attribute='name') | list %}
+    - name: {{ app_name }}
       password: "{{ notifications_secret }}"
-    - name: servicedesk
-      password: "{{ notifications_secret }}"
+{% endfor %}
 
 # used by the git plugin
 info:
