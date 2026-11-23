@@ -19,17 +19,6 @@
     - "application.yml"
   notify: "Restart notifications server"
 
-#- name: "Place the gui configfiles"
-#  ansible.builtin.template:
-#    src: "{{ item }}.j2"
-#    dest: "/opt/openconext/notifications/{{ item }}"
-#    owner: "root"
-#    group: "root"
-#    mode: "0600"
-#  with_items:
-#    - "apache_gui.conf"
-#  notify: "Restart notifications gui"
-
 - name: "Create and start the notifications server container"
   community.docker.docker_container:
     name: "notificationsserver"
