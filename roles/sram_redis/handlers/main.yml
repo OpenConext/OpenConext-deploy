@@ -4,3 +4,4 @@
     name: sram-redis
     state: started
     restart: true
+  when: redis_container is success and redis_container is not change

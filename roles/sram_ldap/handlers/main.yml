@@ -4,3 +4,4 @@
     name: "sram-ldap"
     restart: true
     state: started
+  when: ldap_container is success and ldap_container is not change
