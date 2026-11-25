@@ -75,6 +75,25 @@ frontend internet_ip
 frontend local_ip
     bind 127.0.0.1:81 accept-proxy
     acl valid_vhost hdr(host) -f /etc/haproxy/acls/validvhostsunrestricted.acl
+    {% if access_dashboard_base_domain is defined %}
+    # Path based virtual hosts on the access dashboard domain
+    acl access_dashboard_host hdr(host) -i {{ access_dashboard_base_domain }}
+    # Keep the original path in a var: the prefix strip below rewrites path,
+    # but backend selection must still match on the original path
+    http-request set-var(req.orig_path) path if access_dashboard_host
+    # The backend proxies route on the Host header, so point it at the app vhost
+    http-request set-header Host %[var(req.orig_path),lower,map_beg(/etc/haproxy/maps/accessdashboardhosts.map)] if access_dashboard_host { var(req.orig_path),lower,map_beg(/etc/haproxy/maps/accessdashboardhosts.map) -m found }
+    use_backend %[var(req.orig_path),lower,map_beg(/etc/haproxy/maps/accessdashboard.map)] if access_dashboard_host { var(req.orig_path),lower,map_beg(/etc/haproxy/maps/accessdashboard.map) -m found }
+    {% for application in haproxy_applications %}
+    {% if application.access_dashbord_path is defined %}
+    {% set path = application.access_dashbord_path if application.access_dashbord_path.startswith('/') else '/' + application.access_dashbord_path %}
+    # Re-add the path prefix to root-relative URLs in response headers
+    http-response replace-value Location ^/(.*)$ {{ path }}/\1 if access_dashboard_host { var(req.orig_path) -m beg {{ path }} }
+    http-response replace-value Content-Location ^/(.*)$ {{ path }}/\1 if access_dashboard_host { var(req.orig_path) -m beg {{ path }} }
+    http-response replace-value Link ^/(.*)$ {{ path }}/\1 if access_dashboard_host { var(req.orig_path) -m beg {{ path }} }
+    {% endif %}
+    {% endfor %}
+    {% endif %}
     acl staging req.cook(staging) -m str true
     acl staging src -f /etc/haproxy/acls/stagingips.acl
     acl stagingvhost hdr(host) -i -M -f /etc/haproxy/maps/backendsstaging.map
