@@ -56,7 +56,7 @@ This repository is used for deployment of SURFconext, and several roles that the
 | rsyslog      | For central logging and parsing login statistics for stats                   |
 | galera       | Install multi master MariaDB database with galera. Runs on Rocky 9           |
 | mongo        | Install a mongo cluster  (has its own README)                                |
-| manage_provision_entities|Provision entities to Manage                                      |
+| manage_provision|Provision entities to Manage                                               |
 
 # Setting up your environment
 Many variables can be overridden to create a setup suitable for your needs. We will explain the setup here for one environment or for a multi-environment (OTAP for example) setup.
@@ -154,4 +154,3 @@ These files are licensed under version 2.0 of the Apache License, as described i
 
 * You can ask questions on the [OpenConext mailing list](https://openconext.org/get-involved/mailing-lists/) 
 * Or you can join our [Slack Workspace](https://edu.nl/ocslk)
-

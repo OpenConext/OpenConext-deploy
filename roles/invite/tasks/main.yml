@@ -179,14 +179,27 @@
       start_period: 10s
   when: invite_mock_install
 
-- name: Include the role manage_provision_entities to provision invite client to Manage
+- name: Include the role manage_provision to provision invite client to Manage
   ansible.builtin.include_role:
-    name: manage_provision_entities
+    name: manage_provision
   vars:
-    entity_type: oidc10_rp
+    manage_provision_entity_type: oidc10_rp
+    manage_provision_oidcrp_client_id: "{{ invite_manage_provision_oidcrp_client_id }}"
+    manage_provision_oidcrp_name_en: "{{ invite_manage_provision_oidcrp_name_en }}"
+    manage_provision_oidcrp_description_en: "{{ invite_manage_provision_oidcrp_description_en }}"
+    manage_provision_oidcrp_secret: "{{ invite_manage_provision_oidcrp_secret }}"
+    manage_provision_oidcrp_redirecturls: "{{ invite_manage_provision_oidcrp_redirecturls }}"
+    manage_provision_oidcrp_grants: "{{ invite_manage_provision_oidcrp_grants }}"
+    manage_provision_oidcrp_allowed_resource_servers: "{{ invite_manage_provision_oidcrp_allowed_resource_servers }}"
+    manage_provision_oidcrp_is_public_client: "{{ invite_manage_provision_oidcrp_is_public_client }}"
 
-- name: Include the role manage_provision_entities to provision invite client to Manage
+- name: Include the role manage_provision to provision invite client to Manage
   ansible.builtin.include_role:
-    name: manage_provision_entities
+    name: manage_provision
   vars:
-    entity_type: oauth20_rs
+    manage_provision_entity_type: oauth20_rs
+    manage_provision_oauth_rs_name_en: "{{ invite_manage_provision_oauth_rs_name_en }}"
+    manage_provision_oauth_rs_description_en: "{{  invite_manage_provision_oauth_rs_description_en }}"
+    manage_provision_oauth_rs_client_id: "{{ invite_manage_provision_oauth_rs_client_id }}"
+    manage_provision_oauth_rs_secret: "{{ invite_manage_provision_oauth_rs_rp_secret }}"
+    manage_provision_oauth_rs_scopes: "{{ invite_manage_provision_oauth_rs_scopes }}"

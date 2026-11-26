@@ -321,16 +321,6 @@
           "type": "string",
           "info": "Type of institution contract."
         },
-        "coin:guest_qualifier": {
-          "type": "string",
-          "enum": [
-            "All",
-            "Some",
-            "None"
-          ],
-          "default": "All",
-          "info": "Services can use the guest attribute to offer guests a different set of functionality, the default behavior is to consider all users from an IdP as guest. Select: 1. All (default): All of the users from this IdP are marked as guests. 2 None: None of the users from this IdP marked as guests and all will be considered members. 3 Some: Most users will be a guest, and some of the users will be marked as members. When the IdP provides the attribute urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1 (surfPersonAffiliation) with value member OpenConext considers it a member."
-        },
         "coin:schachomeorganization": {
           "type": "string",
           "info": "The Identity Providers organization using the organization’s domain name; syntax in accordance with RFC 1035. Usually the domain name of the organization. e.g. uniharderwijk.nl."
