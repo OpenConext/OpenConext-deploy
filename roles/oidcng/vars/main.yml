@@ -1,18 +1,1 @@
-springapp_artifact_id: oidcng
-springapp_artifact_type: jar
-springapp_artifact_group_dir: org.openconext
-springapp_version: "{{ oidcng_version }}"
-springapp_dir: "{{ oidcng_dir }}"
-springapp_user: oidcng
-springapp_service_name: oidcng
-springapp_jar: "{{ oidcng_jar }}"
-springapp_tcpport: 9195
-springapp_random_source: "file:///dev/urandom"
-manage_provision_samlsp_client_id: "{{ oidcng_manage_provision_samlsp_client_id }}"
-manage_provision_samlsp_name_en: "{{ oidcng_manage_provision_samlsp_name_en }}"
-manage_provision_samlsp_description_en: "{{ oidcng_manage_provision_samlsp_description_en }}"
-manage_provision_samlsp_acs_location: "{{ oidcng_manage_provision_samlsp_acs_location }}"
-manage_provision_samlsp_metadata_url: "{{ oidcng_manage_provision_samlsp_metadata_url }}"
-manage_provision_samlsp_sp_cert: "{{ oidcng_manage_provision_samlsp_sp_cert }}"
-manage_provision_samlsp_sign: "{{ oidcng_manage_provision_samlsp_sign }}"
-manage_provision_samlsp_trusted_proxy: "{{ oidcng_manage_provision_samlsp_trusted_proxy }}"
+---

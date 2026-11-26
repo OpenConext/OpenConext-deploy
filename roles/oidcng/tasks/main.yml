@@ -1,44 +1,44 @@
 ---
-- name: Create config dir
+- name: "Create config dir"
   ansible.builtin.file:
     path: "{{ oidcng_dir }}"
-    state: directory
-    owner: root
-    group: root
+    state: "directory"
+    owner: "root"
+    group: "root"
     mode: "0750"
 
-- name: Copy config
+- name: "Copy config"
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ oidcng_dir }}/{{ item }}"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0640"
   with_items:
-    - logback.xml
-    - application.yml
+    - "logback.xml"
+    - "application.yml"
   notify:
-    - "restart oidcng"
+    - "Restart oidcng"
 
-- name: Copy oidcng secret keyset configuration
+- name: "Copy oidcng secret keyset configuration"
   ansible.builtin.template:
     src: "secret_keyset.json.j2"
     dest: "{{ oidcng_dir }}/secret_keyset.json"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0640"
   notify:
-    - "restart oidcng"
+    - "Restart oidcng"
 
-- name: Copy oidcng well-known discovery configuration
+- name: "Copy oidcng well-known discovery configuration"
   ansible.builtin.template:
     src: "openid-configuration.json.j2"
     dest: "{{ oidcng_dir }}/openid-configuration.json"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
     mode: "0640"
   notify:
-    - "restart oidcng"
+    - "Restart oidcng"
 
 - name: "Copy oidc saml mapping"
   ansible.builtin.copy:
@@ -48,9 +48,9 @@
     group: "root"
     mode: "0640"
   notify:
-    - "restart oidcng"
+    - "Restart oidcng"
 
-- name: Copy / create SAML private key
+- name: "Copy / create SAML private key"
   ansible.builtin.copy:
     content: "{{ oidcng_private_key }}"
     dest: "{{ oidcng_dir }}/oidcsaml.key"
@@ -58,9 +58,9 @@
     group: "root"
     mode: "0640"
   notify:
-    - "restart oidcng"
+    - "Restart oidcng"
 
-- name: Copy / create SAML certificate
+- name: "Copy / create SAML certificate"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/oidc/oidcsaml.crt"
     dest: "{{ oidcng_dir }}/oidcsaml.crt"
@@ -68,9 +68,9 @@
     group: "root"
     mode: "0640"
   notify:
-    - "restart oidcng"
+    - "Restart oidcng"
 
-- name: Copy engineblock signing certificate
+- name: "Copy engineblock signing certificate"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/oidcng/SURFconext-metadata-signer.pem"
     dest: "{{ oidcng_dir }}/SURFconext-metadata-signer.pem"
@@ -78,9 +78,9 @@
     group: "root"
     mode: "0640"
   notify:
-    - "restart oidcng"
+    - "Restart oidcng"
 
-- name: Place old __cacert_entrypoint.sh script
+- name: "Place old __cacert_entrypoint.sh script"
   ansible.builtin.copy:
     src: "__cacert_entrypoint.sh"
     dest: "/opt/openconext/oidcng"
@@ -88,29 +88,30 @@
     group: "root"
     mode: "0755"
 
-- name: Create and start the server container
+- name: "Create and start the server container"
   community.docker.docker_container:
-    name: oidcngserver
-    image: ghcr.io/openconext/openconext-oidcng/oidcng:{{ oidcng_version }}
-    entrypoint: /__cacert_entrypoint.sh
+    name: "oidcngserver"
+    image: "ghcr.io/openconext/openconext-oidcng/oidcng:{{ oidcng_version }}"
+    entrypoint: "/__cacert_entrypoint.sh"
     pull: true
     restart_policy: "{{ oidcng_server_restart_policy }}"
     restart_retries: "{{ oidcng_server_restart_retries }}" # Only for restart policy on-failure
-    state: started
+    state: "started"
     networks: "{{ oidcng_docker_networks }}"
     mounts:
       - source: "{{ oidcng_dir }}"
-        target: /config/
-        type: bind
-      - source: /opt/openconext/certs/mongoca.crt
-        target: /certificates/mongoca.crt
-        type: bind
-      - source: /opt/openconext/oidcng/__cacert_entrypoint.sh
-        target: /__cacert_entrypoint.sh
-        type: bind
-    command: "java -jar /app.jar -Xmx{{ oidcng_max_heapsize |default('512m')}} --spring.config.location=./config/"
+        target: "/config/"
+        type: "bind"
+      - source: "/opt/openconext/certs/mongoca.crt"
+        target: "/certificates/mongoca.crt"
+        type: "bind"
+      - source: "/opt/openconext/oidcng/__cacert_entrypoint.sh"
+        target: "/__cacert_entrypoint.sh"
+        type: "bind"
+    command: |
+      java -jar /app.jar -Xmx{{ oidcng_max_heapsize | default('512m') }} --spring.config.location=./config/"
     etc_hosts:
-      host.docker.internal: host-gateway
+      host.docker.internal: "host-gateway"
     env:
       USE_SYSTEM_CA_CERTS: "true"
       TZ: "{{ timezone }}"
@@ -124,21 +125,32 @@
           "--spider",
           "http://localhost:8080/internal/health",
         ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+      interval: "10s"
+      timeout: "10s"
+      retries: "3"
+      start_period: "10s"
     labels:
       traefik.enable: "true"
       traefik.http.services.oidcng.loadbalancer.server.port: "8080"
       traefik.http.routers.oidcng.rule: "Host(`connect.{{ base_domain }}`)"
       traefik.http.routers.oidcng.tls: "true"
-      traefik.http.routers.oidcng.middlewares: oidcngmw@docker
+      traefik.http.routers.oidcng.middlewares: "oidcngmw@docker"
       traefik.http.middlewares.oidcngmw.replacepathregex.regex: "^/.well-known/openid-configuration"
       traefik.http.middlewares.oidcngmw.replacepathregex.replacement: "/oidc/.well-known/openid-configuration"
-  register: oidcngservercontainer
-#- name: Include the role manage_provision_entities to provision oidncg to Manage
+  register: "oidcng_servercontainer"
+
+# TODO: moet dit weer aan?
+#- name: "Include the role manage_provision_entities to provision oidncg to Manage"
+#  when: false
 #  ansible.builtin.include_role:
-#    name: manage_provision_entities
+#    name: "manage_provision_entities"
 #  vars:
-#    entity_type: saml20_sp
+#    entity_type: "saml20_sp"
+#    manage_provision_samlsp_client_id: "{{ oidcng_manage_provision_samlsp_client_id }}"
+#    manage_provision_samlsp_name_en: "{{ oidcng_manage_provision_samlsp_name_en }}"
+#    manage_provision_samlsp_description_en: "{{ oidcng_manage_provision_samlsp_description_en }}"
+#    manage_provision_samlsp_acs_location: "{{ oidcng_manage_provision_samlsp_acs_location }}"
+#    manage_provision_samlsp_metadata_url: "{{ oidcng_manage_provision_samlsp_metadata_url }}"
+#    manage_provision_samlsp_sp_cert: "{{ oidcng_manage_provision_samlsp_sp_cert }}"
+#    manage_provision_samlsp_sign: "{{ oidcng_manage_provision_samlsp_sign }}"
+#    manage_provision_samlsp_trusted_proxy: "{{ oidcng_manage_provision_samlsp_trusted_proxy }}"
