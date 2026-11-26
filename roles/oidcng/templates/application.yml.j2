@@ -76,9 +76,8 @@ idp:
   saml_assertion_signing_key: file://{{ oidcng_config_dir }}/SURFconext-metadata-signer.pem
 
 spring:
-  data:
-    mongodb:
-      uri: "mongodb://{{ oidcng.mongo_user }}:{{ oidcng.mongo_password }}@{% for mongo_server in oidcng.mongo_servers %}{{ mongo_server }}:{{ oidcng.mongo_port }}{% if not loop.last %},{% endif %}{%endfor %}/{{ oidcng.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}"
+  mongodb:
+    uri: "mongodb://{{ oidcng.mongo_user }}:{{ oidcng.mongo_password }}@{% for mongo_server in oidcng.mongo_servers %}{{ mongo_server }}:{{ oidcng.mongo_port }}{% if not loop.last %},{% endif %}{%endfor %}/{{ oidcng.mongo_database }}?ssl={{ mongodb_ssl | default('true') }}"
 
   thymeleaf:
     cache: true
