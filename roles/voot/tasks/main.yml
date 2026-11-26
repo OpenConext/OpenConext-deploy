@@ -1,75 +1,74 @@
 ---
-- name: Create directory to keep configfile
+- name: "Create directory to keep configfile"
   ansible.builtin.file:
-    dest: "/opt/openconext/voot"
-    state: directory
-    owner: root
-    group: root
+    path: "/opt/openconext/voot"
+    state: "directory"
+    owner: "root"
+    group: "root"
     mode: "0770"
 
-- name: Place the serverapplication configfiles
+- name: "Place the serverapplication configfiles"
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: /opt/openconext/voot/{{ item }}
-    owner: root
-    group: root
+    dest: "/opt/openconext/voot/{{ item }}"
+    owner: "root"
+    group: "root"
     mode: "0644"
   with_items:
-    - serverapplication.yml
-    - logback.xml
-    - externalProviders.yml
-  notify: restart vootserver
+    - "serverapplication.yml"
+    - "logback.xml"
+    - "externalProviders.yml"
+  notify: "Restart vootserver"
 
-- name: Create and start the server container
+- name: "Create and start the server container"
   community.docker.docker_container:
-    name: vootserver
+    name: "vootserver"
     env:
       TZ: "{{ timezone }}"
-    image: ghcr.io/openconext/openconext-voot/voot:{{ voot_version }}
+    image: "ghcr.io/openconext/openconext-voot/voot:{{ voot_version }}"
     pull: true
     restart_policy: "{{ voot_server_restart_policy }}"
     restart_retries: "{{ voot_server_restart_retries }}" # Only for restart policy on-failure
-    state: started
+    state: "started"
     networks:
       - name: "loadbalancer"
     mounts:
-      - source: /opt/openconext/voot/serverapplication.yml
-        target: /application.yml
-        type: bind
-      - source: /opt/openconext/voot/externalProviders.yml
-        target: /externalProviders.yml
-        type: bind
-      - source: /opt/openconext/voot/logback.xml
-        target: /logback.xml
-        type: bind
+      - source: "/opt/openconext/voot/serverapplication.yml"
+        target: "/application.yml"
+        type: "bind"
+      - source: "/opt/openconext/voot/externalProviders.yml"
+        target: "/externalProviders.yml"
+        type: "bind"
+      - source: "/opt/openconext/voot/logback.xml"
+        target: "/logback.xml"
+        type: "bind"
     command: "-Xmx128m --spring.config.location=./"
     etc_hosts:
-      host.docker.internal: host-gateway
+      host.docker.internal: "host-gateway"
     labels:
       traefik.http.routers.voot.rule: "Host(`voot.{{ base_domain }}`)"
       traefik.http.routers.voot.tls: "true"
       traefik.enable: "true"
     healthcheck:
       test:
-        [
-          "CMD",
-          "wget",
-          "-no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:8080/internal/health",
-        ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-  notify: restart vootserver
+        - "CMD"
+        - "wget"
+        - "-no-verbose"
+        - "--tries=1"
+        - "--spider"
+        - "http://localhost:8080/internal/health"
+      interval: "10s"
+      timeout: "10s"
+      retries: "3"
+      start_period: "10s"
+  register: "voot_container"
+  notify: "Restart vootserver"
 
-- name: Include the role manage_provision to provision the client_credentials client
+- name: "Include the role manage_provision to provision the client_credentials client"
   ansible.builtin.include_role:
-    name: manage_provision
+    name: "manage_provision"
   vars:
-    manage_provision_entity_type: oauth20_rs
+    manage_provision_entity_type: "oauth20_rs"
     manage_provision_oauth_rs_client_id: "{{ voot_manage_provision_oauth_rs_client_id }}"
     manage_provision_oauth_rs_name_en: "{{ voot_manage_provision_oauth_rs_name_en }}"
     manage_provision_oauth_rs_description_en: "{{ voot_manage_provision_oauth_rs_description_en }}"

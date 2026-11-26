@@ -1,6 +1,10 @@
 ---
-- name: restart vootserver
+- name: "Restart vootserver"
   community.docker.docker_container:
-    name: vootserver
-    state: started
+    name: "vootserver"
+    state: "started"
     restart: true
+    # avoid restarting it creates unexpected data loss according to docker_container_module notes
+    comparisons:
+      '*': "ignore"
+  when: "voot_container is success and voot_container is not change"
