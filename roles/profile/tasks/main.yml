@@ -1,101 +1,111 @@
 ---
-- name: Add group {{ appname }}
+- name: "Add group {{ profile_group }}"
   ansible.builtin.group:
-    name: "{{ appname }}"
-    state: present
-  register: profile_guid
+    name: "{{ profile_group }}"
+    state: "present"
+  register: "profile_guid"
 
-- name: Add user {{ appname }}
+- name: "Add user {{ profile_user }}"
   ansible.builtin.user:
-    name: "{{ appname }}"
-    group: "{{ appname }}"
-    createhome: false
-    state: present
-  register: profile_uid
+    name: "{{ profile_user }}"
+    group: "{{ profile_user }}"
+    create_home: false
+    state: "present"
+  register: "profile_uid"
 
-- name: Create some dirs
+- name: "Create some dirs"
   ansible.builtin.file:
-    state: directory
-    dest: "{{ item }}"
-    owner: root
-    group: root
+    state: "directory"
+    path: "{{ item }}"
+    owner: "root"
+    group: "root"
     mode: "0755"
   with_items:
-    - "{{ current_release_config_dir_name }}"
-    - "{{ current_release_config_dir_name }}/certs"
-    - "{{ current_release_config_dir_name }}/translationoverrides"
+    - "{{ profile_dir }}"
+    - "{{ profile_dir }}/certs"
+    - "{{ profile_dir }}/translationoverrides"
 
-- name: Put parameters YAML config
+- name: "Put parameters YAML config"
   ansible.builtin.template:
     src: "{{ item }}.yml.j2"
-    dest: "{{ current_release_config_dir_name }}/{{ item }}.yaml"
+    dest: "{{ profile_dir }}/{{ item }}.yaml"
     mode: "0640"
-    group: "{{ appname }}"
+    group: "{{ profile_group }}"
   with_items:
-    - parameters
-    - global_view_parameters
+    - "parameters"
+    - "global_view_parameters"
   notify:
-    - restart {{ appname }}
+    - "Restart profile"
 
-- name: Install the engineblock certificate
+- name: "Install the engineblock certificate"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/{{ profile_eb_saml_public_key }}"
-    dest: "{{ current_release_config_dir_name }}/certs/{{ profile_eb_saml_public_key }}"
+    dest: "{{ profile_dir }}/certs/{{ profile_eb_saml_public_key }}"
     mode: "0644"
-    owner: root
-    group: root
+    owner: "root"
+    group: "root"
 
-- name: Check presence of language specific overrides
+- name: "Check presence of language specific overrides"
   ansible.builtin.stat:
     path: "{{ inventory_dir }}/files/profile/overrides/"
-  delegate_to: localhost
-  register: overrides_present
+  delegate_to: "localhost"
+  register: "profile_overrides_present"
   become: false
 
-- name: Copy language specific overrides
+- name: "Copy language specific overrides"
   ansible.builtin.template:
     src: "{{ item }}"
-    dest: "{{ current_release_config_dir_name }}/translationoverrides/"
-  when: overrides_present.stat.exists
+    dest: "{{ profile_dir }}/translationoverrides/"
+    mode: "0644"
+    owner: "root"
+    group: "root"
+  when: "profile_overrides_present.stat.exists"
   with_fileglob:
     - "{{ inventory_dir }}/files/profile/overrides/*"
   notify:
-    - "restart {{ appname }}"
+    - "Restart profile"
 
-- name: Create the container
+- name: "Create the container"
   community.docker.docker_container:
-    name: "{{ appname }}"
-    image: ghcr.io/openconext/openconext-profile/profile:{{ profile_version }}
+    name: "profile"
+    image: "ghcr.io/openconext/openconext-profile/profile:{{ profile_version }}"
     etc_hosts:
-      host.docker.internal: host-gateway
+      host.docker.internal: "host-gateway"
     pull: true
     restart_policy: "always"
     networks:
       - name: "loadbalancer"
     labels:
       traefik.http.routers.profile.rule: "Host(`{{ profile_vhost_name }}`)"
-      traefik.http.routers.profile.tls: "true"
-      traefik.enable: "true"
+      traefik.http.routers.profile.tls: "true"  # MUST be a string
+      traefik.enable: "true"  # MUST be a string
     env:
       APACHE_UID: "#{{ profile_uid.uid }}"
       APACHE_GUID: "#{{ profile_guid.gid }}"
-      APP_ENV: prod
+      APP_ENV: "prod"
       HTTPD_CSP: "{{ httpd_csp.strict_with_static_img }}"
     mounts:
-      - source: /opt/openconext/profile
-        target: /var/www/html/config/openconext
-        type: bind
-      - source: /opt/openconext/common/favicon.ico
-        target: /var/www/html/public/favicon.ico
-        type: bind
-      - source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-  register: profilecontainer
+      - source: "/opt/openconext/profile"
+        target: "/var/www/html/config/openconext"
+        type: "bind"
+      - source: "/opt/openconext/common/favicon.ico"
+        target: "/var/www/html/public/favicon.ico"
+        type: "bind"
+      - source: "/etc/localtime"
+        target: "/etc/localtime"
+        type: "bind"
+  register: "profile_container"
 
-
-- name: Include the role manage_provision_entities to provision profile to Manage
+- name: "Include the role manage_provision to provision profile to Manage"
   ansible.builtin.include_role:
-    name: manage_provision_entities
+    name: "manage_provision"
   vars:
-    entity_type: saml20_sp
+    manage_provision_entity_type: "saml20_sp"
+    manage_provision_samlsp_client_id: "{{ profile_manage_provision_samlsp_client_id }}"
+    manage_provision_samlsp_name_en: "{{ profile_manage_provision_samlsp_name_en }}"
+    manage_provision_samlsp_description_en: "{{ profile_manage_provision_samlsp_description_en }}"
+    manage_provision_samlsp_acs_location: "{{ profile_manage_provision_samlsp_acs_location }}"
+    manage_provision_samlsp_metadata_url: "{{ profile_manage_provision_samlsp_metadata_url }}"
+    manage_provision_samlsp_sp_cert: "{{ profile_manage_provision_samlsp_sp_cert }}"
+    manage_provision_samlsp_trusted_proxy: "{{ profile_manage_provision_samlsp_trusted_proxy }}"
+    manage_provision_samlsp_sign: "{{ profile_manage_provision_samlsp_sign }}"

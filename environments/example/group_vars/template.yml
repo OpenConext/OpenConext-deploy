@@ -79,9 +79,6 @@ tls_star_cert: star.{{ base_domain }}.pem
 tls_star_cert_key: star.{{ base_domain }}.key
 tls_ca: star.{{ base_domain }}_ca.pem
 
-# Value for the isMemberOf attribute for users from IdPs that are marked as 'guest'.
-guest_qualifier: "urn:collab:org:{{ base_domain }}"
-
 engine_database_name: eb
 engine_database_host: "{{ mariadb_host }}"
 engine_database_port: 3306
@@ -97,7 +94,7 @@ engine_trusted_proxy_ips:
 #
 profile_apache_symfony_environment: prod
 # Engine's assertion signing certificate:
-engine_profile_idp_certificate: /etc/openconext/engineblock.crt
+profile_engine_idp_certificate: /etc/openconext/engineblock.crt
 
 engineblock:
   idp_url: https://engine.{{ base_domain }}/authentication/idp/single-sign-on

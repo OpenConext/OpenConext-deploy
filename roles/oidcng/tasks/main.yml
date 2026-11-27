@@ -137,8 +137,9 @@
       traefik.http.middlewares.oidcngmw.replacepathregex.regex: "^/.well-known/openid-configuration"
       traefik.http.middlewares.oidcngmw.replacepathregex.replacement: "/oidc/.well-known/openid-configuration"
   register: oidcngservercontainer
-#- name: Include the role manage_provision_entities to provision oidncg to Manage
+
+#- name: Include the role manage_provision to provision oidncg to Manage
 #  ansible.builtin.include_role:
-#    name: manage_provision_entities
+#    name: manage_provision
 #  vars:
-#    entity_type: saml20_sp
+#    manage_provision_entity_type: saml20_sp

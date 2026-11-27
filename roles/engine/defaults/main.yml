@@ -27,7 +27,6 @@ engine_wayf_preferred_idp_entity_ids: []
 
 # Required for the Symfony routing.
 engine_base_domain: "{{ base_domain }}"
-engine_domain: engine.{{ base_domain }}
 
 engine_debug: false
 
