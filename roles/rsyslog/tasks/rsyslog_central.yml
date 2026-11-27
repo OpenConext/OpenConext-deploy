@@ -1,108 +1,115 @@
 ---
-# The server uses a different set of keys as the client
-- name: Put rsyslog server key
+
+- name: "Set variable to note centrallog server"
+  ansible.builtin.set_fact:
+    rsyslog_is_centrallog_server: true
+
+- name: "Install python modules"
+  ansible.builtin.package:
+    name:
+      - "python3-dateutil"
+    state: "present"
+  notify:
+    - "Restart rsyslog"
+
+# The server uses a different set of keys than the client
+- name: "Put rsyslog server key"
   ansible.builtin.copy:
     content: "{{ rsyslogserverkey }}"
     dest: "/etc/pki/rsyslog/rsyslogserver.key"
     mode: "0400"
-    owner: root
 
-- name: Create the group that is allowed to read the logs
-  ansible.builtin.group:
-    name: "{{ rsyslog_read_group }}"
-    state: present
-
-- name: Create directory to save the logs
+- name: "Create directory to save the logs"
   ansible.builtin.file:
     path: "{{ rsyslog_dir }}"
-    owner: root
+    owner: "root"
     group: "{{ rsyslog_read_group }}"
     mode: "0750"
-    # recurse: true # this makes everything very slow and not sure if it is necessary
 
-- name: Put rsyslog client certificate
+- name: "Put rsyslog server certificate"
   ansible.builtin.copy:
     src: "{{ inventory_dir }}/files/certs/rsyslog/rsyslogserver.crt"
     dest: "/etc/pki/rsyslog/rsyslogserver.crt"
     mode: "0644"
-    owner: root
-    group: adm
+    owner: "root"
+    group: "adm"
+  notify:
+    - "Restart rsyslog"
 
-- name: Place rsyslog CA file
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/files/certs/rsyslog_ca.pem"
-    dest: "{{ rsyslog_ca }}"
-    mode: "0644"
-
-- name: Create directories to keep configuration file
+- name: "Create directories to keep configuration file"
   ansible.builtin.file:
     path: "/etc/rsyslog.d/{{ item }}"
-    owner: root
     mode: "0755"
-    state: directory
+    state: "directory"
   with_items:
-    - listeners
-    - rulesets
-    - templates
+    - "listeners"
+    - "rulesets"
+    - "templates"
 
-- name: Create template configurations
+- name: "Create template configurations"
   ansible.builtin.template:
-    src: sc_template.conf.j2
-    dest: /etc/rsyslog.d/templates/{{ item.name }}.conf
+    src: "sc_template.conf.j2"
+    dest: "/etc/rsyslog.d/templates/{{ item.name }}.conf"
     backup: true
-  with_items: "{{ rsyslog_environments }}"
-  loop_control:
-    label: "{{ item.name }}"
-
-  notify:
-    - "restart rsyslog"
-
-- name: Create ruleset configurations
-  ansible.builtin.template:
-    src: sc_ruleset.conf.j2
-    dest: /etc/rsyslog.d/rulesets/{{ item.name }}.conf
-    backup: true
-  with_items: "{{ rsyslog_environments }}"
+    mode: "0644"
+  vars:  # use a semantic name in the template
+    env_name: "{{ item.name }}"
+  loop: "{{ rsyslog_environments }}"
   loop_control:
     label: "{{ item.name }}"
   notify:
-    - "restart rsyslog"
+    - "Restart rsyslog"
 
-- name: Create sc listener configurations
+- name: "Create ruleset configurations"
   ansible.builtin.template:
-    src: listener.conf.j2
-    dest: /etc/rsyslog.d/listeners/{{ item.name }}.conf
+    src: "sc_ruleset.conf.j2"
+    dest: "/etc/rsyslog.d/rulesets/{{ item.name }}.conf"
     backup: true
-  with_items: "{{ rsyslog_environments }}"
+    mode: "0644"
+  vars:  # use a semantic name in the template
+    env_name: "{{ item.name }}"
+  loop: "{{ rsyslog_environments }}"
   loop_control:
     label: "{{ item.name }}"
   notify:
-    - "restart rsyslog"
+    - "Restart rsyslog"
 
-- name: Create logrotate file for apps and host logs
+- name: "Create sc listener configurations"
   ansible.builtin.template:
-    src: centralsyslog.j2
-    dest: /etc/logrotate.d/centralsyslog
-
-- name: Put rsyslog config file
-  ansible.builtin.template:
-    src: "rsyslog.conf.j2"
-    dest: "/etc/rsyslog.conf"
+    src: "listener.conf.j2"
+    dest: "/etc/rsyslog.d/listeners/{{ item.name }}.conf"
+    backup: true
+    mode: "0644"
+  vars:  # use a semantic name in the template
+    env_name: "{{ item.name }}"
+    listener_port: "{{ item.port }}"
+    listener_peer: "{{ item.permittedpeer }}"
+  loop: "{{ rsyslog_environments }}"
+  loop_control:
+    label: "{{ item.name }}"
   notify:
-    - "restart rsyslog"
+    - "Restart rsyslog"
 
-- name: Put log empty warn script and cronjob
-  when: rsyslog_enable_warn_empty_script
+- name: "Create logrotate file for apps and host logs"
+  ansible.builtin.template:
+    src: "centralsyslog.j2"
+    dest: "/etc/logrotate.d/centralsyslog"
+    mode: "0644"
+
+- name: "Put log empty warn script and cronjob"
+  when: "rsyslog_enable_warn_empty_script"
   block:
-    - name: Put log empty script
+    - name: "Put log empty script"
       ansible.builtin.template:
-        src: warn-empty-log.sh.j2
+        src: "warn-empty-log.sh.j2"
         dest: "{{ rsyslog_checkemptylogs_dir }}/warn-empty-log.sh"
-        backup: True
-    - name: Create cronjob
+        backup: true
+        mode: "0644"
+
+    - name: "Create cronjob"
       ansible.builtin.cron:
         name: "check empty logs"
-        minute: "{{ rsyslog_checkemptylogs_cron_minute }}"
-        hour: "{{ rsyslog_checkemptylogs_cron_hour }}"
+        minute: "{{ rsyslog_checkemptylogs_cron_minute | str }}"
+        hour: "{{ rsyslog_checkemptylogs_cron_hour | str }}"
         weekday: "{{ rsyslog_checkemptylogs_cron_weekdays }}"
         job: "{{ rsyslog_checkemptylogs_dir }}/warn-empty-log.sh -m"
