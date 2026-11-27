@@ -137,7 +137,7 @@
       PHP_MEMORY_LIMIT: "{{ engine_php_memory }}"
       APP_ENV: "prod"
       APP_SECRET: "{{ engine_parameters_secret }}"
-      APP_DEBUG: "{{ 1 if engine_debug else 0 }}"
+      APP_DEBUG: "0"  # TODO fix
     etc_hosts:
       host.docker.internal: "host-gateway"
     mounts:
